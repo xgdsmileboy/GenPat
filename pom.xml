@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.edu.pku.sei.repair</groupId>
+    <artifactId>MineFix</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>org.eclipse.jdt.core</artifactId>
+            <version>3.12.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.text -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.text</artifactId>
+            <version>3.6.300</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.osgi -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+            <version>3.13.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.equinox.preferences -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.preferences</artifactId>
+            <version>3.7.100</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.equinox.common -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>3.10.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.core.runtime -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.core.runtime</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.core.resources -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.core.resources</artifactId>
+            <version>3.13.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.core.jobs -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.core.jobs</artifactId>
+            <version>3.10.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.core.contenttype -->
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.core.contenttype</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+
+    </dependencies>
+
+</project>
