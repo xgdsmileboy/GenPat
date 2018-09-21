@@ -7,7 +7,7 @@
 
 package mfix;
 
-import mfix.common.util.JavaFile;
+import mfix.common.java.JavaFile;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.List;
