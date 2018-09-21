@@ -97,17 +97,19 @@ public class JCompiler {
     /**
      * compile your files by JavaCompiler
      */
-    public boolean compile(Iterable<? extends JavaFileObject> files, Iterable<String> options) {
-        StandardJavaFileManager fileManager = compiler.getStandardFileManager(mDiagnosticListener, Locale.ENGLISH, null);
-        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, mDiagnosticListener, options, null, files);
+    private boolean compile(Iterable<? extends JavaFileObject> files, Iterable<String> options) {
+        StandardJavaFileManager fileManager = compiler.getStandardFileManager(mDiagnosticListener, Locale.ENGLISH,
+                null);
+        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, mDiagnosticListener, options, null,
+                files);
         return task.call();
     }
 
-    public boolean compile(Subject subject) {
-        subject.checkAndInitBuildDir();
+    private String buildClasspath(Subject subject) {
         List<String> classpath = subject.getClasspath();
         StringBuffer libs = new StringBuffer();
         if (classpath != null && !classpath.isEmpty()) {
+            libs.append(Utils.join(separator, classpath));
             libs.append(classpath.get(0));
             for (int i = 1; i < classpath.size(); i++) {
                 libs.append(separator + classpath.get(i));
@@ -117,13 +119,21 @@ public class JCompiler {
         } else {
             libs.append(System.getenv("classpath"));
         }
+        return libs.toString();
+    }
+
+    public boolean compile(Subject subject) {
+        subject.checkAndInitBuildDir();
+        String classpath = buildClasspath(subject);
         Iterable<? extends JavaFileObject> files = getAllJavaFileObjects(subject.getHome() + subject.getSsrc());
-        Iterable<String> options = Arrays.asList("-d", subject.getHome() + subject.getSbin(), "-classpath", libs.toString(), "-source", subject.getSourceLevelStr(), "-target", subject.getSourceLevelStr());
+        Iterable<String> options = Arrays.asList("-d", subject.getHome() + subject.getSbin(), "-classpath", classpath
+                , "-source", subject.getSourceLevelStr(), "-target", subject.getSourceLevelStr());
         if (!compile(files, options)) {
             return false;
         }
         files = getAllJavaFileObjects(subject.getHome() + subject.getTsrc());
-        options = Arrays.asList("-d", subject.getHome() + subject.getTbin(), "-classpath", libs.toString(), "-source", subject.getSourceLevelStr(), "-target", subject.getSourceLevelStr());
+        options = Arrays.asList("-d", subject.getHome() + subject.getTbin(), "-classpath", classpath, "-source",
+                subject.getSourceLevelStr(), "-target", subject.getSourceLevelStr());
         if (!compile(files, options)) {
             return false;
         }
@@ -132,18 +142,7 @@ public class JCompiler {
 
     public boolean compile(Subject subject, String className, String code2compile) {
         subject.checkAndInitBuildDir();
-        List<String> classpath = subject.getClasspath();
-        StringBuffer libs = new StringBuffer();
-        if (classpath != null && !classpath.isEmpty()) {
-            libs.append(classpath.get(0));
-            for (int i = 1; i < classpath.size(); i++) {
-                libs.append(separator + classpath.get(i));
-            }
-            libs.append(separator + subject.getHome() + subject.getSbin());
-            libs.append(separator + System.getenv("classpath"));
-        } else {
-            libs.append(System.getenv("classpath"));
-        }
+        String classpath = buildClasspath(subject);
         SimpleJavaFileObject simpleJavaFileObject = null;
         try {
             simpleJavaFileObject = new InMemoryJavaFileObject(className, code2compile);
@@ -151,7 +150,8 @@ public class JCompiler {
             e.printStackTrace();
         }
         Iterable<? extends JavaFileObject> files = new ArrayList<>(Arrays.asList(simpleJavaFileObject));
-        Iterable<String> options = Arrays.asList("-d", subject.getHome() + subject.getSbin(), "-classpath", libs.toString(), "-source", subject.getSourceLevelStr(), "-target", subject.getSourceLevelStr());
+        Iterable<String> options = Arrays.asList("-d", subject.getHome() + subject.getSbin(), "-classpath", classpath
+                , "-source", subject.getSourceLevelStr(), "-target", subject.getSourceLevelStr());
         if (!compile(files, options)) {
             return false;
         }

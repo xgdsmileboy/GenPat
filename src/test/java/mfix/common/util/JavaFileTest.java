@@ -27,7 +27,7 @@ public class JavaFileTest {
     @Test
     public void test_generateAST() {
         String file = System.getProperty("user.dir") + "/resources/forTest/CGMonitor.java";
-        CompilationUnit unit = JavaFile.genAST(file);
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(file, null);
         Assert.assertNotNull(unit);
 
         final Set<String> md = new HashSet<String>();

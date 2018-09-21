@@ -4,12 +4,16 @@
  * strictly prohibited Proprietary and Confidential.
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
+package mfix.core.comp;
 
-package mfix.core.node;
+import mfix.core.parse.node.Node;
 
 /**
  * @author: Jiajun
- * @date: 9/21/18
+ * @date: 2018/9/21
  */
-public abstract class Node {
+public interface NodeComparator {
+
+	public boolean compare(Node other);
+	
 }

@@ -20,6 +20,13 @@ public class Constant {
     public final static String THIS_HOME = System.getProperty("user.dir");
     public final static char SEP = File.separatorChar;
     public final static String RES_DIR = THIS_HOME + SEP + "resources";
+    public final static String NEW_LINE = "\n";
+    public final static String PLACE_HOLDER = "$p$";
+
+    /*
+     * markers
+     */
+    public final static boolean INGORE_OPERATOR_FOR_DELETE_MATCH = false;
 
 
     /*

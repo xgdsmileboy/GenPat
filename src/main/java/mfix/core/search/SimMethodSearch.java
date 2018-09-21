@@ -5,11 +5,11 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core;
+package mfix.core.search;
 
 /**
  * @author: Jiajun
- * @date: 9/21/18
+ * @date: 2018/9/21
  */
-public class Matcher {
+public class SimMethodSearch {
 }
