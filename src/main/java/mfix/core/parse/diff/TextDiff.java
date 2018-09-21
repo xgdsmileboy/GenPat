@@ -1,9 +1,13 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
+
 package mfix.core.parse.diff;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import pfix.common.config.Constant;
+import mfix.common.util.Constant;
 import mfix.core.parse.Matcher;
 import mfix.core.parse.diff.text.AddLine;
 import mfix.core.parse.diff.text.DelLine;
@@ -11,6 +15,13 @@ import mfix.core.parse.diff.text.KeepLine;
 import mfix.core.parse.diff.text.Line;
 import mfix.core.parse.node.Node;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+/**
+ * @author: Jiajun
+ * @date: 2018/9/21
+ */
 public class TextDiff extends Diff<Line> {
 	
 	public TextDiff(Node src, Node tar) {

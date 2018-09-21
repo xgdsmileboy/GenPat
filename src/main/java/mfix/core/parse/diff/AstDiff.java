@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
+
 package mfix.core.parse.diff;
 
 import mfix.core.parse.Matcher;
@@ -15,6 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * @author: Jiajun
+ * @date: 2018/9/21
+ */
 public class AstDiff extends mfix.core.parse.diff.Diff<Tree> {
 	
 	public AstDiff(Node src, Node tar) {

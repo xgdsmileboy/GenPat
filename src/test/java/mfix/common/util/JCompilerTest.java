@@ -9,7 +9,6 @@ package mfix.common.util;
 
 import mfix.common.java.D4jSubject;
 import mfix.common.java.JCompiler;
-import mfix.common.java.JavaFile;
 import mfix.common.java.Subject;
 import org.junit.Assert;
 import org.junit.Test;

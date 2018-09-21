@@ -6,17 +6,6 @@
  */
 package mfix.core.parse.node.stmt;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.eclipse.jdt.core.dom.ASTNode;
-
 import mfix.common.util.Constant;
 import mfix.core.comp.Modification;
 import mfix.core.comp.Update;
@@ -27,11 +16,20 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.Assign;
 import mfix.core.parse.node.expr.MType;
 import mfix.core.parse.node.expr.Vdf;
+import org.eclipse.jdt.core.dom.ASTNode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
- * 
- * @author Jiajun
- * @date Oct 8, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class VarDeclarationStmt extends Stmt {
 

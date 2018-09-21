@@ -1,12 +1,21 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
 package mfix.core.parse.node.expr;
 
-import java.util.LinkedList;
-
+import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 
-import mfix.core.parse.node.Node;
+import java.util.LinkedList;
 
+/**
+ * @author: Jiajun
+ * @date: 2018/9/21
+ */
 public class PostOperator extends Operator {
 
 	private PostfixExpression.Operator _operator;

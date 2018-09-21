@@ -1,17 +1,21 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
 package mfix.core.parse.node.expr;
+
+import mfix.core.parse.node.Node;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.PrefixExpression;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.PrefixExpression;
-
-import mfix.core.parse.node.Node;
 /**
- * 
- * @author Jiajun
- * @date Oct 17, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class PrefixOperator extends Operator {
 

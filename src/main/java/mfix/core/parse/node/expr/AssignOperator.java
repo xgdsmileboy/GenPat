@@ -1,14 +1,23 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
 package mfix.core.parse.node.expr;
+
+import mfix.core.parse.node.Node;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Assignment;
 
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.Assignment;
-
-import mfix.core.parse.node.Node;
-
+/**
+ * @author: Jiajun
+ * @date: 2018/9/21
+ */
 public class AssignOperator extends Operator {
 
 	private Assignment.Operator _operator;

@@ -23,8 +23,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * @author Jiajun
- * @date Oct 8, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public abstract class Node implements NodeComparator {
 

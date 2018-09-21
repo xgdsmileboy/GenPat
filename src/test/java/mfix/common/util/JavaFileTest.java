@@ -7,7 +7,6 @@
 
 package mfix.common.util;
 
-import mfix.common.java.JavaFile;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;

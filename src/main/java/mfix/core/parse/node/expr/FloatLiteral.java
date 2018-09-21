@@ -15,9 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 
- * @author Jiajun
- * @date Oct 8, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class FloatLiteral extends NumLiteral {
 

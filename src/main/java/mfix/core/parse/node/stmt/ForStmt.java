@@ -27,8 +27,8 @@ import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.ExprList;
 
 /**
- * @author Jiajun
- * @date Oct 8, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class ForStmt extends Stmt {
 

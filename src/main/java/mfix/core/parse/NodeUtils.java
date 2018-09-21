@@ -6,7 +6,7 @@
  */
 package mfix.core.parse;
 
-import mfix.common.java.JavaFile;
+import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.match.metric.FVector.ALGO;
@@ -37,8 +37,8 @@ import java.util.Set;
 
 
 /**
- * @author Jiajun
- * @date Oct 9, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class NodeUtils {
 
@@ -211,6 +211,10 @@ public class NodeUtils {
 	
 }
 
+/**
+ * @author: Jiajun
+ * @date: 2018/9/21
+ */
 class VariableVisitor extends ASTVisitor {
 	private MethodVisitor _methodVisitor = new MethodVisitor();
 	private Map<Integer, Set<String>> _vars = new HashMap<>();

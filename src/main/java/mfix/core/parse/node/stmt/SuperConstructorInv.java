@@ -29,9 +29,8 @@ import mfix.core.parse.node.expr.ExprList;
 import mfix.core.parse.node.expr.MType;
 
 /**
- * 
- * @author Jiajun
- * @date Oct 8, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class SuperConstructorInv extends Stmt {
 

@@ -5,9 +5,8 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.common.java;
+package mfix.common.util;
 
-import mfix.common.util.LevelLogger;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -22,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -562,5 +562,51 @@ public class JavaFile {
                 fileList.add(f.getAbsolutePath());
         }
         return fileList;
+    }
+
+    /**
+     * replace source code between the given range
+     * @param fileName : file name to write the replaced source into
+     * @param source : original source code lines
+     * @param startLine : start line number to be replaced
+     * @param endLine : end lin number to be replaced
+     * @param replace : replace string
+     * @throws IOException
+     */
+    public static void sourceReplace(String fileName, List<String> source, int startLine, int endLine, String replace) throws IOException{
+        File file = new File(fileName);
+        if(!file.exists()){
+            System.out.println("File : " + fileName + " does not exist!");
+            return;
+        }
+        boolean flag = false;
+        StringBuffer stringBuffer = new StringBuffer();
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+        for(int i = 1; i < source.size(); i++){
+            if(i == startLine){
+                String origin = source.get(i).replace(" ", "");
+                if(origin.startsWith("}else")){
+                    bw.write("} else ");
+                }
+                bw.write("// start of generated patch" + Constant.NEW_LINE);
+                bw.write(replace);
+                bw.write("// end of generated patch" + Constant.NEW_LINE);
+                stringBuffer.append("// start of original code" + Constant.NEW_LINE);
+                stringBuffer.append("//" + source.get(i) + Constant.NEW_LINE);
+                flag = true;
+            } else if(startLine < i && i <= endLine){
+                stringBuffer.append("//" + source.get(i) + Constant.NEW_LINE);
+                continue;
+            } else {
+                if(flag){
+                    bw.write(stringBuffer.toString());
+                    bw.write("// end of original code" + Constant.NEW_LINE);
+                    stringBuffer = null;
+                    flag = false;
+                }
+                bw.write(source.get(i) + Constant.NEW_LINE);
+            }
+        }
+        bw.close();
     }
 }

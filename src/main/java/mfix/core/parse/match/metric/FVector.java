@@ -7,9 +7,8 @@
 package mfix.core.parse.match.metric;
 
 /**
- * 
- * @author Jiajun
- * @date Oct 15, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class FVector {
 	

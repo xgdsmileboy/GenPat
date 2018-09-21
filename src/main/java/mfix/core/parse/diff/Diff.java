@@ -1,7 +1,14 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
+
 package mfix.core.parse.diff;
 
 import mfix.common.util.Constant;
-import mfix.common.java.JavaFile;
+import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.parse.Matcher;
 import mfix.core.parse.NodePaser;
@@ -13,6 +20,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author: Jiajun
+ * @date: 2018/9/21
+ */
 public abstract class Diff<T> {
 
 	protected Node _src;

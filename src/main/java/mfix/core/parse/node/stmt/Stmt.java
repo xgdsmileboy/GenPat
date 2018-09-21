@@ -10,9 +10,8 @@ import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 /**
- * 
- * @author Jiajun
- * @date Oct 8, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public abstract class Stmt extends Node {
 	

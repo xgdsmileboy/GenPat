@@ -7,8 +7,6 @@
 
 package mfix.common.util;
 
-import mfix.common.util.Utils;
-
 import java.io.File;
 
 /**
@@ -20,8 +18,12 @@ public class Constant {
     public final static String THIS_HOME = System.getProperty("user.dir");
     public final static char SEP = File.separatorChar;
     public final static String RES_DIR = THIS_HOME + SEP + "resources";
+
     public final static String NEW_LINE = "\n";
     public final static String PLACE_HOLDER = "$p$";
+    public final static String PATCH_KEEP_LEADING = " ";
+    public final static String PATCH_DEL_LEADING = "-";
+    public final static String PATCH_ADD_LEADING = "+";
 
     /*
      * markers

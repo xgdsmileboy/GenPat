@@ -13,9 +13,8 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.LinkedList;
 
 /**
- * 
- * @author Jiajun
- * @date Oct 8, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class IntLiteral extends NumLiteral {
 

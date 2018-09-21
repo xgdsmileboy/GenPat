@@ -1,7 +1,14 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
+
 package mfix.core.parse.match;
 
-import mfix.common.java.JavaFile;
 import mfix.common.java.Subject;
+import mfix.common.util.JavaFile;
 import mfix.core.parse.NodePaser;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -14,6 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author: Jiajun
+ * @date: 2018/9/21
+ */
 public class SimMatcher {
 
 	public static Map<String, List<Node>> extractMethodDeclaration(Map<String, Set<Node>>keywords, Subject subject) {

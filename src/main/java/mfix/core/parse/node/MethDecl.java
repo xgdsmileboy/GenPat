@@ -6,17 +6,16 @@
  */
 package mfix.core.parse.node;
 
-import mfix.core.parse.node.Node;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.Type;
 import mfix.core.comp.Modification;
 import mfix.core.comp.Update;
 import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.SName;
 import mfix.core.parse.node.stmt.Blk;
 import mfix.core.parse.node.stmt.Stmt;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +25,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Jiajun
- * @date Oct 8, 2017
+ * @author: Jiajun
+ * @date: 2018/9/21
  */
 public class MethDecl extends Node {
 

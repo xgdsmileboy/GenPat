@@ -7,6 +7,7 @@
 
 package mfix.common.java;
 
+import mfix.common.util.JavaFile;
 import mfix.common.util.Utils;
 
 import javax.tools.Diagnostic;
