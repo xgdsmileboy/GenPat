@@ -7,7 +7,7 @@
 
 package mfix.common.java;
 
-import mfix.common.config.Constant;
+import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 

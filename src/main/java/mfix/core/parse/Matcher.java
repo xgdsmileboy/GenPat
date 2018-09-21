@@ -6,7 +6,7 @@
  */
 package mfix.core.parse;
 
-import mfix.common.config.Constant;
+import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.comp.Deletion;

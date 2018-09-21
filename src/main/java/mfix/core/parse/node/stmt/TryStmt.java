@@ -6,7 +6,7 @@
  */
 package mfix.core.parse.node.stmt;
 
-import mfix.common.config.Constant;
+import mfix.common.util.Constant;
 import mfix.core.comp.Modification;
 import mfix.core.comp.Update;
 import mfix.core.parse.Matcher;

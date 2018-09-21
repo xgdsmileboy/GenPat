@@ -5,10 +5,9 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.common.util;
+package mfix.common.java;
 
-import mfix.common.java.JavaFile;
-import mfix.common.java.Subject;
+import mfix.common.util.Utils;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;

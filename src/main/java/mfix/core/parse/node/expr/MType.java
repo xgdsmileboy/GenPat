@@ -1,6 +1,6 @@
 package mfix.core.parse.node.expr;
 
-import mfix.common.config.Constant;
+import mfix.common.util.Constant;
 import mfix.core.comp.Modification;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;

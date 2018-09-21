@@ -17,7 +17,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 
-import mfix.common.config.Constant;
+import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.comp.Modification;
 import mfix.core.comp.Update;

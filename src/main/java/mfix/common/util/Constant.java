@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.common.config;
+package mfix.common.util;
 
 import mfix.common.util.Utils;
 

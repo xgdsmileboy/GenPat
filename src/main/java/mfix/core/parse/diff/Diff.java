@@ -1,6 +1,6 @@
 package mfix.core.parse.diff;
 
-import mfix.common.config.Constant;
+import mfix.common.util.Constant;
 import mfix.common.java.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.parse.Matcher;

@@ -6,7 +6,7 @@
  */
 package mfix.core.parse.node.expr;
 
-import mfix.common.config.Constant;
+import mfix.common.util.Constant;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
