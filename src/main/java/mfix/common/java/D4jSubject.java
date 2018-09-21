@@ -24,10 +24,13 @@ public class D4jSubject extends Subject {
 
     public D4jSubject(String d4Jbase, String projName, int id) {
         super(Utils.join(Constant.SEP, d4Jbase, projName, projName + "_" + id + "_buggy"), projName);
+        setPath(projName, id);
         _classpath = obtainClasspath(projName);
         // Special case
         if(projName.equals("chart")) {
-            _src_level = "1.4";
+            _src_level = SOURCE_LEVEL.L_1_4;
+        } else {
+            _src_level = SOURCE_LEVEL.L_1_6;
         }
     }
 

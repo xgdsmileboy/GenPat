@@ -7,11 +7,6 @@
 
 package mfix;
 
-import mfix.common.java.JavaFile;
-import org.eclipse.jdt.core.dom.*;
-
-import java.util.List;
-
 /**
  * @author: Jiajun
  * @date: 2018/9/19
@@ -20,38 +15,38 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        CompilationUnit unit = JavaFile.genAST(System.getProperty("user.dir") + "/Pair.java");
-        CompilationUnit unit = JavaFile.genASTFromFileWithType(System.getProperty("user.dir") + "/Path.java", null);
-        unit.accept(new ASTVisitor() {
-            @Override
-            public boolean visit(MethodInvocation node) {
-//                System.out.println(node.resolveMethodBinding());
-//                System.out.println(node.getName().getFullyQualifiedName());
-                return true;
-            }
-
-            public boolean visit(VariableDeclarationStatement variableDeclarationStatement) {
-                List<VariableDeclarationFragment> fragments = variableDeclarationStatement.fragments();
-                for(VariableDeclarationFragment vdf : fragments) {
-                    System.out.println(vdf.resolveBinding().getType().getQualifiedName());
-                }
-                return true;
-            }
-
-            public boolean visit(SingleVariableDeclaration svd) {
-                System.out.println(svd.resolveBinding().getType().getQualifiedName());
-                return true;
-            }
-
-            public boolean visit(FieldDeclaration fieldDeclaration) {
-                List<VariableDeclarationFragment> fragments = fieldDeclaration.fragments();
-                for(VariableDeclarationFragment vdf : fragments) {
-                    System.out.println(vdf.resolveBinding().getType().getQualifiedName());
-                }
-                return true;
-            }
-
-        });
+////        CompilationUnit unit = JavaFile.genAST(System.getProperty("user.dir") + "/Pair.java");
+//        CompilationUnit unit = JavaFile.genASTFromFileWithType(System.getProperty("user.dir") + "/Path.java", null);
+//        unit.accept(new ASTVisitor() {
+//            @Override
+//            public boolean visit(MethodInvocation node) {
+////                System.out.println(node.resolveMethodBinding());
+////                System.out.println(node.getName().getFullyQualifiedName());
+//                return true;
+//            }
+//
+//            public boolean visit(VariableDeclarationStatement variableDeclarationStatement) {
+//                List<VariableDeclarationFragment> fragments = variableDeclarationStatement.fragments();
+//                for(VariableDeclarationFragment vdf : fragments) {
+//                    System.out.println(vdf.resolveBinding().getType().getQualifiedName());
+//                }
+//                return true;
+//            }
+//
+//            public boolean visit(SingleVariableDeclaration svd) {
+//                System.out.println(svd.resolveBinding().getType().getQualifiedName());
+//                return true;
+//            }
+//
+//            public boolean visit(FieldDeclaration fieldDeclaration) {
+//                List<VariableDeclarationFragment> fragments = fieldDeclaration.fragments();
+//                for(VariableDeclarationFragment vdf : fragments) {
+//                    System.out.println(vdf.resolveBinding().getType().getQualifiedName());
+//                }
+//                return true;
+//            }
+//
+//        });
 
     }
 

@@ -18,7 +18,7 @@ import java.io.File;
 public class Constant {
 
     public final static String THIS_HOME = System.getProperty("user.dir");
-    public final static char SEP = File.pathSeparatorChar;
+    public final static char SEP = File.separatorChar;
     public final static String RES_DIR = THIS_HOME + SEP + "resources";
 
 

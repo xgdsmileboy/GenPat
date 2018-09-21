@@ -23,7 +23,7 @@ public class Subject {
     protected String _tsrc = null;
     protected String _sbin = null;
     protected String _tbin = null;
-    protected String _src_level = null;
+    protected SOURCE_LEVEL _src_level = null;
     protected List<String> _classpath;
 
     protected Subject(String base, String name) {
@@ -40,10 +40,11 @@ public class Subject {
      * @param tbin : relative path for test byte code, e.g., "/test-classes"
      */
     public Subject(String base, String name, String ssrc, String tsrc, String sbin, String tbin) {
-        this(base, name, ssrc, tsrc, sbin, tbin, "1.7", new LinkedList<String>());
+        this(base, name, ssrc, tsrc, sbin, tbin, SOURCE_LEVEL.L_1_6, new LinkedList<String>());
     }
 
-    public Subject(String base, String name, String ssrc, String tsrc, String sbin, String tbin, String sourceLevel, List<String> classpath) {
+    public Subject(String base, String name, String ssrc, String tsrc, String sbin, String tbin, SOURCE_LEVEL sourceLevel, List<String> classpath) {
+        _base = base;
         _name = name;
         _ssrc = ssrc;
         _tsrc = tsrc;
@@ -53,7 +54,7 @@ public class Subject {
         _classpath = classpath;
     }
 
-    public String getBasePath() {
+    public String getHome() {
         return _base;
     }
 
@@ -77,8 +78,8 @@ public class Subject {
         return _tbin;
     }
 
-    public String getSourceLevel() {
-        return _src_level;
+    public String getSourceLevelStr() {
+        return _src_level.toString();
     }
 
     public void setClasspath(List<String> classpath) {
@@ -90,11 +91,11 @@ public class Subject {
     }
 
     public boolean checkAndInitBuildDir() {
-        File file = new File(getBasePath() + getSbin());
+        File file = new File(getHome() + getSbin());
         if (!file.exists()) {
             file.mkdirs();
         }
-        file = new File(getBasePath() + getTbin());
+        file = new File(getHome() + getTbin());
         if (!file.exists()) {
             file.mkdirs();
         }
@@ -105,5 +106,42 @@ public class Subject {
     public String toString() {
         return "[_name=" + _name + ", _ssrc=" + _ssrc + ", _tsrc=" + _tsrc + ", _sbin=" + _sbin
                 + ", _tbin=" + _tbin + "]";
+    }
+
+    public static enum SOURCE_LEVEL {
+        L_1_4("1.4"),
+        L_1_5("1.5"),
+        L_1_6("1.6"),
+        L_1_7("1.7");
+
+        public static SOURCE_LEVEL toSourceLevel(String string) {
+            switch (string) {
+                case "1.4":
+                case "1_4":
+                    return SOURCE_LEVEL.L_1_4;
+                case "1.5":
+                case "1_5":
+                    return SOURCE_LEVEL.L_1_5;
+                case "1.6":
+                case "1_6":
+                    return SOURCE_LEVEL.L_1_6;
+                case "1.7":
+                case "1_7":
+                    return SOURCE_LEVEL.L_1_7;
+                default:
+                    return SOURCE_LEVEL.L_1_4;
+            }
+        }
+
+        private String value;
+
+        private SOURCE_LEVEL(String val) {
+            value = val;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
     }
 }
