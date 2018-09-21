@@ -3,3 +3,6 @@
 /target
 /**/.DS_Store
 /MineFix.iml
+/resources/**/build
+/resources/**/build-tests
+/resources/**/target
