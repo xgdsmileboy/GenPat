@@ -22,10 +22,12 @@ import java.util.List;
 public class D4jSubject extends Subject {
 
     private final String __name__ = "@Subject ";
+    private int _id = 0;
 
     public D4jSubject(String d4Jbase, String projName, int id) {
         super(Utils.join(Constant.SEP, d4Jbase, projName, projName + "_" + id + "_buggy"), projName);
         setPath(projName, id);
+        _id = id;
         _classpath = obtainClasspath(projName);
         // Special case
         if(projName.equals("chart")) {
@@ -33,6 +35,10 @@ public class D4jSubject extends Subject {
         } else {
             _src_level = SOURCE_LEVEL.L_1_6;
         }
+    }
+
+    public int getId() {
+        return _id;
     }
 
     private void setPath(String projName, int id) {
