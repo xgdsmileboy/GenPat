@@ -13,7 +13,9 @@ import mfix.common.util.Utils;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
@@ -47,6 +49,18 @@ public class ExtractFaultyCodeTest {
             String file = Utils.join(Constant.SEP, subject.getHome(), subject.getSsrc(), location.getRelClazzFile());
             ASTNode node = ExtractFaultyCode.extractMinimalASTNode(file, location.getLine());
             System.out.println(node.toString());
+        }
+    }
+
+    @Test
+    public void test_chart_1_minimal() {
+        D4jSubject subject = new D4jSubject(base, "chart", 1);
+        D4JManualLocator locator = new D4JManualLocator(subject);
+        List<Location> locations = locator.getLocations(100);
+        for (Location location : locations) {
+            String file = Utils.join(Constant.SEP, subject.getHome(), subject.getSsrc(), location.getRelClazzFile());
+            ASTNode node = ExtractFaultyCode.extractMinimalASTNode(file, location.getLine());
+            Assert.assertTrue("The faulty location is an if statement.", node instanceof IfStatement);
         }
     }
 
