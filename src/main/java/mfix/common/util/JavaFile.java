@@ -184,6 +184,16 @@ public class JavaFile {
     }
 
     /**
+     * @see CompilationUnit genASTFromFileWithType(String srcFile, String srcPath)
+     * @param srcFile
+     * @return
+     */
+    public static CompilationUnit genASTFromFileWithType(String srcFile) {
+        return (CompilationUnit) genASTFromSourceWithType(readFileToString(srcFile), ASTParser.K_COMPILATION_UNIT,
+                srcFile, null);
+    }
+
+    /**
      * create {@code CompilationUnit} from given file {@code srcFile}
      * @param srcFile : absolute path of java source code
      * @param srcPath : base path of source code

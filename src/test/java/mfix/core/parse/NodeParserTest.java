@@ -1,0 +1,49 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
+
+package mfix.core.parse;
+
+import mfix.common.util.Constant;
+import mfix.common.util.JavaFile;
+import mfix.common.util.Pair;
+import mfix.common.util.Utils;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.List;
+
+/**
+ * @author: Jiajun
+ * @date: 2018/9/25
+ */
+public class NodeParserTest {
+
+    @Test
+    public void test_parse() {
+        String srcFile = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest", "src_Project.java");
+        String tarFile = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest", "tar_Project.java");
+
+        CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
+        CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        NodePaser nodePaser = new NodePaser();
+        int modifyLocs = 0;
+        for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+            nodePaser.setCompilationUnit(srcUnit);
+            String src = nodePaser.process(pair.getFirst()).toSrcString().toString();
+            nodePaser.setCompilationUnit(tarUnit);
+            String tar = nodePaser.process(pair.getSecond()).toSrcString().toString();
+            if(!src.equals(tar)) {
+                modifyLocs ++;
+            }
+        }
+        Assert.assertTrue(modifyLocs == 7);
+    }
+
+}
