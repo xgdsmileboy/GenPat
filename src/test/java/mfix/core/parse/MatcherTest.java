@@ -10,7 +10,7 @@ package mfix.core.parse;
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
-import mfix.common.util.Utils;
+import mfix.core.TestCase;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.junit.Assert;
@@ -22,14 +22,12 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/25
  */
-public class MatcherTest {
+public class MatcherTest extends TestCase {
 
     @Test
     public void test_match_dont() {
-        String srcFile_change_retType = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest",
-                "src_Intersect" + ".java");
-        String tarFile_change_retType = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest",
-                "tar_Intersect" + ".java");
+        String srcFile_change_retType = testbase + Constant.SEP + "src_Intersect.java";
+        String tarFile_change_retType = testbase + Constant.SEP + "tar_Intersect.java";
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile_change_retType);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile_change_retType);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
@@ -41,8 +39,8 @@ public class MatcherTest {
 
     @Test
     public void test_match_do() {
-        String srcFile = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest", "src_Project.java");
-        String tarFile = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest", "tar_Project.java");
+        String srcFile = testbase + Constant.SEP + "src_Project.java";
+        String tarFile = testbase + Constant.SEP + "tar_Project.java";
 
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile);

@@ -10,6 +10,7 @@ package mfix.core.search;
 import mfix.common.java.D4jSubject;
 import mfix.common.util.Constant;
 import mfix.common.util.Utils;
+import mfix.core.TestCase;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -24,13 +25,11 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/25
  */
-public class ExtractFaultyCodeTest {
-
-    private final String base = Constant.RES_DIR + Constant.SEP + "forTest";
+public class ExtractFaultyCodeTest extends TestCase {
 
     @Test
     public void test_lang_1() {
-        D4jSubject subject = new D4jSubject(base, "lang", 1);
+        D4jSubject subject = new D4jSubject(testbase, "lang", 1);
         D4JManualLocator locator = new D4JManualLocator(subject);
         List<Location> locations = locator.getLocations(100);
         for (Location location : locations) {
@@ -42,7 +41,7 @@ public class ExtractFaultyCodeTest {
 
     @Test
     public void test_lang_1_minimal() {
-        D4jSubject subject = new D4jSubject(base, "lang", 1);
+        D4jSubject subject = new D4jSubject(testbase, "lang", 1);
         D4JManualLocator locator = new D4JManualLocator(subject);
         List<Location> locations = locator.getLocations(100);
         for (Location location : locations) {
@@ -54,7 +53,7 @@ public class ExtractFaultyCodeTest {
 
     @Test
     public void test_chart_1_minimal() {
-        D4jSubject subject = new D4jSubject(base, "chart", 1);
+        D4jSubject subject = new D4jSubject(testbase, "chart", 1);
         D4JManualLocator locator = new D4JManualLocator(subject);
         List<Location> locations = locator.getLocations(100);
         for (Location location : locations) {

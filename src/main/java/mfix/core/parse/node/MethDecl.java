@@ -8,6 +8,7 @@ package mfix.core.parse.node;
 
 import mfix.core.comp.Modification;
 import mfix.core.comp.Update;
+import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.SName;
 import mfix.core.parse.node.stmt.Blk;
@@ -336,8 +337,13 @@ public class MethDecl extends Node {
 
 	@Override
 	public void computeFeatureVector() {
-		// TODO Auto-generated method stub
-		
+        _fVector = new FVector();
+		for(Expr expr : _arguments) {
+		    _fVector.combineFeature(expr.getFeatureVector());
+        }
+        if(_body != null) {
+            _fVector.combineFeature(_body.getFeatureVector());
+        }
 	}
 
 }

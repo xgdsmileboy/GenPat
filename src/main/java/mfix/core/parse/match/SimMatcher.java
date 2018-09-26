@@ -9,7 +9,7 @@ package mfix.core.parse.match;
 
 import mfix.common.java.Subject;
 import mfix.common.util.JavaFile;
-import mfix.core.parse.NodePaser;
+import mfix.core.parse.NodeParser;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -47,12 +47,12 @@ public class SimMatcher {
 	private static class MethodIdentifyVisitor extends ASTVisitor {
 		
 		private Map<String, Set<Node>> _keywords;
-		private NodePaser _nodePaser;
+		private NodeParser _nodePaser;
 		private List<Node> _candidates;
 		
 		public MethodIdentifyVisitor(Map<String, Set<Node>> keywords) {
 			_keywords = keywords;
-			_nodePaser = new NodePaser();
+			_nodePaser = NodeParser.getInstance();
 		}
 		
 		public List<Node> getCandidates() {

@@ -11,7 +11,7 @@ import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.parse.Matcher;
-import mfix.core.parse.NodePaser;
+import mfix.core.parse.NodeParser;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -85,7 +85,7 @@ public abstract class Diff<T> {
 		CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
 		CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
 		List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-		NodePaser nodePaser = new NodePaser();
+		NodeParser nodePaser = NodeParser.getInstance();
 		for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
 			nodePaser.setCompilationUnit(srcUnit);
 			Node srcNode = nodePaser.process(pair.getFirst()); 

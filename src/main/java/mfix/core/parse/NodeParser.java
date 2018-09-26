@@ -90,11 +90,19 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class NodePaser {
+public class NodeParser {
 
+    private static NodeParser _instance;
     private CompilationUnit _cunit;
 
-    public NodePaser() {
+    public static NodeParser getInstance() {
+        if(_instance == null) {
+            _instance = new NodeParser();
+        }
+        return _instance;
+    }
+
+    private NodeParser() {
 
     }
 
@@ -1318,7 +1326,7 @@ public class NodePaser {
         }
     }
 
-    public static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
+    private static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
         if(typeBinding == null) {
             return ast.newWildcardType();
         }

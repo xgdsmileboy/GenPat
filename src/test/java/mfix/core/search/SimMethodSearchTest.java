@@ -1,0 +1,57 @@
+/**
+ * Copyright (C) SEI, PKU, PRC. - All Rights Reserved.
+ * Unauthorized copying of this file via any medium is
+ * strictly prohibited Proprietary and Confidential.
+ * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
+ */
+
+package mfix.core.search;
+
+import mfix.common.java.D4jSubject;
+import mfix.common.util.Constant;
+import mfix.common.util.JavaFile;
+import mfix.common.util.Utils;
+import mfix.core.TestCase;
+import mfix.core.locator.D4JManualLocator;
+import mfix.core.locator.Location;
+import mfix.core.parse.NodeParser;
+import mfix.core.parse.node.Node;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.junit.Test;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * @author: Jiajun
+ * @date: 2018/9/26
+ */
+public class SimMethodSearchTest extends TestCase {
+
+    @Test
+    public void test_chart_1() {
+        D4jSubject subject = new D4jSubject(testbase, "chart", 1);
+        D4JManualLocator locator = new D4JManualLocator(subject);
+        List<Location> locations = locator.getLocations(100);
+        List<String> files = JavaFile.ergodic(subject.getHome() + subject.getSsrc(), new LinkedList<String>());
+        for(Location location : locations) {
+            String file = Utils.join(Constant.SEP, subject.getHome(), subject.getSsrc(), location.getRelClazzFile());
+            MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
+            CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
+            NodeParser parser = NodeParser.getInstance();
+            parser.setCompilationUnit(unit);
+            Node fnode = parser.process(method);
+            for(String f : files) {
+                unit = JavaFile.genASTFromFileWithType(f);
+                Set<Node> nodes = SimMethodSearch.searchSimMethod(unit, fnode,0.95);
+                for(Node node : nodes) {
+                    System.out.println(node.toSrcString());
+                }
+            }
+
+        }
+    }
+
+}

@@ -8,7 +8,7 @@
 package mfix.core.parse.diff;
 
 import mfix.common.util.Constant;
-import mfix.common.util.Utils;
+import mfix.core.TestCase;
 import org.junit.Test;
 
 import java.util.List;
@@ -17,12 +17,12 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/25
  */
-public class DiffTest {
+public class DiffTest extends TestCase {
 
     @Test
     public void test_extractFileDiff() {
-        String srcFile = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest", "src_Project.java");
-        String tarFile = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest", "tar_Project.java");
+        String srcFile = testbase + Constant.SEP + "src_Project.java";
+        String tarFile = testbase + Constant.SEP + "tar_Project.java";
         List<Diff> diffs = Diff.extractFileDiff(srcFile, tarFile, AstDiff.class);
         for(Diff diff : diffs) {
             System.out.println("------------------");
@@ -33,8 +33,8 @@ public class DiffTest {
 
     @Test
     public void test_extractFileDiff2() {
-        String srcFile = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest", "src_Project.java");
-        String tarFile = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest", "tar_Project.java");
+        String srcFile = testbase + Constant.SEP + "src_Project.java";
+        String tarFile = testbase + Constant.SEP + "tar_Project.java";
         List<Diff> diffs = Diff.extractFileDiff(srcFile, tarFile, TextDiff.class);
         for(Diff diff : diffs) {
             System.out.println("------------------");
