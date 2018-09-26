@@ -11,30 +11,80 @@ package mfix.core.parse.match.metric;
  * @date: 2018/9/21
  */
 public class FVector {
-	
-	public static final int INDEX_STRUCT_FOR = 0;
-	public static final int INDEX_STRUCT_ENFOR = 1;
-	public static final int INDEX_STRUCT_WHILE = 2;
-	public static final int INDEX_STRUCT_DO = 3;
-	public static final int INDEX_STRUCT_IF = 4; 
-	public static final int INDEX_STRUCT_SWC = 5;
-	public static final int INDEX_STRUCT_COND = 6;
-	public static final int INDEX_STRUCT_TRY = 7;
-	public static final int INDEX_STRUCT_SYC = 8;
-	public static final int INDEX_STRUCT_OTHER = 9;
-	
-	public static final int INDEX_OP_ARITH = 10;
-	public static final int INDEX_OP_BIT = 11;
-	public static final int INDEX_OP_COMP = 12;
-	public static final int INDEX_OP_UNARY = 13;
-	public static final int INDEX_OP_LOGIC = 14;
-	
-	public static final int INDEX_OP_ACC = 15;
-	public static final int INDEX_OP_ASSIGN = 16;
-	public static final int INDEX_MCALL = 17;
-	public static final int INDEX_VAR = 18;
-	public static final int INDEX_LITERAL = 19;
-	public static final int VECTOR_LEN = 20;
+
+    //Arithmetic
+    public static final int ARITH_PLUS = 0;
+    public static final int ARITH_MINUS = 1;
+    public static final int ARITH_PLUS_2 = 2;
+    public static final int ARITH_MINUS_2 = 3;
+    public static final int ARITH_TIMES = 4;
+    public static final int ARITH_DIV = 5;
+    public static final int ARITH_MOD = 6;
+    public static final int ARITH_ASSIGN = 7;
+    //Logical
+    public static final int LOGI_GT = 8;
+    public static final int LOGI_GE = 9;
+    public static final int LOGI_LT = 10;
+    public static final int LOGI_LE= 11;
+    public static final int LOGI_EQ = 12;
+    public static final int LOGI_NEQ = 13;
+    public static final int LOGI_NOT = 14;
+    public static final int LOGI_INSOF = 15;
+    public static final int LOGI_AND = 16;
+    public static final int LOGI_OR = 17;
+    //Bit
+    public static final int BIT_AND = 18;
+    public static final int BIT_OR = 19;
+    public static final int BIT_XOR = 20;
+    public static final int BIT_NOT = 21;
+    public static final int BIT_SHIFT_L = 22;
+    public static final int BIT_SHIFT_R = 23;
+    public static final int BIT_SHIFT_RR = 24;
+    //bracket
+    public static final int BRAKET_SQL = 25;
+    public static final int BRAKET_SQR = 26;
+    //keyword
+    public static final int KEY_THIS = 27;
+    public static final int KEY_SUPER = 28;
+    public static final int KEY_CAST = 29;
+    public static final int KEY_NEW = 30;
+    public static final int KEY_ASSERT = 31;
+    public static final int KEY_BREAK = 32;
+    public static final int KEY_CATCH = 33;
+    public static final int KEY_CONTINUE = 34;
+    public static final int KEY_DO = 35;
+    public static final int KEY_WHILE = 36;
+    public static final int KEY_ENFOR = 37;
+    public static final int KEY_FOR = 38;
+    public static final int KEY_IF = 39;
+    public static final int KEY_ELSE = 40;
+    public static final int KEY_RET = 41;
+    public static final int KEY_SWITCH = 42;
+    public static final int KEY_CASE = 43;
+    public static final int KEY_SYNC = 44;
+    public static final int KEY_THROW = 45;
+    public static final int KEY_TRY = 46;
+    //node type
+    public static final int E_AACC = 47;
+    public static final int E_ACREAR = 48;
+    public static final int E_AINIT = 49;
+    public static final int E_NUMBER = 50;
+    public static final int E_CHAR = 51;
+    public static final int E_BOOL = 52;
+    public static final int E_STR = 53;
+    public static final int E_NULL = 54;
+    public static final int E_ASSIGN = 55;
+    public static final int E_COND = 56;
+    public static final int E_FACC = 57;
+    public static final int E_MINV = 58;
+    public static final int E_CLASS = 59;
+    public static final int E_TYPE = 60;
+    public static final int E_POSTFIX = 61;
+    public static final int E_PREFIX = 62;
+    public static final int E_VAR = 63;
+    public static final int E_ANONY = 64;
+    public static final int OTHER = 65;
+	public static final int VECTOR_LEN = 66;
 	
 	private int[] _vector = new int[VECTOR_LEN];
 	
@@ -76,35 +126,30 @@ public class FVector {
 	
 	private int parseOperator(String op){
 		switch(op){
-		case "*":
-		case "/":
-		case "+":
-		case "-":
-		case "%":
-			return INDEX_OP_ARITH;
-		case "<<":
-		case ">>":
-		case ">>>":
-		case "^":
-		case "&":
-		case "|":
-			return INDEX_OP_BIT;
-		case "<":
-		case ">":
-		case "<=":
-		case ">=":
-		case "==":
-		case "!=":
-		case "instanceof" :
-			return INDEX_OP_COMP;
-		case "&&":
-		case "||":
-			return INDEX_OP_LOGIC;
-		case "++":
-		case "--":
-		case "~":
-		case "!":
-			return INDEX_OP_UNARY;
+		case "*": return ARITH_TIMES;
+		case "/": return ARITH_DIV;
+		case "+": return ARITH_PLUS;
+		case "-": return ARITH_MINUS;
+		case "%": return ARITH_MOD;
+		case "<<": return BIT_SHIFT_L;
+		case ">>": return BIT_SHIFT_R;
+		case ">>>": return BIT_SHIFT_RR;
+		case "^": return BIT_XOR;
+		case "&": return BIT_AND;
+		case "|": return BIT_OR;
+		case "<": return LOGI_LT;
+		case ">": return LOGI_GT;
+		case "<=": return LOGI_LE;
+		case ">=": return LOGI_GE;
+		case "==": return LOGI_EQ;
+		case "!=": return LOGI_NEQ;
+		case "instanceof" : return LOGI_INSOF;
+		case "&&": return LOGI_AND;
+		case "||": return LOGI_OR;
+		case "++": return ARITH_PLUS_2;
+		case "--": return ARITH_MINUS_2;
+		case "~": return BIT_NOT;
+		case "!": return LOGI_NOT;
 		}
 		return -1;
 	}

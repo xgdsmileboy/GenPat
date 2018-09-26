@@ -228,7 +228,7 @@ public class YIntervalRenderer extends AbstractXYItemRenderer
         // for item labels, we have a special case because there is the
         // possibility to draw (a) the regular item label near to just the
         // upper y-value, or (b) the regular item label near the upper y-value
-        // PLUS an additional item label near the lower y-value.
+        // ARITH_PLUS an additional item label near the lower y-value.
         if (isItemLabelVisible(series, item, selected)) {
             drawItemLabel(g2, orientation, dataset, series, item, selected, 
                     xx, yyHigh, false);

@@ -236,11 +236,11 @@ public class ClassInstanceCreate extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
 			if(_expression != null) {
-				_keywords.putAll(_expression.getKeywords());
+				_keywords.putAll(_expression.getCalledMethods());
 			}
 			String key = _classType.toSrcString().toString();
 			Set<Node> set = _keywords.get(key);
@@ -400,7 +400,8 @@ public class ClassInstanceCreate extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_MCALL);
+		_fVector.inc(FVector.KEY_NEW);
+		_fVector.inc(FVector.E_CLASS);
 		if(_expression != null){
 			_fVector.combineFeature(_expression.getFeatureVector());
 		}

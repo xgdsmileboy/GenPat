@@ -95,7 +95,7 @@ public class TypeDeclarationStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(0);
 		}

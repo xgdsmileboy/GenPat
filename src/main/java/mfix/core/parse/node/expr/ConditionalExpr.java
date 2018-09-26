@@ -190,10 +190,10 @@ public class ConditionalExpr extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_condition.getKeywords());
+			_keywords.putAll(_condition.getCalledMethods());
 			avoidDuplicate(_keywords, _first);
 			avoidDuplicate(_keywords, _snd);
 		}
@@ -317,7 +317,7 @@ public class ConditionalExpr extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_STRUCT_COND);
+		_fVector.inc(FVector.E_COND);
 		_fVector.combineFeature(_condition.getFeatureVector());
 		_fVector.combineFeature(_first.getFeatureVector());
 		_fVector.combineFeature(_snd.getFeatureVector());

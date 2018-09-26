@@ -177,11 +177,11 @@ public class SuperFieldAcc extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) { 
 			_keywords = new HashMap<>(7);
 			if(_name != null) {
-				_keywords.putAll(_name.getKeywords());
+				_keywords.putAll(_name.getCalledMethods());
 			}
 		}
 		return _keywords;
@@ -303,6 +303,8 @@ public class SuperFieldAcc extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.inc(FVector.KEY_SUPER);
+		_fVector.inc(FVector.E_FACC);
 		if(_name != null){
 			_fVector.combineFeature(_name.getFeatureVector());
 		}

@@ -151,9 +151,9 @@ public class QName extends Label {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
-			_keywords = _name.getKeywords();
+			_keywords = _name.getCalledMethods();
 		}
 		return _keywords;
 	}
@@ -264,7 +264,7 @@ public class QName extends Label {
 		String name = _name.toString();
 		String sname = _sname.toString();
 		if(_name instanceof SName && Character.isUpperCase(name.charAt(0)) && sname.toUpperCase().equals(sname)){
-			_fVector.inc(FVector.INDEX_LITERAL);
+			_fVector.inc(FVector.OTHER);
 		} else {
 			_fVector.combineFeature(_name.getFeatureVector());
 			_fVector.combineFeature(_sname.getFeatureVector());

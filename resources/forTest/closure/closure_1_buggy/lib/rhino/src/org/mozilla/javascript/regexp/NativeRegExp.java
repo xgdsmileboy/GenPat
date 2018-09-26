@@ -1083,7 +1083,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
                 state.result = new RENode(REOP_QUANT);
                 state.result.min = 1;
                 state.result.max = -1;
-                /* <PLUS>, <parencount>, <parenindex>, <next> ... <ENDCHILD> */
+                /* <ARITH_PLUS>, <parencount>, <parenindex>, <next> ... <ENDCHILD> */
                 state.progLength += 8;
                 hasQ = true;
                 break;

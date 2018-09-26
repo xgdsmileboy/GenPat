@@ -71,7 +71,7 @@ public class SimMatcher {
 			
 			_candidates.add(parsedNode);
 			
-//			Map<String, Set<Node>> keywords = parsedNode.getKeywords();
+//			Map<String, Set<Node>> keywords = parsedNode.getCalledMethods();
 //			boolean containAllKey = true;
 //			for (Entry<String, Set<Node>> entry : _keywords.entrySet()) {
 //				Set<Node> allNodes = keywords.get(entry.getKey());

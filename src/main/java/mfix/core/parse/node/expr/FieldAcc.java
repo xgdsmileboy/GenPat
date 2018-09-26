@@ -150,10 +150,10 @@ public class FieldAcc extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_expression.getKeywords());
+			_keywords.putAll(_expression.getCalledMethods());
 			avoidDuplicate(_keywords, _identifier);
 		}
 		return _keywords;
@@ -261,6 +261,7 @@ public class FieldAcc extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.inc(FVector.E_FACC);
 		_fVector.combineFeature(_expression.getFeatureVector());
 		_fVector.combineFeature(_identifier.getFeatureVector());
 	}

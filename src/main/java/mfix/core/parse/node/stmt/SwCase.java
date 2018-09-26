@@ -182,10 +182,10 @@ public class SwCase extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			if(_expression != null) {
-				_keywords = _expression.getKeywords();
+				_keywords = _expression.getCalledMethods();
 			} else {
 				_keywords = new HashMap<>(0);
 			}
@@ -281,8 +281,8 @@ public class SwCase extends Stmt {
 		if(patternNode instanceof SwCase) {
 			SwCase swCase = (SwCase) patternNode;
 			if(_expression != null && swCase._expression != null) {
-				Map<String, Set<Node>> map = patternNode.getKeywords();
-				Map<String, Set<Node>> thisKeys = getKeywords();
+				Map<String, Set<Node>> map = patternNode.getCalledMethods();
+				Map<String, Set<Node>> thisKeys = getCalledMethods();
 				for(Entry<String, Set<Node>> entry : map.entrySet()) {
 					if(!thisKeys.containsKey(entry.getKey())) {
 						return null;
@@ -318,7 +318,7 @@ public class SwCase extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_STRUCT_SWC);
+		_fVector.inc(FVector.KEY_CASE);
 		if(_expression != null) {
 			_fVector.combineFeature(_expression.getFeatureVector());
 		}

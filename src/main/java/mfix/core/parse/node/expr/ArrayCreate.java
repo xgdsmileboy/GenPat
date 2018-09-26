@@ -225,11 +225,11 @@ public class ArrayCreate extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
 			if(_initializer != null) {
-				_keywords.putAll(_initializer.getKeywords());
+				_keywords.putAll(_initializer.getCalledMethods());
 			}
 			for(Expr expr : _dimension) {
 				avoidDuplicate(_keywords, expr);
@@ -362,7 +362,8 @@ public class ArrayCreate extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_MCALL);
+		_fVector.inc(FVector.KEY_NEW);
+		_fVector.inc(FVector.E_ACREAR);
 		if(_dimension != null){
 			for(Expr expr : _dimension){
 				_fVector.combineFeature(expr.getFeatureVector());

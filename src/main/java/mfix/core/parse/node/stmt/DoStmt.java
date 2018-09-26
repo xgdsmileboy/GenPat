@@ -237,10 +237,10 @@ public class DoStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_stmt.getKeywords());
+			_keywords.putAll(_stmt.getCalledMethods());
 			avoidDuplicate(_keywords, _expression);
 		}
 		return _keywords;
@@ -391,8 +391,8 @@ public class DoStmt extends Stmt {
 	@Override
 	public Node bindingNode(Node patternNode) {
 		if(patternNode instanceof DoStmt) {
-			Map<String, Set<Node>> keywords = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> keywords = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			boolean containAllKeys = true;
 			for(Entry<String, Set<Node>> entry : keywords.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())) {
@@ -427,7 +427,7 @@ public class DoStmt extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_STRUCT_DO);
+		_fVector.inc(FVector.KEY_DO);
 		_fVector.combineFeature(_expression.getFeatureVector());
 		_fVector.combineFeature(_stmt.getFeatureVector());
 	}

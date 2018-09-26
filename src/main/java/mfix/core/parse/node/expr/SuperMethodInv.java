@@ -220,10 +220,10 @@ public class SuperMethodInv extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_arguments.getKeywords());
+			_keywords.putAll(_arguments.getCalledMethods());
 			avoidDuplicate(_keywords, _label);
 			Set<Node> set = _keywords.get(_name.getName());
 			if(set == null) {
@@ -365,7 +365,8 @@ public class SuperMethodInv extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_MCALL);
+		_fVector.inc(FVector.KEY_SUPER);
+		_fVector.inc(FVector.E_MINV);
 		if(_label != null){
 			_fVector.combineFeature(_label.getFeatureVector());
 		}

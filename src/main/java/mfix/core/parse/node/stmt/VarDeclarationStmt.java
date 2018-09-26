@@ -298,7 +298,7 @@ public class VarDeclarationStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
 			for(Vdf vdf : _fragments) {
@@ -424,8 +424,8 @@ public class VarDeclarationStmt extends Stmt {
 	public Node bindingNode(Node patternNode) {
 		if ((patternNode instanceof VarDeclarationStmt) || (patternNode instanceof ExpressionStmt
 				&& ((ExpressionStmt) patternNode).getExpression() instanceof Assign)) {
-			Map<String, Set<Node>> map = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> map = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			for(Entry<String, Set<Node>> entry : map.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())) {
 					return null;
@@ -457,6 +457,7 @@ public class VarDeclarationStmt extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.combineFeature(_declType.getFeatureVector());
 		for(Vdf vdf : _fragments) {
 			_fVector.combineFeature(vdf.getFeatureVector());
 		}

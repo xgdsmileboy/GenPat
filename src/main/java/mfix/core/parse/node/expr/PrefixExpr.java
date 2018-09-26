@@ -140,9 +140,9 @@ public class PrefixExpr extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
-			_keywords = _expression.getKeywords();
+			_keywords = _expression.getCalledMethods();
 		}
 		return _keywords;
 	}
@@ -248,6 +248,7 @@ public class PrefixExpr extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.inc(FVector.E_PREFIX);
 		_fVector.inc(_operator.toSrcString().toString());
 		_fVector.combineFeature(_expression.getFeatureVector());
 	}

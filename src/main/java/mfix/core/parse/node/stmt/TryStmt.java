@@ -452,9 +452,9 @@ public class TryStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
-			_keywords = _blk.getKeywords();
+			_keywords = _blk.getCalledMethods();
 		}
 		return _keywords;
 	}
@@ -672,8 +672,8 @@ public class TryStmt extends Stmt {
 		boolean match = false;
 		if(patternNode instanceof TryStmt) {
 			match = true;
-			Map<String, Set<Node>> map = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> map = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			for(Entry<String, Set<Node>> entry : map.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())) {
 					match = false;
@@ -734,7 +734,7 @@ public class TryStmt extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_STRUCT_TRY);
+		_fVector.inc(FVector.KEY_TRY);
 		if(_resource != null) {
 			for(VarDeclarationExpr vdExpr : _resource) {
 				_fVector.combineFeature(vdExpr.getFeatureVector());

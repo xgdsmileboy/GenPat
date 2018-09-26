@@ -173,8 +173,8 @@ public interface Region<S extends Space> {
     /** Compute the relative position of the instance with respect to an
      * hyperplane.
      * @param hyperplane reference hyperplane
-     * @return one of {@link Side#PLUS Side.PLUS}, {@link Side#MINUS
-     * Side.MINUS}, {@link Side#BOTH Side.BOTH} or {@link Side#HYPER
+     * @return one of {@link Side#PLUS Side.ARITH_PLUS}, {@link Side#MINUS
+     * Side.ARITH_MINUS}, {@link Side#BOTH Side.BOTH} or {@link Side#HYPER
      * Side.HYPER} (the latter result can occur only if the tree
      * contains only one cut hyperplane)
      */

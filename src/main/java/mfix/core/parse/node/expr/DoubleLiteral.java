@@ -8,7 +8,6 @@ package mfix.core.parse.node.expr;
 
 import mfix.common.util.Constant;
 import mfix.core.comp.Modification;
-import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -104,10 +103,4 @@ public class DoubleLiteral extends NumLiteral {
 		_matchNodeType = true;
 	}
 	
-	@Override
-	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_LITERAL);
-	}
-
 }

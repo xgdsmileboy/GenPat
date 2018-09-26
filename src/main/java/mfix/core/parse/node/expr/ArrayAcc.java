@@ -149,8 +149,8 @@ public class ArrayAcc extends Expr {
 		_tokens.addAll(_index.tokens());
 		_tokens.add("]");
 	}
-	
-	@Override
+
+    @Override
 	public boolean compare(Node other) {
 		boolean match = false;
 		if(other instanceof ArrayAcc) {
@@ -160,10 +160,10 @@ public class ArrayAcc extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_array.getKeywords());
+			_keywords.putAll(_array.getCalledMethods());
 			avoidDuplicate(_keywords, _index);
 		}
 		return _keywords;
@@ -281,9 +281,11 @@ public class ArrayAcc extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.inc(FVector.E_AACC);
+		_fVector.inc(FVector.BRAKET_SQL);
+		_fVector.inc(FVector.BRAKET_SQR);
 		_fVector.combineFeature(_array.getFeatureVector());
 		_fVector.combineFeature(_index.getFeatureVector());
-		_fVector.inc(FVector.INDEX_OP_ACC);
 	}
 	
 }

@@ -182,10 +182,10 @@ public class CatClause extends Node {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_exception.getKeywords());
+			_keywords.putAll(_exception.getCalledMethods());
 			avoidDuplicate(_keywords, _blk);
 		}
 		return _keywords;
@@ -290,6 +290,7 @@ public class CatClause extends Node {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.inc(FVector.KEY_CATCH);
 		_fVector.combineFeature(_exception.getFeatureVector());
 		_fVector.combineFeature(_blk.getFeatureVector());
 	}

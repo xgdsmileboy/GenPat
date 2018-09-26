@@ -158,11 +158,11 @@ public class ReturnStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
 			if(_expression != null) {
-				_keywords.putAll(_expression.getKeywords());
+				_keywords.putAll(_expression.getCalledMethods());
 			}
 		}
 		return _keywords;
@@ -254,8 +254,8 @@ public class ReturnStmt extends Stmt {
 	@Override
 	public Node bindingNode(Node patternNode) {
 		if(patternNode instanceof ReturnStmt) {
-			Map<String, Set<Node>> map = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> map = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			for(Entry<String, Set<Node>> entry : map.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())) {
 					return null;
@@ -286,7 +286,7 @@ public class ReturnStmt extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_STRUCT_OTHER);
+		_fVector.inc(FVector.KEY_RET);
 		if(_expression != null) {
 			_fVector.combineFeature(_expression.getFeatureVector());
 		}

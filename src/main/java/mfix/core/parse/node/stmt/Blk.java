@@ -193,7 +193,7 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public Map<String, Set<Node>> getKeywords() {
+    public Map<String, Set<Node>> getCalledMethods() {
         if (_keywords == null) {
             _keywords = new HashMap<>();
             for (Stmt stmt : _statements) {

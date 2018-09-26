@@ -228,10 +228,10 @@ public class WhileStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_expression.getKeywords());
+			_keywords.putAll(_expression.getCalledMethods());
 			avoidDuplicate(_keywords, _body);
 		}
 		return _keywords;
@@ -380,8 +380,8 @@ public class WhileStmt extends Stmt {
 		boolean match = false;
 		if(patternNode instanceof WhileStmt) {
 			match = true;
-			Map<String, Set<Node>> map = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> map = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			for(Entry<String, Set<Node>> entry : map.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())){
 					match = false;
@@ -413,7 +413,7 @@ public class WhileStmt extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_STRUCT_WHILE);
+		_fVector.inc(FVector.KEY_WHILE);
 		_fVector.combineFeature(_expression.getFeatureVector());
 		_fVector.combineFeature(_body.getFeatureVector());
 	}

@@ -22,5 +22,4 @@ public abstract class Label extends Expr {
 	public Label(int startLine, int endLine, ASTNode node) {
 		super(startLine, endLine, node);
 	}
-
 }

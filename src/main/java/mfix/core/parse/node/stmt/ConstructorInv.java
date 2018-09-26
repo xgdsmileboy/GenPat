@@ -157,10 +157,10 @@ public class ConstructorInv  extends Stmt{
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_arguments.getKeywords());
+			_keywords.putAll(_arguments.getCalledMethods());
 			String thisStr = "this";
 			Set<Node> set = _keywords.get(thisStr);
 			if(set == null) {
@@ -253,8 +253,8 @@ public class ConstructorInv  extends Stmt{
 	@Override
 	public Node bindingNode(Node patternNode) {
 		if(patternNode instanceof ConstructorInv) {
-			Map<String, Set<Node>> keywords = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> keywords = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			Node binding = this;
 			for(Entry<String, Set<Node>> entry : keywords.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())) {
@@ -282,7 +282,7 @@ public class ConstructorInv  extends Stmt{
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_MCALL);
+		_fVector.inc(FVector.KEY_THIS);
 		_fVector.combineFeature(_arguments.getFeatureVector());
 	}
 

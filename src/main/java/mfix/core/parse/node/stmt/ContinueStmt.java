@@ -156,7 +156,7 @@ public class ContinueStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>();
 		}
@@ -245,5 +245,9 @@ public class ContinueStmt extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.inc(FVector.KEY_CONTINUE);
+		if(_identifier != null) {
+			_fVector.combineFeature(_identifier.getFeatureVector());
+		}
 	}
 }

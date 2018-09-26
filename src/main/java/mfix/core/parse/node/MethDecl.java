@@ -290,10 +290,10 @@ public class MethDecl extends Node {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			if(_body != null) {
-				_keywords = _body.getKeywords();
+				_keywords = _body.getCalledMethods();
 			} else {
 				_keywords = new HashMap<>(0);
 			}

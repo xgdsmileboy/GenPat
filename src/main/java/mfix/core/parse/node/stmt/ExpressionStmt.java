@@ -142,9 +142,9 @@ public class ExpressionStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
-			_keywords = _expression.getKeywords();
+			_keywords = _expression.getCalledMethods();
 		}
 		return _keywords;
 	}
@@ -218,8 +218,8 @@ public class ExpressionStmt extends Stmt {
 	@Override
 	public Node bindingNode(Node patternNode) {
 		if(patternNode instanceof ExpressionStmt) {
-			Map<String, Set<Node>> map = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> map = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			for(Entry<String, Set<Node>> entry : map.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())) {
 					return null;

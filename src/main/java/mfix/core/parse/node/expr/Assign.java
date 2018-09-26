@@ -182,10 +182,10 @@ public class Assign extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_lhs.getKeywords());
+			_keywords.putAll(_lhs.getCalledMethods());
 			avoidDuplicate(_keywords, _rhs);
 		}
 		return _keywords;
@@ -298,7 +298,7 @@ public class Assign extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_OP_ASSIGN);
+		_fVector.inc(FVector.E_ASSIGN);
 		_fVector.combineFeature(_lhs.getFeatureVector());
 		_fVector.combineFeature(_rhs.getFeatureVector());
 	}

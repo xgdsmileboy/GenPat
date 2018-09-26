@@ -212,10 +212,10 @@ public class MethodInv extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_arguments.getKeywords());
+			_keywords.putAll(_arguments.getCalledMethods());
 			avoidDuplicate(_keywords, _expression);
 			String name = _name.getName();
 			if(!NodeUtils.IGNORE_METHOD_INVOKE.contains(name)) {
@@ -375,7 +375,7 @@ public class MethodInv extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_MCALL);
+		_fVector.inc(FVector.E_MINV);
 		if(_expression != null){
 			_fVector.combineFeature(_expression.getFeatureVector());
 		}

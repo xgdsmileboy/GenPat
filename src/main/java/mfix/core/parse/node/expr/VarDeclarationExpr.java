@@ -181,7 +181,7 @@ public class VarDeclarationExpr extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
 			for(Vdf vdf : _vdfs) {
@@ -321,6 +321,7 @@ public class VarDeclarationExpr extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.combineFeature(_declType.getFeatureVector());
 		for(Vdf vdf : _vdfs) {
 			_fVector.combineFeature(vdf.getFeatureVector());
 		}

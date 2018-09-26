@@ -6,17 +6,6 @@
  */
 package mfix.core.parse.node.stmt;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.eclipse.jdt.core.dom.ASTNode;
-
 import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.comp.Modification;
@@ -27,6 +16,16 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.ExprList;
 import mfix.core.parse.node.expr.MType;
+import org.eclipse.jdt.core.dom.ASTNode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -209,10 +208,10 @@ public class SuperConstructorInv extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>();
-			_keywords.putAll(_arguments.getKeywords());
+			_keywords.putAll(_arguments.getCalledMethods());
 			avoidDuplicate(_keywords, _expression);
 			String superStr = "super";
 			Set<Node> set = _keywords.get(superStr);
@@ -328,8 +327,8 @@ public class SuperConstructorInv extends Stmt {
 	@Override
 	public Node bindingNode(Node patternNode) {
 		if(patternNode instanceof SuperConstructorInv) {
-			Map<String, Set<Node>> map = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> map = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			for(Entry<String, Set<Node>> entry : map.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())) {
 					return null;
@@ -363,9 +362,12 @@ public class SuperConstructorInv extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_MCALL);
+		_fVector.inc(FVector.KEY_SUPER);
 		if(_expression != null) {
 			_fVector.combineFeature(_expression.getFeatureVector());
+		}
+		if(_superType != null) {
+			_fVector.combineFeature(_superType.getFeatureVector());
 		}
 		_fVector.combineFeature(_arguments.getFeatureVector());
 	}

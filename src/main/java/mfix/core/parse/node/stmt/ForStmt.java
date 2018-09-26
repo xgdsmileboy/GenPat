@@ -6,16 +6,6 @@
  */
 package mfix.core.parse.node.stmt;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.eclipse.jdt.core.dom.ASTNode;
-
 import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.comp.Modification;
@@ -25,6 +15,15 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.ExprList;
+import org.eclipse.jdt.core.dom.ASTNode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -320,10 +319,10 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public Map<String, Set<Node>> getKeywords() {
+    public Map<String, Set<Node>> getCalledMethods() {
         if (_keywords == null) {
             _keywords = new HashMap<>(7);
-            _keywords.putAll(_body.getKeywords());
+            _keywords.putAll(_body.getCalledMethods());
             avoidDuplicate(_keywords, _initializers);
             avoidDuplicate(_keywords, _condition);
             avoidDuplicate(_keywords, _updaters);
@@ -520,8 +519,8 @@ public class ForStmt extends Stmt {
     @Override
     public Node bindingNode(Node patternNode) {
         if (patternNode instanceof ForStmt) {
-            Map<String, Set<Node>> map = patternNode.getKeywords();
-            Map<String, Set<Node>> thisKeys = getKeywords();
+            Map<String, Set<Node>> map = patternNode.getCalledMethods();
+            Map<String, Set<Node>> thisKeys = getCalledMethods();
             boolean containsAllKeys = true;
             for (Entry<String, Set<Node>> entry : map.entrySet()) {
                 if (!thisKeys.containsKey(entry.getKey())) {
@@ -564,7 +563,7 @@ public class ForStmt extends Stmt {
     @Override
     public void computeFeatureVector() {
         _fVector = new FVector();
-        _fVector.inc(FVector.INDEX_STRUCT_FOR);
+        _fVector.inc(FVector.KEY_FOR);
         _fVector.combineFeature(_initializers.getFeatureVector());
         if (_condition != null) {
             _fVector.combineFeature(_condition.getFeatureVector());

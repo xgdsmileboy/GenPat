@@ -41,7 +41,7 @@ public abstract class Node implements NodeComparator {
 	protected Map<String, Set<Node>> _keywords = null;
 	protected boolean _keyPoint = false;
 	protected Node _binding = null;
-	
+
 	public Node(int startLine, int endLine, ASTNode oriNode) {
 		this(startLine, endLine, oriNode, null);
 	}
@@ -150,7 +150,7 @@ public abstract class Node implements NodeComparator {
 		}
 		return _tokens;
 	}
-	
+
 	public List<Modification> getNodeModification() {
 		return _modifications;
 	}
@@ -199,13 +199,14 @@ public abstract class Node implements NodeComparator {
 	public abstract StringBuffer replace(Map<String, String> exprMap, Set<String> allUsableVars);
 	public abstract StringBuffer applyChange(Map<String, String> exprMap, Set<String> allUsableVars);
 	public abstract List<Modification> extractModifications();
-	public abstract Map<String, Set<Node>> getKeywords();
+	public abstract Map<String, Set<Node>> getCalledMethods();
+
 	protected abstract void tokenize();
-	
+
 	protected void avoidDuplicate(Map<String, Set<Node>> map, Node node) {
 		if(node != null) {
 			Set<Node> set = null;
-			for(Entry<String, Set<Node>> entry : node.getKeywords().entrySet()) {
+			for(Entry<String, Set<Node>> entry : node.getCalledMethods().entrySet()) {
 				set = map.get(entry.getKey());
 				if(set == null) {
 					set = new HashSet<>();
@@ -297,5 +298,5 @@ public abstract class Node implements NodeComparator {
 			return _name;
 		}
 	}
-	
+
 }

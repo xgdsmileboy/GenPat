@@ -197,11 +197,11 @@ public class Svd extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
 			if(_initializer != null) {
-				_keywords.putAll(_initializer.getKeywords());
+				_keywords.putAll(_initializer.getCalledMethods());
 			}
 		}
 		return _keywords;
@@ -343,8 +343,10 @@ public class Svd extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.combineFeature(_decType.getFeatureVector());
 		_fVector.combineFeature(_name.getFeatureVector());
 		if(_initializer != null){
+			_fVector.inc(FVector.ARITH_ASSIGN);
 			_fVector.combineFeature(_initializer.getFeatureVector());
 		}
 	}

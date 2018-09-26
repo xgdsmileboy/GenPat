@@ -203,11 +203,11 @@ public class Vdf extends Node {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
 			if(_expression != null) {
-				_keywords.putAll(_expression.getKeywords());
+				_keywords.putAll(_expression.getCalledMethods());
 			}
 		}
 		return _keywords;
@@ -345,6 +345,7 @@ public class Vdf extends Node {
 		_fVector = new FVector();
 		_fVector.combineFeature(_identifier.getFeatureVector());
 		if(_expression != null){
+		    _fVector.inc(FVector.ARITH_ASSIGN);
 			_fVector.combineFeature(_expression.getFeatureVector());
 		}
 	}

@@ -12,8 +12,8 @@ import mfix.core.comp.Modification;
 import mfix.core.comp.Update;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
-import org.eclipse.jdt.core.dom.ASTNode;
 import mfix.core.parse.node.expr.SName;
+import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,7 +155,7 @@ public class BreakStmt extends Stmt{
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) { 
 			_keywords = new HashMap<>(0);
 		}
@@ -244,6 +244,10 @@ public class BreakStmt extends Stmt{
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.inc(FVector.KEY_BREAK);
+		if(_identifier != null) {
+            _fVector.combineFeature(_identifier.getFeatureVector());
+        }
 	}
 
 }

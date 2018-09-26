@@ -7,23 +7,18 @@
 package mfix.core.parse;
 
 import mfix.common.util.JavaFile;
-import mfix.common.util.Pair;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.match.metric.FVector.ALGO;
 import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.Expr;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
@@ -52,8 +47,8 @@ public class NodeUtils {
 		if(fVector.computeSimilarity(otherVector, ALGO.COSINE) > 0.8 && fVector.computeSimilarity(otherVector, ALGO.NORM_2) < 0.5) {
 			return true;
 		}
-//		Map<String, Set<Node>> map = sketch.getKeywords();
-//		Map<String, Set<Node>> thisKeys = candidate.getKeywords();
+//		Map<String, Set<Node>> map = sketch.getCalledMethods();
+//		Map<String, Set<Node>> thisKeys = candidate.getCalledMethods();
 //		for(Entry<String, Set<Node>> entry : map.entrySet()) {
 //			if(!thisKeys.containsKey(entry.getKey())) {
 //				return false;
@@ -63,37 +58,7 @@ public class NodeUtils {
 		return false;
 	}
 	
-	public static Pair<String, String> getTypeDecAndMethodDec(ASTNode node) {
-		ASTNode parent = node.getParent();
-		String methodName = null;
-		String className = null;
-		while(parent != null){
-			if(parent instanceof MethodDeclaration){
-				MethodDeclaration methodDeclaration = (MethodDeclaration) parent; 
-				methodName = methodDeclaration.getName().getFullyQualifiedName();
-				String params = "";
-				for(Object obj : methodDeclaration.parameters()){
-					SingleVariableDeclaration singleVariableDeclaration = (SingleVariableDeclaration) obj;
-					params += ","+singleVariableDeclaration.getType().toString();
-				}
-				methodName += params;
-			} else if(parent instanceof TypeDeclaration){
-				TypeDeclaration typeDeclaration = (TypeDeclaration) parent;
-				if(Modifier.isPublic(typeDeclaration.getModifiers()) && className != null){
-					className = typeDeclaration.getName().getFullyQualifiedName() + "$" + className;
-				} else {
-					if(className == null) {
-						className = ((TypeDeclaration)parent).getName().getFullyQualifiedName();
-					}
-				}
-			} else if(parent instanceof EnumDeclaration){
-				className = ((EnumDeclaration)parent).getName().getFullyQualifiedName();
-			}
-			parent = parent.getParent();
-		}
-		return new Pair<String, String>(className, methodName);
-	}
-	
+
 	public static Type parseExprType(Expr left, String operator, Expr right){
 		if(left == null){
 			return parsePreExprType(right, operator);

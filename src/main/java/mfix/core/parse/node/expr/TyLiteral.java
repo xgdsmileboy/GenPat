@@ -93,7 +93,7 @@ public class TyLiteral extends Expr {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(0);
 		}
@@ -156,6 +156,7 @@ public class TyLiteral extends Expr {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+		_fVector.inc(FVector.E_TYPE);
 	}
 
 }

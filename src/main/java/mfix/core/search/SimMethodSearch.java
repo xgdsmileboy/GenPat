@@ -54,6 +54,7 @@ public class SimMethodSearch {
             public boolean visit(MethodDeclaration node) {
                 if (node.getBody() == null) return true;
                 Node sim = parser.process(node);
+                sim.tokens();
                 if (sim != null && fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.NORM_2) >= simThreshold
                         && fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.COSINE) >= simThreshold) {
                     set.add(sim);

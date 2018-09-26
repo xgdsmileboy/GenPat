@@ -262,10 +262,10 @@ public class EnhancedForStmt extends Stmt {
 	}
 	
 	@Override
-	public Map<String, Set<Node>> getKeywords() {
+	public Map<String, Set<Node>> getCalledMethods() {
 		if(_keywords == null) {
 			_keywords = new HashMap<>(7);
-			_keywords.putAll(_statement.getKeywords());
+			_keywords.putAll(_statement.getCalledMethods());
 			avoidDuplicate(_keywords, _varDecl);
 			avoidDuplicate(_keywords, _expression);
 		}
@@ -417,8 +417,8 @@ public class EnhancedForStmt extends Stmt {
 	@Override
 	public Node bindingNode(Node patternNode) {
 		if(patternNode instanceof EnhancedForStmt) {
-			Map<String, Set<Node>> map = patternNode.getKeywords();
-			Map<String, Set<Node>> thisKeys = getKeywords();
+			Map<String, Set<Node>> map = patternNode.getCalledMethods();
+			Map<String, Set<Node>> thisKeys = getCalledMethods();
 			boolean containsAllKeys = true;
 			for(Entry<String, Set<Node>> entry : map.entrySet()) {
 				if(!thisKeys.containsKey(entry.getKey())) {
@@ -455,7 +455,7 @@ public class EnhancedForStmt extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
-		_fVector.inc(FVector.INDEX_STRUCT_ENFOR);
+		_fVector.inc(FVector.KEY_ENFOR);
 		_fVector.combineFeature(_varDecl.getFeatureVector());
 		_fVector.combineFeature(_expression.getFeatureVector());
 		_fVector.combineFeature(_statement.getFeatureVector());
