@@ -7,6 +7,25 @@
 
 package mfix;
 
+import mfix.common.java.D4jSubject;
+import mfix.common.util.Constant;
+import mfix.common.util.JavaFile;
+import mfix.common.util.Utils;
+import mfix.core.locator.D4JManualLocator;
+import mfix.core.locator.Location;
+import mfix.core.parse.NodeParser;
+import mfix.core.parse.node.Node;
+import mfix.core.search.ExtractFaultyCode;
+import mfix.core.search.SimMethodSearch;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/19
@@ -14,40 +33,31 @@ package mfix;
 public class Main {
 
     public static void main(String[] args) {
+        String base = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest");
+        String codeBase = "/home/lee/Xia/GitHubData/MissSome/2011/V1";
+        Set<String> ignoreKeys = new HashSet<>();
+        ignoreKeys.add("fixed-version");
+        D4jSubject subject = new D4jSubject(base, "chart", 1);
+        D4JManualLocator locator = new D4JManualLocator(subject);
+        List<Location> locations = locator.getLocations(100);
+        List<File> files = JavaFile.ergodic(new File(codeBase), new LinkedList<File>(), ignoreKeys, ".java");
+        System.out.println("Total file : " + files.size());
+        for (Location location : locations) {
+            String file = Utils.join(Constant.SEP, subject.getHome() + subject.getSsrc(), location.getRelClazzFile());
+            MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
+            CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
+            NodeParser parser = NodeParser.getInstance();
+            parser.setCompilationUnit(unit);
+            Node fnode = parser.process(method);
+            for (File f : files) {
+                unit = JavaFile.genASTFromFileWithType(f);
+                Set<Node> nodes = SimMethodSearch.searchSimMethod(unit, fnode, 0.95);
+                for (Node node : nodes) {
+                    System.out.println(node.toSrcString());
+                }
+            }
 
-////        CompilationUnit unit = JavaFile.genAST(System.getProperty("user.dir") + "/Pair.java");
-//        CompilationUnit unit = JavaFile.genASTFromFileWithType(System.getProperty("user.dir") + "/Path.java", null);
-//        unit.accept(new ASTVisitor() {
-//            @Override
-//            public boolean visit(MethodInvocation node) {
-////                System.out.println(node.resolveMethodBinding());
-////                System.out.println(node.getName().getFullyQualifiedName());
-//                return true;
-//            }
-//
-//            public boolean visit(VariableDeclarationStatement variableDeclarationStatement) {
-//                List<VariableDeclarationFragment> fragments = variableDeclarationStatement.fragments();
-//                for(VariableDeclarationFragment vdf : fragments) {
-//                    System.out.println(vdf.resolveBinding().getType().getQualifiedName());
-//                }
-//                return true;
-//            }
-//
-//            public boolean visit(SingleVariableDeclaration svd) {
-//                System.out.println(svd.resolveBinding().getType().getQualifiedName());
-//                return true;
-//            }
-//
-//            public boolean visit(FieldDeclaration fieldDeclaration) {
-//                List<VariableDeclarationFragment> fragments = fieldDeclaration.fragments();
-//                for(VariableDeclarationFragment vdf : fragments) {
-//                    System.out.println(vdf.resolveBinding().getType().getQualifiedName());
-//                }
-//                return true;
-//            }
-//
-//        });
-
+        }
     }
 
 }

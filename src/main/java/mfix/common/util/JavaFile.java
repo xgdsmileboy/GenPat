@@ -29,6 +29,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -184,13 +185,23 @@ public class JavaFile {
     }
 
     /**
-     * @see CompilationUnit genASTFromFileWithType(String srcFile, String srcPath)
+     * @see ASTNode genASTFromSourceWithType(String icu, int type, String filePath, String srcPath)
      * @param srcFile
      * @return
      */
     public static CompilationUnit genASTFromFileWithType(String srcFile) {
         return (CompilationUnit) genASTFromSourceWithType(readFileToString(srcFile), ASTParser.K_COMPILATION_UNIT,
                 srcFile, null);
+    }
+
+    /**
+     * @see ASTNode genASTFromSourceWithType(String icu, int type, String filePath, String srcPath)
+     * @param srcFile
+     * @return
+     */
+    public static CompilationUnit genASTFromFileWithType(File srcFile) {
+        return (CompilationUnit) genASTFromSourceWithType(readFileToString(srcFile), ASTParser.K_COMPILATION_UNIT,
+                srcFile.getAbsolutePath(), null);
     }
 
     /**
@@ -506,7 +517,7 @@ public class JavaFile {
     }
 
     /**
-     * @see common.util.JavaFile#ergodic(File file, List<File> fileList, String srcFilePostfix)
+     * @see List<File> ergodic(File file, List<File> fileList, String srcFilePostfix)
      */
     public static List<File> ergodic(File file, List<File> fileList) {
         return ergodic(file, fileList, ".java");
@@ -540,8 +551,26 @@ public class JavaFile {
         return fileList;
     }
 
+    public static List<File> ergodic(File file, List<File> fileList, Set<String> ignoreSet, String srcFilePostfix) {
+        if (file == null) {
+            LevelLogger.error(__name__ + "#ergodic Illegal input file : null.");
+            return fileList;
+        }
+        File[] files = file.listFiles();
+        if (files == null)
+            return fileList;
+        for (File f : files) {
+            if(ignoreSet.contains(f.getName())) continue;
+            if (f.isDirectory()) {
+                ergodic(f, fileList, ignoreSet, srcFilePostfix);
+            } else if (f.getName().endsWith(srcFilePostfix))
+                fileList.add(f);
+        }
+        return fileList;
+    }
+
     /**
-     * @see common.util.JavaFile#ergodic(String directory, List<String> fileList, String srcFilePostfix)
+     * @see List<String> ergodic(String directory, List<String> fileList, String srcFilePostfix)
      */
     public static List<String> ergodic(String directory, List<String> fileList) {
         return ergodic(directory, fileList, ".java");

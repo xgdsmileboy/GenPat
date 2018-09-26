@@ -96,7 +96,7 @@ public class NodeParser {
     private CompilationUnit _cunit;
 
     public static NodeParser getInstance() {
-        if(_instance == null) {
+        if (_instance == null) {
             _instance = new NodeParser();
         }
         return _instance;
@@ -1327,50 +1327,67 @@ public class NodeParser {
     }
 
     private static Type typeFromBinding(AST ast, ITypeBinding typeBinding) {
-        if(typeBinding == null) {
+        if (typeBinding == null) {
             return ast.newWildcardType();
         }
 
-        if( typeBinding.isPrimitive() ) {
+        if (typeBinding.isPrimitive()) {
             return ast.newPrimitiveType(
                     PrimitiveType.toCode(typeBinding.getName()));
         }
 
-        if( typeBinding.isCapture() ) {
+        if (typeBinding.isCapture()) {
             ITypeBinding wildCard = typeBinding.getWildcard();
             WildcardType capType = ast.newWildcardType();
             ITypeBinding bound = wildCard.getBound();
-            if( bound != null ) {
+            if (bound != null) {
                 capType.setBound(typeFromBinding(ast, bound),
                         wildCard.isUpperbound());
             }
             return capType;
         }
 
-        if( typeBinding.isArray() ) {
+        if (typeBinding.isArray()) {
             Type elType = typeFromBinding(ast, typeBinding.getElementType());
             return ast.newArrayType(elType, typeBinding.getDimensions());
         }
 
-        if( typeBinding.isParameterizedType() ) {
+        if (typeBinding.isParameterizedType()) {
             ParameterizedType type = ast.newParameterizedType(
                     typeFromBinding(ast, typeBinding.getErasure()));
 
             @SuppressWarnings("unchecked")
             List<Type> newTypeArgs = type.typeArguments();
-            for( ITypeBinding typeArg : typeBinding.getTypeArguments() ) {
+            for (ITypeBinding typeArg : typeBinding.getTypeArguments()) {
                 newTypeArgs.add(typeFromBinding(ast, typeArg));
             }
 
             return type;
         }
 
+        if (typeBinding.isWildcardType()) {
+            WildcardType type = ast.newWildcardType();
+            if (typeBinding.getBound() != null) {
+                type.setBound(typeFromBinding(ast, typeBinding.getBound()));
+            }
+            return type;
+        }
+
+//        if(typeBinding.isGenericType()) {
+//            System.out.println(typeBinding.toString());
+//            return typeFromBinding(ast, typeBinding.getErasure());
+//        }
+
         // simple or raw type
         String qualName = typeBinding.getQualifiedName();
-        if( "".equals(qualName) ) {
+        if ("".equals(qualName)) {
             return ast.newWildcardType();
         }
-        return ast.newSimpleType(ast.newName(qualName));
+        try {
+            return ast.newSimpleType(ast.newName(qualName));
+        } catch (Exception e) {
+            return ast.newWildcardType();
+        }
     }
 
 }
