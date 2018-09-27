@@ -1,5 +1,6 @@
 /.idea
 /logs
+/tmp
 /target
 /**/.DS_Store
 /MineFix.iml
