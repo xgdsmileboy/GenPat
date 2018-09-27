@@ -106,8 +106,9 @@ public class NodeParser {
 
     }
 
-    public void setCompilationUnit(CompilationUnit unit) {
+    public NodeParser setCompilationUnit(CompilationUnit unit) {
         _cunit = unit;
+        return this;
     }
 
     /************************** visit start : MethodDeclaration ***********************/

@@ -15,6 +15,9 @@ import mfix.common.util.Utils;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import mfix.core.parse.NodeParser;
+import mfix.core.parse.diff.Diff;
+import mfix.core.parse.diff.TextDiff;
+import mfix.core.parse.diff.text.Line;
 import mfix.core.parse.node.Node;
 import mfix.core.search.ExtractFaultyCode;
 import mfix.core.search.SimMethodSearch;
@@ -34,40 +37,48 @@ import java.util.Set;
  */
 public class Main {
 
-    public static void main(String[] args) {
-        String base = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest");
-        String codeBase = "/home/lee/Xia/GitHubData/MissSome/2011/V1";
-        String tempFile = Constant.HOME + Constant.SEP + "similar_";
-        Set<String> ignoreKeys = new HashSet<>();
-        ignoreKeys.add("fixed-version");
-        D4jSubject subject = new D4jSubject(base, "chart", 1);
+    private static void process(D4jSubject subject, String codeBase) {
+        String outPath = Utils.join(Constant.SEP, Constant.TMP_OUT, subject.getName(), String.valueOf(subject.getId()));
         D4JManualLocator locator = new D4JManualLocator(subject);
         List<Location> locations = locator.getLocations(100);
+        Set<String> ignoreKeys = new HashSet<>();
+        ignoreKeys.add("fixed-version");
         List<File> files = JavaFile.ergodic(new File(codeBase), new LinkedList<File>(), ignoreKeys, ".java");
-        System.out.println("Total file : " + files.size());
-        int id = 0;
-        for (Location location : locations) {
-            id++;
+        int locationID = 1;
+        for(Location location : locations) {
             String file = Utils.join(Constant.SEP, subject.getHome() + subject.getSsrc(), location.getRelClazzFile());
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
             NodeParser parser = NodeParser.getInstance();
             parser.setCompilationUnit(unit);
             Node fnode = parser.process(method);
-            JavaFile.writeStringToFile(tempFile + id + ".log", fnode.toSrcString().toString() + "\n ---------\n",
-                    false);
-            int fileSize = files.size();
-            for (File f : files) {
-                System.out.println(fileSize--);
-                unit = JavaFile.genASTFromFileWithType(f);
-                Map<Node, Pair<Double, Double>> nodes = SimMethodSearch.searchSimMethod(unit, fnode, 0.8);
-                for (Map.Entry<Node, Pair<Double, Double>> node : nodes.entrySet()) {
-                    JavaFile.writeStringToFile(tempFile + id + ".log", ">>>DIST: " + node.getValue().getFirst() + "\n" +
-                            ">>>ARGLE: " + node.getValue().getSecond() + "\n" + node.getKey().toString() + "\n", true);
+            Utils.log(Utils.join(Constant.SEP, outPath, String.valueOf(locationID), "faulty.log"), file,
+                    fnode.getStartLine(), fnode.getEndLine(), method.toString(), false);
+            int count = 1;
+            for(File buggy : files) {
+                String fixed = buggy.getAbsolutePath().replace("buggy-version", "fixed-version");
+                Map<Pair<Node, Diff<Line>>, Pair<Double, Double>> candidates =
+                        SimMethodSearch.searchSimFixedMethod(buggy.getAbsolutePath(), fixed, fnode, TextDiff.class,
+                                0.7);
+                for(Map.Entry<Pair<Node, Diff<Line>>, Pair<Double, Double>> entry : candidates.entrySet()) {
+                    Node node = entry.getKey().getFirst();
+                    Diff<Line> diff = entry.getKey().getSecond();
+                    Pair<Double, Double> similarity = entry.getValue();
+                    Utils.log(Utils.join(Constant.SEP, outPath, java.lang.String.valueOf(count), ".log"),
+                            buggy.getAbsolutePath(), node.getStartLine(),
+                            node.getEndLine(), similarity.getFirst(), similarity.getSecond(),
+                            node.toSrcString().toString(),
+                            diff, false);
                 }
             }
-
         }
+    }
+
+    public static void main(String[] args) {
+        String base = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest");
+        String codeBase = "/home/lee/Xia/GitHubData/MissSome/2011/V1";
+        D4jSubject subject = new D4jSubject(base, "chart", 1);
+        process(subject, codeBase);
     }
 
 }

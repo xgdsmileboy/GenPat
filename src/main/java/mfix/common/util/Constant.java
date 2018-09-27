@@ -18,6 +18,7 @@ public class Constant {
     public final static String HOME = System.getProperty("user.dir");
     public final static char SEP = File.separatorChar;
     public final static String RES_DIR = HOME + SEP + "resources";
+    public final static String TMP_OUT = HOME + SEP + "tmp";
 
     public final static String NEW_LINE = "\n";
     public final static String PLACE_HOLDER = "$p$";
