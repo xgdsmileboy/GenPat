@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -40,26 +41,42 @@ public class Main {
 
     private static void process(D4jSubject subject, Set<String> codeBase) {
         String outPath = Utils.join(Constant.SEP, Constant.TMP_OUT, subject.getName(), String.valueOf(subject.getId()));
+        String infoFile = outPath + Constant.SEP + "info.log";
+
+        // log start info
+        Utils.log(infoFile, "START: " + new Date().toString() + Constant.NEW_LINE, false);
+        Utils.log(infoFile, "SUBJECT: " + subject.getName() + "_" + subject.getId() + Constant.NEW_LINE, false);
+
         D4JManualLocator locator = new D4JManualLocator(subject);
         List<Location> locations = locator.getLocations(100);
         Set<String> ignoreKeys = new HashSet<>();
         ignoreKeys.add("fixed-version");
         int locationID = 1;
-        for(Location location : locations) {
+        for (Location location : locations) {
             String file = Utils.join(Constant.SEP, subject.getHome() + subject.getSsrc(), location.getRelClazzFile());
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
             NodeParser parser = NodeParser.getInstance();
             parser.setCompilationUnit(unit);
             Node fnode = parser.process(method);
-            Utils.log(Utils.join(Constant.SEP, outPath, String.valueOf(locationID), "faulty.log"), file,
+
+            // record faulty node info
+            Utils.log(Utils.join(Constant.SEP, outPath, String.valueOf(locationID++), "faulty.log"), file,
                     fnode.getStartLine(), fnode.getEndLine(), method.toString(), false);
+            // log current location info
+            Utils.log(infoFile, "LOCATION : " + location.getRelClazzFile() + "#" +
+                    location.getLine() + Constant.NEW_LINE, true);
+
             int count = 1;
-            for(String base : codeBase) {
+            for (String base : codeBase) {
                 List<File> files = JavaFile.ergodic(new File(base), new LinkedList<File>(), ignoreKeys, ".java");
                 int size = files.size();
+
+                // log file size for searching
+                Utils.log(infoFile, "CODEBASE : " + base + "(FILE: " + size + ")", true);
+
                 for (File buggy : files) {
-                    System.out.println(size --);
+                    System.out.println(size--);
                     String fixed = buggy.getAbsolutePath().replace("buggy-version", "fixed-version");
                     Map<Pair<Node, Diff<Line>>, Pair<Double, Double>> candidates =
                             SimMethodSearch.searchSimFixedMethod(buggy.getAbsolutePath(), fixed, fnode, TextDiff.class,
@@ -68,6 +85,7 @@ public class Main {
                         Node node = entry.getKey().getFirst();
                         Diff<Line> diff = entry.getKey().getSecond();
                         Pair<Double, Double> similarity = entry.getValue();
+
                         Utils.log(Utils.join(Constant.SEP, outPath, java.lang.String.valueOf(count), ".log"),
                                 buggy.getAbsolutePath(), node.getStartLine(),
                                 node.getEndLine(), similarity.getFirst(), similarity.getSecond(),
@@ -77,6 +95,8 @@ public class Main {
                 }
             }
         }
+        Utils.log(infoFile, "FINISH : " + new Date().toString() + Constant.NEW_LINE, true);
+
     }
 
     public static void main(String[] args) {
@@ -89,8 +109,8 @@ public class Main {
         path2version.put("2016", 49);
         path2version.put("2017", 60);
 
-        for(Map.Entry<String, Integer> entry : path2version.entrySet()) {
-            for(int i = 1; i < entry.getValue(); i++) {
+        for (Map.Entry<String, Integer> entry : path2version.entrySet()) {
+            for (int i = 1; i < entry.getValue(); i++) {
                 codeBase.add("/home/lee/Xia/GitHubData/MissSome/" + entry.getKey() + "/V" + i);
             }
         }

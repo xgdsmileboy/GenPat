@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -140,6 +141,10 @@ public class Utils {
         }
     }
 
+
+    public static void log(String logFile, String content, boolean append) {
+        JavaFile.writeStringToFile(logFile, "[" + new Date().toString() +  "]" + content, append);
+    }
 
     public static void log(String logFile, String path, int startLine, int endLine, String content,
                            boolean append) {
