@@ -67,7 +67,7 @@ public class Main {
             Utils.log(infoFile, "LOCATION : " + location.getRelClazzFile() + "#" +
                     location.getLine() + Constant.NEW_LINE, true);
 
-            int count = 1;
+            int similarCount = 1;
             for (String base : codeBase) {
                 List<File> files = JavaFile.ergodic(new File(base), new LinkedList<File>(), ignoreKeys, ".java");
                 int size = files.size();
@@ -86,7 +86,7 @@ public class Main {
                         Diff<Line> diff = entry.getKey().getSecond();
                         Pair<Double, Double> similarity = entry.getValue();
 
-                        Utils.log(Utils.join(Constant.SEP, outPath, java.lang.String.valueOf(count), ".log"),
+                        Utils.log(Utils.join(Constant.SEP, outPath, java.lang.String.valueOf(similarCount++), ".log"),
                                 buggy.getAbsolutePath(), node.getStartLine(),
                                 node.getEndLine(), similarity.getFirst(), similarity.getSecond(),
                                 node.toSrcString().toString(),
