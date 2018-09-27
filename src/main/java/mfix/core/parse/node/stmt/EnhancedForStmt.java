@@ -17,6 +17,7 @@ import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.Svd;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -29,8 +30,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class EnhancedForStmt extends Stmt {
+public class EnhancedForStmt extends Stmt implements Serializable {
 
+	private static final long serialVersionUID = 8332915530003880205L;
 	private Svd _varDecl = null;
 	private Expr _expression = null;
 	private Stmt _statement = null;
@@ -41,12 +43,12 @@ public class EnhancedForStmt extends Stmt {
      *	for ( FormalParameter : Expression )
      *	                   Statement
 	 */
-	public EnhancedForStmt(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
+	public EnhancedForStmt(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 	
-	public EnhancedForStmt(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public EnhancedForStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.EFOR;
 	}
 	

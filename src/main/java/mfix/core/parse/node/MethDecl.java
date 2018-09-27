@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Type;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -29,8 +30,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class MethDecl extends Node {
+public class MethDecl extends Node implements Serializable {
 
+	private static final long serialVersionUID = -4279492715496549645L;
 	private List<Modifier> _modifiers = new ArrayList<>(5);
 	private Type _retType;
 	private SName _name;
@@ -38,8 +40,8 @@ public class MethDecl extends Node {
 	private Blk _body;
 	private List<Object> _throws;
 	
-	public MethDecl(int startLine, int endLine, ASTNode oriNode) {
-		super(startLine, endLine, oriNode);
+	public MethDecl(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.METHDECL;
 		_retType = AST.newAST(AST.JLS8).newWildcardType(); 
 	}

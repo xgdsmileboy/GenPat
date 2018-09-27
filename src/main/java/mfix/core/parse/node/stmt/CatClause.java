@@ -16,6 +16,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.Svd;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,8 +28,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class CatClause extends Node {
+public class CatClause extends Node implements Serializable {
 
+	private static final long serialVersionUID = 8636697940678019414L;
 	private Svd _exception = null;
 	private Blk _blk = null; 
 	
@@ -36,12 +38,12 @@ public class CatClause extends Node {
 	 * CatchClause
 	 *    catch ( SingleVariableDeclaration ) Block
 	 */
-	public CatClause(int startLine, int endLine, ASTNode oriNode) {
-		this(startLine, endLine, oriNode, null);
+	public CatClause(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		this(fileName, startLine, endLine, oriNode, null);
 	}
 	
-	public CatClause(int startLine, int endLine, ASTNode oriNode, Node parent) {
-		super(startLine, endLine, oriNode, parent);
+	public CatClause(String fileName, int startLine, int endLine, ASTNode oriNode, Node parent) {
+		super(fileName, startLine, endLine, oriNode, parent);
 		_nodeType = TYPE.CATCHCLAUSE;
 	}
 	

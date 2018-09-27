@@ -14,6 +14,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,12 +27,13 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ExprList extends Node {
+public class ExprList extends Node implements Serializable {
 
+	private static final long serialVersionUID = -1155629329446419826L;
 	private List<Expr> _exprs;
 	
-	public ExprList(int startLine, int endLine, ASTNode oriNode) {
-		super(startLine, endLine, oriNode);
+	public ExprList(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		super(fileName, startLine, endLine, oriNode);
 	}
 	
 	public void setExprs(List<Expr> exprs) {

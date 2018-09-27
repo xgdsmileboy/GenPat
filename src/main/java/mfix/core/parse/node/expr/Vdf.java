@@ -16,6 +16,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,8 +28,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class Vdf extends Node {
+public class Vdf extends Node implements Serializable {
 
+	private static final long serialVersionUID = -1445761649599489420L;
 	private SName _identifier = null;
 	private int _dimensions = 0; 
 	private Expr _expression = null;
@@ -37,13 +39,13 @@ public class Vdf extends Node {
 	 * VariableDeclarationFragment:
      *	Identifier { Dimension } [ = Expression ]
 	 */
-	public Vdf(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
-		_nodeType = TYPE.VARDECLFRAG;
+	public Vdf(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 	}
 	
-	public Vdf(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public Vdf(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
+		_nodeType = TYPE.VARDECLFRAG;
 	}
 	
 	public void setName(SName identifier){

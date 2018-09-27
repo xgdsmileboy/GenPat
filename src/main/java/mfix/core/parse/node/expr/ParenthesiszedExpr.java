@@ -13,6 +13,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,16 +24,17 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ParenthesiszedExpr extends Expr {
+public class ParenthesiszedExpr extends Expr implements Serializable {
 
+	private static final long serialVersionUID = -8417799816148324460L;
 	private Expr _expression = null;
 	
 	/**
 	 * ParenthesizedExpression:
      *	( Expression )
 	 */
-	public ParenthesiszedExpr(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public ParenthesiszedExpr(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.PARENTHESISZED;
 	}
 

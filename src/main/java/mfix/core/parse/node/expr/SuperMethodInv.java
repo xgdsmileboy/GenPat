@@ -15,6 +15,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,8 +28,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SuperMethodInv extends Expr {
+public class SuperMethodInv extends Expr implements Serializable {
 
+	private static final long serialVersionUID = -227589196009347171L;
 	private Label _label = null;
 	private SName _name = null;
 	private ExprList _arguments = null;
@@ -39,8 +41,8 @@ public class SuperMethodInv extends Expr {
      *    [ < Type { , Type } > ]
      *    Identifier ( [ Expression { , Expression } ] )
 	 */
-	public SuperMethodInv(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public SuperMethodInv(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SMINVOCATION;
 	}
 	

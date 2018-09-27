@@ -17,6 +17,7 @@ import mfix.core.parse.node.expr.ExprList;
 import mfix.core.parse.node.expr.MType;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,8 +31,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ConstructorInv  extends Stmt{
+public class ConstructorInv  extends Stmt implements Serializable {
 
+	private static final long serialVersionUID = -680765569439500998L;
 	private MType _thisType = null;
 	private ExprList _arguments = null;
 	
@@ -40,13 +42,13 @@ public class ConstructorInv  extends Stmt{
      *	[ < Type { , Type } > ]
      *	       this ( [ Expression { , Expression } ] ) ;
 	 */
-	public ConstructorInv(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
-		_nodeType = TYPE.CONSTRUCTORINV;
+	public ConstructorInv(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 	
-	public ConstructorInv(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public ConstructorInv(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
+		_nodeType = TYPE.CONSTRUCTORINV;
 	}
 	
 	public void setThisType(MType thisType){

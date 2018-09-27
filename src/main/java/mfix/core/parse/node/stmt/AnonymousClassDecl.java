@@ -12,6 +12,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,11 +24,13 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class AnonymousClassDecl extends Node {
+public class AnonymousClassDecl extends Node implements Serializable {
 
-	
-	public AnonymousClassDecl(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+
+	private static final long serialVersionUID = -5993526474963543721L;
+
+	public AnonymousClassDecl(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.ANONYMOUSCDECL;
 	}
 	

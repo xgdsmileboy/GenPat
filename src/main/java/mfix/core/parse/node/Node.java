@@ -14,6 +14,7 @@ import mfix.core.parse.node.expr.SName;
 import mfix.core.parse.node.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -26,24 +27,27 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Node implements NodeComparator {
+public abstract class Node implements NodeComparator, Serializable {
 
+    private static final long serialVersionUID = -6995771051040337618L;
+    protected String _fileName;
 	protected int _startLine;
 	protected int _endLine;
-	protected ASTNode _oriNode;
 	protected Node _parent;
+    protected TYPE _nodeType = TYPE.UNKNOWN;
+	protected ASTNode _oriNode;
 	protected FVector _fVector = null;
-	protected LinkedList<String> _tokens = null;
-	protected TYPE _nodeType = TYPE.UNKNOWN;
-	protected boolean _matchNodeType = false;
-	protected Node _tarNode = null;
-	protected List<Modification> _modifications = new LinkedList<>();
-	protected Map<String, Set<Node>> _keywords = null;
-	protected boolean _keyPoint = false;
-	protected Node _binding = null;
 
-	public Node(int startLine, int endLine, ASTNode oriNode) {
-		this(startLine, endLine, oriNode, null);
+	protected transient LinkedList<String> _tokens = null;
+	protected transient boolean _matchNodeType = false;
+	protected transient Node _tarNode = null;
+	protected transient List<Modification> _modifications = new LinkedList<>();
+	protected transient Map<String, Set<Node>> _keywords = null;
+	protected transient boolean _keyPoint = false;
+	protected transient Node _binding = null;
+
+	public Node(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		this(fileName, startLine, endLine, oriNode, null);
 	}
 	
 	public int getStartLine() {
@@ -54,8 +58,9 @@ public abstract class Node implements NodeComparator {
 		return _endLine;
 	}
 	
-	public Node(int startLine, int endLine, ASTNode oriNode, Node parent) {
-		_startLine = startLine;
+	public Node(String fileName, int startLine, int endLine, ASTNode oriNode, Node parent) {
+		_fileName = fileName;
+	    _startLine = startLine;
 		_endLine = endLine;
 		_oriNode = oriNode;
 		_parent = parent;

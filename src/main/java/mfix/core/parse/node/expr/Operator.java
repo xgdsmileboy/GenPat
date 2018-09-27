@@ -12,6 +12,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,10 +24,12 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Operator extends Node {
-	
-	public Operator(int startLine, int endLine, ASTNode oriNode) {
-		super(startLine, endLine, oriNode);
+public abstract class Operator extends Node implements Serializable {
+
+	private static final long serialVersionUID = -6189851424541008969L;
+
+	public Operator(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		super(fileName, startLine, endLine, oriNode);
 	}
 	
 	@Override

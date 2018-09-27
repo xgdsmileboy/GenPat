@@ -11,6 +11,7 @@ import mfix.core.comp.Modification;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,13 +19,14 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class FloatLiteral extends NumLiteral {
+public class FloatLiteral extends NumLiteral implements Serializable {
 
+	private static final long serialVersionUID = -6015309331641968237L;
 	private float _value = .0f;
 	private final double EPSILON = 1e-5;
 	
-	public FloatLiteral(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public FloatLiteral(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.FLITERAL;
 	}
 	

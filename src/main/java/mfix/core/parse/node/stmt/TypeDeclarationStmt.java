@@ -12,6 +12,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,19 +24,21 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class TypeDeclarationStmt extends Stmt {
+public class TypeDeclarationStmt extends Stmt implements Serializable {
+
+	private static final long serialVersionUID = -6511516466512533760L;
 
 	/**
 	 * TypeDeclarationStatement:
      *	TypeDeclaration
      *	EnumDeclaration
 	 */
-	public TypeDeclarationStmt(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
+	public TypeDeclarationStmt(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 
-	public TypeDeclarationStmt(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public TypeDeclarationStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.TYPEDECL;
 	}
 	

@@ -10,18 +10,20 @@ import mfix.common.util.Constant;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class IntLiteral extends NumLiteral {
+public class IntLiteral extends NumLiteral implements Serializable {
 
+	private static final long serialVersionUID = 5166876752215736559L;
 	private int _value = 0;
 	
-	public IntLiteral(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public IntLiteral(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.INTLITERAL;
 	}
 	

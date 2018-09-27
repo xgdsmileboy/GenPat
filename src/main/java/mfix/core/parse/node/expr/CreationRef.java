@@ -12,6 +12,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,7 +24,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class CreationRef extends Expr {
+public class CreationRef extends Expr implements Serializable {
+
+	private static final long serialVersionUID = 6237635456129751926L;
 
 	/**
 	 * CreationReference:
@@ -31,8 +34,8 @@ public class CreationRef extends Expr {
      *     [ < Type { , Type } > ]
      *     new
 	 */
-	public CreationRef(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public CreationRef(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 	}
 	
 	@Override

@@ -16,6 +16,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,8 +29,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ArrayCreate extends Expr {
+public class ArrayCreate extends Expr implements Serializable {
 
+	private static final long serialVersionUID = -8863515069590314916L;
 	private MType _type = null;
 	private List<Expr> _dimension = null;
 	private ArrayInitial _initializer = null;
@@ -40,8 +42,8 @@ public class ArrayCreate extends Expr {
 	 * { [ ] } new PrimitiveType [ ] { [ ] } ArrayInitializer new TypeName [ <
 	 * Type { , Type } > ] [ ] { [ ] } ArrayInitializer
 	 */
-	public ArrayCreate(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public ArrayCreate(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.ARRCREAT;
 	}
 

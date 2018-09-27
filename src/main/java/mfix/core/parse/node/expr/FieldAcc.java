@@ -15,6 +15,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,8 +27,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class FieldAcc extends Expr {
+public class FieldAcc extends Expr implements Serializable {
 
+	private static final long serialVersionUID = -7480080890886474478L;
 	private Expr _expression = null;
 	private SName _identifier = null;
 	
@@ -36,8 +38,8 @@ public class FieldAcc extends Expr {
 	 * FieldAccess:
      *           Expression . Identifier
 	 */
-	public FieldAcc(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public FieldAcc(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.FIELDACC;
 	}
 

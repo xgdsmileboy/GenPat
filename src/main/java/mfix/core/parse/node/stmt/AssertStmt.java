@@ -12,6 +12,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,19 +24,21 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class AssertStmt extends Stmt {
+public class AssertStmt extends Stmt implements Serializable {
+
+	private static final long serialVersionUID = 8494694375316529776L;
 
 	/**
 	 * AssertStatement:
      *	assert Expression [ : Expression ] ;
 	 */
-	public AssertStmt(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
-		_nodeType = TYPE.ASSERT;
+	public AssertStmt(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 	
-	public AssertStmt(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public AssertStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
+		_nodeType = TYPE.ASSERT;
 	}
 	
 	@Override

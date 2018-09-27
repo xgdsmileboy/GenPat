@@ -9,14 +9,18 @@ package mfix.core.parse.node.stmt;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Stmt extends Node {
-	
-	protected Stmt(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+public abstract class Stmt extends Node implements Serializable {
+
+	private static final long serialVersionUID = -4168850816999087148L;
+
+	protected Stmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
 	}
 	
 	@Override

@@ -15,6 +15,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +26,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class QName extends Label {
+public class QName extends Label implements Serializable {
 
+	private static final long serialVersionUID = -7347252879776740292L;
 	private Label _name = null;
 	private SName _sname = null;
 	
@@ -34,8 +36,8 @@ public class QName extends Label {
 	 * QualifiedName:
      *	Name . SimpleName
 	 */
-	public QName(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public QName(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.QNAME;
 	}
 	

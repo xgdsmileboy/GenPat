@@ -16,6 +16,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.Expr;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,8 +30,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SwitchStmt extends Stmt {
+public class SwitchStmt extends Stmt implements Serializable {
 
+	private static final long serialVersionUID = 242211567501322520L;
 	private Expr _expression = null;
 	private List<Stmt> _statements = null;
 	
@@ -42,12 +44,12 @@ public class SwitchStmt extends Stmt {
      *           case Expression  :
      *           default :
 	 */
-	public SwitchStmt(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
+	public SwitchStmt(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 	
-	public SwitchStmt(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public SwitchStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.SWSTMT;
 	}
 

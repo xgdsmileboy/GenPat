@@ -17,6 +17,7 @@ import mfix.core.parse.node.expr.ClassInstanceCreate;
 import mfix.core.parse.node.expr.Expr;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ThrowStmt extends Stmt {
+public class ThrowStmt extends Stmt implements Serializable {
 
 	private Expr _expression = null;
 	
@@ -36,12 +37,12 @@ public class ThrowStmt extends Stmt {
 	 * ThrowStatement:
      *	throw Expression ;
 	 */
-	public ThrowStmt(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
+	public ThrowStmt(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 
-	public ThrowStmt(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public ThrowStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.THROW;
 	}
 	

@@ -16,6 +16,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.stmt.AnonymousClassDecl;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,8 +29,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ClassInstanceCreate extends Expr {
+public class ClassInstanceCreate extends Expr implements Serializable {
 
+	private static final long serialVersionUID = -2405461094348344933L;
 	private Expr _expression = null;
 	private MType _classType = null;
 	private ExprList _arguments = null;
@@ -39,8 +41,8 @@ public class ClassInstanceCreate extends Expr {
 	 * ClassInstanceCreation: [ Expression . ] new [ < Type { , Type } > ] Type
 	 * ( [ Expression { , Expression } ] ) [ AnonymousClassDeclaration ]
 	 */
-	public ClassInstanceCreate(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public ClassInstanceCreate(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.CLASSCREATION;
 	}
 

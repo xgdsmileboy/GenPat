@@ -94,6 +94,7 @@ public class NodeParser {
 
     private static NodeParser _instance;
     private CompilationUnit _cunit;
+    private String _fileName;
 
     public static NodeParser getInstance() {
         if (_instance == null) {
@@ -106,8 +107,9 @@ public class NodeParser {
 
     }
 
-    public NodeParser setCompilationUnit(CompilationUnit unit) {
+    public NodeParser setCompilationUnit(String fileName, CompilationUnit unit) {
         _cunit = unit;
+        _fileName = fileName;
         return this;
     }
 
@@ -115,7 +117,7 @@ public class NodeParser {
     private MethDecl visit(MethodDeclaration node) {
         int start = _cunit.getLineNumber(node.getStartPosition());
         int end = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        MethDecl methDecl = new MethDecl(start, end, node);
+        MethDecl methDecl = new MethDecl(_fileName, start, end, node);
 
         methDecl.setModifiers(node.modifiers());
         methDecl.setRetType(node.getReturnType2());
@@ -146,16 +148,16 @@ public class NodeParser {
     private AssertStmt visit(AssertStatement node) {
         int start = _cunit.getLineNumber(node.getStartPosition());
         int end = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        AssertStmt assertStmt = new AssertStmt(start, end, node);
+        AssertStmt assertStmt = new AssertStmt(_fileName, start, end, node);
         return assertStmt;
     }
 
     private BreakStmt visit(BreakStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        BreakStmt breakStmt = new BreakStmt(startLine, endLine, node);
+        BreakStmt breakStmt = new BreakStmt(_fileName, startLine, endLine, node);
         if (node.getLabel() != null) {
-            SName sName = new SName(startLine, endLine, node.getLabel());
+            SName sName = new SName(_fileName, startLine, endLine, node.getLabel());
             sName.setName(node.getLabel().getFullyQualifiedName());
             sName.setParent(breakStmt);
             breakStmt.setIdentifier(sName);
@@ -166,7 +168,7 @@ public class NodeParser {
     private Blk visit(Block node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        Blk blk = new Blk(startLine, endLine, node);
+        Blk blk = new Blk(_fileName, startLine, endLine, node);
         List<Stmt> stmts = new ArrayList<>();
         for (Object object : node.statements()) {
             Stmt stmt = (Stmt) process((ASTNode) object);
@@ -180,8 +182,8 @@ public class NodeParser {
     private ConstructorInv visit(ConstructorInvocation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ConstructorInv constructorInv = new ConstructorInv(startLine, endLine, node);
-        ExprList exprList = new ExprList(startLine, endLine, null);
+        ConstructorInv constructorInv = new ConstructorInv(_fileName, startLine, endLine, node);
+        ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
             Expr expr = (Expr) process((ASTNode) object);
@@ -197,9 +199,9 @@ public class NodeParser {
     private ContinueStmt visit(ContinueStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ContinueStmt continueStmt = new ContinueStmt(startLine, endLine, node);
+        ContinueStmt continueStmt = new ContinueStmt(_fileName, startLine, endLine, node);
         if (node.getLabel() != null) {
-            SName sName = new SName(startLine, endLine, node.getLabel());
+            SName sName = new SName(_fileName, startLine, endLine, node.getLabel());
             sName.setName(node.getLabel().getFullyQualifiedName());
             sName.setParent(continueStmt);
             continueStmt.setIdentifier(sName);
@@ -210,7 +212,7 @@ public class NodeParser {
     private DoStmt visit(DoStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        DoStmt doStmt = new DoStmt(startLine, endLine, node);
+        DoStmt doStmt = new DoStmt(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getExpression());
         expression.setParent(doStmt);
@@ -226,14 +228,14 @@ public class NodeParser {
     private EmptyStmt visit(EmptyStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        EmptyStmt emptyStmt = new EmptyStmt(startLine, endLine, node);
+        EmptyStmt emptyStmt = new EmptyStmt(_fileName, startLine, endLine, node);
         return emptyStmt;
     }
 
     private EnhancedForStmt visit(EnhancedForStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        EnhancedForStmt enhancedForStmt = new EnhancedForStmt(startLine, endLine, node);
+        EnhancedForStmt enhancedForStmt = new EnhancedForStmt(_fileName, startLine, endLine, node);
 
         Svd svd = (Svd) process(node.getParameter());
         svd.setParent(enhancedForStmt);
@@ -253,7 +255,7 @@ public class NodeParser {
     private ExpressionStmt visit(ExpressionStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ExpressionStmt expressionStmt = new ExpressionStmt(startLine, endLine, node);
+        ExpressionStmt expressionStmt = new ExpressionStmt(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getExpression());
         expression.setParent(expressionStmt);
@@ -265,7 +267,7 @@ public class NodeParser {
     private ForStmt visit(ForStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ForStmt forStmt = new ForStmt(startLine, endLine, node);
+        ForStmt forStmt = new ForStmt(_fileName, startLine, endLine, node);
 
         if (node.getExpression() != null) {
             Expr condition = (Expr) process(node.getExpression());
@@ -273,7 +275,7 @@ public class NodeParser {
             forStmt.setCondition(condition);
         }
 
-        ExprList initExprList = new ExprList(startLine, endLine, null);
+        ExprList initExprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> initializers = new ArrayList<>();
         if (!node.initializers().isEmpty()) {
             for (Object object : node.initializers()) {
@@ -286,7 +288,7 @@ public class NodeParser {
         initExprList.setParent(forStmt);
         forStmt.setInitializer(initExprList);
 
-        ExprList exprList = new ExprList(startLine, endLine, null);
+        ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> updaters = new ArrayList<>();
         if (!node.updaters().isEmpty()) {
             for (Object object : node.updaters()) {
@@ -309,7 +311,7 @@ public class NodeParser {
     private IfStmt visit(IfStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        IfStmt ifStmt = new IfStmt(startLine, endLine, node);
+        IfStmt ifStmt = new IfStmt(_fileName, startLine, endLine, node);
 
         Expr condition = (Expr) process(node.getExpression());
         condition.setParent(ifStmt);
@@ -331,14 +333,14 @@ public class NodeParser {
     private LabeledStmt visit(LabeledStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        LabeledStmt labeledStmt = new LabeledStmt(startLine, endLine, node);
+        LabeledStmt labeledStmt = new LabeledStmt(_fileName, startLine, endLine, node);
         return labeledStmt;
     }
 
     private ReturnStmt visit(ReturnStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ReturnStmt returnStmt = new ReturnStmt(startLine, endLine, node);
+        ReturnStmt returnStmt = new ReturnStmt(_fileName, startLine, endLine, node);
 
         if (node.getExpression() != null) {
             Expr expression = (Expr) process(node.getExpression());
@@ -352,7 +354,7 @@ public class NodeParser {
     private SuperConstructorInv visit(SuperConstructorInvocation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        SuperConstructorInv superConstructorInv = new SuperConstructorInv(startLine, endLine, node);
+        SuperConstructorInv superConstructorInv = new SuperConstructorInv(_fileName, startLine, endLine, node);
 
         if (node.getExpression() != null) {
             Expr expression = (Expr) process(node.getExpression());
@@ -360,7 +362,7 @@ public class NodeParser {
             superConstructorInv.setExpression(expression);
         }
 
-        ExprList exprList = new ExprList(startLine, endLine, null);
+        ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
             Expr arg = (Expr) process((ASTNode) object);
@@ -377,7 +379,7 @@ public class NodeParser {
     private SwCase visit(SwitchCase node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        SwCase swCase = new SwCase(startLine, endLine, node);
+        SwCase swCase = new SwCase(_fileName, startLine, endLine, node);
 
         if (node.getExpression() != null) {
             Expr expression = (Expr) process(node.getExpression());
@@ -391,7 +393,7 @@ public class NodeParser {
     private SwitchStmt visit(SwitchStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        SwitchStmt switchStmt = new SwitchStmt(startLine, endLine, node);
+        SwitchStmt switchStmt = new SwitchStmt(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getExpression());
         expression.setParent(switchStmt);
@@ -411,7 +413,7 @@ public class NodeParser {
     private SynchronizedStmt visit(SynchronizedStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        SynchronizedStmt synchronizedStmt = new SynchronizedStmt(startLine, endLine, node);
+        SynchronizedStmt synchronizedStmt = new SynchronizedStmt(_fileName, startLine, endLine, node);
 
         if (node.getExpression() != null) {
             Expr expression = (Expr) process(node.getExpression());
@@ -429,7 +431,7 @@ public class NodeParser {
     private ThrowStmt visit(ThrowStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ThrowStmt throwStmt = new ThrowStmt(startLine, endLine, node);
+        ThrowStmt throwStmt = new ThrowStmt(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getExpression());
         expression.setParent(throwStmt);
@@ -441,7 +443,7 @@ public class NodeParser {
     private TryStmt visit(TryStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        TryStmt tryStmt = new TryStmt(startLine, endLine, node);
+        TryStmt tryStmt = new TryStmt(_fileName, startLine, endLine, node);
         if (node.resources() != null) {
             List<VarDeclarationExpr> resourceList = new ArrayList<>(node.resources().size());
             for (Object object : node.resources()) {
@@ -477,7 +479,7 @@ public class NodeParser {
     private CatClause visit(CatchClause node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        CatClause catClause = new CatClause(startLine, endLine, node);
+        CatClause catClause = new CatClause(_fileName, startLine, endLine, node);
         Svd svd = (Svd) process(node.getException());
         svd.setParent(catClause);
         catClause.setException(svd);
@@ -490,14 +492,14 @@ public class NodeParser {
     private TypeDeclarationStmt visit(TypeDeclarationStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        TypeDeclarationStmt typeDeclarationStmt = new TypeDeclarationStmt(startLine, endLine, node);
+        TypeDeclarationStmt typeDeclarationStmt = new TypeDeclarationStmt(_fileName, startLine, endLine, node);
         return typeDeclarationStmt;
     }
 
     private VarDeclarationStmt visit(VariableDeclarationStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        VarDeclarationStmt varDeclarationStmt = new VarDeclarationStmt(startLine, endLine, node);
+        VarDeclarationStmt varDeclarationStmt = new VarDeclarationStmt(_fileName, startLine, endLine, node);
         String modifier = "";
         if (node.modifiers() != null && node.modifiers().size() > 0) {
             for (Object object : node.modifiers()) {
@@ -508,7 +510,7 @@ public class NodeParser {
             varDeclarationStmt.setModifier(modifier);
         }
 
-        MType mType = new MType(startLine, endLine, node.getType());
+        MType mType = new MType(_fileName, startLine, endLine, node.getType());
         mType.setType(node.getType());
         mType.setParent(varDeclarationStmt);
         varDeclarationStmt.setDeclType(mType);
@@ -527,7 +529,7 @@ public class NodeParser {
     private WhileStmt visit(WhileStatement node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        WhileStmt whileStmt = new WhileStmt(startLine, endLine, node);
+        WhileStmt whileStmt = new WhileStmt(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getExpression());
         expression.setParent(whileStmt);
@@ -544,14 +546,14 @@ public class NodeParser {
     private Comment visit(Annotation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        Comment comment = new Comment(startLine, endLine, node);
+        Comment comment = new Comment(_fileName, startLine, endLine, node);
         return comment;
     }
 
     private ArrayAcc visit(ArrayAccess node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ArrayAcc arrayAcc = new ArrayAcc(startLine, endLine, node);
+        ArrayAcc arrayAcc = new ArrayAcc(_fileName, startLine, endLine, node);
 
         Expr array = (Expr) process(node.getArray());
         array.setParent(arrayAcc);
@@ -570,8 +572,8 @@ public class NodeParser {
     private ArrayCreate visit(ArrayCreation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ArrayCreate arrayCreate = new ArrayCreate(startLine, endLine, node);
-        MType mType = new MType(startLine, endLine, node.getType().getElementType());
+        ArrayCreate arrayCreate = new ArrayCreate(_fileName, startLine, endLine, node);
+        MType mType = new MType(_fileName, startLine, endLine, node.getType().getElementType());
         mType.setType(node.getType().getElementType());
         mType.setParent(arrayCreate);
         arrayCreate.setArrayType(mType);
@@ -597,7 +599,7 @@ public class NodeParser {
     private ArrayInitial visit(ArrayInitializer node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ArrayInitial arrayInitial = new ArrayInitial(startLine, endLine, node);
+        ArrayInitial arrayInitial = new ArrayInitial(_fileName, startLine, endLine, node);
 
         List<Expr> expressions = new ArrayList<>();
         for (Object object : node.expressions()) {
@@ -613,7 +615,7 @@ public class NodeParser {
     private Assign visit(Assignment node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        Assign assign = new Assign(startLine, endLine, node);
+        Assign assign = new Assign(_fileName, startLine, endLine, node);
 
         Expr lhs = (Expr) process(node.getLeftHandSide());
         lhs.setParent(assign);
@@ -623,7 +625,7 @@ public class NodeParser {
         rhs.setParent(assign);
         assign.setRightHandSide(rhs);
 
-        AssignOperator assignOperator = new AssignOperator(startLine, endLine, null);
+        AssignOperator assignOperator = new AssignOperator(_fileName, startLine, endLine, null);
         assignOperator.setOperator(node.getOperator());
         assign.setParent(assign);
         assign.setOperator(assignOperator);
@@ -634,7 +636,7 @@ public class NodeParser {
     private BoolLiteral visit(BooleanLiteral node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        BoolLiteral literal = new BoolLiteral(startLine, endLine, node);
+        BoolLiteral literal = new BoolLiteral(_fileName, startLine, endLine, node);
         literal.setValue(node.booleanValue());
         AST ast = AST.newAST(AST.JLS8);
         Type type = ast.newPrimitiveType(PrimitiveType.BOOLEAN);
@@ -646,8 +648,8 @@ public class NodeParser {
     private CastExpr visit(CastExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        CastExpr castExpr = new CastExpr(startLine, endLine, node);
-        MType mType = new MType(startLine, endLine, node.getType());
+        CastExpr castExpr = new CastExpr(_fileName, startLine, endLine, node);
+        MType mType = new MType(_fileName, startLine, endLine, node.getType());
         mType.setType(node.getType());
         mType.setParent(castExpr);
         castExpr.setCastType(mType);
@@ -662,7 +664,7 @@ public class NodeParser {
     private CharLiteral visit(CharacterLiteral node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        CharLiteral charLiteral = new CharLiteral(startLine, endLine, node);
+        CharLiteral charLiteral = new CharLiteral(_fileName, startLine, endLine, node);
 
         charLiteral.setValue(node.charValue());
 
@@ -676,7 +678,7 @@ public class NodeParser {
     private ClassInstanceCreate visit(ClassInstanceCreation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ClassInstanceCreate classInstanceCreate = new ClassInstanceCreate(startLine, endLine, node);
+        ClassInstanceCreate classInstanceCreate = new ClassInstanceCreate(_fileName, startLine, endLine, node);
 
         if (node.getExpression() != null) {
             Expr expression = (Expr) process(node.getExpression());
@@ -690,7 +692,7 @@ public class NodeParser {
             classInstanceCreate.setAnonymousClassDecl(anonymousClassDecl);
         }
 
-        ExprList exprList = new ExprList(startLine, endLine, null);
+        ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
             Expr arg = (Expr) process((ASTNode) object);
@@ -701,7 +703,7 @@ public class NodeParser {
         exprList.setParent(classInstanceCreate);
         classInstanceCreate.setArguments(exprList);
 
-        MType mType = new MType(startLine, endLine, node.getType());
+        MType mType = new MType(_fileName, startLine, endLine, node.getType());
         mType.setType(node.getType());
         mType.setParent(classInstanceCreate);
         classInstanceCreate.setClassType(mType);
@@ -713,14 +715,14 @@ public class NodeParser {
     private AnonymousClassDecl visit(AnonymousClassDeclaration node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        AnonymousClassDecl anonymousClassDecl = new AnonymousClassDecl(startLine, endLine, node);
+        AnonymousClassDecl anonymousClassDecl = new AnonymousClassDecl(_fileName, startLine, endLine, node);
         return anonymousClassDecl;
     }
 
     private ConditionalExpr visit(ConditionalExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ConditionalExpr conditionalExpr = new ConditionalExpr(startLine, endLine, node);
+        ConditionalExpr conditionalExpr = new ConditionalExpr(_fileName, startLine, endLine, node);
 
         Expr condition = (Expr) process(node.getExpression());
         condition.setParent(conditionalExpr);
@@ -746,21 +748,21 @@ public class NodeParser {
     private CreationRef visit(CreationReference node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        CreationRef creationRef = new CreationRef(startLine, endLine, node);
+        CreationRef creationRef = new CreationRef(_fileName, startLine, endLine, node);
         return creationRef;
     }
 
     private ExpressionMethodRef visit(ExpressionMethodReference node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ExpressionMethodRef expressionMethodRef = new ExpressionMethodRef(startLine, endLine, node);
+        ExpressionMethodRef expressionMethodRef = new ExpressionMethodRef(_fileName, startLine, endLine, node);
         return expressionMethodRef;
     }
 
     private FieldAcc visit(FieldAccess node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        FieldAcc fieldAcc = new FieldAcc(startLine, endLine, node);
+        FieldAcc fieldAcc = new FieldAcc(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getExpression());
         expression.setParent(fieldAcc);
@@ -779,7 +781,7 @@ public class NodeParser {
     private InfixExpr visit(InfixExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        InfixExpr infixExpr = new InfixExpr(startLine, endLine, node);
+        InfixExpr infixExpr = new InfixExpr(_fileName, startLine, endLine, node);
 
         Expr lhs = (Expr) process(node.getLeftOperand());
         lhs.setParent(infixExpr);
@@ -789,7 +791,7 @@ public class NodeParser {
         rhs.setParent(infixExpr);
         infixExpr.setRightHandSide(rhs);
 
-        InfixOperator infixOperator = new InfixOperator(startLine, endLine, null);
+        InfixOperator infixOperator = new InfixOperator(_fileName, startLine, endLine, null);
         infixOperator.setOperator(node.getOperator());
         infixOperator.setParent(infixExpr);
         infixExpr.setOperator(infixOperator);
@@ -802,13 +804,13 @@ public class NodeParser {
     private InstanceofExpr visit(InstanceofExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        InstanceofExpr instanceofExpr = new InstanceofExpr(startLine, endLine, node);
+        InstanceofExpr instanceofExpr = new InstanceofExpr(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getLeftOperand());
         expression.setParent(instanceofExpr);
         instanceofExpr.setExpression(expression);
 
-        MType mType = new MType(startLine, endLine, node.getRightOperand());
+        MType mType = new MType(_fileName, startLine, endLine, node.getRightOperand());
         mType.setType(node.getRightOperand());
         mType.setParent(instanceofExpr);
         instanceofExpr.setInstanceType(mType);
@@ -823,14 +825,14 @@ public class NodeParser {
     private LambdaExpr visit(LambdaExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        LambdaExpr lambdaExpr = new LambdaExpr(startLine, endLine, node);
+        LambdaExpr lambdaExpr = new LambdaExpr(_fileName, startLine, endLine, node);
         return lambdaExpr;
     }
 
     private MethodInv visit(MethodInvocation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        MethodInv methodInv = new MethodInv(startLine, endLine, node);
+        MethodInv methodInv = new MethodInv(_fileName, startLine, endLine, node);
 
         Expr expression = null;
         if (node.getExpression() != null) {
@@ -839,12 +841,12 @@ public class NodeParser {
             methodInv.setExpression(expression);
         }
 
-        SName sName = new SName(startLine, endLine, node.getName());
+        SName sName = new SName(_fileName, startLine, endLine, node.getName());
         sName.setName(node.getName().getFullyQualifiedName());
         sName.setParent(methodInv);
         methodInv.setName(sName);
 
-        ExprList exprList = new ExprList(startLine, endLine, null);
+        ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
             Expr expr = (Expr) process((ASTNode) object);
@@ -864,7 +866,7 @@ public class NodeParser {
     private MethodRef visit(MethodReference node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        MethodRef methodRef = new MethodRef(startLine, endLine, node);
+        MethodRef methodRef = new MethodRef(_fileName, startLine, endLine, node);
         return methodRef;
     }
 
@@ -873,7 +875,7 @@ public class NodeParser {
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Label expr = null;
         if (node instanceof SimpleName) {
-            SName sName = new SName(startLine, endLine, node);
+            SName sName = new SName(_fileName, startLine, endLine, node);
 
             String name = node.getFullyQualifiedName();
             sName.setName(name);
@@ -884,7 +886,7 @@ public class NodeParser {
         } else if (node instanceof QualifiedName) {
             QualifiedName qualifiedName = (QualifiedName) node;
 //			System.out.println(qualifiedName.toString());
-            QName qName = new QName(startLine, endLine, node);
+            QName qName = new QName(_fileName, startLine, endLine, node);
             SName sname = (SName) process(qualifiedName.getName());
             sname.setParent(qName);
             Label label = (Label) process(qualifiedName.getQualifier());
@@ -900,7 +902,7 @@ public class NodeParser {
     private NillLiteral visit(NullLiteral node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        NillLiteral nillLiteral = new NillLiteral(startLine, endLine, node);
+        NillLiteral nillLiteral = new NillLiteral(_fileName, startLine, endLine, node);
         return nillLiteral;
     }
 
@@ -911,7 +913,7 @@ public class NodeParser {
         NumLiteral expr = null;
         try {
             Integer value = Integer.parseInt(token);
-            IntLiteral literal = new IntLiteral(startLine, endLine, node);
+            IntLiteral literal = new IntLiteral(_fileName, startLine, endLine, node);
             literal.setValue(value);
             AST ast = AST.newAST(AST.JLS8);
             Type type = ast.newPrimitiveType(PrimitiveType.INT);
@@ -923,7 +925,7 @@ public class NodeParser {
         if (expr == null) {
             try {
                 long value = Long.parseLong(token);
-                LongLiteral literal = new LongLiteral(startLine, endLine, node);
+                LongLiteral literal = new LongLiteral(_fileName, startLine, endLine, node);
                 literal.setValue(value);
                 AST ast = AST.newAST(AST.JLS8);
                 Type type = ast.newPrimitiveType(PrimitiveType.LONG);
@@ -936,7 +938,7 @@ public class NodeParser {
         if (expr == null) {
             try {
                 float value = Float.parseFloat(token);
-                FloatLiteral literal = new FloatLiteral(startLine, endLine, node);
+                FloatLiteral literal = new FloatLiteral(_fileName, startLine, endLine, node);
                 literal.setValue(value);
                 AST ast = AST.newAST(AST.JLS8);
                 Type type = ast.newPrimitiveType(PrimitiveType.FLOAT);
@@ -949,7 +951,7 @@ public class NodeParser {
         if (expr == null) {
             try {
                 double value = Double.parseDouble(token);
-                DoubleLiteral literal = new DoubleLiteral(startLine, endLine, node);
+                DoubleLiteral literal = new DoubleLiteral(_fileName, startLine, endLine, node);
                 literal.setValue(value);
                 AST ast = AST.newAST(AST.JLS8);
                 Type type = ast.newPrimitiveType(PrimitiveType.DOUBLE);
@@ -963,7 +965,7 @@ public class NodeParser {
             // should be hexadecimal number or octal number
             token = token.replace("X", "x");
             token = token.replace("F", "f");
-            NumLiteral literal = new NumLiteral(startLine, endLine, node);
+            NumLiteral literal = new NumLiteral(_fileName, startLine, endLine, node);
             literal.setValue(token);
             // simply set as int type
             AST ast = AST.newAST(AST.JLS8);
@@ -979,7 +981,7 @@ public class NodeParser {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
 
-        ParenthesiszedExpr parenthesiszedExpr = new ParenthesiszedExpr(startLine, endLine, node);
+        ParenthesiszedExpr parenthesiszedExpr = new ParenthesiszedExpr(_fileName, startLine, endLine, node);
         Expr expression = (Expr) process(node.getExpression());
         expression.setParent(parenthesiszedExpr);
         parenthesiszedExpr.setExpr(expression);
@@ -991,13 +993,13 @@ public class NodeParser {
     private PostfixExpr visit(PostfixExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        PostfixExpr postfixExpr = new PostfixExpr(startLine, endLine, node);
+        PostfixExpr postfixExpr = new PostfixExpr(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getOperand());
         expression.setParent(postfixExpr);
         postfixExpr.setExpression(expression);
 
-        PostOperator postOperator = new PostOperator(startLine, endLine, null);
+        PostOperator postOperator = new PostOperator(_fileName, startLine, endLine, null);
         postOperator.setOperator(node.getOperator());
         postOperator.setParent(postfixExpr);
         postfixExpr.setOperator(postOperator);
@@ -1012,13 +1014,13 @@ public class NodeParser {
     private PrefixExpr visit(PrefixExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        PrefixExpr prefixExpr = new PrefixExpr(startLine, endLine, node);
+        PrefixExpr prefixExpr = new PrefixExpr(_fileName, startLine, endLine, node);
 
         Expr expression = (Expr) process(node.getOperand());
         expression.setParent(prefixExpr);
         prefixExpr.setExpression(expression);
 
-        PrefixOperator prefixOperator = new PrefixOperator(startLine, endLine, null);
+        PrefixOperator prefixOperator = new PrefixOperator(_fileName, startLine, endLine, null);
         prefixOperator.setOperator(node.getOperator());
         prefixOperator.setParent(prefixExpr);
         prefixExpr.setOperator(prefixOperator);
@@ -1032,7 +1034,7 @@ public class NodeParser {
     private StrLiteral visit(StringLiteral node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        StrLiteral literal = new StrLiteral(startLine, endLine, node);
+        StrLiteral literal = new StrLiteral(_fileName, startLine, endLine, node);
 
         literal.setValue(node.getLiteralValue());
 
@@ -1046,7 +1048,7 @@ public class NodeParser {
     private SuperFieldAcc visit(SuperFieldAccess node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        SuperFieldAcc superFieldAcc = new SuperFieldAcc(startLine, endLine, node);
+        SuperFieldAcc superFieldAcc = new SuperFieldAcc(_fileName, startLine, endLine, node);
 
         SName identifier = (SName) process(node.getName());
         identifier.setParent(superFieldAcc);
@@ -1067,9 +1069,9 @@ public class NodeParser {
     private SuperMethodInv visit(SuperMethodInvocation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        SuperMethodInv superMethodInv = new SuperMethodInv(startLine, endLine, node);
+        SuperMethodInv superMethodInv = new SuperMethodInv(_fileName, startLine, endLine, node);
 
-        SName sName = new SName(startLine, endLine, node.getName());
+        SName sName = new SName(_fileName, startLine, endLine, node.getName());
         sName.setName(node.getName().getFullyQualifiedName());
         sName.setParent(superMethodInv);
         superMethodInv.setName(sName);
@@ -1080,7 +1082,7 @@ public class NodeParser {
             superMethodInv.setLabel(label);
         }
 
-        ExprList exprList = new ExprList(startLine, endLine, null);
+        ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
             Expr expr = (Expr) process((ASTNode) object);
@@ -1100,7 +1102,7 @@ public class NodeParser {
     private SuperMethodRef visit(SuperMethodReference node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        SuperMethodRef superMethodRef = new SuperMethodRef(startLine, endLine, node);
+        SuperMethodRef superMethodRef = new SuperMethodRef(_fileName, startLine, endLine, node);
 
         return superMethodRef;
     }
@@ -1108,7 +1110,7 @@ public class NodeParser {
     private ThisExpr visit(ThisExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ThisExpr thisExpr = new ThisExpr(startLine, endLine, node);
+        ThisExpr thisExpr = new ThisExpr(_fileName, startLine, endLine, node);
 
         Type type = typeFromBinding(node.getAST(), node.resolveTypeBinding());
         thisExpr.setType(type);
@@ -1119,8 +1121,8 @@ public class NodeParser {
     private TyLiteral visit(TypeLiteral node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        TyLiteral tyLiteral = new TyLiteral(startLine, endLine, node);
-        MType mType = new MType(startLine, endLine, node.getType());
+        TyLiteral tyLiteral = new TyLiteral(_fileName, startLine, endLine, node);
+        MType mType = new MType(_fileName, startLine, endLine, node.getType());
         mType.setType(node.getType());
         mType.setParent(tyLiteral);
         tyLiteral.setValue(mType);
@@ -1132,16 +1134,16 @@ public class NodeParser {
     private TypeMethodRef visit(TypeMethodReference node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        TypeMethodRef typeMethodRef = new TypeMethodRef(startLine, endLine, node);
+        TypeMethodRef typeMethodRef = new TypeMethodRef(_fileName, startLine, endLine, node);
         return typeMethodRef;
     }
 
     private VarDeclarationExpr visit(VariableDeclarationExpression node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        VarDeclarationExpr varDeclarationExpr = new VarDeclarationExpr(startLine, endLine, node);
+        VarDeclarationExpr varDeclarationExpr = new VarDeclarationExpr(_fileName, startLine, endLine, node);
 
-        MType mType = new MType(startLine, endLine, node.getType());
+        MType mType = new MType(_fileName, startLine, endLine, node.getType());
         mType.setType(node.getType());
         mType.setParent(varDeclarationExpr);
         varDeclarationExpr.setDeclType(mType);
@@ -1160,7 +1162,7 @@ public class NodeParser {
     private Vdf visit(VariableDeclarationFragment node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        Vdf vdf = new Vdf(startLine, endLine, node);
+        Vdf vdf = new Vdf(_fileName, startLine, endLine, node);
 
         SName identifier = (SName) process(node.getName());
         identifier.setParent(vdf);
@@ -1180,9 +1182,9 @@ public class NodeParser {
     private Svd visit(SingleVariableDeclaration node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        Svd svd = new Svd(startLine, endLine, node);
+        Svd svd = new Svd(_fileName, startLine, endLine, node);
 
-        MType mType = new MType(startLine, endLine, node.getType());
+        MType mType = new MType(_fileName, startLine, endLine, node.getType());
         mType.setType(node.getType());
         mType.setParent(svd);
         svd.setDecType(mType);

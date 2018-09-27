@@ -16,6 +16,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,8 +29,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class VarDeclarationExpr extends Expr {
+public class VarDeclarationExpr extends Expr implements Serializable {
 
+	private static final long serialVersionUID = -5908284718888454712L;
 	private MType _declType = null;
 	private List<Vdf> _vdfs = null;
 	
@@ -39,8 +41,8 @@ public class VarDeclarationExpr extends Expr {
      *	{ ExtendedModifier } Type VariableDeclarationFragment
      *	    { , VariableDeclarationFragment }
 	 */
-	public VarDeclarationExpr(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public VarDeclarationExpr(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.VARDECLEXPR;
 	}
 	

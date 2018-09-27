@@ -10,18 +10,20 @@ import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class PostOperator extends Operator {
+public class PostOperator extends Operator implements Serializable {
 
+	private static final long serialVersionUID = -487330256404513705L;
 	private PostfixExpression.Operator _operator;
 	
-	public PostOperator(int startLine, int endLine, ASTNode oriNode) {
-		super(startLine, endLine, oriNode);
+	public PostOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.POSTOPERATOR;
 	}
 	

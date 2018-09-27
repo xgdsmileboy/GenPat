@@ -10,6 +10,7 @@ import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -18,12 +19,13 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class AssignOperator extends Operator {
+public class AssignOperator extends Operator implements Serializable {
 
+	private static final long serialVersionUID = 2573726544838821670L;
 	private Assignment.Operator _operator;
 	
-	public AssignOperator(int startLine, int endLine, ASTNode oriNode) {
-		super(startLine, endLine, oriNode);
+	public AssignOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.ASSIGNOPERATOR;
 	}
 	

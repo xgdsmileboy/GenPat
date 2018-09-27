@@ -11,6 +11,7 @@ import mfix.core.parse.node.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +20,13 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Expr extends Node {
-	
+public abstract class Expr extends Node implements Serializable {
+
+	private static final long serialVersionUID = 1325289211050496258L;
 	protected Type _exprType = null;
 
-	protected Expr(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node, null);
+	protected Expr(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node, null);
 	}
 	
 	public void setType(Type exprType){

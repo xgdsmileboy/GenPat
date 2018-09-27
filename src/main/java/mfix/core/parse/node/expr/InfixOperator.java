@@ -10,18 +10,20 @@ import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.InfixExpression;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class InfixOperator extends Operator {
+public class InfixOperator extends Operator implements Serializable {
 
+	private static final long serialVersionUID = -4702533056648468078L;
 	private InfixExpression.Operator _operator;
 	
-	public InfixOperator(int startLine, int endLine, ASTNode oriNode) {
-		super(startLine, endLine, oriNode);
+	public InfixOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.INFIXOPERATOR;
 	}
 	

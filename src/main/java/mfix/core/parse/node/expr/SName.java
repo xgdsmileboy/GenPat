@@ -12,6 +12,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,16 +24,17 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SName extends Label {
+public class SName extends Label implements Serializable {
 
-	private String _name = null; 
+	private static final long serialVersionUID = 6548845608841663421L;
+	private String _name = null;
 	
 	/**
 	 * SimpleName:
      *	Identifier
 	 */
-	public SName(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public SName(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SNAME;
 	}
 	

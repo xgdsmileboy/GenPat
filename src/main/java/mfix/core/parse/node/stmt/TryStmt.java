@@ -16,6 +16,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.VarDeclarationExpr;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,8 +30,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class TryStmt extends Stmt {
+public class TryStmt extends Stmt implements Serializable {
 
+	private static final long serialVersionUID = -4283593302346047974L;
 	private List<VarDeclarationExpr> _resource = null;
 	private Blk _blk = null;
 	private List<CatClause> _catches = null;
@@ -43,12 +45,12 @@ public class TryStmt extends Stmt {
      *	    [ { CatchClause } ]
      *	    [ finally Block ]
 	 */
-	public TryStmt(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
+	public TryStmt(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 
-	public TryStmt(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public TryStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.TRY;
 	}
 	

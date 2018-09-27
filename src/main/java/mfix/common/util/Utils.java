@@ -10,6 +10,13 @@ package mfix.common.util;
 import mfix.common.java.D4jSubject;
 import mfix.core.parse.diff.Diff;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -139,6 +146,19 @@ public class Utils {
         } else {
             return binarySearch(prob, mid, e, r);
         }
+    }
+
+    public static void serialize(Serializable object, String fileName) throws IOException {
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileName));
+        objectOutputStream.writeObject(object);
+        objectOutputStream.flush();
+        objectOutputStream.close();
+    }
+
+    public static Serializable deserialize(String fileName) throws IOException, ClassNotFoundException {
+        File file = new File(fileName);
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
+        return (Serializable) objectInputStream.readObject();
     }
 
 

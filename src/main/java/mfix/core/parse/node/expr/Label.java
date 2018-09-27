@@ -8,18 +8,22 @@ package mfix.core.parse.node.expr;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Label extends Expr {
+public abstract class Label extends Expr implements Serializable {
+
+	private static final long serialVersionUID = -6660200671704024539L;
 
 	/**
 	 * Name:
      *	SimpleName
      *	QualifiedName
 	 */
-	public Label(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public Label(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 	}
 }

@@ -15,6 +15,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +26,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class PostfixExpr extends Expr {
+public class PostfixExpr extends Expr implements Serializable {
 
+	private static final long serialVersionUID = 3427634272372187596L;
 	private Expr _expression = null;
 	private PostOperator _operator = null;
 	
@@ -34,8 +36,8 @@ public class PostfixExpr extends Expr {
 	 * PostfixExpression:
      *	Expression PostfixOperator
 	 */
-	public PostfixExpr(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public PostfixExpr(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.POSTEXPR;
 	}
 	

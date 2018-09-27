@@ -18,6 +18,7 @@ import mfix.core.parse.node.expr.MType;
 import mfix.core.parse.node.expr.Vdf;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,8 +32,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class VarDeclarationStmt extends Stmt {
+public class VarDeclarationStmt extends Stmt implements Serializable {
 
+	private static final long serialVersionUID = 3322205918544098505L;
 	private String _modifier = null;
 	private MType _declType = null;
 	private List<Vdf> _fragments = null;
@@ -41,12 +43,12 @@ public class VarDeclarationStmt extends Stmt {
 	 * VariableDeclarationStatement: { ExtendedModifier } Type
 	 * VariableDeclarationFragment { , VariableDeclarationFragment } ;
 	 */
-	public VarDeclarationStmt(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
+	public VarDeclarationStmt(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 
-	public VarDeclarationStmt(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public VarDeclarationStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.VARDECLSTMT;
 	}
 

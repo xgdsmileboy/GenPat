@@ -11,6 +11,7 @@ import mfix.core.comp.Modification;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,14 +19,15 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class DoubleLiteral extends NumLiteral {
+public class DoubleLiteral extends NumLiteral implements Serializable {
 
+	private static final long serialVersionUID = 7468689438028560182L;
 	private double _value = 0;
 	private final double EPSILON = 1e-7;
 	
 	
-	public DoubleLiteral(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public DoubleLiteral(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.DLITERAL;
 	}
 	

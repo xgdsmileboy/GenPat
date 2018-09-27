@@ -10,6 +10,7 @@ import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -17,8 +18,9 @@ import java.util.Map;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class PrefixOperator extends Operator {
+public class PrefixOperator extends Operator implements Serializable {
 
+	private static final long serialVersionUID = -7394935189908328110L;
 	private PrefixExpression.Operator _operator;
 	private static Map<String, Integer> _operatorMap;
 	
@@ -32,8 +34,8 @@ public class PrefixOperator extends Operator {
 		_operatorMap.put("!", 3);
 	}
 
-	public PrefixOperator(int startLine, int endLine, ASTNode oriNode) {
-		super(startLine, endLine, oriNode);
+	public PrefixOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
+		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.PREFIXOPERATOR;
 	}
 

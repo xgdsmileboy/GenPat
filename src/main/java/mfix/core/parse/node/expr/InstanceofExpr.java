@@ -15,6 +15,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +26,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class InstanceofExpr extends Expr {
+public class InstanceofExpr extends Expr implements Serializable {
 
+	private static final long serialVersionUID = 8963981016056992635L;
 	private Expr _expression = null;
 	private String _operator = "instanceof";
 	private MType _instanceType = null;
@@ -35,8 +37,8 @@ public class InstanceofExpr extends Expr {
 	 * InstanceofExpression:
      *	Expression instanceof Type
 	 */
-	public InstanceofExpr(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public InstanceofExpr(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.INSTANCEOF;
 	}
 	

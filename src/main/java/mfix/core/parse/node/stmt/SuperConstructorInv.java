@@ -18,6 +18,7 @@ import mfix.core.parse.node.expr.ExprList;
 import mfix.core.parse.node.expr.MType;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,8 +32,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SuperConstructorInv extends Stmt {
+public class SuperConstructorInv extends Stmt implements Serializable {
 
+	private static final long serialVersionUID = -6063679105312839664L;
 	private Expr _expression = null;
 	private MType _superType = null;
 	private ExprList _arguments = null;
@@ -43,12 +45,12 @@ public class SuperConstructorInv extends Stmt {
      *	    [ < Type { , Type } > ]
      *	    super ( [ Expression { , Expression } ] ) ;
 	 */
-	public SuperConstructorInv(int startLine, int endLine, ASTNode node) {
-		this(startLine, endLine, node, null);
+	public SuperConstructorInv(String fileName, int startLine, int endLine, ASTNode node) {
+		this(fileName, startLine, endLine, node, null);
 	}
 
-	public SuperConstructorInv(int startLine, int endLine, ASTNode node, Node parent) {
-		super(startLine, endLine, node, parent);
+	public SuperConstructorInv(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.SCONSTRUCTORINV;
 	}
 	

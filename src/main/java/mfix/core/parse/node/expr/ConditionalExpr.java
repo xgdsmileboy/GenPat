@@ -15,6 +15,7 @@ import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,8 +27,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ConditionalExpr extends Expr {
+public class ConditionalExpr extends Expr implements Serializable {
 
+	private static final long serialVersionUID = -6125079576530376280L;
 	private Expr _condition = null;
 	private Expr _first = null;
 	private Expr _snd = null;
@@ -36,8 +38,8 @@ public class ConditionalExpr extends Expr {
 	 * ConditionalExpression:
      *	Expression ? Expression : Expression
 	 */
-	public ConditionalExpr(int startLine, int endLine, ASTNode node) {
-		super(startLine, endLine, node);
+	public ConditionalExpr(String fileName, int startLine, int endLine, ASTNode node) {
+		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.CONDEXPR;
 	}
 

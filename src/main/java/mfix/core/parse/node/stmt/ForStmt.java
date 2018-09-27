@@ -17,6 +17,7 @@ import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.ExprList;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -29,8 +30,9 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ForStmt extends Stmt {
+public class ForStmt extends Stmt implements Serializable {
 
+    private static final long serialVersionUID = -377100625221024477L;
     private ExprList _initializers = null;
     private ExprList _updaters = null;
     private Expr _condition = null;
@@ -47,13 +49,13 @@ public class ForStmt extends Stmt {
      * ForUpdate:
      * Expression { , Expression }
      */
-    public ForStmt(int startLine, int endLine, ASTNode node) {
-        this(startLine, endLine, node, null);
-        _nodeType = TYPE.FOR;
+    public ForStmt(String fileName, int startLine, int endLine, ASTNode node) {
+        this(fileName, startLine, endLine, node, null);
     }
 
-    public ForStmt(int startLine, int endLine, ASTNode node, Node parent) {
-        super(startLine, endLine, node, parent);
+    public ForStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+        super(fileName, startLine, endLine, node, parent);
+        _nodeType = TYPE.FOR;
     }
 
     public void setCondition(Expr condition) {

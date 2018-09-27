@@ -14,6 +14,7 @@ import mfix.core.parse.node.MethDecl;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,21 +27,22 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class Blk extends Stmt {
+public class Blk extends Stmt implements Serializable {
 
+    private static final long serialVersionUID = -8152168560236365788L;
     private List<Stmt> _statements = null;
 
     /**
      * Block:
      * { { Statement } }
      */
-    public Blk(int startLine, int endLine, ASTNode node) {
-        this(startLine, endLine, node, null);
-        _nodeType = TYPE.BLOCK;
+    public Blk(String fileName, int startLine, int endLine, ASTNode node) {
+        this(fileName, startLine, endLine, node, null);
     }
 
-    public Blk(int startLine, int endLine, ASTNode node, Node parent) {
-        super(startLine, endLine, node, parent);
+    public Blk(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+        super(fileName, startLine, endLine, node, parent);
+        _nodeType = TYPE.BLOCK;
     }
 
     public void setStatement(List<Stmt> statements) {
