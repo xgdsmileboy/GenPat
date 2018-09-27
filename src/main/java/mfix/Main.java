@@ -10,6 +10,7 @@ package mfix;
 import mfix.common.java.D4jSubject;
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
+import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,21 +47,23 @@ public class Main {
         System.out.println("Total file : " + files.size());
         int id = 0;
         for (Location location : locations) {
-            id ++;
+            id++;
             String file = Utils.join(Constant.SEP, subject.getHome() + subject.getSsrc(), location.getRelClazzFile());
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
             NodeParser parser = NodeParser.getInstance();
             parser.setCompilationUnit(unit);
             Node fnode = parser.process(method);
-            JavaFile.writeStringToFile(tempFile + id + ".log", fnode.toSrcString().toString() + "\n ---------\n", false);
+            JavaFile.writeStringToFile(tempFile + id + ".log", fnode.toSrcString().toString() + "\n ---------\n",
+                    false);
             int fileSize = files.size();
             for (File f : files) {
-                System.out.println(fileSize --);
+                System.out.println(fileSize--);
                 unit = JavaFile.genASTFromFileWithType(f);
-                Set<Node> nodes = SimMethodSearch.searchSimMethod(unit, fnode, 0.95);
-                for (Node node : nodes) {
-                    JavaFile.writeStringToFile(tempFile + id + ".log", node.toSrcString().toString() + "\n", true);
+                Map<Node, Pair<Double, Double>> nodes = SimMethodSearch.searchSimMethod(unit, fnode, 0.8);
+                for (Map.Entry<Node, Pair<Double, Double>> node : nodes.entrySet()) {
+                    JavaFile.writeStringToFile(tempFile + id + ".log", ">>>DIST: " + node.getValue().getFirst() + "\n" +
+                            ">>>ARGLE: " + node.getValue().getSecond() + "\n" + node.getKey().toString() + "\n", true);
                 }
             }
 

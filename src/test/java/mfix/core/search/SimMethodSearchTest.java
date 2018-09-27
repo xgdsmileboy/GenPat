@@ -10,6 +10,7 @@ package mfix.core.search;
 import mfix.common.java.D4jSubject;
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
+import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.TestCase;
 import mfix.core.locator.D4JManualLocator;
@@ -22,7 +23,7 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -45,9 +46,10 @@ public class SimMethodSearchTest extends TestCase {
             Node fnode = parser.process(method);
             for(String f : files) {
                 unit = JavaFile.genASTFromFileWithType(f);
-                Set<Node> nodes = SimMethodSearch.searchSimMethod(unit, fnode,0.95);
-                for(Node node : nodes) {
-                    System.out.println(node.toSrcString());
+                Map<Node, Pair<Double, Double>> nodes = SimMethodSearch.searchSimMethod(unit, fnode,0.95);
+                for(Map.Entry<Node, Pair<Double, Double>> entry: nodes.entrySet()) {
+                    System.out.println("DIST : " + entry.getValue().getFirst() + "\tANGLE : " + entry.getValue().getSecond());
+                    System.out.println(entry);
                 }
             }
 
