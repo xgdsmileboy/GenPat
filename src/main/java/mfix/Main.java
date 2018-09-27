@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,13 +38,12 @@ import java.util.Set;
  */
 public class Main {
 
-    private static void process(D4jSubject subject, String codeBase) {
+    private static void process(D4jSubject subject, Set<String> codeBase) {
         String outPath = Utils.join(Constant.SEP, Constant.TMP_OUT, subject.getName(), String.valueOf(subject.getId()));
         D4JManualLocator locator = new D4JManualLocator(subject);
         List<Location> locations = locator.getLocations(100);
         Set<String> ignoreKeys = new HashSet<>();
         ignoreKeys.add("fixed-version");
-        List<File> files = JavaFile.ergodic(new File(codeBase), new LinkedList<File>(), ignoreKeys, ".java");
         int locationID = 1;
         for(Location location : locations) {
             String file = Utils.join(Constant.SEP, subject.getHome() + subject.getSsrc(), location.getRelClazzFile());
@@ -55,20 +55,25 @@ public class Main {
             Utils.log(Utils.join(Constant.SEP, outPath, String.valueOf(locationID), "faulty.log"), file,
                     fnode.getStartLine(), fnode.getEndLine(), method.toString(), false);
             int count = 1;
-            for(File buggy : files) {
-                String fixed = buggy.getAbsolutePath().replace("buggy-version", "fixed-version");
-                Map<Pair<Node, Diff<Line>>, Pair<Double, Double>> candidates =
-                        SimMethodSearch.searchSimFixedMethod(buggy.getAbsolutePath(), fixed, fnode, TextDiff.class,
-                                0.7);
-                for(Map.Entry<Pair<Node, Diff<Line>>, Pair<Double, Double>> entry : candidates.entrySet()) {
-                    Node node = entry.getKey().getFirst();
-                    Diff<Line> diff = entry.getKey().getSecond();
-                    Pair<Double, Double> similarity = entry.getValue();
-                    Utils.log(Utils.join(Constant.SEP, outPath, java.lang.String.valueOf(count), ".log"),
-                            buggy.getAbsolutePath(), node.getStartLine(),
-                            node.getEndLine(), similarity.getFirst(), similarity.getSecond(),
-                            node.toSrcString().toString(),
-                            diff, false);
+            for(String base : codeBase) {
+                List<File> files = JavaFile.ergodic(new File(base), new LinkedList<File>(), ignoreKeys, ".java");
+                int size = files.size();
+                for (File buggy : files) {
+                    System.out.println(size --);
+                    String fixed = buggy.getAbsolutePath().replace("buggy-version", "fixed-version");
+                    Map<Pair<Node, Diff<Line>>, Pair<Double, Double>> candidates =
+                            SimMethodSearch.searchSimFixedMethod(buggy.getAbsolutePath(), fixed, fnode, TextDiff.class,
+                                    0.7);
+                    for (Map.Entry<Pair<Node, Diff<Line>>, Pair<Double, Double>> entry : candidates.entrySet()) {
+                        Node node = entry.getKey().getFirst();
+                        Diff<Line> diff = entry.getKey().getSecond();
+                        Pair<Double, Double> similarity = entry.getValue();
+                        Utils.log(Utils.join(Constant.SEP, outPath, java.lang.String.valueOf(count), ".log"),
+                                buggy.getAbsolutePath(), node.getStartLine(),
+                                node.getEndLine(), similarity.getFirst(), similarity.getSecond(),
+                                node.toSrcString().toString(),
+                                diff, false);
+                    }
                 }
             }
         }
@@ -76,7 +81,19 @@ public class Main {
 
     public static void main(String[] args) {
         String base = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest");
-        String codeBase = "/home/lee/Xia/GitHubData/MissSome/2011/V1";
+        Set<String> codeBase = new HashSet<>();
+        Map<String, Integer> path2version = new HashMap<>();
+        path2version.put("2011", 5);
+        path2version.put("2012-2014", 69);
+        path2version.put("2015", 40);
+        path2version.put("2016", 49);
+        path2version.put("2017", 60);
+
+        for(Map.Entry<String, Integer> entry : path2version.entrySet()) {
+            for(int i = 1; i < entry.getValue(); i++) {
+                codeBase.add("/home/lee/Xia/GitHubData/MissSome/" + entry.getKey() + "/V" + i);
+            }
+        }
         D4jSubject subject = new D4jSubject(base, "chart", 1);
         process(subject, codeBase);
     }
