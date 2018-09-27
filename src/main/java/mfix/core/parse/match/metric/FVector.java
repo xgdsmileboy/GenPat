@@ -6,11 +6,13 @@
  */
 package mfix.core.parse.match.metric;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class FVector {
+public class FVector implements Serializable {
 
     //Arithmetic
     public static final int ARITH_PLUS = 0;
@@ -85,7 +87,8 @@ public class FVector {
     public static final int E_ANONY = 64;
     public static final int OTHER = 65;
 	public static final int VECTOR_LEN = 66;
-	
+	private static final long serialVersionUID = -2160573999272597201L;
+
 	private int[] _vector = new int[VECTOR_LEN];
 	
 	public FVector() {

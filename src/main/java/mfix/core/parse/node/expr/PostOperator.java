@@ -20,7 +20,8 @@ import java.util.LinkedList;
 public class PostOperator extends Operator implements Serializable {
 
 	private static final long serialVersionUID = -487330256404513705L;
-	private PostfixExpression.Operator _operator;
+	private String _operatorStr;
+	private transient PostfixExpression.Operator _operator;
 	
 	public PostOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
@@ -29,6 +30,7 @@ public class PostOperator extends Operator implements Serializable {
 	
 	public void setOperator(PostfixExpression.Operator operator) {
 		this._operator = operator;
+		this._operatorStr = operator.toString();
 	}
 	
 	public PostfixExpression.Operator getOperator() {
@@ -38,7 +40,7 @@ public class PostOperator extends Operator implements Serializable {
 	@Override
 	public boolean compare(Node other) {
 		if(other instanceof PostOperator) {
-			return _operator.toString().equals(((PostOperator) other)._operator.toString());
+			return _operatorStr.equals(((PostOperator) other)._operatorStr);
 		}
 		return false;
 	}
@@ -46,14 +48,14 @@ public class PostOperator extends Operator implements Serializable {
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operator.toString());
+		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
 	
 	@Override
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operator.toString());
+		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
 
@@ -63,7 +65,7 @@ public class PostOperator extends Operator implements Serializable {
 		if(other instanceof PostOperator) {
 			_matchNodeType = true;
 			PostOperator postOperator = (PostOperator) other;
-			if(!_operator.toString().equals(postOperator._operator.toString())) {
+			if(!_operatorStr.equals(postOperator._operatorStr)) {
 				_matchNodeType = false;
 			}
 		} else {
@@ -84,7 +86,7 @@ public class PostOperator extends Operator implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_operator.toString());
+		_tokens.add(_operatorStr);
 	}
 
 }

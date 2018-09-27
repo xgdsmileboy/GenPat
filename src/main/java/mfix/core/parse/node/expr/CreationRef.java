@@ -28,6 +28,8 @@ public class CreationRef extends Expr implements Serializable {
 
 	private static final long serialVersionUID = 6237635456129751926L;
 
+	private String _str;
+
 	/**
 	 * CreationReference:
      *	Type :: 
@@ -36,12 +38,13 @@ public class CreationRef extends Expr implements Serializable {
 	 */
 	public CreationRef(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
+		_str = node.toString();
 	}
 	
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_oriNode.toString());
+		stringBuffer.append(_str);
 		return stringBuffer;
 	}
 	
@@ -63,7 +66,7 @@ public class CreationRef extends Expr implements Serializable {
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(isKeyPoint()) {
-			stringBuffer.append(_oriNode.toString());
+			stringBuffer.append(_str);
 		} else {
 			stringBuffer.append(Constant.PLACE_HOLDER);
 		}
@@ -73,7 +76,7 @@ public class CreationRef extends Expr implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_oriNode.toString());
+		_tokens.add(_str);
 	}
 	
 	@Override
@@ -81,7 +84,7 @@ public class CreationRef extends Expr implements Serializable {
 		boolean match = false;
 		if(other instanceof CreationRef) {
 			CreationRef creationRef = (CreationRef) other;
-			match = _oriNode.toString().equals(creationRef.toString());
+			match = _str.equals(creationRef.toString());
 		}
 		return match;
 	}
@@ -107,7 +110,7 @@ public class CreationRef extends Expr implements Serializable {
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if(other instanceof CreationRef && _oriNode.toString().equals(((CreationRef) other)._oriNode.toString())) {
+		if(other instanceof CreationRef && _str.equals(((CreationRef) other)._str)) {
 			_matchNodeType = true;
 		} else {
 			_matchNodeType = false;

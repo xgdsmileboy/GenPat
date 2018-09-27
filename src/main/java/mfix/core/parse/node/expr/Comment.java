@@ -27,7 +27,7 @@ import java.util.Set;
 public class Comment extends Expr implements Serializable {
 
 	private static final long serialVersionUID = -6085082564199071574L;
-
+	private String _comment;
 	/**
 	 * Annotation:
      *           NormalAnnotation
@@ -37,12 +37,13 @@ public class Comment extends Expr implements Serializable {
 	public Comment(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.COMMENT;
+		_comment = node.toString();
 	}
 	
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_oriNode.toString());
+		stringBuffer.append(_comment);
 		return stringBuffer;
 	}
 	
@@ -64,7 +65,7 @@ public class Comment extends Expr implements Serializable {
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(isKeyPoint()) {
-			stringBuffer.append(_oriNode.toString());
+			stringBuffer.append(_comment);
 		} else {
 			stringBuffer.append(Constant.PLACE_HOLDER);
 		}
@@ -74,13 +75,13 @@ public class Comment extends Expr implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_oriNode.toString());
+		_tokens.add(_comment);
 	}
 	
 	@Override
 	public boolean compare(Node other) {
 		if(other instanceof Comment) {
-			return _oriNode.toString().equals(((Comment) other)._oriNode.toString());
+			return _comment.equals(((Comment) other)._comment);
 		}
 		return false;
 	}
@@ -106,7 +107,7 @@ public class Comment extends Expr implements Serializable {
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if (other instanceof Comment && _oriNode.toString().equals(((Comment) other)._oriNode.toString())) {
+		if (other instanceof Comment && _comment.equals(((Comment) other)._comment)) {
 			_matchNodeType = true;
 		} else {
 			_matchNodeType = false;

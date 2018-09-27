@@ -21,6 +21,7 @@ import java.util.Map;
 public class PrefixOperator extends Operator implements Serializable {
 
 	private static final long serialVersionUID = -7394935189908328110L;
+	private String _operatorStr;
 	private PrefixExpression.Operator _operator;
 	private static Map<String, Integer> _operatorMap;
 	
@@ -41,6 +42,7 @@ public class PrefixOperator extends Operator implements Serializable {
 
 	public void setOperator(PrefixExpression.Operator operator) {
 		this._operator = operator;
+		this._operatorStr = operator.toString();
 	}
 
 	public PrefixExpression.Operator getOperator() {
@@ -50,7 +52,7 @@ public class PrefixOperator extends Operator implements Serializable {
 	@Override
 	public boolean compare(Node other) {
 		if (other instanceof PrefixOperator) {
-			return _operator.toString().equals(((PrefixOperator) other)._operator.toString());
+			return _operatorStr.equals(((PrefixOperator) other)._operatorStr);
 		}
 		return false;
 	}
@@ -58,14 +60,14 @@ public class PrefixOperator extends Operator implements Serializable {
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operator.toString());
+		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
 	
 	@Override
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operator.toString());
+		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
 
@@ -74,7 +76,7 @@ public class PrefixOperator extends Operator implements Serializable {
 		_tarNode = other;
 		if (other instanceof PrefixOperator) {
 			_matchNodeType = true;
-			if (!_operator.toString().equals(((PrefixOperator) other)._operator.toString())) {
+			if (!_operatorStr.equals(((PrefixOperator) other)._operatorStr)) {
 				_matchNodeType = false;
 			}
 		} else {
@@ -86,8 +88,8 @@ public class PrefixOperator extends Operator implements Serializable {
 	public boolean matchSketch(Node sketch) {
 		if(sketch instanceof PrefixOperator) {
 			PrefixOperator prefixOperator = (PrefixOperator) sketch;
-			return (PrefixOperator._operatorMap.get(_operator.toString()) == PrefixOperator._operatorMap
-					.get(prefixOperator._operator.toString()));
+			return (PrefixOperator._operatorMap.get(_operatorStr) == PrefixOperator._operatorMap
+					.get(prefixOperator._operatorStr));
 		}
 		return false;
 	}
@@ -95,7 +97,7 @@ public class PrefixOperator extends Operator implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_operator.toString());
+		_tokens.add(_operatorStr);
 	}
 
 }

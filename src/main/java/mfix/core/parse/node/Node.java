@@ -35,9 +35,9 @@ public abstract class Node implements NodeComparator, Serializable {
 	protected int _endLine;
 	protected Node _parent;
     protected TYPE _nodeType = TYPE.UNKNOWN;
-	protected ASTNode _oriNode;
 	protected FVector _fVector = null;
 
+	protected transient ASTNode _oriNode;
 	protected transient LinkedList<String> _tokens = null;
 	protected transient boolean _matchNodeType = false;
 	protected transient Node _tarNode = null;

@@ -26,17 +26,19 @@ import java.util.Set;
  */
 public class AnonymousClassDecl extends Node implements Serializable {
 
+	private String _codeStr;
 
 	private static final long serialVersionUID = -5993526474963543721L;
 
 	public AnonymousClassDecl(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.ANONYMOUSCDECL;
+		_codeStr = node.toString();
 	}
 	
 	@Override
 	public StringBuffer toSrcString() {
-		return new StringBuffer(_oriNode.toString());
+		return new StringBuffer(_codeStr);
 	}
 	
 	@Override
@@ -57,7 +59,7 @@ public class AnonymousClassDecl extends Node implements Serializable {
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(isKeyPoint()) {
-			stringBuffer.append(_oriNode.toString());
+			stringBuffer.append(_codeStr);
 		} else {
 			stringBuffer.append(Constant.PLACE_HOLDER);
 		}
@@ -67,7 +69,7 @@ public class AnonymousClassDecl extends Node implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_oriNode.toString());
+		_tokens.add(_codeStr);
 	}
 	
 	@Override
@@ -83,7 +85,7 @@ public class AnonymousClassDecl extends Node implements Serializable {
 	@Override
 	public boolean compare(Node other) {
 		if(other instanceof AnonymousClassDecl) {
-			return _oriNode.toString().equals(((AnonymousClassDecl) other)._oriNode.toString());
+			return _codeStr.equals(((AnonymousClassDecl) other)._codeStr);
 		}
 		return false;
 	}
@@ -110,7 +112,7 @@ public class AnonymousClassDecl extends Node implements Serializable {
 	public void deepMatch(Node other) {
 		_tarNode = other;
 		if(other instanceof AnonymousClassDecl) {
-			_matchNodeType = _oriNode.toString().equals(((AnonymousClassDecl) other)._oriNode.toString());
+			_matchNodeType = _codeStr.equals(((AnonymousClassDecl) other)._codeStr);
 		} else {
 			_matchNodeType = false;
 		}

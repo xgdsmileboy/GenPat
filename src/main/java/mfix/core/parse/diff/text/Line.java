@@ -7,12 +7,15 @@
 
 package mfix.core.parse.diff.text;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Line {
+public abstract class Line implements Serializable {
 
+	private static final long serialVersionUID = 1241825485382255312L;
 	protected String _text;
 	protected String _leading = "";
 	

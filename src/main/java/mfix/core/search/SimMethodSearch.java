@@ -7,8 +7,10 @@
 
 package mfix.core.search;
 
+import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
+import mfix.common.util.Utils;
 import mfix.core.parse.Matcher;
 import mfix.core.parse.NodeParser;
 import mfix.core.parse.diff.Diff;
@@ -18,6 +20,8 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -107,15 +111,46 @@ public class SimMethodSearch {
     }
 
     private static <T> Set<Pair<Node, Diff<T>>> filterChangedMethods(final String buggyFile, final String fixedFile,
-                                                                     Class<? extends Diff<T>> diffclazz) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+                                                                     Class<? extends Diff<T>> diffclazz)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         CompilationUnit buggyUnit = JavaFile.genASTFromFileWithType(buggyFile);
         CompilationUnit fixedUnit = JavaFile.genASTFromFileWithType(fixedFile);
         Set<Pair<Node, Diff<T>>> set = new HashSet<>();
         List<Pair<MethodDeclaration, MethodDeclaration>> pairs = Matcher.match(buggyUnit, fixedUnit);
         NodeParser parser = NodeParser.getInstance();
+        File file = new File(buggyFile);
+        String name = file.getName();
+        String path = file.getParentFile().getParentFile().getAbsolutePath() + Constant.SEP + "serial";
+        File base = new File(path);
+        if (!base.exists()) {
+            base.mkdirs();
+        }
+        int count = 1;
         for (Pair<MethodDeclaration, MethodDeclaration> pair : pairs) {
-            Node buggyNode = parser.setCompilationUnit(buggyFile, buggyUnit).process(pair.getFirst());
-            Node fixedNode = parser.setCompilationUnit(fixedFile, fixedUnit).process(pair.getSecond());
+            String bNode = path + Constant.SEP + name + "_" + count + "b";
+            String fNode = path + Constant.SEP + name + "_" + count + "f";
+            Node buggyNode = null;
+            Node fixedNode = null;
+            if (new File(bNode).exists() && new File(fNode).exists()) {
+                try {
+                    buggyNode = (Node) Utils.deserialize(bNode);
+                    fixedNode = (Node) Utils.deserialize(fNode);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (buggyNode == null || fixedNode == null) {
+                buggyNode = parser.setCompilationUnit(buggyFile, buggyUnit).process(pair.getFirst());
+                fixedNode = parser.setCompilationUnit(fixedFile, fixedUnit).process(pair.getSecond());
+                try {
+                    Utils.serialize(buggyNode, bNode);
+                    Utils.serialize(fixedNode, fNode);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             if (buggyNode.toSrcString().toString().equals(fixedNode.toSrcString().toString())) continue;
             Diff<T> diff = diffclazz.getConstructor().newInstance(buggyNode, fixedNode);
             set.add(new Pair<Node, Diff<T>>(buggyNode, diff));

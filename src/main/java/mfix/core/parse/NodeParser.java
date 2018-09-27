@@ -119,7 +119,11 @@ public class NodeParser {
         int end = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         MethDecl methDecl = new MethDecl(_fileName, start, end, node);
 
-        methDecl.setModifiers(node.modifiers());
+        List<String> modifiers = new ArrayList<>(5);
+        for(Object object: node.modifiers()) {
+            modifiers.add(object.toString());
+        }
+        methDecl.setModifiers(modifiers);
         methDecl.setRetType(node.getReturnType2());
         SName name = (SName) process(node.getName());
         name.setParent(methDecl);
@@ -132,7 +136,12 @@ public class NodeParser {
         }
         methDecl.setArguments(params);
 
-        methDecl.setThrows(node.thrownExceptionTypes());
+        List<String> throwTypes = new ArrayList<>(7);
+        for(Object object : node.thrownExceptionTypes()) {
+            throwTypes.add(object.toString());
+        }
+
+        methDecl.setThrows(throwTypes);
 
         Block body = node.getBody();
         if (body != null) {

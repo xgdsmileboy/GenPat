@@ -15,7 +15,6 @@ import mfix.core.parse.node.stmt.Blk;
 import mfix.core.parse.node.stmt.Stmt;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Type;
 
 import java.io.Serializable;
@@ -33,34 +32,37 @@ import java.util.Set;
 public class MethDecl extends Node implements Serializable {
 
 	private static final long serialVersionUID = -4279492715496549645L;
-	private List<Modifier> _modifiers = new ArrayList<>(5);
-	private Type _retType;
+	private List<String> _modifiers = new ArrayList<>(5);
+	private String _retTypeStr;
+	private transient Type _retType;
 	private SName _name;
 	private List<Expr> _arguments;
 	private Blk _body;
-	private List<Object> _throws;
+	private List<String> _throws;
 	
 	public MethDecl(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.METHDECL;
-		_retType = AST.newAST(AST.JLS8).newWildcardType(); 
+		_retType = AST.newAST(AST.JLS8).newWildcardType();
+		_retTypeStr = _retType.toString();
 	}
 	
-	public void setModifiers(List<Modifier> modifiers) {
+	public void setModifiers(List<String> modifiers) {
 		_modifiers = modifiers;
 	}
 	
-	public List<Modifier> getModifiers() {
+	public List<String> getModifiers() {
 		return _modifiers;
 	}
 	
-	public void setThrows(List<Object> throwTypes) {
+	public void setThrows(List<String> throwTypes) {
 		_throws = throwTypes;
 	}
 	
 	public void setRetType(Type type) {
 		if(type != null) {
 			_retType = type;
+			_retTypeStr = type.toString();
 		}
 	}
 	
@@ -98,8 +100,8 @@ public class MethDecl extends Node implements Serializable {
 		for(Object modifier : _modifiers) {
 			stringBuffer.append(modifier.toString() + " ");
 		}
-		if(!_retType.toString().equals("?")) {
-			stringBuffer.append(_retType + " ");
+		if(!_retTypeStr.equals("?")) {
+			stringBuffer.append(_retTypeStr + " ");
 		}
 		stringBuffer.append(_name.toSrcString());
 		stringBuffer.append("(");
@@ -111,9 +113,9 @@ public class MethDecl extends Node implements Serializable {
 		}
 		stringBuffer.append(")");
 		if(_throws != null && _throws.size() > 0) {
-			stringBuffer.append(" throws " + _throws.get(0).toString());
+			stringBuffer.append(" throws " + _throws.get(0));
 			for(int i = 1; i < _throws.size(); i++) {
-				stringBuffer.append("," + _throws.get(i).toString());
+				stringBuffer.append("," + _throws.get(i));
 			}
 		}
 		if(_body == null) {

@@ -27,7 +27,7 @@ import java.util.Set;
 public class ExpressionMethodRef extends Expr implements Serializable {
 
 	private static final long serialVersionUID = -7935543365316676426L;
-
+	private String _str;
 	/**
 	 * ExpressionMethodReference:
      *	Expression :: 
@@ -36,12 +36,13 @@ public class ExpressionMethodRef extends Expr implements Serializable {
 	 */
 	public ExpressionMethodRef(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
+		_str = node.toString();
 	}
 
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_oriNode.toString());
+		stringBuffer.append(_str);
 		return stringBuffer;
 	}
 	
@@ -63,7 +64,7 @@ public class ExpressionMethodRef extends Expr implements Serializable {
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(isKeyPoint()) {
-			stringBuffer.append(_oriNode.toString());
+			stringBuffer.append(_str);
 		} else {
 			stringBuffer.append(Constant.PLACE_HOLDER);
 		}
@@ -73,14 +74,14 @@ public class ExpressionMethodRef extends Expr implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_oriNode.toString());
+		_tokens.add(_str);
 	}
 	
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
 		if(other instanceof ExpressionMethodRef) {
-			match = _oriNode.toString().equals(((ExpressionMethodRef) other)._oriNode.toString());
+			match = _str.equals(((ExpressionMethodRef) other)._str);
 		}
 		return match;
 	}
@@ -106,7 +107,7 @@ public class ExpressionMethodRef extends Expr implements Serializable {
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if(other instanceof ExpressionMethodRef && _oriNode.toString().equals(((ExpressionMethodRef) other)._oriNode.toString())) {
+		if(other instanceof ExpressionMethodRef && _str.equals(((ExpressionMethodRef) other)._str)) {
 			_matchNodeType = true;
 		} else {
 			_matchNodeType = false;

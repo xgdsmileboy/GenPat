@@ -20,7 +20,8 @@ import java.util.LinkedList;
 public class InfixOperator extends Operator implements Serializable {
 
 	private static final long serialVersionUID = -4702533056648468078L;
-	private InfixExpression.Operator _operator;
+	private String _operatorStr;
+	private transient InfixExpression.Operator _operator;
 	
 	public InfixOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
@@ -29,6 +30,7 @@ public class InfixOperator extends Operator implements Serializable {
 	
 	public void setOperator(InfixExpression.Operator operator) {
 		_operator = operator;
+		_operatorStr = operator.toString();
 	}
 	
 	public InfixExpression.Operator getOperator() {
@@ -39,7 +41,7 @@ public class InfixOperator extends Operator implements Serializable {
 	public boolean compare(Node other) {
 		if(other instanceof InfixOperator) {
 			InfixOperator infixOperator = (InfixOperator) other;
-			return _operator.toString().equals(infixOperator.getOperator().toString());
+			return _operatorStr.equals(infixOperator._operatorStr);
 		}
 		return false;
 	}
@@ -47,14 +49,14 @@ public class InfixOperator extends Operator implements Serializable {
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operator.toString());
+		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
 	
 	@Override
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operator.toString());
+		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
 
@@ -62,7 +64,7 @@ public class InfixOperator extends Operator implements Serializable {
 	public void deepMatch(Node other) {
 		_tarNode = other;
 		if(other instanceof InfixOperator) {
-			_matchNodeType = _operator.toString().equals(((InfixOperator) other)._operator.toString());
+			_matchNodeType = _operatorStr.equals(((InfixOperator) other)._operatorStr);
 		} else {
 			_matchNodeType = false;
 		}
@@ -83,7 +85,7 @@ public class InfixOperator extends Operator implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_operator.toString());
+		_tokens.add(_operatorStr);
 	}
 
 }

@@ -9,11 +9,13 @@ package mfix.core.parse.diff.text;
 
 import mfix.common.util.Constant;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class KeepLine extends Line {
+public class KeepLine extends Line  implements Serializable {
 
 	public KeepLine(String text) {
 		super(text);

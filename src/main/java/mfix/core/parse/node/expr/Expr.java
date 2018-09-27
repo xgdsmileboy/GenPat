@@ -23,14 +23,17 @@ import java.util.List;
 public abstract class Expr extends Node implements Serializable {
 
 	private static final long serialVersionUID = 1325289211050496258L;
-	protected Type _exprType = null;
+	protected String _exprTypeStr = null;
+	protected transient Type _exprType = null;
 
 	protected Expr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node, null);
+		_exprTypeStr = node.toString();
 	}
 	
 	public void setType(Type exprType){
 		_exprType = exprType;
+		_exprTypeStr = exprType.toString();
 	}
 	
 	public Type getType(){

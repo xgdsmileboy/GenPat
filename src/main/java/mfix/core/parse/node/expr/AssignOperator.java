@@ -22,7 +22,8 @@ import java.util.Set;
 public class AssignOperator extends Operator implements Serializable {
 
 	private static final long serialVersionUID = 2573726544838821670L;
-	private Assignment.Operator _operator;
+	private String _operatorStr;
+	private transient Assignment.Operator _operator;
 	
 	public AssignOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
@@ -31,6 +32,7 @@ public class AssignOperator extends Operator implements Serializable {
 	
 	public void setOperator(Assignment.Operator operator) {
 		this._operator = operator;
+		this._operatorStr = operator.toString();
 	}
 	
 	public Assignment.Operator getOperator() {
@@ -40,7 +42,7 @@ public class AssignOperator extends Operator implements Serializable {
 	@Override
 	public boolean compare(Node other) {
 		if(other instanceof AssignOperator) {
-			return _operator.toString().equals(((AssignOperator) other)._operator.toString());
+			return _operatorStr.equals(((AssignOperator) other)._operatorStr);
 		}
 		return false;
 	}
@@ -48,7 +50,7 @@ public class AssignOperator extends Operator implements Serializable {
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operator.toString());
+		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
 	
@@ -59,7 +61,7 @@ public class AssignOperator extends Operator implements Serializable {
 	
 	@Override
 	public StringBuffer replace(Map<String, String> exprMap, Set<String> allUsableVars) {
-		String result = exprMap.get(_operator.toString());
+		String result = exprMap.get(_operatorStr);
 		if(result != null) {
 			return new StringBuffer(result);
 		} else {
@@ -70,14 +72,14 @@ public class AssignOperator extends Operator implements Serializable {
 	@Override
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operator.toString());
+		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
 	
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if(other instanceof AssignOperator && _operator.toString().equals(((AssignOperator) other)._operator.toString())) {
+		if(other instanceof AssignOperator && _operatorStr.equals(((AssignOperator) other)._operatorStr)) {
 			_matchNodeType = true;
 		} else {
 			_matchNodeType = false;
@@ -99,7 +101,7 @@ public class AssignOperator extends Operator implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_operator.toString());
+		_tokens.add(_operatorStr);
 	}
 
 }

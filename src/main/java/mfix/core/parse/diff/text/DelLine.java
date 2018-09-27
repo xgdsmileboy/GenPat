@@ -10,11 +10,15 @@ package mfix.core.parse.diff.text;
 import mfix.common.util.Constant;
 import mfix.core.parse.diff.Delete;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class DelLine extends Line implements Delete {
+public class DelLine extends Line implements Delete, Serializable {
+
+	private static final long serialVersionUID = 7207850128129029810L;
 
 	public DelLine(String text) {
 		super(text);

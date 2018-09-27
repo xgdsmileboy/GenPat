@@ -31,21 +31,24 @@ import java.util.Set;
 public class MType extends Node implements Serializable {
 
 	private static final long serialVersionUID = 1247523997810234312L;
-	private Type _type;
+	private String _typeStr;
+	private transient Type _type;
 	
 	public MType(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.TYPE;
+		_typeStr = oriNode.toString();
 	}
 	
-	public void setType(org.eclipse.jdt.core.dom.Type type) {
+	public void setType(Type type) {
 		if(type == null) {
 			type = AST.newAST(AST.JLS8).newWildcardType();
 		}
 		this._type = type;
+		_typeStr = type.toString();
 	}
 	
-	public org.eclipse.jdt.core.dom.Type type() {
+	public Type type() {
 		return _type;
 	}
 	
@@ -85,7 +88,7 @@ public class MType extends Node implements Serializable {
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_type.toString());
+		stringBuffer.append(_typeStr);
 		return stringBuffer;
 	}
 	
@@ -107,7 +110,7 @@ public class MType extends Node implements Serializable {
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(isKeyPoint()) {
-			stringBuffer.append(_type.toString());
+			stringBuffer.append(_typeStr);
 		} else {
 			stringBuffer.append(Constant.PLACE_HOLDER);
 		}
@@ -148,7 +151,7 @@ public class MType extends Node implements Serializable {
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if(other instanceof MType && _type.toString().equals(((MType) other)._type.toString())) {
+		if(other instanceof MType && _typeStr.equals(((MType) other)._typeStr)) {
 			_matchNodeType = true;
 		} else {
 			_matchNodeType = false;
@@ -182,7 +185,7 @@ public class MType extends Node implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_type.toString());
+		_tokens.add(_typeStr);
 	}
 	
 	@Override
@@ -191,7 +194,7 @@ public class MType extends Node implements Serializable {
 			return false;
 		}
 		MType mType = (MType) obj;
-		return _type.toString().equals(mType._type.toString());
+		return _typeStr.equals(mType._typeStr);
 	}
 
 }

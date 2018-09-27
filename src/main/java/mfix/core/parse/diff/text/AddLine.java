@@ -10,11 +10,15 @@ package mfix.core.parse.diff.text;
 import mfix.common.util.Constant;
 import mfix.core.parse.diff.Add;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class AddLine extends Line implements Add {
+public class AddLine extends Line implements Add, Serializable {
+
+	private static final long serialVersionUID = -5178723884749316617L;
 
 	public AddLine(String text) {
 		super(text);

@@ -27,7 +27,7 @@ import java.util.Set;
 public class MethodRef extends Expr implements Serializable {
 
 	private static final long serialVersionUID = -6933267554937901141L;
-
+	private String _str;
 	/**
 	 * MethodReference:
      *	CreationReference
@@ -37,13 +37,14 @@ public class MethodRef extends Expr implements Serializable {
 	 */
 	public MethodRef(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
+		_str = node.toString();
 	}
 
 	
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_oriNode.toString());
+		stringBuffer.append(_str);
 		return stringBuffer;
 	}
 	
@@ -65,7 +66,7 @@ public class MethodRef extends Expr implements Serializable {
 	public StringBuffer printMatchSketch() {
 		StringBuffer stringBuffer = new StringBuffer();
 		if(isKeyPoint()) {
-			stringBuffer.append(_oriNode.toString());
+			stringBuffer.append(_str);
 		} else {
 			stringBuffer.append(Constant.PLACE_HOLDER);
 		}
@@ -75,14 +76,14 @@ public class MethodRef extends Expr implements Serializable {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_oriNode.toString());
+		_tokens.add(_str);
 	}
 	
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
 		if(other instanceof MethodRef) {
-			match = _oriNode.toString().equals(((MethodRef) other)._oriNode.toString());
+			match = _str.equals(((MethodRef) other)._str);
 		}
 		return match;
 	}
@@ -109,7 +110,7 @@ public class MethodRef extends Expr implements Serializable {
 	public void deepMatch(Node other) {
 		_tarNode = other;
 		if(other instanceof MethodRef) {
-			_matchNodeType = (_oriNode.toString().equals(((MethodRef) other)._oriNode.toString()));
+			_matchNodeType = (_str.equals(((MethodRef) other)._str));
 		} else {
 			_matchNodeType = false;
 		}
