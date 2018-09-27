@@ -49,13 +49,13 @@ public class SimMethodSearch {
         parser.setCompilationUnit(unit);
         final FVector fVector = node.getFeatureVector();
         if (fVector == null) return set;
+        final double biggetDis = 1.0 - simThreshold;
         unit.accept(new ASTVisitor() {
             @Override
             public boolean visit(MethodDeclaration node) {
                 if (node.getBody() == null) return true;
                 Node sim = parser.process(node);
-                sim.tokens();
-                if (sim != null && fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.NORM_2) >= simThreshold
+                if (sim != null && fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.NORM_2) <= biggetDis
                         && fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.COSINE) >= simThreshold) {
                     set.add(sim);
                 }

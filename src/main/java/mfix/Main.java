@@ -35,6 +35,7 @@ public class Main {
     public static void main(String[] args) {
         String base = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest");
         String codeBase = "/home/lee/Xia/GitHubData/MissSome/2011/V1";
+        String tempFile = Constant.HOME + Constant.SEP + "similar_";
         Set<String> ignoreKeys = new HashSet<>();
         ignoreKeys.add("fixed-version");
         D4jSubject subject = new D4jSubject(base, "chart", 1);
@@ -42,18 +43,23 @@ public class Main {
         List<Location> locations = locator.getLocations(100);
         List<File> files = JavaFile.ergodic(new File(codeBase), new LinkedList<File>(), ignoreKeys, ".java");
         System.out.println("Total file : " + files.size());
+        int id = 0;
         for (Location location : locations) {
+            id ++;
             String file = Utils.join(Constant.SEP, subject.getHome() + subject.getSsrc(), location.getRelClazzFile());
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
             NodeParser parser = NodeParser.getInstance();
             parser.setCompilationUnit(unit);
             Node fnode = parser.process(method);
+            JavaFile.writeStringToFile(tempFile + id + ".log", fnode.toSrcString().toString() + "\n ---------\n", false);
+            int fileSize = files.size();
             for (File f : files) {
+                System.out.println(fileSize --);
                 unit = JavaFile.genASTFromFileWithType(f);
                 Set<Node> nodes = SimMethodSearch.searchSimMethod(unit, fnode, 0.95);
                 for (Node node : nodes) {
-                    System.out.println(node.toSrcString());
+                    JavaFile.writeStringToFile(tempFile + id + ".log", node.toSrcString().toString() + "\n", true);
                 }
             }
 

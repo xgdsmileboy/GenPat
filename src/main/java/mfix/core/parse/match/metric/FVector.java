@@ -165,7 +165,14 @@ public class FVector {
 	
 	public double computeSimilarity(FVector fVector, ALGO alg){
 		if(fVector == null){
-			return 0.0;
+            switch (alg) {
+                case NORM_1:
+                case NORM_2:
+                    return 1.0;
+                case COSINE:
+                default:
+            }
+		    return 0.0;
 		} else {
 			switch (alg) {
 			case NORM_1:
@@ -210,6 +217,7 @@ public class FVector {
 		if(biggest == 0){
 			return 0.0;
 		}
+		// the smaller the better
 		return delta / biggest;
 	}
 	
@@ -224,6 +232,7 @@ public class FVector {
 		if(biggest == 0){
 			return 0.0;
 		}
+		// the smaller the better
 		delta = Math.sqrt(delta / biggest);
 		return delta;
 	}
