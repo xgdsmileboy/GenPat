@@ -193,7 +193,7 @@ public class Utils {
         StringBuffer buffer = new StringBuffer();
         buffer.append("path : " + path + Constant.NEW_LINE);
         buffer.append("range : <" + startLine + "," + endLine + ">" + Constant.NEW_LINE);
-        buffer.append("NORM : " + normSim + Constant.NEW_LINE);
+        buffer.append("DIST : " + normSim + Constant.NEW_LINE);
         buffer.append("COSIN : " + cosineSim + Constant.NEW_LINE);
         buffer.append("-----------------------------" + Constant.NEW_LINE);
         buffer.append(content);

@@ -14,6 +14,7 @@ import mfix.common.util.Utils;
 import mfix.core.parse.Matcher;
 import mfix.core.parse.NodeParser;
 import mfix.core.parse.diff.Diff;
+import mfix.core.parse.diff.TextDiff;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -84,21 +85,20 @@ public class SimMethodSearch {
         return map;
     }
 
-    public static <T> Map<Pair<Node, Diff<T>>, Pair<Double, Double>> searchSimFixedMethod(final String buggyFile,
+    public static Map<Pair<Node, TextDiff>, Pair<Double, Double>> searchSimFixedMethod(final String buggyFile,
                                                                                           final String fixedFile,
-                                                                                          final Node node, Class<?
-            extends Diff<T>> diff, final double simThreshold) {
-        final Map<Pair<Node, Diff<T>>, Pair<Double, Double>> map = new HashMap<>();
+                                                                                          final Node node, final double simThreshold) {
+        final Map<Pair<Node, TextDiff>, Pair<Double, Double>> map = new HashMap<>();
         final FVector fVector = node.getFeatureVector();
         if (fVector == null) return map;
-        Set<Pair<Node, Diff<T>>> candidates = null;
+        Set<Pair<Node, TextDiff>> candidates = null;
         try {
-            candidates = filterChangedMethods(buggyFile, fixedFile, diff);
+            candidates = filterChangedMethods(buggyFile, fixedFile);
         } catch (Exception e) {
             return map;
         }
         double biggetDis = 1.0 - simThreshold;
-        for (Pair<Node, Diff<T>> pair : candidates) {
+        for (Pair<Node, TextDiff> pair : candidates) {
             Node sim = pair.getFirst();
             double norm = fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.NORM_2);
             double cosine = fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.COSINE);
@@ -110,12 +110,11 @@ public class SimMethodSearch {
         return map;
     }
 
-    private static <T> Set<Pair<Node, Diff<T>>> filterChangedMethods(final String buggyFile, final String fixedFile,
-                                                                     Class<? extends Diff<T>> diffclazz)
+    private static Set<Pair<Node, TextDiff>> filterChangedMethods(final String buggyFile, final String fixedFile)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         CompilationUnit buggyUnit = JavaFile.genASTFromFileWithType(buggyFile);
         CompilationUnit fixedUnit = JavaFile.genASTFromFileWithType(fixedFile);
-        Set<Pair<Node, Diff<T>>> set = new HashSet<>();
+        Set<Pair<Node, TextDiff>> set = new HashSet<>();
         List<Pair<MethodDeclaration, MethodDeclaration>> pairs = Matcher.match(buggyUnit, fixedUnit);
         NodeParser parser = NodeParser.getInstance();
         File file = new File(buggyFile);
@@ -129,6 +128,7 @@ public class SimMethodSearch {
         for (Pair<MethodDeclaration, MethodDeclaration> pair : pairs) {
             String bNode = path + Constant.SEP + name + "_" + count + "b";
             String fNode = path + Constant.SEP + name + "_" + count + "f";
+            count ++;
             Node buggyNode = null;
             Node fixedNode = null;
             if (new File(bNode).exists() && new File(fNode).exists()) {
@@ -152,8 +152,8 @@ public class SimMethodSearch {
                 }
             }
             if (buggyNode.toSrcString().toString().equals(fixedNode.toSrcString().toString())) continue;
-            Diff<T> diff = diffclazz.getConstructor().newInstance(buggyNode, fixedNode);
-            set.add(new Pair<Node, Diff<T>>(buggyNode, diff));
+            TextDiff diff = new TextDiff(buggyNode, fixedNode);
+            set.add(new Pair<Node, TextDiff>(buggyNode, diff));
         }
         return set;
     }

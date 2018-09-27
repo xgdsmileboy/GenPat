@@ -52,8 +52,9 @@ public class Main {
         List<Location> locations = locator.getLocations(100);
         Set<String> ignoreKeys = new HashSet<>();
         ignoreKeys.add("fixed-version");
-        int locationID = 1;
+        int locationID = 0;
         for (Location location : locations) {
+            locationID ++;
             String file = Utils.join(Constant.SEP, subject.getHome() + subject.getSsrc(), location.getRelClazzFile());
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
@@ -62,13 +63,13 @@ public class Main {
             Node fnode = parser.process(method);
 
             // record faulty node info
-            Utils.log(Utils.join(Constant.SEP, outPath, String.valueOf(locationID++), "faulty.log"), file,
+            Utils.log(Utils.join(Constant.SEP, outPath, String.valueOf(locationID), "faulty.log"), file,
                     fnode.getStartLine(), fnode.getEndLine(), method.toString(), false);
             // log current location info
             Utils.log(infoFile, "LOCATION : " + location.getRelClazzFile() + "#" +
                     location.getLine() + Constant.NEW_LINE, true);
 
-            int similarCount = 1;
+            int similarCount = 0;
             for (String base : codeBase) {
                 List<File> files = JavaFile.ergodic(new File(base), new LinkedList<File>(), ignoreKeys, ".java");
                 int size = files.size();
@@ -79,15 +80,16 @@ public class Main {
                 for (File buggy : files) {
                     System.out.println(size--);
                     String fixed = buggy.getAbsolutePath().replace("buggy-version", "fixed-version");
-                    Map<Pair<Node, Diff<Line>>, Pair<Double, Double>> candidates =
-                            SimMethodSearch.searchSimFixedMethod(buggy.getAbsolutePath(), fixed, fnode, TextDiff.class,
-                                    0.5);
-                    for (Map.Entry<Pair<Node, Diff<Line>>, Pair<Double, Double>> entry : candidates.entrySet()) {
+                    Map<Pair<Node, TextDiff>, Pair<Double, Double>> candidates =
+                            SimMethodSearch.searchSimFixedMethod(buggy.getAbsolutePath(), fixed, fnode,
+                                    0.8);
+                    for (Map.Entry<Pair<Node, TextDiff>, Pair<Double, Double>> entry : candidates.entrySet()) {
+                        similarCount ++;
                         Node node = entry.getKey().getFirst();
-                        Diff<Line> diff = entry.getKey().getSecond();
+                        TextDiff diff = entry.getKey().getSecond();
                         Pair<Double, Double> similarity = entry.getValue();
 
-                        Utils.log(Utils.join(Constant.SEP, outPath, java.lang.String.valueOf(similarCount++), ".log"),
+                        Utils.log(Utils.join(Constant.SEP, outPath, String.valueOf(locationID), similarCount + ".log"),
                                 buggy.getAbsolutePath(), node.getStartLine(),
                                 node.getEndLine(), similarity.getFirst(), similarity.getSecond(),
                                 node.toSrcString().toString(),
