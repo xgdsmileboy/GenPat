@@ -60,7 +60,7 @@ public class SimMatcher {
 		}
 		
 		public boolean visit(CompilationUnit unit) {
-			_nodePaser.setCompilationUnit(unit);
+			_nodePaser.setCompilationUnit(null, unit);
 			_candidates = new LinkedList<>();
 			return true;
 		}

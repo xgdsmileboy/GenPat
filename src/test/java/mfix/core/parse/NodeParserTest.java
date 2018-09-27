@@ -35,9 +35,9 @@ public class NodeParserTest extends TestCase {
         NodeParser nodePaser = NodeParser.getInstance();
         int modifyLocs = 0;
         for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
-            nodePaser.setCompilationUnit(srcUnit);
+            nodePaser.setCompilationUnit(srcFile, srcUnit);
             String src = nodePaser.process(pair.getFirst()).toSrcString().toString();
-            nodePaser.setCompilationUnit(tarUnit);
+            nodePaser.setCompilationUnit(tarFile, tarUnit);
             String tar = nodePaser.process(pair.getSecond()).toSrcString().toString();
             if(!src.equals(tar)) {
                 modifyLocs ++;

@@ -87,10 +87,10 @@ public abstract class Diff<T> {
 		List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
 		NodeParser nodePaser = NodeParser.getInstance();
 		for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
-			nodePaser.setCompilationUnit(srcUnit);
+			nodePaser.setCompilationUnit(srcFile, srcUnit);
 			Node srcNode = nodePaser.process(pair.getFirst()); 
 			String src = srcNode.toSrcString().toString();
-			nodePaser.setCompilationUnit(tarUnit);
+			nodePaser.setCompilationUnit(tarFile, tarUnit);
 			Node tarNode = nodePaser.process(pair.getSecond()); 
 			String tar = tarNode.toSrcString().toString();
 			

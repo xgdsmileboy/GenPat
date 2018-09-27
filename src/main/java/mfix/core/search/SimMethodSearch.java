@@ -38,26 +38,26 @@ public class SimMethodSearch {
         CompilationUnit sunit = JavaFile.genASTFromFileWithType(searchfile);
         CompilationUnit ounit = JavaFile.genASTFromFileWithType(oriFile);
         final NodeParser parser = NodeParser.getInstance();
-        parser.setCompilationUnit(ounit);
+        parser.setCompilationUnit(oriFile, ounit);
         Node node = parser.process(method);
         return searchSimMethod(sunit, node, simThreshold);
     }
 
-    public static Map<Node, Pair<Double, Double>> searchSimMethod(final CompilationUnit unit,
-                                                                  final CompilationUnit oriUnit,
-                                                                  final MethodDeclaration method,
-                                                                  final double simThreshold) {
-        final NodeParser parser = NodeParser.getInstance();
-        parser.setCompilationUnit(oriUnit);
-        Node node = parser.process(method);
-        return searchSimMethod(unit, node, simThreshold);
-    }
+//    public static Map<Node, Pair<Double, Double>> searchSimMethod(final CompilationUnit unit,
+//                                                                  final CompilationUnit oriUnit,
+//                                                                  final MethodDeclaration method,
+//                                                                  final double simThreshold) {
+//        final NodeParser parser = NodeParser.getInstance();
+//        parser.setCompilationUnit(oriUnit);
+//        Node node = parser.process(method);
+//        return searchSimMethod(unit, node, simThreshold);
+//    }
 
     public static Map<Node, Pair<Double, Double>> searchSimMethod(final CompilationUnit unit, final Node node,
                                                                   final double simThreshold) {
         final Map<Node, Pair<Double, Double>> map = new HashMap<>();
         final NodeParser parser = NodeParser.getInstance();
-        parser.setCompilationUnit(unit);
+        parser.setCompilationUnit(null, unit);
         final FVector fVector = node.getFeatureVector();
         if (fVector == null) return map;
         final double biggetDis = 1.0 - simThreshold;
@@ -114,8 +114,8 @@ public class SimMethodSearch {
         List<Pair<MethodDeclaration, MethodDeclaration>> pairs = Matcher.match(buggyUnit, fixedUnit);
         NodeParser parser = NodeParser.getInstance();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : pairs) {
-            Node buggyNode = parser.setCompilationUnit(buggyUnit).process(pair.getFirst());
-            Node fixedNode = parser.setCompilationUnit(fixedUnit).process(pair.getSecond());
+            Node buggyNode = parser.setCompilationUnit(buggyFile, buggyUnit).process(pair.getFirst());
+            Node fixedNode = parser.setCompilationUnit(fixedFile, fixedUnit).process(pair.getSecond());
             if (buggyNode.toSrcString().toString().equals(fixedNode.toSrcString().toString())) continue;
             Diff<T> diff = diffclazz.getConstructor().newInstance(buggyNode, fixedNode);
             set.add(new Pair<Node, Diff<T>>(buggyNode, diff));

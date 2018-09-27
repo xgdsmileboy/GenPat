@@ -38,7 +38,7 @@ public class NodeTest extends TestCase {
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(unit, location.getLine());
             NodeParser parser = NodeParser.getInstance();
-            parser.setCompilationUnit(unit);
+            parser.setCompilationUnit(file, unit);
             Node node = parser.process(method);
             System.out.println(node.toSrcString().toString());
             List<String> tokens = node.tokens();

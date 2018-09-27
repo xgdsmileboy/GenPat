@@ -57,7 +57,7 @@ public class Main {
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
             NodeParser parser = NodeParser.getInstance();
-            parser.setCompilationUnit(unit);
+            parser.setCompilationUnit(file, unit);
             Node fnode = parser.process(method);
 
             // record faulty node info
