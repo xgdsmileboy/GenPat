@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,7 +81,7 @@ public class Main {
                     String fixed = buggy.getAbsolutePath().replace("buggy-version", "fixed-version");
                     Map<Pair<Node, Diff<Line>>, Pair<Double, Double>> candidates =
                             SimMethodSearch.searchSimFixedMethod(buggy.getAbsolutePath(), fixed, fnode, TextDiff.class,
-                                    0.7);
+                                    0.5);
                     for (Map.Entry<Pair<Node, Diff<Line>>, Pair<Double, Double>> entry : candidates.entrySet()) {
                         Node node = entry.getKey().getFirst();
                         Diff<Line> diff = entry.getKey().getSecond();
@@ -100,7 +101,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        String base = Utils.join(Constant.SEP, Constant.HOME, "resources", "forTest");
+        String base = "/home/ubuntu/code/d4j/projects_4_fix";
         Set<String> codeBase = new HashSet<>();
         Map<String, Integer> path2version = new HashMap<>();
         path2version.put("2011", 5);
@@ -114,8 +115,16 @@ public class Main {
                 codeBase.add("/home/lee/Xia/GitHubData/MissSome/" + entry.getKey() + "/V" + i);
             }
         }
-        D4jSubject subject = new D4jSubject(base, "chart", 1);
-        process(subject, codeBase);
+//        D4jSubject subject = new D4jSubject(base, "chart", 1);
+        Set<Integer> ids = new HashSet<>();
+        ids.add(1);
+        ids.add(2);
+        ids.add(3);
+        ids.add(5);
+        Set<D4jSubject> subjects = Utils.select(base, "math", ids);
+        for(D4jSubject subject : subjects) {
+            process(subject, codeBase);
+        }
     }
 
 }
