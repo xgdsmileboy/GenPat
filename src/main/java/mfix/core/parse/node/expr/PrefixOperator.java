@@ -22,7 +22,7 @@ public class PrefixOperator extends Operator implements Serializable {
 
 	private static final long serialVersionUID = -7394935189908328110L;
 	private String _operatorStr;
-	private PrefixExpression.Operator _operator;
+	private transient PrefixExpression.Operator _operator;
 	private static Map<String, Integer> _operatorMap;
 	
 	static {

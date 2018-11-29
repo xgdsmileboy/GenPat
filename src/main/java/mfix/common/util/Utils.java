@@ -51,6 +51,22 @@ public class Utils {
     }
 
     /**
+     * Select project {@code whichProject} with bug ids{@code whichBugs}.
+     * @param base
+     * @param whichProject : name of the project
+     * @param whichBugs : bug ids
+     * @return a set of d4j subject
+     */
+    public static Set<D4jSubject> select(String base, String whichProject, Set<Integer> whichBugs) {
+        Set<D4jSubject> subjects = new HashSet<>();
+        for(Integer whichBug : whichBugs) {
+            D4jSubject subject = new D4jSubject(base, whichProject, whichBug);
+            subjects.add(subject);
+        }
+        return subjects;
+    }
+
+    /**
      * Select project {@code whichProject} with bug id{@code whichBug}.
      * @param base
      * @param whichProject : name of the project
@@ -163,7 +179,7 @@ public class Utils {
 
 
     public static void log(String logFile, String content, boolean append) {
-        JavaFile.writeStringToFile(logFile, "[" + new Date().toString() +  "]" + content, append);
+        JavaFile.writeStringToFile(logFile, "[" + new Date().toString() +  "] " + content, append);
     }
 
     public static void log(String logFile, String path, int startLine, int endLine, String content,
@@ -177,7 +193,7 @@ public class Utils {
         StringBuffer buffer = new StringBuffer();
         buffer.append("path : " + path + Constant.NEW_LINE);
         buffer.append("range : <" + startLine + "," + endLine + ">" + Constant.NEW_LINE);
-        buffer.append("NORM : " + normSim + Constant.NEW_LINE);
+        buffer.append("DIST : " + normSim + Constant.NEW_LINE);
         buffer.append("COSIN : " + cosineSim + Constant.NEW_LINE);
         buffer.append("-----------------------------" + Constant.NEW_LINE);
         buffer.append(content);
