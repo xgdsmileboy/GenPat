@@ -71,7 +71,7 @@ public class Assign extends Expr implements Serializable {
 		children.add(_rhs);
 		return children;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

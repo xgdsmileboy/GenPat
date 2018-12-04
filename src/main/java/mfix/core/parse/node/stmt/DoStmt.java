@@ -63,7 +63,7 @@ public class DoStmt extends Stmt implements Serializable {
 	protected Expr getExpression() {
 		return _expression;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

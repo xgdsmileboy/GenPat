@@ -43,7 +43,7 @@ public class NumLiteral extends Expr implements Serializable {
 	public void setBinding(Node node) {
 		_binding = node;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_token);

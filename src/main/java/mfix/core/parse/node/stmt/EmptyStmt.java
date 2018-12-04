@@ -9,6 +9,7 @@ package mfix.core.parse.node.stmt;
 import mfix.core.comp.Modification;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
+import mfix.core.parse.node.NodeVisitor;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.io.Serializable;

@@ -28,6 +28,8 @@ public class LambdaExpr extends Expr implements Serializable {
 
 	private static final long serialVersionUID = -7877574560065780171L;
 
+	//TODO : add support for lambda expression
+
 	/**
 	 * LambdaExpression:
      *	Identifier -> Body
@@ -37,7 +39,7 @@ public class LambdaExpr extends Expr implements Serializable {
 	public LambdaExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

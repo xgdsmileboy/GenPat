@@ -33,7 +33,9 @@ public abstract class Expr extends Node implements Serializable {
 	
 	public void setType(Type exprType){
 		_exprType = exprType;
-		_exprTypeStr = exprType.toString();
+		if (exprType != null) {
+			_exprTypeStr = "?";
+		}
 	}
 	
 	public Type getType(){

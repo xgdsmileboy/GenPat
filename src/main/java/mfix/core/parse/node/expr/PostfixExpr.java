@@ -48,7 +48,7 @@ public class PostfixExpr extends Expr implements Serializable {
 	public void setOperator(PostOperator operator){
 		_operator = operator;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

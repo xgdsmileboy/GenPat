@@ -58,7 +58,7 @@ public class ConstructorInv  extends Stmt implements Serializable {
 	public void setArguments(ExprList arguments){
 		_arguments = arguments;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

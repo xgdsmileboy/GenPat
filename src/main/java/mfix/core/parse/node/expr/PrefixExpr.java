@@ -48,7 +48,7 @@ public class PrefixExpr extends Expr implements Serializable {
 	public void setOperator(PrefixOperator operator){
 		_operator = operator;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

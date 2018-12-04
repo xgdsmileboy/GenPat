@@ -34,7 +34,7 @@ public class LongLiteral extends NumLiteral implements Serializable {
 	public long getValue(){
 		return _value;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(String.valueOf(_value));

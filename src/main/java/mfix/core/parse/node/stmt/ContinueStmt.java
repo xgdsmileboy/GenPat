@@ -48,7 +48,7 @@ public class ContinueStmt extends Stmt implements Serializable {
 	public void setIdentifier(SName identifier){
 		_identifier = identifier;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer("continue");

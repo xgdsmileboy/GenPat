@@ -37,7 +37,7 @@ public class FloatLiteral extends NumLiteral implements Serializable {
 	public float getValue(){
 		return _value;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(String.valueOf(_value));

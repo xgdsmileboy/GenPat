@@ -94,6 +94,39 @@ public abstract class Node implements NodeComparator, Serializable {
 			node.resetBinding();
 		}
 	}
+
+	public final void accept(NodeVisitor visitor) {
+		if(visitor == null) {
+			throw new IllegalArgumentException("visitor should not be null!");
+		}
+		visitor.preVisit(this);
+
+		if (visitor.preVisit(this)) {
+			accept0(visitor);
+		}
+		// end with the generic post-visit
+		visitor.postVisit(this);
+	}
+
+	protected final void accept0(NodeVisitor visitor) {
+		if(visitor.visit(this)) {
+			for (Node node : getAllChildren()) {
+				if(node != null) {
+					node.accept(visitor);
+				}
+			}
+		}
+		visitor.endVisit(this);
+	}
+
+	protected final void acceptChild(NodeVisitor visitor, Node child) {
+		if (child == null) {
+			return;
+		}
+		child.accept(visitor);
+	}
+
+//
 	
 	public boolean isKeyPoint() {
 		return _keyPoint;
@@ -189,7 +222,7 @@ public abstract class Node implements NodeComparator, Serializable {
 	public Set<String> getNewVars() {
 		return new HashSet<>();
 	}
-	
+
 	public abstract StringBuffer toSrcString();
 	public abstract Stmt getParentStmt();
 	public abstract List<Stmt> getChildren();

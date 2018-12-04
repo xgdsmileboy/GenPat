@@ -13,7 +13,6 @@ import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.parse.Matcher;
 import mfix.core.parse.NodeParser;
-import mfix.core.parse.diff.Diff;
 import mfix.core.parse.diff.TextDiff;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;

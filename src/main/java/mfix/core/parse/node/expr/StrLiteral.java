@@ -42,7 +42,7 @@ public class StrLiteral extends Expr implements Serializable {
 				.replace("\b", "\\b").replace("\t", "\\t").replace("\r", "\\r").replace("\f", "\\f")
 				.replace("\0", "\\0");
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

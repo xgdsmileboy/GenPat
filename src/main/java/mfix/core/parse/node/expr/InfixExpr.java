@@ -66,7 +66,7 @@ public class InfixExpr extends Expr implements Serializable {
 	public Expr getRhs(){
 		return _rhs;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
