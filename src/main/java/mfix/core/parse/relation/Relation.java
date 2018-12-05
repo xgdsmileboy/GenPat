@@ -13,9 +13,30 @@ package mfix.core.parse.relation;
  */
 public abstract class Relation {
 
+    private RelationKind _relationKind;
     /**
      * a relation may rely on some other relation
      */
     protected Relation _parent;
+
+    protected Relation(RelationKind kind) {
+        _relationKind = kind;
+    }
+
+
+    public enum RelationKind{
+        ARGUMENT,
+        OPERATION,
+        DEFINE,
+        ASSIGN,
+        MCALL,
+        RETURN,
+        STRUCTURE,
+        CHILD,
+
+        VIRTUALDEFINE,
+        UNION,
+        DATADEPEND
+    }
 
 }

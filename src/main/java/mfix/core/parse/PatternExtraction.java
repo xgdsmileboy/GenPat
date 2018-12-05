@@ -15,441 +15,527 @@ import mfix.core.parse.node.stmt.*;
 import mfix.core.parse.relation.Pattern;
 import mfix.core.parse.relation.Relation;
 
-import java.util.List;
-
 /**
  * @author: Jiajun
  * @date: 2018/12/4
  */
 public class PatternExtraction {
 
-    public static Pattern extract(Node node) {
+    private static PatternExtraction patternExtraction = new PatternExtraction();
 
+    private PatternExtraction(){}
+
+    public static Pattern extract(Node oldNode, Node newNode) {
+        Pattern pattern = new Pattern();
+        pattern.setOldRelationFlag(true);
+        patternExtraction.process(oldNode, pattern);
+        pattern.setOldRelationFlag(false);
+        patternExtraction.process(newNode, pattern);
+        return pattern;
+    }
+
+
+    public Relation visit(AnonymousClassDecl node, Pattern pattern) {
 
         return null;
     }
 
+    public Relation visit(AssertStmt node, Pattern pattern) {
 
-    public void visit(AnonymousClassDecl node, List<Relation> relations) {
-
+        return null;
     }
 
-    public void visit(AssertStmt node, List<Relation> relations) {
+    public Relation visit(Blk node, Pattern pattern) {
 
+        return null;
     }
 
-    public void visit(Blk node, List<Relation> relations) {
+    public Relation visit(BreakStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(BreakStmt node, List<Relation> relations) {
+    public Relation visit(CatClause node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(CatClause node, List<Relation> relations) {
+    public Relation visit(ConstructorInv node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ConstructorInv node, List<Relation> relations) {
+    public Relation visit(ContinueStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ContinueStmt node, List<Relation> relations) {
+    public Relation visit(DoStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(DoStmt node, List<Relation> relations) {
+    public Relation visit(EmptyStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(EmptyStmt node, List<Relation> relations) {
+    public Relation visit(EnhancedForStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(EnhancedForStmt node, List<Relation> relations) {
+    public Relation visit(ExpressionStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ExpressionStmt node, List<Relation> relations) {
+    public Relation visit(ForStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ForStmt node, List<Relation> relations) {
+    public Relation visit(IfStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(IfStmt node, List<Relation> relations) {
+    public Relation visit(LabeledStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(LabeledStmt node, List<Relation> relations) {
+    public Relation visit(ReturnStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ReturnStmt node, List<Relation> relations) {
+    public Relation visit(Stmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(Stmt node, List<Relation> relations) {
+    public Relation visit(SuperConstructorInv node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(SuperConstructorInv node, List<Relation> relations) {
+    public Relation visit(SwCase node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(SwCase node, List<Relation> relations) {
+    public Relation visit(SwitchStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(SwitchStmt node, List<Relation> relations) {
+    public Relation visit(SynchronizedStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(SynchronizedStmt node, List<Relation> relations) {
+    public Relation visit(ThrowStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ThrowStmt node, List<Relation> relations) {
+    public Relation visit(TryStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(TryStmt node, List<Relation> relations) {
+    public Relation visit(TypeDeclarationStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(TypeDeclarationStmt node, List<Relation> relations) {
+    public Relation visit(VarDeclarationStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(VarDeclarationStmt node, List<Relation> relations) {
+    public Relation visit(WhileStmt node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(WhileStmt node, List<Relation> relations) {
-    }
+    public Relation visit(MethDecl node, Pattern pattern) {
 
-    public void visit(MethDecl node, List<Relation> relations) {
+        return null;
     }
 
     // expression bellow
-    public void visit(AryAcc node, List<Relation> relations) {
+    public Relation visit(AryAcc node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(AryCreation node, List<Relation> relations) {
+    public Relation visit(AryCreation node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(AryInitializer node, List<Relation> relations) {
+    public Relation visit(AryInitializer node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(Assign node, List<Relation> relations) {
+    public Relation visit(Assign node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(AssignOperator node, List<Relation> relations) {
+    public Relation visit(AssignOperator node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(BoolLiteral node, List<Relation> relations) {
+    public Relation visit(BoolLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(CastExpr node, List<Relation> relations) {
+    public Relation visit(CastExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(CharLiteral node, List<Relation> relations) {
+    public Relation visit(CharLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ClassInstCreation node, List<Relation> relations) {
+    public Relation visit(ClassInstCreation node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(Comment node, List<Relation> relations) {
+    public Relation visit(Comment node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ConditionalExpr node, List<Relation> relations) {
+    public Relation visit(ConditionalExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(CreationRef node, List<Relation> relations) {
+    public Relation visit(CreationRef node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(DoubleLiteral node, List<Relation> relations) {
+    public Relation visit(DoubleLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(Expr node, List<Relation> relations) {
+    public Relation visit(Expr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ExpressionMethodRef node, List<Relation> relations) {
+    public Relation visit(ExpressionMethodRef node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ExprList node, List<Relation> relations) {
+    public Relation visit(ExprList node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(FieldAcc node, List<Relation> relations) {
+    public Relation visit(FieldAcc node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(FloatLiteral node, List<Relation> relations) {
+    public Relation visit(FloatLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(InfixExpr node, List<Relation> relations) {
+    public Relation visit(InfixExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(InfixOperator node, List<Relation> relations) {
+    public Relation visit(InfixOperator node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(InstanceofExpr node, List<Relation> relations) {
+    public Relation visit(InstanceofExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(IntLiteral node, List<Relation> relations) {
+    public Relation visit(IntLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(Label node, List<Relation> relations) {
+    public Relation visit(Label node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(LambdaExpr node, List<Relation> relations) {
+    public Relation visit(LambdaExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(LongLiteral node, List<Relation> relations) {
+    public Relation visit(LongLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(MethodInv node, List<Relation> relations) {
+    public Relation visit(MethodInv node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(MethodRef node, List<Relation> relations) {
+    public Relation visit(MethodRef node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(MType node, List<Relation> relations) {
+    public Relation visit(MType node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(NillLiteral node, List<Relation> relations) {
+    public Relation visit(NillLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(NumLiteral node, List<Relation> relations) {
+    public Relation visit(NumLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(Operator node, List<Relation> relations) {
+    public Relation visit(Operator node, Pattern pattern) {
 
+        return null;
     }
 
-    public void visit(ParenthesiszedExpr node, List<Relation> relations) {
+    public Relation visit(ParenthesiszedExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(PostfixExpr node, List<Relation> relations) {
+    public Relation visit(PostfixExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(PostOperator node, List<Relation> relations) {
+    public Relation visit(PostOperator node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(PrefixExpr node, List<Relation> relations) {
+    public Relation visit(PrefixExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(PrefixOperator node, List<Relation> relations) {
+    public Relation visit(PrefixOperator node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(QName node, List<Relation> relations) {
+    public Relation visit(QName node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(SName node, List<Relation> relations) {
+    public Relation visit(SName node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(StrLiteral node, List<Relation> relations) {
+    public Relation visit(StrLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(SuperFieldAcc node, List<Relation> relations) {
+    public Relation visit(SuperFieldAcc node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(SuperMethodInv node, List<Relation> relations) {
+    public Relation visit(SuperMethodInv node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(SuperMethodRef node, List<Relation> relations) {
+    public Relation visit(SuperMethodRef node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(Svd node, List<Relation> relations) {
+    public Relation visit(Svd node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(ThisExpr node, List<Relation> relations) {
+    public Relation visit(ThisExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(TyLiteral node, List<Relation> relations) {
+    public Relation visit(TyLiteral node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(TypeMethodRef node, List<Relation> relations) {
+    public Relation visit(TypeMethodRef node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(VarDeclarationExpr node, List<Relation> relations) {
+    public Relation visit(VarDeclarationExpr node, Pattern pattern) {
+
+        return null;
     }
 
-    public void visit(Vdf node, List<Relation> relations) {
+    public Relation visit(Vdf node, Pattern pattern) {
+
+        return null;
     }
 
-
-    public void process(Node node, List<Relation> relations) {
+    public Relation process(Node node, Pattern pattern) {
         switch (node.getNodeType()) {
             case METHDECL:
-                visit((MethDecl) node, relations);
-                break;
+                return visit((MethDecl) node, pattern);
             case ARRACC:
-                visit((AryAcc) node, relations);
-                break;
+                return visit((AryAcc) node, pattern);
             case ARRCREAT:
-                visit((AryCreation) node, relations);
-                break;
+                return visit((AryCreation) node, pattern);
             case ARRINIT:
-                visit((AryInitializer) node, relations);
-                break;
+                return visit((AryInitializer) node, pattern);
             case ASSIGN:
-                visit((Assign) node, relations);
-                break;
+                return visit((Assign) node, pattern);
             case BLITERAL:
-                visit((BoolLiteral) node, relations);
-                break;
+                return visit((BoolLiteral) node, pattern);
             case CAST:
-                visit((CastExpr) node, relations);
-                break;
+                return visit((CastExpr) node, pattern);
             case CLITERAL:
-                visit((CharLiteral) node, relations);
-                break;
+                return visit((CharLiteral) node, pattern);
             case CLASSCREATION:
-                visit((ClassInstCreation) node, relations);
-                break;
+                return visit((ClassInstCreation) node, pattern);
             case COMMENT:
-                visit((Comment) node, relations);
-                break;
+                return visit((Comment) node, pattern);
             case CONDEXPR:
-                visit((ConditionalExpr) node, relations);
-                break;
+                return visit((ConditionalExpr) node, pattern);
             case DLITERAL:
-                visit((DoubleLiteral) node, relations);
-                break;
+                return visit((DoubleLiteral) node, pattern);
             case FIELDACC:
-                visit((FieldAcc) node, relations);
-                break;
+                return visit((FieldAcc) node, pattern);
             case FLITERAL:
-                visit((FloatLiteral) node, relations);
-                break;
+                return visit((FloatLiteral) node, pattern);
             case INFIXEXPR:
-                visit((InfixExpr) node, relations);
-                break;
+                return visit((InfixExpr) node, pattern);
             case INSTANCEOF:
-                visit((InstanceofExpr) node, relations);
-                break;
+                return visit((InstanceofExpr) node, pattern);
             case INTLITERAL:
-                visit((IntLiteral) node, relations);
-                break;
+                return visit((IntLiteral) node, pattern);
             case LABEL:
-                visit((Label) node, relations);
-                break;
+                return visit((Label) node, pattern);
             case LLITERAL:
-                visit((LongLiteral) node, relations);
-                break;
+                return visit((LongLiteral) node, pattern);
             case MINVOCATION:
-                visit((MethodInv) node, relations);
-                break;
+                return visit((MethodInv) node, pattern);
             case NULL:
-                visit((NillLiteral) node, relations);
-                break;
+                return visit((NillLiteral) node, pattern);
             case NUMBER:
-                visit((NumLiteral) node, relations);
-                break;
+                return visit((NumLiteral) node, pattern);
             case PARENTHESISZED:
-                visit((ParenthesiszedExpr) node, relations);
-                break;
+                return visit((ParenthesiszedExpr) node, pattern);
             case POSTEXPR:
-                visit((PostfixExpr) node, relations);
-                break;
+                return visit((PostfixExpr) node, pattern);
             case PREEXPR:
-                visit((PrefixExpr) node, relations);
-                break;
+                return visit((PrefixExpr) node, pattern);
             case QNAME:
-                visit((QName) node, relations);
-                break;
+                return visit((QName) node, pattern);
             case SNAME:
-                visit((SName) node, relations);
-                break;
+                return visit((SName) node, pattern);
             case SLITERAL:
-                visit((StrLiteral) node, relations);
-                break;
+                return visit((StrLiteral) node, pattern);
             case SFIELDACC:
-                visit((SuperFieldAcc) node, relations);
-                break;
+                return visit((SuperFieldAcc) node, pattern);
             case SMINVOCATION:
-                visit((SuperMethodInv) node, relations);
-                break;
+                return visit((SuperMethodInv) node, pattern);
             case SINGLEVARDECL:
-                visit((Svd) node, relations);
-                break;
+                return visit((Svd) node, pattern);
             case THIS:
-                visit((ThisExpr) node, relations);
-                break;
+                return visit((ThisExpr) node, pattern);
             case TLITERAL:
-                visit((TyLiteral) node, relations);
-                break;
+                return visit((TyLiteral) node, pattern);
             case VARDECLEXPR:
-                visit((VarDeclarationExpr) node, relations);
-                break;
+                return visit((VarDeclarationExpr) node, pattern);
             case VARDECLFRAG:
-                visit((Vdf) node, relations);
-                break;
+                return visit((Vdf) node, pattern);
             case ANONYMOUSCDECL:
-                visit((AnonymousClassDecl) node, relations);
-                break;
+                return visit((AnonymousClassDecl) node, pattern);
             case ASSERT:
-                visit((AssertStmt) node, relations);
-                break;
+                return visit((AssertStmt) node, pattern);
             case BLOCK:
-                visit((Blk) node, relations);
-                break;
+                return visit((Blk) node, pattern);
             case BREACK:
-                visit((BreakStmt) node, relations);
-                break;
+                return visit((BreakStmt) node, pattern);
             case CONSTRUCTORINV:
-                visit((ConstructorInv) node, relations);
-                break;
+                return visit((ConstructorInv) node, pattern);
             case CONTINUE:
-                visit((ContinueStmt) node, relations);
-                break;
+                return visit((ContinueStmt) node, pattern);
             case DO:
-                visit((DoStmt) node, relations);
-                break;
+                return visit((DoStmt) node, pattern);
             case EFOR:
-                visit((EnhancedForStmt) node, relations);
-                break;
+                return visit((EnhancedForStmt) node, pattern);
             case FOR:
-                visit((ForStmt) node, relations);
-                break;
+                return visit((ForStmt) node, pattern);
             case IF:
-                visit((IfStmt) node, relations);
-                break;
+                return visit((IfStmt) node, pattern);
             case RETURN:
-                visit((ReturnStmt) node, relations);
-                break;
+                return visit((ReturnStmt) node, pattern);
             case SCONSTRUCTORINV:
-                visit((SuperConstructorInv) node, relations);
-                break;
+                return visit((SuperConstructorInv) node, pattern);
             case SWCASE:
-                visit((SwCase) node, relations);
-                break;
+                return visit((SwCase) node, pattern);
             case SWSTMT:
-                visit((SwitchStmt) node, relations);
-                break;
+                return visit((SwitchStmt) node, pattern);
             case SYNC:
-                visit((SynchronizedStmt) node, relations);
-                break;
+                return visit((SynchronizedStmt) node, pattern);
             case THROW:
-                visit((ThrowStmt) node, relations);
-                break;
+                return visit((ThrowStmt) node, pattern);
             case TRY:
-                visit((TryStmt) node, relations);
-                break;
+                return visit((TryStmt) node, pattern);
             case CATCHCLAUSE:
-                visit((CatClause) node, relations);
-                break;
+                return visit((CatClause) node, pattern);
             case TYPEDECL:
-                visit((TypeDeclarationStmt) node, relations);
-                break;
+                return visit((TypeDeclarationStmt) node, pattern);
             case VARDECLSTMT:
-                visit((VarDeclarationStmt) node, relations);
-                break;
+                return visit((VarDeclarationStmt) node, pattern);
             case WHILE:
-                visit((WhileStmt) node, relations);
-                break;
+                return visit((WhileStmt) node, pattern);
             case POSTOPERATOR:
-                visit((PostOperator) node, relations);
-                break;
+                return visit((PostOperator) node, pattern);
             case INFIXOPERATOR:
-                visit((InfixOperator) node, relations);
-                break;
+                return visit((InfixOperator) node, pattern);
             case PREFIXOPERATOR:
-                visit((PrefixOperator) node, relations);
-                break;
+                return visit((PrefixOperator) node, pattern);
             case ASSIGNOPERATOR:
-                visit((AssignOperator) node, relations);
-                break;
+                return visit((AssignOperator) node, pattern);
             case TYPE:
-                visit((MType) node, relations);
-                break;
+                return visit((MType) node, pattern);
             case UNKNOWN:
                 LevelLogger.warn("Found an unknown node type ! ");
-                break;
             default:
                 LevelLogger.fatal("Cannot parse node type ! ");
         }
-
-
+        return null;
     }
 
 }

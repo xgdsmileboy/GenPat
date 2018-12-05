@@ -7,21 +7,19 @@
 
 package mfix.core.parse.relation;
 
-import mfix.core.parse.relation.op.Operation;
-
 /**
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class ROpt extends ObjRelation {
+public class VRDef extends RDef {
 
-    private Operation _operation;
+    private Object _value;
 
-    public ROpt() {
-        super(RelationKind.OPERATION);
+    public VRDef() {
+        super(RelationKind.VIRTUALDEFINE);
     }
 
-    public void setOperation(Operation operation) {
-        _operation = operation;
+    public void setValue(Object value) {
+        _value = value;
     }
 }

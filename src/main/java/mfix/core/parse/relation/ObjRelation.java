@@ -7,21 +7,17 @@
 
 package mfix.core.parse.relation;
 
-import mfix.core.parse.relation.op.Operation;
-
 /**
+ * This kind of relation denotes the relation returns an
+ * expression that can be used as an argument of other expression
+ * i.e., the relation represents an object
+ *
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class ROpt extends ObjRelation {
+public abstract class ObjRelation extends Relation {
 
-    private Operation _operation;
-
-    public ROpt() {
-        super(RelationKind.OPERATION);
-    }
-
-    public void setOperation(Operation operation) {
-        _operation = operation;
+    protected ObjRelation(RelationKind kind) {
+       super(kind);
     }
 }

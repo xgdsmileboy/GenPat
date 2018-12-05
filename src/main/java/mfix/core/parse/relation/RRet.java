@@ -12,4 +12,14 @@ package mfix.core.parse.relation;
  * @date: 2018/11/29
  */
 public class RRet extends Relation {
+
+    private ObjRelation _retObj;
+
+    public RRet() {
+        super(RelationKind.RETURN);
+    }
+
+    public void setRetObject(ObjRelation relation) {
+        _retObj = relation;
+    }
 }

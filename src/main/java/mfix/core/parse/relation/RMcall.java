@@ -11,5 +11,29 @@ package mfix.core.parse.relation;
  * @author: Jiajun
  * @date: 2018/11/29
  */
-public class RMcall extends Relation {
+public class RMcall extends ObjRelation {
+
+    private MCallType _type;
+    private ObjRelation _reciever;
+    private String _methodName;
+
+    public RMcall(MCallType type) {
+        super(RelationKind.MCALL);
+        _type = type;
+    }
+
+    public void setReciever(ObjRelation reciever) {
+        _reciever = reciever;
+    }
+
+    public void setMethodName(String name) {
+        _methodName = name;
+    }
+
+    public enum MCallType{
+        NORM_CALL,
+        SUPER_CALL,
+        INIT_CALL,
+        NEW_ARRAY,
+    }
 }

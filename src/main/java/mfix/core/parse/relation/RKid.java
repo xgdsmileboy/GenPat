@@ -9,28 +9,28 @@ package mfix.core.parse.relation;
 
 /**
  * @author: Jiajun
- * @date: 2018/11/29
+ * @date: 2018/12/5
  */
-public class RArg extends Relation {
+public class RKid extends Relation {
 
-    private ObjRelation _function;
+    private RStruct _structure;
     private int _index;
-    private ObjRelation _arg;
+    private Relation _child;
 
-    public RArg() {
-        super(RelationKind.ARGUMENT);
+    public RKid() {
+        super(RelationKind.CHILD);
     }
 
-    public void setFunction(ObjRelation function) {
-        _function = function;
+    public void setStructure(RStruct structure) {
+        _structure = structure;
     }
 
     public void setIndex(int index) {
         _index = index;
     }
 
-    public void setArgument(ObjRelation argument) {
-        _arg = argument;
+    public void setChild(Relation child) {
+        _child = child;
     }
 
 }

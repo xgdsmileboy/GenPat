@@ -22,4 +22,19 @@ public class RAssign extends Relation {
      *
      */
 
+    private ObjRelation _lhs;
+    private ObjRelation _rhs;
+
+    public RAssign() {
+        super(RelationKind.ASSIGN);
+    }
+
+    public void setLhs(ObjRelation lhs) {
+        _lhs = lhs;
+    }
+
+    public void setRhs(ObjRelation rhs) {
+        _rhs = rhs;
+    }
+
 }
