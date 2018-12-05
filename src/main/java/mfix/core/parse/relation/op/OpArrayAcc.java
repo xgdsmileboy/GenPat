@@ -11,7 +11,7 @@ package mfix.core.parse.relation.op;
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class OpArrayAcc extends Operation {
+public class OpArrayAcc extends BinaryOp {
 
     public OpArrayAcc() {
         super(Op.ARRY_ACC);
