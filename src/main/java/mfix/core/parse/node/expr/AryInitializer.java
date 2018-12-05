@@ -27,7 +27,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ArrayInitial extends Expr implements Serializable {
+public class AryInitializer extends Expr implements Serializable {
 
 	private static final long serialVersionUID = 5694794734726396689L;
 	private List<Expr> _expressions = null;
@@ -35,7 +35,7 @@ public class ArrayInitial extends Expr implements Serializable {
 	/**
 	 * ArrayInitializer: { [ Expression { , Expression} [ , ]] }
 	 */
-	public ArrayInitial(String fileName, int startLine, int endLine, ASTNode node) {
+	public AryInitializer(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.ARRINIT;
 	}
@@ -138,11 +138,11 @@ public class ArrayInitial extends Expr implements Serializable {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof ArrayInitial) {
-			ArrayInitial arrayInitial = (ArrayInitial) other;
-			match = (_expressions.size() == arrayInitial._expressions.size());
+		if(other instanceof AryInitializer) {
+			AryInitializer aryInitializer = (AryInitializer) other;
+			match = (_expressions.size() == aryInitializer._expressions.size());
 			for(int i = 0; match && i < _expressions.size(); i ++) {
-				match = match && _expressions.get(i).compare(arrayInitial._expressions.get(i));
+				match = match && _expressions.get(i).compare(aryInitializer._expressions.get(i));
 			}
 		}
 		return match;
@@ -174,10 +174,10 @@ public class ArrayInitial extends Expr implements Serializable {
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if(other instanceof ArrayInitial) {
+		if(other instanceof AryInitializer) {
 			_matchNodeType = true;
-			ArrayInitial arrayInitial = (ArrayInitial) other;
-			if(!Matcher.matchNodeList(this, _expressions, arrayInitial._expressions).isEmpty()){
+			AryInitializer aryInitializer = (AryInitializer) other;
+			if(!Matcher.matchNodeList(this, _expressions, aryInitializer._expressions).isEmpty()){
 				_matchNodeType = false;
 			}
 		} else {
@@ -188,17 +188,17 @@ public class ArrayInitial extends Expr implements Serializable {
 	@Override
 	public boolean matchSketch(Node sketch) {
 		boolean match = false;
-		if(sketch instanceof ArrayInitial) {
+		if(sketch instanceof AryInitializer) {
 			match = true;
-			ArrayInitial arrayInitial = (ArrayInitial) sketch;
-			if(!arrayInitial.isNodeTypeMatch()) {
+			AryInitializer aryInitializer = (AryInitializer) sketch;
+			if(!aryInitializer.isNodeTypeMatch()) {
 				if(!NodeUtils.matchNode(sketch, this)) {
 					return false;
 				}
 				bindingSketch(sketch);
 			} else {
 				Set<Integer> alreadyMatch = new HashSet<>();
-				for(Expr expr : arrayInitial._expressions) {
+				for(Expr expr : aryInitializer._expressions) {
 					if(expr.isKeyPoint()) {
 						boolean singleMatch = false;
 						for(int i = 0; i < _expressions.size(); i++) {
@@ -219,8 +219,8 @@ public class ArrayInitial extends Expr implements Serializable {
 				}
 			}
 			if(match) {
-				arrayInitial._binding = this;
-				_binding = arrayInitial;
+				aryInitializer._binding = this;
+				_binding = aryInitializer;
 			}
 		}
 		if(!match) sketch.resetBinding();
@@ -231,11 +231,11 @@ public class ArrayInitial extends Expr implements Serializable {
 	public boolean bindingSketch(Node sketch) {
 		_binding = sketch;
 		sketch.setBinding(this);
-		if (sketch instanceof ArrayInitial) {
-			ArrayInitial arrayInitial = (ArrayInitial) sketch;
+		if (sketch instanceof AryInitializer) {
+			AryInitializer aryInitializer = (AryInitializer) sketch;
 			
 			Set<Integer> alreadyMatch = new HashSet<>();
-			for (Expr expr : arrayInitial._expressions) {
+			for (Expr expr : aryInitializer._expressions) {
 				if (expr.isKeyPoint()) {
 					for (int i = 0; i < _expressions.size(); i++) {
 						if (alreadyMatch.contains(i)) {

@@ -14,8 +14,14 @@ import java.util.List;
  * @date: 2018/11/29
  */
 public class Pattern {
+
+    private int _relationId = 0;
+
     /**
      * a pattern consists of a set of relations
      */
     private List<Relation> _relations;
+
+
+
 }

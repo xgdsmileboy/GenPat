@@ -75,11 +75,11 @@ public abstract class NodeVisitor {
     public boolean visit(MethDecl node) { return true; }
 
     // expression bellow
-    public boolean visit(ArrayAcc node) { return true; }
+    public boolean visit(AryAcc node) { return true; }
 
-    public boolean visit(ArrayCreate node) { return true; }
+    public boolean visit(AryCreation node) { return true; }
 
-    public boolean visit(ArrayInitial node) { return true; }
+    public boolean visit(AryInitializer node) { return true; }
 
     public boolean visit(Assign node) { return true; }
 
@@ -91,7 +91,7 @@ public abstract class NodeVisitor {
 
     public boolean visit(CharLiteral node) { return true; }
 
-    public boolean visit(ClassInstanceCreate node) { return true; }
+    public boolean visit(ClassInstCreation node) { return true; }
 
     public boolean visit(Comment node) { return true; }
 
@@ -227,11 +227,11 @@ public abstract class NodeVisitor {
     public void endVisit(MethDecl node) {  }
 
     // expression bellow
-    public void endVisit(ArrayAcc node) {  }
+    public void endVisit(AryAcc node) {  }
 
-    public void endVisit(ArrayCreate node) {  }
+    public void endVisit(AryCreation node) {  }
 
-    public void endVisit(ArrayInitial node) {  }
+    public void endVisit(AryInitializer node) {  }
 
     public void endVisit(Assign node) {  }
 
@@ -243,7 +243,7 @@ public abstract class NodeVisitor {
 
     public void endVisit(CharLiteral node) {  }
 
-    public void endVisit(ClassInstanceCreate node) {  }
+    public void endVisit(ClassInstCreation node) {  }
 
     public void endVisit(Comment node) {  }
 

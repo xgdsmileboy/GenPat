@@ -29,12 +29,12 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ArrayCreate extends Expr implements Serializable {
+public class AryCreation extends Expr implements Serializable {
 
 	private static final long serialVersionUID = -8863515069590314916L;
 	private MType _type = null;
 	private List<Expr> _dimension = null;
-	private ArrayInitial _initializer = null;
+	private AryInitializer _initializer = null;
 
 	/**
 	 * ArrayCreation: new PrimitiveType [ Expression ] { [ Expression ] } { [ ]
@@ -42,7 +42,7 @@ public class ArrayCreate extends Expr implements Serializable {
 	 * { [ ] } new PrimitiveType [ ] { [ ] } ArrayInitializer new TypeName [ <
 	 * Type { , Type } > ] [ ] { [ ] } ArrayInitializer
 	 */
-	public ArrayCreate(String fileName, int startLine, int endLine, ASTNode node) {
+	public AryCreation(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.ARRCREAT;
 	}
@@ -55,7 +55,7 @@ public class ArrayCreate extends Expr implements Serializable {
 		_dimension = dimension;
 	}
 
-	public void setInitializer(ArrayInitial initializer) {
+	public void setInitializer(AryInitializer initializer) {
 		_initializer = initializer;
 	}
 	
@@ -90,19 +90,19 @@ public class ArrayCreate extends Expr implements Serializable {
 	public StringBuffer applyChange(Map<String, String> exprMap, Set<String> allUsableVars) {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer initializer = null;
-		if(_binding != null && _binding instanceof ArrayCreate) {
-			ArrayCreate arrayCreate = (ArrayCreate) _binding;
-			for(Modification modification : arrayCreate.getNodeModification()) {
+		if(_binding != null && _binding instanceof AryCreation) {
+			AryCreation aryCreation = (AryCreation) _binding;
+			for(Modification modification : aryCreation.getNodeModification()) {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
-					if(update.getSrcNode() == arrayCreate._initializer) {
+					if(update.getSrcNode() == aryCreation._initializer) {
 						initializer = update.getTarString(exprMap, allUsableVars);
 						if(initializer == null) return null;
 					} else {
-						LevelLogger.error("@ArrayCreate ERROR!");
+						LevelLogger.error("@AryCreation ERROR!");
 					}
 				} else {
-					LevelLogger.error("@ArrayCreate Should not be this kind of modification : " + modification.toString());
+					LevelLogger.error("@AryCreation Should not be this kind of modification : " + modification.toString());
 				}
 			}
 		}
@@ -208,18 +208,18 @@ public class ArrayCreate extends Expr implements Serializable {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof ArrayCreate) {
-			ArrayCreate arrayCreate = (ArrayCreate) other;
-			match = _type.compare(arrayCreate._type);
+		if(other instanceof AryCreation) {
+			AryCreation aryCreation = (AryCreation) other;
+			match = _type.compare(aryCreation._type);
 			if(match) {
-				match = match && (_dimension.size() == arrayCreate._dimension.size());
+				match = match && (_dimension.size() == aryCreation._dimension.size());
 				for(int i = 0; match && i < _dimension.size(); i++) {
-					match = match && _dimension.get(i).compare(arrayCreate._dimension.get(i));
+					match = match && _dimension.get(i).compare(aryCreation._dimension.get(i));
 				}
 				if(_initializer == null) {
-					match = match && (arrayCreate._initializer == null);
+					match = match && (aryCreation._initializer == null);
 				} else {
-					match = match && _initializer.compare(arrayCreate._initializer);
+					match = match && _initializer.compare(aryCreation._initializer);
 				}
 			}
 		}
@@ -258,26 +258,26 @@ public class ArrayCreate extends Expr implements Serializable {
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if(other instanceof ArrayCreate) {
+		if(other instanceof AryCreation) {
 			_matchNodeType = true;
-			ArrayCreate	arrayCreate = (ArrayCreate) other;
-			if(_initializer == null && arrayCreate._initializer != null) {
+			AryCreation aryCreation = (AryCreation) other;
+			if(_initializer == null && aryCreation._initializer != null) {
 				_matchNodeType = false;
 				return;
 			}
-			if(!Matcher.matchNodeList(this, _dimension, arrayCreate._dimension).isEmpty()) {
+			if(!Matcher.matchNodeList(this, _dimension, aryCreation._dimension).isEmpty()) {
 				_matchNodeType = false;
 				return;
 			}
 			
-			if(_initializer != null && arrayCreate._initializer != null) {
-				_initializer.deepMatch(arrayCreate._initializer);
+			if(_initializer != null && aryCreation._initializer != null) {
+				_initializer.deepMatch(aryCreation._initializer);
 				if(!_initializer.isNodeTypeMatch()) {
-					Update update = new Update(this, _initializer, arrayCreate._initializer);
+					Update update = new Update(this, _initializer, aryCreation._initializer);
 					_modifications.add(update);
 				}
 			} else if(_initializer != null){
-				Update update = new Update(this, _initializer, arrayCreate._initializer);
+				Update update = new Update(this, _initializer, aryCreation._initializer);
 				_modifications.add(update);
 			}
 		} else {
@@ -288,29 +288,29 @@ public class ArrayCreate extends Expr implements Serializable {
 	@Override
 	public boolean matchSketch(Node sketch) {
 		boolean match = false;
-		if(sketch instanceof ArrayCreate) {
+		if(sketch instanceof AryCreation) {
 			match = true;
-			ArrayCreate	 arrayCreate = (ArrayCreate) sketch;
+			AryCreation aryCreation = (AryCreation) sketch;
 			// find changed node
-			if(!arrayCreate.isNodeTypeMatch()){
+			if(!aryCreation.isNodeTypeMatch()){
 				if(!NodeUtils.matchNode(sketch, this)){
 					return false;
 				}
 				bindingSketch(sketch);
 			} else {
 				// match sub-nodes which are match point
-				if(arrayCreate._type.isKeyPoint()) {
-					match = _type.matchSketch(arrayCreate._type);
+				if(aryCreation._type.isKeyPoint()) {
+					match = _type.matchSketch(aryCreation._type);
 				}
 				if(match) {
-					if(arrayCreate._initializer != null && arrayCreate._initializer.isKeyPoint()) {
-						match = (_initializer == null) ? false : _initializer.matchSketch(arrayCreate._initializer);
+					if(aryCreation._initializer != null && aryCreation._initializer.isKeyPoint()) {
+						match = (_initializer == null) ? false : _initializer.matchSketch(aryCreation._initializer);
 					}
 				}
 			}
 			if(match) {
-				arrayCreate._binding = this;
-				_binding = arrayCreate;
+				aryCreation._binding = this;
+				_binding = aryCreation;
 			}
 		}
 		if(!match) sketch.resetBinding();
@@ -321,15 +321,15 @@ public class ArrayCreate extends Expr implements Serializable {
 	public boolean bindingSketch(Node sketch) {
 		_binding = sketch;
 		sketch.setBinding(this);
-		if (sketch instanceof ArrayCreate) {
-			ArrayCreate arrayCreate = (ArrayCreate) sketch;
+		if (sketch instanceof AryCreation) {
+			AryCreation aryCreation = (AryCreation) sketch;
 			
-			if (arrayCreate._type.isKeyPoint()) {
-				_type.bindingSketch(arrayCreate._type);
+			if (aryCreation._type.isKeyPoint()) {
+				_type.bindingSketch(aryCreation._type);
 			}
-			if (arrayCreate._initializer != null && arrayCreate._initializer.isKeyPoint()) {
+			if (aryCreation._initializer != null && aryCreation._initializer.isKeyPoint()) {
 				if (_initializer != null) {
-					_initializer.bindingSketch(arrayCreate._initializer);
+					_initializer.bindingSketch(aryCreation._initializer);
 				}
 			}
 			return true;
