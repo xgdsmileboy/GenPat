@@ -50,6 +50,10 @@ public class SuperFieldAcc extends Expr implements Serializable {
 		_identifier = identifier;
 	}
 
+	public SName getIdentifier() {
+		return _identifier;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

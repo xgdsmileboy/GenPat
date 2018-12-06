@@ -60,7 +60,10 @@ public class SwitchStmt extends Stmt implements Serializable {
 	public void setStatements(List<Stmt> statements){
 		_statements = statements;
 	}
-	
+
+	public Expr getExpression() { return _expression; }
+
+	public List<Stmt> getStatements() { return _statements; }
 	
 	@Override
 	public StringBuffer toSrcString() {

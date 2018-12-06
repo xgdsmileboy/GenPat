@@ -13,6 +13,11 @@ package mfix.core.parse.relation.struct;
  */
 public class RSTry extends Structure {
 
+    public final static int POS_CHILD_RES = 0x0001;
+    public final static int POS_CHILD_BODY = 0x0010;
+    public final static int POS_CHILD_CATCH = 0x0100;
+    public final static int POS_CHILD_FINALLY = 0x1000;
+
     public RSTry() {
         super(RSKind.RS_TRY);
     }

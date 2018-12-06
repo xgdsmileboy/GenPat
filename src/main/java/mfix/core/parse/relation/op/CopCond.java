@@ -11,7 +11,7 @@ package mfix.core.parse.relation.op;
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class CopCond extends Operation {
+public class CopCond extends AbsOperation {
 
     public final static int POSITION_CONDITION = 0x00100;
     public final static int POSITION_THEN = 0x01000;

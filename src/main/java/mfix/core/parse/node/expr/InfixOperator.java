@@ -37,6 +37,10 @@ public class InfixOperator extends Operator implements Serializable {
 		return _operator;
 	}
 
+	public String getOperatorStr() {
+		return _operatorStr;
+	}
+
 	@Override
 	public boolean compare(Node other) {
 		if(other instanceof InfixOperator) {

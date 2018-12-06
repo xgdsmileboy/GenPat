@@ -17,11 +17,8 @@ public class RKid extends Relation {
     private int _index;
     private Relation _child;
 
-    public RKid() {
+    public RKid(RStruct structure) {
         super(RelationKind.CHILD);
-    }
-
-    public void setStructure(RStruct structure) {
         _structure = structure;
     }
 

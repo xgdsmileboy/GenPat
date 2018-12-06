@@ -13,6 +13,10 @@ package mfix.core.parse.relation.struct;
  */
 public class RSEnhancedFor extends Structure {
 
+    public final static int POS_CHILD_PRAM = 0x001;
+    public final static int POS_CHILD_EXPR = 0x010;
+    public final static int POS_CHILD_BODY = 0x100;
+
     public RSEnhancedFor() {
         super(RSKind.RS_ENHANCEDFOR);
     }

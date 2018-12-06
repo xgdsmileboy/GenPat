@@ -43,6 +43,10 @@ public class StrLiteral extends Expr implements Serializable {
 				.replace("\0", "\\0");
 	}
 
+	public String getValue() {
+		return _value;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

@@ -5,15 +5,15 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse.relation.struct;
+package mfix.core.parse.relation.op;
 
 /**
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class RSwichStmt extends Structure {
+public class AopDec extends BinaryOp {
 
-    public RSwichStmt() {
-        super(RSKind.RS_SWITCHSTMT);
+    public AopDec() {
+        super(Op.A_DEC);
     }
 }

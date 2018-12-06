@@ -38,7 +38,11 @@ public class AssignOperator extends Operator implements Serializable {
 	public Assignment.Operator getOperator() {
 		return _operator;
 	}
-	
+
+	public String getOperatorStr() {
+		return _operatorStr;
+	}
+
 	@Override
 	public boolean compare(Node other) {
 		if(other instanceof AssignOperator) {

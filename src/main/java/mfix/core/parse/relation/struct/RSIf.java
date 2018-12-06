@@ -13,6 +13,10 @@ package mfix.core.parse.relation.struct;
  */
 public class RSIf extends Structure {
 
+    public final static int POS_CHILD_COND = 0x001;
+    public final static int POS_CHILD_THEN = 0x010;
+    public final static int POS_CHILD_ELSE = 0x100;
+
     public RSIf() {
         super(RSKind.RS_IF);
     }

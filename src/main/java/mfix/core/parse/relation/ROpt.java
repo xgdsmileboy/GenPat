@@ -7,7 +7,7 @@
 
 package mfix.core.parse.relation;
 
-import mfix.core.parse.relation.op.Operation;
+import mfix.core.parse.relation.op.AbsOperation;
 
 /**
  * @author: Jiajun
@@ -15,13 +15,14 @@ import mfix.core.parse.relation.op.Operation;
  */
 public class ROpt extends ObjRelation {
 
-    private Operation _operation;
+    private AbsOperation _operation;
 
-    public ROpt() {
+    public ROpt(AbsOperation operation) {
         super(RelationKind.OPERATION);
+        _operation = operation;
     }
 
-    public void setOperation(Operation operation) {
+    public void setOperation(AbsOperation operation) {
         _operation = operation;
     }
 }

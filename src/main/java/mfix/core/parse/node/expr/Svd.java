@@ -50,7 +50,15 @@ public class Svd extends Expr implements Serializable {
 	public void setName(SName name){
 		_name = name;
 	}
-	
+
+	public MType getDeclType() {
+		return _decType;
+	}
+
+	public Expr getInitializer() {
+		return _initializer;
+	}
+
 	public SName getName(){
 		return _name;
 	}

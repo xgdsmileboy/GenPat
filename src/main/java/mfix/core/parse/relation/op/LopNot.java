@@ -11,7 +11,7 @@ package mfix.core.parse.relation.op;
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class LopNot extends Operation {
+public class LopNot extends AbsOperation {
 
     public LopNot() {
         super(Op.L_NOT);

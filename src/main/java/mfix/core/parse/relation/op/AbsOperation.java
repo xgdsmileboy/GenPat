@@ -11,11 +11,11 @@ package mfix.core.parse.relation.op;
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public abstract class Operation {
+public abstract class AbsOperation {
 
     private Op _operator;
 
-    protected Operation(Op operator) {
+    protected AbsOperation(Op operator) {
         _operator = operator;
     }
 
@@ -27,10 +27,8 @@ public abstract class Operation {
         A_MUL("*"),
         A_DIV("/"),
         A_MOD("%"),
-        A_INCL("++"), //PrefixExpression
-        A_DECL("--"),
-        A_INCR("++"), //PostfixExpression
-        A_DECR("--"),
+        A_INC("++"),
+        A_DEC("--"),
 
         // Relational
         R_EQ("=="),

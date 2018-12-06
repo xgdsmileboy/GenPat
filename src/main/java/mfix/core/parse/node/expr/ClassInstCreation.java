@@ -66,6 +66,18 @@ public class ClassInstCreation extends Expr implements Serializable {
 		return _classType;
 	}
 
+	public Expr getExpression() {
+		return _expression;
+	}
+
+	public ExprList getArguments() {
+		return _arguments;
+	}
+
+	public AnonymousClassDecl getDecl() {
+		return _decl;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

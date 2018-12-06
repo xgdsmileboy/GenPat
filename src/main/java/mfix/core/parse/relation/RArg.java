@@ -17,11 +17,8 @@ public class RArg extends Relation {
     private int _index;
     private ObjRelation _arg;
 
-    public RArg() {
+    public RArg(ObjRelation function) {
         super(RelationKind.ARGUMENT);
-    }
-
-    public void setFunction(ObjRelation function) {
         _function = function;
     }
 

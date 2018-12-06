@@ -9,14 +9,14 @@ package mfix.core.parse.relation.struct;
 
 /**
  * @author: Jiajun
- * @date: 2018/12/5
+ * @date: 2018/12/6
  */
-public class RSCatch extends Structure {
+public class RSMethod extends Structure {
 
-    public final static int POS_CHILD_DEF = 0x01;
-    public final static int POS_CHILD_HANDLER = 0x10;
+    public final static int POS_CHILD_PARAM = 0x01;
+    public final static int POS_CHILD_BODY = 0x10;
 
-    public RSCatch() {
-        super(RSKind.RS_CATCH);
+    public RSMethod() {
+        super(RSKind.RS_METHOD);
     }
 }

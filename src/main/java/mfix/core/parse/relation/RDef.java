@@ -13,9 +13,10 @@ package mfix.core.parse.relation;
  */
 public class RDef extends ObjRelation {
 
-    private int _modifiers = 0;
+    private String _modifiers;
     private String _typeStr;
     private String _name;
+    private ObjRelation _initializer;
 
     public RDef() {
         this(RelationKind.DEFINE);
@@ -25,7 +26,7 @@ public class RDef extends ObjRelation {
         super(kind);
     }
 
-    public void setModifiers(int modifiers) {
+    public void setModifiers(String modifiers) {
         _modifiers = modifiers;
     }
 
@@ -35,5 +36,13 @@ public class RDef extends ObjRelation {
 
     public void setName(String name) {
         _name = name;
+    }
+
+    public void setInitializer(ObjRelation initializer) {
+        _initializer = initializer;
+    }
+
+    public String getName() {
+        return _name;
     }
 }

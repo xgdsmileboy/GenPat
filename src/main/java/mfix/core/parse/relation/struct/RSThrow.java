@@ -5,15 +5,15 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse.relation.op;
+package mfix.core.parse.relation.struct;
 
 /**
  * @author: Jiajun
- * @date: 2018/12/5
+ * @date: 2018/12/6
  */
-public class AopDecL extends Operation {
+public class RSThrow extends Structure {
 
-    public AopDecL() {
-        super(Op.A_DECL);
+    public RSThrow() {
+        super(RSKind.RS_THROW);
     }
 }

@@ -50,7 +50,11 @@ public class ReturnStmt extends Stmt implements Serializable {
 	public void setExpression(Expr expression){
 		_expression = expression;
 	}
-	
+
+	public Expr getExpression() {
+		return _expression;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer("return ");

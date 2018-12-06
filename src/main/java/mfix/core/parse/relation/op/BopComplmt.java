@@ -11,7 +11,7 @@ package mfix.core.parse.relation.op;
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class BopComplmt extends Operation {
+public class BopComplmt extends AbsOperation {
 
     public BopComplmt() {
         super(Op.B_COMPLIMENT);

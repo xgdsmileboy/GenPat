@@ -68,6 +68,18 @@ public class VarDeclarationStmt extends Stmt implements Serializable {
 		_fragments = fragments;
 	}
 
+	public String getModifier() {
+		return _modifier;
+	}
+
+	public MType getDeclType() {
+		return _declType;
+	}
+
+	public List<Vdf> getFragments() {
+		return _fragments;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

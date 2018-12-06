@@ -23,6 +23,9 @@ public abstract class Relation {
         _relationKind = kind;
     }
 
+    public RelationKind getRelationKind() {
+        return _relationKind;
+    }
 
     public enum RelationKind{
         ARGUMENT,

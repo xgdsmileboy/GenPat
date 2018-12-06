@@ -17,11 +17,8 @@ public class RStruct extends Relation {
 
     private Structure _structure;
 
-    public RStruct() {
+    public RStruct(Structure structure) {
         super(RelationKind.STRUCTURE);
-    }
-
-    public void setStructure(Structure structure) {
         _structure = structure;
     }
 }

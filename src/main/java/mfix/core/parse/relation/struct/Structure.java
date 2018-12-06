@@ -23,6 +23,7 @@ public abstract class Structure {
 
 
     public enum RSKind{
+        RS_METHOD,
         RS_FOR,
         RS_ENHANCEDFOR,
         RS_WHILE,
@@ -35,6 +36,8 @@ public abstract class Structure {
         RS_CATCH,
         RS_FINALLY,
         RS_BREAK,
-        RS_CONTINUE
+        RS_CONTINUE,
+        RS_RETURN,
+        RS_THROW
     }
 }

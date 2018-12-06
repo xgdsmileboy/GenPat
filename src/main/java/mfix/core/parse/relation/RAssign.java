@@ -17,7 +17,7 @@ public class RAssign extends Relation {
      * normalized to an {@code ROpt} relation
      * and an {@code RAssign} relation
      *
-     * =, +=, -=, /=, %=, <<=, >>=
+     * =, +=, -=, *=. /=, %=, <<=, >>=
      * &=, |=, ^=
      *
      */
@@ -25,11 +25,8 @@ public class RAssign extends Relation {
     private ObjRelation _lhs;
     private ObjRelation _rhs;
 
-    public RAssign() {
+    public RAssign(ObjRelation lhs) {
         super(RelationKind.ASSIGN);
-    }
-
-    public void setLhs(ObjRelation lhs) {
         _lhs = lhs;
     }
 

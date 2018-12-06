@@ -54,6 +54,14 @@ public class VarDeclarationExpr extends Expr implements Serializable {
 		_vdfs = vdfs;
 	}
 
+	public MType getDeclType() {
+		return _declType;
+	}
+
+	public List<Vdf> getFragments() {
+		return _vdfs;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

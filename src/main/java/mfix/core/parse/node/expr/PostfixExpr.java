@@ -40,13 +40,21 @@ public class PostfixExpr extends Expr implements Serializable {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.POSTEXPR;
 	}
-	
+
 	public void setExpression(Expr expression){
 		_expression = expression;
 	}
 	
 	public void setOperator(PostOperator operator){
 		_operator = operator;
+	}
+
+	public Expr getExpression() {
+		return _expression;
+	}
+
+	public PostOperator getOperator() {
+		return _operator;
 	}
 
 	@Override

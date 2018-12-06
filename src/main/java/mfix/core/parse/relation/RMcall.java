@@ -31,9 +31,11 @@ public class RMcall extends ObjRelation {
     }
 
     public enum MCallType{
-        NORM_CALL,
-        SUPER_CALL,
+        NORM_MCALL,
+        SUPER_MCALL,
+        SUPER_INIT_CALL,
         INIT_CALL,
         NEW_ARRAY,
+        CAST,
     }
 }

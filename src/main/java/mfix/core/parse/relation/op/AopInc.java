@@ -5,21 +5,15 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse.relation;
+package mfix.core.parse.relation.op;
 
 /**
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class VRDef extends RDef {
+public class AopInc extends BinaryOp {
 
-    private Object _value;
-
-    public VRDef() {
-        super(RelationKind.VIRTUALDEFINE);
-    }
-
-    public void setValue(Object value) {
-        _value = value;
+    public AopInc() {
+        super(Op.A_INC);
     }
 }

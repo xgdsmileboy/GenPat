@@ -40,6 +40,10 @@ public class ExprList extends Node implements Serializable {
 		this._exprs = exprs;
 	}
 
+	public List<Expr> getExpr() {
+		return _exprs;
+	}
+
 	@Override
 	public boolean compare(Node other) {
 		if(other instanceof ExprList) {

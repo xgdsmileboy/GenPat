@@ -13,6 +13,9 @@ package mfix.core.parse.relation.struct;
  */
 public class RSwCase extends Structure {
 
+    public final static int POS_CHILD_CONST = 0x01;
+    public final static int POS_CHILD_BODY = 0x10;
+
     public RSwCase() {
         super(RSKind.RS_SWCASE);
     }

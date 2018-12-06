@@ -5,15 +5,18 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse.relation.op;
+package mfix.core.parse.relation.struct;
 
 /**
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public class AopIncL extends Operation {
+public class RSwitchStmt extends Structure {
 
-    public AopIncL() {
-        super(Op.A_INCL);
+    public final static int POS_CHILD_VAR = 0x01;
+    public final static int POS_CHILD_CASE = 0x10;
+
+    public RSwitchStmt() {
+        super(RSKind.RS_SWITCHSTMT);
     }
 }
