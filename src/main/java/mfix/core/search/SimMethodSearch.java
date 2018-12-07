@@ -13,7 +13,6 @@ import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.parse.Matcher;
 import mfix.core.parse.NodeParser;
-import mfix.core.parse.diff.Diff;
 import mfix.core.parse.diff.TextDiff;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
@@ -23,7 +22,6 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +40,7 @@ public class SimMethodSearch {
                                                                   final double simThreshold) {
         CompilationUnit sunit = JavaFile.genASTFromFileWithType(searchfile);
         CompilationUnit ounit = JavaFile.genASTFromFileWithType(oriFile);
+        if(ounit == null) return new HashMap<>();
         final NodeParser parser = NodeParser.getInstance();
         parser.setCompilationUnit(oriFile, ounit);
         Node node = parser.process(method);
@@ -61,6 +60,7 @@ public class SimMethodSearch {
     public static Map<Node, Pair<Double, Double>> searchSimMethod(final CompilationUnit unit, final Node node,
                                                                   final double simThreshold) {
         final Map<Node, Pair<Double, Double>> map = new HashMap<>();
+        if(unit == null) return map;
         final NodeParser parser = NodeParser.getInstance();
         parser.setCompilationUnit(null, unit);
         final FVector fVector = node.getFeatureVector();
@@ -91,29 +91,11 @@ public class SimMethodSearch {
         final Map<Pair<Node, TextDiff>, Pair<Double, Double>> map = new HashMap<>();
         final FVector fVector = node.getFeatureVector();
         if (fVector == null) return map;
-        Set<Pair<Node, TextDiff>> candidates = null;
-        try {
-            candidates = filterChangedMethods(buggyFile, fixedFile);
-        } catch (Exception e) {
-            return map;
-        }
         double biggetDis = 1.0 - simThreshold;
-        for (Pair<Node, TextDiff> pair : candidates) {
-            Node sim = pair.getFirst();
-            double norm = fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.NORM_2);
-            double cosine = fVector.computeSimilarity(sim.getFeatureVector(), FVector.ALGO.COSINE);
-            if (norm < biggetDis && cosine > simThreshold) {
-                map.put(pair, new Pair<Double, Double>(norm, cosine));
-            }
-        }
 
-        return map;
-    }
-
-    private static Set<Pair<Node, TextDiff>> filterChangedMethods(final String buggyFile, final String fixedFile)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         CompilationUnit buggyUnit = JavaFile.genASTFromFileWithType(buggyFile);
         CompilationUnit fixedUnit = JavaFile.genASTFromFileWithType(fixedFile);
+        if(buggyUnit == null || fixedUnit == null) return map;
         Set<Pair<Node, TextDiff>> set = new HashSet<>();
         List<Pair<MethodDeclaration, MethodDeclaration>> pairs = Matcher.match(buggyUnit, fixedUnit);
         NodeParser parser = NodeParser.getInstance();
@@ -132,14 +114,14 @@ public class SimMethodSearch {
             Node buggyNode = null;
             Node fixedNode = null;
             if (new File(bNode).exists() && new File(fNode).exists()) {
-                try {
-                    buggyNode = (Node) Utils.deserialize(bNode);
-                    fixedNode = (Node) Utils.deserialize(fNode);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    buggyNode = (Node) Utils.deserialize(bNode);
+//                    fixedNode = (Node) Utils.deserialize(fNode);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (ClassNotFoundException e) {
+//                    e.printStackTrace();
+//                }
             }
             if (buggyNode == null || fixedNode == null) {
                 buggyNode = parser.setCompilationUnit(buggyFile, buggyUnit).process(pair.getFirst());
@@ -148,13 +130,19 @@ public class SimMethodSearch {
                     Utils.serialize(buggyNode, bNode);
                     Utils.serialize(fixedNode, fNode);
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
             if (buggyNode.toSrcString().toString().equals(fixedNode.toSrcString().toString())) continue;
-            TextDiff diff = new TextDiff(buggyNode, fixedNode);
-            set.add(new Pair<Node, TextDiff>(buggyNode, diff));
+
+            double norm = fVector.computeSimilarity(buggyNode.getFeatureVector(), FVector.ALGO.NORM_2);
+            double cosine = fVector.computeSimilarity(buggyNode.getFeatureVector(), FVector.ALGO.COSINE);
+            if (norm < biggetDis && cosine > simThreshold) {
+                TextDiff diff = new TextDiff(buggyNode, fixedNode);
+                map.put(new Pair<Node, TextDiff>(buggyNode, diff), new Pair<Double, Double>(norm, cosine));
+            }
         }
-        return set;
+
+        return map;
     }
+
 }
