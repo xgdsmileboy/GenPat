@@ -54,7 +54,6 @@ public class VarDeclarationExpr extends Expr implements Serializable {
 		_vdfs = vdfs;
 	}
 
-	
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

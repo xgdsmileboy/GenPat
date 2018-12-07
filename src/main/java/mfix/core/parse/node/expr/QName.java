@@ -57,7 +57,7 @@ public class QName extends Label implements Serializable {
 	public String getLabel(){
 		return _name.toSrcString().toString();
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

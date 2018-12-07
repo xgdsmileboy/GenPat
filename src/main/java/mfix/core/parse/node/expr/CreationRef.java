@@ -40,7 +40,7 @@ public class CreationRef extends Expr implements Serializable {
 		super(fileName, startLine, endLine, node);
 		_str = node.toString();
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

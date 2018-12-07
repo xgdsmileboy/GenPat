@@ -40,7 +40,6 @@ public class MethodRef extends Expr implements Serializable {
 		_str = node.toString();
 	}
 
-	
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

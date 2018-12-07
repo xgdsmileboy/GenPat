@@ -31,7 +31,7 @@ public abstract class Operator extends Node implements Serializable {
 	public Operator(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 	}
-	
+
 	@Override
 	public List<Modification> extractModifications() {
 		return new LinkedList<>();

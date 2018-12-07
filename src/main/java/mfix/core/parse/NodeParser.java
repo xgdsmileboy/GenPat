@@ -8,53 +8,10 @@ package mfix.core.parse;
 
 import mfix.core.parse.node.MethDecl;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.node.expr.ArrayAcc;
-import mfix.core.parse.node.expr.ArrayCreate;
-import mfix.core.parse.node.expr.ArrayInitial;
-import mfix.core.parse.node.expr.Assign;
-import mfix.core.parse.node.expr.AssignOperator;
-import mfix.core.parse.node.expr.BoolLiteral;
-import mfix.core.parse.node.expr.CastExpr;
-import mfix.core.parse.node.expr.CharLiteral;
-import mfix.core.parse.node.expr.ClassInstanceCreate;
+import mfix.core.parse.node.expr.*;
+import mfix.core.parse.node.expr.ClassInstCreation;
 import mfix.core.parse.node.expr.Comment;
-import mfix.core.parse.node.expr.ConditionalExpr;
-import mfix.core.parse.node.expr.CreationRef;
-import mfix.core.parse.node.expr.DoubleLiteral;
-import mfix.core.parse.node.expr.Expr;
-import mfix.core.parse.node.expr.ExprList;
-import mfix.core.parse.node.expr.ExpressionMethodRef;
-import mfix.core.parse.node.expr.FieldAcc;
-import mfix.core.parse.node.expr.FloatLiteral;
-import mfix.core.parse.node.expr.InfixExpr;
-import mfix.core.parse.node.expr.InfixOperator;
-import mfix.core.parse.node.expr.InstanceofExpr;
-import mfix.core.parse.node.expr.IntLiteral;
-import mfix.core.parse.node.expr.Label;
-import mfix.core.parse.node.expr.LambdaExpr;
-import mfix.core.parse.node.expr.LongLiteral;
-import mfix.core.parse.node.expr.MType;
-import mfix.core.parse.node.expr.MethodInv;
 import mfix.core.parse.node.expr.MethodRef;
-import mfix.core.parse.node.expr.NillLiteral;
-import mfix.core.parse.node.expr.NumLiteral;
-import mfix.core.parse.node.expr.ParenthesiszedExpr;
-import mfix.core.parse.node.expr.PostOperator;
-import mfix.core.parse.node.expr.PostfixExpr;
-import mfix.core.parse.node.expr.PrefixExpr;
-import mfix.core.parse.node.expr.PrefixOperator;
-import mfix.core.parse.node.expr.QName;
-import mfix.core.parse.node.expr.SName;
-import mfix.core.parse.node.expr.StrLiteral;
-import mfix.core.parse.node.expr.SuperFieldAcc;
-import mfix.core.parse.node.expr.SuperMethodInv;
-import mfix.core.parse.node.expr.SuperMethodRef;
-import mfix.core.parse.node.expr.Svd;
-import mfix.core.parse.node.expr.ThisExpr;
-import mfix.core.parse.node.expr.TyLiteral;
-import mfix.core.parse.node.expr.TypeMethodRef;
-import mfix.core.parse.node.expr.VarDeclarationExpr;
-import mfix.core.parse.node.expr.Vdf;
 import mfix.core.parse.node.stmt.AnonymousClassDecl;
 import mfix.core.parse.node.stmt.AssertStmt;
 import mfix.core.parse.node.stmt.Blk;
@@ -559,66 +516,66 @@ public class NodeParser {
         return comment;
     }
 
-    private ArrayAcc visit(ArrayAccess node) {
+    private AryAcc visit(ArrayAccess node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ArrayAcc arrayAcc = new ArrayAcc(_fileName, startLine, endLine, node);
+        AryAcc aryAcc = new AryAcc(_fileName, startLine, endLine, node);
 
         Expr array = (Expr) process(node.getArray());
-        array.setParent(arrayAcc);
-        arrayAcc.setArray(array);
+        array.setParent(aryAcc);
+        aryAcc.setArray(array);
 
         Expr indexExpr = (Expr) process(node.getIndex());
-        indexExpr.setParent(arrayAcc);
-        arrayAcc.setIndex(indexExpr);
+        indexExpr.setParent(aryAcc);
+        aryAcc.setIndex(indexExpr);
 
         Type type = typeFromBinding(node.getAST(), node.resolveTypeBinding());
-        arrayAcc.setType(type);
+        aryAcc.setType(type);
 
-        return arrayAcc;
+        return aryAcc;
     }
 
-    private ArrayCreate visit(ArrayCreation node) {
+    private AryCreation visit(ArrayCreation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ArrayCreate arrayCreate = new ArrayCreate(_fileName, startLine, endLine, node);
+        AryCreation aryCreation = new AryCreation(_fileName, startLine, endLine, node);
         MType mType = new MType(_fileName, startLine, endLine, node.getType().getElementType());
         mType.setType(node.getType().getElementType());
-        mType.setParent(arrayCreate);
-        arrayCreate.setArrayType(mType);
-        arrayCreate.setType(node.getType());
+        mType.setParent(aryCreation);
+        aryCreation.setArrayType(mType);
+        aryCreation.setType(node.getType());
 
         List<Expr> dimension = new ArrayList<>();
         for (Object object : node.dimensions()) {
             Expr dim = (Expr) process((ASTNode) object);
-            dim.setParent(arrayCreate);
+            dim.setParent(aryCreation);
             dimension.add(dim);
         }
-        arrayCreate.setDimension(dimension);
+        aryCreation.setDimension(dimension);
 
         if (node.getInitializer() != null) {
-            ArrayInitial arrayInitializer = (ArrayInitial) process(node.getInitializer());
-            arrayInitializer.setParent(arrayCreate);
-            arrayCreate.setInitializer(arrayInitializer);
+            AryInitializer arrayInitializer = (AryInitializer) process(node.getInitializer());
+            arrayInitializer.setParent(aryCreation);
+            aryCreation.setInitializer(arrayInitializer);
         }
 
-        return arrayCreate;
+        return aryCreation;
     }
 
-    private ArrayInitial visit(ArrayInitializer node) {
+    private AryInitializer visit(ArrayInitializer node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ArrayInitial arrayInitial = new ArrayInitial(_fileName, startLine, endLine, node);
+        AryInitializer aryInitializer = new AryInitializer(_fileName, startLine, endLine, node);
 
         List<Expr> expressions = new ArrayList<>();
         for (Object object : node.expressions()) {
             Expr expr = (Expr) process((ASTNode) object);
-            expr.setParent(arrayInitial);
+            expr.setParent(aryInitializer);
             expressions.add(expr);
         }
-        arrayInitial.setExpressions(expressions);
+        aryInitializer.setExpressions(expressions);
 
-        return arrayInitial;
+        return aryInitializer;
     }
 
     private Assign visit(Assignment node) {
@@ -684,21 +641,21 @@ public class NodeParser {
         return charLiteral;
     }
 
-    private ClassInstanceCreate visit(ClassInstanceCreation node) {
+    private ClassInstCreation visit(ClassInstanceCreation node) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
-        ClassInstanceCreate classInstanceCreate = new ClassInstanceCreate(_fileName, startLine, endLine, node);
+        ClassInstCreation classInstCreation = new ClassInstCreation(_fileName, startLine, endLine, node);
 
         if (node.getExpression() != null) {
             Expr expression = (Expr) process(node.getExpression());
-            expression.setParent(classInstanceCreate);
-            classInstanceCreate.setExpression(expression);
+            expression.setParent(classInstCreation);
+            classInstCreation.setExpression(expression);
         }
 
         if (node.getAnonymousClassDeclaration() != null) {
             AnonymousClassDecl anonymousClassDecl = (AnonymousClassDecl) process(node.getAnonymousClassDeclaration());
-            anonymousClassDecl.setParent(classInstanceCreate);
-            classInstanceCreate.setAnonymousClassDecl(anonymousClassDecl);
+            anonymousClassDecl.setParent(classInstCreation);
+            classInstCreation.setAnonymousClassDecl(anonymousClassDecl);
         }
 
         ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
@@ -709,16 +666,16 @@ public class NodeParser {
             arguments.add(arg);
         }
         exprList.setExprs(arguments);
-        exprList.setParent(classInstanceCreate);
-        classInstanceCreate.setArguments(exprList);
+        exprList.setParent(classInstCreation);
+        classInstCreation.setArguments(exprList);
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
         mType.setType(node.getType());
-        mType.setParent(classInstanceCreate);
-        classInstanceCreate.setClassType(mType);
-        classInstanceCreate.setType(node.getType());
+        mType.setParent(classInstCreation);
+        classInstCreation.setClassType(mType);
+        classInstCreation.setType(node.getType());
 
-        return classInstanceCreate;
+        return classInstCreation;
     }
 
     private AnonymousClassDecl visit(AnonymousClassDeclaration node) {

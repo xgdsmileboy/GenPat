@@ -28,6 +28,7 @@ public class AssertStmt extends Stmt implements Serializable {
 
 	private static final long serialVersionUID = 8494694375316529776L;
 
+	// TODO: assert statement should be added
 	/**
 	 * AssertStatement:
      *	assert Expression [ : Expression ] ;
@@ -40,7 +41,7 @@ public class AssertStmt extends Stmt implements Serializable {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.ASSERT;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_oriNode.toString());

@@ -59,7 +59,6 @@ public class Svd extends Expr implements Serializable {
 		_initializer = initializer;
 	}
 
-	
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

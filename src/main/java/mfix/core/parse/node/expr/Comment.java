@@ -46,7 +46,7 @@ public class Comment extends Expr implements Serializable {
 		stringBuffer.append(_comment);
 		return stringBuffer;
 	}
-	
+
 	@Override
 	public StringBuffer applyChange(Map<String, String> exprMap, Set<String> allUsableVars) {
 		return toSrcString();

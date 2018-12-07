@@ -35,7 +35,7 @@ public class AnonymousClassDecl extends Node implements Serializable {
 		_nodeType = TYPE.ANONYMOUSCDECL;
 		_codeStr = node.toString();
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_codeStr);

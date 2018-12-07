@@ -61,7 +61,7 @@ public class MethodInv extends Expr implements Serializable {
 	public Expr getExpression(){
 		return _expression;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

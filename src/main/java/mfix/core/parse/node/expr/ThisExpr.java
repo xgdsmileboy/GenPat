@@ -36,7 +36,7 @@ public class ThisExpr extends Expr implements Serializable {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.THIS;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer("this");

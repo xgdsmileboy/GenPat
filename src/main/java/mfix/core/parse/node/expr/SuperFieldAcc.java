@@ -49,7 +49,7 @@ public class SuperFieldAcc extends Expr implements Serializable {
 	public void setIdentifier(SName identifier){
 		_identifier = identifier;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

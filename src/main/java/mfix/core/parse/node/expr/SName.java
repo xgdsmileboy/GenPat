@@ -45,7 +45,7 @@ public class SName extends Label implements Serializable {
 	public String getName(){
 		return _name;
 	}
-	
+
 	@Override
 	public StringBuffer applyChange(Map<String, String> exprMap, Set<String> allUsableVars) {
 		return toSrcString();

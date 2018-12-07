@@ -13,7 +13,7 @@ import mfix.core.comp.Update;
 import mfix.core.parse.NodeUtils;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.node.expr.ClassInstanceCreate;
+import mfix.core.parse.node.expr.ClassInstCreation;
 import mfix.core.parse.node.expr.Expr;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -51,8 +51,8 @@ public class ThrowStmt extends Stmt implements Serializable {
 	}
 	
 	public String getExceptionType(){
-		if(_expression instanceof ClassInstanceCreate){
-			return ((ClassInstanceCreate)_expression).getClassType().toString();
+		if(_expression instanceof ClassInstCreation){
+			return ((ClassInstCreation)_expression).getClassType().toString();
 		} else {
 			return _expression.getType().toString();
 		}

@@ -13,6 +13,7 @@ import mfix.core.comp.Update;
 import mfix.core.parse.NodeUtils;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
+import mfix.core.parse.node.NodeVisitor;
 import mfix.core.parse.node.expr.Expr;
 import org.eclipse.jdt.core.dom.ASTNode;
 

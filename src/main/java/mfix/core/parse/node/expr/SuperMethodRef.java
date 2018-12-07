@@ -37,7 +37,7 @@ public class SuperMethodRef extends Expr implements Serializable {
 	public SuperMethodRef(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_oriNode.toString());

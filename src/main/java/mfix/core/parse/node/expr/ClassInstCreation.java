@@ -29,7 +29,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ClassInstanceCreate extends Expr implements Serializable {
+public class ClassInstCreation extends Expr implements Serializable {
 
 	private static final long serialVersionUID = -2405461094348344933L;
 	private Expr _expression = null;
@@ -41,7 +41,7 @@ public class ClassInstanceCreate extends Expr implements Serializable {
 	 * ClassInstanceCreation: [ Expression . ] new [ < Type { , Type } > ] Type
 	 * ( [ Expression { , Expression } ] ) [ AnonymousClassDeclaration ]
 	 */
-	public ClassInstanceCreate(String fileName, int startLine, int endLine, ASTNode node) {
+	public ClassInstCreation(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.CLASSCREATION;
 	}
@@ -90,27 +90,27 @@ public class ClassInstanceCreate extends Expr implements Serializable {
 		StringBuffer classType = null;
 		StringBuffer arguments = null;
 		StringBuffer decl = null;
-		if(_binding != null && _binding instanceof ClassInstanceCreate) {
-			ClassInstanceCreate classInstanceCreate = (ClassInstanceCreate) _binding;
-			for(Modification modification : classInstanceCreate.getNodeModification()) {
+		if(_binding != null && _binding instanceof ClassInstCreation) {
+			ClassInstCreation classInstCreation = (ClassInstCreation) _binding;
+			for(Modification modification : classInstCreation.getNodeModification()) {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode(); 
-					if(node == classInstanceCreate._expression) {
+					if(node == classInstCreation._expression) {
 						expression = update.getTarString(exprMap, allUsableVars);
 						if(expression == null) return null;
-					} else if(node == classInstanceCreate._classType) {
+					} else if(node == classInstCreation._classType) {
 						classType = update.getTarString(exprMap, allUsableVars);
 						if(classType == null) return null;
-					} else if(node == classInstanceCreate._arguments) {
+					} else if(node == classInstCreation._arguments) {
 						arguments = update.getTarString(exprMap, allUsableVars);
 						if(arguments == null) return null;
-					} else if(node == classInstanceCreate._decl) {
+					} else if(node == classInstCreation._decl) {
 						decl = update.getTarString(exprMap, allUsableVars);
 						if(decl == null) return null;
 					}
 				} else {
-					LevelLogger.error("@ClassInstanceCreate Should not be this kind of modification : " + modification);
+					LevelLogger.error("@ClassInstCreation Should not be this kind of modification : " + modification);
 				}
 			}
 		}
@@ -224,14 +224,14 @@ public class ClassInstanceCreate extends Expr implements Serializable {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof ClassInstanceCreate) {
-			ClassInstanceCreate classInstanceCreate = (ClassInstanceCreate) other;
-			match = _expression == null ? (classInstanceCreate._expression == null) : _expression.compare(classInstanceCreate._expression);
-			match = match && _classType.compare(classInstanceCreate._classType) && _arguments.compare(classInstanceCreate._arguments); 
+		if(other instanceof ClassInstCreation) {
+			ClassInstCreation classInstCreation = (ClassInstCreation) other;
+			match = _expression == null ? (classInstCreation._expression == null) : _expression.compare(classInstCreation._expression);
+			match = match && _classType.compare(classInstCreation._classType) && _arguments.compare(classInstCreation._arguments);
 			if(_decl == null) {
-				match = match && (classInstanceCreate._decl == null);
+				match = match && (classInstCreation._decl == null);
 			} else {
-				match = match && _decl.compare(classInstanceCreate._decl);
+				match = match && _decl.compare(classInstCreation._decl);
 			}
 		}
 		return match;
@@ -285,43 +285,43 @@ public class ClassInstanceCreate extends Expr implements Serializable {
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if(other instanceof ClassInstanceCreate) {
-			ClassInstanceCreate classInstanceCreate = (ClassInstanceCreate) other;
+		if(other instanceof ClassInstCreation) {
+			ClassInstCreation classInstCreation = (ClassInstCreation) other;
 			_matchNodeType = true;
-			if((_expression == null && classInstanceCreate._expression != null) || (_decl == null && classInstanceCreate._decl != null)){
+			if((_expression == null && classInstCreation._expression != null) || (_decl == null && classInstCreation._decl != null)){
 				_matchNodeType = false;
 				return;
 			}
 			
-			_classType.deepMatch(classInstanceCreate._classType);
+			_classType.deepMatch(classInstCreation._classType);
 			if(!_classType.isNodeTypeMatch()) {
-				Update update = new Update(this, _classType, classInstanceCreate._classType);
+				Update update = new Update(this, _classType, classInstCreation._classType);
 				_modifications.add(update);
 			}
-			if(_expression != null && classInstanceCreate._expression != null) {
-				_expression.deepMatch(classInstanceCreate._expression);
+			if(_expression != null && classInstCreation._expression != null) {
+				_expression.deepMatch(classInstCreation._expression);
 				if(!_expression.isNodeTypeMatch()) {
-					Update update = new Update(this, _expression, classInstanceCreate._expression);
+					Update update = new Update(this, _expression, classInstCreation._expression);
 					_modifications.add(update);
 				}
 			} else if(_expression != null) {
-				Update update = new Update(this, _expression, classInstanceCreate._expression);
+				Update update = new Update(this, _expression, classInstCreation._expression);
 				_modifications.add(update);
 			}
-			_arguments.deepMatch(classInstanceCreate._arguments);
+			_arguments.deepMatch(classInstCreation._arguments);
 			if(!_arguments.isNodeTypeMatch()) {
-				Update update = new Update(this, _arguments, classInstanceCreate._arguments);
+				Update update = new Update(this, _arguments, classInstCreation._arguments);
 				_modifications.add(update);
 			}
 			
-			if(_decl != null && classInstanceCreate._decl != null) {
-				_decl.deepMatch(classInstanceCreate._decl);
+			if(_decl != null && classInstCreation._decl != null) {
+				_decl.deepMatch(classInstCreation._decl);
 				if(!_decl.isNodeTypeMatch()) {
-					Update update = new Update(this, _decl, classInstanceCreate._decl);
+					Update update = new Update(this, _decl, classInstCreation._decl);
 					_modifications.add(update);
 				}
 			} else if(_decl != null) {
-				Update update = new Update(this, _decl, classInstanceCreate._decl);
+				Update update = new Update(this, _decl, classInstCreation._decl);
 				_modifications.add(update);
 			}
 		} else {
@@ -332,24 +332,24 @@ public class ClassInstanceCreate extends Expr implements Serializable {
 	@Override
 	public boolean matchSketch(Node sketch) {
 		boolean match = false;
-		if(sketch instanceof ClassInstanceCreate) {
-			ClassInstanceCreate classInstanceCreate = (ClassInstanceCreate) sketch;
-			if(!classInstanceCreate.isNodeTypeMatch()) {
+		if(sketch instanceof ClassInstCreation) {
+			ClassInstCreation classInstCreation = (ClassInstCreation) sketch;
+			if(!classInstCreation.isNodeTypeMatch()) {
 				if(!NodeUtils.matchNode(sketch, this)) {
 					return false;
 				}
 				bindingSketch(sketch);
 			} else {
-				if(classInstanceCreate._classType.isKeyPoint()) {
-					match = _classType.matchSketch(classInstanceCreate._classType);
+				if(classInstCreation._classType.isKeyPoint()) {
+					match = _classType.matchSketch(classInstCreation._classType);
 				}
-				if(classInstanceCreate._arguments.isKeyPoint()) {
-					match = match && _arguments.matchSketch(classInstanceCreate._arguments);
+				if(classInstCreation._arguments.isKeyPoint()) {
+					match = match && _arguments.matchSketch(classInstCreation._arguments);
 				}
 			}
 			if(match) {
-				classInstanceCreate._binding = this;
-				_binding = classInstanceCreate;
+				classInstCreation._binding = this;
+				_binding = classInstCreation;
 			}
 		}
 		if(!match) sketch.resetBinding();
@@ -360,13 +360,13 @@ public class ClassInstanceCreate extends Expr implements Serializable {
 	public boolean bindingSketch(Node sketch) {
 		_binding = sketch;
 		sketch.setBinding(this);
-		if(sketch instanceof ClassInstanceCreate) {
-			ClassInstanceCreate classInstanceCreate = (ClassInstanceCreate) sketch;
-			if(classInstanceCreate._classType.isKeyPoint()) {
-				_classType.bindingSketch(classInstanceCreate._classType);
+		if(sketch instanceof ClassInstCreation) {
+			ClassInstCreation classInstCreation = (ClassInstCreation) sketch;
+			if(classInstCreation._classType.isKeyPoint()) {
+				_classType.bindingSketch(classInstCreation._classType);
 			}
-			if(classInstanceCreate._arguments.isKeyPoint()) {
-				_arguments.bindingSketch(classInstanceCreate._arguments);
+			if(classInstCreation._arguments.isKeyPoint()) {
+				_arguments.bindingSketch(classInstCreation._arguments);
 			}
 			return true;
 		}

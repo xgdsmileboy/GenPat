@@ -27,7 +27,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ArrayAcc extends Expr implements Serializable {
+public class AryAcc extends Expr implements Serializable {
 
 	private static final long serialVersionUID = 3197483700688117500L;
 	private Expr _index = null;
@@ -36,7 +36,7 @@ public class ArrayAcc extends Expr implements Serializable {
 	/**
 	 * ArrayAccess: Expression [ Expression ]
 	 */
-	public ArrayAcc(String fileName, int startLine, int endLine, ASTNode node) {
+	public AryAcc(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.ARRACC;
 	}
@@ -72,13 +72,13 @@ public class ArrayAcc extends Expr implements Serializable {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer array = null;
 		StringBuffer index = null;
-		if(_binding != null && _binding instanceof ArrayAcc) {
-			ArrayAcc arrayAcc = (ArrayAcc) _binding;
-			List<Modification> modifications = arrayAcc.getNodeModification();
+		if(_binding != null && _binding instanceof AryAcc) {
+			AryAcc aryAcc = (AryAcc) _binding;
+			List<Modification> modifications = aryAcc.getNodeModification();
 			for(Modification modification : modifications) {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
-					if(update.getSrcNode() == arrayAcc._array) {
+					if(update.getSrcNode() == aryAcc._array) {
 						array = update.getTarString(exprMap, allUsableVars);
 						if(array == null) return null;
 					} else {
@@ -86,7 +86,7 @@ public class ArrayAcc extends Expr implements Serializable {
 						if(index == null) return null;
 					}
 				} else {
-					LevelLogger.error("@ArrayAcc Should not be this kind of modification : " + modification.toString());
+					LevelLogger.error("@AryAcc Should not be this kind of modification : " + modification.toString());
 				}
 			}
 		}
@@ -155,8 +155,8 @@ public class ArrayAcc extends Expr implements Serializable {
     @Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof ArrayAcc) {
-			match = _array.compare(((ArrayAcc) other)._array) && _index.compare(((ArrayAcc) other)._index); 
+		if(other instanceof AryAcc) {
+			match = _array.compare(((AryAcc) other)._array) && _index.compare(((AryAcc) other)._index);
 		}
 		return match;
 	}
@@ -185,17 +185,17 @@ public class ArrayAcc extends Expr implements Serializable {
 	@Override
 	public void deepMatch(Node other) {
 		_tarNode = other;
-		if(other instanceof ArrayAcc) {
+		if(other instanceof AryAcc) {
 			_matchNodeType = true;
-			ArrayAcc arrayAcc = (ArrayAcc) other;
-			_array.deepMatch(arrayAcc._array);
-			_index.deepMatch(arrayAcc._index);
+			AryAcc aryAcc = (AryAcc) other;
+			_array.deepMatch(aryAcc._array);
+			_index.deepMatch(aryAcc._index);
 			if(!_array.isNodeTypeMatch()) {
-				Update update = new Update(this, _array, arrayAcc._array);
+				Update update = new Update(this, _array, aryAcc._array);
 				_modifications.add(update);
 			}
 			if(!_index.isNodeTypeMatch()) {
-				Update update = new Update(this, _index, arrayAcc);
+				Update update = new Update(this, _index, aryAcc);
 				_modifications.add(update);
 			}
 		} else {
@@ -206,30 +206,30 @@ public class ArrayAcc extends Expr implements Serializable {
 	@Override
 	public boolean matchSketch(Node sketch) {
 		boolean match = false;
-		if(sketch instanceof ArrayAcc) {
+		if(sketch instanceof AryAcc) {
 			match = true;
-			ArrayAcc arrayAcc = (ArrayAcc) sketch;
+			AryAcc aryAcc = (AryAcc) sketch;
 			// find change node
-			if(!arrayAcc.isNodeTypeMatch()) {
+			if(!aryAcc.isNodeTypeMatch()) {
 				if(!NodeUtils.matchNode(sketch, this)){
 					return false;
 				}
 				bindingSketch(sketch);
 			} else {
 				// match array if it is match point
-				if(arrayAcc._array.isKeyPoint()) {
-					match = _array.matchSketch(arrayAcc._array);
+				if(aryAcc._array.isKeyPoint()) {
+					match = _array.matchSketch(aryAcc._array);
 				}
 				// match another part
 				if (match) {
-					if(arrayAcc._index.isKeyPoint()){
-						match = _index.matchSketch(arrayAcc._index);
+					if(aryAcc._index.isKeyPoint()){
+						match = _index.matchSketch(aryAcc._index);
 					}
 				}
 			}
 			if(match) {
-				arrayAcc._binding = this;
-				_binding = arrayAcc;
+				aryAcc._binding = this;
+				_binding = aryAcc;
 			}
 		}
 		if(!match) sketch.resetBinding();
@@ -240,15 +240,15 @@ public class ArrayAcc extends Expr implements Serializable {
 	public boolean bindingSketch(Node sketch) {
 		_binding = sketch;
 		sketch.setBinding(this);
-		if (sketch instanceof ArrayAcc) {
-			ArrayAcc arrayAcc = (ArrayAcc) sketch;
+		if (sketch instanceof AryAcc) {
+			AryAcc aryAcc = (AryAcc) sketch;
 			// match array if it is match point
-			if (arrayAcc._array.isKeyPoint()) {
-				_array.bindingSketch(arrayAcc._array);
+			if (aryAcc._array.isKeyPoint()) {
+				_array.bindingSketch(aryAcc._array);
 			}
 			// match another part
-			if (arrayAcc._index.isKeyPoint()) {
-				_index.bindingSketch(arrayAcc._index);
+			if (aryAcc._index.isKeyPoint()) {
+				_index.bindingSketch(aryAcc._index);
 			}
 			return true;
 		}
@@ -257,8 +257,8 @@ public class ArrayAcc extends Expr implements Serializable {
 	
 //	@Override
 //	public Map<Expr, Expr> searchPattern(Node pattern) {
-//		if(pattern instanceof ArrayAcc) {
-//			ArrayAcc arrayAcc = (ArrayAcc) pattern;
+//		if(pattern instanceof AryAcc) {
+//			AryAcc arrayAcc = (AryAcc) pattern;
 //			Map<Expr, Expr> map = _array.searchPattern(arrayAcc._array);
 //			Map<Expr, Expr> map2 = _index.searchPattern(arrayAcc._index);
 //		}

@@ -38,7 +38,7 @@ public class DoubleLiteral extends NumLiteral implements Serializable {
 	public double getValue(){
 		return _value;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(String.valueOf(_value));

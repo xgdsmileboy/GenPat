@@ -66,7 +66,7 @@ public class ConditionalExpr extends Expr implements Serializable {
 	public Expr getSecond(){
 		return _snd;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
