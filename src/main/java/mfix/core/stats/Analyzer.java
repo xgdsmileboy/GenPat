@@ -4,25 +4,19 @@ import mfix.core.parse.node.expr.MethodInv;
 import mfix.core.parse.node.expr.SName;
 import org.eclipse.jdt.core.dom.*;
 import mfix.core.parse.node.*;
-import mfix.common.util.Pair;
 
-import java.util.HashMap;
 import java.util.Set;
 
 /**
  * @author: Luyao Ren
- * @date: 2018/12/6
+ * @date: 2018/12/06
  */
 public class Analyzer {
     private static Analyzer _instance;
     private CompilationUnit _cunit;
     private String _fileName;
-
-    private HashMap<String, Integer> _counter;
-
-    public Analyzer() {
-        _counter = new HashMap<String, Integer>();
-    }
+    private ElementCounter _elementCounter = new ElementCounter<Element>();
+    private ElementCounter _typedElementCounter = new ElementCounter<TypedElement>();
 
     public static Analyzer getInstance() {
         if (_instance == null) {
@@ -33,11 +27,19 @@ public class Analyzer {
 
     public void analyze(Node curNode) {
         if (curNode instanceof MethodInv) {
-            for (String method : curNode.getCalledMethods().keySet()) {
-                addName(method);
+            // System.out.println("code=" + curNode.toString());
+            // System.out.println(curNode.getCalledMethods().toString());
+            // System.out.println(curNode.getAllVars().toString());
+
+            for (Set<Node> methodSet : curNode.getCalledMethods().values()) {
+                for (Node method : methodSet) {
+                    _elementCounter.add(new Element(method.toString()));
+                    _typedElementCounter.add(new TypedElement(method.toString(), method.getNodeType()));
+                }
             }
             for (SName var : curNode.getAllVars()) {
-                addName(var.getName());
+                _elementCounter.add(new Element(var.getName()));
+                _typedElementCounter.add(new TypedElement(var));
             }
         }
         for (Node child : curNode.getAllChildren()) {
@@ -45,20 +47,12 @@ public class Analyzer {
         }
     }
 
-    public Integer getCount(String name) {
-        return _counter.get(name);
+    public Integer getElementFrequency(Element element) {
+        return _elementCounter.count(element);
     }
 
-    @Override
-    public String toString(){
-        return _counter.toString();
+    public Integer getTypedElementFrequency(TypedElement element) {
+        return _typedElementCounter.count(element);
     }
 
-    private void addName(String name) {
-        if (!_counter.containsKey(name)) {
-            _counter.put(name, 0);
-        }
-        Integer oldValue = _counter.get(name);
-        _counter.put(name, oldValue + 1);
-    }
 }

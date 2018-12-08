@@ -57,8 +57,14 @@ public class AnalyzerTest extends TestCase {
             nodeAnalyzer.analyze(nodePaser.process(method));
         }
 
-        // System.out.println(nodeAnalyzer);
+        Assert.assertTrue(nodeAnalyzer.getElementFrequency(new Element("currentThread")) == 10);
+        Assert.assertTrue(nodeAnalyzer.getElementFrequency(new Element("path")) == 5);
 
-        Assert.assertTrue(nodeAnalyzer.getCount("currentThread") == 10);
+        TypedElement element1 = new TypedElement("path", "org.apache.tools.ant.Path");
+        TypedElement element2 = new TypedElement("path", "org.apache.tools.ant.StringBuffer");
+        Assert.assertTrue(nodeAnalyzer.getTypedElementFrequency(element1) == 1);
+        Assert.assertTrue(nodeAnalyzer.getTypedElementFrequency(element2) == 4);
+
+        Assert.assertTrue(nodeAnalyzer.getElementFrequency(element1) == 5);
     }
 }
