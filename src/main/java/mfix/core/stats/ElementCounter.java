@@ -14,7 +14,7 @@ public class ElementCounter<T> {
     }
 
     public Integer count(T element) {
-        return _counter.get(element);
+        return _counter.getOrDefault(element, 0);
     }
 
     @Override

@@ -56,15 +56,19 @@ public class AnalyzerTest extends TestCase {
             nodePaser.setCompilationUnit(srcFile, srcUnit);
             nodeAnalyzer.analyze(nodePaser.process(method));
         }
-
+        
         Assert.assertTrue(nodeAnalyzer.getElementFrequency(new Element("currentThread")) == 10);
         Assert.assertTrue(nodeAnalyzer.getElementFrequency(new Element("path")) == 5);
 
         TypedElement element1 = new TypedElement("path", "org.apache.tools.ant.Path");
-        TypedElement element2 = new TypedElement("path", "org.apache.tools.ant.StringBuffer");
         Assert.assertTrue(nodeAnalyzer.getTypedElementFrequency(element1) == 1);
+        Assert.assertTrue(nodeAnalyzer.getElementFrequency(element1) == 5);
+
+        TypedElement element2 = new TypedElement("path", "java.lang.StringBuffer");
         Assert.assertTrue(nodeAnalyzer.getTypedElementFrequency(element2) == 4);
 
-        Assert.assertTrue(nodeAnalyzer.getElementFrequency(element1) == 5);
+        TypedElement element3 = new TypedElement("noThisMethod", "java.lang.StringBuffer");
+        Assert.assertTrue(nodeAnalyzer.getElementFrequency(element3) == 0);
+        Assert.assertTrue(nodeAnalyzer.getTypedElementFrequency(element3) == 0);
     }
 }
