@@ -530,7 +530,7 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         String name;
         if(node.getExpression() != null) {
-            name = node.toSrcString().toString() + "." + node.getIdentifier().getName();
+            name = node.getExpression().toString() + "." + node.getIdentifier().getName();
         } else {
             name = "this." + node.getIdentifier().getName();
         }
