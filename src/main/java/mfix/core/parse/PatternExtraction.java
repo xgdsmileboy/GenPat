@@ -15,6 +15,7 @@ import mfix.core.parse.node.stmt.*;
 import mfix.core.parse.relation.*;
 import mfix.core.parse.relation.op.BinaryOp;
 import mfix.core.parse.relation.op.CopCond;
+import mfix.core.parse.relation.op.CopInstof;
 import mfix.core.parse.relation.op.OpArrayAcc;
 import mfix.core.parse.relation.op.OperationFactory;
 import mfix.core.parse.relation.struct.*;
@@ -420,12 +421,14 @@ public class PatternExtraction {
             List<Relation> relations = process(node.getLhs(), pattern);
             RAssign assign = new RAssign((ObjRelation) relations.get(0));
             assign.setRhs(opt);
+            pattern.addRelation(assign);
             result.add(assign);
         } else {
             List<Relation> relations = process(node.getLhs(), pattern);
             RAssign assign = new RAssign((ObjRelation) relations.get(0));
             relations = process(node.getRhs(), pattern);
             assign.setRhs((ObjRelation) relations.get(0));
+            pattern.addRelation(assign);
             result.add(assign);
         }
         return result;
@@ -569,7 +572,15 @@ public class PatternExtraction {
     }
 
     public List<Relation> visit(InstanceofExpr node, Pattern pattern) {
-        return emptyRelations;
+        List<Relation> relations = new LinkedList<>();
+        ROpt opt = new ROpt(new CopInstof());
+        relations.add(opt);
+
+        processArg(opt, CopInstof.POSITION_LHS, node.getExpression(), pattern);
+        processArg(opt, CopInstof.POSITION_RHS, node.getInstanceofType(), pattern);
+
+        pattern.addRelation(opt);
+        return relations;
     }
 
     public List<Relation> visit(IntLiteral node, Pattern pattern) {
@@ -599,8 +610,8 @@ public class PatternExtraction {
     public List<Relation> visit(MethodInv node, Pattern pattern) {
         List<Relation> result = new LinkedList<>();
         RMcall mcall = new RMcall(RMcall.MCallType.NORM_MCALL);
-        if(node.getExpression() != null) {
-            List<Relation> relations = process(node.getExpression(), pattern);
+        List<Relation> relations = process(node.getExpression(), pattern);
+        if(relations.size() > 0) {
             mcall.setReciever((ObjRelation) relations.get(0));
         }
         mcall.setMethodName(node.getName().getName());
@@ -618,7 +629,13 @@ public class PatternExtraction {
     }
 
     public List<Relation> visit(MType node, Pattern pattern) {
-        return emptyRelations;
+        List<Relation> relations = new LinkedList<>();
+        RVDef def = new RVDef();
+        def.setValue(node.typeStr());
+        def.setTypeStr(node.typeStr());
+        pattern.addRelation(def);
+        relations.add(def);
+        return relations;
     }
 
     public List<Relation> visit(NillLiteral node, Pattern pattern) {
@@ -767,7 +784,13 @@ public class PatternExtraction {
     }
 
     public List<Relation> visit(ThisExpr node, Pattern pattern) {
-        return emptyRelations;
+        List<Relation> relations = new LinkedList<>();
+        RVDef def = new RVDef();
+        def.setName("this");
+        def.setTypeStr(node.getTypeString());
+        relations.add(def);
+        pattern.addRelation(def);
+        return relations;
     }
 
     public List<Relation> visit(TyLiteral node, Pattern pattern) {
@@ -816,6 +839,8 @@ public class PatternExtraction {
         switch (node.getNodeType()) {
             case METHDECL:
                 return visit((MethDecl) node, pattern);
+            case EXPRLST:
+                return visit((ExprList) node, pattern);
             case ARRACC:
                 return visit((AryAcc) node, pattern);
             case ARRCREAT:
@@ -858,6 +883,8 @@ public class PatternExtraction {
                 return visit((NumLiteral) node, pattern);
             case PARENTHESISZED:
                 return visit((ParenthesiszedExpr) node, pattern);
+            case EXPRSTMT:
+                return visit((ExpressionStmt) node, pattern);
             case POSTEXPR:
                 return visit((PostfixExpr) node, pattern);
             case PREEXPR:
