@@ -15,9 +15,12 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.relation.Pattern;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -34,13 +37,25 @@ public class PatternExtractionTest extends TestCase {
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = NodeParser.getInstance();
+        Set<String> changedMethod = new HashSet<>();
         for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);
             Node srcNode = nodeParser.process(pair.getFirst());
             nodeParser.setCompilationUnit(tarFile, tarUnit);
             Node tarNode = nodeParser.process(pair.getSecond());
             Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
+            if(pattern.getNewRelations().size() != pattern.getOldRelations().size()) {
+                changedMethod.add(pair.getFirst().getName().getFullyQualifiedName());
+            }
         }
+
+        Assert.assertTrue(changedMethod.contains("fireBuildStarted"));
+        Assert.assertTrue(changedMethod.contains("fireBuildFinished"));
+        Assert.assertTrue(changedMethod.contains("fireTargetStarted"));
+        Assert.assertTrue(changedMethod.contains("fireTargetFinished"));
+        Assert.assertTrue(changedMethod.contains("fireTaskStarted"));
+        Assert.assertTrue(changedMethod.contains("fireTaskFinished"));
+        Assert.assertTrue(changedMethod.contains("fireMessageLoggedEvent"));
     }
 
 }
