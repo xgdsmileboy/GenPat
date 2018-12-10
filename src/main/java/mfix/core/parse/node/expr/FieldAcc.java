@@ -51,6 +51,14 @@ public class FieldAcc extends Expr implements Serializable {
 		_identifier = identifier;
 	}
 
+	public Expr getExpression() {
+		return _expression;
+	}
+
+	public SName getIdentifier() {
+		return _identifier;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

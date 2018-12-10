@@ -42,6 +42,10 @@ public class TyLiteral extends Expr implements Serializable {
 		_type = type;
 	}
 
+	public MType getDeclType() {
+		return _type;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

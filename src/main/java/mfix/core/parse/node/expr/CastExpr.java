@@ -48,6 +48,14 @@ public class CastExpr extends Expr implements Serializable {
 		_expression = expression;
 	}
 
+	public MType getCastType() {
+		return _castType;
+	}
+
+	public Expr getExpresion() {
+		return _expression;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

@@ -69,7 +69,23 @@ public class TryStmt extends Stmt implements Serializable {
 	public void setFinallyBlock(Blk finallyBlk) {
 		_finallyBlk = finallyBlk;
 	}
-	
+
+	public List<VarDeclarationExpr> getResource() {
+		return _resource;
+	}
+
+	public Blk getBody() {
+		return _blk;
+	}
+
+	public List<CatClause> getCatches() {
+		return _catches;
+	}
+
+	public Blk getFinally() {
+		return _finallyBlk;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer("try");

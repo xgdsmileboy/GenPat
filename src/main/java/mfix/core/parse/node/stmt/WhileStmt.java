@@ -52,7 +52,7 @@ public class WhileStmt extends Stmt implements Serializable {
 		_expression = expression;
 	}
 	
-	protected Expr getExpression() {
+	public Expr getExpression() {
 		return _expression;
 	}
 	
@@ -60,7 +60,7 @@ public class WhileStmt extends Stmt implements Serializable {
 		_body = body;
 	}
 	
-	protected Stmt getBody() {
+	public Stmt getBody() {
 		return _body;
 	}
 	

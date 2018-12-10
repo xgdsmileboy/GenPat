@@ -59,9 +59,17 @@ public class Vdf extends Node implements Serializable {
 	public void setDimensions(int dimensions){
 		_dimensions = dimensions;
 	}
-	
+
+	public int getDimension() {
+		return _dimensions;
+	}
+
 	public void setExpression(Expr expression){
 		_expression = expression;
+	}
+
+	public Expr getExpression() {
+		return _expression;
 	}
 
 	@Override

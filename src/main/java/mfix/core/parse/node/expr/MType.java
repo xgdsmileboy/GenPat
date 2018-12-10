@@ -55,7 +55,11 @@ public class MType extends Node implements Serializable {
 	public boolean isArrayType() {
 		return _type.isArrayType();
 	}
-	
+
+	public String typeStr() {
+		return _typeStr;
+	}
+
 	public Type getElementType() {
 		if(isArrayType()) {
 			return ((ArrayType) _type).getElementType();

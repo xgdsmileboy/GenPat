@@ -50,13 +50,21 @@ public class ConstructorInv  extends Stmt implements Serializable {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.CONSTRUCTORINV;
 	}
-	
+
+	public String getClassStr() {
+		return _thisType == null ? "DUMMY" : _thisType.toSrcString().toString();
+	}
+
 	public void setThisType(MType thisType){
 		_thisType = thisType;
 	}
 	
 	public void setArguments(ExprList arguments){
 		_arguments = arguments;
+	}
+
+	public ExprList getArguments() {
+		return _arguments;
 	}
 
 	@Override

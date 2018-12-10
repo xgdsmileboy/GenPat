@@ -55,7 +55,11 @@ public class SynchronizedStmt extends Stmt implements Serializable {
 	public void setBlock(Blk blk){
 		_blk = blk;
 	}
-	
+
+	public Expr getExpression() { return _expression; }
+
+	public Blk getBody() { return _blk; }
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer("synchronized(");

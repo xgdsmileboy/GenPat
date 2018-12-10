@@ -9,34 +9,9 @@ package mfix.core.parse;
 import mfix.core.parse.node.MethDecl;
 import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.*;
-import mfix.core.parse.node.expr.ClassInstCreation;
 import mfix.core.parse.node.expr.Comment;
 import mfix.core.parse.node.expr.MethodRef;
-import mfix.core.parse.node.stmt.AnonymousClassDecl;
-import mfix.core.parse.node.stmt.AssertStmt;
-import mfix.core.parse.node.stmt.Blk;
-import mfix.core.parse.node.stmt.BreakStmt;
-import mfix.core.parse.node.stmt.CatClause;
-import mfix.core.parse.node.stmt.ConstructorInv;
-import mfix.core.parse.node.stmt.ContinueStmt;
-import mfix.core.parse.node.stmt.DoStmt;
-import mfix.core.parse.node.stmt.EmptyStmt;
-import mfix.core.parse.node.stmt.EnhancedForStmt;
-import mfix.core.parse.node.stmt.ExpressionStmt;
-import mfix.core.parse.node.stmt.ForStmt;
-import mfix.core.parse.node.stmt.IfStmt;
-import mfix.core.parse.node.stmt.LabeledStmt;
-import mfix.core.parse.node.stmt.ReturnStmt;
-import mfix.core.parse.node.stmt.Stmt;
-import mfix.core.parse.node.stmt.SuperConstructorInv;
-import mfix.core.parse.node.stmt.SwCase;
-import mfix.core.parse.node.stmt.SwitchStmt;
-import mfix.core.parse.node.stmt.SynchronizedStmt;
-import mfix.core.parse.node.stmt.ThrowStmt;
-import mfix.core.parse.node.stmt.TryStmt;
-import mfix.core.parse.node.stmt.TypeDeclarationStmt;
-import mfix.core.parse.node.stmt.VarDeclarationStmt;
-import mfix.core.parse.node.stmt.WhileStmt;
+import mfix.core.parse.node.stmt.*;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
@@ -81,7 +56,9 @@ public class NodeParser {
             modifiers.add(object.toString());
         }
         methDecl.setModifiers(modifiers);
-        methDecl.setRetType(node.getReturnType2());
+        if(node.getReturnType2() != null) {
+            methDecl.setRetType(typeFromBinding(node.getAST(), node.getReturnType2().resolveBinding()));
+        }
         SName name = (SName) process(node.getName());
         name.setParent(methDecl);
         methDecl.setName(name);
@@ -95,7 +72,12 @@ public class NodeParser {
 
         List<String> throwTypes = new ArrayList<>(7);
         for(Object object : node.thrownExceptionTypes()) {
-            throwTypes.add(object.toString());
+            Type throwType = typeFromBinding(node.getAST(), ((Type) object).resolveBinding());
+            if(throwType == null) {
+                throwTypes.add(object.toString());
+            } else {
+                throwTypes.add(throwType.toString());
+            }
         }
 
         methDecl.setThrows(throwTypes);
@@ -477,7 +459,7 @@ public class NodeParser {
         }
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(node.getType());
+        mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
         mType.setParent(varDeclarationStmt);
         varDeclarationStmt.setDeclType(mType);
 
@@ -540,7 +522,7 @@ public class NodeParser {
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AryCreation aryCreation = new AryCreation(_fileName, startLine, endLine, node);
         MType mType = new MType(_fileName, startLine, endLine, node.getType().getElementType());
-        mType.setType(node.getType().getElementType());
+        mType.setType(typeFromBinding(node.getAST(), node.getType().getElementType().resolveBinding()));
         mType.setParent(aryCreation);
         aryCreation.setArrayType(mType);
         aryCreation.setType(node.getType());
@@ -616,7 +598,7 @@ public class NodeParser {
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         CastExpr castExpr = new CastExpr(_fileName, startLine, endLine, node);
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(node.getType());
+        mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
         mType.setParent(castExpr);
         castExpr.setCastType(mType);
         Expr expression = (Expr) process(node.getExpression());
@@ -670,10 +652,11 @@ public class NodeParser {
         classInstCreation.setArguments(exprList);
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(node.getType());
+        Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
+        mType.setType(type);
         mType.setParent(classInstCreation);
         classInstCreation.setClassType(mType);
-        classInstCreation.setType(node.getType());
+        classInstCreation.setType(type);
 
         return classInstCreation;
     }
@@ -1089,10 +1072,11 @@ public class NodeParser {
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         TyLiteral tyLiteral = new TyLiteral(_fileName, startLine, endLine, node);
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(node.getType());
+        Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
+        mType.setType(type);
         mType.setParent(tyLiteral);
         tyLiteral.setValue(mType);
-        tyLiteral.setType(node.getType());
+        tyLiteral.setType(type);
 
         return tyLiteral;
     }
@@ -1110,7 +1094,7 @@ public class NodeParser {
         VarDeclarationExpr varDeclarationExpr = new VarDeclarationExpr(_fileName, startLine, endLine, node);
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(node.getType());
+        mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
         mType.setParent(varDeclarationExpr);
         varDeclarationExpr.setDeclType(mType);
 
@@ -1151,7 +1135,7 @@ public class NodeParser {
         Svd svd = new Svd(_fileName, startLine, endLine, node);
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(node.getType());
+        mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
         mType.setParent(svd);
         svd.setDecType(mType);
         if (node.getInitializer() != null) {

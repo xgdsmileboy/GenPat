@@ -52,7 +52,7 @@ public class DoStmt extends Stmt implements Serializable {
 		_stmt = stmt;
 	}
 	
-	protected Stmt getBody() {
+	public Stmt getBody() {
 		return _stmt;
 	}
 	
@@ -60,7 +60,7 @@ public class DoStmt extends Stmt implements Serializable {
 		_expression = expression;
 	}
 	
-	protected Expr getExpression() {
+	public Expr getExpression() {
 		return _expression;
 	}
 

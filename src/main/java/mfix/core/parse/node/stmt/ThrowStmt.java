@@ -49,7 +49,9 @@ public class ThrowStmt extends Stmt implements Serializable {
 	public void setExpression(Expr expression){
 		_expression = expression;
 	}
-	
+
+	public Expr getExpression() { return _expression; }
+
 	public String getExceptionType(){
 		if(_expression instanceof ClassInstCreation){
 			return ((ClassInstCreation)_expression).getClassType().toString();

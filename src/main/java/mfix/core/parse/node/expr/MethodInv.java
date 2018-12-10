@@ -62,6 +62,14 @@ public class MethodInv extends Expr implements Serializable {
 		return _expression;
 	}
 
+	public SName getName() {
+		return _name;
+	}
+
+	public ExprList getArguments() {
+		return _arguments;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

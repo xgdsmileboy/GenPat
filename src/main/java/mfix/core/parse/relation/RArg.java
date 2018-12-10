@@ -13,7 +13,44 @@ package mfix.core.parse.relation;
  */
 public class RArg extends Relation {
 
+    private ObjRelation _function;
     private int _index;
-    private Relation _arg;
+    private ObjRelation _arg;
 
+    public RArg(ObjRelation function) {
+        super(RelationKind.ARGUMENT);
+        _function = function;
+    }
+
+    public void setIndex(int index) {
+        _index = index;
+    }
+
+    public void setArgument(ObjRelation argument) {
+        _arg = argument;
+    }
+
+    public int getIndex() {
+        return _index;
+    }
+
+    public ObjRelation getFunctionRelation() {
+        return _function;
+    }
+
+    public ObjRelation getArgument() {
+        return _arg;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if (!super.match(relation)) {
+            return false;
+        }
+        RArg arg = (RArg) relation;
+        if (_index != arg.getIndex()) {
+            return false;
+        }
+        return _function.match(arg.getFunctionRelation());
+    }
 }

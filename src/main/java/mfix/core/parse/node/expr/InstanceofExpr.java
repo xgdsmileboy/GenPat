@@ -50,6 +50,14 @@ public class InstanceofExpr extends Expr implements Serializable {
 		_instanceType = instanceType;
 	}
 
+	public Expr getExpression() {
+		return _expression;
+	}
+
+	public MType getInstanceofType() {
+		return _instanceType;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

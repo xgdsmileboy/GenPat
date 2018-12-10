@@ -13,7 +13,6 @@ import mfix.core.comp.Update;
 import mfix.core.parse.NodeUtils;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.node.NodeVisitor;
 import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.Svd;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -57,7 +56,7 @@ public class EnhancedForStmt extends Stmt implements Serializable {
 		_varDecl = varDecl;
 	}
 	
-	protected Svd getParameter() {
+	public Svd getParameter() {
 		return _varDecl;
 	}
 	
@@ -65,7 +64,7 @@ public class EnhancedForStmt extends Stmt implements Serializable {
 		_expression = expression;
 	}
 	
-	protected Expr getExpression() {
+	public Expr getExpression() {
 		return _expression;
 	}
 	
@@ -73,7 +72,7 @@ public class EnhancedForStmt extends Stmt implements Serializable {
 		_statement = statement;
 	}
 	
-	protected Stmt getBody() {
+	public Stmt getBody() {
 		return _statement;
 	}
 

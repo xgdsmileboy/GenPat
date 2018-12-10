@@ -54,7 +54,11 @@ public class Assign extends Expr implements Serializable {
 	public void setRightHandSide(Expr rhs){
 		_rhs = rhs;
 	}
-	
+
+	public AssignOperator getOperator() {
+		return _operator;
+	}
+
 	public Expr getLhs(){
 		return _lhs;
 	}
