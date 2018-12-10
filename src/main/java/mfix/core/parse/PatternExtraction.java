@@ -104,10 +104,9 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSBreak());
         result.add(struct);
-
+        pattern.addRelation(struct);
         processChild(struct, 0, node.getAllChildren(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -115,10 +114,9 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSCatch());
         result.add(struct);
-
+        pattern.addRelation(struct);
         processChild(struct, 0, node.getAllChildren(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -144,10 +142,9 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSContinue());
         result.add(struct);
-
+        pattern.addRelation(struct);
         processChild(struct, 0, node.getAllChildren(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -155,11 +152,11 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSDo());
         result.add(struct);
+        pattern.addRelation(struct);
 
         processChild(struct, RSDo.POS_CHILD_COND, node.getExpression(), pattern);
         processChild(struct, RSDo.POS_CHILD_BODY, node.getBody(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -171,12 +168,12 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSEnhancedFor());
         result.add(struct);
+        pattern.addRelation(struct);
 
         processChild(struct, RSEnhancedFor.POS_CHILD_PRAM, node.getParameter(), pattern);
         processChild(struct, RSEnhancedFor.POS_CHILD_EXPR, node.getExpression(), pattern);
         processChild(struct, RSEnhancedFor.POS_CHILD_BODY, node.getBody(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -188,13 +185,13 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSFor());
         result.add(struct);
+        pattern.addRelation(struct);
 
         processChild(struct, RSFor.POS_CHILD_INIT, node.getInitializer(), pattern);
         processChild(struct, RSFor.POS_CHILD_COND, node.getCondition(), pattern);
         processChild(struct, RSFor.POS_CHILD_UPD, node.getUpdaters(), pattern);
         processChild(struct, RSFor.POS_CHILD_BODY, node.getBody(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -202,12 +199,12 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSIf());
         result.add(struct);
+        pattern.addRelation(struct);
 
         processChild(struct, RSIf.POS_CHILD_COND, node.getCondition(), pattern);
         processChild(struct, RSIf.POS_CHILD_THEN, node.getThen(), pattern);
         processChild(struct, RSIf.POS_CHILD_ELSE, node.getElse(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -219,10 +216,10 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSRet());
         result.add(struct);
+        pattern.addRelation(struct);
 
         processChild(struct, 0, node.getExpression(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -254,6 +251,7 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct ss = new RStruct(new RSwitchStmt());
         result.add(ss);
+        pattern.addRelation(ss);
 
         processChild(ss, RSwitchStmt.POS_CHILD_VAR, node.getExpression(), pattern);
 
@@ -262,9 +260,9 @@ public class PatternExtraction {
             if(stmt instanceof  SwCase) {
                 SwCase ca = (SwCase) stmt;
                 swcase = new RStruct(new RSwCase());
-                processChild(swcase, RSwCase.POS_CHILD_CONST, ca.getExpression(), pattern);
-
                 pattern.addRelation(swcase);
+
+                processChild(swcase, RSwCase.POS_CHILD_CONST, ca.getExpression(), pattern);
 
                 RKid kid = new RKid(ss);
                 kid.setIndex(RSwitchStmt.POS_CHILD_CASE);
@@ -280,7 +278,6 @@ public class PatternExtraction {
             }
         }
 
-        pattern.addRelation(ss);
         return result;
     }
 
@@ -288,11 +285,11 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSync());
         result.add(struct);
+        pattern.addRelation(struct);
 
         processChild(struct, RSync.POS_CHILD_RES, node.getExpression(), pattern);
         processChild(struct, RSync.POS_CHILD_BODY, node.getBody(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -300,8 +297,8 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSThrow());
         result.add(struct);
-        processChild(struct, 0, node.getExpression(), pattern);
         pattern.addRelation(struct);
+        processChild(struct, 0, node.getExpression(), pattern);
         return result;
     }
 
@@ -309,6 +306,7 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSTry());
         result.add(struct);
+        pattern.addRelation(struct);
 
         if(node.getResource() != null && !node.getResource().isEmpty()) {
             for(VarDeclarationExpr expr : node.getResource()) {
@@ -323,7 +321,6 @@ public class PatternExtraction {
         }
         processChild(struct, RSTry.POS_CHILD_FINALLY, node.getFinally(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -358,9 +355,9 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSWhile());
         result.add(struct);
+        pattern.addRelation(struct);
         processChild(struct, RSWhile.POS_CHILD_COND, node.getExpression(), pattern);
         processChild(struct, RSWhile.POS_CHILD_BODY, node.getBody(), pattern);
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -368,13 +365,14 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         RStruct struct = new RStruct(new RSMethod());
         result.add(struct);
+        pattern.addRelation(struct);
+
         for(Expr expr : node.getArguments()) {
             processChild(struct, RSMethod.POS_CHILD_PARAM, expr, pattern);
         }
 
         processChild(struct, RSMethod.POS_CHILD_BODY, node.getBody(), pattern);
 
-        pattern.addRelation(struct);
         return result;
     }
 
@@ -383,9 +381,9 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         ROpt opt = new ROpt(new OpArrayAcc());
         result.add(opt);
+        pattern.addRelation(opt);
         processArg(opt, OpArrayAcc.POSITION_LHS, node.getArray(), pattern);
         processArg(opt, OpArrayAcc.POSITION_RHS, node.getIndex(), pattern);
-        pattern.addRelation(opt);
         return result;
     }
 
@@ -441,7 +439,7 @@ public class PatternExtraction {
     public List<Relation> visit(BoolLiteral node, Pattern pattern) {
         List<Relation> result = new LinkedList<>();
         RVDef virtualDef = new RVDef();
-        virtualDef.setValue(new Boolean(node.getValue()));
+        virtualDef.setValue(node.getValue());
         virtualDef.setTypeStr("boolean");
         pattern.addRelation(virtualDef);
         result.add(virtualDef);
@@ -491,12 +489,13 @@ public class PatternExtraction {
     public List<Relation> visit(ConditionalExpr node, Pattern pattern) {
         List<Relation> result = new LinkedList<>();
         ROpt opt = new ROpt(new CopCond());
+        result.add(opt);
+        pattern.addRelation(opt);
+
         processArg(opt, CopCond.POSITION_CONDITION, node.getCondition(), pattern);
         processArg(opt, CopCond.POSITION_THEN, node.getfirst(), pattern);
         processArg(opt, CopCond.POSITION_ELSE, node.getSecond(), pattern);
 
-        result.add(opt);
-        pattern.addRelation(opt);
         return result;
     }
 
@@ -559,11 +558,11 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
         result.add(opt);
+        pattern.addRelation(opt);
 
         processArg(opt, BinaryOp.POSITION_LHS, node.getLhs(), pattern);
         processArg(opt, BinaryOp.POSITION_RHS, node.getRhs(), pattern);
 
-        pattern.addRelation(opt);
         return result;
     }
 
@@ -575,11 +574,11 @@ public class PatternExtraction {
         List<Relation> relations = new LinkedList<>();
         ROpt opt = new ROpt(new CopInstof());
         relations.add(opt);
+        pattern.addRelation(opt);
 
         processArg(opt, CopInstof.POSITION_LHS, node.getExpression(), pattern);
         processArg(opt, CopInstof.POSITION_RHS, node.getInstanceofType(), pattern);
 
-        pattern.addRelation(opt);
         return relations;
     }
 
@@ -673,9 +672,10 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
         result.add(opt);
+        pattern.addRelation(opt);
+
         processArg(opt, BinaryOp.POSITION_LHS, node.getExpression(), pattern);
 
-        pattern.addRelation(opt);
         return result;
     }
 
@@ -687,8 +687,8 @@ public class PatternExtraction {
         List<Relation> result = new LinkedList<>();
         ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
         result.add(opt);
-        processArg(opt, BinaryOp.POSITION_RHS, node.getExpression(), pattern);
         pattern.addRelation(opt);
+        processArg(opt, BinaryOp.POSITION_RHS, node.getExpression(), pattern);
         return result;
     }
 
