@@ -293,6 +293,7 @@ public class JavaFile {
      * @return AST
      */
     public static ASTNode genASTFromSourceWithType(String icu, String jversion, int astLevel, int type, String filePath, String srcPath) {
+        if(icu == null || icu.isEmpty()) return null;
         ASTParser astParser = ASTParser.newParser(astLevel);
         Map<?, ?> options = JavaCore.getOptions();
         JavaCore.setComplianceOptions(jversion, options);
@@ -304,7 +305,11 @@ public class JavaFile {
         astParser.setEnvironment(getClassPath(), new String[] {srcPath}, null, true);
         astParser.setUnitName(filePath);
         astParser.setBindingsRecovery(true);
-        return astParser.createAST(null);
+        try{
+            return astParser.createAST(null);
+        }catch(Exception e) {
+            return null;
+        }
     }
 
     private static String[] getClassPath() {
