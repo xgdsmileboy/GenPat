@@ -479,6 +479,12 @@ public class PatternExtraction {
         // TODO : currently we do not consider anonymous class declaration
         result.add(mcall);
         pattern.addRelation(mcall);
+
+        int index = 1;
+        for(Expr expr : node.getArguments().getExpr()) {
+            processArg(mcall, index++, expr, pattern);
+        }
+
         return result;
     }
 
