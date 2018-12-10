@@ -5,11 +5,15 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse.relation;
+package mfix.core.parse.relation.op;
 
 /**
  * @author: Jiajun
- * @date: 2018/11/29
+ * @date: 2018/12/5
  */
-public class RRet extends Relation {
+public class LopOr extends BinaryOp {
+
+    public LopOr() {
+        super(Op.L_OR);
+    }
 }

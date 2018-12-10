@@ -7,55 +7,35 @@
 
 package mfix.core.parse.relation;
 
+import mfix.core.parse.relation.op.AbsOperation;
+
 /**
  * @author: Jiajun
- * @date: 2018/11/29
+ * @date: 2018/12/5
  */
-public class ROpt extends Relation {
-    enum Op{
-        // Arithmetic
-        A_PLUS("+"),
-        A_MINUS("-"),
-        A_TIMES("*"),
-        A_DIV("/"),
-        A_MOD("%"),
-        A_INC("++"),
-        A_DEC("--"),
+public class ROpt extends ObjRelation {
 
-        // Relational
-        R_EQ("=="),
-        R_NEQ("!="),
-        R_GT(">"),
-        R_LT("<"),
-        R_GE(">="),
-        R_LE("<="),
+    private AbsOperation _operation;
 
-        // Bitwise
-        B_AND("&"),
-        B_OR("|"),
-        B_XOR("^"),
-        B_COMPLIMENT("~"),
-        B_SHL("<<"),
-        B_SHR(">>"),
-        B_SSHR(">>>"),
-
-        // Logical
-        L_AND("&&"),
-        L_OR("||"),
-        L_NOT("!"),
-
-        //Conditional
-        C_COND(":?"),
-        C_INS("instanceof");
-
-        private String _value;
-        Op(String v) {_value = v;}
-
-        @Override
-        public String toString() {
-            return _value;
-        }
+    public ROpt(AbsOperation operation) {
+        super(RelationKind.OPERATION);
+        _operation = operation;
     }
-    private int _index;
-    private Op _op;
+
+    public void setOperation(AbsOperation operation) {
+        _operation = operation;
+    }
+
+    public AbsOperation getOperation() {
+        return _operation;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if(!super.match(relation)) {
+            return false;
+        }
+        ROpt opt = (ROpt) relation;
+        return _operation.match(opt.getOperation());
+    }
 }

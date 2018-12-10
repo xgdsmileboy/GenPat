@@ -45,10 +45,18 @@ public class AryAcc extends Expr implements Serializable {
 		_array = array;
 	}
 
+	public Expr getArray() {
+		return _array;
+	}
+
 	public void setIndex(Expr index) {
 		_index = index;
 	}
-	
+
+	public Expr getIndex() {
+		return _index;
+	}
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(2);

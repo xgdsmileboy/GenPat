@@ -261,7 +261,7 @@ public abstract class Node implements NodeComparator, Serializable {
 		return toSrcString().toString();
 	}
 	
-	public static enum TYPE{
+	public enum TYPE{
 		
 		METHDECL("MethodDeclaration"),
 		ARRACC("ArrayAccess"),
@@ -286,6 +286,7 @@ public abstract class Node implements NodeComparator, Serializable {
 		NULL("NullLiteral"),
 		NUMBER("NumberLiteral"),
 		PARENTHESISZED("ParenthesizedExpression"),
+		EXPRSTMT("ExpressionStatement"),
 		POSTEXPR("PostfixExpression"),
 		PREEXPR("PrefixExpression"),
 		QNAME("QualifiedName"),
@@ -324,6 +325,7 @@ public abstract class Node implements NodeComparator, Serializable {
 		PREFIXOPERATOR("PrefixExpression.Operator"),
 		ASSIGNOPERATOR("Assignment.Operator"),
 		TYPE("Type"),
+		EXPRLST("ExpressionList"),
 		UNKNOWN("Unknown");
 		
 		private String _name = null;

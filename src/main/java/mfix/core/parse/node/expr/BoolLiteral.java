@@ -41,6 +41,10 @@ public class BoolLiteral extends Expr implements Serializable {
 		_value = value;
 	}
 
+	public boolean getValue() {
+		return _value;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(String.valueOf(_value));

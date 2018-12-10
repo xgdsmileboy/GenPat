@@ -7,9 +7,31 @@
 
 package mfix.core.parse.relation;
 
+import mfix.core.parse.relation.struct.Structure;
+
 /**
  * @author: Jiajun
- * @date: 2018/11/29
+ * @date: 2018/12/5
  */
 public class RStruct extends Relation {
+
+    private Structure _structure;
+
+    public RStruct(Structure structure) {
+        super(RelationKind.STRUCTURE);
+        _structure = structure;
+    }
+
+    public Structure getStructure() {
+        return _structure;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if(!super.match(relation)) {
+            return false;
+        }
+        RStruct struct = (RStruct) relation;
+        return _structure.match(struct.getStructure());
+    }
 }

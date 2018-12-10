@@ -65,7 +65,13 @@ public class SuperConstructorInv extends Stmt implements Serializable {
 	public void setArguments(ExprList arguments){
 		_arguments = arguments;
 	}
-	
+
+	public Expr getExpression() { return _expression; }
+
+	public MType getSuperType() { return _superType; }
+
+	public ExprList getArgument() { return _arguments; }
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

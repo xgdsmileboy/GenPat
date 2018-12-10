@@ -12,9 +12,15 @@ import mfix.core.parse.node.MethDecl;
 import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.*;
 import mfix.core.parse.node.stmt.*;
-import mfix.core.parse.relation.Pattern;
-import mfix.core.parse.relation.Relation;
+import mfix.core.parse.relation.*;
+import mfix.core.parse.relation.op.BinaryOp;
+import mfix.core.parse.relation.op.CopCond;
+import mfix.core.parse.relation.op.CopInstof;
+import mfix.core.parse.relation.op.OpArrayAcc;
+import mfix.core.parse.relation.op.OperationFactory;
+import mfix.core.parse.relation.struct.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,433 +29,950 @@ import java.util.List;
  */
 public class PatternExtraction {
 
-    public static Pattern extract(Node node) {
+    private static PatternExtraction patternExtraction = new PatternExtraction();
+    private final List<Relation> emptyRelations = new LinkedList<>();
+    private PatternExtraction(){}
 
-
-        return null;
+    public static Pattern extract(Node oldNode, Node newNode) {
+        Pattern pattern = new Pattern();
+        pattern.setOldRelationFlag(true);
+        patternExtraction.process(oldNode, pattern);
+        pattern.setOldRelationFlag(false);
+        patternExtraction.process(newNode, pattern);
+        return pattern;
     }
 
-
-    public void visit(AnonymousClassDecl node, List<Relation> relations) {
-
+    private void processChild(RStruct structure, int index, Node node, Pattern pattern) {
+        if(node != null) {
+            List<Relation> children = process(node, pattern);
+            for(Relation r : children) {
+                RKid kid = new RKid(structure);
+                kid.setChild(r);
+                kid.setIndex(index);
+                pattern.addRelation(kid);
+            }
+        }
     }
 
-    public void visit(AssertStmt node, List<Relation> relations) {
-
+    private void processChild(RStruct structure, int index, List<Node> nodes, Pattern pattern) {
+        for(Node child : nodes) {
+            List<Relation> children = process(child, pattern);
+            for(Relation r : children) {
+                RKid kid = new RKid(structure);
+                kid.setChild(r);
+                kid.setIndex(index);
+                pattern.addRelation(kid);
+            }
+        }
     }
 
-    public void visit(Blk node, List<Relation> relations) {
+    private void processArg(ROpt operation, int index, Node node, Pattern pattern) {
+        List<Relation> children = process(node, pattern);
+        assert children.size() == 1;
+        RArg arg = new RArg(operation);
+        arg.setIndex(index);
+        arg.setArgument((ObjRelation) children.get(0));
+        pattern.addRelation(arg);
     }
 
-    public void visit(BreakStmt node, List<Relation> relations) {
+    private void processArg(RMcall mcall, int index, Node node, Pattern pattern) {
+        List<Relation> children = process(node, pattern);
+        assert children.size() == 1;
+        RArg arg = new RArg(mcall);
+        arg.setIndex(index);
+        arg.setArgument((ObjRelation) children.get(0));
+        pattern.addRelation(arg);
     }
 
-    public void visit(CatClause node, List<Relation> relations) {
+    public List<Relation> visit(AnonymousClassDecl node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(ConstructorInv node, List<Relation> relations) {
+    public List<Relation> visit(AssertStmt node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(ContinueStmt node, List<Relation> relations) {
+    public List<Relation> visit(Blk node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        for (Node child : node.getAllChildren()) {
+            result.addAll(process(child, pattern));
+        }
+        return result;
     }
 
-    public void visit(DoStmt node, List<Relation> relations) {
+    public List<Relation> visit(BreakStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSBreak());
+        result.add(struct);
+        pattern.addRelation(struct);
+        processChild(struct, 0, node.getAllChildren(), pattern);
+
+        return result;
     }
 
-    public void visit(EmptyStmt node, List<Relation> relations) {
+    public List<Relation> visit(CatClause node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSCatch());
+        result.add(struct);
+        pattern.addRelation(struct);
+        processChild(struct, 0, node.getAllChildren(), pattern);
+
+        return result;
     }
 
-    public void visit(EnhancedForStmt node, List<Relation> relations) {
+    public List<Relation> visit(ConstructorInv node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RMcall constructor = new RMcall(RMcall.MCallType.INIT_CALL);
+        constructor.setMethodName(node.getClassStr());
+        result.add(constructor);
+
+        int index = 1;
+        for(Relation r : process(node.getArguments(), pattern)) {
+            RArg arg = new RArg(constructor);
+            arg.setIndex(index ++);
+            arg.setArgument((ObjRelation) r);
+            pattern.addRelation(arg);
+        }
+
+        pattern.addRelation(constructor);
+        return result;
     }
 
-    public void visit(ExpressionStmt node, List<Relation> relations) {
+    public List<Relation> visit(ContinueStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSContinue());
+        result.add(struct);
+        pattern.addRelation(struct);
+        processChild(struct, 0, node.getAllChildren(), pattern);
+
+        return result;
     }
 
-    public void visit(ForStmt node, List<Relation> relations) {
+    public List<Relation> visit(DoStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSDo());
+        result.add(struct);
+        pattern.addRelation(struct);
+
+        processChild(struct, RSDo.POS_CHILD_COND, node.getExpression(), pattern);
+        processChild(struct, RSDo.POS_CHILD_BODY, node.getBody(), pattern);
+
+        return result;
     }
 
-    public void visit(IfStmt node, List<Relation> relations) {
+    public List<Relation> visit(EmptyStmt node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(LabeledStmt node, List<Relation> relations) {
+    public List<Relation> visit(EnhancedForStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSEnhancedFor());
+        result.add(struct);
+        pattern.addRelation(struct);
+
+        processChild(struct, RSEnhancedFor.POS_CHILD_PRAM, node.getParameter(), pattern);
+        processChild(struct, RSEnhancedFor.POS_CHILD_EXPR, node.getExpression(), pattern);
+        processChild(struct, RSEnhancedFor.POS_CHILD_BODY, node.getBody(), pattern);
+
+        return result;
     }
 
-    public void visit(ReturnStmt node, List<Relation> relations) {
+    public List<Relation> visit(ExpressionStmt node, Pattern pattern) {
+        return process(node.getExpression(), pattern);
     }
 
-    public void visit(Stmt node, List<Relation> relations) {
+    public List<Relation> visit(ForStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSFor());
+        result.add(struct);
+        pattern.addRelation(struct);
+
+        processChild(struct, RSFor.POS_CHILD_INIT, node.getInitializer(), pattern);
+        processChild(struct, RSFor.POS_CHILD_COND, node.getCondition(), pattern);
+        processChild(struct, RSFor.POS_CHILD_UPD, node.getUpdaters(), pattern);
+        processChild(struct, RSFor.POS_CHILD_BODY, node.getBody(), pattern);
+
+        return result;
     }
 
-    public void visit(SuperConstructorInv node, List<Relation> relations) {
+    public List<Relation> visit(IfStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSIf());
+        result.add(struct);
+        pattern.addRelation(struct);
+
+        processChild(struct, RSIf.POS_CHILD_COND, node.getCondition(), pattern);
+        processChild(struct, RSIf.POS_CHILD_THEN, node.getThen(), pattern);
+        processChild(struct, RSIf.POS_CHILD_ELSE, node.getElse(), pattern);
+
+        return result;
     }
 
-    public void visit(SwCase node, List<Relation> relations) {
+    public List<Relation> visit(LabeledStmt node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(SwitchStmt node, List<Relation> relations) {
+    public List<Relation> visit(ReturnStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSRet());
+        result.add(struct);
+        pattern.addRelation(struct);
+
+        processChild(struct, 0, node.getExpression(), pattern);
+
+        return result;
     }
 
-    public void visit(SynchronizedStmt node, List<Relation> relations) {
+    public List<Relation> visit(SuperConstructorInv node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RMcall mcall = new RMcall(RMcall.MCallType.SUPER_INIT_CALL);
+        result.add(mcall);
+        List<Relation> relations = process(node.getExpression(), pattern);
+        if(relations.size() > 0) mcall.setReciever((ObjRelation) relations.get(0));
+
+        relations = process(node.getArgument(), pattern);
+        int index = 1;
+        for(Relation r : relations) {
+            RArg arg = new RArg(mcall);
+            arg.setIndex(index ++);
+            arg.setArgument((ObjRelation) r);
+        }
+
+        pattern.addRelation(mcall);
+        return result;
     }
 
-    public void visit(ThrowStmt node, List<Relation> relations) {
+    public List<Relation> visit(SwCase node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        return result;
     }
 
-    public void visit(TryStmt node, List<Relation> relations) {
+    public List<Relation> visit(SwitchStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct ss = new RStruct(new RSwitchStmt());
+        result.add(ss);
+        pattern.addRelation(ss);
+
+        processChild(ss, RSwitchStmt.POS_CHILD_VAR, node.getExpression(), pattern);
+
+        RStruct swcase = null;
+        for(Stmt stmt : node.getStatements()) {
+            if(stmt instanceof  SwCase) {
+                SwCase ca = (SwCase) stmt;
+                swcase = new RStruct(new RSwCase());
+                pattern.addRelation(swcase);
+
+                processChild(swcase, RSwCase.POS_CHILD_CONST, ca.getExpression(), pattern);
+
+                RKid kid = new RKid(ss);
+                kid.setIndex(RSwitchStmt.POS_CHILD_CASE);
+                kid.setChild(swcase);
+                pattern.addRelation(kid);
+            } else {
+                List<Relation> relations = process(stmt, pattern);
+                for(Relation r : relations) {
+                    RKid kid = new RKid(swcase);
+                    kid.setChild(r);
+                    pattern.addRelation(kid);
+                }
+            }
+        }
+
+        return result;
     }
 
-    public void visit(TypeDeclarationStmt node, List<Relation> relations) {
+    public List<Relation> visit(SynchronizedStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSync());
+        result.add(struct);
+        pattern.addRelation(struct);
+
+        processChild(struct, RSync.POS_CHILD_RES, node.getExpression(), pattern);
+        processChild(struct, RSync.POS_CHILD_BODY, node.getBody(), pattern);
+
+        return result;
     }
 
-    public void visit(VarDeclarationStmt node, List<Relation> relations) {
+    public List<Relation> visit(ThrowStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSThrow());
+        result.add(struct);
+        pattern.addRelation(struct);
+        processChild(struct, 0, node.getExpression(), pattern);
+        return result;
     }
 
-    public void visit(WhileStmt node, List<Relation> relations) {
+    public List<Relation> visit(TryStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSTry());
+        result.add(struct);
+        pattern.addRelation(struct);
+
+        if(node.getResource() != null && !node.getResource().isEmpty()) {
+            for(VarDeclarationExpr expr : node.getResource()) {
+                processChild(struct, RSTry.POS_CHILD_RES, expr, pattern);
+            }
+        }
+        processChild(struct, RSTry.POS_CHILD_BODY, node.getBody(), pattern);
+        if(node.getCatches() != null) {
+            for (CatClause cc : node.getCatches()) {
+                processChild(struct, RSTry.POS_CHILD_CATCH, cc, pattern);
+            }
+        }
+        processChild(struct, RSTry.POS_CHILD_FINALLY, node.getFinally(), pattern);
+
+        return result;
     }
 
-    public void visit(MethDecl node, List<Relation> relations) {
+    public List<Relation> visit(TypeDeclarationStmt node, Pattern pattern) {
+        return emptyRelations;
+    }
+
+    public List<Relation> visit(VarDeclarationStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        for(Vdf vdf : node.getFragments()) {
+            RDef vardef = new RDef();
+            vardef.setModifiers(node.getModifier());
+            vardef.setName(vdf.getName());
+            String typeStr = node.getDeclType().typeStr();
+            for(int i = 0; i < vdf.getDimension(); i++) {
+                typeStr += "[]";
+            }
+            vardef.setTypeStr(typeStr);
+            if(vdf.getExpression() != null) {
+                List<Relation> relations = process(vdf.getExpression(), pattern);
+                if(!relations.isEmpty()) {
+                    vardef.setInitializer((ObjRelation) relations.get(0));
+                }
+            }
+            result.add(vardef);
+            pattern.addRelation(vardef);
+        }
+        return result;
+    }
+
+    public List<Relation> visit(WhileStmt node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSWhile());
+        result.add(struct);
+        pattern.addRelation(struct);
+        processChild(struct, RSWhile.POS_CHILD_COND, node.getExpression(), pattern);
+        processChild(struct, RSWhile.POS_CHILD_BODY, node.getBody(), pattern);
+        return result;
+    }
+
+    public List<Relation> visit(MethDecl node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RStruct struct = new RStruct(new RSMethod());
+        result.add(struct);
+        pattern.addRelation(struct);
+
+        for(Expr expr : node.getArguments()) {
+            processChild(struct, RSMethod.POS_CHILD_PARAM, expr, pattern);
+        }
+
+        processChild(struct, RSMethod.POS_CHILD_BODY, node.getBody(), pattern);
+
+        return result;
     }
 
     // expression bellow
-    public void visit(AryAcc node, List<Relation> relations) {
+    public List<Relation> visit(AryAcc node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        ROpt opt = new ROpt(new OpArrayAcc());
+        result.add(opt);
+        pattern.addRelation(opt);
+        processArg(opt, OpArrayAcc.POSITION_LHS, node.getArray(), pattern);
+        processArg(opt, OpArrayAcc.POSITION_RHS, node.getIndex(), pattern);
+        return result;
     }
 
-    public void visit(AryCreation node, List<Relation> relations) {
+    public List<Relation> visit(AryCreation node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RMcall mcall = new RMcall(RMcall.MCallType.NEW_ARRAY);
+        mcall.setMethodName(node.getElementType().typeStr());
+        result.add(mcall);
+        int index = 1;
+        for(Expr expr : node.getDimention()) {
+            processArg(mcall, index++, expr, pattern);
+        }
+        pattern.addRelation(mcall);
+        return result;
     }
 
-    public void visit(AryInitializer node, List<Relation> relations) {
+    //TODO: should parse array initializer
+    public List<Relation> visit(AryInitializer node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(Assign node, List<Relation> relations) {
+    public List<Relation> visit(Assign node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        String op = node.getOperator().getOperatorStr();
+        if(op.length() > 1) {
+            String computeOp = op.substring(0, op.length() - 1);
+            ROpt opt = new ROpt(OperationFactory.createOperation(computeOp));
+            pattern.addRelation(opt);
+
+            processArg(opt, BinaryOp.POSITION_LHS, node.getLhs(), pattern);
+            processArg(opt, BinaryOp.POSITION_RHS, node.getRhs(), pattern);
+
+            List<Relation> relations = process(node.getLhs(), pattern);
+            RAssign assign = new RAssign((ObjRelation) relations.get(0));
+            assign.setRhs(opt);
+            pattern.addRelation(assign);
+            result.add(assign);
+        } else {
+            List<Relation> relations = process(node.getLhs(), pattern);
+            RAssign assign = new RAssign((ObjRelation) relations.get(0));
+            relations = process(node.getRhs(), pattern);
+            assign.setRhs((ObjRelation) relations.get(0));
+            pattern.addRelation(assign);
+            result.add(assign);
+        }
+        return result;
     }
 
-    public void visit(AssignOperator node, List<Relation> relations) {
+    public List<Relation> visit(AssignOperator node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(BoolLiteral node, List<Relation> relations) {
+    public List<Relation> visit(BoolLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualDef = new RVDef();
+        virtualDef.setValue(node.getValue());
+        virtualDef.setTypeStr("boolean");
+        pattern.addRelation(virtualDef);
+        result.add(virtualDef);
+        return result;
     }
 
-    public void visit(CastExpr node, List<Relation> relations) {
+    public List<Relation> visit(CastExpr node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RMcall mcall = new RMcall(RMcall.MCallType.CAST);
+        mcall.setMethodName(node.getCastType().typeStr());
+        result.add(mcall);
+
+        processArg(mcall, 0, node.getExpresion(), pattern);
+        pattern.addRelation(mcall);
+
+        return result;
     }
 
-    public void visit(CharLiteral node, List<Relation> relations) {
+    public List<Relation> visit(CharLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualdef = new RVDef();
+        virtualdef.setTypeStr("char");
+        virtualdef.setName(node.getStringValue());
+        pattern.addRelation(virtualdef);
+        result.add(virtualdef);
+        return result;
     }
 
-    public void visit(ClassInstCreation node, List<Relation> relations) {
+    public List<Relation> visit(ClassInstCreation node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RMcall mcall = new RMcall(RMcall.MCallType.INIT_CALL);
+        if(node.getExpression() != null) {
+            List<Relation> relations = process(node.getExpression(), pattern);
+            mcall.setReciever((ObjRelation) relations.get(0));
+        }
+        mcall.setMethodName(node.getClassType().typeStr());
+        // TODO : currently we do not consider anonymous class declaration
+        result.add(mcall);
+        pattern.addRelation(mcall);
+
+        int index = 1;
+        for(Expr expr : node.getArguments().getExpr()) {
+            processArg(mcall, index++, expr, pattern);
+        }
+
+        return result;
     }
 
-    public void visit(Comment node, List<Relation> relations) {
+    public List<Relation> visit(Comment node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(ConditionalExpr node, List<Relation> relations) {
+    public List<Relation> visit(ConditionalExpr node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        ROpt opt = new ROpt(new CopCond());
+        result.add(opt);
+        pattern.addRelation(opt);
+
+        processArg(opt, CopCond.POSITION_CONDITION, node.getCondition(), pattern);
+        processArg(opt, CopCond.POSITION_THEN, node.getfirst(), pattern);
+        processArg(opt, CopCond.POSITION_ELSE, node.getSecond(), pattern);
+
+        return result;
     }
 
-    public void visit(CreationRef node, List<Relation> relations) {
+    public List<Relation> visit(CreationRef node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(DoubleLiteral node, List<Relation> relations) {
+    public List<Relation> visit(DoubleLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualDef = new RVDef();
+        virtualDef.setTypeStr("double");
+        virtualDef.setValue(node.getValue());
+        pattern.addRelation(virtualDef);
+        result.add(virtualDef);
+        return result;
     }
 
-    public void visit(Expr node, List<Relation> relations) {
+    public List<Relation> visit(ExpressionMethodRef node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(ExpressionMethodRef node, List<Relation> relations) {
+    public List<Relation> visit(ExprList node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        for(Expr expr : node.getExpr()) {
+            result.addAll(process(expr, pattern));
+        }
+        return result;
     }
 
-    public void visit(ExprList node, List<Relation> relations) {
+    public List<Relation> visit(FieldAcc node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        String name;
+        if(node.getExpression() != null) {
+            name = node.getExpression().toString() + "." + node.getIdentifier().getName();
+        } else {
+            name = "this." + node.getIdentifier().getName();
+        }
+        RDef virtualDef = pattern.getVarDefine(name);
+        if(virtualDef == null) {
+            virtualDef = new RVDef();
+            virtualDef.setName(name);
+            virtualDef.setTypeStr(node.getTypeString());
+            pattern.addRelation(virtualDef);
+        }
+        result.add(virtualDef);
+        return result;
     }
 
-    public void visit(FieldAcc node, List<Relation> relations) {
+    public List<Relation> visit(FloatLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualdef = new RVDef();
+        virtualdef.setTypeStr("float");
+        virtualdef.setValue(node.getValue());
+        pattern.addRelation(virtualdef);
+        result.add(virtualdef);
+        return result;
     }
 
-    public void visit(FloatLiteral node, List<Relation> relations) {
+    public List<Relation> visit(InfixExpr node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        result.add(opt);
+        pattern.addRelation(opt);
+
+        processArg(opt, BinaryOp.POSITION_LHS, node.getLhs(), pattern);
+        processArg(opt, BinaryOp.POSITION_RHS, node.getRhs(), pattern);
+
+        return result;
     }
 
-    public void visit(InfixExpr node, List<Relation> relations) {
+    public List<Relation> visit(InfixOperator node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(InfixOperator node, List<Relation> relations) {
+    public List<Relation> visit(InstanceofExpr node, Pattern pattern) {
+        List<Relation> relations = new LinkedList<>();
+        ROpt opt = new ROpt(new CopInstof());
+        relations.add(opt);
+        pattern.addRelation(opt);
+
+        processArg(opt, CopInstof.POSITION_LHS, node.getExpression(), pattern);
+        processArg(opt, CopInstof.POSITION_RHS, node.getInstanceofType(), pattern);
+
+        return relations;
     }
 
-    public void visit(InstanceofExpr node, List<Relation> relations) {
+    public List<Relation> visit(IntLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualdef = new RVDef();
+        virtualdef.setTypeStr("int");
+        virtualdef.setValue(node.getValue());
+        pattern.addRelation(virtualdef);
+        result.add(virtualdef);
+        return result;
     }
 
-    public void visit(IntLiteral node, List<Relation> relations) {
+    public List<Relation> visit(LambdaExpr node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(Label node, List<Relation> relations) {
+    public List<Relation> visit(LongLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualdef = new RVDef();
+        virtualdef.setTypeStr("long");
+        virtualdef.setValue(node.getValue());
+        pattern.addRelation(virtualdef);
+        result.add(virtualdef);
+        return result;
     }
 
-    public void visit(LambdaExpr node, List<Relation> relations) {
+    public List<Relation> visit(MethodInv node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RMcall mcall = new RMcall(RMcall.MCallType.NORM_MCALL);
+        List<Relation> relations = process(node.getExpression(), pattern);
+        if(relations.size() > 0) {
+            mcall.setReciever((ObjRelation) relations.get(0));
+        }
+        mcall.setMethodName(node.getName().getName());
+        int index = 1;
+        for(Expr expr : node.getArguments().getExpr()) {
+            processArg(mcall, index++, expr, pattern);
+        }
+        result.add(mcall);
+        pattern.addRelation(mcall);
+        return result;
     }
 
-    public void visit(LongLiteral node, List<Relation> relations) {
+    public List<Relation> visit(MethodRef node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(MethodInv node, List<Relation> relations) {
+    public List<Relation> visit(MType node, Pattern pattern) {
+        List<Relation> relations = new LinkedList<>();
+        RVDef def = new RVDef();
+        def.setValue(node.typeStr());
+        def.setTypeStr(node.typeStr());
+        pattern.addRelation(def);
+        relations.add(def);
+        return relations;
     }
 
-    public void visit(MethodRef node, List<Relation> relations) {
+    public List<Relation> visit(NillLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualdef = new RVDef();
+        virtualdef.setValue("null");
+        virtualdef.setTypeStr(null);
+        pattern.addRelation(virtualdef);
+        result.add(virtualdef);
+        return result;
     }
 
-    public void visit(MType node, List<Relation> relations) {
+    public List<Relation> visit(NumLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualdef = new RVDef();
+        // if failed to parse the value of a number
+        // set double type as default (0.0)
+        // this should not happen
+        virtualdef.setTypeStr("double");
+        virtualdef.setValue(0.0);
+        pattern.addRelation(virtualdef);
+        result.add(virtualdef);
+        return result;
     }
 
-    public void visit(NillLiteral node, List<Relation> relations) {
+    public List<Relation> visit(Operator node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(NumLiteral node, List<Relation> relations) {
+    public List<Relation> visit(ParenthesiszedExpr node, Pattern pattern) {
+        return process(node.getExpression(), pattern);
     }
 
-    public void visit(Operator node, List<Relation> relations) {
+    public List<Relation> visit(PostfixExpr node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        result.add(opt);
+        pattern.addRelation(opt);
 
+        processArg(opt, BinaryOp.POSITION_LHS, node.getExpression(), pattern);
+
+        return result;
     }
 
-    public void visit(ParenthesiszedExpr node, List<Relation> relations) {
+    public List<Relation> visit(PostOperator node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(PostfixExpr node, List<Relation> relations) {
+    public List<Relation> visit(PrefixExpr node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        result.add(opt);
+        pattern.addRelation(opt);
+        processArg(opt, BinaryOp.POSITION_RHS, node.getExpression(), pattern);
+        return result;
     }
 
-    public void visit(PostOperator node, List<Relation> relations) {
+    public List<Relation> visit(PrefixOperator node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(PrefixExpr node, List<Relation> relations) {
+    public List<Relation> visit(QName node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        //TODO : to improve
+        String name = node.toSrcString().toString();
+        RDef def = pattern.getVarDefine(name);
+        if(def == null) {
+            def = new RVDef();
+            def.setName(name);
+            def.setTypeStr(node.getTypeString());
+            pattern.addRelation(def);
+        }
+        result.add(def);
+        return result;
     }
 
-    public void visit(PrefixOperator node, List<Relation> relations) {
+    public List<Relation> visit(SName node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        String name = node.getName();
+        RDef def = pattern.getVarDefine(name);
+        if(def == null) {
+            def = new RVDef();
+            def.setName(name);
+            def.setTypeStr(node.getTypeString());
+            pattern.addRelation(def);
+        }
+        result.add(def);
+        return result;
     }
 
-    public void visit(QName node, List<Relation> relations) {
+    public List<Relation> visit(StrLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualdef = new RVDef();
+        virtualdef.setValue(node.getValue());
+        virtualdef.setTypeStr("String");
+        pattern.addRelation(virtualdef);
+        result.add(virtualdef);
+        return result;
     }
 
-    public void visit(SName node, List<Relation> relations) {
+    public List<Relation> visit(SuperFieldAcc node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        String name = "super." + node.getIdentifier();
+        RDef virtualDef = pattern.getVarDefine(name);
+        if(virtualDef == null) {
+            virtualDef = new RVDef();
+            virtualDef.setName(name);
+            virtualDef.setTypeStr(node.getTypeString());
+            pattern.addRelation(virtualDef);
+        }
+        result.add(virtualDef);
+        return result;
     }
 
-    public void visit(StrLiteral node, List<Relation> relations) {
+    public List<Relation> visit(SuperMethodInv node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RMcall mcall = new RMcall(RMcall.MCallType.SUPER_MCALL);
+        mcall.setMethodName(node.getMethodName().getName());
+        int index = 1;
+        for(Expr expr : node.getArguments().getExpr()) {
+            processArg(mcall, index++, expr, pattern);
+        }
+        pattern.addRelation(mcall);
+        result.add(mcall);
+        return result;
     }
 
-    public void visit(SuperFieldAcc node, List<Relation> relations) {
+    public List<Relation> visit(SuperMethodRef node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(SuperMethodInv node, List<Relation> relations) {
+    public List<Relation> visit(Svd node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RDef def = new RDef();
+        String typeStr = node.getDeclType().typeStr();
+        def.setTypeStr(typeStr);
+        def.setName(node.getName().getName());
+        if(node.getInitializer() != null) {
+            List<Relation> relations = process(node, pattern);
+            if(!relations.isEmpty()) {
+                def.setInitializer((ObjRelation) relations.get(0));
+            }
+        }
+        result.add(def);
+        pattern.addRelation(def);
+        return result;
     }
 
-    public void visit(SuperMethodRef node, List<Relation> relations) {
+    public List<Relation> visit(ThisExpr node, Pattern pattern) {
+        List<Relation> relations = new LinkedList<>();
+        RVDef def = new RVDef();
+        def.setName("this");
+        def.setTypeStr(node.getTypeString());
+        relations.add(def);
+        pattern.addRelation(def);
+        return relations;
     }
 
-    public void visit(Svd node, List<Relation> relations) {
+    public List<Relation> visit(TyLiteral node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+        RVDef virtualdef = new RVDef();
+        virtualdef.setTypeStr(node.getDeclType().typeStr());
+        virtualdef.setValue(node.getDeclType().typeStr());
+        pattern.addRelation(virtualdef);
+        result.add(virtualdef);
+        return result;
     }
 
-    public void visit(ThisExpr node, List<Relation> relations) {
+    public List<Relation> visit(TypeMethodRef node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(TyLiteral node, List<Relation> relations) {
+    public List<Relation> visit(VarDeclarationExpr node, Pattern pattern) {
+        List<Relation> result = new LinkedList<>();
+
+        String typeStr = node.getDeclType().typeStr();
+        for(Vdf vdf : node.getFragments()) {
+            RDef vardef = new RDef();
+            vardef.setName(vdf.getName());
+            for(int i = 0; i < vdf.getDimension(); i++) {
+                typeStr += "[]";
+            }
+            vardef.setTypeStr(typeStr);
+            if(vdf.getExpression() != null) {
+                List<Relation> relations = process(vdf.getExpression(), pattern);
+                if(!relations.isEmpty()) {
+                    vardef.setInitializer((ObjRelation) relations.get(0));
+                }
+            }
+            result.add(vardef);
+            pattern.addRelation(vardef);
+        }
+        return result;
     }
 
-    public void visit(TypeMethodRef node, List<Relation> relations) {
+    public List<Relation> visit(Vdf node, Pattern pattern) {
+        return emptyRelations;
     }
 
-    public void visit(VarDeclarationExpr node, List<Relation> relations) {
-    }
-
-    public void visit(Vdf node, List<Relation> relations) {
-    }
-
-
-    public void process(Node node, List<Relation> relations) {
+    public List<Relation> process(Node node, Pattern pattern) {
+        if(node == null) return emptyRelations;
         switch (node.getNodeType()) {
             case METHDECL:
-                visit((MethDecl) node, relations);
-                break;
+                return visit((MethDecl) node, pattern);
+            case EXPRLST:
+                return visit((ExprList) node, pattern);
             case ARRACC:
-                visit((AryAcc) node, relations);
-                break;
+                return visit((AryAcc) node, pattern);
             case ARRCREAT:
-                visit((AryCreation) node, relations);
-                break;
+                return visit((AryCreation) node, pattern);
             case ARRINIT:
-                visit((AryInitializer) node, relations);
-                break;
+                return visit((AryInitializer) node, pattern);
             case ASSIGN:
-                visit((Assign) node, relations);
-                break;
+                return visit((Assign) node, pattern);
             case BLITERAL:
-                visit((BoolLiteral) node, relations);
-                break;
+                return visit((BoolLiteral) node, pattern);
             case CAST:
-                visit((CastExpr) node, relations);
-                break;
+                return visit((CastExpr) node, pattern);
             case CLITERAL:
-                visit((CharLiteral) node, relations);
-                break;
+                return visit((CharLiteral) node, pattern);
             case CLASSCREATION:
-                visit((ClassInstCreation) node, relations);
-                break;
+                return visit((ClassInstCreation) node, pattern);
             case COMMENT:
-                visit((Comment) node, relations);
-                break;
+                return visit((Comment) node, pattern);
             case CONDEXPR:
-                visit((ConditionalExpr) node, relations);
-                break;
+                return visit((ConditionalExpr) node, pattern);
             case DLITERAL:
-                visit((DoubleLiteral) node, relations);
-                break;
+                return visit((DoubleLiteral) node, pattern);
             case FIELDACC:
-                visit((FieldAcc) node, relations);
-                break;
+                return visit((FieldAcc) node, pattern);
             case FLITERAL:
-                visit((FloatLiteral) node, relations);
-                break;
+                return visit((FloatLiteral) node, pattern);
             case INFIXEXPR:
-                visit((InfixExpr) node, relations);
-                break;
+                return visit((InfixExpr) node, pattern);
             case INSTANCEOF:
-                visit((InstanceofExpr) node, relations);
-                break;
+                return visit((InstanceofExpr) node, pattern);
             case INTLITERAL:
-                visit((IntLiteral) node, relations);
-                break;
-            case LABEL:
-                visit((Label) node, relations);
-                break;
+                return visit((IntLiteral) node, pattern);
             case LLITERAL:
-                visit((LongLiteral) node, relations);
-                break;
+                return visit((LongLiteral) node, pattern);
             case MINVOCATION:
-                visit((MethodInv) node, relations);
-                break;
+                return visit((MethodInv) node, pattern);
             case NULL:
-                visit((NillLiteral) node, relations);
-                break;
+                return visit((NillLiteral) node, pattern);
             case NUMBER:
-                visit((NumLiteral) node, relations);
-                break;
+                return visit((NumLiteral) node, pattern);
             case PARENTHESISZED:
-                visit((ParenthesiszedExpr) node, relations);
-                break;
+                return visit((ParenthesiszedExpr) node, pattern);
+            case EXPRSTMT:
+                return visit((ExpressionStmt) node, pattern);
             case POSTEXPR:
-                visit((PostfixExpr) node, relations);
-                break;
+                return visit((PostfixExpr) node, pattern);
             case PREEXPR:
-                visit((PrefixExpr) node, relations);
-                break;
+                return visit((PrefixExpr) node, pattern);
             case QNAME:
-                visit((QName) node, relations);
-                break;
+                return visit((QName) node, pattern);
             case SNAME:
-                visit((SName) node, relations);
-                break;
+                return visit((SName) node, pattern);
             case SLITERAL:
-                visit((StrLiteral) node, relations);
-                break;
+                return visit((StrLiteral) node, pattern);
             case SFIELDACC:
-                visit((SuperFieldAcc) node, relations);
-                break;
+                return visit((SuperFieldAcc) node, pattern);
             case SMINVOCATION:
-                visit((SuperMethodInv) node, relations);
-                break;
+                return visit((SuperMethodInv) node, pattern);
             case SINGLEVARDECL:
-                visit((Svd) node, relations);
-                break;
+                return visit((Svd) node, pattern);
             case THIS:
-                visit((ThisExpr) node, relations);
-                break;
+                return visit((ThisExpr) node, pattern);
             case TLITERAL:
-                visit((TyLiteral) node, relations);
-                break;
+                return visit((TyLiteral) node, pattern);
             case VARDECLEXPR:
-                visit((VarDeclarationExpr) node, relations);
-                break;
+                return visit((VarDeclarationExpr) node, pattern);
             case VARDECLFRAG:
-                visit((Vdf) node, relations);
-                break;
+                return visit((Vdf) node, pattern);
             case ANONYMOUSCDECL:
-                visit((AnonymousClassDecl) node, relations);
-                break;
+                return visit((AnonymousClassDecl) node, pattern);
             case ASSERT:
-                visit((AssertStmt) node, relations);
-                break;
+                return visit((AssertStmt) node, pattern);
             case BLOCK:
-                visit((Blk) node, relations);
-                break;
+                return visit((Blk) node, pattern);
             case BREACK:
-                visit((BreakStmt) node, relations);
-                break;
+                return visit((BreakStmt) node, pattern);
             case CONSTRUCTORINV:
-                visit((ConstructorInv) node, relations);
-                break;
+                return visit((ConstructorInv) node, pattern);
             case CONTINUE:
-                visit((ContinueStmt) node, relations);
-                break;
+                return visit((ContinueStmt) node, pattern);
             case DO:
-                visit((DoStmt) node, relations);
-                break;
+                return visit((DoStmt) node, pattern);
             case EFOR:
-                visit((EnhancedForStmt) node, relations);
-                break;
+                return visit((EnhancedForStmt) node, pattern);
             case FOR:
-                visit((ForStmt) node, relations);
-                break;
+                return visit((ForStmt) node, pattern);
             case IF:
-                visit((IfStmt) node, relations);
-                break;
+                return visit((IfStmt) node, pattern);
             case RETURN:
-                visit((ReturnStmt) node, relations);
-                break;
+                return visit((ReturnStmt) node, pattern);
             case SCONSTRUCTORINV:
-                visit((SuperConstructorInv) node, relations);
-                break;
+                return visit((SuperConstructorInv) node, pattern);
             case SWCASE:
-                visit((SwCase) node, relations);
-                break;
+                return visit((SwCase) node, pattern);
             case SWSTMT:
-                visit((SwitchStmt) node, relations);
-                break;
+                return visit((SwitchStmt) node, pattern);
             case SYNC:
-                visit((SynchronizedStmt) node, relations);
-                break;
+                return visit((SynchronizedStmt) node, pattern);
             case THROW:
-                visit((ThrowStmt) node, relations);
-                break;
+                return visit((ThrowStmt) node, pattern);
             case TRY:
-                visit((TryStmt) node, relations);
-                break;
+                return visit((TryStmt) node, pattern);
             case CATCHCLAUSE:
-                visit((CatClause) node, relations);
-                break;
+                return visit((CatClause) node, pattern);
             case TYPEDECL:
-                visit((TypeDeclarationStmt) node, relations);
-                break;
+                return visit((TypeDeclarationStmt) node, pattern);
             case VARDECLSTMT:
-                visit((VarDeclarationStmt) node, relations);
-                break;
+                return visit((VarDeclarationStmt) node, pattern);
             case WHILE:
-                visit((WhileStmt) node, relations);
-                break;
+                return visit((WhileStmt) node, pattern);
             case POSTOPERATOR:
-                visit((PostOperator) node, relations);
-                break;
+                return visit((PostOperator) node, pattern);
             case INFIXOPERATOR:
-                visit((InfixOperator) node, relations);
-                break;
+                return visit((InfixOperator) node, pattern);
             case PREFIXOPERATOR:
-                visit((PrefixOperator) node, relations);
-                break;
+                return visit((PrefixOperator) node, pattern);
             case ASSIGNOPERATOR:
-                visit((AssignOperator) node, relations);
-                break;
+                return visit((AssignOperator) node, pattern);
             case TYPE:
-                visit((MType) node, relations);
-                break;
+                return visit((MType) node, pattern);
             case UNKNOWN:
                 LevelLogger.warn("Found an unknown node type ! ");
-                break;
             default:
                 LevelLogger.fatal("Cannot parse node type ! ");
         }
-
-
+        return emptyRelations;
     }
 
 }

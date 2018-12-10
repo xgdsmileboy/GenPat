@@ -13,7 +13,6 @@ import mfix.core.comp.Update;
 import mfix.core.parse.NodeUtils;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.node.NodeVisitor;
 import mfix.core.parse.node.expr.Expr;
 import mfix.core.parse.node.expr.ExprList;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -63,7 +62,7 @@ public class ForStmt extends Stmt implements Serializable {
         _condition = condition;
     }
 
-    protected Expr getCondition() {
+    public Expr getCondition() {
         return _condition;
     }
 
@@ -71,7 +70,7 @@ public class ForStmt extends Stmt implements Serializable {
         _initializers = initializers;
     }
 
-    protected ExprList getInitializer() {
+    public ExprList getInitializer() {
         return _initializers;
     }
 
@@ -79,7 +78,7 @@ public class ForStmt extends Stmt implements Serializable {
         _updaters = updaters;
     }
 
-    protected ExprList getUpdaters() {
+    public ExprList getUpdaters() {
         return _updaters;
     }
 
@@ -87,7 +86,7 @@ public class ForStmt extends Stmt implements Serializable {
         _body = body;
     }
 
-    protected Stmt getBody() {
+    public Stmt getBody() {
         return _body;
     }
 

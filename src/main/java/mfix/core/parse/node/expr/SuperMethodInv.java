@@ -58,6 +58,14 @@ public class SuperMethodInv extends Expr implements Serializable {
 		_arguments = arguments;
 	}
 
+	public SName getMethodName() {
+		return _name;
+	}
+
+	public ExprList getArguments() {
+		return _arguments;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

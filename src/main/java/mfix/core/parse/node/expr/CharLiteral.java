@@ -46,6 +46,14 @@ public class CharLiteral extends Expr implements Serializable {
 				.replace("\0", "\\0");
 	}
 
+	public String getStringValue() {
+		return toString().toString();
+	}
+
+	public char getValue() {
+		return _value;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer("\'" + _valStr + "\'");

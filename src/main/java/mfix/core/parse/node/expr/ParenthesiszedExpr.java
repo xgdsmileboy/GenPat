@@ -42,6 +42,10 @@ public class ParenthesiszedExpr extends Expr implements Serializable {
 		_expression = expression;
 	}
 
+	public Expr getExpression() {
+		return _expression;
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
