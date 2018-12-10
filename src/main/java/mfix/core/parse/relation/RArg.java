@@ -30,4 +30,27 @@ public class RArg extends Relation {
         _arg = argument;
     }
 
+    public int getIndex() {
+        return _index;
+    }
+
+    public ObjRelation getFunctionRelation() {
+        return _function;
+    }
+
+    public ObjRelation getArgument() {
+        return _arg;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if (!super.match(relation)) {
+            return false;
+        }
+        RArg arg = (RArg) relation;
+        if (_index != arg.getIndex()) {
+            return false;
+        }
+        return _function.match(arg.getFunctionRelation());
+    }
 }

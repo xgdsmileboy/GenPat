@@ -31,4 +31,31 @@ public class RDatadep extends Relation {
         _useRelation = relation;
     }
 
+    public List<ObjRelation> getDependedRelations() {
+        return _valueDecideRelation;
+    }
+
+    public Relation getUseRelation() {
+        return _useRelation;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if(!super.match(relation)) {
+            return false;
+        }
+        RDatadep datadep = (RDatadep) relation;
+        List<ObjRelation> dependencies = datadep.getDependedRelations();
+        if(_valueDecideRelation.size() != dependencies.size()) {
+            return false;
+        }
+
+        for(int i = 0; i < _valueDecideRelation.size(); i++) {
+            if(!_valueDecideRelation.get(i).match(dependencies.get(i))) {
+                return false;
+            }
+        }
+
+        return _useRelation.match(datadep.getUseRelation());
+    }
 }

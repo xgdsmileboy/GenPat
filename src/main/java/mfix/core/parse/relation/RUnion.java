@@ -17,7 +17,8 @@ import java.util.List;
 public class RUnion extends ObjRelation {
 
     private String _varName;
-    private List<RAssign> _assigns = new LinkedList<RAssign>();
+    // the relation should be assignment or variable declaration
+    private List<Relation> _assigns = new LinkedList<>();
 
     public RUnion() {
         super(RelationKind.UNION);
@@ -27,7 +28,36 @@ public class RUnion extends ObjRelation {
         _varName = name;
     }
 
-    public void addAssignRelation(RAssign assign) {
+    public void addAssignRelation(Relation assign) {
         _assigns.add(assign);
+    }
+
+    public String getVarname() {
+        return _varName;
+    }
+
+    public List<Relation> getAssignVarValueRelations() {
+        return _assigns;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if (!super.match(relation)) {
+            return false;
+        }
+        RUnion union = (RUnion) relation;
+        if(!_varName.equals(union.getVarname())) {
+            return false;
+        }
+        List<Relation> relations = union.getAssignVarValueRelations();
+        if(_assigns.size() != relations.size()) {
+            return false;
+        }
+        for(int i = 0; i < _assigns.size(); i++) {
+            if(!_assigns.get(i).match(relations.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

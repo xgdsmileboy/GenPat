@@ -30,6 +30,38 @@ public class RMcall extends ObjRelation {
         _methodName = name;
     }
 
+    public MCallType getCallType() {
+        return _type;
+    }
+
+    public ObjRelation getReciever() {
+        return _reciever;
+    }
+
+    public String getMethodName() {
+        return _methodName;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if(!super.match(relation)) {
+            return false;
+        }
+        RMcall mcall = (RMcall) relation;
+        if(_type != mcall.getCallType()) {
+            return false;
+        }
+
+        if(!_methodName.equals(mcall.getMethodName())) {
+            return false;
+        }
+
+        if(_reciever == null) {
+            return mcall.getReciever() == null;
+        }
+        return _reciever.match(mcall.getReciever());
+    }
+
     public enum MCallType{
         NORM_MCALL,
         SUPER_MCALL,

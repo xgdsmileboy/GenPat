@@ -30,4 +30,29 @@ public class RKid extends Relation {
         _child = child;
     }
 
+    public RStruct getStructure() {
+        return _structure;
+    }
+
+    public int getIndex() {
+        return _index;
+    }
+
+    public Relation getChildRelation() {
+        return _child;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if(!super.match(relation)) {
+            return false;
+        }
+
+        RKid kid = (RKid) relation;
+        if(_index != kid.getIndex()) {
+            return false;
+        }
+
+        return _child.match(kid.getChildRelation());
+    }
 }

@@ -25,4 +25,17 @@ public class ROpt extends ObjRelation {
     public void setOperation(AbsOperation operation) {
         _operation = operation;
     }
+
+    public AbsOperation getOperation() {
+        return _operation;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if(!super.match(relation)) {
+            return false;
+        }
+        ROpt opt = (ROpt) relation;
+        return _operation.match(opt.getOperation());
+    }
 }

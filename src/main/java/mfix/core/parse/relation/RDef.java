@@ -42,7 +42,39 @@ public class RDef extends ObjRelation {
         _initializer = initializer;
     }
 
+    public String getModifiers() {
+        return _modifiers;
+    }
+
+    public String getTypeString() {
+        return _typeStr;
+    }
+
     public String getName() {
         return _name;
+    }
+
+    public ObjRelation getInitializer() {
+        return _initializer;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if (!super.match(relation)) {
+            return false;
+        }
+        RDef def = (RDef) relation;
+        if ((_modifiers == null && def.getModifiers() != null)
+                || !_modifiers.equals(def.getModifiers())
+                || !_typeStr.equals(def.getTypeString())
+                || !(_name.equals(def.getName()))) {
+            return false;
+        }
+
+        if(_initializer == null) {
+            return def.getInitializer() == null;
+        }
+
+        return _initializer.match(def.getInitializer());
     }
 }

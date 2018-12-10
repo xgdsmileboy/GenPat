@@ -34,4 +34,20 @@ public class RAssign extends Relation {
         _rhs = rhs;
     }
 
+    public ObjRelation getLhs() {
+        return _lhs;
+    }
+
+    public ObjRelation getRhs() {
+        return _rhs;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if(!super.match(relation)) {
+            return false;
+        }
+        RAssign assign = (RAssign) relation;
+        return _lhs.match(assign.getLhs()) && _rhs.match(assign.getRhs()) ;
+    }
 }

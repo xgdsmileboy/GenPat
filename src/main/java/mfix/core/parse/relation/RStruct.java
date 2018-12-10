@@ -21,4 +21,17 @@ public class RStruct extends Relation {
         super(RelationKind.STRUCTURE);
         _structure = structure;
     }
+
+    public Structure getStructure() {
+        return _structure;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if(!super.match(relation)) {
+            return false;
+        }
+        RStruct struct = (RStruct) relation;
+        return _structure.match(struct.getStructure());
+    }
 }

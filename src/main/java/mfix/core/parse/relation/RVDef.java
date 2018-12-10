@@ -22,4 +22,17 @@ public class RVDef extends RDef {
     public void setValue(Object value) {
         _value = value;
     }
+
+    public Object getValue() {
+        return _value;
+    }
+
+    @Override
+    public boolean match(Relation relation) {
+        if (!super.match(relation)) {
+            return false;
+        }
+        RVDef def = (RVDef) relation;
+        return _value.equals(def.getValue());
+    }
 }

@@ -21,6 +21,10 @@ public abstract class Structure {
         return _rskind;
     }
 
+    public boolean match(Structure structure) {
+        return _rskind == structure.rskind();
+    }
+
 
     public enum RSKind{
         RS_METHOD,

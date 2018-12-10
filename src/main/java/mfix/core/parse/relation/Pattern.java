@@ -89,4 +89,8 @@ public class Pattern implements Serializable {
         return _relationId++;
     }
 
+    public void minimize(int expandLevel) {
+
+    }
+
 }

@@ -19,6 +19,13 @@ public abstract class AbsOperation {
         _operator = operator;
     }
 
+    public Op getOperator() {
+        return _operator;
+    }
+
+    public boolean match(AbsOperation operation) {
+        return _operator == operation.getOperator();
+    }
 
     public enum Op{
         // Arithmetic

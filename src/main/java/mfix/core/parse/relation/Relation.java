@@ -27,6 +27,13 @@ public abstract class Relation {
         return _relationKind;
     }
 
+    public boolean match(Relation relation) {
+        if(relation == null || relation.getRelationKind() != _relationKind) {
+            return false;
+        }
+        return true;
+    }
+
     public enum RelationKind{
         ARGUMENT,
         OPERATION,
