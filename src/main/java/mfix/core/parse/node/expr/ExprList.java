@@ -34,6 +34,7 @@ public class ExprList extends Node implements Serializable {
 	
 	public ExprList(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
+		_nodeType = TYPE.EXPRLST;
 	}
 	
 	public void setExprs(List<Expr> exprs) {

@@ -28,13 +28,14 @@ public abstract class Expr extends Node implements Serializable {
 
 	protected Expr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node, null);
-		_exprTypeStr = node.toString();
 	}
 	
 	public void setType(Type exprType){
 		_exprType = exprType;
 		if (exprType == null) {
 			_exprTypeStr = "?";
+		} else {
+			_exprTypeStr = exprType.toString();
 		}
 	}
 	
