@@ -43,6 +43,12 @@ public class AnalyzerTest extends TestCase {
 
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
 
+        // Create a new table for test.
+        DatabaseConnector connector = new DatabaseConnector();
+        connector.setAsTestMode();
+        connector.open();
+        connector.createTable();
+
         Analyzer nodeAnalyzer = Analyzer.getInstance();
 
         MethodDeclCollector methodDeclCollector = new MethodDeclCollector();
@@ -54,21 +60,37 @@ public class AnalyzerTest extends TestCase {
 
         for(MethodDeclaration method: srcMethods) {
             nodePaser.setCompilationUnit(srcFile, srcUnit);
+            nodeAnalyzer.setFileName(srcFile);
             nodeAnalyzer.analyze(nodePaser.process(method));
         }
-        
-        Assert.assertTrue(nodeAnalyzer.getElementFrequency(new Element("currentThread")) == 10);
-        Assert.assertTrue(nodeAnalyzer.getElementFrequency(new Element("path")) == 5);
+        nodeAnalyzer.finish();
 
-        TypedElement element1 = new TypedElement("path", "org.apache.tools.ant.Path");
-        Assert.assertTrue(nodeAnalyzer.getTypedElementFrequency(element1) == 1);
-        Assert.assertTrue(nodeAnalyzer.getElementFrequency(element1) == 5);
+        ElementCounter counter = new ElementCounter();
+        counter.open();
 
-        TypedElement element2 = new TypedElement("path", "java.lang.StringBuffer");
-        Assert.assertTrue(nodeAnalyzer.getTypedElementFrequency(element2) == 4);
+        Element elementA = new Element("path", "org.apache.tools.ant.Path");
 
-        TypedElement element3 = new TypedElement("noThisMethod", "java.lang.StringBuffer");
-        Assert.assertTrue(nodeAnalyzer.getElementFrequency(element3) == 0);
-        Assert.assertTrue(nodeAnalyzer.getTypedElementFrequency(element3) == 0);
+        QueryElement queryElementA1 = new QueryElement(elementA, true, QueryElement.QueryType.ALL);
+        Assert.assertTrue(counter.count(queryElementA1) == 1);
+
+        QueryElement queryElementA2 = new QueryElement(elementA, false, QueryElement.QueryType.ALL);
+        Assert.assertTrue(counter.count(queryElementA2) == 5);
+
+        Element elementB = new Element("path", "java.lang.StringBuffer");
+        QueryElement queryElementB1 = new QueryElement(elementB, true, QueryElement.QueryType.ALL);
+        Assert.assertTrue(counter.count(queryElementB1) == 4);
+
+        Element elementC = new Element("noThisMethod", "java.lang.StringBuffer");
+        QueryElement queryElementC1 = new QueryElement(elementC, true, QueryElement.QueryType.ALL);
+        QueryElement queryElementC2 = new QueryElement(elementC, false, QueryElement.QueryType.ALL);
+
+        Assert.assertTrue(counter.count(queryElementC1) == 0);
+        Assert.assertTrue(counter.count(queryElementC2) == 0);
+
+        counter.close();
+
+        // Drop the new table for test.
+        connector.dropTable();
+        connector.close();
     }
 }
