@@ -28,6 +28,10 @@ public class Pattern implements Serializable {
      */
     private transient boolean _isOldRelation = true;
     /**
+     * A flag to record whether the pattern has been minimized
+     */
+    public boolean _minimized = false;
+    /**
      * Record the variables defined in the old relations,
      * including real variable definitions and virtual
      * variables (such fields).
@@ -134,8 +138,12 @@ public class Pattern implements Serializable {
      * relations according to the given relation expansion scope.
      * @param expandLevel : denotes how many levels should be expanded
      */
-    public void minimize(int expandLevel) {
-        Map<Integer, Integer> old2newRlationMap = new HashMap<>();
+    public Pattern minimize(int expandLevel) {
+        if(_minimized) return this;
+        _minimized = true;
+        //TODO : to replace the following process with SAT process
+        Map<Integer, Integer> old2newRelationMap = new HashMap<>();
+        Map<Integer, Integer> new2oldRlationMap = new HashMap<>();
         for(int row = 0; row < _oldRelations.size(); row ++) {
             int preMatchColumn = -1;
             for(int column = 0; column < _newRelations.size(); column++) {
@@ -143,49 +151,71 @@ public class Pattern implements Serializable {
                     // this row is already match some column before
                     if(preMatchColumn != -1) {
                         // remove the matched column and select a best matching column
-                        old2newRlationMap.remove(preMatchColumn);
+                        new2oldRlationMap.remove(preMatchColumn);
                         preMatchColumn = processColumnConflict(row, preMatchColumn, column);
                     } else {
                         preMatchColumn = column;
                     }
                     // find the best matching column, otherwise, no match for current row
-                    if(preMatchColumn > 0) {
+                    if(preMatchColumn >= 0) {
                         // check whether the selected column is matched by any previous row
-                        Integer preMatchedRow = old2newRlationMap.get(preMatchColumn);
+                        Integer preMatchedRow = new2oldRlationMap.get(preMatchColumn);
                         if(preMatchedRow != null) {
                             // if matched, first remove the match relation
                             // then find a proper match for the column
-                            old2newRlationMap.remove(preMatchColumn);
+                            new2oldRlationMap.remove(preMatchColumn);
                             int selectedRow = processRowConfilict(preMatchColumn, preMatchedRow, row);
-                            if(selectedRow > 0) {
+                            if(selectedRow >= 0) {
                                 // find the best match row, re-map the matching relation.
-                                old2newRlationMap.put(preMatchColumn, selectedRow);
+                                new2oldRlationMap.put(preMatchColumn, selectedRow);
                             }
                         } else {
                             // the column is not matched by previous rows
                             // match the current row with the selected column (no conflict)
-                            old2newRlationMap.put(preMatchColumn, row);
+                            new2oldRlationMap.put(preMatchColumn, row);
                         }
                     }
                 }
             }
         }
         // label all matched relations.
-        for(Map.Entry<Integer, Integer> entry : old2newRlationMap.entrySet()) {
-            _oldRelations.get(entry.getKey()).setMatched(true);
-            _newRelations.get(entry.getValue()).setMatched(true);
+        for(Map.Entry<Integer, Integer> entry : new2oldRlationMap.entrySet()) {
+            _newRelations.get(entry.getKey()).setMatched(true);
+            _oldRelations.get(entry.getValue()).setMatched(true);
         }
+        return this;
+    }
 
+    public List<Relation> getMinimizedOldRelations() {
+        if(!_minimized) minimize(0);
+        List<Relation> relations = new LinkedList<>();
+        for(Relation r : _oldRelations) {
+            if(!r.isMatched()) {
+                relations.add(r);
+            }
+        }
+        return relations;
+    }
+
+    public List<Relation> getMinimizedNewRelations() {
+        if(!_minimized) minimize(0);
+        List<Relation> relations = new LinkedList<>();
+        for(Relation r : _newRelations) {
+            if(!r.isMatched()) {
+                relations.add(r);
+            }
+        }
+        return relations;
     }
 
     private int processColumnConflict(int row, int column1, int column2) {
         // TODO
-        return 0;
+        return column2;
     }
 
     private int processRowConfilict(int column, int row1, int row2) {
         // TODO
-        return 0;
+        return row1;
     }
 
     private Set<Integer> obtainOnes(int[] vector) {

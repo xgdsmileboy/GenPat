@@ -7,6 +7,8 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Utils;
+
 /**
  * @author: Jiajun
  * @date: 2018/11/29
@@ -73,12 +75,16 @@ public class RMcall extends ObjRelation {
             return false;
         }
 
-        if(!_methodName.equals(mcall.getMethodName())) {
+        if(!Utils.safeStringEqual(_methodName, mcall.getMethodName())) {
             return false;
         }
 
         if(_receiver == null) {
-            return mcall.getReciever() == null;
+            if (mcall.getReciever() != null) {
+                return false;
+            } else {
+                return true;
+            }
         }
         return _receiver.match(mcall.getReciever());
     }
