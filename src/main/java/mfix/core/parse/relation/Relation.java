@@ -30,10 +30,11 @@ public abstract class Relation {
     protected Relation _parent;
 
     /**
-     * Label a relation changed after the repair,
-     * which is the core of the pattern if true.
+     * Label whether a relation is matched before
+     * and after repair, initially all relations are
+     * not matched.
      */
-    private boolean _isMinimized = false;
+    private boolean _matched = false;
 
     protected Relation(RelationKind kind) {
         _relationKind = kind;
@@ -43,12 +44,12 @@ public abstract class Relation {
         return _relationKind;
     }
 
-    public void setIsminimized() {
-        _isMinimized = true;
+    public void setMatched(boolean matched) {
+        _matched = matched;
     }
 
-    public boolean isMinimized() {
-        return _isMinimized;
+    public boolean isMatched() {
+        return _matched;
     }
 
     /**
