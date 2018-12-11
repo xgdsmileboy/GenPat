@@ -9,9 +9,11 @@ package mfix.core.parse.relation;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -133,7 +135,68 @@ public class Pattern implements Serializable {
      * @param expandLevel : denotes how many levels should be expanded
      */
     public void minimize(int expandLevel) {
+        Map<Integer, Integer> old2newRlationMap = new HashMap<>();
+        for(int row = 0; row < _oldRelations.size(); row ++) {
+            int preMatchColumn = -1;
+            for(int column = 0; column < _newRelations.size(); column++) {
+                if(_oldRelations.get(row).match(_newRelations.get(column))) {
+                    // this row is already match some column before
+                    if(preMatchColumn != -1) {
+                        // remove the matched column and select a best matching column
+                        old2newRlationMap.remove(preMatchColumn);
+                        preMatchColumn = processColumnConflict(row, preMatchColumn, column);
+                    } else {
+                        preMatchColumn = column;
+                    }
+                    // find the best matching column, otherwise, no match for current row
+                    if(preMatchColumn > 0) {
+                        // check whether the selected column is matched by any previous row
+                        Integer preMatchedRow = old2newRlationMap.get(preMatchColumn);
+                        if(preMatchedRow != null) {
+                            // if matched, first remove the match relation
+                            // then find a proper match for the column
+                            old2newRlationMap.remove(preMatchColumn);
+                            int selectedRow = processRowConfilict(preMatchColumn, preMatchedRow, row);
+                            if(selectedRow > 0) {
+                                // find the best match row, re-map the matching relation.
+                                old2newRlationMap.put(preMatchColumn, selectedRow);
+                            }
+                        } else {
+                            // the column is not matched by previous rows
+                            // match the current row with the selected column (no conflict)
+                            old2newRlationMap.put(preMatchColumn, row);
+                        }
+                    }
+                }
+            }
+        }
+        // label all matched relations.
+        for(Map.Entry<Integer, Integer> entry : old2newRlationMap.entrySet()) {
+            _oldRelations.get(entry.getKey()).setMatched(true);
+            _newRelations.get(entry.getValue()).setMatched(true);
+        }
 
     }
+
+    private int processColumnConflict(int row, int column1, int column2) {
+        // TODO
+        return 0;
+    }
+
+    private int processRowConfilict(int column, int row1, int row2) {
+        // TODO
+        return 0;
+    }
+
+    private Set<Integer> obtainOnes(int[] vector) {
+        Set<Integer> set = new HashSet<>();
+        for(int i = 0; i < vector.length; i++) {
+            if(vector[i] == 1) {
+                set.add(i);
+            }
+        }
+        return set;
+    }
+
 
 }
