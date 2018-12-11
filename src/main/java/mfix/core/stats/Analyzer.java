@@ -13,33 +13,35 @@ import java.util.Set;
  */
 public class Analyzer {
     private static Analyzer _instance;
-    private CompilationUnit _cunit;
     private String _fileName;
-    private ElementCounter _elementCounter = new ElementCounter<Element>();
-    private ElementCounter _typedElementCounter = new ElementCounter<TypedElement>();
+    private ElementCounter _elementCounter = null;
 
     public static Analyzer getInstance() {
         if (_instance == null) {
             _instance = new Analyzer();
+            _instance.open();
         }
         return _instance;
     }
 
+    public void open() {
+        _elementCounter = new ElementCounter();
+        _elementCounter.open();
+    }
+
+    public void finish() {
+        _elementCounter.close();
+    }
+
     public void analyze(Node curNode) {
         if (curNode instanceof MethodInv) {
-            // System.out.println("code=" + curNode.toString());
-            // System.out.println(curNode.getCalledMethods().toString());
-            // System.out.println(curNode.getAllVars().toString());
-
             for (Set<Node> methodSet : curNode.getCalledMethods().values()) {
                 for (Node method : methodSet) {
-                    _elementCounter.add(new Element(method.toString()));
-                    _typedElementCounter.add(new TypedElement(method.toString(), method.getNodeType()));
+                    _elementCounter.add(new Element(method));
                 }
             }
             for (SName var : curNode.getAllVars()) {
-                _elementCounter.add(new Element(var.getName()));
-                _typedElementCounter.add(new TypedElement(var));
+                _elementCounter.add(new Element(var));
             }
         }
         for (Node child : curNode.getAllChildren()) {
@@ -47,12 +49,7 @@ public class Analyzer {
         }
     }
 
-    public Integer getElementFrequency(Element element) {
-        return _elementCounter.count(element);
+    public void setFileName(String fileName) {
+        _fileName = fileName;
     }
-
-    public Integer getTypedElementFrequency(TypedElement element) {
-        return _typedElementCounter.count(element);
-    }
-
 }

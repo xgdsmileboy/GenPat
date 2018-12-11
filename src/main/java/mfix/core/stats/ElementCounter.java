@@ -1,32 +1,51 @@
 package mfix.core.stats;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author: Luyao Ren
  * @date: 2018/12/09
  */
-public class ElementCounter<T> {
-    private HashMap<T, Integer> _counter;
+public class ElementCounter {
+    private DatabaseConnector _connector = null;
 
-    public ElementCounter() {
-        _counter = new HashMap<T, Integer>();
+    public void open() {
+        _connector = new DatabaseConnector();
+        _connector.open();
     }
 
-    public Integer count(T element) {
-        return _counter.getOrDefault(element, 0);
+    public void close() {
+        _connector.close();
     }
 
-    @Override
-    public String toString(){
-        return _counter.toString();
-    }
+    private Map<String, String> elementToRow(Element element) {
+        Map<String, String> KeyToValue = new HashMap<String, String>();
 
-    public void add(T element) {
-        if (!_counter.containsKey(element)) {
-            _counter.put(element, 0);
+        KeyToValue.put("elementName", element._name);
+        KeyToValue.put("typeName", element._type);
+        KeyToValue.put("sourceFile", element._sourceFile);
+
+        if (element instanceof QueryElement){
+            if (!((QueryElement) element)._withType) {
+                KeyToValue.remove("typeName");
+            }
+            if (((QueryElement) element)._queryType != QueryElement.QueryType.IN_FILE) {
+                KeyToValue.remove("sourceFile");
+            }
+            if (((QueryElement) element)._queryType == QueryElement.QueryType.COUNT_FILES) {
+                KeyToValue.put("countElement", "sourceFile");
+            }
         }
-        Integer oldValue = _counter.get(element);
-        _counter.put(element, oldValue + 1);
+
+        return KeyToValue;
+    }
+
+    public void add(Element element) {
+        _connector.add(elementToRow(element));
+    }
+
+    public Integer count(QueryElement element) {
+        return _connector.query(elementToRow(element));
     }
 }
