@@ -56,4 +56,9 @@ public class RAssign extends Relation {
         RAssign assign = (RAssign) relation;
         return _lhs.match(assign.getLhs()) && _rhs.match(assign.getRhs()) ;
     }
+
+    @Override
+    public String toString() {
+        return _lhs.toString() + "=" + _rhs.toString();
+    }
 }

@@ -61,7 +61,7 @@ public abstract class AbsOperation {
 
         //Conditional
         C_COND("?:"),
-        C_INSTOF(" instanceof "),
+        C_INSTOF("instanceof"),
 
         //array access
         ARRY_ACC("[]");
@@ -77,12 +77,6 @@ public abstract class AbsOperation {
 
     @Override
     public String toString() {
-        if(_operator == Op.C_COND) {
-            return "%s?%s:%s";
-        } else if(_operator == Op.ARRY_ACC) {
-            return "%s[%s]";
-        } else {
-            return "%s" + _operator.toString() + "%s";
-        }
+        return _operator.toString();
     }
 }

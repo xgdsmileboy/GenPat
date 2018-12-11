@@ -38,4 +38,13 @@ public class RVDef extends RDef {
         RVDef def = (RVDef) relation;
         return _value.equals(def.getValue());
     }
+
+    @Override
+    public String toString() {
+        if(_value != null) {
+            return _value.toString();
+        } else {
+            return super.toString();
+        }
+    }
 }

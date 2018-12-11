@@ -37,4 +37,9 @@ public class RStruct extends Relation {
         RStruct struct = (RStruct) relation;
         return _structure.match(struct.getStructure());
     }
+
+    @Override
+    public String toString() {
+        return _structure.toString();
+    }
 }

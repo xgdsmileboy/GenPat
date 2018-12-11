@@ -91,4 +91,20 @@ public class RDef extends ObjRelation {
 
         return _initializer.match(def.getInitializer());
     }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer("[");
+        if(_modifiers != null) {
+            buffer.append(_modifiers + " ");
+        }
+        buffer.append(_typeStr + " ");
+        buffer.append(_name);
+        if(_initializer != null) {
+            buffer.append("=");
+            buffer.append(_initializer.toString());
+        }
+        buffer.append("]");
+        return buffer.toString();
+    }
 }

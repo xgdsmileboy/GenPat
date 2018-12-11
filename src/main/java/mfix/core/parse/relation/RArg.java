@@ -62,4 +62,9 @@ public class RArg extends Relation {
         }
         return _function.match(arg.getFunctionRelation());
     }
+
+    @Override
+    public String toString() {
+        return "[" + _function.toString() + ", " + _index + ", " + _arg + "]";
+    }
 }
