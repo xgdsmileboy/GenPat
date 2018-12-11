@@ -58,15 +58,20 @@ public class RKid extends Relation {
 
     @Override
     public boolean match(Relation relation) {
-        if(!super.match(relation)) {
+        if (!super.match(relation)) {
             return false;
         }
 
         RKid kid = (RKid) relation;
-        if(_index != kid.getIndex()) {
+        if (_index != kid.getIndex()) {
             return false;
         }
 
         return _child.match(kid.getChildRelation());
+    }
+
+    @Override
+    public String toString() {
+        return "<" + _structure.toString() + ", " +  _index + ". " + _child.toString() + ">";
     }
 }

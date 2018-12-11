@@ -41,4 +41,9 @@ public class ROpt extends ObjRelation {
         ROpt opt = (ROpt) relation;
         return _operation.match(opt.getOperation());
     }
+
+    @Override
+    public String toString() {
+        return _operation.toString();
+    }
 }

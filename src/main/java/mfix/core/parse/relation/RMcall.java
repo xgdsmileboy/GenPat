@@ -91,4 +91,45 @@ public class RMcall extends ObjRelation {
         NEW_ARRAY,
         CAST,
     }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer("[");
+        if(_receiver != null) {
+            buffer.append(_receiver.toString() + ".");
+        }
+        switch(_type) {
+            case NORM_MCALL:
+                buffer.append(_methodName);
+                buffer.append("()");
+                break;
+            case SUPER_MCALL:
+                buffer.append("super.");
+                buffer.append(_methodName);
+                buffer.append("()");
+                break;
+            case SUPER_INIT_CALL:
+                buffer.append("super");
+                buffer.append("()");
+                break;
+            case INIT_CALL:
+                buffer.append("new ");
+                buffer.append(_methodName);
+                buffer.append("()");
+                break;
+            case NEW_ARRAY:
+                buffer.append("new ");
+                buffer.append(_methodName);
+                buffer.append("[]");
+                break;
+            case CAST:
+                buffer.append("(");
+                buffer.append(_methodName);
+                buffer.append(")");
+                buffer.append("()");
+            default:
+        }
+        buffer.append("]");
+        return buffer.toString();
+    }
 }
