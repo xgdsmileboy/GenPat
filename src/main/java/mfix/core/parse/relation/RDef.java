@@ -13,9 +13,23 @@ package mfix.core.parse.relation;
  */
 public class RDef extends ObjRelation {
 
+    /**
+     * modifiers of the defined variables
+     */
     private String _modifiers;
+    /**
+     * {@code java.lang.String} format of variable type
+     */
     private String _typeStr;
+    /**
+     * variable names
+     * NOTE: this can be null if it is a constant value
+     * (virtual variable definition)
+     */
     private String _name;
+    /**
+     * The initializer of the variable definition
+     */
     private ObjRelation _initializer;
 
     public RDef() {

@@ -13,6 +13,9 @@ package mfix.core.parse.relation;
  */
 public class RVDef extends RDef {
 
+    /**
+     * value of a constant
+     */
     private Object _value;
 
     public RVDef() {

@@ -15,6 +15,9 @@ import mfix.core.parse.relation.struct.Structure;
  */
 public class RStruct extends Relation {
 
+    /**
+     * structure type
+     */
     private Structure _structure;
 
     public RStruct(Structure structure) {
