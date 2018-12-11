@@ -36,6 +36,9 @@ public class RVDef extends RDef {
             return false;
         }
         RVDef def = (RVDef) relation;
+        if(_value == null) {
+            return def.getValue() == null;
+        }
         return _value.equals(def.getValue());
     }
 

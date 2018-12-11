@@ -734,7 +734,7 @@ public class PatternExtraction {
     public List<Relation> visit(StrLiteral node, Pattern pattern) {
         List<Relation> result = new LinkedList<>();
         RVDef virtualdef = new RVDef();
-        virtualdef.setValue(node.getValue());
+        virtualdef.setValue(node.toSrcString().toString());
         virtualdef.setTypeStr("String");
         pattern.addRelation(virtualdef);
         result.add(virtualdef);

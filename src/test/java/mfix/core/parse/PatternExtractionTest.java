@@ -96,4 +96,35 @@ public class PatternExtractionTest extends TestCase {
 
     }
 
+    @Test
+    public void test_minimization() {
+        String srcFile = testbase + Constant.SEP + "src_Project.java";
+        String tarFile = testbase + Constant.SEP + "tar_Project.java";
+
+        CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
+        CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        NodeParser nodeParser = NodeParser.getInstance();
+        for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+            if(pair.getFirst().getName().getIdentifier().equals("setProjectReference")) {
+            System.out.println("\n" + pair.getFirst().getName().getIdentifier() + "======");
+                nodeParser.setCompilationUnit(srcFile, srcUnit);
+                Node srcNode = nodeParser.process(pair.getFirst());
+                nodeParser.setCompilationUnit(tarFile, tarUnit);
+                Node tarNode = nodeParser.process(pair.getSecond());
+                Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
+                List<Relation> relations = pattern.minimize(1).getMinimizedOldRelations();
+                System.out.println("BEFORE : ");
+                System.out.println(relations);
+
+                relations = pattern.minimize(1).getMinimizedNewRelations();
+                System.out.println("AFTER : ");
+                System.out.println(relations);
+
+//                break;
+            }
+        }
+
+    }
+
 }
