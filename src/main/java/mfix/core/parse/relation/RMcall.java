@@ -13,8 +13,29 @@ package mfix.core.parse.relation;
  */
 public class RMcall extends ObjRelation {
 
+    /**
+     * This field is to distinguish different
+     * kinds of "method calls",
+     *
+     * In the current model, the method call contains
+     * normal method invocation, super method invocation,
+     * class instance creation, case expression, ... etc.
+     */
     private MCallType _type;
-    private ObjRelation _reciever;
+    /**
+     * The receiver object of the method call
+     */
+    private ObjRelation _receiver;
+    /**
+     * Name of the method call
+     * possible values:
+     *  normal method invocation : method name
+     *  class instance creation : class name
+     *  super method invocation : method name
+     *  super constructor invocation : null
+     *  array creation : array element type
+     *  cast expression : case type
+     */
     private String _methodName;
 
     public RMcall(MCallType type) {
@@ -23,7 +44,7 @@ public class RMcall extends ObjRelation {
     }
 
     public void setReciever(ObjRelation reciever) {
-        _reciever = reciever;
+        _receiver = reciever;
     }
 
     public void setMethodName(String name) {
@@ -35,7 +56,7 @@ public class RMcall extends ObjRelation {
     }
 
     public ObjRelation getReciever() {
-        return _reciever;
+        return _receiver;
     }
 
     public String getMethodName() {
@@ -56,10 +77,10 @@ public class RMcall extends ObjRelation {
             return false;
         }
 
-        if(_reciever == null) {
+        if(_receiver == null) {
             return mcall.getReciever() == null;
         }
-        return _reciever.match(mcall.getReciever());
+        return _receiver.match(mcall.getReciever());
     }
 
     public enum MCallType{

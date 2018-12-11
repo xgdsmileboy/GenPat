@@ -22,7 +22,13 @@ public class RAssign extends Relation {
      *
      */
 
+    /**
+     * Left hand side of the assignment
+     */
     private ObjRelation _lhs;
+    /**
+     * Rgiht hand side of the assignment
+     */
     private ObjRelation _rhs;
 
     public RAssign(ObjRelation lhs) {

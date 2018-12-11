@@ -13,8 +13,22 @@ package mfix.core.parse.relation;
  */
 public class RKid extends Relation {
 
+    /**
+     * Record the structure: a relation can be the
+     * kid of a structure, which captures the control
+     * flow of the program
+     */
     private RStruct _structure;
+    /**
+     * The index of child node in the {@code _structure}
+     * NOTE: this index does not denotes the order of
+     * the child against the siblings, but the coarse-grained
+     * location information, i.e., while-condition and while-body.
+     */
     private int _index;
+    /**
+     * The child node
+     */
     private Relation _child;
 
     public RKid(RStruct structure) {

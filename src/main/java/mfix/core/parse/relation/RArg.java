@@ -13,8 +13,17 @@ package mfix.core.parse.relation;
  */
 public class RArg extends Relation {
 
+    /**
+     * Denotes a function or operation object (relation)
+     */
     private ObjRelation _function;
+    /**
+     * The index of the argument
+     */
     private int _index;
+    /**
+     * The argument object (relation)
+     */
     private ObjRelation _arg;
 
     public RArg(ObjRelation function) {

@@ -15,6 +15,9 @@ import mfix.core.parse.relation.op.AbsOperation;
  */
 public class ROpt extends ObjRelation {
 
+    /**
+     * operator
+     */
     private AbsOperation _operation;
 
     public ROpt(AbsOperation operation) {

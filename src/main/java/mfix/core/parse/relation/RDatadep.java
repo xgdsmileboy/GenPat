@@ -16,7 +16,13 @@ import java.util.List;
  */
 public class RDatadep extends Relation {
 
+    /**
+     * Relations that an relation may depend on
+     */
     private List<ObjRelation> _valueDecideRelation = new LinkedList<>();
+    /**
+     * Relation that use the objects in {@code _valueDecideRelation}
+     */
     private Relation _useRelation;
 
     public RDatadep() {
