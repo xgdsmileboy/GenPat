@@ -7,6 +7,10 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+
+import java.util.Set;
+
 /**
  * @author: Jiajun
  * @date: 2018/11/29
@@ -52,15 +56,23 @@ public class RArg extends Relation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if (!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if (!super.match(relation, dependencies)) {
             return false;
         }
         RArg arg = (RArg) relation;
         if (_index != arg.getIndex()) {
             return false;
         }
-        return _function.match(arg.getFunctionRelation());
+        if(!_function.match(arg.getFunctionRelation(), dependencies)) {
+            return false;
+        }
+        dependencies.add(new Pair<>(_function, arg.getFunctionRelation()));
+        if(_arg.match(arg.getArgument(), dependencies)) {
+           dependencies.add(new Pair<>(_arg, arg.getArgument()));
+           return true;
+        }
+        return false;
     }
 
     @Override

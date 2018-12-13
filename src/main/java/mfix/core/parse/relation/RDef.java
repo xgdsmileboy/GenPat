@@ -7,7 +7,10 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -75,8 +78,8 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if (!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if (!super.match(relation, dependencies)) {
             return false;
         }
         RDef def = (RDef) relation;
@@ -90,7 +93,11 @@ public class RDef extends ObjRelation {
             return def.getInitializer() == null;
         }
 
-        return _initializer.match(def.getInitializer());
+        if(_initializer.match(def.getInitializer(), dependencies)) {
+            dependencies.add(new Pair<>(_initializer, def.getInitializer()));
+            return true;
+        }
+        return false;
     }
 
     @Override

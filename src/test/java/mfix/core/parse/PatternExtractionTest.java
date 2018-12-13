@@ -39,13 +39,13 @@ public class PatternExtractionTest extends TestCase {
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = NodeParser.getInstance();
         Set<String> changedMethod = new HashSet<>();
-        for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+        for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);
             Node srcNode = nodeParser.process(pair.getFirst());
             nodeParser.setCompilationUnit(tarFile, tarUnit);
             Node tarNode = nodeParser.process(pair.getSecond());
             Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
-            if(pattern.getNewRelations().size() != pattern.getOldRelations().size()) {
+            if (pattern.getNewRelations().size() != pattern.getOldRelations().size()) {
                 changedMethod.add(pair.getFirst().getName().getFullyQualifiedName());
             }
         }
@@ -68,8 +68,8 @@ public class PatternExtractionTest extends TestCase {
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = NodeParser.getInstance();
-        for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
-            if(pair.getFirst().getName().getIdentifier().equals("Project")) {
+        for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+            if (pair.getFirst().getName().getIdentifier().equals("Project")) {
                 nodeParser.setCompilationUnit(srcFile, srcUnit);
                 Node srcNode = nodeParser.process(pair.getFirst());
                 nodeParser.setCompilationUnit(tarFile, tarUnit);
@@ -105,23 +105,15 @@ public class PatternExtractionTest extends TestCase {
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = NodeParser.getInstance();
-        for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
-            if(pair.getFirst().getName().getIdentifier().equals("setProjectReference")) {
-            System.out.println("\n" + pair.getFirst().getName().getIdentifier() + "======");
+        for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+            if (pair.getFirst().getName().getIdentifier().equals("fireBuildStarted")) {
                 nodeParser.setCompilationUnit(srcFile, srcUnit);
                 Node srcNode = nodeParser.process(pair.getFirst());
                 nodeParser.setCompilationUnit(tarFile, tarUnit);
                 Node tarNode = nodeParser.process(pair.getSecond());
                 Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
-                List<Relation> relations = pattern.minimize(1).getMinimizedOldRelations();
-                System.out.println("BEFORE : ");
-                System.out.println(relations);
-
-                relations = pattern.minimize(1).getMinimizedNewRelations();
-                System.out.println("AFTER : ");
-                System.out.println(relations);
-
-//                break;
+                Assert.assertTrue(pattern.minimize(0).getMinimizedOldRelations().size() == 1);
+                Assert.assertTrue(pattern.minimize(0).getMinimizedNewRelations().size() == 3);
             }
         }
 

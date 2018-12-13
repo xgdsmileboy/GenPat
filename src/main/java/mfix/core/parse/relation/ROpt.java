@@ -7,7 +7,10 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
 import mfix.core.parse.relation.op.AbsOperation;
+
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -34,8 +37,8 @@ public class ROpt extends ObjRelation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if(!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if(!super.match(relation, dependencies)) {
             return false;
         }
         ROpt opt = (ROpt) relation;

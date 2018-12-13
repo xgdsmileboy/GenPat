@@ -7,7 +7,10 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -66,8 +69,8 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if(!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if(!super.match(relation, dependencies)) {
             return false;
         }
         RMcall mcall = (RMcall) relation;
@@ -86,7 +89,11 @@ public class RMcall extends ObjRelation {
                 return true;
             }
         }
-        return _receiver.match(mcall.getReciever());
+        if(_receiver.match(mcall.getReciever(), dependencies)) {
+            dependencies.add(new Pair<>(_receiver, mcall.getReciever()));
+            return true;
+        }
+        return false;
     }
 
     public enum MCallType{

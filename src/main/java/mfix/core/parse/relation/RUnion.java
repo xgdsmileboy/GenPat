@@ -7,8 +7,11 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -41,8 +44,8 @@ public class RUnion extends ObjRelation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if (!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if (!super.match(relation, dependencies)) {
             return false;
         }
         RUnion union = (RUnion) relation;
@@ -54,9 +57,10 @@ public class RUnion extends ObjRelation {
             return false;
         }
         for(int i = 0; i < _assigns.size(); i++) {
-            if(!_assigns.get(i).match(relations.get(i))) {
+            if(!_assigns.get(i).match(relations.get(i), dependencies)) {
                 return false;
             }
+            dependencies.add(new Pair<>(_assigns.get(i), relations.get(i)));
         }
         return true;
     }

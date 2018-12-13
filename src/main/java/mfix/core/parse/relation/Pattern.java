@@ -7,7 +7,11 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+import mfix.core.parse.Z3Solver;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -52,8 +56,8 @@ public class Pattern implements Serializable {
     private List<Relation> _newRelations;
 
     public Pattern() {
-        _oldRelations = new LinkedList<>();
-        _newRelations = new LinkedList<>();
+        _oldRelations = new ArrayList<>();
+        _newRelations = new ArrayList<>();
     }
 
     /**
@@ -141,48 +145,44 @@ public class Pattern implements Serializable {
     public Pattern minimize(int expandLevel) {
         if(_minimized) return this;
         _minimized = true;
-        //TODO : to replace the following process with SAT process
-        Map<Integer, Integer> old2newRelationMap = new HashMap<>();
-        Map<Integer, Integer> new2oldRlationMap = new HashMap<>();
-        for(int row = 0; row < _oldRelations.size(); row ++) {
-            int preMatchColumn = -1;
-            for(int column = 0; column < _newRelations.size(); column++) {
-                if(_oldRelations.get(row).match(_newRelations.get(column))) {
-                    // this row is already match some column before
-                    if(preMatchColumn != -1) {
-                        // remove the matched column and select a best matching column
-                        new2oldRlationMap.remove(preMatchColumn);
-                        preMatchColumn = processColumnConflict(row, preMatchColumn, column);
-                    } else {
-                        preMatchColumn = column;
+        Map<Relation, Integer> oldR2index = new HashMap<>();
+        Map<Relation, Integer> newR2index = new HashMap<>();
+        int oldLen = _oldRelations.size();
+        int newLen = _newRelations.size();
+        for(int i = 0; i < oldLen; i++) {
+            oldR2index.put(_oldRelations.get(i), i);
+        }
+        for(int i = 0; i < newLen; i++) {
+            newR2index.put(_newRelations.get(i), i);
+        }
+
+        int[][] matrix = new int[oldLen][newLen];
+        Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
+        Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
+        for(int i = 0; i < oldLen; i++) {
+            for(int j = 0; j < newLen; j++) {
+                dependencies.clear();
+                if(_oldRelations.get(i).match(_newRelations.get(j), dependencies)) {
+                    matrix[i][j] = 1;
+                    String key = i + "_" + j;
+                    Set<Pair<Integer, Integer>> set = new HashSet<>();
+                    for(Pair<Relation, Relation> pair : dependencies) {
+                        set.add(new Pair<>(oldR2index.get(pair.getFirst()), newR2index.get(pair.getSecond())));
                     }
-                    // find the best matching column, otherwise, no match for current row
-                    if(preMatchColumn >= 0) {
-                        // check whether the selected column is matched by any previous row
-                        Integer preMatchedRow = new2oldRlationMap.get(preMatchColumn);
-                        if(preMatchedRow != null) {
-                            // if matched, first remove the match relation
-                            // then find a proper match for the column
-                            new2oldRlationMap.remove(preMatchColumn);
-                            int selectedRow = processRowConfilict(preMatchColumn, preMatchedRow, row);
-                            if(selectedRow >= 0) {
-                                // find the best match row, re-map the matching relation.
-                                new2oldRlationMap.put(preMatchColumn, selectedRow);
-                            }
-                        } else {
-                            // the column is not matched by previous rows
-                            // match the current row with the selected column (no conflict)
-                            new2oldRlationMap.put(preMatchColumn, row);
-                        }
-                    }
+                    loc2dependencies.put(key, set);
                 }
             }
         }
-        // label all matched relations.
-        for(Map.Entry<Integer, Integer> entry : new2oldRlationMap.entrySet()) {
-            _newRelations.get(entry.getKey()).setMatched(true);
-            _oldRelations.get(entry.getValue()).setMatched(true);
+        Z3Solver solver = new Z3Solver();
+        Map<Integer, Integer> old2new = solver.build(matrix, loc2dependencies);
+        for(Map.Entry<Integer, Integer> entry : old2new.entrySet()) {
+            _oldRelations.get(entry.getKey()).setMatched(true);
+            _newRelations.get(entry.getValue()).setMatched(true);
         }
+
+        // TODO: alter obtain the minimal changed,
+        // then expand the relations based on "expandLevel"
+
         return this;
     }
 
@@ -207,26 +207,5 @@ public class Pattern implements Serializable {
         }
         return relations;
     }
-
-    private int processColumnConflict(int row, int column1, int column2) {
-        // TODO
-        return column2;
-    }
-
-    private int processRowConfilict(int column, int row1, int row2) {
-        // TODO
-        return row1;
-    }
-
-    private Set<Integer> obtainOnes(int[] vector) {
-        Set<Integer> set = new HashSet<>();
-        for(int i = 0; i < vector.length; i++) {
-            if(vector[i] == 1) {
-                set.add(i);
-            }
-        }
-        return set;
-    }
-
 
 }
