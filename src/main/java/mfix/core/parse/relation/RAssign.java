@@ -7,6 +7,10 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+
+import java.util.Set;
+
 /**
  * @author: Jiajun
  * @date: 2018/11/29
@@ -49,12 +53,17 @@ public class RAssign extends Relation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if(!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> denpendencies) {
+        if(!super.match(relation, denpendencies)) {
             return false;
         }
         RAssign assign = (RAssign) relation;
-        return _lhs.match(assign.getLhs()) && _rhs.match(assign.getRhs()) ;
+        if (_lhs.match(assign.getLhs(), denpendencies) && _rhs.match(assign.getRhs(), denpendencies)) {
+            denpendencies.add(new Pair<>(_lhs, assign.getLhs()));
+            denpendencies.add(new Pair<>(_rhs, assign.getRhs()));
+            return true;
+        }
+        return false;
     }
 
     @Override

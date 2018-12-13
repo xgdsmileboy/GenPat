@@ -7,6 +7,10 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+
+import java.util.Set;
+
 /**
  * @author: Jiajun
  * @date: 2018/12/5
@@ -57,8 +61,8 @@ public class RKid extends Relation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if (!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if (!super.match(relation, dependencies)) {
             return false;
         }
 
@@ -67,7 +71,11 @@ public class RKid extends Relation {
             return false;
         }
 
-        return _child.match(kid.getChildRelation());
+        if(_child.match(kid.getChildRelation(), dependencies)) {
+            dependencies.add(new Pair<>(_child, kid.getChildRelation()));
+            return true;
+        }
+        return false;
     }
 
     @Override

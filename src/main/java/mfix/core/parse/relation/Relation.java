@@ -7,6 +7,10 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+
+import java.util.Set;
+
 /**
  * @author: Jiajun
  * @date: 2018/11/29
@@ -59,7 +63,7 @@ public abstract class Relation {
      * @return {@code true} if {@code relation} match current
      * relation, {@code false} otherwise.
      */
-    public boolean match(Relation relation) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
         if(relation == null || relation.getRelationKind() != _relationKind) {
             return false;
         }
