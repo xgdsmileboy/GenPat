@@ -34,6 +34,12 @@ public class PatternExtraction {
     private PatternExtraction(){}
 
     public static Pattern extract(Node oldNode, Node newNode) {
+        if(oldNode == null || newNode == null) {
+            throw new IllegalArgumentException("Arguments cannot be null.");
+        }
+        if(oldNode.toSrcString().toString().equals(newNode.toSrcString().toString())) {
+            return null;
+        }
         Pattern pattern = new Pattern();
         pattern.setOldRelationFlag(true);
         patternExtraction.process(oldNode, pattern);
