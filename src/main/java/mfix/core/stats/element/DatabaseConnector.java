@@ -1,4 +1,4 @@
-package mfix.core.stats;
+package mfix.core.stats.element;
 
 import java.sql.*;
 
@@ -10,59 +10,17 @@ import java.util.Map;
  */
 public class DatabaseConnector {
     static final String DB_URL = "jdbc:mysql://localhost:3306/MINEFIX";
+    static final String DB_URL_FOR_TEST = "jdbc:mysql://localhost:3306/MINEFIX_test";
     static final String DB_USER = "root";
     static final String DB_PASSWORD = "thisispassword";
-    static final String DB_TABLE_NAME = "Elements";
-    static final String DB_TEST_TABLE_NAME = "TestElements";
-    private static String _tableName = DB_TABLE_NAME;
+    private static String databaseURL = DB_URL;
     private Connection conn = null;
 
     public void open() {
         try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = DriverManager.getConnection(databaseURL, DB_USER, DB_PASSWORD);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public void createTable() {
-        String SQLcodeforInit =
-                "CREATE TABLE " + _tableName + " \n" +
-                "(\n" +
-                "\t typeName varchar(255),\n" +
-                "\t elementName TEXT,\n" +
-                "\t sourceFile TEXT\n" +
-                ");\n";
-
-        Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-            stmt.execute(SQLcodeforInit);
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-    }
-
-    public void dropTable() {
-        String SQLcodeforClose = "DROP TABLE " + _tableName;
-        Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-            stmt.execute(SQLcodeforClose);
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
         }
     }
 
@@ -76,10 +34,12 @@ public class DatabaseConnector {
         }
     }
 
-    Integer query(Map<String, String> queryRow) {
+    public Integer query(Map<String, String> queryRow) {
         // "SELECT count(*) FROM elements WHERE name == XX and type == YY"
-        String SQLcode = String.format("SELECT count(%s) FROM %s WHERE ", queryRow.getOrDefault("countElement", "*"), _tableName);
+        String SQLcode = String.format("SELECT count(%s) FROM %s WHERE ", queryRow.getOrDefault("countElement", "*"), queryRow.get("table"));
 
+        queryRow.remove("countElement");
+        queryRow.remove("table");
         boolean first = true;
         for (Map.Entry<String, String> entry : queryRow.entrySet()) {
             if (first) {
@@ -116,10 +76,11 @@ public class DatabaseConnector {
         return countNum;
     }
 
-    void add(Map<String, String> insertRow) {
+    public void add(Map<String, String> insertRow) {
         // INSERT INTO Elements (A, B) VALUES ('aaa', 'bbb')
-        String SQLcode = String.format("INSERT INTO %s ", _tableName);
+        String SQLcode = String.format("INSERT INTO %s ", insertRow.get("table"));
 
+        insertRow.remove("table");
         boolean first = true;
         for (String key : insertRow.keySet()) {
             if (first) {
@@ -144,6 +105,38 @@ public class DatabaseConnector {
         }
         SQLcode += ")";
 
+        executeSQL(SQLcode);
+    }
+
+    public void createTable() {
+        executeSQL("CREATE TABLE IF NOT EXISTS VarTable(\n" +
+                "\telementName varchar(255),\n" +
+                "\tsourceFile TEXT,\n" +
+                "    varType varchar(255)\n" +
+                ");\n");
+        executeSQL("CREATE TABLE IF NOT EXISTS MethodTable(\n" +
+                "\telementName varchar(255),\n" +
+                "\tsourceFile TEXT,\n" +
+                "    retType varchar(255),\n" +
+                "    objType varchar(255),\n" +
+                "    argsType TEXT,\n" +
+                "    argsNumber varchar(255)\n" +
+                ");\n");
+    }
+
+    public void dropTable() {
+        executeSQL("DROP TABLE IF EXISTS VarTable;");
+        executeSQL("DROP TABLE IF EXISTS MethodTable;");
+    }
+
+    public void setAsTestMode() {
+        databaseURL = DB_URL_FOR_TEST;
+    }
+
+    private void executeSQL(String SQLcode) {
+        // DEBUG
+        // System.out.println(SQLcode);
+
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
@@ -157,12 +150,5 @@ public class DatabaseConnector {
                 se.printStackTrace();
             }
         }
-
-        // DEBUG
-        // System.out.println(SQLcode);
-    }
-
-    public void setAsTestMode() {
-        _tableName = DB_TEST_TABLE_NAME;
     }
 }

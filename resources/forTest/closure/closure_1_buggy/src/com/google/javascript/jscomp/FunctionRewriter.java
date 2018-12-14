@@ -403,8 +403,8 @@ class FunctionRewriter implements CompilerPass {
     static final String FACTORY_METHOD_NAME = "JSCompiler_get";
     static final String HELPER_SOURCE =
         "function " + FACTORY_METHOD_NAME + "(" +
-        FACTORY_METHOD_NAME + "_name) {" +
-        "  return function() {return this[" + FACTORY_METHOD_NAME + "_name]}" +
+        FACTORY_METHOD_NAME + "_elementName) {" +
+        "  return function() {return this[" + FACTORY_METHOD_NAME + "_elementName]}" +
         "}";
 
     @Override
@@ -462,9 +462,9 @@ class FunctionRewriter implements CompilerPass {
     static final String FACTORY_METHOD_NAME = "JSCompiler_set";
     static final String HELPER_SOURCE =
         "function " + FACTORY_METHOD_NAME + "(" +
-        FACTORY_METHOD_NAME + "_name) {" +
+        FACTORY_METHOD_NAME + "_elementName) {" +
         "  return function(" + FACTORY_METHOD_NAME + "_value) {" +
-        "this[" + FACTORY_METHOD_NAME + "_name] = " +
+        "this[" + FACTORY_METHOD_NAME + "_elementName] = " +
         FACTORY_METHOD_NAME + "_value}" +
         "}";
 
