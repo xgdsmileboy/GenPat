@@ -37,11 +37,15 @@ public class Analyzer {
         if (curNode instanceof MethodInv) {
             for (Set<Node> methodSet : curNode.getCalledMethods().values()) {
                 for (Node method : methodSet) {
-                    _elementCounter.add(new Element(method));
+                    Element ele = new Element(method);
+                    ele.setSourceFile(_fileName);
+                    // _elementCounter.add(ele);
                 }
             }
             for (SName var : curNode.getAllVars()) {
-                _elementCounter.add(new Element(var));
+                Element ele = new Element(var);
+                ele.setSourceFile(_fileName);
+                // _elementCounter.add(ele);
             }
         }
         for (Node child : curNode.getAllChildren()) {
