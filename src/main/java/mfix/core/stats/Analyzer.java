@@ -2,7 +2,6 @@ package mfix.core.stats;
 
 import mfix.core.parse.node.expr.MethodInv;
 import mfix.core.parse.node.expr.SName;
-import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.MethodElement;
 import mfix.core.stats.element.VarElement;
 import mfix.core.parse.node.*;
