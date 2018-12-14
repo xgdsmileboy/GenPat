@@ -143,7 +143,11 @@ public class Pattern implements Serializable {
      * @param expandLevel : denotes how many levels should be expanded
      */
     public Pattern minimize(int expandLevel) {
-        if(_minimized) return this;
+        return minimize(expandLevel, false);
+    }
+
+    public Pattern minimize(int expandLevel, boolean force) {
+        if(_minimized && !force) return this;
         _minimized = true;
         Map<Relation, Integer> oldR2index = new HashMap<>();
         Map<Relation, Integer> newR2index = new HashMap<>();
@@ -159,13 +163,14 @@ public class Pattern implements Serializable {
         int[][] matrix = new int[oldLen][newLen];
         Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
         Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
+        Set<Pair<Integer, Integer>> set;
         for(int i = 0; i < oldLen; i++) {
             for(int j = 0; j < newLen; j++) {
                 dependencies.clear();
                 if(_oldRelations.get(i).match(_newRelations.get(j), dependencies)) {
                     matrix[i][j] = 1;
                     String key = i + "_" + j;
-                    Set<Pair<Integer, Integer>> set = new HashSet<>();
+                    set = new HashSet<>();
                     for(Pair<Relation, Relation> pair : dependencies) {
                         set.add(new Pair<>(oldR2index.get(pair.getFirst()), newR2index.get(pair.getSecond())));
                     }
@@ -180,8 +185,8 @@ public class Pattern implements Serializable {
             _newRelations.get(entry.getValue()).setMatched(true);
         }
 
-        // TODO: alter obtain the minimal changed,
-        // then expand the relations based on "expandLevel"
+        // TODO: after obtain the minimal changes,
+        // expand the relations based on "expandLevel"
 
         return this;
     }
