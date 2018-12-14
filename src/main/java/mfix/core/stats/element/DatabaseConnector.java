@@ -1,7 +1,6 @@
 package mfix.core.stats.element;
 
 import java.sql.*;
-
 import java.util.Map;
 
 /**
