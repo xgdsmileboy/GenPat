@@ -2,10 +2,10 @@ package mfix.core.stats;
 
 import mfix.core.parse.node.expr.MethodInv;
 import mfix.core.parse.node.expr.SName;
-import org.eclipse.jdt.core.dom.*;
+import mfix.core.stats.element.ElementCounter;
+import mfix.core.stats.element.MethodElement;
+import mfix.core.stats.element.VarElement;
 import mfix.core.parse.node.*;
-
-import java.util.Set;
 
 /**
  * @author: Luyao Ren
@@ -35,18 +35,9 @@ public class Analyzer {
 
     public void analyze(Node curNode) {
         if (curNode instanceof MethodInv) {
-            for (Set<Node> methodSet : curNode.getCalledMethods().values()) {
-                for (Node method : methodSet) {
-                    Element ele = new Element(method);
-                    ele.setSourceFile(_fileName);
-                    // _elementCounter.add(ele);
-                }
-            }
-            for (SName var : curNode.getAllVars()) {
-                Element ele = new Element(var);
-                ele.setSourceFile(_fileName);
-                // _elementCounter.add(ele);
-            }
+            _elementCounter.add(new MethodElement((MethodInv)curNode));
+        } else if (curNode instanceof SName) {
+            _elementCounter.add(new VarElement((SName)curNode));
         }
         for (Node child : curNode.getAllChildren()) {
             analyze(child);

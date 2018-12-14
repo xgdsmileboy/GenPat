@@ -4,6 +4,7 @@ import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.core.TestCase;
 import mfix.core.parse.NodeParser;
+import mfix.core.stats.element.*;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
@@ -47,6 +48,7 @@ public class AnalyzerTest extends TestCase {
         DatabaseConnector connector = new DatabaseConnector();
         connector.setAsTestMode();
         connector.open();
+        connector.dropTable(); // Drop the table if exist.
         connector.createTable();
 
         Analyzer nodeAnalyzer = Analyzer.getInstance();
@@ -68,24 +70,26 @@ public class AnalyzerTest extends TestCase {
         ElementCounter counter = new ElementCounter();
         counter.open();
 
-        Element elementA = new Element("path", "org.apache.tools.ant.Path");
+        Element VarElementA = new VarElement("path", "org.apache.tools.ant.Path", srcFile);
+        Element VarElementB = new VarElement("path", "java.lang.StringBuffer", srcFile);
+        Element VarElementC = new VarElement("noThisVar", "java.lang.StringBuffer", srcFile);
+        Element methodElementD = new MethodElement("close", srcFile);
 
-        QueryElement queryElementA1 = new QueryElement(elementA, true, QueryElement.QueryType.ALL);
-        Assert.assertTrue(counter.count(queryElementA1) == 1);
+        QueryType sameTypeInAllFiles = new QueryType(true, QueryType.CountType.ALL);
+        QueryType withoutTypeInAllFiles = new QueryType(false, QueryType.CountType.ALL);
+        QueryType withoutTypeCountFiles = new QueryType(false, QueryType.CountType.COUNT_FILES);
 
-        QueryElement queryElementA2 = new QueryElement(elementA, false, QueryElement.QueryType.ALL);
-        Assert.assertTrue(counter.count(queryElementA2) == 5);
+        Assert.assertTrue(counter.count(VarElementA, sameTypeInAllFiles) == 1);
+        Assert.assertTrue(counter.count(VarElementA, withoutTypeInAllFiles) == 6);
+        Assert.assertTrue(counter.count(VarElementA, withoutTypeCountFiles) == 1);
 
-        Element elementB = new Element("path", "java.lang.StringBuffer");
-        QueryElement queryElementB1 = new QueryElement(elementB, true, QueryElement.QueryType.ALL);
-        Assert.assertTrue(counter.count(queryElementB1) == 4);
+        Assert.assertTrue(counter.count(VarElementB, sameTypeInAllFiles) == 5);
 
-        Element elementC = new Element("noThisMethod", "java.lang.StringBuffer");
-        QueryElement queryElementC1 = new QueryElement(elementC, true, QueryElement.QueryType.ALL);
-        QueryElement queryElementC2 = new QueryElement(elementC, false, QueryElement.QueryType.ALL);
+        Assert.assertTrue(counter.count(VarElementC, sameTypeInAllFiles) == 0);
+        Assert.assertTrue(counter.count(VarElementC, withoutTypeInAllFiles) == 0);
+        Assert.assertTrue(counter.count(VarElementC, withoutTypeCountFiles) == 0);
 
-        Assert.assertTrue(counter.count(queryElementC1) == 0);
-        Assert.assertTrue(counter.count(queryElementC2) == 0);
+        Assert.assertTrue(counter.count(methodElementD, withoutTypeInAllFiles) == 2);
 
         counter.close();
 
