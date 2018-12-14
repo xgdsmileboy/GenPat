@@ -36,9 +36,9 @@ public class DatabaseConnector {
 
     public Integer query(Map<String, String> queryRow) {
         // "SELECT count(*) FROM elements WHERE name == XX and type == YY"
-        String SQLcode = String.format("SELECT count(%s) FROM %s WHERE ", queryRow.getOrDefault("countElement", "*"), queryRow.get("table"));
+        String SQLcode = String.format("SELECT count(%s) FROM %s WHERE ", queryRow.getOrDefault("countColumn", "*"), queryRow.get("table"));
 
-        queryRow.remove("countElement");
+        queryRow.remove("countColumn");
         queryRow.remove("table");
         boolean first = true;
         for (Map.Entry<String, String> entry : queryRow.entrySet()) {

@@ -75,9 +75,9 @@ public class AnalyzerTest extends TestCase {
         Element VarElementC = new VarElement("noThisVar", "java.lang.StringBuffer", srcFile);
         Element methodElementD = new MethodElement("close", srcFile);
 
-        QueryType sameTypeInAllFiles = new QueryType(true, QueryType.CountType.ALL);
-        QueryType withoutTypeInAllFiles = new QueryType(false, QueryType.CountType.ALL);
-        QueryType withoutTypeCountFiles = new QueryType(false, QueryType.CountType.COUNT_FILES);
+        ElementQueryType sameTypeInAllFiles = new ElementQueryType(true, ElementQueryType.CountType.ALL);
+        ElementQueryType withoutTypeInAllFiles = new ElementQueryType(false, ElementQueryType.CountType.ALL);
+        ElementQueryType withoutTypeCountFiles = new ElementQueryType(false, ElementQueryType.CountType.COUNT_FILES);
 
         Assert.assertTrue(counter.count(VarElementA, sameTypeInAllFiles) == 1);
         Assert.assertTrue(counter.count(VarElementA, withoutTypeInAllFiles) == 6);
