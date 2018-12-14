@@ -1,6 +1,4 @@
-package mfix.core.stats;
-
-import mfix.core.stats.element.*;
+package mfix.core.stats.element;
 
 /**
  * @author: Luyao Ren
