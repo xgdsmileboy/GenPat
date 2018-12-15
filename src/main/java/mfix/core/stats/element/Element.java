@@ -8,24 +8,12 @@ import java.util.Map;
  * @date: 2018/12/09
  */
 public class Element {
-    public enum ElementType {
-        VAR, METHOD
-    };
-
-    protected ElementType _elementType;
     protected String _elementName;
     protected String _sourceFile;
 
-    public Element(ElementType elementType, String name, String sourceFile) {
-        _elementType = elementType;
+    public Element(String name, String sourceFile) {
         _elementName = name;
         _sourceFile = sourceFile;
-    }
-
-    Element(Element element) {
-        _elementType = element._elementType;
-        _elementName = element._elementName;
-        _sourceFile = element._sourceFile;
     }
 
     public Map<String, String> toInsertRow() {
@@ -33,13 +21,13 @@ public class Element {
 
         KeyToValue.put("elementName", _elementName);
         KeyToValue.put("sourceFile", _sourceFile);
-        if (_elementType == Element.ElementType.VAR) {
+        if (this instanceof VarElement) {
             VarElement var = (VarElement) this;
             KeyToValue.put("table", "VarTable");
             if (var._varType != null) {
                 KeyToValue.put("varType", var._varType);
             }
-        } else if (_elementType == Element.ElementType.METHOD) {
+        } else if (this instanceof MethodElement) {
             MethodElement method = (MethodElement) this;
             KeyToValue.put("table", "MethodTable");
             if (method._retType != null) {
@@ -63,9 +51,9 @@ public class Element {
         Map<String, String> KeyToValue = toInsertRow();
 
         if (!query.getWithType()) {
-            if (_elementType == Element.ElementType.VAR) {
+            if (this instanceof VarElement) {
                 KeyToValue.remove("varType");
-            } else if (_elementType == Element.ElementType.METHOD) {
+            } else if (this instanceof MethodElement) {
                 KeyToValue.remove("retType");
                 KeyToValue.remove("objType");
                 KeyToValue.remove("argsType");

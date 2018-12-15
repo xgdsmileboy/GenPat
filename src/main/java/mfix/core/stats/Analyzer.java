@@ -51,20 +51,20 @@ public class Analyzer {
     private class Collector extends ASTVisitor {
         public boolean visit(MethodInvocation method) {
             String callFuncName = method.getName().getFullyQualifiedName();
-            MethodElement element = new MethodElement(callFuncName, _fileName);
+            MethodElement methodElement = new MethodElement(callFuncName, _fileName);
 
             if (method.getExpression() != null) {
-                element.setObjType(getExprTypeOrNull(method.getExpression()));
+                methodElement.setObjType(getExprTypeOrNull(method.getExpression()));
             }
-            element.setRetType(getExprTypeOrNull(method));
-            element.setArgsNumber(method.arguments().size());
+            methodElement.setRetType(getExprTypeOrNull(method));
+            methodElement.setArgsNumber(method.arguments().size());
             String argsType = "";
             for (Object object : method.arguments()) {
                 argsType += getExprTypeOrNull((Expression) object) + ",";
             }
-            element.setArgsType(argsType);
+            methodElement.setArgsType(argsType);
 
-            _elementCounter.add(element);
+            _elementCounter.add(methodElement);
 
             return true;
         }

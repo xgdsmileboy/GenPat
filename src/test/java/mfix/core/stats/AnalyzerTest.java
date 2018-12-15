@@ -59,7 +59,7 @@ public class AnalyzerTest extends TestCase {
 
         methodElementE.setArgsNumber(3);
         Assert.assertTrue(counter.count(methodElementE, withTypeInAllFiles) == 0);
-
+        
         counter.close();
 
         // Drop the new table for test.

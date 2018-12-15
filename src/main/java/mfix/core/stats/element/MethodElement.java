@@ -10,9 +10,7 @@ public class MethodElement extends Element {
     protected String _argsType = null;
     protected Integer _argsNumber = null;
 
-    public MethodElement(String name, String fileName) {
-        super(ElementType.METHOD, name, fileName);
-    }
+    public MethodElement(String name, String fileName) { super(name, fileName); }
 
     public void setRetType(String retType) {
         _retType = retType;
