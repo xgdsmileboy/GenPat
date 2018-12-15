@@ -27,21 +27,36 @@ public abstract class Structure {
 
 
     public enum RSKind{
-        RS_METHOD,
-        RS_FOR,
-        RS_ENHANCEDFOR,
-        RS_WHILE,
-        RS_DO,
-        RS_IF,
-        RS_SWCASE,
-        RS_SWITCHSTMT,
-        RS_SYNC,
-        RS_TRY,
-        RS_CATCH,
-        RS_FINALLY,
-        RS_BREAK,
-        RS_CONTINUE,
-        RS_RETURN,
-        RS_THROW
+        RS_METHOD("METHOD"),
+        RS_FOR("FOR"),
+        RS_ENHANCEDFOR("ENFOR"),
+        RS_WHILE("WHILE"),
+        RS_DO("DO"),
+        RS_IF("IF"),
+        RS_SWCASE("CASE"),
+        RS_SWITCHSTMT("SWITCH"),
+        RS_SYNC("SYNC"),
+        RS_TRY("TRY"),
+        RS_CATCH("CATCH"),
+        RS_FINALLY("FINALLY"),
+        RS_BREAK("BREAK"),
+        RS_CONTINUE("CONTINUE"),
+        RS_RETURN("RETURN"),
+        RS_THROW("THROW");
+
+        private String _value;
+        private RSKind(String value) {
+            _value = value;
+        }
+
+        @Override
+        public String toString() {
+            return _value;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "[" + _rskind.toString() + "]";
     }
 }

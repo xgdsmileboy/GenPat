@@ -45,6 +45,41 @@ public class Pair<T1, T2> {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 0;
+        if(first != null) {
+            hash += first.hashCode();
+        }
+        if(second != null) {
+            hash += second.hashCode();
+        }
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !(obj instanceof Pair)) {
+            return false;
+        }
+        Pair pair = (Pair) obj;
+        if(first == null) {
+            if (pair.getFirst() != null) {
+                return false;
+            }
+        } else if(!first.equals(pair.getFirst())) {
+            return false;
+        }
+        if(second == null) {
+            if(pair.getSecond() != null) {
+                return false;
+            }
+        } else {
+            return second.equals(pair.getSecond());
+        }
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "<" + first.toString() + "," + second.toString() + ">";
     }

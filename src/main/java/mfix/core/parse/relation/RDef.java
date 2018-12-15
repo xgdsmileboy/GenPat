@@ -7,15 +7,34 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+import mfix.common.util.Utils;
+
+import java.util.Set;
+
 /**
  * @author: Jiajun
  * @date: 2018/11/29
  */
 public class RDef extends ObjRelation {
 
+    /**
+     * modifiers of the defined variables
+     */
     private String _modifiers;
+    /**
+     * {@code java.lang.String} format of variable type
+     */
     private String _typeStr;
+    /**
+     * variable names
+     * NOTE: this can be null if it is a constant value
+     * (virtual variable definition)
+     */
     private String _name;
+    /**
+     * The initializer of the variable definition
+     */
     private ObjRelation _initializer;
 
     public RDef() {
@@ -59,15 +78,14 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if (!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if (!super.match(relation, dependencies)) {
             return false;
         }
         RDef def = (RDef) relation;
-        if ((_modifiers == null && def.getModifiers() != null)
-                || !_modifiers.equals(def.getModifiers())
-                || !_typeStr.equals(def.getTypeString())
-                || !(_name.equals(def.getName()))) {
+        if(!Utils.safeStringEqual(_modifiers, def.getModifiers())
+                || !Utils.safeStringEqual(_typeStr, def.getTypeString())
+                || !Utils.safeStringEqual(_name, def.getName())) {
             return false;
         }
 
@@ -75,6 +93,26 @@ public class RDef extends ObjRelation {
             return def.getInitializer() == null;
         }
 
-        return _initializer.match(def.getInitializer());
+        if(_initializer.match(def.getInitializer(), dependencies)) {
+            dependencies.add(new Pair<>(_initializer, def.getInitializer()));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer("[");
+        if(_modifiers != null) {
+            buffer.append(_modifiers + " ");
+        }
+        buffer.append(_typeStr + " ");
+        buffer.append(_name);
+        if(_initializer != null) {
+            buffer.append("=");
+            buffer.append(_initializer.toString());
+        }
+        buffer.append("]");
+        return buffer.toString();
     }
 }
