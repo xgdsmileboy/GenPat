@@ -42,11 +42,12 @@ public class NodeTest extends TestCase {
             NodeParser parser = NodeParser.getInstance();
             parser.setCompilationUnit(file, unit);
             Node node = parser.process(method);
-            System.out.println(node.toSrcString().toString());
+//            System.out.println(node.toSrcString().toString());
             List<String> tokens = node.tokens();
-            for (String string : tokens) {
-                System.out.println(string);
-            }
+            Assert.assertTrue(tokens.size() == 193);
+//            for (String string : tokens) {
+//                System.out.println(string);
+//            }
         }
     }
 
