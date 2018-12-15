@@ -7,12 +7,19 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+
+import java.util.Set;
+
 /**
  * @author: Jiajun
  * @date: 2018/12/5
  */
 public class RVDef extends RDef {
 
+    /**
+     * value of a constant
+     */
     private Object _value;
 
     public RVDef() {
@@ -28,11 +35,23 @@ public class RVDef extends RDef {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if (!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if (!super.match(relation, dependencies)) {
             return false;
         }
         RVDef def = (RVDef) relation;
+        if(_value == null) {
+            return def.getValue() == null;
+        }
         return _value.equals(def.getValue());
+    }
+
+    @Override
+    public String toString() {
+        if(_value != null) {
+            return _value.toString();
+        } else {
+            return super.toString();
+        }
     }
 }

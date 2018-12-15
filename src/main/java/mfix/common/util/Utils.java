@@ -17,23 +17,20 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: Jiajun
  * @date: 9/21/18
  */
 public class Utils {
+
+    public static boolean safeStringEqual(String s1, String s2) {
+        if(s1 == s2) return true;
+        if(s1 == null) return false;
+        return s1.equals(s2);
+    }
+
     public static String join(char delimiter, String... element) {
         return join(delimiter, Arrays.asList(element));
     }

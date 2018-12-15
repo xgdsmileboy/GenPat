@@ -7,7 +7,10 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
 import mfix.core.parse.relation.struct.Structure;
+
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -15,6 +18,9 @@ import mfix.core.parse.relation.struct.Structure;
  */
 public class RStruct extends Relation {
 
+    /**
+     * structure type
+     */
     private Structure _structure;
 
     public RStruct(Structure structure) {
@@ -27,11 +33,16 @@ public class RStruct extends Relation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if(!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if(!super.match(relation, dependencies)) {
             return false;
         }
         RStruct struct = (RStruct) relation;
         return _structure.match(struct.getStructure());
+    }
+
+    @Override
+    public String toString() {
+        return _structure.toString();
     }
 }
