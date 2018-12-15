@@ -49,9 +49,7 @@ public abstract class Node implements NodeComparator, Serializable {
 	public Node(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		this(fileName, startLine, endLine, oriNode, null);
 	}
-
-	public String getFileName() { return _fileName;}
-
+	
 	public int getStartLine() {
 		return _startLine;
 	}
