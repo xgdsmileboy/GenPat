@@ -1,9 +1,8 @@
 package mfix.core.stats;
 
-import mfix.core.parse.node.*;
-import mfix.core.parse.node.expr.MethodInv;
-import mfix.core.parse.node.expr.SName;
+import mfix.common.util.JavaFile;
 import mfix.core.stats.element.*;
+import org.eclipse.jdt.core.dom.*;
 
 /**
  * @author: Luyao Ren
@@ -31,18 +30,40 @@ public class Analyzer {
         _elementCounter.close();
     }
 
-    public void analyze(Node curNode) {
-        if (curNode instanceof MethodInv) {
-            _elementCounter.add(new MethodElement((MethodInv)curNode));
-        } else if (curNode instanceof SName) {
-            _elementCounter.add(new VarElement((SName)curNode));
-        }
-        for (Node child : curNode.getAllChildren()) {
-            analyze(child);
+    public void runFile(String srcFile) {
+        _fileName = srcFile;
+
+        CompilationUnit _cunit = JavaFile.genASTFromFileWithType(srcFile, null);
+        _cunit.accept(new Collector());
+    }
+
+    private String getNameOrNull(ITypeBinding typeBinding) { // help function
+        if (typeBinding == null) {
+            return null;
+        } else {
+            return typeBinding.getName();
         }
     }
 
-    public void setFileName(String fileName) {
-        _fileName = fileName;
+    private class Collector extends ASTVisitor {
+        public boolean visit(MethodInvocation method) {
+            String callFuncName = method.getName().getFullyQualifiedName();
+            MethodElement element = new MethodElement(callFuncName, _fileName);
+
+            if (method.getExpression() != null) {
+                element.setObjType(getNameOrNull(method.getExpression().resolveTypeBinding()));
+            }
+            element.setRetType(getNameOrNull(method.resolveTypeBinding()));
+            element.setArgsNumber(method.arguments().size());
+            String argsType = "";
+            for (Object object : method.arguments()) {
+                argsType += getNameOrNull(((Expression) object).resolveTypeBinding()) + ",";
+            }
+            element.setArgsType(argsType);
+
+            _elementCounter.add(element);
+
+            return true;
+        }
     }
 }
