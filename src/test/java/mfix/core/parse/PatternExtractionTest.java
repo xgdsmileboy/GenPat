@@ -45,7 +45,7 @@ public class PatternExtractionTest extends TestCase {
             nodeParser.setCompilationUnit(tarFile, tarUnit);
             Node tarNode = nodeParser.process(pair.getSecond());
             Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
-            if (pattern.getNewRelations().size() != pattern.getOldRelations().size()) {
+            if (pattern != null) {
                 changedMethod.add(pair.getFirst().getName().getFullyQualifiedName());
             }
         }
