@@ -60,7 +60,7 @@ public abstract class AbsOperation {
         L_NOT("!"),
 
         //Conditional
-        C_COND(":?"),
+        C_COND("?:"),
         C_INSTOF("instanceof"),
 
         //array access
@@ -73,5 +73,10 @@ public abstract class AbsOperation {
         public String toString() {
             return _value;
         }
+    }
+
+    @Override
+    public String toString() {
+        return _operator.toString();
     }
 }

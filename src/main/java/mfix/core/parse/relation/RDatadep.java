@@ -7,8 +7,11 @@
 
 package mfix.core.parse.relation;
 
+import mfix.common.util.Pair;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -16,7 +19,13 @@ import java.util.List;
  */
 public class RDatadep extends Relation {
 
+    /**
+     * Relations that an relation may depend on
+     */
     private List<ObjRelation> _valueDecideRelation = new LinkedList<>();
+    /**
+     * Relation that use the objects in {@code _valueDecideRelation}
+     */
     private Relation _useRelation;
 
     public RDatadep() {
@@ -40,22 +49,27 @@ public class RDatadep extends Relation {
     }
 
     @Override
-    public boolean match(Relation relation) {
-        if(!super.match(relation)) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+        if(!super.match(relation, dependencies)) {
             return false;
         }
         RDatadep datadep = (RDatadep) relation;
-        List<ObjRelation> dependencies = datadep.getDependedRelations();
-        if(_valueDecideRelation.size() != dependencies.size()) {
+        List<ObjRelation> deps = datadep.getDependedRelations();
+        if(_valueDecideRelation.size() != deps.size()) {
             return false;
         }
 
         for(int i = 0; i < _valueDecideRelation.size(); i++) {
-            if(!_valueDecideRelation.get(i).match(dependencies.get(i))) {
+            if(!_valueDecideRelation.get(i).match(deps.get(i), dependencies)) {
                 return false;
             }
+            dependencies.add(new Pair<>(_valueDecideRelation.get(i), deps.get(i)));
         }
 
-        return _useRelation.match(datadep.getUseRelation());
+        if(_useRelation.match(datadep.getUseRelation(), dependencies)) {
+            dependencies.add(new Pair<>(_useRelation, datadep.getUseRelation()));
+            return true;
+        }
+        return false;
     }
 }
