@@ -3,6 +3,7 @@ package mfix.core.stats;
 import mfix.common.util.JavaFile;
 import mfix.core.stats.element.*;
 import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 
 /**
  * @author: Luyao Ren
@@ -45,7 +46,7 @@ public class Analyzer {
         if (type == null) {
             return null;
         }
-        return type.getName();
+        return type.getQualifiedName();
     }
 
     private class Collector extends ASTVisitor {
@@ -65,6 +66,18 @@ public class Analyzer {
             methodElement.setArgsType(argsType);
 
             _elementCounter.add(methodElement);
+
+            return true;
+        }
+
+
+        public boolean visit(SimpleName name) {
+            if (name.resolveBinding() instanceof IVariableBinding) {
+                VarElement varElement = new VarElement(name.getFullyQualifiedName(), _fileName);
+                varElement.setVarType(getExprTypeOrNull(name));
+
+                _elementCounter.add(varElement);
+            }
 
             return true;
         }

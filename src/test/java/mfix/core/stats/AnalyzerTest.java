@@ -31,14 +31,12 @@ public class AnalyzerTest extends TestCase {
         ElementQueryType withoutTypeInAllFiles = new ElementQueryType(false, ElementQueryType.CountType.ALL);
         ElementQueryType withoutTypeCountFiles = new ElementQueryType(false, ElementQueryType.CountType.COUNT_FILES);
 
-        // Variable haven't support now.
-        /*
         Element VarElementA = new VarElement("path", "org.apache.tools.ant.Path", srcFile);
         Element VarElementB = new VarElement("path", "java.lang.StringBuffer", srcFile);
         Element VarElementC = new VarElement("noThisVar", "java.lang.StringBuffer", srcFile);
 
-        Assert.assertTrue(counter.count(VarElementA, withTypeInAllFiles) == 1);
-        Assert.assertTrue(counter.count(VarElementA, withoutTypeInAllFiles) == 6);
+        Assert.assertTrue(counter.count(VarElementA, withTypeInAllFiles) == 2);
+        Assert.assertTrue(counter.count(VarElementA, withoutTypeInAllFiles) == 7);
         Assert.assertTrue(counter.count(VarElementA, withoutTypeCountFiles) == 1);
 
         Assert.assertTrue(counter.count(VarElementB, withTypeInAllFiles) == 5);
@@ -46,20 +44,20 @@ public class AnalyzerTest extends TestCase {
         Assert.assertTrue(counter.count(VarElementC, withTypeInAllFiles) == 0);
         Assert.assertTrue(counter.count(VarElementC, withoutTypeInAllFiles) == 0);
         Assert.assertTrue(counter.count(VarElementC, withoutTypeCountFiles) == 0);
-        */
+
 
         MethodElement methodElementD = new MethodElement("close", srcFile);
         Assert.assertTrue(counter.count(methodElementD, withoutTypeInAllFiles) == 2);
 
         MethodElement methodElementE = new MethodElement("setProperty", srcFile);
-        methodElementE.setObjType("PropertyHelper");
+        methodElementE.setObjType("org.apache.tools.ant.PropertyHelper");
         methodElementE.setArgsNumber(4);
         Assert.assertTrue(counter.count(methodElementE, withoutTypeInAllFiles) == 2);
         Assert.assertTrue(counter.count(methodElementE, withTypeInAllFiles) == 1);
 
         methodElementE.setArgsNumber(3);
         Assert.assertTrue(counter.count(methodElementE, withTypeInAllFiles) == 0);
-        
+
         counter.close();
 
         // Drop the new table for test.
