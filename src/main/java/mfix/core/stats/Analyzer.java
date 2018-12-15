@@ -37,12 +37,15 @@ public class Analyzer {
         _cunit.accept(new Collector());
     }
 
-    private String getNameOrNull(ITypeBinding typeBinding) { // help function
-        if (typeBinding == null) {
+    private String getExprTypeOrNull(Expression expr) { // help function
+        if (expr == null) {
             return null;
-        } else {
-            return typeBinding.getName();
         }
+        ITypeBinding type = expr.resolveTypeBinding();
+        if (type == null) {
+            return null;
+        }
+        return type.getName();
     }
 
     private class Collector extends ASTVisitor {
@@ -51,13 +54,13 @@ public class Analyzer {
             MethodElement element = new MethodElement(callFuncName, _fileName);
 
             if (method.getExpression() != null) {
-                element.setObjType(getNameOrNull(method.getExpression().resolveTypeBinding()));
+                element.setObjType(getExprTypeOrNull(method.getExpression()));
             }
-            element.setRetType(getNameOrNull(method.resolveTypeBinding()));
+            element.setRetType(getExprTypeOrNull(method));
             element.setArgsNumber(method.arguments().size());
             String argsType = "";
             for (Object object : method.arguments()) {
-                argsType += getNameOrNull(((Expression) object).resolveTypeBinding()) + ",";
+                argsType += getExprTypeOrNull((Expression) object) + ",";
             }
             element.setArgsType(argsType);
 

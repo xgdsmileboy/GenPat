@@ -1,12 +1,11 @@
 package mfix.core.stats.element;
 
-
 /**
  * @author: Luyao Ren
  * @date: 2018/12/14
  */
 public class VarElement extends Element {
-    protected String _varType;
+    protected String _varType = null;
 
     public VarElement(String name, String fileName) {
         super(ElementType.VAR, name, fileName);
