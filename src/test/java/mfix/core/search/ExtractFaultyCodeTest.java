@@ -35,7 +35,7 @@ public class ExtractFaultyCodeTest extends TestCase {
         for (Location location : locations) {
             String file = Utils.join(Constant.SEP, subject.getHome(), subject.getSsrc(), location.getRelClazzFile());
             MethodDeclaration md = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
-            System.out.println(md.toString());
+            Assert.assertTrue(md.getName().getIdentifier().equals("createNumber"));
         }
     }
 
@@ -47,7 +47,7 @@ public class ExtractFaultyCodeTest extends TestCase {
         for (Location location : locations) {
             String file = Utils.join(Constant.SEP, subject.getHome(), subject.getSsrc(), location.getRelClazzFile());
             ASTNode node = ExtractFaultyCode.extractMinimalASTNode(file, location.getLine());
-            System.out.println(node.toString());
+            Assert.assertTrue(node instanceof IfStatement);
         }
     }
 

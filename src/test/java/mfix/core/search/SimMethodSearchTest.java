@@ -19,6 +19,7 @@ import mfix.core.parse.NodeParser;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -47,10 +48,11 @@ public class SimMethodSearchTest extends TestCase {
             for(String f : files) {
                 unit = JavaFile.genASTFromFileWithType(f);
                 Map<Node, Pair<Double, Double>> nodes = SimMethodSearch.searchSimMethod(unit, fnode,0.95);
-                for(Map.Entry<Node, Pair<Double, Double>> entry: nodes.entrySet()) {
-                    System.out.println("DIST : " + entry.getValue().getFirst() + "\tANGLE : " + entry.getValue().getSecond());
-                    System.out.println(entry);
-                }
+                Assert.assertTrue(nodes.isEmpty() || nodes.size() == 1);
+//                for(Map.Entry<Node, Pair<Double, Double>> entry: nodes.entrySet()) {
+//                    System.out.println("DIST : " + entry.getValue().getFirst() + "\tANGLE : " + entry.getValue().getSecond());
+//                    System.out.println(entry);
+//                }
             }
 
         }
