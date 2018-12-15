@@ -149,16 +149,10 @@ public class Pattern implements Serializable {
     public Pattern minimize(int expandLevel, boolean force) {
         if(_minimized && !force) return this;
         _minimized = true;
-        Map<Relation, Integer> oldR2index = new HashMap<>();
-        Map<Relation, Integer> newR2index = new HashMap<>();
+        Map<Relation, Integer> oldR2index = mapRelation2LstIndex(_oldRelations);
+        Map<Relation, Integer> newR2index = mapRelation2LstIndex(_newRelations);
         int oldLen = _oldRelations.size();
         int newLen = _newRelations.size();
-        for(int i = 0; i < oldLen; i++) {
-            oldR2index.put(_oldRelations.get(i), i);
-        }
-        for(int i = 0; i < newLen; i++) {
-            newR2index.put(_newRelations.get(i), i);
-        }
 
         int[][] matrix = new int[oldLen][newLen];
         Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
@@ -189,6 +183,16 @@ public class Pattern implements Serializable {
         // expand the relations based on "expandLevel"
 
         return this;
+    }
+
+    private Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {
+        Map<Relation, Integer> map = new HashMap<>();
+        if(relations != null) {
+            for (int i = 0; i < relations.size(); i++) {
+                map.put(relations.get(i), i);
+            }
+        }
+        return map;
     }
 
     public List<Relation> getMinimizedOldRelations() {
