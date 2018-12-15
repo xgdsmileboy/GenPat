@@ -16,7 +16,7 @@ public class Element {
     protected String _elementName;
     protected String _sourceFile;
 
-    Element(ElementType elementType, String name, String sourceFile) {
+    public Element(ElementType elementType, String name, String sourceFile) {
         _elementType = elementType;
         _elementName = name;
         _sourceFile = sourceFile;
@@ -36,7 +36,7 @@ public class Element {
         if (_elementType == Element.ElementType.VAR) {
             VarElement var = (VarElement) this;
             KeyToValue.put("table", "VarTable");
-            if ((var._varType != null) && (var._varType != "?")) {
+            if (var._varType != null) {
                 KeyToValue.put("varType", var._varType);
             }
         } else if (_elementType == Element.ElementType.METHOD) {
