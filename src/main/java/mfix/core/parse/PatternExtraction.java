@@ -34,6 +34,12 @@ public class PatternExtraction {
     private PatternExtraction(){}
 
     public static Pattern extract(Node oldNode, Node newNode) {
+        if(oldNode == null || newNode == null) {
+            throw new IllegalArgumentException("Arguments cannot be null.");
+        }
+        if(oldNode.toSrcString().toString().equals(newNode.toSrcString().toString())) {
+            return null;
+        }
         Pattern pattern = new Pattern();
         pattern.setOldRelationFlag(true);
         patternExtraction.process(oldNode, pattern);
@@ -734,7 +740,7 @@ public class PatternExtraction {
     public List<Relation> visit(StrLiteral node, Pattern pattern) {
         List<Relation> result = new LinkedList<>();
         RVDef virtualdef = new RVDef();
-        virtualdef.setValue(node.getValue());
+        virtualdef.setValue(node.toSrcString().toString());
         virtualdef.setTypeStr("String");
         pattern.addRelation(virtualdef);
         result.add(virtualdef);
