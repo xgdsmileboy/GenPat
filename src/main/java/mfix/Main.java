@@ -101,45 +101,6 @@ public class Main {
 
     }
 
-//    public static void main(String[] args) {
-//        String base = "/home/ubuntu/code/d4j/projects_4_fix";
-//        Set<String> codeBase = new HashSet<>();
-//        Map<String, Integer> path2version = new HashMap<>();
-//        path2version.put("2011", 5);
-//        path2version.put("2012-2014", 69);
-//        path2version.put("2015", 40);
-//        path2version.put("2016", 49);
-//        path2version.put("2017", 60);
-//
-//        Set<String> already = new HashSet<>();
-//        already.add("/home/lee/Xia/GitHubData/MissSome/2016/V36");
-//        already.add("/home/lee/Xia/GitHubData/MissSome/2016/V35");
-//        already.add("/home/lee/Xia/GitHubData/MissSome/2016/V38");
-//        already.add("/home/lee/Xia/GitHubData/MissSome/2016/V37");
-//        already.add("/home/lee/Xia/GitHubData/MissSome/2016/V32");
-//        already.add("/home/lee/Xia/GitHubData/MissSome/2016/V31");
-//        already.add("/home/lee/Xia/GitHubData/MissSome/2016/V34");
-//
-//        for (Map.Entry<String, Integer> entry : path2version.entrySet()) {
-//            for (int i = 1; i < entry.getValue(); i++) {
-//                String path = "/home/lee/Xia/GitHubData/MissSome/" + entry.getKey() + "/V" + i;
-//                if(already.contains(path)) continue;
-//                codeBase.add(path);
-//            }
-//        }
-////        D4jSubject subject = new D4jSubject(base, "chart", 1);
-//        Set<Integer> ids = new HashSet<>();
-//        ids.add(1);
-////        ids.add(2);
-////        ids.add(3);
-////        ids.add(5);
-//        Set<D4jSubject> subjects = Utils.select(base, "math", ids);
-//        for(D4jSubject subject : subjects) {
-//            process(subject, codeBase);
-//        }
-//    }
-
-
     private static Set<String> obtainCases(String base, int bound, int number) {
         Set<String> fileNames = new HashSet<>();
         Random random = new Random();
