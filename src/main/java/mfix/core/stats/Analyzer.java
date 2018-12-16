@@ -1,11 +1,9 @@
 package mfix.core.stats;
 
-import mfix.core.parse.node.expr.MethodInv;
-import mfix.core.parse.node.expr.SName;
+import mfix.common.util.JavaFile;
+import mfix.core.stats.element.*;
 import org.eclipse.jdt.core.dom.*;
-import mfix.core.parse.node.*;
-
-import java.util.Set;
+import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 
 /**
  * @author: Luyao Ren
@@ -13,46 +11,75 @@ import java.util.Set;
  */
 public class Analyzer {
     private static Analyzer _instance;
-    private CompilationUnit _cunit;
     private String _fileName;
-    private ElementCounter _elementCounter = new ElementCounter<Element>();
-    private ElementCounter _typedElementCounter = new ElementCounter<TypedElement>();
+    private ElementCounter _elementCounter = null;
 
     public static Analyzer getInstance() {
         if (_instance == null) {
             _instance = new Analyzer();
+            _instance.open();
         }
         return _instance;
     }
 
-    public void analyze(Node curNode) {
-        if (curNode instanceof MethodInv) {
-            // System.out.println("code=" + curNode.toString());
-            // System.out.println(curNode.getCalledMethods().toString());
-            // System.out.println(curNode.getAllVars().toString());
+    public void open() {
+        _elementCounter = new ElementCounter();
+        _elementCounter.open();
+    }
 
-            for (Set<Node> methodSet : curNode.getCalledMethods().values()) {
-                for (Node method : methodSet) {
-                    _elementCounter.add(new Element(method.toString()));
-                    _typedElementCounter.add(new TypedElement(method.toString(), method.getNodeType()));
-                }
-            }
-            for (SName var : curNode.getAllVars()) {
-                _elementCounter.add(new Element(var.getName()));
-                _typedElementCounter.add(new TypedElement(var));
-            }
+    public void finish() {
+        _elementCounter.close();
+    }
+
+    public void runFile(String srcFile) {
+        _fileName = srcFile;
+
+        CompilationUnit _cunit = JavaFile.genASTFromFileWithType(srcFile, null);
+        _cunit.accept(new Collector());
+    }
+
+    private String getExprTypeOrNull(Expression expr) { // help function
+        if (expr == null) {
+            return null;
         }
-        for (Node child : curNode.getAllChildren()) {
-            analyze(child);
+        ITypeBinding type = expr.resolveTypeBinding();
+        if (type == null) {
+            return null;
+        }
+        return type.getQualifiedName();
+    }
+
+    private class Collector extends ASTVisitor {
+        public boolean visit(MethodInvocation method) {
+            String callFuncName = method.getName().getFullyQualifiedName();
+            MethodElement methodElement = new MethodElement(callFuncName, _fileName);
+
+            if (method.getExpression() != null) {
+                methodElement.setObjType(getExprTypeOrNull(method.getExpression()));
+            }
+            methodElement.setRetType(getExprTypeOrNull(method));
+            methodElement.setArgsNumber(method.arguments().size());
+            String argsType = "";
+            for (Object object : method.arguments()) {
+                argsType += getExprTypeOrNull((Expression) object) + ",";
+            }
+            methodElement.setArgsType(argsType);
+
+            _elementCounter.add(methodElement);
+
+            return true;
+        }
+
+
+        public boolean visit(SimpleName name) {
+            if (name.resolveBinding() instanceof IVariableBinding) {
+                VarElement varElement = new VarElement(name.getFullyQualifiedName(), _fileName);
+                varElement.setVarType(getExprTypeOrNull(name));
+
+                _elementCounter.add(varElement);
+            }
+
+            return true;
         }
     }
-
-    public Integer getElementFrequency(Element element) {
-        return _elementCounter.count(element);
-    }
-
-    public Integer getTypedElementFrequency(TypedElement element) {
-        return _typedElementCounter.count(element);
-    }
-
 }
