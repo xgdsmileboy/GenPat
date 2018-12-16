@@ -12,6 +12,15 @@ public class DatabaseConnector {
     static final String DB_URL_FOR_TEST = "jdbc:mysql://localhost:3306/MINEFIX_test";
     static final String DB_USER = "root";
     static final String DB_PASSWORD = "thisispassword";
+
+    static final String DB_SELECT_FOR_COUNT_CODE = "SELECT count(%s) FROM (%s) WHERE (%s)";
+    static final String DB_INSERT_CODE = "INSERT INTO %s (%s) VALUES (%s)";
+    static final String DB_TRY_DROP_TABLE = "DROP TABLE IF EXISTS %s";
+    static final String DB_TRY_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS %s(%s)";
+    static final String VAR_TABLE_DEFINE = "elementName varchar(255),\n sourceFile TEXT,\n varType varchar(255)";
+    static final String METHOD_TABLE_DEFINE = "elementName varchar(255),\n sourceFile TEXT,\n retType varchar(255),\n objType varchar(255),\n argsType TEXT,\n argsNumber varchar(255)\n";
+    static final String DEFAULT_COUNT_COLUMN = "*";
+
     private static String databaseURL = DB_URL;
     private Connection conn = null;
 
@@ -35,97 +44,60 @@ public class DatabaseConnector {
 
     public Integer query(Map<String, String> queryRow) {
         // "SELECT count(*) FROM elements WHERE name == XX and type == YY"
-        String SQLcode = String.format("SELECT count(%s) FROM %s WHERE ", queryRow.getOrDefault("countColumn", "*"), queryRow.get("table"));
+        String tableName = queryRow.get(Element.KEYWORD_FOR_TABLE);
+        queryRow.remove(Element.KEYWORD_FOR_TABLE);
+        String countColumn = queryRow.getOrDefault(Element.KEYWORD_FOR_COUNT_COLUMN, DEFAULT_COUNT_COLUMN);
+        queryRow.remove(Element.KEYWORD_FOR_COUNT_COLUMN);
 
-        queryRow.remove("countColumn");
-        queryRow.remove("table");
+        StringBuffer conditionsConcat = new StringBuffer();
+
         boolean first = true;
         for (Map.Entry<String, String> entry : queryRow.entrySet()) {
             if (first) {
                 first = false;
             } else {
-                SQLcode += " and ";
+                conditionsConcat.append(" and ");
             }
-            SQLcode += entry.getKey() + " = " + String.format("\'%s\'", entry.getValue());
+            conditionsConcat.append(entry.getKey());
+            conditionsConcat.append("=");
+            conditionsConcat.append(String.format("\'%s\'", entry.getValue()));
         }
 
-        // DEBUG
-        // System.out.println(SQLcode);
-
-        Integer countNum = -1;
-
-        Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(SQLcode);
-            if (rs.next()) {
-                countNum = rs.getInt(1);
-            }
-            rs.close();
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-
-        return countNum;
+        return executeSQLwithSingleNumberReturn(
+                String.format(DB_SELECT_FOR_COUNT_CODE, countColumn, tableName, conditionsConcat.toString()));
     }
 
     public void add(Map<String, String> insertRow) {
         // INSERT INTO Elements (A, B) VALUES ('aaa', 'bbb')
-        String SQLcode = String.format("INSERT INTO %s ", insertRow.get("table"));
+        String tableName = insertRow.get(Element.KEYWORD_FOR_TABLE);
+        insertRow.remove(Element.KEYWORD_FOR_TABLE);
 
-        insertRow.remove("table");
+        StringBuffer keysConcat = new StringBuffer();
+        StringBuffer valuesConcat = new StringBuffer();
         boolean first = true;
-        for (String key : insertRow.keySet()) {
+
+        for (Map.Entry<String, String> entry : insertRow.entrySet()) {
             if (first) {
-                SQLcode += "(";
                 first = false;
             } else {
-                SQLcode += ",";
+                keysConcat.append(",");
+                valuesConcat.append(",");
             }
-            SQLcode += key;
+            keysConcat.append(entry.getKey());
+            valuesConcat.append(String.format("\'%s\'", entry.getValue()));
         }
-        SQLcode += ") VALUES ";
 
-        first = true;
-        for (String value : insertRow.values()) {
-            if (first) {
-                SQLcode += "(";
-                first = false;
-            } else {
-                SQLcode += ",";
-            }
-            SQLcode += String.format("\'%s\'", value);
-        }
-        SQLcode += ")";
-
-        executeSQL(SQLcode);
+        executeSQL(String.format(DB_INSERT_CODE, tableName, keysConcat, valuesConcat));
     }
 
     public void createTable() {
-        executeSQL("CREATE TABLE IF NOT EXISTS VarTable(\n" +
-                "\telementName varchar(255),\n" +
-                "\tsourceFile TEXT,\n" +
-                "    varType varchar(255)\n" +
-                ");\n");
-        executeSQL("CREATE TABLE IF NOT EXISTS MethodTable(\n" +
-                "\telementName varchar(255),\n" +
-                "\tsourceFile TEXT,\n" +
-                "    retType varchar(255),\n" +
-                "    objType varchar(255),\n" +
-                "    argsType TEXT,\n" +
-                "    argsNumber varchar(255)\n" +
-                ");\n");
+        executeSQL(String.format(DB_TRY_CREATE_TABLE, Element.VAR_TABLE_NAME, VAR_TABLE_DEFINE));
+        executeSQL(String.format(DB_TRY_CREATE_TABLE, Element.METHOD_TABLE_NAME, METHOD_TABLE_DEFINE));
     }
 
     public void dropTable() {
-        executeSQL("DROP TABLE IF EXISTS VarTable;");
-        executeSQL("DROP TABLE IF EXISTS MethodTable;");
+        executeSQL(String.format(DB_TRY_DROP_TABLE, Element.VAR_TABLE_NAME));
+        executeSQL(String.format(DB_TRY_DROP_TABLE, Element.METHOD_TABLE_NAME));
     }
 
     public void setAsTestMode() {
@@ -149,5 +121,30 @@ public class DatabaseConnector {
                 se.printStackTrace();
             }
         }
+    }
+
+    private Integer executeSQLwithSingleNumberReturn(String SQLcode) {
+        // DEBUG
+        // System.out.println(SQLcode);
+
+        Integer countNum = -1;
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SQLcode);
+            if (rs.next()) {
+                countNum = rs.getInt(1);
+            }
+            rs.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return countNum;
     }
 }
