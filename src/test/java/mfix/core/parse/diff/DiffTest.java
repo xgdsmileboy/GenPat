@@ -9,6 +9,7 @@ package mfix.core.parse.diff;
 
 import mfix.common.util.Constant;
 import mfix.core.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
@@ -24,11 +25,11 @@ public class DiffTest extends TestCase {
         String srcFile = testbase + Constant.SEP + "src_Project.java";
         String tarFile = testbase + Constant.SEP + "tar_Project.java";
         List<Diff> diffs = Diff.extractFileDiff(srcFile, tarFile, AstDiff.class);
-        for(Diff diff : diffs) {
-            System.out.println("------------------");
-            System.out.println(diff.miniDiff());
-            System.out.println("------------------\n");
+        Assert.assertTrue(diffs.size() == 7);
+        for(int i = 0; i < 6; i++) {
+            Assert.assertTrue(diffs.get(0).getMiniDiff().size() == 3);
         }
+
     }
 
     @Test
@@ -36,10 +37,6 @@ public class DiffTest extends TestCase {
         String srcFile = testbase + Constant.SEP + "src_Project.java";
         String tarFile = testbase + Constant.SEP + "tar_Project.java";
         List<Diff> diffs = Diff.extractFileDiff(srcFile, tarFile, TextDiff.class);
-        for(Diff diff : diffs) {
-            System.out.println("------------------");
-            System.out.println(diff.miniDiff());
-            System.out.println("------------------\n");
-        }
+        Assert.assertTrue(diffs.size() == 7);
     }
 }
