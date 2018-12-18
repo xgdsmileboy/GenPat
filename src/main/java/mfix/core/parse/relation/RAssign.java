@@ -38,14 +38,17 @@ public class RAssign extends ObjRelation {
     public RAssign(ObjRelation lhs) {
         super(RelationKind.ASSIGN);
         _lhs = lhs;
+        _lhs.usedBy(this);
     }
 
     public void setLhs(ObjRelation lhs) {
         _lhs = lhs;
+        _lhs.usedBy(this);
     }
 
     public void setRhs(ObjRelation rhs) {
         _rhs = rhs;
+        _rhs.usedBy(this);
     }
 
     public ObjRelation getLhs() {
@@ -54,6 +57,18 @@ public class RAssign extends ObjRelation {
 
     public ObjRelation getRhs() {
         return _rhs;
+    }
+
+    @Override
+    protected Set<Relation> expandDownward0(Set<Relation> set) {
+        set.add(_lhs);
+        set.add(_rhs);
+        return set;
+    }
+
+    @Override
+    public String getExprString() {
+        return _lhs.getExprString();
     }
 
     @Override
@@ -72,6 +87,6 @@ public class RAssign extends ObjRelation {
 
     @Override
     public String toString() {
-        return _lhs.toString() + "=" + _rhs.toString();
+        return _lhs.getExprString() + "=" + _rhs.getExprString();
     }
 }

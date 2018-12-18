@@ -36,15 +36,29 @@ public abstract class Relation {
     protected Set<ObjRelation> _dependon;
 
     /**
+     * record this relation is used by
+     * which relations
+     */
+    private Set<Relation> _usedBy;
+
+    /**
      * Label whether a relation is matched before
      * and after repair, initially all relations are
      * not matched.
      */
     private boolean _matched = false;
 
+    /**
+     * Label whether a relation is considered in
+     * the applying procedure, initially all relations
+     * are considered
+     */
+    private boolean _concerned = true;
+
     protected Relation(RelationKind kind) {
         _relationKind = kind;
         _dependon = new HashSet<>();
+        _usedBy = new HashSet<>();
     }
 
     public RelationKind getRelationKind() {
@@ -53,16 +67,19 @@ public abstract class Relation {
 
     public void setMatched(boolean matched) {
         _matched = matched;
+        _concerned = !matched;
     }
 
     public boolean isMatched() {
         return _matched;
     }
 
-    public void addDependencies(Set<ObjRelation> relations) {
-        if(relations != null) {
-            _dependon.addAll(relations);
-        }
+    public void setConcerned(boolean concerned) {
+        _concerned = concerned;
+    }
+
+    public boolean isConcerned() {
+        return _concerned;
     }
 
     public void addDependency(ObjRelation relation) {
@@ -74,6 +91,29 @@ public abstract class Relation {
     public Set<ObjRelation> getDependencies() {
         return _dependon;
     }
+
+    public void usedBy(Relation relation) {
+        if(relation != null) {
+            _usedBy.add(relation);
+        }
+    }
+
+    public Set<Relation> getUsedBy() {
+        return _usedBy;
+    }
+
+    public void addArg(RArg arg) {}
+
+    public Set<Relation> expandDownward(Set<Relation> set) {
+        set.addAll(_dependon);
+        return expandDownward0(set);
+    }
+
+    public String getExprString(){
+        return "";
+    }
+
+    protected abstract Set<Relation> expandDownward0(Set<Relation> set);
 
     /**
      * The matched relation cannot be {@code null}

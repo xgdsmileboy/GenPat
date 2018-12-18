@@ -181,6 +181,33 @@ public class Pattern implements Serializable {
 
         // TODO: after obtain the minimal changes,
         // expand the relations based on "expandLevel"
+        Set<Relation> toExpend = new HashSet<>();
+        for(int i = 0; i < _oldRelations.size(); i++) {
+            if(!old2new.containsKey(i)) {
+                toExpend.add(_oldRelations.get(i));
+            }
+        }
+
+        Set<Relation> toTagConcerned = new HashSet<>();
+        Set<Relation> expanded;
+        while((expandLevel--) > 0) {
+            expanded = new HashSet<>();
+            for(Relation r : toExpend) {
+                r.expandDownward(expanded);
+                expanded.addAll(r.getUsedBy());
+            }
+            toTagConcerned.addAll(expanded);
+            toExpend = expanded;
+        }
+
+        for(Relation r : toTagConcerned) {
+            Integer oldIndex = oldR2index.get(r);
+            _oldRelations.get(oldIndex).setConcerned(true);
+            Integer newIndex = old2new.get(oldIndex);
+            if(newIndex != null) {
+                _newRelations.get(newIndex).setConcerned(true);
+            }
+        }
 
         return this;
     }
@@ -195,22 +222,22 @@ public class Pattern implements Serializable {
         return map;
     }
 
-    public List<Relation> getMinimizedOldRelations() {
+    public List<Relation> getMinimizedOldRelations(boolean concerned) {
         if(!_minimized) minimize(0);
         List<Relation> relations = new LinkedList<>();
         for(Relation r : _oldRelations) {
-            if(!r.isMatched()) {
+            if(!r.isMatched() || (concerned && r.isConcerned())) {
                 relations.add(r);
             }
         }
         return relations;
     }
 
-    public List<Relation> getMinimizedNewRelations() {
+    public List<Relation> getMinimizedNewRelations(boolean concerned) {
         if(!_minimized) minimize(0);
         List<Relation> relations = new LinkedList<>();
         for(Relation r : _newRelations) {
-            if(!r.isMatched()) {
+            if(!r.isMatched() || (concerned && r.isConcerned())) {
                 relations.add(r);
             }
         }

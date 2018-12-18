@@ -10,6 +10,10 @@ package mfix.core.parse.relation;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -43,13 +47,19 @@ public class RMcall extends ObjRelation {
      */
     private String _methodName;
 
+    private List<RArg> _args;
+
     public RMcall(MCallType type) {
         super(RelationKind.MCALL);
         _type = type;
+        _args = new LinkedList<>();
     }
 
     public void setReciever(ObjRelation reciever) {
         _receiver = reciever;
+        if(_receiver != null) {
+            _receiver.usedBy(this);
+        }
     }
 
     public void setMethodName(String name) {
@@ -66,6 +76,85 @@ public class RMcall extends ObjRelation {
 
     public String getMethodName() {
         return _methodName;
+    }
+
+    @Override
+    public void addArg(RArg arg) {
+        _args.add(arg);
+    }
+
+
+    private StringBuffer buildArgString() {
+        StringBuffer buffer = new StringBuffer("(");
+        boolean first = true;
+        Collections.sort(_args, new Comparator<RArg>() {
+            @Override
+            public int compare(RArg o1, RArg o2) {
+                return o2.getIndex() - o1.getIndex();
+            }
+        });
+        for(RArg r : _args) {
+            if(first) {
+                buffer.append(r.getExprString());
+            } else {
+                buffer.append("," + r.getExprString());
+            }
+        }
+        buffer.append(")");
+        return buffer;
+    }
+
+    @Override
+    public String getExprString() {
+        StringBuffer buffer = new StringBuffer();
+        if(_receiver != null) {
+            buffer.append(_receiver.getExprString() + ".");
+        }
+        switch(_type) {
+            case NORM_MCALL:
+                buffer.append(_methodName);
+                buffer.append(buildArgString());
+                break;
+            case SUPER_MCALL:
+                buffer.append("super.");
+                buffer.append(_methodName);
+                buffer.append(buildArgString());
+                break;
+            case SUPER_INIT_CALL:
+                buffer.append("super");
+                buffer.append(buildArgString());
+                break;
+            case INIT_CALL:
+                buffer.append("new ");
+                buffer.append(_methodName);
+                buffer.append(buildArgString());
+                break;
+            case NEW_ARRAY:
+                buffer.append("new ");
+                buffer.append(_methodName);
+                for(RArg r : _args) {
+                    buffer.append("[");
+                    buffer.append(r.getExprString());
+                    buffer.append("]");
+                }
+                break;
+            case CAST:
+                buffer.append("(");
+                buffer.append(_methodName);
+                buffer.append(")");
+                buffer.append(buildArgString());
+            default:
+        }
+        return buffer.toString();
+    }
+
+    @Override
+    protected Set<Relation> expandDownward0(Set<Relation> set) {
+        if(_receiver != null) {
+            set.add(_receiver);
+        }
+        set.addAll(_args);
+        return set;
     }
 
     @Override
@@ -107,42 +196,6 @@ public class RMcall extends ObjRelation {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer("[");
-        if(_receiver != null) {
-            buffer.append(_receiver.toString() + ".");
-        }
-        switch(_type) {
-            case NORM_MCALL:
-                buffer.append(_methodName);
-                buffer.append("()");
-                break;
-            case SUPER_MCALL:
-                buffer.append("super.");
-                buffer.append(_methodName);
-                buffer.append("()");
-                break;
-            case SUPER_INIT_CALL:
-                buffer.append("super");
-                buffer.append("()");
-                break;
-            case INIT_CALL:
-                buffer.append("new ");
-                buffer.append(_methodName);
-                buffer.append("()");
-                break;
-            case NEW_ARRAY:
-                buffer.append("new ");
-                buffer.append(_methodName);
-                buffer.append("[]");
-                break;
-            case CAST:
-                buffer.append("(");
-                buffer.append(_methodName);
-                buffer.append(")");
-                buffer.append("()");
-            default:
-        }
-        buffer.append("]");
-        return buffer.toString();
+        return getExprString();
     }
 }

@@ -25,13 +25,13 @@ public class RDef extends ObjRelation {
     /**
      * {@code java.lang.String} format of variable type
      */
-    private String _typeStr;
+    protected String _typeStr;
     /**
      * variable names
      * NOTE: this can be null if it is a constant value
      * (virtual variable definition)
      */
-    private String _name;
+    protected String _name;
     /**
      * The initializer of the variable definition
      */
@@ -59,6 +59,7 @@ public class RDef extends ObjRelation {
 
     public void setInitializer(ObjRelation initializer) {
         _initializer = initializer;
+        _initializer.usedBy(this);
     }
 
     public String getModifiers() {
@@ -75,6 +76,19 @@ public class RDef extends ObjRelation {
 
     public ObjRelation getInitializer() {
         return _initializer;
+    }
+
+    @Override
+    public String getExprString() {
+        return _name;
+    }
+
+    @Override
+    protected Set<Relation> expandDownward0(Set<Relation> set) {
+        if(_initializer != null) {
+            set.add(_initializer);
+        }
+        return set;
     }
 
     @Override
@@ -102,7 +116,7 @@ public class RDef extends ObjRelation {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer("[");
+        StringBuffer buffer = new StringBuffer();
         if(_modifiers != null) {
             buffer.append(_modifiers + " ");
         }
@@ -112,7 +126,6 @@ public class RDef extends ObjRelation {
             buffer.append("=");
             buffer.append(_initializer.toString());
         }
-        buffer.append("]");
         return buffer.toString();
     }
 }

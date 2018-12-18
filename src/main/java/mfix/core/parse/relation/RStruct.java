@@ -33,6 +33,11 @@ public class RStruct extends Relation {
     }
 
     @Override
+    protected Set<Relation> expandDownward0(Set<Relation> set) {
+        return set;
+    }
+
+    @Override
     public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
         if(!super.match(relation, dependencies)) {
             return false;
