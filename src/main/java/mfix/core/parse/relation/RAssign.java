@@ -15,7 +15,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/11/29
  */
-public class RAssign extends Relation {
+public class RAssign extends ObjRelation {
     /**
      * the following assignment operators should be
      * normalized to an {@code ROpt} relation
@@ -37,6 +37,10 @@ public class RAssign extends Relation {
 
     public RAssign(ObjRelation lhs) {
         super(RelationKind.ASSIGN);
+        _lhs = lhs;
+    }
+
+    public void setLhs(ObjRelation lhs) {
         _lhs = lhs;
     }
 
