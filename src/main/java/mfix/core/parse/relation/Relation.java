@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -30,8 +31,9 @@ public abstract class Relation {
     private RelationKind _relationKind;
     /**
      * a relation may rely on some other relation
+     * Especially, this list record the define use relation
      */
-    protected Relation _parent;
+    protected Set<ObjRelation> _dependon;
 
     /**
      * Label whether a relation is matched before
@@ -42,6 +44,7 @@ public abstract class Relation {
 
     protected Relation(RelationKind kind) {
         _relationKind = kind;
+        _dependon = new HashSet<>();
     }
 
     public RelationKind getRelationKind() {
@@ -54,6 +57,22 @@ public abstract class Relation {
 
     public boolean isMatched() {
         return _matched;
+    }
+
+    public void addDependencies(Set<ObjRelation> relations) {
+        if(relations != null) {
+            _dependon.addAll(relations);
+        }
+    }
+
+    public void addDependency(ObjRelation relation) {
+        if(relation != null) {
+            _dependon.add(relation);
+        }
+    }
+
+    public Set<ObjRelation> getDependencies() {
+        return _dependon;
     }
 
     /**
