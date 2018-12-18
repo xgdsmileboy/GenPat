@@ -186,6 +186,8 @@
                     <excludes>
                         <!-- related to z3 solver that depends on native library -->
                         <exclude>**/PatternExtractionTest.java</exclude>
+                        <!-- related to mysql operation -->
+                        <exclude>**/stats/AnalyzerTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
