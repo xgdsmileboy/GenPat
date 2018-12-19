@@ -143,10 +143,14 @@ public class Pattern implements Serializable {
      * @param expandLevel : denotes how many levels should be expanded
      */
     public Pattern minimize(int expandLevel) {
-        return minimize(expandLevel, false);
+        return minimize(expandLevel, 100,false);
     }
 
-    public Pattern minimize(int expandLevel, boolean force) {
+    public Pattern minimize(int expandLevel, int maxRNumbers) {
+        return minimize(expandLevel, maxRNumbers,false);
+    }
+
+    public Pattern minimize(int expandLevel, int maxRNumbers, boolean force) {
         if(_minimized && !force) return this;
         _minimized = true;
         Map<Relation, Integer> oldR2index = mapRelation2LstIndex(_oldRelations);
@@ -188,7 +192,11 @@ public class Pattern implements Serializable {
             }
         }
 
+        // remove the number of minimal changed relations
+        maxRNumbers -= _oldRelations.size() + _newRelations.size() - 2 * old2new.size();
+
         Set<Relation> expanded;
+        Set<Relation> relations2Tag;
         int currentLevel = 0;
         while((expandLevel--) > 0) {
             currentLevel ++;
@@ -198,19 +206,31 @@ public class Pattern implements Serializable {
                 expanded.addAll(r.getUsedBy());
             }
 
+            relations2Tag = new HashSet<>();
+            // using the max relation number to
+            // restrain the expansion
             for(Relation r : expanded) {
-                Integer oldIndex = oldR2index.get(r);
-                _oldRelations.get(oldIndex).setExpendedLevel(currentLevel);
-                Integer newIndex = old2new.get(oldIndex);
-                if(newIndex != null) {
-                    _newRelations.get(newIndex).setExpendedLevel(currentLevel);
+                // filter already considered relations
+                if(!r.isConcerned()) {
+                    relations2Tag.add(r);
+                    Integer index = old2new.get(oldR2index.get(r));
+                    if(index != null) {
+                        relations2Tag.add(_newRelations.get(index));
+                    }
                 }
             }
+            maxRNumbers -= relations2Tag.size();
+            if(maxRNumbers < 0) {
+                break;
+            }
 
-            toExpend = expanded;
+            // to tag all expended relations with
+            // current expand level
+            for(Relation r : relations2Tag) {
+                r.setExpendedLevel(currentLevel);
+            }
+            toExpend = relations2Tag;
         }
-
-
 
         return this;
     }

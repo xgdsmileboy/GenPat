@@ -114,7 +114,7 @@ public class PatternExtractionTest extends TestCase {
                 Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1);
                 Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 3);
 
-                pattern.minimize(1, true);
+                pattern.minimize(1, 100, true);
                 // the minimal changed relations should be unchanged regardless of the expansion
                 Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
                 Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
@@ -123,12 +123,20 @@ public class PatternExtractionTest extends TestCase {
                 Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1 + 2);
                 Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 3 + 2);
 
-                pattern.minimize(2, true);
+                pattern.minimize(2, 100, true);
                 Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
                 Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
                 // six more concerned relations after expanding two level
                 Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1 + 6);
                 Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 3 + 6);
+
+                pattern.minimize(2, 10, true);
+                Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
+                // two more concerned relations even expand level is 2,
+                // since the max relation number is no more than 10.
+                Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1 + 2);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 3 + 2);
 
             }
         }
