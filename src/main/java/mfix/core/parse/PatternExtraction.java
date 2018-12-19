@@ -83,6 +83,7 @@ public class PatternExtraction {
         arg.setIndex(index);
         arg.setArgument((ObjRelation) children.get(0));
         pattern.addRelation(arg);
+        operation.addArg(arg);
         operation.addDependency(scope.getDefines(children.get(0)));
     }
 
@@ -93,6 +94,7 @@ public class PatternExtraction {
         arg.setIndex(index);
         arg.setArgument((ObjRelation) children.get(0));
         pattern.addRelation(arg);
+        mcall.addArg(arg);
         mcall.addDependency(scope.getDefines(children.get(0)));
     }
 

@@ -7,6 +7,10 @@
 
 package mfix.core.parse.relation.op;
 
+import mfix.core.parse.relation.RArg;
+
+import java.util.List;
+
 /**
  * @author: Jiajun
  * @date: 2018/12/5
@@ -21,6 +25,83 @@ public abstract class AbsOperation {
 
     public Op getOperator() {
         return _operator;
+    }
+
+    public String getExprString(List<RArg> args) {
+        switch(_operator) {
+            case A_PLUS:
+            case A_MINUS:
+            case A_MUL:
+            case A_DIV:
+            case A_MOD:
+            case R_EQ:
+            case R_NEQ:
+            case R_GT:
+            case R_LT:
+            case R_GE:
+            case R_LE:
+            case B_AND:
+            case B_OR:
+            case B_XOR:
+            case B_SHL:
+            case B_SHR:
+            case B_SSHR:
+            case L_AND:
+            case L_OR:
+            case C_INSTOF:
+                assert args.size() == 2;
+                RArg lhs, rhs;
+                if(args.get(0).getIndex() == BinaryOp.POSITION_LHS) {
+                    lhs = args.get(0);
+                    rhs = args.get(1);
+                } else {
+                    lhs = args.get(1);
+                    rhs = args.get(0);
+                }
+                return String.format("(%s)%s(%s)", lhs.getExprString(), _operator.toString(), rhs.getExprString());
+            case A_INC:
+            case A_DEC:
+                assert args.size() == 1;
+                if(args.get(0).getIndex() == BinaryOp.POSITION_LHS) {
+                    return String.format("(%s)%s", args.get(0).getExprString(), _operator.toString());
+                } else {
+                    return String.format("%s(%s)", _operator.toString(), args.get(0).getExprString());
+                }
+            case B_COMPLIMENT:
+            case L_NOT:
+                assert args.size() == 1;
+                return String.format("%s(%s)", _operator.toString(), args.get(0).getExprString());
+            case C_COND:
+                assert args.size() == 3;
+                RArg cond = null, then = null, els = null;
+                for(RArg arg : args) {
+                    switch (arg.getIndex()) {
+                        case CopCond.POSITION_CONDITION:
+                            cond = arg;
+                            break;
+                        case CopCond.POSITION_THEN:
+                            then = arg;
+                            break;
+                        case CopCond.POSITION_ELSE:
+                            els = arg;
+                    }
+                }
+                assert cond != null && then != null && els != null;
+                return String.format("(%)?(%s):(%s)", cond.getExprString(), then.getExprString(), els.getExprString());
+            case ARRY_ACC:
+                assert args.size() == 2;
+                RArg ary, idx;
+                if(args.get(0).getIndex() == BinaryOp.POSITION_LHS) {
+                    ary = args.get(0);
+                    idx = args.get(1);
+                } else {
+                    ary = args.get(1);
+                    idx = args.get(0);
+                }
+                return String.format("%s[%s]", ary.getExprString(), idx.getExprString());
+            default:
+        }
+        return "[OP]";
     }
 
     public boolean match(AbsOperation operation) {

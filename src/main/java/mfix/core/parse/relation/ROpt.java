@@ -10,6 +10,8 @@ package mfix.core.parse.relation;
 import mfix.common.util.Pair;
 import mfix.core.parse.relation.op.AbsOperation;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,9 +25,12 @@ public class ROpt extends ObjRelation {
      */
     private AbsOperation _operation;
 
+    private List<RArg> _args;
+
     public ROpt(AbsOperation operation) {
         super(RelationKind.OPERATION);
         _operation = operation;
+        _args = new LinkedList<>();
     }
 
     public void setOperation(AbsOperation operation) {
@@ -34,6 +39,27 @@ public class ROpt extends ObjRelation {
 
     public AbsOperation getOperation() {
         return _operation;
+    }
+
+    @Override
+    public void addArg(RArg arg) {
+        _args.add(arg);
+    }
+
+    @Override
+    public String getExprString() {
+        return _operation.getExprString(_args);
+    }
+
+    @Override
+    protected Set<Relation> expandDownward0(Set<Relation> set) {
+        set.addAll(_args);
+        return set;
+    }
+
+    @Override
+    public void doAbstraction(double frequency) {
+
     }
 
     @Override
@@ -47,6 +73,6 @@ public class ROpt extends ObjRelation {
 
     @Override
     public String toString() {
-        return _operation.toString();
+        return getExprString();
     }
 }

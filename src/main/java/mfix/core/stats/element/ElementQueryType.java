@@ -6,7 +6,13 @@ package mfix.core.stats.element;
  */
 public class ElementQueryType {
     public enum CountType {
-        IN_FILE, COUNT_FILES, ALL
+        // the number appeared in only one file
+        // specifically, the file name should be given
+        IN_FILE,
+        // number of files that contains the element
+        COUNT_FILES,
+        // the number of elements in all files.
+        ALL
     };
     protected boolean _withType = false;
     protected CountType _countType = CountType.ALL;

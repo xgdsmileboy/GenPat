@@ -107,8 +107,37 @@ public class PatternExtractionTest extends TestCase {
                 nodeParser.setCompilationUnit(tarFile, tarUnit);
                 Node tarNode = nodeParser.process(pair.getSecond());
                 Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
-                Assert.assertTrue(pattern.minimize(0).getMinimizedOldRelations().size() == 1);
-                Assert.assertTrue(pattern.minimize(0).getMinimizedNewRelations().size() == 3);
+
+                pattern.minimize(0);
+                Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
+                Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 3);
+
+                pattern.minimize(1, 100, true);
+                // the minimal changed relations should be unchanged regardless of the expansion
+                Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
+                // two more concerned relations after expanding one level
+                // "<" operation and "listeners.size()" method invocation
+                Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1 + 2);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 3 + 2);
+
+                pattern.minimize(2, 100, true);
+                Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
+                // six more concerned relations after expanding two level
+                Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1 + 6);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 3 + 6);
+
+                pattern.minimize(2, 10, true);
+                Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
+                // two more concerned relations even expand level is 2,
+                // since the max relation number is no more than 10.
+                Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1 + 2);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 3 + 2);
+
             }
         }
 
