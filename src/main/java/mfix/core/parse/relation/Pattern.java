@@ -54,6 +54,7 @@ public class Pattern implements Serializable {
      */
     private List<Relation> _oldRelations;
     private List<Relation> _newRelations;
+    private Map<Integer, Integer> _oldR2newRidxMap;
 
     public Pattern() {
         _oldRelations = new ArrayList<>();
@@ -155,30 +156,33 @@ public class Pattern implements Serializable {
         _minimized = true;
         Map<Relation, Integer> oldR2index = mapRelation2LstIndex(_oldRelations);
         Map<Relation, Integer> newR2index = mapRelation2LstIndex(_newRelations);
-        int oldLen = _oldRelations.size();
-        int newLen = _newRelations.size();
 
-        int[][] matrix = new int[oldLen][newLen];
-        Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
-        Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
-        Set<Pair<Integer, Integer>> set;
-        for(int i = 0; i < oldLen; i++) {
-            for(int j = 0; j < newLen; j++) {
-                dependencies.clear();
-                if(_oldRelations.get(i).match(_newRelations.get(j), dependencies)) {
-                    matrix[i][j] = 1;
-                    String key = i + "_" + j;
-                    set = new HashSet<>();
-                    for(Pair<Relation, Relation> pair : dependencies) {
-                        set.add(new Pair<>(oldR2index.get(pair.getFirst()), newR2index.get(pair.getSecond())));
+        if(_oldR2newRidxMap == null) {
+            int oldLen = _oldRelations.size();
+            int newLen = _newRelations.size();
+
+            int[][] matrix = new int[oldLen][newLen];
+            Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
+            Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
+            Set<Pair<Integer, Integer>> set;
+            for (int i = 0; i < oldLen; i++) {
+                for (int j = 0; j < newLen; j++) {
+                    dependencies.clear();
+                    if (_oldRelations.get(i).match(_newRelations.get(j), dependencies)) {
+                        matrix[i][j] = 1;
+                        String key = i + "_" + j;
+                        set = new HashSet<>();
+                        for (Pair<Relation, Relation> pair : dependencies) {
+                            set.add(new Pair<>(oldR2index.get(pair.getFirst()), newR2index.get(pair.getSecond())));
+                        }
+                        loc2dependencies.put(key, set);
                     }
-                    loc2dependencies.put(key, set);
                 }
             }
+            Z3Solver solver = new Z3Solver();
+            _oldR2newRidxMap = solver.build(matrix, loc2dependencies);
         }
-        Z3Solver solver = new Z3Solver();
-        Map<Integer, Integer> old2new = solver.build(matrix, loc2dependencies);
-        for(Map.Entry<Integer, Integer> entry : old2new.entrySet()) {
+        for(Map.Entry<Integer, Integer> entry : _oldR2newRidxMap.entrySet()) {
             _oldRelations.get(entry.getKey()).setMatched(true);
             _newRelations.get(entry.getValue()).setMatched(true);
         }
@@ -187,13 +191,13 @@ public class Pattern implements Serializable {
         // expand the relations based on "expandLevel"
         Set<Relation> toExpend = new HashSet<>();
         for(int i = 0; i < _oldRelations.size(); i++) {
-            if(!old2new.containsKey(i)) {
+            if(!_oldR2newRidxMap.containsKey(i)) {
                 toExpend.add(_oldRelations.get(i));
             }
         }
 
         // remove the number of minimal changed relations
-        maxRNumbers -= _oldRelations.size() + _newRelations.size() - 2 * old2new.size();
+        maxRNumbers -= _oldRelations.size() + _newRelations.size() - 2 * _oldR2newRidxMap.size();
 
         Set<Relation> expanded;
         Set<Relation> relations2Tag;
@@ -213,7 +217,7 @@ public class Pattern implements Serializable {
                 // filter already considered relations
                 if(!r.isConcerned()) {
                     relations2Tag.add(r);
-                    Integer index = old2new.get(oldR2index.get(r));
+                    Integer index = _oldR2newRidxMap.get(oldR2index.get(r));
                     if(index != null) {
                         relations2Tag.add(_newRelations.get(index));
                     }
