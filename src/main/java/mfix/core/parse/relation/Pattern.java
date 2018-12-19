@@ -188,26 +188,29 @@ public class Pattern implements Serializable {
             }
         }
 
-        Set<Relation> toTagConcerned = new HashSet<>();
         Set<Relation> expanded;
+        int currentLevel = 0;
         while((expandLevel--) > 0) {
+            currentLevel ++;
             expanded = new HashSet<>();
             for(Relation r : toExpend) {
                 r.expandDownward(expanded);
                 expanded.addAll(r.getUsedBy());
             }
-            toTagConcerned.addAll(expanded);
+
+            for(Relation r : expanded) {
+                Integer oldIndex = oldR2index.get(r);
+                _oldRelations.get(oldIndex).setExpendedLevel(currentLevel);
+                Integer newIndex = old2new.get(oldIndex);
+                if(newIndex != null) {
+                    _newRelations.get(newIndex).setExpendedLevel(currentLevel);
+                }
+            }
+
             toExpend = expanded;
         }
 
-        for(Relation r : toTagConcerned) {
-            Integer oldIndex = oldR2index.get(r);
-            _oldRelations.get(oldIndex).setConcerned(true);
-            Integer newIndex = old2new.get(oldIndex);
-            if(newIndex != null) {
-                _newRelations.get(newIndex).setConcerned(true);
-            }
-        }
+
 
         return this;
     }

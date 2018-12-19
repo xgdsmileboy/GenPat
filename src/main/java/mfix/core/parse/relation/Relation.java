@@ -50,10 +50,12 @@ public abstract class Relation {
 
     /**
      * Label whether a relation is considered in
-     * the applying procedure, initially all relations
-     * are considered
+     * the matching procedure, if >= 0, considered
+     * otherwise, not considered. Its value denotes
+     * the expanded level. Initially, All relations
+     * are considered and the expanded value are 0;
      */
-    protected boolean _concerned = true;
+    protected int _expandedLevel = 0;
 
     /**
      * Label this relation is abstract or not.
@@ -72,19 +74,25 @@ public abstract class Relation {
 
     public void setMatched(boolean matched) {
         _matched = matched;
-        _concerned = !matched;
+        _expandedLevel = -1;
     }
 
     public boolean isMatched() {
         return _matched;
     }
 
-    public void setConcerned(boolean concerned) {
-        _concerned = concerned;
+    public void setExpendedLevel(int expandedLevel) {
+        if(!isConcerned()) {
+            _expandedLevel = expandedLevel;
+        }
     }
 
     public boolean isConcerned() {
-        return _concerned;
+        return _expandedLevel >= 0;
+    }
+
+    public int getExpandedLevel() {
+        return _expandedLevel;
     }
 
     public boolean isAbstract() {
