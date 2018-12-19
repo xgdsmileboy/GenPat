@@ -35,8 +35,9 @@ public class RVDef extends RDef {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(double frequency) {
+        // TODO : we can simply abstract all virtual variables
+        _isAbstract = true;
     }
 
     @Override

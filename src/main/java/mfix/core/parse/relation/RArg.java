@@ -69,8 +69,10 @@ public class RArg extends Relation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(double frequency) {
+        _function.doAbstraction(frequency);
+        _arg.doAbstraction(frequency);
+        _isAbstract = !_arg.isConcerned() || _arg.isAbstract();
     }
 
     @Override

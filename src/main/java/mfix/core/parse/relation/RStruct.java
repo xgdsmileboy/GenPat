@@ -38,8 +38,9 @@ public class RStruct extends Relation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(double frequency) {
+        // structures do not abstract
+        _isAbstract = false;
     }
 
     @Override

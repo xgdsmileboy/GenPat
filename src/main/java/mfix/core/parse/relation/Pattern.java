@@ -118,6 +118,13 @@ public class Pattern implements Serializable {
         }
     }
 
+    public void doAbstraction(double frequency) {
+        //TODO : can open and close the db here
+        for(int i = 0; i < _oldRelations.size(); i++){
+            _oldRelations.get(i).doAbstraction(frequency);
+        }
+    }
+
     private void addOldRelation(Relation relation) {
         _oldRelations.add(relation);
     }
@@ -187,7 +194,7 @@ public class Pattern implements Serializable {
             _newRelations.get(entry.getValue()).setMatched(true);
         }
 
-        // TODO: after obtain the minimal changes,
+        // after obtain the minimal changes,
         // expand the relations based on "expandLevel"
         Set<Relation> toExpend = new HashSet<>();
         for(int i = 0; i < _oldRelations.size(); i++) {

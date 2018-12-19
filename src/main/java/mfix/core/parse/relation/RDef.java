@@ -92,8 +92,14 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(double frequency) {
+        if(_initializer != null) {
+            _initializer.doAbstraction(frequency);
+        }
+        // this relation should be concretely matched
+        // NOTE: here it does not denote the name of
+        // variables but the relation it self (var-define)
+        _isAbstract = false;
     }
 
     @Override

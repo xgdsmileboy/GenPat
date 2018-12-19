@@ -61,6 +61,8 @@ public abstract class Relation {
      * Label this relation is abstract or not.
      */
     protected boolean _isAbstract = false;
+    // used to avoid repeat abstraction
+    private transient boolean _visited = false;
 
     protected Relation(RelationKind kind) {
         _relationKind = kind;
@@ -152,7 +154,14 @@ public abstract class Relation {
      * on the given {@code frequency} threshold.
      * @param frequency : frequency threshold
      */
-    public abstract void doAbstraction(double frequency);
+    public void doAbstraction(double frequency) {
+        if(isConcerned() && !_visited) {
+            _visited = true;
+            doAbstraction0(frequency);
+        }
+    }
+
+    protected abstract void doAbstraction0(double frequency);
 
     /**
      * The matched relation cannot be {@code null}

@@ -72,8 +72,11 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(double frequency) {
+        _lhs.doAbstraction(frequency);
+        _rhs.doAbstraction(frequency);
+        _isAbstract = (!_lhs.isConcerned() || _lhs.isAbstract())
+                && (!_rhs.isConcerned() || _rhs.isAbstract());
     }
 
     @Override

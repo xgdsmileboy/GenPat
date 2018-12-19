@@ -9,6 +9,9 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.stats.element.ElementCounter;
+import mfix.core.stats.element.ElementQueryType;
+import mfix.core.stats.element.MethodElement;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -158,8 +161,36 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
+    public void doAbstraction0(double frequency) {
+        if(_receiver != null) {
+            _receiver.doAbstraction(frequency);
+        }
+        switch (_type) {
+            case SUPER_INIT_CALL:
+            case INIT_CALL:
+            case NEW_ARRAY:
+            case CAST:
+                break;
+            case NORM_MCALL:
+            case SUPER_MCALL:
+                ElementCounter counter = new ElementCounter();
+                ElementQueryType qtype = new ElementQueryType(false, ElementQueryType.CountType.COUNT_FILES);
+                MethodElement methodElement = new MethodElement(_methodName, null);
+                methodElement.setArgsNumber(_args.size());
 
+                // TODO : provide frequency query with optimization at db side
+                // TODO : counter.open() will open the db as well, which should not be intensively invoked.
+                counter.open();
+                counter.count(methodElement, qtype);
+
+//                 freq = counter.frequency(methodElement, qtype);
+//                _isAbstract = freq > frequency;
+
+                break;
+        }
+        for(RArg r : _args) {
+            r.doAbstraction(frequency);
+        }
     }
 
     @Override
