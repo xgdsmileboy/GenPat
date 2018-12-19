@@ -58,6 +58,11 @@ public class ROpt extends ObjRelation {
     }
 
     @Override
+    public void doAbstraction(double frequency) {
+
+    }
+
+    @Override
     public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
         if(!super.match(relation, dependencies)) {
             return false;

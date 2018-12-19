@@ -72,6 +72,11 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
+    public void doAbstraction(double frequency) {
+
+    }
+
+    @Override
     public boolean match(Relation relation, Set<Pair<Relation, Relation>> denpendencies) {
         if(!super.match(relation, denpendencies)) {
             return false;

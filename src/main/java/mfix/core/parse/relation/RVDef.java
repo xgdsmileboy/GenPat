@@ -35,6 +35,11 @@ public class RVDef extends RDef {
     }
 
     @Override
+    public void doAbstraction(double frequency) {
+
+    }
+
+    @Override
     public String getExprString() {
         if(_name != null) {
             return _name;

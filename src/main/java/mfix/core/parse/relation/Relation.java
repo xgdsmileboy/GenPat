@@ -39,21 +39,26 @@ public abstract class Relation {
      * record this relation is used by
      * which relations
      */
-    private Set<Relation> _usedBy;
+    protected Set<Relation> _usedBy;
 
     /**
      * Label whether a relation is matched before
      * and after repair, initially all relations are
      * not matched.
      */
-    private boolean _matched = false;
+    protected boolean _matched = false;
 
     /**
      * Label whether a relation is considered in
      * the applying procedure, initially all relations
      * are considered
      */
-    private boolean _concerned = true;
+    protected boolean _concerned = true;
+
+    /**
+     * Label this relation is abstract or not.
+     */
+    protected boolean _isAbstract = false;
 
     protected Relation(RelationKind kind) {
         _relationKind = kind;
@@ -82,6 +87,10 @@ public abstract class Relation {
         return _concerned;
     }
 
+    public boolean isAbstract() {
+        return _isAbstract;
+    }
+
     public void addDependency(ObjRelation relation) {
         if(relation != null) {
             _dependon.add(relation);
@@ -104,16 +113,38 @@ public abstract class Relation {
 
     public void addArg(RArg arg) {}
 
+    /**
+     * Expand current relations downwards
+     * @param set :
+     * @return
+     */
     public Set<Relation> expandDownward(Set<Relation> set) {
         set.addAll(_dependon);
         return expandDownward0(set);
     }
 
+    /**
+     * Return the expression string format.
+     * This is for user-friendly debugging
+     * @return
+     */
     public String getExprString(){
         return "";
     }
 
+    /**
+     * Expand the changed relations downwards
+     * @param set : set to add the newly added relations
+     * @return : a set of newly added relations
+     */
     protected abstract Set<Relation> expandDownward0(Set<Relation> set);
+
+    /**
+     * Perform object abstraction in the relation based
+     * on the given {@code frequency} threshold.
+     * @param frequency : frequency threshold
+     */
+    public abstract void doAbstraction(double frequency);
 
     /**
      * The matched relation cannot be {@code null}
