@@ -11,22 +11,24 @@ public class ElementQueryType {
         IN_FILE,
         // number of files that contains the element
         COUNT_FILES,
-        // percent of files that contains the element,
-        COUNT_FILES_PERCENT,
         // the number of elements in all files.
         ALL
     };
     protected boolean _withType = false;
+    protected boolean _withPercent = false;
     protected CountType _countType = CountType.ALL;
 
-    public ElementQueryType(boolean withType, CountType countType) {
+    public ElementQueryType(boolean withType, boolean withPercent, CountType countType) {
         _withType = withType;
+        _withPercent = withPercent;
         _countType = countType;
     }
 
     public boolean getWithType() {
         return _withType;
     }
+
+    public boolean getWithPercent() { return _withPercent; }
 
     public CountType getCountType() {
         return _countType;
