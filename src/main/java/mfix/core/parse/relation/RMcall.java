@@ -161,9 +161,9 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(double frequency) {
+    public void doAbstraction0(ElementCounter counter, double frequency) {
         if(_receiver != null) {
-            _receiver.doAbstraction(frequency);
+            _receiver.doAbstraction(counter, frequency);
         }
         switch (_type) {
             case SUPER_INIT_CALL:
@@ -173,14 +173,10 @@ public class RMcall extends ObjRelation {
                 break;
             case NORM_MCALL:
             case SUPER_MCALL:
-                ElementCounter counter = new ElementCounter();
-                ElementQueryType qtype = new ElementQueryType(false, ElementQueryType.CountType.COUNT_FILES);
+                ElementQueryType qtype = new ElementQueryType(false, ElementQueryType.CountType.COUNT_FILES_PERCENT);
                 MethodElement methodElement = new MethodElement(_methodName, null);
                 methodElement.setArgsNumber(_args.size());
 
-                // TODO : provide frequency query with optimization at db side
-                // TODO : counter.open() will open the db as well, which should not be intensively invoked.
-                counter.open();
                 counter.count(methodElement, qtype);
 
 //                 freq = counter.frequency(methodElement, qtype);
@@ -189,7 +185,7 @@ public class RMcall extends ObjRelation {
                 break;
         }
         for(RArg r : _args) {
-            r.doAbstraction(frequency);
+            r.doAbstraction(counter, frequency);
         }
     }
 

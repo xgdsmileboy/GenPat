@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
 
@@ -69,9 +70,9 @@ public class RArg extends Relation {
     }
 
     @Override
-    public void doAbstraction0(double frequency) {
-        _function.doAbstraction(frequency);
-        _arg.doAbstraction(frequency);
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        _function.doAbstraction(counter, frequency);
+        _arg.doAbstraction(counter, frequency);
         _isAbstract = !_arg.isConcerned() || _arg.isAbstract();
     }
 

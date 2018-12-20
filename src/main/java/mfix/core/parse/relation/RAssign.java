@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
 
@@ -72,9 +73,9 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(double frequency) {
-        _lhs.doAbstraction(frequency);
-        _rhs.doAbstraction(frequency);
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        _lhs.doAbstraction(counter, frequency);
+        _rhs.doAbstraction(counter, frequency);
         _isAbstract = (!_lhs.isConcerned() || _lhs.isAbstract())
                 && (!_rhs.isConcerned() || _rhs.isAbstract());
     }
