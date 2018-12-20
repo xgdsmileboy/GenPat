@@ -3,7 +3,6 @@ package mfix.core.stats;
 import mfix.common.util.JavaFile;
 import mfix.core.stats.element.*;
 import org.eclipse.jdt.core.dom.*;
-import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 
 /**
  * @author: Luyao Ren

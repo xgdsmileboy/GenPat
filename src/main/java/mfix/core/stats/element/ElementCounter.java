@@ -1,7 +1,5 @@
 package mfix.core.stats.element;
 
-import java.util.Map;
-
 /**
  * @author: Luyao Ren
  * @date: 2018/12/09
