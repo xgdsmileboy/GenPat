@@ -65,7 +65,11 @@ public class Analyzer {
             }
             methodElement.setArgsType(argsType);
 
-            _elementCounter.add(methodElement);
+            try {
+                _elementCounter.add(methodElement);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
 
             return true;
         }
@@ -76,7 +80,11 @@ public class Analyzer {
                 VarElement varElement = new VarElement(name.getFullyQualifiedName(), _fileName);
                 varElement.setVarType(getExprTypeOrNull(name));
 
-                _elementCounter.add(varElement);
+                try {
+                    _elementCounter.add(varElement);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             return true;
