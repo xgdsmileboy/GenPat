@@ -34,10 +34,11 @@ public class AnalyzerTest extends TestCase {
         ElementQueryType withoutTypeCountFiles = new ElementQueryType(false, false, ElementQueryType.CountType.COUNT_FILES);
         ElementQueryType withTypeInOneFile = new ElementQueryType(true, false, ElementQueryType.CountType.IN_FILE);
 
-        ElementQueryType withTypeInAllFilesOutputPercent = new ElementQueryType(false, true, ElementQueryType.CountType.ALL);
+        ElementQueryType withoutTypeInAllFilesOutputPercent = new ElementQueryType(false, true, ElementQueryType.CountType.ALL);
         ElementQueryType withoutTypeCountFilesOutputPercent = new ElementQueryType(false, true, ElementQueryType.CountType.COUNT_FILES);
         ElementQueryType withoutTypeInOneFilesOutputPercent = new ElementQueryType(false, true, ElementQueryType.CountType.IN_FILE);
         ElementQueryType withTypeInOneFilesOutputPercent = new ElementQueryType(true, true, ElementQueryType.CountType.IN_FILE);
+        ElementQueryType withTypeInAllFilesOutputPercent = new ElementQueryType(true, true, ElementQueryType.CountType.ALL);
 
         Element VarElementA = new VarElement("path", "org.apache.tools.ant.Path", null);
         Element VarElementB = new VarElement("path", "java.lang.StringBuffer", null);
@@ -52,6 +53,9 @@ public class AnalyzerTest extends TestCase {
 
         Assert.assertTrue(counter.count(VarElementA, withoutTypeInAllFiles) == 7);
         Assert.assertTrue(counter.count(VarElementA, withoutTypeCountFiles) == 1);
+
+        Assert.assertTrue(Math.abs(counter.count(VarElementA, withTypeInAllFilesOutputPercent) - 0.001932) <= 1e-5);
+        Assert.assertTrue(Math.abs(counter.count(VarElementA, withoutTypeInAllFilesOutputPercent) - 0.006763) <= 1e-5);
 
         Assert.assertTrue(counter.count(VarElementB, withTypeInAllFiles) == 5);
 
@@ -83,7 +87,8 @@ public class AnalyzerTest extends TestCase {
         Element VarElementG = new VarElement("result", "java.util.List<org.apache.tools.ant.types.resources.Resource>", srcFile2);
         Element VarElementI = new VarElement("result", "noSuchType", srcFile2);
 
-        Assert.assertTrue(Math.abs(counter.count(VarElementG, withTypeInAllFilesOutputPercent) - 0.0029) <= 1e-3);
+        Assert.assertTrue(Math.abs(counter.count(VarElementG, withoutTypeInAllFilesOutputPercent) - 0.0029) <= 1e-3);
+
         Assert.assertTrue(counter.count(VarElementG, withoutTypeCountFilesOutputPercent) == 0.5);
         Assert.assertTrue(Math.abs(counter.count(VarElementG, withoutTypeInOneFilesOutputPercent) - 0.136) <= 1e-3);
         Assert.assertTrue(counter.count(VarElementI, withTypeInOneFilesOutputPercent) == 0);
