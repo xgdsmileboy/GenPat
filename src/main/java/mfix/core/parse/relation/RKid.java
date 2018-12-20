@@ -38,6 +38,7 @@ public class RKid extends Relation {
     public RKid(RStruct structure) {
         super(RelationKind.CHILD);
         _structure = structure;
+        this.usedBy(structure);
     }
 
     public void setIndex(int index) {
@@ -46,6 +47,7 @@ public class RKid extends Relation {
 
     public void setChild(Relation child) {
         _child = child;
+        _child.usedBy(this);
     }
 
     public RStruct getStructure() {
@@ -58,6 +60,18 @@ public class RKid extends Relation {
 
     public Relation getChildRelation() {
         return _child;
+    }
+
+    @Override
+    protected Set<Relation> expandDownward0(Set<Relation> set) {
+        set.add(_structure);
+        set.add(_child);
+        return set;
+    }
+
+    @Override
+    public void doAbstraction(double frequency) {
+
     }
 
     @Override
@@ -80,6 +94,6 @@ public class RKid extends Relation {
 
     @Override
     public String toString() {
-        return "<" + _structure.toString() + ", " +  _index + ". " + _child.toString() + ">";
+        return "[KID]";
     }
 }

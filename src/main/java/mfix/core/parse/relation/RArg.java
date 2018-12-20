@@ -33,6 +33,7 @@ public class RArg extends Relation {
     public RArg(ObjRelation function) {
         super(RelationKind.ARGUMENT);
         _function = function;
+        this.usedBy(function);
     }
 
     public void setIndex(int index) {
@@ -41,6 +42,7 @@ public class RArg extends Relation {
 
     public void setArgument(ObjRelation argument) {
         _arg = argument;
+        _arg.usedBy(this);
     }
 
     public int getIndex() {
@@ -53,6 +55,22 @@ public class RArg extends Relation {
 
     public ObjRelation getArgument() {
         return _arg;
+    }
+
+    @Override
+    public String getExprString() {
+        return _arg.getExprString();
+    }
+
+    @Override
+    protected Set<Relation> expandDownward0(Set<Relation> set) {
+        set.add(_arg);
+        return set;
+    }
+
+    @Override
+    public void doAbstraction(double frequency) {
+
     }
 
     @Override
@@ -77,6 +95,6 @@ public class RArg extends Relation {
 
     @Override
     public String toString() {
-        return "[" + _function.toString() + ", " + _index + ", " + _arg + "]";
+        return "[RArg]";
     }
 }

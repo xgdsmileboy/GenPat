@@ -35,6 +35,22 @@ public class RVDef extends RDef {
     }
 
     @Override
+    public void doAbstraction(double frequency) {
+
+    }
+
+    @Override
+    public String getExprString() {
+        if(_name != null) {
+            return _name;
+        }
+        if(_value != null) {
+            return _value.toString();
+        }
+        return null;
+    }
+
+    @Override
     public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
         if (!super.match(relation, dependencies)) {
             return false;
@@ -48,10 +64,6 @@ public class RVDef extends RDef {
 
     @Override
     public String toString() {
-        if(_value != null) {
-            return _value.toString();
-        } else {
-            return super.toString();
-        }
+        return getExprString();
     }
 }

@@ -36,15 +36,36 @@ public abstract class Relation {
     protected Set<ObjRelation> _dependon;
 
     /**
+     * record this relation is used by
+     * which relations
+     */
+    protected Set<Relation> _usedBy;
+
+    /**
      * Label whether a relation is matched before
      * and after repair, initially all relations are
      * not matched.
      */
-    private boolean _matched = false;
+    protected boolean _matched = false;
+
+    /**
+     * Label whether a relation is considered in
+     * the matching procedure, if >= 0, considered
+     * otherwise, not considered. Its value denotes
+     * the expanded level. Initially, All relations
+     * are considered and the expanded value are 0;
+     */
+    protected int _expandedLevel = 0;
+
+    /**
+     * Label this relation is abstract or not.
+     */
+    protected boolean _isAbstract = false;
 
     protected Relation(RelationKind kind) {
         _relationKind = kind;
         _dependon = new HashSet<>();
+        _usedBy = new HashSet<>();
     }
 
     public RelationKind getRelationKind() {
@@ -53,16 +74,29 @@ public abstract class Relation {
 
     public void setMatched(boolean matched) {
         _matched = matched;
+        _expandedLevel = -1;
     }
 
     public boolean isMatched() {
         return _matched;
     }
 
-    public void addDependencies(Set<ObjRelation> relations) {
-        if(relations != null) {
-            _dependon.addAll(relations);
+    public void setExpendedLevel(int expandedLevel) {
+        if(!isConcerned()) {
+            _expandedLevel = expandedLevel;
         }
+    }
+
+    public boolean isConcerned() {
+        return _expandedLevel >= 0;
+    }
+
+    public int getExpandedLevel() {
+        return _expandedLevel;
+    }
+
+    public boolean isAbstract() {
+        return _isAbstract;
     }
 
     public void addDependency(ObjRelation relation) {
@@ -74,6 +108,51 @@ public abstract class Relation {
     public Set<ObjRelation> getDependencies() {
         return _dependon;
     }
+
+    public void usedBy(Relation relation) {
+        if(relation != null) {
+            _usedBy.add(relation);
+        }
+    }
+
+    public Set<Relation> getUsedBy() {
+        return _usedBy;
+    }
+
+    public void addArg(RArg arg) {}
+
+    /**
+     * Expand current relations downwards
+     * @param set :
+     * @return
+     */
+    public Set<Relation> expandDownward(Set<Relation> set) {
+        set.addAll(_dependon);
+        return expandDownward0(set);
+    }
+
+    /**
+     * Return the expression string format.
+     * This is for user-friendly debugging
+     * @return
+     */
+    public String getExprString(){
+        return "";
+    }
+
+    /**
+     * Expand the changed relations downwards
+     * @param set : set to add the newly added relations
+     * @return : a set of newly added relations
+     */
+    protected abstract Set<Relation> expandDownward0(Set<Relation> set);
+
+    /**
+     * Perform object abstraction in the relation based
+     * on the given {@code frequency} threshold.
+     * @param frequency : frequency threshold
+     */
+    public abstract void doAbstraction(double frequency);
 
     /**
      * The matched relation cannot be {@code null}
