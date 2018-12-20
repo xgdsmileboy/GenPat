@@ -20,6 +20,8 @@ public class DatabaseConnector {
     static final String VAR_TABLE_DEFINE = "elementName varchar(255),\n sourceFile TEXT,\n varType varchar(255)";
     static final String METHOD_TABLE_DEFINE = "elementName varchar(255),\n sourceFile TEXT,\n retType varchar(255),\n objType varchar(255),\n argsType TEXT,\n argsNumber varchar(255)\n";
     static final String DEFAULT_COUNT_COLUMN = "*";
+    static final String NO_CONDITION_IN_WHRER = "TRUE";
+
 
     private static String databaseURL = DB_URL;
     private Connection conn = null;
@@ -42,25 +44,30 @@ public class DatabaseConnector {
         }
     }
 
-    public float query(Map<String, String> queryRow) {
-        // "SELECT count(*) FROM elements WHERE name == XX and type == YY"
+    public Integer query(Map<String, String> queryRow) {
+        // "SELECT count(*) FROM elements (WHERE name == XX and type == YY)"
         String tableName = queryRow.get(Element.KEYWORD_FOR_TABLE);
-        queryRow.remove(Element.KEYWORD_FOR_TABLE);
         String countColumn = queryRow.getOrDefault(Element.KEYWORD_FOR_COUNT_COLUMN, DEFAULT_COUNT_COLUMN);
-        queryRow.remove(Element.KEYWORD_FOR_COUNT_COLUMN);
 
         StringBuffer conditionsConcat = new StringBuffer();
-
         boolean first = true;
         for (Map.Entry<String, String> entry : queryRow.entrySet()) {
+            String key = entry.getKey();
+            if (key.equals(Element.KEYWORD_FOR_TABLE) || key.equals(Element.KEYWORD_FOR_COUNT_COLUMN)) {
+                continue;
+            }
             if (first) {
                 first = false;
             } else {
                 conditionsConcat.append(" and ");
             }
-            conditionsConcat.append(entry.getKey());
+            conditionsConcat.append(key);
             conditionsConcat.append("=");
             conditionsConcat.append(String.format("\'%s\'", entry.getValue()));
+        }
+
+        if (first) {
+            conditionsConcat.append(NO_CONDITION_IN_WHRER);
         }
 
         return executeSQLwithSingleNumberReturn(
@@ -70,20 +77,23 @@ public class DatabaseConnector {
     public void add(Map<String, String> insertRow) {
         // INSERT INTO Elements (A, B) VALUES ('aaa', 'bbb')
         String tableName = insertRow.get(Element.KEYWORD_FOR_TABLE);
-        insertRow.remove(Element.KEYWORD_FOR_TABLE);
 
         StringBuffer keysConcat = new StringBuffer();
         StringBuffer valuesConcat = new StringBuffer();
         boolean first = true;
 
         for (Map.Entry<String, String> entry : insertRow.entrySet()) {
+            String key = entry.getKey();
+            if (key.equals(Element.KEYWORD_FOR_TABLE)) {
+                continue;
+            }
             if (first) {
                 first = false;
             } else {
                 keysConcat.append(",");
                 valuesConcat.append(",");
             }
-            keysConcat.append(entry.getKey());
+            keysConcat.append(key);
             valuesConcat.append(String.format("\'%s\'", entry.getValue()));
         }
 

@@ -12,9 +12,7 @@ public class MethodElement extends Element {
 
     public MethodElement(String name, String fileName) { super(name, fileName); }
 
-    public void setRetType(String retType) {
-        _retType = retType;
-    }
+    public void setRetType(String retType) { _retType = retType; }
 
     public void setObjType(String objType) {
         _objType = objType;
