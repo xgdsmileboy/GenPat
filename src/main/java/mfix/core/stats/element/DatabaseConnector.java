@@ -42,7 +42,7 @@ public class DatabaseConnector {
         }
     }
 
-    public Integer query(Map<String, String> queryRow) {
+    public float query(Map<String, String> queryRow) {
         // "SELECT count(*) FROM elements WHERE name == XX and type == YY"
         String tableName = queryRow.get(Element.KEYWORD_FOR_TABLE);
         queryRow.remove(Element.KEYWORD_FOR_TABLE);
