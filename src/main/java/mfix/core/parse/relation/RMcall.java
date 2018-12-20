@@ -176,11 +176,8 @@ public class RMcall extends ObjRelation {
                 ElementQueryType qtype = new ElementQueryType(false, ElementQueryType.CountType.COUNT_FILES_PERCENT);
                 MethodElement methodElement = new MethodElement(_methodName, null);
                 methodElement.setArgsNumber(_args.size());
-
-                counter.count(methodElement, qtype);
-
-//                 freq = counter.frequency(methodElement, qtype);
-//                _isAbstract = freq > frequency;
+                float freq = counter.count(methodElement, qtype);
+                _isAbstract = freq > frequency;
 
                 break;
         }
