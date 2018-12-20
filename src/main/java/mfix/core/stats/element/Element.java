@@ -116,4 +116,27 @@ public class Element {
 
         return KeyToValue;
     }
+
+    public Map<String, String> toQueryRowWithoutLimit(ElementQueryType query) throws ElementException {
+        Map<String, String> KeyToValue = new HashMap<String, String>();
+        if (this instanceof VarElement) {
+            KeyToValue.put(KEYWORD_FOR_TABLE, VAR_TABLE_NAME);
+        } else if (this instanceof MethodElement) {
+            KeyToValue.put(KEYWORD_FOR_TABLE, METHOD_TABLE_NAME);
+        }
+        if (query.getCountType() == ElementQueryType.CountType.COUNT_FILES) {
+            KeyToValue.put(KEYWORD_FOR_COUNT_COLUMN, COUNT_OF_DISTINCT_SOURCEFILE);
+        } else if (query.getCountType() == ElementQueryType.CountType.IN_FILE) {
+            if (_sourceFile != null) {
+                KeyToValue.put(DBKEY_COLUMN_SOURCE_FILE, _sourceFile);
+            } else {
+                throw new ElementException(DBKEY_COLUMN_SOURCE_FILE);
+            }
+        }
+        return KeyToValue;
+    }
+
+    public void setSourceFile(String sourceFile) {
+        _sourceFile = sourceFile;
+    }
 }

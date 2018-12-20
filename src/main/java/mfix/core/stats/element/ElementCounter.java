@@ -23,17 +23,11 @@ public class ElementCounter {
     }
 
     public float count(Element element, ElementQueryType queryType) throws ElementException {
-        Map<String, String> queryRow = element.toQueryRow(queryType);
-        Integer countNumber = _connector.query(queryRow);
+        Integer countNumber = _connector.query(element.toQueryRow(queryType));
 
         if (queryType.getWithPercent()) {
-            queryRow.remove(Element.DBKEY_ELEMENT_NAME);
-            Integer allNumber = _connector.query(queryRow);
-            if (allNumber == 0) {
-                return 0;
-            } else {
-                return ((float)countNumber) / allNumber;
-            }
+            Integer allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
+            return allNumber == 0 ? 0 : ((float)countNumber) / allNumber;
         } else {
             return countNumber;
         }
