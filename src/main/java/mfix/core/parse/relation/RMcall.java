@@ -10,6 +10,7 @@ package mfix.core.parse.relation;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.stats.element.ElementCounter;
+import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
 import mfix.core.stats.element.MethodElement;
 
@@ -173,11 +174,15 @@ public class RMcall extends ObjRelation {
                 break;
             case NORM_MCALL:
             case SUPER_MCALL:
-                ElementQueryType qtype = new ElementQueryType(false, ElementQueryType.CountType.COUNT_FILES_PERCENT);
+                ElementQueryType qtype = new ElementQueryType(false,
+                        true, ElementQueryType.CountType.COUNT_FILES);
                 MethodElement methodElement = new MethodElement(_methodName, null);
                 methodElement.setArgsNumber(_args.size());
-                float freq = counter.count(methodElement, qtype);
-                _isAbstract = freq > frequency;
+                try {
+                    _isAbstract = counter.count(methodElement, qtype) >= frequency;
+                } catch (ElementException e) {
+                    _isAbstract = true;
+                }
 
                 break;
         }
