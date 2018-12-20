@@ -20,7 +20,7 @@ public class ElementCounter {
         _connector.add(element.toInsertRow());
     }
 
-    public Integer count(Element element, ElementQueryType queryType) {
+    public float count(Element element, ElementQueryType queryType) {
         return _connector.query(element.toQueryRow(queryType));
     }
 }

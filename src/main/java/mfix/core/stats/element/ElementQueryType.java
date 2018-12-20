@@ -11,6 +11,8 @@ public class ElementQueryType {
         IN_FILE,
         // number of files that contains the element
         COUNT_FILES,
+        // percent of files that contains the element,
+        COUNT_FILES_PERCENT,
         // the number of elements in all files.
         ALL
     };
