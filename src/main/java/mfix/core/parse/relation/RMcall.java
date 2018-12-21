@@ -14,6 +14,7 @@ import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
 import mfix.core.stats.element.MethodElement;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -94,7 +95,7 @@ public class RMcall extends ObjRelation {
         Collections.sort(_args, new Comparator<RArg>() {
             @Override
             public int compare(RArg o1, RArg o2) {
-                return o2.getIndex() - o1.getIndex();
+                return o1.getIndex() - o2.getIndex();
             }
         });
         for(RArg r : _args) {
