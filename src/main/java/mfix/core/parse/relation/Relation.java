@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -61,6 +62,8 @@ public abstract class Relation {
      * Label this relation is abstract or not.
      */
     protected boolean _isAbstract = false;
+    // used to avoid repeat abstraction
+    private transient boolean _visited = false;
 
     protected Relation(RelationKind kind) {
         _relationKind = kind;
@@ -152,7 +155,14 @@ public abstract class Relation {
      * on the given {@code frequency} threshold.
      * @param frequency : frequency threshold
      */
-    public abstract void doAbstraction(double frequency);
+    public void doAbstraction(ElementCounter counter, double frequency) {
+        if(isConcerned() && !_visited) {
+            _visited = true;
+            doAbstraction0(counter, frequency);
+        }
+    }
+
+    protected abstract void doAbstraction0(ElementCounter counter, double frequency);
 
     /**
      * The matched relation cannot be {@code null}

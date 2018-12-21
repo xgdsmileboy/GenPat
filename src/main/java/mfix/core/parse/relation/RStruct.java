@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.core.parse.relation.struct.Structure;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
 
@@ -38,8 +39,9 @@ public class RStruct extends Relation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        // structures do not abstract
+        _isAbstract = false;
     }
 
     @Override

@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.core.parse.Z3Solver;
+import mfix.core.stats.element.ElementCounter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -118,6 +119,15 @@ public class Pattern implements Serializable {
         }
     }
 
+    public void doAbstraction(double frequency) {
+        ElementCounter counter = new ElementCounter();
+        counter.open();
+        for(int i = 0; i < _oldRelations.size(); i++){
+            _oldRelations.get(i).doAbstraction(counter, frequency);
+        }
+        counter.close();
+    }
+
     private void addOldRelation(Relation relation) {
         _oldRelations.add(relation);
     }
@@ -187,7 +197,7 @@ public class Pattern implements Serializable {
             _newRelations.get(entry.getValue()).setMatched(true);
         }
 
-        // TODO: after obtain the minimal changes,
+        // after obtain the minimal changes,
         // expand the relations based on "expandLevel"
         Set<Relation> toExpend = new HashSet<>();
         for(int i = 0; i < _oldRelations.size(); i++) {

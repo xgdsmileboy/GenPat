@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
 
@@ -70,8 +71,9 @@ public class RKid extends Relation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        _child.doAbstraction(counter, frequency);
+        _isAbstract = !_child.isConcerned() || _child.isAbstract();
     }
 
     @Override

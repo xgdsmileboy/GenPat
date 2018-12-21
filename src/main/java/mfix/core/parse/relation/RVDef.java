@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
 
@@ -35,8 +36,9 @@ public class RVDef extends RDef {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        // TODO : we can simply abstract all virtual variables
+        _isAbstract = true;
     }
 
     @Override

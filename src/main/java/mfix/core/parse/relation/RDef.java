@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
 
@@ -92,8 +93,14 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        if(_initializer != null) {
+            _initializer.doAbstraction(counter, frequency);
+        }
+        // this relation should be concretely matched
+        // NOTE: here it does not denote the name of
+        // variables but the relation it self (var-define)
+        _isAbstract = false;
     }
 
     @Override
