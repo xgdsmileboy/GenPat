@@ -35,6 +35,16 @@ public class PatternExtraction {
     private final List<Relation> emptyRelations = new LinkedList<>();
     private PatternExtraction(){}
 
+    public static Pattern extract(Node node, boolean isOldPattern) {
+        if(node == null) {
+            throw new IllegalArgumentException("Argument cannot be null.");
+        }
+        Pattern pattern = new Pattern();
+        pattern.setOldRelationFlag(isOldPattern);
+        patternExtraction.process(node, pattern, new Scope(null));
+        return pattern;
+    }
+
     public static Pattern extract(Node oldNode, Node newNode) {
         if(oldNode == null || newNode == null) {
             throw new IllegalArgumentException("Arguments cannot be null.");
@@ -445,12 +455,14 @@ public class PatternExtraction {
             pattern.addRelation(assign);
             result.add(assign);
         } else {
-            List<Relation> relations = process(node.getRhs(), pattern, scope);
-            RAssign assign = new RAssign(null);
+            List<Relation> relations = process(node.getLhs(), pattern, scope);
+            ObjRelation r = (ObjRelation) relations.get(0);
+            RAssign assign = new RAssign(r);
+
+            relations = process(node.getRhs(), pattern, scope);
             assign.setRhs((ObjRelation) relations.get(0));
-            relations = process(node.getLhs(), pattern, scope);
-            assign.setLhs((ObjRelation) relations.get(0));
-            scope.addDefine((RDef) relations.get(0), assign);
+
+            scope.addDefine((RDef) r, assign);
 
             pattern.addRelation(assign);
             result.add(assign);
