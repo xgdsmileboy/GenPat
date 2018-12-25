@@ -96,6 +96,6 @@ public class RKid extends Relation {
 
     @Override
     public String toString() {
-        return "[KID | " + _child.toString() + "]";
+        return String.format("[KID (%d)| p@%s | c@%s]", _index, _structure.toString(), _child);
     }
 }

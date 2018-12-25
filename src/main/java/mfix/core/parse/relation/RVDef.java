@@ -66,6 +66,6 @@ public class RVDef extends RDef {
 
     @Override
     public String toString() {
-        return getExprString();
+        return "";
     }
 }

@@ -19,14 +19,22 @@ import java.util.Set;
  */
 public class RStruct extends Relation {
 
+
+    private static int ID = 0;
     /**
      * structure type
      */
     private Structure _structure;
+    private int _id = 0;
 
     public RStruct(Structure structure) {
         super(RelationKind.STRUCTURE);
         _structure = structure;
+        _id = genId();
+    }
+
+    public static int genId() {
+        return ID ++;
     }
 
     public Structure getStructure() {
@@ -55,6 +63,6 @@ public class RStruct extends Relation {
 
     @Override
     public String toString() {
-        return _structure.toString();
+        return String.format("[%s-%d]", _structure.toString(), _id);
     }
 }

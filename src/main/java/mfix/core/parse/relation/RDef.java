@@ -109,9 +109,12 @@ public class RDef extends ObjRelation {
             return false;
         }
         RDef def = (RDef) relation;
-        if(!Utils.safeStringEqual(_modifiers, def.getModifiers())
-                || !Utils.safeStringEqual(_typeStr, def.getTypeString())
-                || !Utils.safeStringEqual(_name, def.getName())) {
+//        if(!Utils.safeStringEqual(_modifiers, def.getModifiers())
+//                || !Utils.safeStringEqual(_typeStr, def.getTypeString())
+//                || !Utils.safeStringEqual(_name, def.getName())) {
+//            return false;
+//        }
+        if(!Utils.safeStringEqual(_name, def.getName())) {
             return false;
         }
 
@@ -136,7 +139,7 @@ public class RDef extends ObjRelation {
         buffer.append(_name);
         if(_initializer != null) {
             buffer.append("=");
-            buffer.append(_initializer.toString());
+            buffer.append(_initializer.getExprString());
         }
         return buffer.toString();
     }

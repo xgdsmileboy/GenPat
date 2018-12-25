@@ -14,7 +14,6 @@ import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
 import mfix.core.stats.element.MethodElement;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -231,6 +230,17 @@ public class RMcall extends ObjRelation {
 
     @Override
     public String toString() {
+        boolean used = false;
+        for(Relation r : _usedBy) {
+            if(r instanceof RKid) {
+              continue;
+            }
+            used = true;
+            break;
+        }
+        if(used) {
+            return "";
+        }
         return getExprString();
     }
 }

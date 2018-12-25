@@ -57,6 +57,6 @@ public abstract class Structure {
 
     @Override
     public String toString() {
-        return "[" + _rskind.toString() + "]";
+        return _rskind.toString();
     }
 }

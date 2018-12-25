@@ -78,6 +78,17 @@ public class ROpt extends ObjRelation {
 
     @Override
     public String toString() {
+        boolean used = false;
+        for(Relation r : _usedBy) {
+            if(r instanceof  RKid) {
+                continue;
+            }
+            used = true;
+            break;
+        }
+        if(used) {
+            return "";
+        }
         return getExprString();
     }
 }

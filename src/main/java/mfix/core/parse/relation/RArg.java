@@ -98,6 +98,9 @@ public class RArg extends Relation {
 
     @Override
     public String toString() {
-        return "[RArg | " + _arg.getExprString() + "]";
+        if(_function.isConcerned()) {
+            return "";
+        }
+        return String.format("[RArg (%d)| %s]", _index, _function.getExprString());
     }
 }
