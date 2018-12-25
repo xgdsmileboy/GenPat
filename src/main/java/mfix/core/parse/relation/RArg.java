@@ -98,6 +98,6 @@ public class RArg extends Relation {
 
     @Override
     public String toString() {
-        return "[RArg]";
+        return "[RArg | " + _arg.getExprString() + "]";
     }
 }
