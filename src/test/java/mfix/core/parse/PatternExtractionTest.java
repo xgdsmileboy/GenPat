@@ -110,9 +110,8 @@ public class PatternExtractionTest extends TestCase {
 
                 pattern.minimize(0);
 
-
-                System.out.println(pattern.getMinimizedOldRelations(false));
-                System.out.println(pattern.getMinimizedNewRelations(false));
+//                System.out.println(pattern.getMinimizedOldRelations(false));
+//                System.out.println(pattern.getMinimizedNewRelations(false));
 
                 Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
                 Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
