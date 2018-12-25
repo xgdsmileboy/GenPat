@@ -192,17 +192,41 @@ public class Pattern implements Serializable {
             Z3Solver solver = new Z3Solver();
             _oldR2newRidxMap = solver.build(matrix, loc2dependencies);
         }
+        Map<Integer, Integer> newR2OldRidxMap = new HashMap<>();
         for(Map.Entry<Integer, Integer> entry : _oldR2newRidxMap.entrySet()) {
             _oldRelations.get(entry.getKey()).setMatched(true);
             _newRelations.get(entry.getValue()).setMatched(true);
+            newR2OldRidxMap.put(entry.getValue(), entry.getKey());
         }
 
         // after obtain the minimal changes,
         // expand the relations based on "expandLevel"
         Set<Relation> toExpend = new HashSet<>();
-        for(int i = 0; i < _oldRelations.size(); i++) {
-            if(!_oldR2newRidxMap.containsKey(i)) {
-                toExpend.add(_oldRelations.get(i));
+        if(_oldRelations.size() > _oldR2newRidxMap.size()) {
+            for (int i = 0; i < _oldRelations.size(); i++) {
+                if (!_oldR2newRidxMap.containsKey(i)) {
+                    toExpend.add(_oldRelations.get(i));
+                }
+            }
+        } else {
+            // if all relations in the old code are matched
+            // this condition happens when add new code but revising existing code
+            // if happen, we expand the new added code as the minimal
+            Set<Relation> temp = new HashSet<>();
+            for (int i = 0; i < _newRelations.size(); i++) {
+                if (!newR2OldRidxMap.containsKey(i)) {
+                    _newRelations.get(i).expandDownward(temp);
+                    temp.addAll(_newRelations.get(i).getUsedBy());
+                }
+            }
+            for(Relation r : temp) {
+                Integer index = newR2OldRidxMap.get(newR2index.get(r));
+                if(index != null) {
+                    toExpend.add(_oldRelations.get(index));
+                    _oldRelations.get(index).setMatched(false);
+                    r.setMatched(false);
+                    _oldR2newRidxMap.remove(index);
+                }
             }
         }
 
