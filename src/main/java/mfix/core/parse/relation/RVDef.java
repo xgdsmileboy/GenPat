@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
@@ -23,8 +24,8 @@ public class RVDef extends RDef {
      */
     private Object _value;
 
-    public RVDef() {
-        super(RelationKind.VIRTUALDEFINE);
+    public RVDef(Node node) {
+        super(node, RelationKind.VIRTUALDEFINE);
     }
 
     public void setValue(Object value) {

@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.parse.relation.op.AbsOperation;
 import mfix.core.stats.element.ElementCounter;
 
@@ -28,8 +29,8 @@ public class ROpt extends ObjRelation {
 
     private List<RArg> _args;
 
-    public ROpt(AbsOperation operation) {
-        super(RelationKind.OPERATION);
+    public ROpt(Node node, AbsOperation operation) {
+        super(node, RelationKind.OPERATION);
         _operation = operation;
         _args = new LinkedList<>();
     }

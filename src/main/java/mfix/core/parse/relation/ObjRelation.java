@@ -7,6 +7,8 @@
 
 package mfix.core.parse.relation;
 
+import mfix.core.parse.node.Node;
+
 /**
  * This kind of relation denotes the relation returns an
  * expression that can be used as an argument of other expression
@@ -17,7 +19,17 @@ package mfix.core.parse.relation;
  */
 public abstract class ObjRelation extends Relation {
 
-    protected ObjRelation(RelationKind kind) {
-       super(kind);
+    protected String _objType;
+
+    protected ObjRelation(Node node, RelationKind kind) {
+       super(node, kind);
+    }
+
+    public void setObjType(String string) {
+        _objType = string;
+    }
+
+    public String getObjType() {
+        return _objType;
     }
 }

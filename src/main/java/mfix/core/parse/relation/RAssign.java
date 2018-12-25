@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
@@ -36,8 +37,8 @@ public class RAssign extends ObjRelation {
      */
     private ObjRelation _rhs;
 
-    public RAssign(ObjRelation lhs) {
-        super(RelationKind.ASSIGN);
+    public RAssign(Node node, ObjRelation lhs) {
+        super(node, RelationKind.ASSIGN);
         _lhs = lhs;
         _lhs.usedBy(this);
     }

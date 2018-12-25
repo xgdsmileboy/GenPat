@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
@@ -38,12 +39,12 @@ public class RDef extends ObjRelation {
      */
     private ObjRelation _initializer;
 
-    public RDef() {
-        this(RelationKind.DEFINE);
+    public RDef(Node node) {
+        this(node, RelationKind.DEFINE);
     }
 
-    protected RDef(RelationKind kind) {
-        super(kind);
+    protected RDef(Node node, RelationKind kind) {
+        super(node, kind);
     }
 
     public void setModifiers(String modifiers) {

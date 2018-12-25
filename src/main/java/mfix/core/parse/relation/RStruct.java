@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.parse.relation.struct.Structure;
 import mfix.core.stats.element.ElementCounter;
 
@@ -27,8 +28,8 @@ public class RStruct extends Relation {
     private Structure _structure;
     private int _id = 0;
 
-    public RStruct(Structure structure) {
-        super(RelationKind.STRUCTURE);
+    public RStruct(Node node, Structure structure) {
+        super(node, RelationKind.STRUCTURE);
         _structure = structure;
         _id = genId();
     }

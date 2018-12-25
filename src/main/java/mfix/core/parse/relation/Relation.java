@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
 import java.util.HashSet;
@@ -30,6 +31,10 @@ public abstract class Relation {
      * should rely on more concrete matching process.
      */
     private RelationKind _relationKind;
+    /**
+     * This is used to record the original ast node
+     */
+    private transient Node _node;
     /**
      * a relation may rely on some other relation
      * Especially, this list record the define use relation
@@ -65,7 +70,8 @@ public abstract class Relation {
     // used to avoid repeat abstraction
     private transient boolean _visited = false;
 
-    protected Relation(RelationKind kind) {
+    protected Relation(Node node, RelationKind kind) {
+        _node = node;
         _relationKind = kind;
         _dependon = new HashSet<>();
         _usedBy = new HashSet<>();
@@ -73,6 +79,10 @@ public abstract class Relation {
 
     public RelationKind getRelationKind() {
         return _relationKind;
+    }
+
+    public Node getAstNode() {
+        return _node;
     }
 
     public void setMatched(boolean matched) {

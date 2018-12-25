@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
@@ -53,8 +54,8 @@ public class RMcall extends ObjRelation {
 
     private List<RArg> _args;
 
-    public RMcall(MCallType type) {
-        super(RelationKind.MCALL);
+    public RMcall(Node node, MCallType type) {
+        super(node, RelationKind.MCALL);
         _type = type;
         _args = new LinkedList<>();
     }
