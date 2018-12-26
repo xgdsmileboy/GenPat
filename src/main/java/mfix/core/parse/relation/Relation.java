@@ -21,6 +21,22 @@ import java.util.Set;
 public abstract class Relation {
 
     /**
+     * types of relations.
+     */
+    public enum RelationKind{
+        ARGUMENT,
+        OPERATION,
+        DEFINE,
+        ASSIGN,
+        MCALL,
+        RETURN,
+        STRUCTURE,
+        CHILD,
+
+        VIRTUALDEFINE
+    }
+
+    /**
      * Designed to boost relation matching process.
      *
      * This field denotes the type of the relation,
@@ -171,8 +187,15 @@ public abstract class Relation {
             doAbstraction0(counter, frequency);
         }
     }
-
     protected abstract void doAbstraction0(ElementCounter counter, double frequency);
+
+    /**
+     * Perform the core pattern matching algorithm when given a potential buggy pattern
+     * @param r : relation in a potential buggy pattern, waiting for repair
+     * @param dependencies : dependencies to match current relations
+     * @return true of matches, false otherwise
+     */
+    public abstract boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies);
 
     /**
      * The matched relation cannot be {@code null}
@@ -186,24 +209,6 @@ public abstract class Relation {
             return false;
         }
         return true;
-    }
-
-    /**
-     * types of relations.
-     */
-    public enum RelationKind{
-        ARGUMENT,
-        OPERATION,
-        DEFINE,
-        ASSIGN,
-        MCALL,
-        RETURN,
-        STRUCTURE,
-        CHILD,
-
-        VIRTUALDEFINE,
-        UNION,
-        DATADEPEND
     }
 
 }

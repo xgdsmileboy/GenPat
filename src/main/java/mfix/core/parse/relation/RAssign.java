@@ -96,6 +96,12 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
         return _lhs.getExprString() + "=" + _rhs.getExprString();
     }

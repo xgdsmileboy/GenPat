@@ -63,6 +63,12 @@ public class RStruct extends Relation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
         return String.format("[%s-%d]", _structure.toString(), _id);
     }

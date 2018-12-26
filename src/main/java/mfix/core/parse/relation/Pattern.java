@@ -26,7 +26,6 @@ import java.util.Set;
  */
 public class Pattern implements Serializable {
 
-    private transient int _relationId = 0;
     /**
      * A flag denoting current added relations is from the
      * code before repair {@code true} or after repair {@code false}
@@ -138,6 +137,22 @@ public class Pattern implements Serializable {
     }
 
     /**
+     *
+     * @return
+     */
+    /**
+     * Perform pattern matching between the repair pattern {@code this} and the
+     * pattern {@code p} for a buggy code.
+     * @param p : pattern for a potential buggy code
+     * @param exprMapping : the mapping relation for expressions if the pattern matches
+     * @return true if matches, false otherwise
+     */
+    public boolean foldMatching(Pattern p, Map<String, String> exprMapping) {
+        // TODO : p is an concrete instance for a potential buggy code
+        return false;
+    }
+
+    /**
      * Get concrete APIs used in the pattern, which
      * should be exactly matched
      * @return : a set of API (method) names
@@ -169,10 +184,6 @@ public class Pattern implements Serializable {
 
     public List<Relation> getNewRelations() {
         return _newRelations;
-    }
-
-    public int genRelationId() {
-        return _relationId++;
     }
 
     /**

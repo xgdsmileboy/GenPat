@@ -27,6 +27,15 @@ import java.util.Set;
  */
 public class RMcall extends ObjRelation {
 
+    public enum MCallType{
+        NORM_MCALL,
+        SUPER_MCALL,
+        SUPER_INIT_CALL,
+        INIT_CALL,
+        NEW_ARRAY,
+        CAST,
+    }
+
     /**
      * This field is to distinguish different
      * kinds of "method calls",
@@ -220,13 +229,10 @@ public class RMcall extends ObjRelation {
         return false;
     }
 
-    public enum MCallType{
-        NORM_MCALL,
-        SUPER_MCALL,
-        SUPER_INIT_CALL,
-        INIT_CALL,
-        NEW_ARRAY,
-        CAST,
+    @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
     }
 
     @Override

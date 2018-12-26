@@ -96,6 +96,12 @@ public class RKid extends Relation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
         return String.format("[KID (%d)| p@%s | c@%s]", _index, _structure.toString(), _child);
     }

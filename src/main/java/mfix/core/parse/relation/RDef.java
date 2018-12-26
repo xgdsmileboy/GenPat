@@ -131,6 +131,12 @@ public class RDef extends ObjRelation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         if(_modifiers != null) {
