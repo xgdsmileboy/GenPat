@@ -26,7 +26,6 @@ import java.util.Set;
  */
 public class Pattern implements Serializable {
 
-    private transient int _relationId = 0;
     /**
      * A flag denoting current added relations is from the
      * code before repair {@code true} or after repair {@code false}
@@ -57,6 +56,8 @@ public class Pattern implements Serializable {
     private List<Relation> _newRelations;
     private Map<Integer, Integer> _oldR2newRidxMap;
 
+    private Set<String> _apis;
+
     public Pattern() {
         _oldRelations = new ArrayList<>();
         _newRelations = new ArrayList<>();
@@ -64,6 +65,7 @@ public class Pattern implements Serializable {
 
     /**
      * Set current added relations are from the code before repair
+     *
      * @param isOldRelation
      */
     public void setOldRelationFlag(boolean isOldRelation) {
@@ -74,7 +76,7 @@ public class Pattern implements Serializable {
      * Add relations to the pattern, this function will add the relation
      * into {@code _oldRelations} or {@code _newRelations} based on the
      * flag {@code )_isOldRelation}
-     *
+     * 
      * NOTE: if the added relation is a variable definition,
      * this function will automatically record the variable
      *
@@ -89,7 +91,7 @@ public class Pattern implements Serializable {
                 // if the name of the variable definition relation is null,
                 // it is a constant (a virtual variable definition) and wont
                 // be record
-                if(def.getName() != null) {
+                if (def.getName() != null) {
                     _oldName2Define.put(def.getName(), def);
                 }
             }
@@ -98,7 +100,7 @@ public class Pattern implements Serializable {
             if (relation.getRelationKind() == Relation.RelationKind.DEFINE
                     || relation.getRelationKind() == Relation.RelationKind.VIRTUALDEFINE) {
                 RDef def = (RDef) relation;
-                if(def.getName() != null) {
+                if (def.getName() != null) {
                     _newName2Define.put(def.getName(), def);
                 }
             }
@@ -108,24 +110,60 @@ public class Pattern implements Serializable {
     /**
      * Search the variable definition relation based
      * on the variable name
+     *
      * @param name : name of variables
      * @return
      */
     public RDef getVarDefine(String name) {
-        if(_isOldRelation) {
+        if (_isOldRelation) {
             return _oldName2Define.get(name);
         } else {
             return _newName2Define.get(name);
         }
     }
 
+    /**
+     * perform pattern abstraction process based on
+     * the given frequency
+     * @param frequency : threshold for abstraction
+     */
     public void doAbstraction(double frequency) {
         ElementCounter counter = new ElementCounter();
         counter.open();
-        for(int i = 0; i < _oldRelations.size(); i++){
+        for (int i = 0; i < _oldRelations.size(); i++) {
             _oldRelations.get(i).doAbstraction(counter, frequency);
         }
         counter.close();
+    }
+
+    /**
+     * Perform pattern matching between the repair pattern {@code this} and the
+     * pattern {@code p} for a buggy code.
+     * @param p : pattern for a potential buggy code
+     * @param exprMapping : the mapping relation for expressions if the pattern matches
+     * @return true if matches, false otherwise
+     */
+    public boolean foldMatching(Pattern p, Map<String, String> exprMapping) {
+        // TODO : p is an concrete instance for a potential buggy code
+        return false;
+    }
+
+    /**
+     * Get concrete APIs used in the pattern, which
+     * should be exactly matched
+     * @return : a set of API (method) names
+     */
+    public Set<String> getRelatedAPIs() {
+        if (_apis == null) {
+            _apis = new HashSet<>();
+            for (Relation r : _oldRelations) {
+                if (r.isConcerned() && !r.isAbstract()
+                        && r.getRelationKind() == Relation.RelationKind.MCALL) {
+                    _apis.add(((RMcall) r).getMethodName());
+                }
+            }
+        }
+        return _apis;
     }
 
     private void addOldRelation(Relation relation) {
@@ -144,30 +182,27 @@ public class Pattern implements Serializable {
         return _newRelations;
     }
 
-    public int genRelationId() {
-        return _relationId++;
-    }
-
     /**
      * Minimize current pattern by removing some unrelated
      * relations according to the given relation expansion scope.
+     *
      * @param expandLevel : denotes how many levels should be expanded
      */
     public Pattern minimize(int expandLevel) {
-        return minimize(expandLevel, 100,false);
+        return minimize(expandLevel, 100, false);
     }
 
     public Pattern minimize(int expandLevel, int maxRNumbers) {
-        return minimize(expandLevel, maxRNumbers,false);
+        return minimize(expandLevel, maxRNumbers, false);
     }
 
     public Pattern minimize(int expandLevel, int maxRNumbers, boolean force) {
-        if(_minimized && !force) return this;
+        if (_minimized && !force) return this;
         _minimized = true;
         Map<Relation, Integer> oldR2index = mapRelation2LstIndex(_oldRelations);
         Map<Relation, Integer> newR2index = mapRelation2LstIndex(_newRelations);
 
-        if(_oldR2newRidxMap == null) {
+        if (_oldR2newRidxMap == null) {
             int oldLen = _oldRelations.size();
             int newLen = _newRelations.size();
 
@@ -192,17 +227,41 @@ public class Pattern implements Serializable {
             Z3Solver solver = new Z3Solver();
             _oldR2newRidxMap = solver.build(matrix, loc2dependencies);
         }
-        for(Map.Entry<Integer, Integer> entry : _oldR2newRidxMap.entrySet()) {
+        Map<Integer, Integer> newR2OldRidxMap = new HashMap<>();
+        for (Map.Entry<Integer, Integer> entry : _oldR2newRidxMap.entrySet()) {
             _oldRelations.get(entry.getKey()).setMatched(true);
             _newRelations.get(entry.getValue()).setMatched(true);
+            newR2OldRidxMap.put(entry.getValue(), entry.getKey());
         }
 
         // after obtain the minimal changes,
         // expand the relations based on "expandLevel"
         Set<Relation> toExpend = new HashSet<>();
-        for(int i = 0; i < _oldRelations.size(); i++) {
-            if(!_oldR2newRidxMap.containsKey(i)) {
-                toExpend.add(_oldRelations.get(i));
+        if (_oldRelations.size() > _oldR2newRidxMap.size()) {
+            for (int i = 0; i < _oldRelations.size(); i++) {
+                if (!_oldR2newRidxMap.containsKey(i)) {
+                    toExpend.add(_oldRelations.get(i));
+                }
+            }
+        } else {
+            // if all relations in the old code are matched
+            // this condition happens when add new code but revising existing code
+            // if happen, we expand the new added code as the minimal
+            Set<Relation> temp = new HashSet<>();
+            for (int i = 0; i < _newRelations.size(); i++) {
+                if (!newR2OldRidxMap.containsKey(i)) {
+                    _newRelations.get(i).expandDownward(temp);
+                    temp.addAll(_newRelations.get(i).getUsedBy());
+                }
+            }
+            for (Relation r : temp) {
+                Integer index = newR2OldRidxMap.get(newR2index.get(r));
+                if (index != null) {
+                    toExpend.add(_oldRelations.get(index));
+                    _oldRelations.get(index).setMatched(false);
+                    r.setMatched(false);
+                    _oldR2newRidxMap.remove(index);
+                }
             }
         }
 
@@ -212,10 +271,10 @@ public class Pattern implements Serializable {
         Set<Relation> expanded;
         Set<Relation> relations2Tag;
         int currentLevel = 0;
-        while((expandLevel--) > 0) {
-            currentLevel ++;
+        while ((expandLevel--) > 0) {
+            currentLevel++;
             expanded = new HashSet<>();
-            for(Relation r : toExpend) {
+            for (Relation r : toExpend) {
                 r.expandDownward(expanded);
                 expanded.addAll(r.getUsedBy());
             }
@@ -223,24 +282,24 @@ public class Pattern implements Serializable {
             relations2Tag = new HashSet<>();
             // using the max relation number to
             // restrain the expansion
-            for(Relation r : expanded) {
+            for (Relation r : expanded) {
                 // filter already considered relations
-                if(!r.isConcerned()) {
+                if (!r.isConcerned()) {
                     relations2Tag.add(r);
                     Integer index = _oldR2newRidxMap.get(oldR2index.get(r));
-                    if(index != null) {
+                    if (index != null) {
                         relations2Tag.add(_newRelations.get(index));
                     }
                 }
             }
             maxRNumbers -= relations2Tag.size();
-            if(maxRNumbers < 0) {
+            if (maxRNumbers < 0) {
                 break;
             }
 
             // to tag all expended relations with
             // current expand level
-            for(Relation r : relations2Tag) {
+            for (Relation r : relations2Tag) {
                 r.setExpendedLevel(currentLevel);
             }
             toExpend = relations2Tag;
@@ -251,7 +310,7 @@ public class Pattern implements Serializable {
 
     private Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {
         Map<Relation, Integer> map = new HashMap<>();
-        if(relations != null) {
+        if (relations != null) {
             for (int i = 0; i < relations.size(); i++) {
                 map.put(relations.get(i), i);
             }
@@ -260,10 +319,10 @@ public class Pattern implements Serializable {
     }
 
     public List<Relation> getMinimizedOldRelations(boolean concerned) {
-        if(!_minimized) minimize(0);
+        if (!_minimized) minimize(0);
         List<Relation> relations = new LinkedList<>();
-        for(Relation r : _oldRelations) {
-            if(!r.isMatched() || (concerned && r.isConcerned())) {
+        for (Relation r : _oldRelations) {
+            if (!r.isMatched() || (concerned && r.isConcerned())) {
                 relations.add(r);
             }
         }
@@ -271,10 +330,10 @@ public class Pattern implements Serializable {
     }
 
     public List<Relation> getMinimizedNewRelations(boolean concerned) {
-        if(!_minimized) minimize(0);
+        if (!_minimized) minimize(0);
         List<Relation> relations = new LinkedList<>();
-        for(Relation r : _newRelations) {
-            if(!r.isMatched() || (concerned && r.isConcerned())) {
+        for (Relation r : _newRelations) {
+            if (!r.isMatched() || (concerned && r.isConcerned())) {
                 relations.add(r);
             }
         }

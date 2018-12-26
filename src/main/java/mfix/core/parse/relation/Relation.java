@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
 import java.util.HashSet;
@@ -20,6 +21,22 @@ import java.util.Set;
 public abstract class Relation {
 
     /**
+     * types of relations.
+     */
+    public enum RelationKind{
+        ARGUMENT,
+        OPERATION,
+        DEFINE,
+        ASSIGN,
+        MCALL,
+        RETURN,
+        STRUCTURE,
+        CHILD,
+
+        VIRTUALDEFINE
+    }
+
+    /**
      * Designed to boost relation matching process.
      *
      * This field denotes the type of the relation,
@@ -30,6 +47,10 @@ public abstract class Relation {
      * should rely on more concrete matching process.
      */
     private RelationKind _relationKind;
+    /**
+     * This is used to record the original ast node
+     */
+    private transient Node _node;
     /**
      * a relation may rely on some other relation
      * Especially, this list record the define use relation
@@ -65,7 +86,8 @@ public abstract class Relation {
     // used to avoid repeat abstraction
     private transient boolean _visited = false;
 
-    protected Relation(RelationKind kind) {
+    protected Relation(Node node, RelationKind kind) {
+        _node = node;
         _relationKind = kind;
         _dependon = new HashSet<>();
         _usedBy = new HashSet<>();
@@ -73,6 +95,10 @@ public abstract class Relation {
 
     public RelationKind getRelationKind() {
         return _relationKind;
+    }
+
+    public Node getAstNode() {
+        return _node;
     }
 
     public void setMatched(boolean matched) {
@@ -161,8 +187,15 @@ public abstract class Relation {
             doAbstraction0(counter, frequency);
         }
     }
-
     protected abstract void doAbstraction0(ElementCounter counter, double frequency);
+
+    /**
+     * Perform the core pattern matching algorithm when given a potential buggy pattern
+     * @param r : relation in a potential buggy pattern, waiting for repair
+     * @param dependencies : dependencies to match current relations
+     * @return true of matches, false otherwise
+     */
+    public abstract boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies);
 
     /**
      * The matched relation cannot be {@code null}
@@ -176,24 +209,6 @@ public abstract class Relation {
             return false;
         }
         return true;
-    }
-
-    /**
-     * types of relations.
-     */
-    public enum RelationKind{
-        ARGUMENT,
-        OPERATION,
-        DEFINE,
-        ASSIGN,
-        MCALL,
-        RETURN,
-        STRUCTURE,
-        CHILD,
-
-        VIRTUALDEFINE,
-        UNION,
-        DATADEPEND
     }
 
 }

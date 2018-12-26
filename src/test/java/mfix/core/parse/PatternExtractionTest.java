@@ -109,6 +109,10 @@ public class PatternExtractionTest extends TestCase {
                 Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
 
                 pattern.minimize(0);
+                System.out.println("ASSERT");
+//                System.out.println(pattern.getMinimizedOldRelations(false));
+//                System.out.println(pattern.getMinimizedNewRelations(false));
+
                 Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 1);
                 Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 3);
                 Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 1);
@@ -140,7 +144,65 @@ public class PatternExtractionTest extends TestCase {
 
             }
         }
+    }
 
+    @Test
+    public void test_minimization_when_old_empty() {
+        String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
+        String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
+
+        CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
+        CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        NodeParser nodeParser = NodeParser.getInstance();
+        for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+            if (pair.getFirst().getName().getIdentifier().equals("onItemClick")) {
+                nodeParser.setCompilationUnit(srcFile, srcUnit);
+                Node srcNode = nodeParser.process(pair.getFirst());
+                nodeParser.setCompilationUnit(tarFile, tarUnit);
+                Node tarNode = nodeParser.process(pair.getSecond());
+                Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
+
+                pattern.minimize(1);
+                Assert.assertTrue(pattern.getMinimizedOldRelations(false).size() == 3);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(false).size() == 7);
+                Assert.assertTrue(pattern.getMinimizedOldRelations(true).size() == 9);
+                Assert.assertTrue(pattern.getMinimizedNewRelations(true).size() == 13);
+            }
+        }
+    }
+
+    @Test
+    public void test_extractpattern_example() {
+        String srcFile = testbase + Constant.SEP + "src_UnifiedPushInstanceIDListenerService.java";
+        String tarFile = testbase + Constant.SEP + "tar_UnifiedPushInstanceIDListenerService.java";
+        CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile);
+        CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile);
+
+        List<Pair<MethodDeclaration, MethodDeclaration>> pairs = Matcher.match(srcUnit, tarUnit);
+        NodeParser parser = NodeParser.getInstance();
+        for (Pair<MethodDeclaration, MethodDeclaration> pair : pairs) {
+            parser.setCompilationUnit(srcFile, srcUnit);
+            Node srcNode = parser.process(pair.getFirst());
+            parser.setCompilationUnit(tarFile, tarUnit);
+            Node tarNode = parser.process(pair.getSecond());
+            Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
+            if (pattern != null) {
+
+                pattern.minimize(1);
+                for (Relation r : pattern.getMinimizedOldRelations(true)) {
+                    if (!r.toString().isEmpty()) {
+                        System.out.println(r.toString());
+                    }
+                }
+                System.out.println("--------------------");
+                for (Relation r : pattern.getMinimizedNewRelations(true)) {
+                    if (!r.toString().isEmpty()) {
+                        System.out.println(r.toString());
+                    }
+                }
+            }
+        }
     }
 
 }

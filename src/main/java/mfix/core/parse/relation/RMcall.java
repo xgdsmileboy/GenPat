@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
@@ -25,6 +26,15 @@ import java.util.Set;
  * @date: 2018/11/29
  */
 public class RMcall extends ObjRelation {
+
+    public enum MCallType{
+        NORM_MCALL,
+        SUPER_MCALL,
+        SUPER_INIT_CALL,
+        INIT_CALL,
+        NEW_ARRAY,
+        CAST,
+    }
 
     /**
      * This field is to distinguish different
@@ -53,8 +63,8 @@ public class RMcall extends ObjRelation {
 
     private List<RArg> _args;
 
-    public RMcall(MCallType type) {
-        super(RelationKind.MCALL);
+    public RMcall(Node node, MCallType type) {
+        super(node, RelationKind.MCALL);
         _type = type;
         _args = new LinkedList<>();
     }
@@ -94,7 +104,7 @@ public class RMcall extends ObjRelation {
         Collections.sort(_args, new Comparator<RArg>() {
             @Override
             public int compare(RArg o1, RArg o2) {
-                return o2.getIndex() - o1.getIndex();
+                return o1.getIndex() - o2.getIndex();
             }
         });
         for(RArg r : _args) {
@@ -179,7 +189,7 @@ public class RMcall extends ObjRelation {
                 MethodElement methodElement = new MethodElement(_methodName, null);
                 methodElement.setArgsNumber(_args.size());
                 try {
-                    _isAbstract = counter.count(methodElement, qtype) >= frequency;
+                    _isAbstract = counter.count(methodElement, qtype) < frequency;
                 } catch (ElementException e) {
                     _isAbstract = true;
                 }
@@ -219,17 +229,25 @@ public class RMcall extends ObjRelation {
         return false;
     }
 
-    public enum MCallType{
-        NORM_MCALL,
-        SUPER_MCALL,
-        SUPER_INIT_CALL,
-        INIT_CALL,
-        NEW_ARRAY,
-        CAST,
+    @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
     }
 
     @Override
     public String toString() {
+        boolean used = false;
+        for(Relation r : _usedBy) {
+            if(r instanceof RKid) {
+              continue;
+            }
+            used = true;
+            break;
+        }
+        if(used) {
+            return "";
+        }
         return getExprString();
     }
 }

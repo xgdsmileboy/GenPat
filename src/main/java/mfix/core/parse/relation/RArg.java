@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
@@ -31,8 +32,8 @@ public class RArg extends Relation {
      */
     private ObjRelation _arg;
 
-    public RArg(ObjRelation function) {
-        super(RelationKind.ARGUMENT);
+    public RArg(Node node, ObjRelation function) {
+        super(node, RelationKind.ARGUMENT);
         _function = function;
         this.usedBy(function);
     }
@@ -97,7 +98,16 @@ public class RArg extends Relation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
-        return "[RArg]";
+        if(_function.isConcerned()) {
+            return "";
+        }
+        return String.format("[RArg (%d)| %s]", _index, _function.getExprString());
     }
 }

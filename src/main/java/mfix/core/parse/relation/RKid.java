@@ -8,6 +8,7 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
@@ -36,8 +37,8 @@ public class RKid extends Relation {
      */
     private Relation _child;
 
-    public RKid(RStruct structure) {
-        super(RelationKind.CHILD);
+    public RKid(Node node, RStruct structure) {
+        super(node, RelationKind.CHILD);
         _structure = structure;
         this.usedBy(structure);
     }
@@ -95,7 +96,13 @@ public class RKid extends Relation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
-        return "[KID]";
+        return String.format("[KID (%d)| p@%s | c@%s]", _index, _structure.toString(), _child);
     }
 }

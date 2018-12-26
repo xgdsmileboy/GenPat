@@ -35,6 +35,16 @@ public class PatternExtraction {
     private final List<Relation> emptyRelations = new LinkedList<>();
     private PatternExtraction(){}
 
+    public static Pattern extract(Node node, boolean isOldPattern) {
+        if(node == null) {
+            throw new IllegalArgumentException("Argument cannot be null.");
+        }
+        Pattern pattern = new Pattern();
+        pattern.setOldRelationFlag(isOldPattern);
+        patternExtraction.process(node, pattern, new Scope(null));
+        return pattern;
+    }
+
     public static Pattern extract(Node oldNode, Node newNode) {
         if(oldNode == null || newNode == null) {
             throw new IllegalArgumentException("Arguments cannot be null.");
@@ -55,7 +65,7 @@ public class PatternExtraction {
             List<Relation> children = process(node, pattern, scope);
             for(Relation r : children) {
                 structure.addDependency(scope.getDefines(r));
-                RKid kid = new RKid(structure);
+                RKid kid = new RKid(r.getAstNode(), structure);
                 kid.setChild(r);
                 kid.setIndex(index);
                 pattern.addRelation(kid);
@@ -68,7 +78,7 @@ public class PatternExtraction {
             List<Relation> children = process(child, pattern, scope);
             for(Relation r : children) {
                 structure.addDependency(scope.getDefines(r));
-                RKid kid = new RKid(structure);
+                RKid kid = new RKid(r.getAstNode(), structure);
                 kid.setChild(r);
                 kid.setIndex(index);
                 pattern.addRelation(kid);
@@ -79,7 +89,7 @@ public class PatternExtraction {
     private void processArg(ROpt operation, int index, Node node, Pattern pattern, Scope scope) {
         List<Relation> children = process(node, pattern, scope);
         assert children.size() == 1;
-        RArg arg = new RArg(operation);
+        RArg arg = new RArg(node, operation);
         arg.setIndex(index);
         arg.setArgument((ObjRelation) children.get(0));
         pattern.addRelation(arg);
@@ -90,7 +100,7 @@ public class PatternExtraction {
     private void processArg(RMcall mcall, int index, Node node, Pattern pattern, Scope scope) {
         List<Relation> children = process(node, pattern, scope);
         assert children.size() == 1;
-        RArg arg = new RArg(mcall);
+        RArg arg = new RArg(node, mcall);
         arg.setIndex(index);
         arg.setArgument((ObjRelation) children.get(0));
         pattern.addRelation(arg);
@@ -117,7 +127,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(BreakStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSBreak());
+        RStruct struct = new RStruct(node, new RSBreak());
         result.add(struct);
         pattern.addRelation(struct);
         processChild(struct, 0, node.getAllChildren(), pattern, scope);
@@ -126,7 +136,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(CatClause node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSCatch());
+        RStruct struct = new RStruct(node, new RSCatch());
         result.add(struct);
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
@@ -136,13 +146,13 @@ public class PatternExtraction {
 
     public List<Relation> visit(ConstructorInv node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RMcall constructor = new RMcall(RMcall.MCallType.INIT_CALL);
+        RMcall constructor = new RMcall(node, RMcall.MCallType.INIT_CALL);
         constructor.setMethodName(node.getClassStr());
         result.add(constructor);
 
         int index = 1;
         for(Relation r : process(node.getArguments(), pattern, scope)) {
-            RArg arg = new RArg(constructor);
+            RArg arg = new RArg(r.getAstNode(), constructor);
             arg.setIndex(index ++);
             arg.setArgument((ObjRelation) r);
             pattern.addRelation(arg);
@@ -155,7 +165,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(ContinueStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSContinue());
+        RStruct struct = new RStruct(node, new RSContinue());
         result.add(struct);
         pattern.addRelation(struct);
         processChild(struct, 0, node.getAllChildren(), pattern, scope);
@@ -165,7 +175,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(DoStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSDo());
+        RStruct struct = new RStruct(node, new RSDo());
         result.add(struct);
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
@@ -181,7 +191,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(EnhancedForStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSEnhancedFor());
+        RStruct struct = new RStruct(node, new RSEnhancedFor());
         result.add(struct);
         pattern.addRelation(struct);
 
@@ -199,7 +209,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(ForStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSFor());
+        RStruct struct = new RStruct(node, new RSFor());
         result.add(struct);
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
@@ -213,7 +223,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(IfStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSIf());
+        RStruct struct = new RStruct(node, new RSIf());
         result.add(struct);
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
@@ -230,7 +240,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(ReturnStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSRet());
+        RStruct struct = new RStruct(node, new RSRet());
         result.add(struct);
         pattern.addRelation(struct);
 
@@ -241,7 +251,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(SuperConstructorInv node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RMcall mcall = new RMcall(RMcall.MCallType.SUPER_INIT_CALL);
+        RMcall mcall = new RMcall(node, RMcall.MCallType.SUPER_INIT_CALL);
         result.add(mcall);
         List<Relation> relations = process(node.getExpression(), pattern, scope);
         if(relations.size() > 0) mcall.setReciever((ObjRelation) relations.get(0));
@@ -249,7 +259,7 @@ public class PatternExtraction {
         relations = process(node.getArgument(), pattern, scope);
         int index = 1;
         for(Relation r : relations) {
-            RArg arg = new RArg(mcall);
+            RArg arg = new RArg(r.getAstNode(), mcall);
             arg.setIndex(index ++);
             arg.setArgument((ObjRelation) r);
             mcall.addDependency(scope.getDefines(r));
@@ -266,7 +276,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(SwitchStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct ss = new RStruct(new RSwitchStmt());
+        RStruct ss = new RStruct(node, new RSwitchStmt());
         result.add(ss);
         pattern.addRelation(ss);
         Scope newScope = new Scope(scope);
@@ -277,19 +287,19 @@ public class PatternExtraction {
         for(Stmt stmt : node.getStatements()) {
             if(stmt instanceof  SwCase) {
                 SwCase ca = (SwCase) stmt;
-                swcase = new RStruct(new RSwCase());
+                swcase = new RStruct(stmt, new RSwCase());
                 pattern.addRelation(swcase);
                 childScope = new Scope(newScope);
                 processChild(swcase, RSwCase.POS_CHILD_CONST, ca.getExpression(), pattern, childScope);
 
-                RKid kid = new RKid(ss);
+                RKid kid = new RKid(stmt, ss);
                 kid.setIndex(RSwitchStmt.POS_CHILD_CASE);
                 kid.setChild(swcase);
                 pattern.addRelation(kid);
             } else {
                 List<Relation> relations = process(stmt, pattern, childScope);
                 for(Relation r : relations) {
-                    RKid kid = new RKid(swcase);
+                    RKid kid = new RKid(r.getAstNode(), swcase);
                     kid.setChild(r);
                     pattern.addRelation(kid);
                     swcase.addDependency(childScope.getDefines(r));
@@ -302,7 +312,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(SynchronizedStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSync());
+        RStruct struct = new RStruct(node, new RSync());
         result.add(struct);
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
@@ -314,7 +324,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(ThrowStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSThrow());
+        RStruct struct = new RStruct(node, new RSThrow());
         result.add(struct);
         pattern.addRelation(struct);
         processChild(struct, 0, node.getExpression(), pattern, scope);
@@ -323,7 +333,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(TryStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSTry());
+        RStruct struct = new RStruct(node, new RSTry());
         result.add(struct);
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
@@ -350,13 +360,14 @@ public class PatternExtraction {
     public List<Relation> visit(VarDeclarationStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
         for(Vdf vdf : node.getFragments()) {
-            RDef vardef = new RDef();
+            RDef vardef = new RDef(node);
             vardef.setModifiers(node.getModifier());
             vardef.setName(vdf.getName());
             String typeStr = node.getDeclType().typeStr();
             for(int i = 0; i < vdf.getDimension(); i++) {
                 typeStr += "[]";
             }
+            vardef.setObjType(typeStr);
             vardef.setTypeStr(typeStr);
             
             if(vdf.getExpression() != null) {
@@ -374,7 +385,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(WhileStmt node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSWhile());
+        RStruct struct = new RStruct(node, new RSWhile());
         result.add(struct);
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
@@ -385,7 +396,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(MethDecl node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RStruct struct = new RStruct(new RSMethod());
+        RStruct struct = new RStruct(node, new RSMethod());
         result.add(struct);
         pattern.addRelation(struct);
 
@@ -401,7 +412,8 @@ public class PatternExtraction {
     // expression bellow
     public List<Relation> visit(AryAcc node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        ROpt opt = new ROpt(new OpArrayAcc());
+        ROpt opt = new ROpt(node, new OpArrayAcc());
+        opt.setObjType(node.getTypeString());
         result.add(opt);
         pattern.addRelation(opt);
         processArg(opt, OpArrayAcc.POSITION_LHS, node.getArray(), pattern, scope);
@@ -411,7 +423,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(AryCreation node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RMcall mcall = new RMcall(RMcall.MCallType.NEW_ARRAY);
+        RMcall mcall = new RMcall(node, RMcall.MCallType.NEW_ARRAY);
+        mcall.setObjType(node.getTypeString());
         mcall.setMethodName(node.getElementType().typeStr());
         result.add(mcall);
         int index = 1;
@@ -432,25 +445,29 @@ public class PatternExtraction {
         String op = node.getOperator().getOperatorStr();
         if(op.length() > 1) {
             String computeOp = op.substring(0, op.length() - 1);
-            ROpt opt = new ROpt(OperationFactory.createOperation(computeOp));
+            ROpt opt = new ROpt(node, OperationFactory.createOperation(computeOp));
+            opt.setObjType(node.getLhs().getTypeString());
             pattern.addRelation(opt);
 
             processArg(opt, BinaryOp.POSITION_LHS, node.getLhs(), pattern, scope);
             processArg(opt, BinaryOp.POSITION_RHS, node.getRhs(), pattern, scope);
 
             List<Relation> relations = process(node.getLhs(), pattern, scope);
-            RAssign assign = new RAssign((ObjRelation) relations.get(0));
+            RAssign assign = new RAssign(node, (ObjRelation) relations.get(0));
+            assign.setObjType(node.getTypeString());
             scope.addDefine((RDef)relations.get(0), assign);
             assign.setRhs(opt);
             pattern.addRelation(assign);
             result.add(assign);
         } else {
-            List<Relation> relations = process(node.getRhs(), pattern, scope);
-            RAssign assign = new RAssign(null);
+            List<Relation> relations = process(node.getLhs(), pattern, scope);
+            ObjRelation r = (ObjRelation) relations.get(0);
+            RAssign assign = new RAssign(node, r);
+            assign.setObjType(node.getTypeString());
+            relations = process(node.getRhs(), pattern, scope);
             assign.setRhs((ObjRelation) relations.get(0));
-            relations = process(node.getLhs(), pattern, scope);
-            assign.setLhs((ObjRelation) relations.get(0));
-            scope.addDefine((RDef) relations.get(0), assign);
+
+            scope.addDefine((RDef) r, assign);
 
             pattern.addRelation(assign);
             result.add(assign);
@@ -464,9 +481,10 @@ public class PatternExtraction {
 
     public List<Relation> visit(BoolLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualDef = new RVDef();
+        RVDef virtualDef = new RVDef(node);
         virtualDef.setValue(node.getValue());
         virtualDef.setTypeStr("boolean");
+        virtualDef.setObjType("boolean");
         pattern.addRelation(virtualDef);
         result.add(virtualDef);
         return result;
@@ -474,7 +492,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(CastExpr node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RMcall mcall = new RMcall(RMcall.MCallType.CAST);
+        RMcall mcall = new RMcall(node, RMcall.MCallType.CAST);
+        mcall.setObjType(node.getTypeString());
         mcall.setMethodName(node.getCastType().typeStr());
         result.add(mcall);
 
@@ -486,8 +505,9 @@ public class PatternExtraction {
 
     public List<Relation> visit(CharLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualdef = new RVDef();
+        RVDef virtualdef = new RVDef(node);
         virtualdef.setTypeStr("char");
+        virtualdef.setObjType("char");
         virtualdef.setName(node.getStringValue());
         pattern.addRelation(virtualdef);
         result.add(virtualdef);
@@ -496,7 +516,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(ClassInstCreation node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RMcall mcall = new RMcall(RMcall.MCallType.INIT_CALL);
+        RMcall mcall = new RMcall(node, RMcall.MCallType.INIT_CALL);
+        mcall.setObjType(node.getTypeString());
         if(node.getExpression() != null) {
             List<Relation> relations = process(node.getExpression(), pattern, scope);
             mcall.setReciever((ObjRelation) relations.get(0));
@@ -520,7 +541,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(ConditionalExpr node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        ROpt opt = new ROpt(new CopCond());
+        ROpt opt = new ROpt(node, new CopCond());
+        opt.setObjType(node.getTypeString());
         result.add(opt);
         pattern.addRelation(opt);
 
@@ -537,8 +559,9 @@ public class PatternExtraction {
 
     public List<Relation> visit(DoubleLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualDef = new RVDef();
+        RVDef virtualDef = new RVDef(node);
         virtualDef.setTypeStr("double");
+        virtualDef.setObjType("double");
         virtualDef.setValue(node.getValue());
         pattern.addRelation(virtualDef);
         result.add(virtualDef);
@@ -566,8 +589,9 @@ public class PatternExtraction {
             name = "this." + node.getIdentifier().getName();
         }
         RDef virtualDef = pattern.getVarDefine(name);
+        virtualDef.setObjType(node.getTypeString());
         if(virtualDef == null) {
-            virtualDef = new RVDef();
+            virtualDef = new RVDef(node);
             virtualDef.setName(name);
             virtualDef.setTypeStr(node.getTypeString());
             pattern.addRelation(virtualDef);
@@ -579,8 +603,9 @@ public class PatternExtraction {
 
     public List<Relation> visit(FloatLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualdef = new RVDef();
+        RVDef virtualdef = new RVDef(node);
         virtualdef.setTypeStr("float");
+        virtualdef.setObjType("float");
         virtualdef.setValue(node.getValue());
         pattern.addRelation(virtualdef);
         result.add(virtualdef);
@@ -589,7 +614,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(InfixExpr node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        ROpt opt = new ROpt(node, OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        opt.setObjType(node.getTypeString());
         result.add(opt);
         pattern.addRelation(opt);
 
@@ -605,7 +631,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(InstanceofExpr node, Pattern pattern, Scope scope) {
         List<Relation> relations = new LinkedList<>();
-        ROpt opt = new ROpt(new CopInstof());
+        ROpt opt = new ROpt(node, new CopInstof());
+        opt.setObjType(node.getTypeString());
         relations.add(opt);
         pattern.addRelation(opt);
 
@@ -617,8 +644,9 @@ public class PatternExtraction {
 
     public List<Relation> visit(IntLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualdef = new RVDef();
+        RVDef virtualdef = new RVDef(node);
         virtualdef.setTypeStr("int");
+        virtualdef.setObjType("int");
         virtualdef.setValue(node.getValue());
         pattern.addRelation(virtualdef);
         result.add(virtualdef);
@@ -631,8 +659,9 @@ public class PatternExtraction {
 
     public List<Relation> visit(LongLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualdef = new RVDef();
+        RVDef virtualdef = new RVDef(node);
         virtualdef.setTypeStr("long");
+        virtualdef.setObjType("long");
         virtualdef.setValue(node.getValue());
         pattern.addRelation(virtualdef);
         result.add(virtualdef);
@@ -641,7 +670,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(MethodInv node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RMcall mcall = new RMcall(RMcall.MCallType.NORM_MCALL);
+        RMcall mcall = new RMcall(node, RMcall.MCallType.NORM_MCALL);
+        mcall.setObjType(node.getTypeString());
         List<Relation> relations = process(node.getExpression(), pattern, scope);
         if(relations.size() > 0) {
             mcall.setReciever((ObjRelation) relations.get(0));
@@ -663,7 +693,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(MType node, Pattern pattern, Scope scope) {
         List<Relation> relations = new LinkedList<>();
-        RVDef def = new RVDef();
+        RVDef def = new RVDef(node);
         def.setValue(node.typeStr());
         def.setTypeStr(node.typeStr());
         pattern.addRelation(def);
@@ -673,7 +703,7 @@ public class PatternExtraction {
 
     public List<Relation> visit(NillLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualdef = new RVDef();
+        RVDef virtualdef = new RVDef(node);
         virtualdef.setValue("null");
         virtualdef.setTypeStr(null);
         pattern.addRelation(virtualdef);
@@ -683,11 +713,12 @@ public class PatternExtraction {
 
     public List<Relation> visit(NumLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualdef = new RVDef();
+        RVDef virtualdef = new RVDef(node);
         // if failed to parse the value of a number
         // set double type as default (0.0)
         // this should not happen
         virtualdef.setTypeStr("double");
+        virtualdef.setObjType("double");
         virtualdef.setValue(0.0);
         pattern.addRelation(virtualdef);
         result.add(virtualdef);
@@ -704,7 +735,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(PostfixExpr node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        ROpt opt = new ROpt(node, OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        opt.setObjType(node.getTypeString());
         result.add(opt);
         pattern.addRelation(opt);
 
@@ -719,7 +751,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(PrefixExpr node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        ROpt opt = new ROpt(OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        ROpt opt = new ROpt(node, OperationFactory.createOperation(node.getOperator().getOperatorStr()));
+        opt.setObjType(node.getTypeString());
         result.add(opt);
         pattern.addRelation(opt);
         processArg(opt, BinaryOp.POSITION_RHS, node.getExpression(), pattern, scope);
@@ -736,8 +769,9 @@ public class PatternExtraction {
         String name = node.toSrcString().toString();
         RDef def = pattern.getVarDefine(name);
         if(def == null) {
-            def = new RVDef();
+            def = new RVDef(node);
             def.setName(name);
+            def.setObjType(node.getTypeString());
             def.setTypeStr(node.getTypeString());
             pattern.addRelation(def);
             scope.addDefine(def, def);
@@ -751,8 +785,9 @@ public class PatternExtraction {
         String name = node.getName();
         RDef def = pattern.getVarDefine(name);
         if(def == null) {
-            def = new RVDef();
+            def = new RVDef(node);
             def.setName(name);
+            def.setObjType(node.getTypeString());
             def.setTypeStr(node.getTypeString());
             pattern.addRelation(def);
             scope.addDefine(def, def);
@@ -763,9 +798,10 @@ public class PatternExtraction {
 
     public List<Relation> visit(StrLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualdef = new RVDef();
+        RVDef virtualdef = new RVDef(node);
         virtualdef.setValue(node.toSrcString().toString());
-        virtualdef.setTypeStr("String");
+        virtualdef.setTypeStr("java.lang.String");
+        virtualdef.setTypeStr("java.lang.String");
         pattern.addRelation(virtualdef);
         result.add(virtualdef);
         return result;
@@ -776,8 +812,9 @@ public class PatternExtraction {
         String name = "super." + node.getIdentifier();
         RDef virtualDef = pattern.getVarDefine(name);
         if(virtualDef == null) {
-            virtualDef = new RVDef();
+            virtualDef = new RVDef(node);
             virtualDef.setName(name);
+            virtualDef.setObjType(node.getTypeString());
             virtualDef.setTypeStr(node.getTypeString());
             pattern.addRelation(virtualDef);
         }
@@ -787,7 +824,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(SuperMethodInv node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RMcall mcall = new RMcall(RMcall.MCallType.SUPER_MCALL);
+        RMcall mcall = new RMcall(node, RMcall.MCallType.SUPER_MCALL);
+        mcall.setObjType(node.getTypeString());
         mcall.setMethodName(node.getMethodName().getName());
         int index = 1;
         for(Expr expr : node.getArguments().getExpr()) {
@@ -804,8 +842,9 @@ public class PatternExtraction {
 
     public List<Relation> visit(Svd node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RDef def = new RDef();
+        RDef def = new RDef(node);
         String typeStr = node.getDeclType().typeStr();
+        def.setObjType(typeStr);
         def.setTypeStr(typeStr);
         def.setName(node.getName().getName());
         if(node.getInitializer() != null) {
@@ -822,8 +861,9 @@ public class PatternExtraction {
 
     public List<Relation> visit(ThisExpr node, Pattern pattern, Scope scope) {
         List<Relation> relations = new LinkedList<>();
-        RVDef def = new RVDef();
+        RVDef def = new RVDef(node);
         def.setName("this");
+        def.setObjType(node.getTypeString());
         def.setTypeStr(node.getTypeString());
         relations.add(def);
         pattern.addRelation(def);
@@ -832,7 +872,8 @@ public class PatternExtraction {
 
     public List<Relation> visit(TyLiteral node, Pattern pattern, Scope scope) {
         List<Relation> result = new LinkedList<>();
-        RVDef virtualdef = new RVDef();
+        RVDef virtualdef = new RVDef(node);
+        virtualdef.setObjType(node.getDeclType().typeStr());
         virtualdef.setTypeStr(node.getDeclType().typeStr());
         virtualdef.setValue(node.getDeclType().typeStr());
         pattern.addRelation(virtualdef);
@@ -849,11 +890,12 @@ public class PatternExtraction {
 
         String typeStr = node.getDeclType().typeStr();
         for(Vdf vdf : node.getFragments()) {
-            RDef vardef = new RDef();
+            RDef vardef = new RDef(node);
             vardef.setName(vdf.getName());
             for(int i = 0; i < vdf.getDimension(); i++) {
                 typeStr += "[]";
             }
+            vardef.setObjType(typeStr);
             vardef.setTypeStr(typeStr);
             if(vdf.getExpression() != null) {
                 List<Relation> relations = process(vdf.getExpression(), pattern, scope);
