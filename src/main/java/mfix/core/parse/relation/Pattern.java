@@ -57,7 +57,7 @@ public class Pattern implements Serializable {
     private List<Relation> _newRelations;
     private Map<Integer, Integer> _oldR2newRidxMap;
 
-    private transient Set<String> _apis;
+    private transient Set<String> _usedAPIs;
 
     public Pattern() {
         _oldRelations = new ArrayList<>();
@@ -155,16 +155,16 @@ public class Pattern implements Serializable {
      * @return : a set of API (method) names
      */
     public Set<String> getRelatedAPIs() {
-        if (_apis == null) {
-            _apis = new HashSet<>();
+        if (_usedAPIs == null) {
+            _usedAPIs = new HashSet<>();
             for (Relation r : _oldRelations) {
                 if (r.isConcerned() && !r.isAbstract()
                         && r.getRelationKind() == Relation.RelationKind.MCALL) {
-                    _apis.add(((RMcall) r).getMethodName());
+                    _usedAPIs.add(((RMcall) r).getMethodName());
                 }
             }
         }
-        return _apis;
+        return _usedAPIs;
     }
 
     private void addOldRelation(Relation relation) {
