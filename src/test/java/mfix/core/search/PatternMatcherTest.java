@@ -50,7 +50,7 @@ public class PatternMatcherTest extends TestCase {
             if (pattern != null) {
                 pattern.minimize(1, 50);
                 if(!pattern.getMinimizedOldRelations(true).isEmpty()) {
-                    // TODO : to abstract the pattern, which need access database
+                    pattern.doAbstraction(0.01);
                     patterns.add(pattern);
                 }
             }

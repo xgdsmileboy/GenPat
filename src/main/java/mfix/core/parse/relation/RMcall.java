@@ -180,7 +180,7 @@ public class RMcall extends ObjRelation {
                 MethodElement methodElement = new MethodElement(_methodName, null);
                 methodElement.setArgsNumber(_args.size());
                 try {
-                    _isAbstract = counter.count(methodElement, qtype) >= frequency;
+                    _isAbstract = counter.count(methodElement, qtype) < frequency;
                 } catch (ElementException e) {
                     _isAbstract = true;
                 }
