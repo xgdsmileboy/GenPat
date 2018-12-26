@@ -863,7 +863,7 @@ public class PatternExtraction {
         List<Relation> relations = new LinkedList<>();
         RVDef def = new RVDef(node);
         def.setName("this");
-        def.setTypeStr(node.getTypeString());
+        def.setObjType(node.getTypeString());
         def.setTypeStr(node.getTypeString());
         relations.add(def);
         pattern.addRelation(def);
