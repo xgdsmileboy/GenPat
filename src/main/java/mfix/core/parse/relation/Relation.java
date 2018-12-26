@@ -11,6 +11,7 @@ import mfix.common.util.Pair;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,23 +19,34 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/11/29
  */
-public abstract class Relation {
+public abstract class Relation implements Serializable {
+
+    private static final long serialVersionUID = 706186378892330947L;
 
     /**
      * types of relations.
      */
     public enum RelationKind{
-        ARGUMENT,
-        OPERATION,
-        DEFINE,
-        ASSIGN,
-        MCALL,
-        RETURN,
-        STRUCTURE,
-        CHILD,
+        ARGUMENT("Argument"),
+        OPERATION("Operation"),
+        DEFINE("VarDefinition"),
+        ASSIGN("Assignment"),
+        MCALL("MethodCall"),
+        RETURN("Return"),
+        STRUCTURE("Structure"),
+        CHILD("Child"),
 
-        VIRTUALDEFINE
-    }
+        VIRTUALDEFINE("VirtualDefinition");
+
+        private String _value;
+        private RelationKind(String value) {
+            _value = value;
+        }
+
+        @Override
+        public String toString() {
+            return _value;
+        }}
 
     /**
      * Designed to boost relation matching process.

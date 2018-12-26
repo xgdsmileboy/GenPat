@@ -26,6 +26,7 @@ import java.util.Set;
  */
 public class Pattern implements Serializable {
 
+    private static final long serialVersionUID = -1487307746482756299L;
     /**
      * A flag denoting current added relations is from the
      * code before repair {@code true} or after repair {@code false}
@@ -40,13 +41,13 @@ public class Pattern implements Serializable {
      * including real variable definitions and virtual
      * variables (such fields).
      */
-    private Map<String, RDef> _oldName2Define = new HashMap<>();
+    private transient Map<String, RDef> _oldName2Define = new HashMap<>();
     /**
      * Record the variables defined in the new relations,
      * including real variable definitions and virtual
      * variables (such fields).
      */
-    private Map<String, RDef> _newName2Define = new HashMap<>();
+    private transient Map<String, RDef> _newName2Define = new HashMap<>();
 
     /**
      * a pattern consists of a set of relations before
@@ -56,7 +57,7 @@ public class Pattern implements Serializable {
     private List<Relation> _newRelations;
     private Map<Integer, Integer> _oldR2newRidxMap;
 
-    private Set<String> _apis;
+    private transient Set<String> _apis;
 
     public Pattern() {
         _oldRelations = new ArrayList<>();

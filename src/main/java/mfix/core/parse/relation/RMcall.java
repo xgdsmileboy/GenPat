@@ -28,12 +28,22 @@ import java.util.Set;
 public class RMcall extends ObjRelation {
 
     public enum MCallType{
-        NORM_MCALL,
-        SUPER_MCALL,
-        SUPER_INIT_CALL,
-        INIT_CALL,
-        NEW_ARRAY,
-        CAST,
+        NORM_MCALL("Normal Call"),
+        SUPER_MCALL("Super Call"),
+        SUPER_INIT_CALL("Super Init"),
+        INIT_CALL("Init Call"),
+        NEW_ARRAY("New Array"),
+        CAST("Cast Expression");
+
+        private String _value;
+        private MCallType(String value) {
+            _value = value;
+        }
+
+        @Override
+        public String toString() {
+            return _value;
+        }
     }
 
     /**
