@@ -50,7 +50,7 @@ public class RVDef extends RDef {
         if(_value != null) {
             return _value.toString();
         }
-        return null;
+        return "null";
     }
 
     @Override
