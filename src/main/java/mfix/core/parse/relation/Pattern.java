@@ -137,10 +137,6 @@ public class Pattern implements Serializable {
     }
 
     /**
-     *
-     * @return
-     */
-    /**
      * Perform pattern matching between the repair pattern {@code this} and the
      * pattern {@code p} for a buggy code.
      * @param p : pattern for a potential buggy code
