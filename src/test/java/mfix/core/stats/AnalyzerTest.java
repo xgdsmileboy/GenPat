@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class AnalyzerTest extends TestCase {
     @Test
-    public void test_parse() throws ElementException {
+    public void test() throws Exception {
         String srcFile = testbase + Constant.SEP + "src_Project.java";
         String srcFile2 = testbase + Constant.SEP + "src_Intersect.java";
 
@@ -98,5 +98,29 @@ public class AnalyzerTest extends TestCase {
         // Drop the new table for test.
         connector.dropTable();
         connector.close();
+    }
+
+
+    @Test
+    public void test_with_cache() throws Exception {
+        String srcFile = testbase + Constant.SEP + "src_Project.java";
+        String srcFile2 = testbase + Constant.SEP + "src_Intersect.java";
+        String cacheResourceFile = testbase + Constant.SEP + "CacheResourceForMethodTableElements.txt";
+
+        ElementCounter counter = new ElementCounter();
+        counter.loadCache(cacheResourceFile);
+
+        ElementQueryType withoutTypeCountFiles = new ElementQueryType(false, false, ElementQueryType.CountType.COUNT_FILES);
+        ElementQueryType withoutTypeCountFilesOutputPercent = new ElementQueryType(false, true, ElementQueryType.CountType.COUNT_FILES);
+
+        MethodElement methodElementA = new MethodElement("getPropertyHelper", null);
+        methodElementA.setArgsNumber(1);
+
+        Assert.assertTrue(counter.count(methodElementA, withoutTypeCountFiles) == 12);
+        Assert.assertTrue(Math.abs(counter.count(methodElementA, withoutTypeCountFilesOutputPercent) - 12.0 / 333) <= 1e-3);
+
+        methodElementA.setArgsNumber(0);
+        Assert.assertTrue(counter.count(methodElementA, withoutTypeCountFiles) == 0);
+        Assert.assertTrue(Math.abs(counter.count(methodElementA, withoutTypeCountFilesOutputPercent) - 0.0) <= 1e-3);
     }
 }
