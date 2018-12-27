@@ -8,7 +8,9 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.parse.relation.op.AbsOperation;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,8 +29,8 @@ public class ROpt extends ObjRelation {
 
     private List<RArg> _args;
 
-    public ROpt(AbsOperation operation) {
-        super(RelationKind.OPERATION);
+    public ROpt(Node node, AbsOperation operation) {
+        super(node, RelationKind.OPERATION);
         _operation = operation;
         _args = new LinkedList<>();
     }
@@ -58,8 +60,12 @@ public class ROpt extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        _isAbstract = true;
+        for(RArg arg : _args) {
+            arg.doAbstraction(counter, frequency);
+            _isAbstract = _isAbstract && (!arg.isConcerned() || arg.isAbstract());
+        }
     }
 
     @Override
@@ -72,7 +78,24 @@ public class ROpt extends ObjRelation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
+        boolean used = false;
+        for(Relation r : _usedBy) {
+            if(r instanceof  RKid) {
+                continue;
+            }
+            used = true;
+            break;
+        }
+        if(used) {
+            return "";
+        }
         return getExprString();
     }
 }

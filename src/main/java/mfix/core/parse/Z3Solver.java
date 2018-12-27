@@ -48,9 +48,14 @@ public class Z3Solver {
             for(int j = 0; j < columns; j ++) {
                 // 0 <= vars[i][j] <= matrix[i][j] : each cell can be 0 or 1
                 vars[i][j] = ctx.mkIntConst("x_" + i + "_" + j);
-                optimize.Assert(
-                        ctx.mkAnd(ctx.mkGe(vars[i][j], zero),
-                                ctx.mkLe(vars[i][j], ctx.mkInt(matrix[i][j]))));
+                if(matrix[i][j] == 0) {
+                    optimize.Assert(ctx.mkEq(vars[i][j], zero));
+                } else {
+                    optimize.Assert(ctx.mkOr(ctx.mkEq(vars[i][j], zero), ctx.mkEq(vars[i][j], one)));
+                }
+//                 optimize.Assert(
+//                        ctx.mkOr(ctx.mkEq(vars[i][j], zero),
+//                                ctx.mkEq(vars[i][j], ctx.mkInt(matrix[i][j]))));
             }
         }
 

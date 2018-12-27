@@ -8,7 +8,9 @@
 package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
+import mfix.core.parse.node.Node;
 import mfix.core.parse.relation.struct.Structure;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
 
@@ -18,14 +20,22 @@ import java.util.Set;
  */
 public class RStruct extends Relation {
 
+
+    private static int ID = 0;
     /**
      * structure type
      */
     private Structure _structure;
+    private int _id = 0;
 
-    public RStruct(Structure structure) {
-        super(RelationKind.STRUCTURE);
+    public RStruct(Node node, Structure structure) {
+        super(node, RelationKind.STRUCTURE);
         _structure = structure;
+        _id = genId();
+    }
+
+    public static int genId() {
+        return ID ++;
     }
 
     public Structure getStructure() {
@@ -38,8 +48,9 @@ public class RStruct extends Relation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        // structures do not abstract
+        _isAbstract = false;
     }
 
     @Override
@@ -52,7 +63,13 @@ public class RStruct extends Relation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
-        return _structure.toString();
+        return String.format("[%s-%d]", _structure.toString(), _id);
     }
 }

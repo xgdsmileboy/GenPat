@@ -9,6 +9,8 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.parse.node.Node;
+import mfix.core.stats.element.ElementCounter;
 
 import java.util.Set;
 
@@ -37,12 +39,12 @@ public class RDef extends ObjRelation {
      */
     private ObjRelation _initializer;
 
-    public RDef() {
-        this(RelationKind.DEFINE);
+    public RDef(Node node) {
+        this(node, RelationKind.DEFINE);
     }
 
-    protected RDef(RelationKind kind) {
-        super(kind);
+    protected RDef(Node node, RelationKind kind) {
+        super(node, kind);
     }
 
     public void setModifiers(String modifiers) {
@@ -92,8 +94,14 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction(double frequency) {
-
+    public void doAbstraction0(ElementCounter counter, double frequency) {
+        if(_initializer != null) {
+            _initializer.doAbstraction(counter, frequency);
+        }
+        // this relation should be concretely matched
+        // NOTE: here it does not denote the name of
+        // variables but the relation it self (var-define)
+        _isAbstract = false;
     }
 
     @Override
@@ -102,9 +110,12 @@ public class RDef extends ObjRelation {
             return false;
         }
         RDef def = (RDef) relation;
-        if(!Utils.safeStringEqual(_modifiers, def.getModifiers())
-                || !Utils.safeStringEqual(_typeStr, def.getTypeString())
-                || !Utils.safeStringEqual(_name, def.getName())) {
+//        if(!Utils.safeStringEqual(_modifiers, def.getModifiers())
+//                || !Utils.safeStringEqual(_typeStr, def.getTypeString())
+//                || !Utils.safeStringEqual(_name, def.getName())) {
+//            return false;
+//        }
+        if(!Utils.safeStringEqual(_name, def.getName())) {
             return false;
         }
 
@@ -120,6 +131,12 @@ public class RDef extends ObjRelation {
     }
 
     @Override
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+        // TODO : to finish
+        return false;
+    }
+
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         if(_modifiers != null) {
@@ -129,7 +146,7 @@ public class RDef extends ObjRelation {
         buffer.append(_name);
         if(_initializer != null) {
             buffer.append("=");
-            buffer.append(_initializer.toString());
+            buffer.append(_initializer.getExprString());
         }
         return buffer.toString();
     }
