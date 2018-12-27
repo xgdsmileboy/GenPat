@@ -95,9 +95,9 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
+    public void doAbstraction0(ElementCounter counter) {
         if(_initializer != null) {
-            _initializer.doAbstraction(counter, frequency);
+            _initializer.doAbstraction(counter);
         }
         // this relation should be concretely matched
         // NOTE: here it does not denote the name of

@@ -75,9 +75,9 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
-        _lhs.doAbstraction(counter, frequency);
-        _rhs.doAbstraction(counter, frequency);
+    public void doAbstraction0(ElementCounter counter) {
+        _lhs.doAbstraction(counter);
+        _rhs.doAbstraction(counter);
         _isAbstract = (!_lhs.isConcerned() || _lhs.isAbstract())
                 && (!_rhs.isConcerned() || _rhs.isAbstract());
     }

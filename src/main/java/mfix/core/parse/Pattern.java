@@ -30,6 +30,10 @@ public class Pattern implements Serializable {
 
     private static final long serialVersionUID = -1487307746482756299L;
     /**
+     * Denoting how many projects use the API is regarded as frequent API
+     */
+    public static final int API_FREQUENCY = 100;
+    /**
      * A flag denoting current added relations is from the
      * code before repair {@code true} or after repair {@code false}
      */
@@ -128,13 +132,12 @@ public class Pattern implements Serializable {
     /**
      * perform pattern abstraction process based on
      * the given frequency
-     * @param frequency : threshold for abstraction
      */
-    public void doAbstraction(double frequency) {
+    public void doAbstraction() {
         ElementCounter counter = new ElementCounter();
         counter.open();
         for (int i = 0; i < _oldRelations.size(); i++) {
-            _oldRelations.get(i).doAbstraction(counter, frequency);
+            _oldRelations.get(i).doAbstraction(counter);
         }
         counter.close();
     }

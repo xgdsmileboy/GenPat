@@ -190,17 +190,15 @@ public abstract class Relation implements Serializable {
     protected abstract Set<Relation> expandDownward0(Set<Relation> set);
 
     /**
-     * Perform object abstraction in the relation based
-     * on the given {@code frequency} threshold.
-     * @param frequency : frequency threshold
+     * Perform object abstraction in the relation
      */
-    public void doAbstraction(ElementCounter counter, double frequency) {
+    public void doAbstraction(ElementCounter counter) {
         if(isConcerned() && !_visited) {
             _visited = true;
-            doAbstraction0(counter, frequency);
+            doAbstraction0(counter);
         }
     }
-    protected abstract void doAbstraction0(ElementCounter counter, double frequency);
+    protected abstract void doAbstraction0(ElementCounter counter);
 
     /**
      * Perform the core pattern matching algorithm when given a potential buggy pattern

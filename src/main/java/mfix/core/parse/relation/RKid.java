@@ -73,8 +73,8 @@ public class RKid extends Relation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
-        _child.doAbstraction(counter, frequency);
+    public void doAbstraction0(ElementCounter counter) {
+        _child.doAbstraction(counter);
         _isAbstract = !_child.isConcerned() || _child.isAbstract();
     }
 

@@ -72,9 +72,9 @@ public class RArg extends Relation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
-        _function.doAbstraction(counter, frequency);
-        _arg.doAbstraction(counter, frequency);
+    public void doAbstraction0(ElementCounter counter) {
+        _function.doAbstraction(counter);
+        _arg.doAbstraction(counter);
         _isAbstract = !_arg.isConcerned() || _arg.isAbstract();
     }
 

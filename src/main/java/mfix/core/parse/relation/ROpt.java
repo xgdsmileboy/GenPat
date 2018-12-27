@@ -61,10 +61,10 @@ public class ROpt extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
+    public void doAbstraction0(ElementCounter counter) {
         _isAbstract = true;
         for(RArg arg : _args) {
-            arg.doAbstraction(counter, frequency);
+            arg.doAbstraction(counter);
             _isAbstract = _isAbstract && (!arg.isConcerned() || arg.isAbstract());
         }
     }

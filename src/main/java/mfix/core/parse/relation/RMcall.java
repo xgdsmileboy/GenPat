@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.parse.Pattern;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
@@ -183,9 +184,9 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
+    public void doAbstraction0(ElementCounter counter) {
         if(_receiver != null) {
-            _receiver.doAbstraction(counter, frequency);
+            _receiver.doAbstraction(counter);
         }
         switch (_type) {
             case SUPER_INIT_CALL:
@@ -196,11 +197,11 @@ public class RMcall extends ObjRelation {
             case NORM_MCALL:
             case SUPER_MCALL:
                 ElementQueryType qtype = new ElementQueryType(false,
-                        true, ElementQueryType.CountType.COUNT_FILES);
+                        false, ElementQueryType.CountType.COUNT_FILES);
                 MethodElement methodElement = new MethodElement(_methodName, null);
                 methodElement.setArgsNumber(_args.size());
                 try {
-                    _isAbstract = counter.count(methodElement, qtype) < frequency;
+                    _isAbstract = counter.count(methodElement, qtype) < Pattern.API_FREQUENCY;
                 } catch (ElementException e) {
                     _isAbstract = true;
                 }
@@ -208,7 +209,7 @@ public class RMcall extends ObjRelation {
                 break;
         }
         for(RArg r : _args) {
-            r.doAbstraction(counter, frequency);
+            r.doAbstraction(counter);
         }
     }
 

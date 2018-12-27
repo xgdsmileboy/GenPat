@@ -50,7 +50,7 @@ public class PatternMatcherTest extends TestCase {
             if (pattern != null) {
                 pattern.minimize(1, 50);
                 if(!pattern.getMinimizedOldRelations(true).isEmpty()) {
-                    pattern.doAbstraction(0.01);
+                    pattern.doAbstraction();
                     patterns.add(pattern);
                 }
             }
