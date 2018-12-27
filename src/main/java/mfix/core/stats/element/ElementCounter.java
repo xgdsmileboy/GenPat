@@ -15,7 +15,7 @@ public class ElementCounter {
     private DatabaseConnector _connector = null;
 
     private static HashMap<Pair<String, Integer>, Integer> cacheMap = null;
-    private static Integer cacheMaptotalNumber;
+    private static Integer cacheTotalNumber = null;
 
     public void open() {
         _connector = new DatabaseConnector();
@@ -42,13 +42,17 @@ public class ElementCounter {
                 throw new ElementException(element.DBKEY_ARGS_NUMBER);
             }
             countNumber = cacheMap.getOrDefault(new Pair<String, Integer>(methodElement._elementName, methodElement._argsNumber), 0);
-            allNumber = cacheMaptotalNumber;
+            if (queryType.getWithPercent()) {
+                if (cacheTotalNumber == null) {
+                    cacheTotalNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
+                }
+                allNumber = cacheTotalNumber;
+            }
         } else {
             countNumber = _connector.query(element.toQueryRow(queryType));
-            if (queryType.getWithPercent()) {
-                allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
-            }
+            allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
         }
+
 
         if (queryType.getWithPercent()) {
             return allNumber == 0 ? 0 : ((float)countNumber) / allNumber;
@@ -61,14 +65,12 @@ public class ElementCounter {
         BufferedReader br = new BufferedReader(new FileReader(cacheFile));
         String line;
         cacheMap = new HashMap<Pair<String, Integer>, Integer>();
-        cacheMaptotalNumber = 0;
         while ((line = br.readLine()) != null) {
             StringTokenizer st = new StringTokenizer(line);
             String elementName = st.nextToken();
             Integer argsNumber = Integer.parseInt(st.nextToken());
             Integer countNumber = Integer.parseInt(st.nextToken());
             cacheMap.put(new Pair<String, Integer>(elementName, argsNumber), countNumber);
-            cacheMaptotalNumber += countNumber;
         }
     }
 }

@@ -107,7 +107,21 @@ public class AnalyzerTest extends TestCase {
         String srcFile2 = testbase + Constant.SEP + "src_Intersect.java";
         String cacheResourceFile = testbase + Constant.SEP + "CacheResourceForMethodTableElements.txt";
 
+        // Create a new table for test.
+        DatabaseConnector connector = new DatabaseConnector();
+        connector.setAsTestMode();
+        connector.open();
+        connector.dropTable(); // Drop the table if exist.
+        connector.createTable();
+
+        Analyzer analyzer = Analyzer.getInstance();
+        analyzer.open();
+        analyzer.runFile(srcFile);
+        analyzer.runFile(srcFile2);
+        analyzer.finish();
+
         ElementCounter counter = new ElementCounter();
+        counter.open();
         counter.loadCache(cacheResourceFile);
 
         ElementQueryType withoutTypeCountFiles = new ElementQueryType(false, false, ElementQueryType.CountType.COUNT_FILES);
@@ -116,11 +130,22 @@ public class AnalyzerTest extends TestCase {
         MethodElement methodElementA = new MethodElement("getPropertyHelper", null);
         methodElementA.setArgsNumber(1);
 
-        Assert.assertTrue(counter.count(methodElementA, withoutTypeCountFiles) == 12);
-        Assert.assertTrue(Math.abs(counter.count(methodElementA, withoutTypeCountFilesOutputPercent) - 12.0 / 333) <= 1e-3);
+        Assert.assertTrue(counter.count(methodElementA, withoutTypeCountFiles) == 1);
+        Assert.assertTrue(Math.abs(counter.count(methodElementA, withoutTypeCountFilesOutputPercent) - 1.0 / 2) <= 1e-3);
 
         methodElementA.setArgsNumber(0);
         Assert.assertTrue(counter.count(methodElementA, withoutTypeCountFiles) == 0);
         Assert.assertTrue(Math.abs(counter.count(methodElementA, withoutTypeCountFilesOutputPercent) - 0.0) <= 1e-3);
+
+        MethodElement methodElementB = new MethodElement("size", null);
+        methodElementB.setArgsNumber(0);
+        Assert.assertTrue(counter.count(methodElementB, withoutTypeCountFiles) == 2);
+        Assert.assertTrue(Math.abs(counter.count(methodElementB, withoutTypeCountFilesOutputPercent) - 1.0 / 1) <= 1e-3);
+
+        counter.close();
+
+        // Drop the new table for test.
+        connector.dropTable();
+        connector.close();
     }
 }
