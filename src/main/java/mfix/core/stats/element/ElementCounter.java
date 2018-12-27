@@ -16,7 +16,7 @@ public class ElementCounter {
 
     private static HashMap<Pair<String, Integer>, Integer> cacheMap = null;
     private static Integer cacheTotalNumber = null;
-    private static String DEFAULT_CACHE_FILE = "/home/renly/MethodTableElements.txt";
+    static final String DEFAULT_CACHE_FILE = "/home/renly/MethodTableElements.txt";
 
     public void open() {
         _connector = new DatabaseConnector();
