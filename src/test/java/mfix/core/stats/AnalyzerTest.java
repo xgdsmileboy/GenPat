@@ -139,8 +139,8 @@ public class AnalyzerTest extends TestCase {
 
         MethodElement methodElementB = new MethodElement("size", null);
         methodElementA.setArgsNumber(0);
-        Assert.assertTrue(counter.count(methodElementA, withoutTypeCountFiles) == 2);
-        Assert.assertTrue(Math.abs(counter.count(methodElementA, withoutTypeCountFilesOutputPercent) - 1.0 / 1) <= 1e-3);
+        Assert.assertTrue(counter.count(methodElementB, withoutTypeCountFiles) == 2);
+        Assert.assertTrue(Math.abs(counter.count(methodElementB, withoutTypeCountFilesOutputPercent) - 1.0 / 1) <= 1e-3);
 
         counter.close();
 
