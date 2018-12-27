@@ -16,6 +16,7 @@ public class ElementCounter {
 
     private static HashMap<Pair<String, Integer>, Integer> cacheMap = null;
     private static Integer cacheTotalNumber = null;
+    private static String DEFAULT_CACHE_FILE = "/home/renly/MethodTableElements.txt";
 
     public void open() {
         _connector = new DatabaseConnector();
@@ -72,5 +73,9 @@ public class ElementCounter {
             Integer countNumber = Integer.parseInt(st.nextToken());
             cacheMap.put(new Pair<String, Integer>(elementName, argsNumber), countNumber);
         }
+    }
+
+    public void loadCache() throws Exception {
+        loadCache(DEFAULT_CACHE_FILE);
     }
 }
