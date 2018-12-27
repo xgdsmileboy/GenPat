@@ -13,6 +13,7 @@ import mfix.core.stats.element.ElementCounter;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -207,7 +208,8 @@ public abstract class Relation implements Serializable {
      * @param dependencies : dependencies to match current relations
      * @return true of matches, false otherwise
      */
-    public abstract boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies);
+    public abstract boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                         Map<String, String> varMapping);
 
     /**
      * The matched relation cannot be {@code null}

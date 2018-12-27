@@ -70,7 +70,7 @@ public class PatternMatcherTest extends TestCase {
         for(MethodDeclaration m : methods) {
             Node node = nodeParser.process(m);
             Pattern bp = PatternExtraction.extract(node, true);
-            Set<Pattern> matched = PatternMatcher.match(bp, patterns);
+            Set<Pattern> matched = PatternMatcher.filter(bp, patterns);
             System.out.println(matched.size());
         }
 

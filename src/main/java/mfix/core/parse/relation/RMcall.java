@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -240,7 +241,8 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

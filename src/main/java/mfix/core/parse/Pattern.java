@@ -148,6 +148,38 @@ public class Pattern implements Serializable {
      */
     public boolean foldMatching(Pattern p, Map<String, String> exprMapping) {
         // TODO : p is an concrete instance for a potential buggy code
+        List<Relation> pRelations = getMinimizedOldRelations(true);
+        List<Relation> bRelations = p.getOldRelations();
+        Map<Relation, Integer> absPtnOldR2IdxMap = mapRelation2LstIndex(pRelations);
+        Map<Relation, Integer> buggyPtnR2IdexMap = mapRelation2LstIndex(bRelations);
+
+        int pLen = pRelations.size();
+        int bLen = bRelations.size();
+        int[][] matrix = new int[pLen][bLen];
+        Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
+        Map<String, String> varMapping = new HashMap<>();
+        Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
+        Set<Pair<Integer, Integer>> set;
+        for(int i = 0; i < pLen; i++) {
+            for(int j = 0; j < bLen; j++) {
+                dependencies.clear();
+                if(pRelations.get(i).foldMatching(bRelations.get(j), dependencies, varMapping)) {
+                    matrix[i][j] = 1;
+                    String key = i + "_" + j;
+                    set = new HashSet<>();
+                    for (Pair<Relation, Relation> pair : dependencies) {
+                        set.add(new Pair<>(absPtnOldR2IdxMap.get(pair.getFirst()), buggyPtnR2IdexMap.get(pair.getSecond())));
+                    }
+                    loc2dependencies.put(key, set);
+                }
+            }
+        }
+        Z3Solver solver = new Z3Solver();
+        Map<Integer, Integer> map = solver.checkSat(matrix, loc2dependencies);
+        if(map != null) {
+
+        }
+
         return false;
     }
 
@@ -228,7 +260,7 @@ public class Pattern implements Serializable {
                 }
             }
             Z3Solver solver = new Z3Solver();
-            _oldR2newRidxMap = solver.build(matrix, loc2dependencies);
+            _oldR2newRidxMap = solver.maxOptimize(matrix, loc2dependencies);
         }
         Map<Integer, Integer> newR2OldRidxMap = new HashMap<>();
         for (Map.Entry<Integer, Integer> entry : _oldR2newRidxMap.entrySet()) {

@@ -12,6 +12,7 @@ import mfix.common.util.Utils;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -131,7 +132,8 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }
