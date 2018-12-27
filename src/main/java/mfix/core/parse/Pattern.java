@@ -5,10 +5,12 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse.relation;
+package mfix.core.parse;
 
 import mfix.common.util.Pair;
-import mfix.core.parse.Z3Solver;
+import mfix.core.parse.relation.RDef;
+import mfix.core.parse.relation.RMcall;
+import mfix.core.parse.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 
 import java.io.Serializable;

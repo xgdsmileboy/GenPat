@@ -15,7 +15,7 @@ import mfix.core.parse.Matcher;
 import mfix.core.parse.NodeParser;
 import mfix.core.parse.PatternExtraction;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.relation.Pattern;
+import mfix.core.parse.Pattern;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;

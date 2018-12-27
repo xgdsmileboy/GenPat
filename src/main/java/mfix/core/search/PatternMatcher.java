@@ -7,7 +7,7 @@
 
 package mfix.core.search;
 
-import mfix.core.parse.relation.Pattern;
+import mfix.core.parse.Pattern;
 
 import java.util.HashSet;
 import java.util.Set;
