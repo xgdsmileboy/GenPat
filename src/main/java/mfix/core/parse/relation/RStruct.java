@@ -12,6 +12,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.relation.struct.Structure;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -48,7 +49,7 @@ public class RStruct extends Relation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
+    public void doAbstraction0(ElementCounter counter) {
         // structures do not abstract
         _isAbstract = false;
     }
@@ -63,7 +64,8 @@ public class RStruct extends Relation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

@@ -7,11 +7,16 @@
 
 package mfix.core.parse.relation.struct;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public abstract class Structure {
+public abstract class Structure implements Serializable {
+
+    private static final long serialVersionUID = 7690928543701849397L;
+
     private RSKind _rskind;
     protected Structure(RSKind rsKind) {
         _rskind = rsKind;

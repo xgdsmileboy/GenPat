@@ -11,6 +11,7 @@ import mfix.common.util.Pair;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -74,9 +75,9 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
-        _lhs.doAbstraction(counter, frequency);
-        _rhs.doAbstraction(counter, frequency);
+    public void doAbstraction0(ElementCounter counter) {
+        _lhs.doAbstraction(counter);
+        _rhs.doAbstraction(counter);
         _isAbstract = (!_lhs.isConcerned() || _lhs.isAbstract())
                 && (!_rhs.isConcerned() || _rhs.isAbstract());
     }
@@ -96,7 +97,8 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }
