@@ -11,30 +11,43 @@ import mfix.common.util.Pair;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
+import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * @author: Jiajun
  * @date: 2018/11/29
  */
-public abstract class Relation {
+public abstract class Relation implements Serializable {
+
+    private static final long serialVersionUID = 706186378892330947L;
 
     /**
      * types of relations.
      */
     public enum RelationKind{
-        ARGUMENT,
-        OPERATION,
-        DEFINE,
-        ASSIGN,
-        MCALL,
-        RETURN,
-        STRUCTURE,
-        CHILD,
+        ARGUMENT("Argument"),
+        OPERATION("Operation"),
+        DEFINE("VarDefinition"),
+        ASSIGN("Assignment"),
+        MCALL("MethodCall"),
+        RETURN("Return"),
+        STRUCTURE("Structure"),
+        CHILD("Child"),
 
-        VIRTUALDEFINE
-    }
+        VIRTUALDEFINE("VirtualDefinition");
+
+        private String _value;
+        private RelationKind(String value) {
+            _value = value;
+        }
+
+        @Override
+        public String toString() {
+            return _value;
+        }}
 
     /**
      * Designed to boost relation matching process.
@@ -177,17 +190,15 @@ public abstract class Relation {
     protected abstract Set<Relation> expandDownward0(Set<Relation> set);
 
     /**
-     * Perform object abstraction in the relation based
-     * on the given {@code frequency} threshold.
-     * @param frequency : frequency threshold
+     * Perform object abstraction in the relation
      */
-    public void doAbstraction(ElementCounter counter, double frequency) {
+    public void doAbstraction(ElementCounter counter) {
         if(isConcerned() && !_visited) {
             _visited = true;
-            doAbstraction0(counter, frequency);
+            doAbstraction0(counter);
         }
     }
-    protected abstract void doAbstraction0(ElementCounter counter, double frequency);
+    protected abstract void doAbstraction0(ElementCounter counter);
 
     /**
      * Perform the core pattern matching algorithm when given a potential buggy pattern
@@ -195,7 +206,8 @@ public abstract class Relation {
      * @param dependencies : dependencies to match current relations
      * @return true of matches, false otherwise
      */
-    public abstract boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies);
+    public abstract boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                         Map<String, String> varMapping);
 
     /**
      * The matched relation cannot be {@code null}

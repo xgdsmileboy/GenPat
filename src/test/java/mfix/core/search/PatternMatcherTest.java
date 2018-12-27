@@ -15,7 +15,7 @@ import mfix.core.parse.Matcher;
 import mfix.core.parse.NodeParser;
 import mfix.core.parse.PatternExtraction;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.relation.Pattern;
+import mfix.core.parse.Pattern;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -50,7 +50,7 @@ public class PatternMatcherTest extends TestCase {
             if (pattern != null) {
                 pattern.minimize(1, 50);
                 if(!pattern.getMinimizedOldRelations(true).isEmpty()) {
-                    pattern.doAbstraction(0.01);
+                    pattern.doAbstraction();
                     patterns.add(pattern);
                 }
             }
@@ -70,7 +70,7 @@ public class PatternMatcherTest extends TestCase {
         for(MethodDeclaration m : methods) {
             Node node = nodeParser.process(m);
             Pattern bp = PatternExtraction.extract(node, true);
-            Set<Pattern> matched = PatternMatcher.match(bp, patterns);
+            Set<Pattern> matched = PatternMatcher.filter(bp, patterns);
             System.out.println(matched.size());
         }
 

@@ -11,6 +11,7 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.IntExpr;
 import com.microsoft.z3.Model;
 import com.microsoft.z3.Optimize;
+import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
 import mfix.common.util.Pair;
 
@@ -27,7 +28,17 @@ public class Z3Solver {
     public Z3Solver() {
     }
 
-    public Map<Integer, Integer> build(int[][] matrix, Map<String, Set<Pair<Integer, Integer>>> loc2dependencies) {
+    public Map<Integer, Integer> checkSat(int[][] matrix, Map<String, Set<Pair<Integer, Integer>>> loc2dependencies) {
+        HashMap<String, String> cfg = new HashMap<String, String>();
+        cfg.put("model", "true");
+        Context ctx = new Context(cfg);
+        Solver solver = ctx.mkSolver();
+        // TODO: tO finish the solving constraints
+
+        return null;
+    }
+
+    public Map<Integer, Integer> maxOptimize(int[][] matrix, Map<String, Set<Pair<Integer, Integer>>> loc2dependencies) {
         HashMap<String, String> cfg = new HashMap<String, String>();
         cfg.put("model", "true");
         Context ctx = new Context(cfg);

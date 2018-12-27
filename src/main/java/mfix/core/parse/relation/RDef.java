@@ -12,6 +12,7 @@ import mfix.common.util.Utils;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -94,9 +95,9 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
+    public void doAbstraction0(ElementCounter counter) {
         if(_initializer != null) {
-            _initializer.doAbstraction(counter, frequency);
+            _initializer.doAbstraction(counter);
         }
         // this relation should be concretely matched
         // NOTE: here it does not denote the name of
@@ -131,7 +132,8 @@ public class RDef extends ObjRelation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

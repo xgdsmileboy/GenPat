@@ -5,10 +5,12 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse.relation;
+package mfix.core.parse;
 
 import mfix.common.util.Pair;
-import mfix.core.parse.Z3Solver;
+import mfix.core.parse.relation.RDef;
+import mfix.core.parse.relation.RMcall;
+import mfix.core.parse.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 
 import java.io.Serializable;
@@ -26,6 +28,11 @@ import java.util.Set;
  */
 public class Pattern implements Serializable {
 
+    private static final long serialVersionUID = -1487307746482756299L;
+    /**
+     * Denoting how many projects use the API is regarded as frequent API
+     */
+    public static final int API_FREQUENCY = 100;
     /**
      * A flag denoting current added relations is from the
      * code before repair {@code true} or after repair {@code false}
@@ -40,13 +47,13 @@ public class Pattern implements Serializable {
      * including real variable definitions and virtual
      * variables (such fields).
      */
-    private Map<String, RDef> _oldName2Define = new HashMap<>();
+    private transient Map<String, RDef> _oldName2Define = new HashMap<>();
     /**
      * Record the variables defined in the new relations,
      * including real variable definitions and virtual
      * variables (such fields).
      */
-    private Map<String, RDef> _newName2Define = new HashMap<>();
+    private transient Map<String, RDef> _newName2Define = new HashMap<>();
 
     /**
      * a pattern consists of a set of relations before
@@ -56,7 +63,7 @@ public class Pattern implements Serializable {
     private List<Relation> _newRelations;
     private Map<Integer, Integer> _oldR2newRidxMap;
 
-    private Set<String> _apis;
+    private transient Set<String> _usedAPIs;
 
     public Pattern() {
         _oldRelations = new ArrayList<>();
@@ -125,13 +132,12 @@ public class Pattern implements Serializable {
     /**
      * perform pattern abstraction process based on
      * the given frequency
-     * @param frequency : threshold for abstraction
      */
-    public void doAbstraction(double frequency) {
+    public void doAbstraction() {
         ElementCounter counter = new ElementCounter();
         counter.open();
         for (int i = 0; i < _oldRelations.size(); i++) {
-            _oldRelations.get(i).doAbstraction(counter, frequency);
+            _oldRelations.get(i).doAbstraction(counter);
         }
         counter.close();
     }
@@ -145,6 +151,38 @@ public class Pattern implements Serializable {
      */
     public boolean foldMatching(Pattern p, Map<String, String> exprMapping) {
         // TODO : p is an concrete instance for a potential buggy code
+        List<Relation> pRelations = getMinimizedOldRelations(true);
+        List<Relation> bRelations = p.getOldRelations();
+        Map<Relation, Integer> absPtnOldR2IdxMap = mapRelation2LstIndex(pRelations);
+        Map<Relation, Integer> buggyPtnR2IdexMap = mapRelation2LstIndex(bRelations);
+
+        int pLen = pRelations.size();
+        int bLen = bRelations.size();
+        int[][] matrix = new int[pLen][bLen];
+        Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
+        Map<String, String> varMapping = new HashMap<>();
+        Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
+        Set<Pair<Integer, Integer>> set;
+        for(int i = 0; i < pLen; i++) {
+            for(int j = 0; j < bLen; j++) {
+                dependencies.clear();
+                if(pRelations.get(i).foldMatching(bRelations.get(j), dependencies, varMapping)) {
+                    matrix[i][j] = 1;
+                    String key = i + "_" + j;
+                    set = new HashSet<>();
+                    for (Pair<Relation, Relation> pair : dependencies) {
+                        set.add(new Pair<>(absPtnOldR2IdxMap.get(pair.getFirst()), buggyPtnR2IdexMap.get(pair.getSecond())));
+                    }
+                    loc2dependencies.put(key, set);
+                }
+            }
+        }
+        Z3Solver solver = new Z3Solver();
+        Map<Integer, Integer> map = solver.checkSat(matrix, loc2dependencies);
+        if(map != null) {
+
+        }
+
         return false;
     }
 
@@ -154,16 +192,16 @@ public class Pattern implements Serializable {
      * @return : a set of API (method) names
      */
     public Set<String> getRelatedAPIs() {
-        if (_apis == null) {
-            _apis = new HashSet<>();
+        if (_usedAPIs == null) {
+            _usedAPIs = new HashSet<>();
             for (Relation r : _oldRelations) {
                 if (r.isConcerned() && !r.isAbstract()
                         && r.getRelationKind() == Relation.RelationKind.MCALL) {
-                    _apis.add(((RMcall) r).getMethodName());
+                    _usedAPIs.add(((RMcall) r).getMethodName());
                 }
             }
         }
-        return _apis;
+        return _usedAPIs;
     }
 
     private void addOldRelation(Relation relation) {
@@ -225,7 +263,7 @@ public class Pattern implements Serializable {
                 }
             }
             Z3Solver solver = new Z3Solver();
-            _oldR2newRidxMap = solver.build(matrix, loc2dependencies);
+            _oldR2newRidxMap = solver.maxOptimize(matrix, loc2dependencies);
         }
         Map<Integer, Integer> newR2OldRidxMap = new HashMap<>();
         for (Map.Entry<Integer, Integer> entry : _oldR2newRidxMap.entrySet()) {

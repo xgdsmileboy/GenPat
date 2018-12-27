@@ -11,6 +11,7 @@ import mfix.common.util.Pair;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -37,7 +38,7 @@ public class RVDef extends RDef {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
+    public void doAbstraction0(ElementCounter counter) {
         // TODO : we can simply abstract all virtual variables
         _isAbstract = true;
     }
@@ -66,7 +67,8 @@ public class RVDef extends RDef {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

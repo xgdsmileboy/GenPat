@@ -9,13 +9,16 @@ package mfix.core.parse.relation.op;
 
 import mfix.core.parse.relation.RArg;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author: Jiajun
  * @date: 2018/12/5
  */
-public abstract class AbsOperation {
+public abstract class AbsOperation implements Serializable {
+
+    private static final long serialVersionUID = 1509901644924597833L;
 
     private Op _operator;
 

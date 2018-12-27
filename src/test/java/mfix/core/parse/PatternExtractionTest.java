@@ -12,7 +12,6 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.TestCase;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.relation.Pattern;
 import mfix.core.parse.relation.Relation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;

@@ -14,6 +14,7 @@ import mfix.core.stats.element.ElementCounter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -60,10 +61,10 @@ public class ROpt extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
+    public void doAbstraction0(ElementCounter counter) {
         _isAbstract = true;
         for(RArg arg : _args) {
-            arg.doAbstraction(counter, frequency);
+            arg.doAbstraction(counter);
             _isAbstract = _isAbstract && (!arg.isConcerned() || arg.isAbstract());
         }
     }
@@ -78,7 +79,8 @@ public class ROpt extends ObjRelation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

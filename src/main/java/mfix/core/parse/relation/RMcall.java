@@ -9,6 +9,7 @@ package mfix.core.parse.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.parse.Pattern;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,12 +30,22 @@ import java.util.Set;
 public class RMcall extends ObjRelation {
 
     public enum MCallType{
-        NORM_MCALL,
-        SUPER_MCALL,
-        SUPER_INIT_CALL,
-        INIT_CALL,
-        NEW_ARRAY,
-        CAST,
+        NORM_MCALL("Normal Call"),
+        SUPER_MCALL("Super Call"),
+        SUPER_INIT_CALL("Super Init"),
+        INIT_CALL("Init Call"),
+        NEW_ARRAY("New Array"),
+        CAST("Cast Expression");
+
+        private String _value;
+        private MCallType(String value) {
+            _value = value;
+        }
+
+        @Override
+        public String toString() {
+            return _value;
+        }
     }
 
     /**
@@ -172,9 +184,9 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public void doAbstraction0(ElementCounter counter, double frequency) {
+    public void doAbstraction0(ElementCounter counter) {
         if(_receiver != null) {
-            _receiver.doAbstraction(counter, frequency);
+            _receiver.doAbstraction(counter);
         }
         switch (_type) {
             case SUPER_INIT_CALL:
@@ -185,11 +197,11 @@ public class RMcall extends ObjRelation {
             case NORM_MCALL:
             case SUPER_MCALL:
                 ElementQueryType qtype = new ElementQueryType(false,
-                        true, ElementQueryType.CountType.COUNT_FILES);
+                        false, ElementQueryType.CountType.COUNT_FILES);
                 MethodElement methodElement = new MethodElement(_methodName, null);
                 methodElement.setArgsNumber(_args.size());
                 try {
-                    _isAbstract = counter.count(methodElement, qtype) < frequency;
+                    _isAbstract = counter.count(methodElement, qtype) < Pattern.API_FREQUENCY;
                 } catch (ElementException e) {
                     _isAbstract = true;
                 }
@@ -197,7 +209,7 @@ public class RMcall extends ObjRelation {
                 break;
         }
         for(RArg r : _args) {
-            r.doAbstraction(counter, frequency);
+            r.doAbstraction(counter);
         }
     }
 
@@ -230,7 +242,8 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
+                                Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }
