@@ -589,10 +589,10 @@ public class PatternExtraction {
             name = "this." + node.getIdentifier().getName();
         }
         RDef virtualDef = pattern.getVarDefine(name);
-        virtualDef.setObjType(node.getTypeString());
         if(virtualDef == null) {
             virtualDef = new RVDef(node);
             virtualDef.setName(name);
+            virtualDef.setObjType(node.getTypeString());
             virtualDef.setTypeStr(node.getTypeString());
             pattern.addRelation(virtualDef);
             scope.addDefine(virtualDef, virtualDef);
