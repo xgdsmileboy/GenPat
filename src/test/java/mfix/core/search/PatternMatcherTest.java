@@ -13,9 +13,9 @@ import mfix.common.util.Pair;
 import mfix.core.TestCase;
 import mfix.core.parse.Matcher;
 import mfix.core.parse.NodeParser;
+import mfix.core.parse.Pattern;
 import mfix.core.parse.PatternExtraction;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.Pattern;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -74,6 +74,50 @@ public class PatternMatcherTest extends TestCase {
             System.out.println(matched.size());
         }
 
+    }
+
+    @Test
+    public void test_search_add_try_example() {
+        String srcFile = testbase + Constant.SEP + "examples" + Constant.SEP + "src_Track.java";
+        String tarFile = testbase + Constant.SEP + "examples" + Constant.SEP + "tar_Track.java";
+
+        CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
+        CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        NodeParser nodeParser = NodeParser.getInstance();
+        Set<Pattern> patterns = new HashSet<>();
+        for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+            nodeParser.setCompilationUnit(srcFile, srcUnit);
+            Node srcNode = nodeParser.process(pair.getFirst());
+            nodeParser.setCompilationUnit(tarFile, tarUnit);
+            Node tarNode = nodeParser.process(pair.getSecond());
+            Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
+            if (pattern != null) {
+                pattern.minimize(1, 50);
+                if(!pattern.getMinimizedOldRelations(true).isEmpty()) {
+                    pattern.doAbstraction();
+                    patterns.add(pattern);
+                }
+            }
+        }
+
+        String buggy = testbase + Constant.SEP + "buggy_RtcpReceivedEvent.java";
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                methods.add(node);
+                return true;
+            }
+        });
+
+        nodeParser.setCompilationUnit(buggy, unit);
+        for(MethodDeclaration m : methods) {
+            Node node = nodeParser.process(m);
+            Pattern bp = PatternExtraction.extract(node, true);
+            Set<Pattern> matched = PatternMatcher.filter(bp, patterns);
+            System.out.println(matched.size());
+        }
 
     }
 
