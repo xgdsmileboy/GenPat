@@ -21,6 +21,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -95,13 +96,13 @@ public class PatternMatcherTest extends TestCase {
             if (pattern != null) {
                 pattern.minimize(1, 50);
                 if(!pattern.getMinimizedOldRelations(true).isEmpty()) {
-                    pattern.doAbstraction();
+//                    pattern.doAbstraction();
                     patterns.add(pattern);
                 }
             }
         }
 
-        String buggy = testbase + Constant.SEP + "buggy_RtcpReceivedEvent.java";
+        String buggy = testbase + Constant.SEP + "examples" + Constant.SEP + "buggy_RtcpReceivedEvent.java";
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
         unit.accept(new ASTVisitor() {
@@ -116,7 +117,10 @@ public class PatternMatcherTest extends TestCase {
             Node node = nodeParser.process(m);
             Pattern bp = PatternExtraction.extract(node, true);
             Set<Pattern> matched = PatternMatcher.filter(bp, patterns);
-            System.out.println(matched.size());
+            for(Pattern p : matched) {
+                p.foldMatching(bp, new HashMap<>());
+            }
+//            System.out.println(matched.size());
         }
 
     }

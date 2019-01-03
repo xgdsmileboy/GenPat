@@ -180,7 +180,7 @@ public class Pattern implements Serializable {
         Z3Solver solver = new Z3Solver();
         Map<Integer, Integer> map = solver.checkSat(matrix, loc2dependencies);
         if(map != null) {
-
+            // TODO: to finish
         }
 
         return false;
@@ -281,30 +281,31 @@ public class Pattern implements Serializable {
                     toExpend.add(_oldRelations.get(i));
                 }
             }
-        } else {
-            // if all relations in the old code are matched
-            // this condition happens when add new code but revising existing code
-            // if happen, we expand the new added code as the minimal
-            Set<Relation> temp = new HashSet<>();
-            for (int i = 0; i < _newRelations.size(); i++) {
-                if (!newR2OldRidxMap.containsKey(i)) {
-                    _newRelations.get(i).expandDownward(temp);
-                    temp.addAll(_newRelations.get(i).getUsedBy());
-                }
+        }
+        // if all relations in the old code are matched
+        // this condition happens when add new code but revising existing code
+        // if happen, we expand the new added code as the minimal
+        Set<Relation> temp = new HashSet<>();
+        for (int i = 0; i < _newRelations.size(); i++) {
+            if (!newR2OldRidxMap.containsKey(i)) {
+                _newRelations.get(i).expandDownward(temp);
+                temp.addAll(_newRelations.get(i).getUsedBy());
             }
-            for (Relation r : temp) {
-                Integer index = newR2OldRidxMap.get(newR2index.get(r));
-                if (index != null) {
-                    toExpend.add(_oldRelations.get(index));
-                    _oldRelations.get(index).setMatched(false);
-                    r.setMatched(false);
-                    _oldR2newRidxMap.remove(index);
-                }
+        }
+        int size = _oldR2newRidxMap.size();
+        for (Relation r : temp) {
+            Integer index = newR2OldRidxMap.get(newR2index.get(r));
+            if (index != null) {
+                toExpend.add(_oldRelations.get(index));
+                _oldRelations.get(index).setMatched(false);
+                r.setMatched(false);
+                size --;
             }
         }
 
+
         // remove the number of minimal changed relations
-        maxRNumbers -= _oldRelations.size() + _newRelations.size() - 2 * _oldR2newRidxMap.size();
+        maxRNumbers -= _oldRelations.size() + _newRelations.size() - 2 * size;
 
         Set<Relation> expanded;
         Set<Relation> relations2Tag;

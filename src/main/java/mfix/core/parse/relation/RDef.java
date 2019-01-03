@@ -134,7 +134,16 @@ public class RDef extends ObjRelation {
     @Override
     public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
                                 Map<String, String> varMapping) {
-        // TODO : to finish
+        if(!isConcerned()) return true;
+        if(r instanceof RVDef) {
+            RVDef def = (RVDef) r;
+            boolean match = true;
+            if(_typeStr != null) {
+                match = _typeStr.equals(def.getTypeString());
+            }
+            if(match && def.getName() != null) varMapping.put(_name, def.getName());
+            return match;
+        }
         return false;
     }
 

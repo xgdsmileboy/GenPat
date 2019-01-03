@@ -68,7 +68,11 @@ public class RKid extends Relation {
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
         set.add(_structure);
+        _structure.expandDownward(set);
         set.add(_child);
+        if(!(_child instanceof ObjRelation)) {
+            _child.expandDownward(set);
+        }
         return set;
     }
 
@@ -99,7 +103,16 @@ public class RKid extends Relation {
     @Override
     public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
                                 Map<String, String> varMapping) {
-        // TODO : to finish
+        if(!isConcerned()) return true;
+        if(r instanceof RKid) {
+            RKid kid = (RKid) r;
+            boolean match = _structure.getStructure().rskind() == kid.getStructure().getStructure().rskind();
+            if(!_child.isAbstract()) {
+                match = match && _child.foldMatching(kid.getChildRelation(), dependencies, varMapping);
+            }
+            return match;
+
+        }
         return false;
     }
 

@@ -180,6 +180,9 @@ public class RMcall extends ObjRelation {
             set.add(_receiver);
         }
         set.addAll(_args);
+        for(RArg arg : _args) {
+            arg.expandDownward(set);
+        }
         return set;
     }
 
@@ -244,7 +247,15 @@ public class RMcall extends ObjRelation {
     @Override
     public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
                                 Map<String, String> varMapping) {
-        // TODO : to finish
+        if(!isConcerned()) return true;
+        if(r instanceof RMcall) {
+            RMcall mcall = (RMcall) r;
+            boolean match = true;
+            if(!isAbstract()) {
+                match = _methodName.equals(mcall.getMethodName());
+            }
+            return match;
+        }
         return false;
     }
 

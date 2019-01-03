@@ -66,7 +66,10 @@ public class RStruct extends Relation {
     @Override
     public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
                                 Map<String, String> varMapping) {
-        // TODO : to finish
+        if(!isConcerned()) return true;
+        if(r instanceof RStruct) {
+            return _structure.rskind() == ((RStruct) r).getStructure().rskind();
+        }
         return false;
     }
 

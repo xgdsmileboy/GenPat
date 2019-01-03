@@ -87,13 +87,13 @@ public class RArg extends Relation {
         if (_index != arg.getIndex()) {
             return false;
         }
-        if(!_function.match(arg.getFunctionRelation(), dependencies)) {
+        if (!_function.match(arg.getFunctionRelation(), dependencies)) {
             return false;
         }
         dependencies.add(new Pair<>(_function, arg.getFunctionRelation()));
-        if(_arg.match(arg.getArgument(), dependencies)) {
-           dependencies.add(new Pair<>(_arg, arg.getArgument()));
-           return true;
+        if (_arg.match(arg.getArgument(), dependencies)) {
+            dependencies.add(new Pair<>(_arg, arg.getArgument()));
+            return true;
         }
         return false;
     }
@@ -101,13 +101,18 @@ public class RArg extends Relation {
     @Override
     public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
                                 Map<String, String> varMapping) {
-        // TODO : to finish
+        if(!isConcerned()) return true;
+        if (r instanceof RArg) {
+            RArg arg = (RArg) r;
+            return _function.foldMatching(arg.getFunctionRelation(), dependencies, varMapping)
+                    && _arg.foldMatching(arg.getArgument(), dependencies, varMapping);
+        }
         return false;
     }
 
     @Override
     public String toString() {
-        if(_function.isConcerned()) {
+        if (_function.isConcerned()) {
             return "";
         }
         return String.format("[RArg (%d)| %s]", _index, _function.getExprString());

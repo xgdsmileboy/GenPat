@@ -99,7 +99,18 @@ public class RAssign extends ObjRelation {
     @Override
     public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
                                 Map<String, String> varMapping) {
-        // TODO : to finish
+        if(!isConcerned()) return true;
+        if(r instanceof  RAssign) {
+            RAssign assign = (RAssign) r;
+            boolean match = true;
+            if(!_lhs.isAbstract()) {
+                match = match && _lhs.foldMatching(assign.getLhs(), dependencies, varMapping);
+            }
+            if(!_rhs.isAbstract()) {
+                match = match && _rhs.foldMatching(assign.getRhs(), dependencies, varMapping);
+            }
+            return match;
+        }
         return false;
     }
 

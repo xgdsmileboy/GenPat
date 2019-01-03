@@ -57,6 +57,9 @@ public class ROpt extends ObjRelation {
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
         set.addAll(_args);
+        for(RArg arg : _args) {
+            arg.expandDownward(set);
+        }
         return set;
     }
 
@@ -81,7 +84,11 @@ public class ROpt extends ObjRelation {
     @Override
     public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
                                 Map<String, String> varMapping) {
-        // TODO : to finish
+        if(!isConcerned()) return true;
+        if(r instanceof ROpt) {
+            ROpt opt = (ROpt) r;
+            return true;
+        }
         return false;
     }
 
