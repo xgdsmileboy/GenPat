@@ -72,6 +72,12 @@ public class RArg extends Relation {
     }
 
     @Override
+    protected void setControlDependency(RStruct rstruct, Set<Relation> controls) {
+        _function.setControlDependency(rstruct, controls);
+        _arg.setControlDependency(rstruct, controls);
+    }
+
+    @Override
     public void doAbstraction0(ElementCounter counter) {
         _function.doAbstraction(counter);
         _arg.doAbstraction(counter);

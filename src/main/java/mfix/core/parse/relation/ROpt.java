@@ -57,10 +57,18 @@ public class ROpt extends ObjRelation {
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
         set.addAll(_args);
-        for(RArg arg : _args) {
-            arg.expandDownward(set);
-        }
         return set;
+    }
+
+    @Override
+    protected void setControlDependency(RStruct rstruct, Set<Relation> controls) {
+        if(_controlDependon == null) {
+            _controlDependon = rstruct;
+            controls.add(this);
+            for (Relation r : _args) {
+                r.setControlDependency(rstruct, controls);
+            }
+        }
     }
 
     @Override

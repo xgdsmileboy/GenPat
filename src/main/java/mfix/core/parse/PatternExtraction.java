@@ -42,6 +42,7 @@ public class PatternExtraction {
         Pattern pattern = new Pattern();
         pattern.setOldRelationFlag(isOldPattern);
         patternExtraction.process(node, pattern, new Scope(null));
+        pattern.doPostProcess();
         return pattern;
     }
 
@@ -57,6 +58,7 @@ public class PatternExtraction {
         patternExtraction.process(oldNode, pattern, new Scope(null));
         pattern.setOldRelationFlag(false);
         patternExtraction.process(newNode, pattern, new Scope(null));
+        pattern.doPostProcess();
         return pattern;
     }
 

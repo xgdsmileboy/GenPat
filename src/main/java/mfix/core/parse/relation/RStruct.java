@@ -12,6 +12,7 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.relation.struct.Structure;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,10 +29,12 @@ public class RStruct extends Relation {
      */
     private Structure _structure;
     private int _id = 0;
+    private Set<Relation> _control;
 
     public RStruct(Node node, Structure structure) {
         super(node, RelationKind.STRUCTURE);
         _structure = structure;
+        _control = new HashSet<>();
         _id = genId();
     }
 
@@ -43,9 +46,20 @@ public class RStruct extends Relation {
         return _structure;
     }
 
+    public void addControls(Set<Relation> control) {
+        _control.addAll(control);
+    }
+
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
+        set.addAll(_control);
         return set;
+    }
+
+    @Override
+    protected void setControlDependency(RStruct rstruct, Set<Relation> controls) {
+        _controlDependon = rstruct;
+        controls.add(this);
     }
 
     @Override

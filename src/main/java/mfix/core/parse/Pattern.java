@@ -9,6 +9,7 @@ package mfix.core.parse;
 
 import mfix.common.util.Pair;
 import mfix.core.parse.relation.RDef;
+import mfix.core.parse.relation.RKid;
 import mfix.core.parse.relation.RMcall;
 import mfix.core.parse.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
@@ -123,6 +124,23 @@ public class Pattern implements Serializable {
         }
     }
 
+    public void doPostProcess() {
+        if(_oldRelations != null) {
+            for (Relation r : _oldRelations) {
+                if(r.getRelationKind() == Relation.RelationKind.CHILD) {
+                    ((RKid) r).updateControlDependencies();
+                }
+            }
+        }
+        if(_newRelations != null) {
+            for (Relation r : _newRelations) {
+                if(r.getRelationKind() == Relation.RelationKind.CHILD) {
+                    ((RKid) r).updateControlDependencies();
+                }
+            }
+        }
+    }
+
     /**
      * perform pattern abstraction process based on
      * the given frequency
@@ -174,8 +192,12 @@ public class Pattern implements Serializable {
         }
 
         for(Relation r : _oldRelations) {
-            if(!r.alreadyMatched()) {
-
+            if(r.getExpandedLevel() == 0) {
+                if(r.alreadyMatched()) {
+                    System.out.println(r + " >>>>> " + r.getBindingRelation());
+                } else {
+                    System.out.println("?????? -- " + r);
+                }
             }
         }
 
@@ -333,7 +355,7 @@ public class Pattern implements Serializable {
         for (int i = 0; i < _newRelations.size(); i++) {
             if (!newR2OldRidxMap.containsKey(i)) {
                 _newRelations.get(i).expandDownward(temp);
-                temp.addAll(_newRelations.get(i).getUsedBy());
+//                temp.addAll(_newRelations.get(i).getUsedBy());
             }
         }
         int size = _oldR2newRidxMap.size();
@@ -341,8 +363,8 @@ public class Pattern implements Serializable {
             Integer index = newR2OldRidxMap.get(newR2index.get(r));
             if (index != null) {
                 toExpend.add(_oldRelations.get(index));
-                _oldRelations.get(index).setMatched(false);
-                r.setMatched(false);
+                _oldRelations.get(index).setExpendedLevel(0);
+                r.setExpendedLevel(0);
                 size --;
             }
         }

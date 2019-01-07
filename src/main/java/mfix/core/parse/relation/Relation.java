@@ -70,7 +70,12 @@ public abstract class Relation implements Serializable {
      * a relation may rely on some other relation
      * Especially, this list record the define use relation
      */
-    protected Set<ObjRelation> _dependon;
+    protected Set<ObjRelation> _dataDependon;
+
+    /**
+     *
+     */
+    protected RStruct _controlDependon;
 
     /**
      * used to store the parent relation
@@ -110,7 +115,7 @@ public abstract class Relation implements Serializable {
     protected Relation(Node node, RelationKind kind) {
         _node = node;
         _relationKind = kind;
-        _dependon = new HashSet<>();
+        _dataDependon = new HashSet<>();
         _usedBy = new HashSet<>();
     }
 
@@ -159,12 +164,12 @@ public abstract class Relation implements Serializable {
 
     public void addDependency(ObjRelation relation) {
         if (relation != null) {
-            _dependon.add(relation);
+            _dataDependon.add(relation);
         }
     }
 
     public Set<ObjRelation> getDependencies() {
-        return _dependon;
+        return _dataDependon;
     }
 
     public void usedBy(Relation relation) {
@@ -177,6 +182,11 @@ public abstract class Relation implements Serializable {
         return _usedBy;
     }
 
+
+    /**
+     * generic API for MCall and Operation
+     * @param arg
+     */
     public void addArg(RArg arg) {
     }
 
@@ -187,9 +197,16 @@ public abstract class Relation implements Serializable {
      * @return
      */
     public Set<Relation> expandDownward(Set<Relation> set) {
-        set.addAll(_dependon);
+        set.addAll(_dataDependon);
         return expandDownward0(set);
     }
+
+    /**
+     * record control dependencies
+     * @param rstruct : structure of the control flow
+     * @param controls : controled components under the structure
+     */
+    protected void setControlDependency(RStruct rstruct, Set<Relation> controls){}
 
     /**
      * Return the expression string format.
@@ -247,7 +264,7 @@ public abstract class Relation implements Serializable {
         return _matchedBinding != null;
     }
 
-    public Relation getMatchedRelation() {
+    public Relation getBindingRelation() {
         return _matchedBinding;
     }
 

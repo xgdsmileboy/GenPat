@@ -70,6 +70,16 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
+    protected void setControlDependency(RStruct rstruct, Set<Relation> controls) {
+        if(_controlDependon == null) {
+            _controlDependon = rstruct;
+            controls.add(this);
+            _lhs.setControlDependency(rstruct, controls);
+            _rhs.setControlDependency(rstruct, controls);
+        }
+    }
+
+    @Override
     public String getExprString() {
         return _lhs.getExprString();
     }

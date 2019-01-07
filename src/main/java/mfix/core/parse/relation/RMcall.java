@@ -176,10 +176,21 @@ public class RMcall extends ObjRelation {
             set.add(_receiver);
         }
         set.addAll(_args);
-        for(RArg arg : _args) {
-            arg.expandDownward(set);
-        }
         return set;
+    }
+
+    @Override
+    protected void setControlDependency(RStruct rstruct, Set<Relation> controls) {
+        if(_controlDependon == null) {
+            _controlDependon = rstruct;
+            controls.add(this);
+            if (_receiver != null) {
+                _receiver.setControlDependency(rstruct, controls);
+            }
+            for (Relation r : _args) {
+                r.setControlDependency(rstruct, controls);
+            }
+        }
     }
 
     @Override

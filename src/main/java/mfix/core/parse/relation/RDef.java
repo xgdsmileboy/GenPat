@@ -95,6 +95,16 @@ public class RDef extends ObjRelation {
     }
 
     @Override
+    protected void setControlDependency(RStruct rstruct, Set<Relation> controls) {
+        if(getParent() == rstruct) {
+            controls.add(this);
+            if (_initializer != null) {
+                _initializer.setControlDependency(rstruct, controls);
+            }
+        }
+    }
+
+    @Override
     public void doAbstraction0(ElementCounter counter) {
         if(_initializer != null) {
             _initializer.doAbstraction(counter);

@@ -11,6 +11,7 @@ import mfix.common.util.Pair;
 import mfix.core.parse.node.Node;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,14 +66,15 @@ public class RKid extends Relation {
         return _child;
     }
 
+    public void updateControlDependencies() {
+        Set<Relation> relations = new HashSet<>();
+        _child.setControlDependency(_structure, relations);
+        _structure.addControls(relations);
+    }
+
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
-        set.add(_structure);
-        _structure.expandDownward(set);
         set.add(_child);
-        if(!(_child instanceof ObjRelation)) {
-            _child.expandDownward(set);
-        }
         return set;
     }
 
@@ -89,11 +91,16 @@ public class RKid extends Relation {
         }
 
         RKid kid = (RKid) relation;
+        if(!_structure.match(kid._structure, dependencies)) {
+            return false;
+        }
+        dependencies.add(new Pair<>(_structure, kid.getStructure()));
+
         if (_index != kid.getIndex()) {
             return false;
         }
 
-        if(_child.match(kid.getChildRelation(), dependencies)) {
+        if(_child.match(kid.getChildRelation(), new HashSet<>())) {
             dependencies.add(new Pair<>(_child, kid.getChildRelation()));
             return true;
         }
