@@ -64,8 +64,23 @@ public class RStruct extends Relation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
-                                Map<String, String> varMapping) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
+        if(super.greedyMatch(r, dependencies, varMapping)) {
+            RStruct rStruct = (RStruct) r;
+            if(_structure.rskind() == rStruct.getStructure().rskind()) {
+                if(getParent() != null) {
+                    if(getParent().greedyMatch(rStruct.getParent(), dependencies, varMapping)) {
+                        dependencies.put(this, r);
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean foldMatching(Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

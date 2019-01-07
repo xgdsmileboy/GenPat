@@ -97,8 +97,23 @@ public class RKid extends Relation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
-                                Map<String, String> varMapping) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
+        if(super.greedyMatch(r, dependencies, varMapping)) {
+            RKid kid = (RKid) r;
+            if(_index == kid._index && _structure.greedyMatch(kid._structure, dependencies, varMapping)
+                    && _child.greedyMatch(kid._child, dependencies, varMapping)) {
+                dependencies.put(this, r);
+                if(getParent() != null) {
+                    getParent().greedyMatch(kid.getParent(), dependencies, varMapping);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean foldMatching(Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

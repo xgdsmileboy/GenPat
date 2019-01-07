@@ -21,6 +21,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,7 +72,9 @@ public class PatternMatcherTest extends TestCase {
             Node node = nodeParser.process(m);
             Pattern bp = PatternExtraction.extract(node, true);
             Set<Pattern> matched = PatternMatcher.filter(bp, patterns);
-            System.out.println(matched.size());
+            for(Pattern p : matched) {
+                p.foldMatching(bp, new HashMap<>());
+            }
         }
 
     }

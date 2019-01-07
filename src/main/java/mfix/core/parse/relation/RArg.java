@@ -99,8 +99,23 @@ public class RArg extends Relation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
-                                Map<String, String> varMapping) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
+        if(super.greedyMatch(r, dependencies, varMapping)) {
+            RArg arg = (RArg) r;
+            if (_function.greedyMatch(arg.getFunctionRelation(), dependencies, varMapping)
+                    && _arg.greedyMatch(arg.getArgument(), dependencies, varMapping)) {
+                dependencies.put(this, r);
+                if(getParent() != null) {
+                    getParent().greedyMatch(arg.getParent(), dependencies, varMapping);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean foldMatching(Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

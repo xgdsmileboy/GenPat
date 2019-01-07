@@ -64,6 +64,7 @@ public class PatternExtraction {
         if(node != null) {
             List<Relation> children = process(node, pattern, scope);
             for(Relation r : children) {
+                r.setParent(structure);
                 structure.addDependency(scope.getDefines(r));
                 RKid kid = new RKid(r.getAstNode(), structure);
                 kid.setChild(r);
@@ -77,6 +78,7 @@ public class PatternExtraction {
         for(Node child : nodes) {
             List<Relation> children = process(child, pattern, scope);
             for(Relation r : children) {
+                r.setParent(structure);
                 structure.addDependency(scope.getDefines(r));
                 RKid kid = new RKid(r.getAstNode(), structure);
                 kid.setChild(r);
@@ -91,6 +93,7 @@ public class PatternExtraction {
         assert children.size() == 1;
         RArg arg = new RArg(node, operation);
         arg.setIndex(index);
+        children.get(0).setParent(operation);
         arg.setArgument((ObjRelation) children.get(0));
         pattern.addRelation(arg);
         operation.addArg(arg);
@@ -101,6 +104,7 @@ public class PatternExtraction {
         List<Relation> children = process(node, pattern, scope);
         assert children.size() == 1;
         RArg arg = new RArg(node, mcall);
+        children.get(0).setParent(mcall);
         arg.setIndex(index);
         arg.setArgument((ObjRelation) children.get(0));
         pattern.addRelation(arg);
@@ -140,7 +144,8 @@ public class PatternExtraction {
         result.add(struct);
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
-        processChild(struct, 0, node.getAllChildren(), pattern, newScope);
+        processChild(struct, RSCatch.POS_CHILD_DEF, node.getException(), pattern, newScope);
+        processChild(struct, RSCatch.POS_CHILD_HANDLER, node.getBody(), pattern, newScope);
         return result;
     }
 
@@ -152,6 +157,7 @@ public class PatternExtraction {
 
         int index = 1;
         for(Relation r : process(node.getArguments(), pattern, scope)) {
+            r.setParent(constructor);
             RArg arg = new RArg(r.getAstNode(), constructor);
             arg.setIndex(index ++);
             arg.setArgument((ObjRelation) r);
@@ -180,7 +186,7 @@ public class PatternExtraction {
         pattern.addRelation(struct);
         Scope newScope = new Scope(scope);
         processChild(struct, RSDo.POS_CHILD_COND, node.getExpression(), pattern, newScope);
-        processChild(struct, RSDo.POS_CHILD_BODY, node.getBody(), pattern, new Scope(newScope));
+        processChild(struct, RSDo.POS_CHILD_BODY, node.getBody(), pattern, newScope);
 
         return result;
     }
@@ -254,11 +260,15 @@ public class PatternExtraction {
         RMcall mcall = new RMcall(node, RMcall.MCallType.SUPER_INIT_CALL);
         result.add(mcall);
         List<Relation> relations = process(node.getExpression(), pattern, scope);
-        if(relations.size() > 0) mcall.setReciever((ObjRelation) relations.get(0));
+        if(relations.size() > 0){
+            mcall.setReciever((ObjRelation) relations.get(0));
+            relations.get(0).setParent(mcall);
+        }
 
         relations = process(node.getArgument(), pattern, scope);
         int index = 1;
         for(Relation r : relations) {
+            r.setParent(mcall);
             RArg arg = new RArg(r.getAstNode(), mcall);
             arg.setIndex(index ++);
             arg.setArgument((ObjRelation) r);
@@ -288,6 +298,7 @@ public class PatternExtraction {
             if(stmt instanceof  SwCase) {
                 SwCase ca = (SwCase) stmt;
                 swcase = new RStruct(stmt, new RSwCase());
+                swcase.setParent(ss);
                 pattern.addRelation(swcase);
                 childScope = new Scope(newScope);
                 processChild(swcase, RSwCase.POS_CHILD_CONST, ca.getExpression(), pattern, childScope);
@@ -299,6 +310,7 @@ public class PatternExtraction {
             } else {
                 List<Relation> relations = process(stmt, pattern, childScope);
                 for(Relation r : relations) {
+                    r.setParent(swcase);
                     RKid kid = new RKid(r.getAstNode(), swcase);
                     kid.setChild(r);
                     pattern.addRelation(kid);
@@ -345,10 +357,10 @@ public class PatternExtraction {
         processChild(struct, RSTry.POS_CHILD_BODY, node.getBody(), pattern, newScope);
         if(node.getCatches() != null) {
             for (CatClause cc : node.getCatches()) {
-                processChild(struct, RSTry.POS_CHILD_CATCH, cc, pattern, scope);
+                processChild(struct, RSTry.POS_CHILD_CATCH, cc, pattern, new Scope(scope));
             }
         }
-        processChild(struct, RSTry.POS_CHILD_FINALLY, node.getFinally(), pattern, scope);
+        processChild(struct, RSTry.POS_CHILD_FINALLY, node.getFinally(), pattern, new Scope(scope));
 
         return result;
     }
@@ -374,6 +386,7 @@ public class PatternExtraction {
                 List<Relation> relations = process(vdf.getExpression(), pattern, scope);
                 if(!relations.isEmpty()) {
                     vardef.setInitializer((ObjRelation) relations.get(0));
+                    relations.get(0).setParent(vardef);
                 }
             }
             scope.addDefine(vardef, vardef);
@@ -454,19 +467,22 @@ public class PatternExtraction {
 
             List<Relation> relations = process(node.getLhs(), pattern, scope);
             RAssign assign = new RAssign(node, (ObjRelation) relations.get(0));
+            relations.get(0).setParent(assign);
             assign.setObjType(node.getTypeString());
             scope.addDefine((RDef)relations.get(0), assign);
             assign.setRhs(opt);
+            opt.setParent(assign);
             pattern.addRelation(assign);
             result.add(assign);
         } else {
             List<Relation> relations = process(node.getLhs(), pattern, scope);
             ObjRelation r = (ObjRelation) relations.get(0);
             RAssign assign = new RAssign(node, r);
+            r.setParent(assign);
             assign.setObjType(node.getTypeString());
             relations = process(node.getRhs(), pattern, scope);
             assign.setRhs((ObjRelation) relations.get(0));
-
+            relations.get(0).setParent(assign);
             scope.addDefine((RDef) r, assign);
 
             pattern.addRelation(assign);
@@ -521,6 +537,7 @@ public class PatternExtraction {
         if(node.getExpression() != null) {
             List<Relation> relations = process(node.getExpression(), pattern, scope);
             mcall.setReciever((ObjRelation) relations.get(0));
+            relations.get(0).setParent(mcall);
         }
         mcall.setMethodName(node.getClassType().typeStr());
         // TODO : currently we do not consider anonymous class declaration
@@ -674,8 +691,10 @@ public class PatternExtraction {
         mcall.setObjType(node.getTypeString());
         List<Relation> relations = process(node.getExpression(), pattern, scope);
         if(relations.size() > 0) {
-            mcall.setReciever((ObjRelation) relations.get(0));
-            mcall.addDependency(scope.getDefines(relations.get(0)));
+            ObjRelation r = (ObjRelation) relations.get(0);
+            mcall.setReciever(r);
+            mcall.addDependency(scope.getDefines(r));
+            r.setParent(mcall);
         }
         mcall.setMethodName(node.getName().getName());
         int index = 1;
@@ -851,6 +870,7 @@ public class PatternExtraction {
             List<Relation> relations = process(node, pattern, scope);
             if(!relations.isEmpty()) {
                 def.setInitializer((ObjRelation) relations.get(0));
+                relations.get(0).setParent(def);
             }
         }
         scope.addDefine(def, def);
@@ -901,6 +921,7 @@ public class PatternExtraction {
                 List<Relation> relations = process(vdf.getExpression(), pattern, scope);
                 if(!relations.isEmpty()) {
                     vardef.setInitializer((ObjRelation) relations.get(0));
+                    relations.get(0).setParent(vardef);
                 }
             }
             scope.addDefine(vardef, vardef);

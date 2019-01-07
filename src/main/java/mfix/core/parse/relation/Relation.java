@@ -13,6 +13,7 @@ import mfix.core.stats.element.ElementCounter;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public abstract class Relation implements Serializable {
     /**
      * types of relations.
      */
-    public enum RelationKind{
+    public enum RelationKind {
         ARGUMENT("Argument"),
         OPERATION("Operation"),
         DEFINE("VarDefinition"),
@@ -40,6 +41,7 @@ public abstract class Relation implements Serializable {
         VIRTUALDEFINE("VirtualDefinition");
 
         private String _value;
+
         private RelationKind(String value) {
             _value = value;
         }
@@ -51,7 +53,7 @@ public abstract class Relation implements Serializable {
 
     /**
      * Designed to boost relation matching process.
-     *
+     * <p>
      * This field denotes the type of the relation,
      * which is used for relation matching.
      * NOTE: this kind of relation is coarse-grained
@@ -69,6 +71,12 @@ public abstract class Relation implements Serializable {
      * Especially, this list record the define use relation
      */
     protected Set<ObjRelation> _dependon;
+
+    /**
+     * used to store the parent relation
+     * similar to the parent node in AST (syntactic)
+     */
+    private Relation _parent;
 
     /**
      * record this relation is used by
@@ -114,6 +122,14 @@ public abstract class Relation implements Serializable {
         return _node;
     }
 
+    public void setParent(Relation parent) {
+        _parent = parent;
+    }
+
+    public Relation getParent() {
+        return _parent;
+    }
+
     public void setMatched(boolean matched) {
         _matched = matched;
         _expandedLevel = -1;
@@ -124,7 +140,7 @@ public abstract class Relation implements Serializable {
     }
 
     public void setExpendedLevel(int expandedLevel) {
-        if(!isConcerned()) {
+        if (!isConcerned()) {
             _expandedLevel = expandedLevel;
         }
     }
@@ -142,7 +158,7 @@ public abstract class Relation implements Serializable {
     }
 
     public void addDependency(ObjRelation relation) {
-        if(relation != null) {
+        if (relation != null) {
             _dependon.add(relation);
         }
     }
@@ -152,7 +168,7 @@ public abstract class Relation implements Serializable {
     }
 
     public void usedBy(Relation relation) {
-        if(relation != null) {
+        if (relation != null) {
             _usedBy.add(relation);
         }
     }
@@ -161,10 +177,12 @@ public abstract class Relation implements Serializable {
         return _usedBy;
     }
 
-    public void addArg(RArg arg) {}
+    public void addArg(RArg arg) {
+    }
 
     /**
      * Expand current relations downwards
+     *
      * @param set :
      * @return
      */
@@ -176,14 +194,16 @@ public abstract class Relation implements Serializable {
     /**
      * Return the expression string format.
      * This is for user-friendly debugging
+     *
      * @return
      */
-    public String getExprString(){
+    public String getExprString() {
         return "";
     }
 
     /**
      * Expand the changed relations downwards
+     *
      * @param set : set to add the newly added relations
      * @return : a set of newly added relations
      */
@@ -193,34 +213,85 @@ public abstract class Relation implements Serializable {
      * Perform object abstraction in the relation
      */
     public void doAbstraction(ElementCounter counter) {
-        if(isConcerned() && !_visited) {
+        if (isConcerned() && !_visited) {
             _visited = true;
             doAbstraction0(counter);
         }
     }
-    protected abstract void doAbstraction0(ElementCounter counter);
 
-    /**
-     * Perform the core pattern matching algorithm when given a potential buggy pattern
-     * @param r : relation in a potential buggy pattern, waiting for repair
-     * @param dependencies : dependencies to match current relations
-     * @return true of matches, false otherwise
-     */
-    public abstract boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
-                                         Map<String, String> varMapping);
+    protected abstract void doAbstraction0(ElementCounter counter);
 
     /**
      * The matched relation cannot be {@code null}
      * and the relation type should be the same
+     *
      * @param relation : relation to be matched
      * @return {@code true} if {@code relation} match current
      * relation, {@code false} otherwise.
      */
     public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
-        if(relation == null || relation.getRelationKind() != _relationKind) {
+        if (relation == null || relation.getRelationKind() != _relationKind) {
             return false;
         }
         return true;
+    }
+
+
+    //**************************************************************//
+    //************ FOR REPAIR **************************************//
+    //**************************************************************//
+    protected Relation _matchedBinding = null;
+    protected Relation _foldMatchBinding = null;
+
+    public boolean alreadyMatched() {
+        return _matchedBinding != null;
+    }
+
+    public Relation getMatchedRelation() {
+        return _matchedBinding;
+    }
+
+    /**
+     * Perform the core pattern matching algorithm when given a potential buggy pattern
+     *
+     * @param r            : relation in a potential buggy pattern, waiting for repair
+     * @param dependencies : dependencies to match current relations
+     * @param varMapping   : variable mapping relation
+     * @return true of matches, false otherwise
+     */
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies,
+                                        Map<String, String> varMapping) {
+        if(r == null) return false;
+        if(alreadyMatched() || r.alreadyMatched()) {
+            if(dependencies.get(this) != r) {
+                return false;
+            }
+        }
+        if(r.isConcerned() && r.getRelationKind() == getRelationKind()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param varMapping
+     * @return
+     */
+    public abstract boolean foldMatching(Map<String, String> varMapping);
+
+
+    protected boolean matchList(List<Relation> left, List<Relation> right, Map<Relation, Relation> dependencies,
+                                Map<String, String> varMapping) {
+        Set<Integer> matched = new HashSet<>();
+        for (int i = 0; i < left.size(); i++) {
+            for (int j = 0; j < right.size(); j++) {
+                if (matched.contains(j)) continue;
+                if (left.get(i).greedyMatch(right.get(j), dependencies, varMapping)) {
+                    matched.add(j);
+                }
+            }
+        }
+        return !matched.isEmpty();
     }
 
 }

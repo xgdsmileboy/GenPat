@@ -14,13 +14,7 @@ import mfix.core.parse.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: Jiajun
@@ -150,40 +144,78 @@ public class Pattern implements Serializable {
      * @return true if matches, false otherwise
      */
     public boolean foldMatching(Pattern p, Map<String, String> exprMapping) {
-        // TODO : p is an concrete instance for a potential buggy code
-        List<Relation> pRelations = getMinimizedOldRelations(true);
-        List<Relation> bRelations = p.getOldRelations();
-        Map<Relation, Integer> absPtnOldR2IdxMap = mapRelation2LstIndex(pRelations);
-        Map<Relation, Integer> buggyPtnR2IdexMap = mapRelation2LstIndex(bRelations);
+        List<Pair<String, RMcall>> pcall = getAPIs();
+        List<Pair<String, RMcall>> bcall = p.getAPIs();
 
-        int pLen = pRelations.size();
-        int bLen = bRelations.size();
-        int[][] matrix = new int[pLen][bLen];
-        Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
-        Map<String, String> varMapping = new HashMap<>();
-        Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
-        Set<Pair<Integer, Integer>> set;
-        for(int i = 0; i < pLen; i++) {
-            for(int j = 0; j < bLen; j++) {
-                dependencies.clear();
-                if(pRelations.get(i).foldMatching(bRelations.get(j), dependencies, varMapping)) {
-                    matrix[i][j] = 1;
-                    String key = i + "_" + j;
-                    set = new HashSet<>();
-                    for (Pair<Relation, Relation> pair : dependencies) {
-                        set.add(new Pair<>(absPtnOldR2IdxMap.get(pair.getFirst()), buggyPtnR2IdexMap.get(pair.getSecond())));
-                    }
-                    loc2dependencies.put(key, set);
+        Set<Integer> already = new HashSet<>();
+        Map<RMcall, RMcall> rMap = new HashMap<>();
+        for(Pair<String, RMcall> pair : pcall) {
+            boolean match = false;
+            for(int i = 0; i < bcall.size(); i++) {
+                if(already.contains(i)) {
+                    continue;
+                }
+                if(pair.getFirst().equals(bcall.get(i).getFirst())) {
+                    rMap.put(pair.getSecond(), bcall.get(i).getSecond());
+                    already.add(i);
+                    match = true;
+                    break;
                 }
             }
-        }
-        Z3Solver solver = new Z3Solver();
-        Map<Integer, Integer> map = solver.checkSat(matrix, loc2dependencies);
-        if(map != null) {
-
+            if(!match) {
+                return false;
+            }
         }
 
-        return false;
+        Map<Relation, Relation> dependencies = new HashMap<>();
+        Map<String, String> varMapping = new HashMap<>();
+        for(Map.Entry<RMcall, RMcall> entry : rMap.entrySet()) {
+            entry.getKey().greedyMatch(entry.getValue(),dependencies,varMapping);
+        }
+
+        for(Relation r : _oldRelations) {
+            if(!r.alreadyMatched()) {
+
+            }
+        }
+
+        return true;
+
+
+//        // TODO : p is an concrete instance for a potential buggy code
+//        List<Relation> pRelations = getMinimizedOldRelations(true);
+//        List<Relation> bRelations = p.getOldRelations();
+//        Map<Relation, Integer> absPtnOldR2IdxMap = mapRelation2LstIndex(pRelations);
+//        Map<Relation, Integer> buggyPtnR2IdexMap = mapRelation2LstIndex(bRelations);
+//
+//        int pLen = pRelations.size();
+//        int bLen = bRelations.size();
+//        int[][] matrix = new int[pLen][bLen];
+//        Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
+//        Map<String, String> varMapping = new HashMap<>();
+//        Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
+//        Set<Pair<Integer, Integer>> set;
+//        for(int i = 0; i < pLen; i++) {
+//            for(int j = 0; j < bLen; j++) {
+//                dependencies.clear();
+//                if(pRelations.get(i).foldMatching(bRelations.get(j), dependencies, varMapping)) {
+//                    matrix[i][j] = 1;
+//                    String key = i + "_" + j;
+//                    set = new HashSet<>();
+//                    for (Pair<Relation, Relation> pair : dependencies) {
+//                        set.add(new Pair<>(absPtnOldR2IdxMap.get(pair.getFirst()), buggyPtnR2IdexMap.get(pair.getSecond())));
+//                    }
+//                    loc2dependencies.put(key, set);
+//                }
+//            }
+//        }
+//        Z3Solver solver = new Z3Solver();
+//        Map<Integer, Integer> map = solver.checkSat(matrix, loc2dependencies);
+//        if(map != null) {
+//
+//        }
+//
+//        return false;
     }
 
     /**
@@ -202,6 +234,18 @@ public class Pattern implements Serializable {
             }
         }
         return _usedAPIs;
+    }
+
+    private List<Pair<String, RMcall>> getAPIs() {
+        List<Pair<String, RMcall>> apiList = new ArrayList<>(7);
+        for (Relation r : _oldRelations) {
+            if (r.isConcerned() && !r.isAbstract()
+                    && r.getRelationKind() == Relation.RelationKind.MCALL) {
+                RMcall call = (RMcall) r;
+                apiList.add(new Pair<>(call.getMethodName(), call));
+            }
+        }
+        return apiList;
     }
 
     private void addOldRelation(Relation relation) {

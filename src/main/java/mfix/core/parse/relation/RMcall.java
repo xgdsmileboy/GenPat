@@ -16,12 +16,7 @@ import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
 import mfix.core.stats.element.MethodElement;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: Jiajun
@@ -29,7 +24,7 @@ import java.util.Set;
  */
 public class RMcall extends ObjRelation {
 
-    public enum MCallType{
+    public enum MCallType {
         NORM_MCALL("Normal Call"),
         SUPER_MCALL("Super Call"),
         SUPER_INIT_CALL("Super Init"),
@@ -38,6 +33,7 @@ public class RMcall extends ObjRelation {
         CAST("Cast Expression");
 
         private String _value;
+
         private MCallType(String value) {
             _value = value;
         }
@@ -51,7 +47,7 @@ public class RMcall extends ObjRelation {
     /**
      * This field is to distinguish different
      * kinds of "method calls",
-     *
+     * <p>
      * In the current model, the method call contains
      * normal method invocation, super method invocation,
      * class instance creation, case expression, ... etc.
@@ -64,12 +60,12 @@ public class RMcall extends ObjRelation {
     /**
      * Name of the method call
      * possible values:
-     *  normal method invocation : method name
-     *  class instance creation : class name
-     *  super method invocation : method name
-     *  super constructor invocation : null
-     *  array creation : array element type
-     *  cast expression : case type
+     * normal method invocation : method name
+     * class instance creation : class name
+     * super method invocation : method name
+     * super constructor invocation : null
+     * array creation : array element type
+     * cast expression : case type
      */
     private String _methodName;
 
@@ -83,7 +79,7 @@ public class RMcall extends ObjRelation {
 
     public void setReciever(ObjRelation reciever) {
         _receiver = reciever;
-        if(_receiver != null) {
+        if (_receiver != null) {
             _receiver.usedBy(this);
         }
     }
@@ -119,8 +115,8 @@ public class RMcall extends ObjRelation {
                 return o1.getIndex() - o2.getIndex();
             }
         });
-        for(RArg r : _args) {
-            if(first) {
+        for (RArg r : _args) {
+            if (first) {
                 buffer.append(r.getExprString());
             } else {
                 buffer.append("," + r.getExprString());
@@ -133,10 +129,10 @@ public class RMcall extends ObjRelation {
     @Override
     public String getExprString() {
         StringBuffer buffer = new StringBuffer();
-        if(_receiver != null) {
+        if (_receiver != null) {
             buffer.append(_receiver.getExprString() + ".");
         }
-        switch(_type) {
+        switch (_type) {
             case NORM_MCALL:
                 buffer.append(_methodName);
                 buffer.append(buildArgString());
@@ -158,7 +154,7 @@ public class RMcall extends ObjRelation {
             case NEW_ARRAY:
                 buffer.append("new ");
                 buffer.append(_methodName);
-                for(RArg r : _args) {
+                for (RArg r : _args) {
                     buffer.append("[");
                     buffer.append(r.getExprString());
                     buffer.append("]");
@@ -176,7 +172,7 @@ public class RMcall extends ObjRelation {
 
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
-        if(_receiver != null) {
+        if (_receiver != null) {
             set.add(_receiver);
         }
         set.addAll(_args);
@@ -185,7 +181,7 @@ public class RMcall extends ObjRelation {
 
     @Override
     public void doAbstraction0(ElementCounter counter) {
-        if(_receiver != null) {
+        if (_receiver != null) {
             _receiver.doAbstraction(counter);
         }
         switch (_type) {
@@ -208,33 +204,33 @@ public class RMcall extends ObjRelation {
 
                 break;
         }
-        for(RArg r : _args) {
+        for (RArg r : _args) {
             r.doAbstraction(counter);
         }
     }
 
     @Override
     public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
-        if(!super.match(relation, dependencies)) {
+        if (!super.match(relation, dependencies)) {
             return false;
         }
         RMcall mcall = (RMcall) relation;
-        if(_type != mcall.getCallType()) {
+        if (_type != mcall.getCallType()) {
             return false;
         }
 
-        if(!Utils.safeStringEqual(_methodName, mcall.getMethodName())) {
+        if (!Utils.safeStringEqual(_methodName, mcall.getMethodName())) {
             return false;
         }
 
-        if(_receiver == null) {
+        if (_receiver == null) {
             if (mcall.getReciever() != null) {
                 return false;
             } else {
                 return true;
             }
         }
-        if(_receiver.match(mcall.getReciever(), dependencies)) {
+        if (_receiver.match(mcall.getReciever(), dependencies)) {
             dependencies.add(new Pair<>(_receiver, mcall.getReciever()));
             return true;
         }
@@ -242,8 +238,30 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
-                                Map<String, String> varMapping) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
+        if (super.greedyMatch(r, dependencies, varMapping)) {
+            RMcall mcall = (RMcall) r;
+            if (isAbstract() || (_type == mcall._type && _methodName.equals(mcall._methodName)
+                    && _args.size() == mcall._args.size())) {
+                _matchedBinding = r;
+                r._matchedBinding = this;
+                varMapping.put(_objType, mcall.getObjType());
+                dependencies.put(this, r);
+                if (_receiver != null) {
+                    _receiver.greedyMatch(mcall._receiver, dependencies, varMapping);
+                }
+                matchList(new LinkedList<>(_args), new LinkedList<>(mcall._args), dependencies, varMapping);
+                if (getParent() != null) {
+                    getParent().greedyMatch(r.getParent(), dependencies, varMapping);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean foldMatching(Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }
@@ -251,14 +269,14 @@ public class RMcall extends ObjRelation {
     @Override
     public String toString() {
         boolean used = false;
-        for(Relation r : _usedBy) {
-            if(r instanceof RKid) {
-              continue;
+        for (Relation r : _usedBy) {
+            if (r instanceof RKid) {
+                continue;
             }
             used = true;
             break;
         }
-        if(used) {
+        if (used) {
             return "";
         }
         return getExprString();

@@ -78,9 +78,14 @@ public class ROpt extends ObjRelation {
         return _operation.match(opt.getOperation());
     }
 
+
     @Override
-    public boolean foldMatching(Relation r, Set<Pair<Relation, Relation>> dependencies,
-                                Map<String, String> varMapping) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
+        return super.greedyMatch(r, dependencies, varMapping);
+    }
+
+    @Override
+    public boolean foldMatching(Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }
