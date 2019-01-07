@@ -132,7 +132,7 @@ public abstract class Relation implements Serializable {
 
     public void setMatched(boolean matched) {
         _matched = matched;
-        _expandedLevel = -1;
+        _expandedLevel = matched ? -1 : 0;
     }
 
     public boolean isMatched() {

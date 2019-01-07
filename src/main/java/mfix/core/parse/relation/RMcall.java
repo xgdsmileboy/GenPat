@@ -176,6 +176,9 @@ public class RMcall extends ObjRelation {
             set.add(_receiver);
         }
         set.addAll(_args);
+        for(RArg arg : _args) {
+            arg.expandDownward(set);
+        }
         return set;
     }
 

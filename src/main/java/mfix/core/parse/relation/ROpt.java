@@ -57,6 +57,9 @@ public class ROpt extends ObjRelation {
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
         set.addAll(_args);
+        for(RArg arg : _args) {
+            arg.expandDownward(set);
+        }
         return set;
     }
 

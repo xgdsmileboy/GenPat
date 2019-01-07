@@ -68,7 +68,11 @@ public class RKid extends Relation {
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
         set.add(_structure);
+        _structure.expandDownward(set);
         set.add(_child);
+        if(!(_child instanceof ObjRelation)) {
+            _child.expandDownward(set);
+        }
         return set;
     }
 

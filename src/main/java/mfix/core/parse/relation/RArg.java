@@ -87,13 +87,13 @@ public class RArg extends Relation {
         if (_index != arg.getIndex()) {
             return false;
         }
-        if(!_function.match(arg.getFunctionRelation(), dependencies)) {
+        if (!_function.match(arg.getFunctionRelation(), dependencies)) {
             return false;
         }
         dependencies.add(new Pair<>(_function, arg.getFunctionRelation()));
-        if(_arg.match(arg.getArgument(), dependencies)) {
-           dependencies.add(new Pair<>(_arg, arg.getArgument()));
-           return true;
+        if (_arg.match(arg.getArgument(), dependencies)) {
+            dependencies.add(new Pair<>(_arg, arg.getArgument()));
+            return true;
         }
         return false;
     }
@@ -122,7 +122,7 @@ public class RArg extends Relation {
 
     @Override
     public String toString() {
-        if(_function.isConcerned()) {
+        if (_function.isConcerned()) {
             return "";
         }
         return String.format("[RArg (%d)| %s]", _index, _function.getExprString());
