@@ -79,6 +79,10 @@ public class RVDef extends RDef {
 
     @Override
     public String toString() {
-        return "";
+        if(_name != null) {
+            return _name;
+        } else {
+            return _value == null ? "null" : _value.toString();
+        }
     }
 }
