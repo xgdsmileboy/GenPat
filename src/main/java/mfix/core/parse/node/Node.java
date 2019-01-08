@@ -25,20 +25,59 @@ import java.util.Set;
 public abstract class Node implements NodeComparator, Serializable {
 
     private static final long serialVersionUID = -6995771051040337618L;
+    /**
+     * source file name (with absolute path)
+     */
     protected String _fileName;
+    /**
+     * start line number of current node in the source file
+     */
     protected int _startLine;
+    /**
+     * end line number of current node in the source file
+     */
     protected int _endLine;
+    /**
+     * parent node in the abstract syntax tree
+     */
     protected Node _parent;
+    /**
+     * enum type of node, for easy comparison
+     */
     protected TYPE _nodeType = TYPE.UNKNOWN;
+    /**
+     * feature vector to represent current node
+     */
     protected FVector _fVector = null;
 
+    /**
+     * original AST node in the JDT abstract tree model
+     * NOTE: AST node dose not support serialization
+     */
     protected transient ASTNode _oriNode;
+    /**
+     * tokenized representation of node
+     * NOTE: includes all symbols, e.g., '[', but omit ';'.
+     */
     protected transient LinkedList<String> _tokens = null;
 
+    /**
+     * @param fileName : source file name (with absolute path)
+     * @param startLine : start line number of the node in the original source file
+     * @param endLine : end line number of the node in the original source file
+     * @param oriNode : original abstract syntax tree node in the JDT model
+     */
     public Node(String fileName, int startLine, int endLine, ASTNode oriNode) {
         this(fileName, startLine, endLine, oriNode, null);
     }
 
+    /**
+     * @param fileName : source file name (with absolute path)
+     * @param startLine : start line number of the node in the original source file
+     * @param endLine : end line number of the node in the original source file
+     * @param oriNode : original abstract syntax tree node in the JDT model
+     * @param parent : parent node in the abstract syntax tree
+     */
     public Node(String fileName, int startLine, int endLine, ASTNode oriNode, Node parent) {
         _fileName = fileName;
         _startLine = startLine;
@@ -47,25 +86,58 @@ public abstract class Node implements NodeComparator, Serializable {
         _parent = parent;
     }
 
+    /**
+     * get the start line number of node in the original source file
+     * @return : line number
+     */
     public int getStartLine() {
         return _startLine;
     }
 
+    /**
+     * get the end line number of node in the original source file
+     * @return : line number
+     */
     public int getEndLine() {
         return _endLine;
     }
 
     /**
-     * @param parent the _parent to set
+     * set current node type, {@code Node.TYPE.UNKNOWN} as default
+     * @param nodeType : node type
+     */
+    public void setNodeType(TYPE nodeType) {
+        this._nodeType = nodeType;
+    }
+
+    /**
+     * get node type (see {@code Node.TYPE})
+     * @return : current node type
+     */
+    public TYPE getNodeType() {
+        return _nodeType;
+    }
+
+    /**
+     * set the parent node in the abstract syntax tree
+     * @param parent : parent node
      */
     public void setParent(Node parent) {
         this._parent = parent;
     }
 
+    /**
+     * get parent node in the abstract syntax tree
+     * @return : parent node
+     */
     public Node getParent() {
         return _parent;
     }
 
+    /**
+     * traverse the complete sub-tree with the given {@code visitor}
+     * @param visitor : traverser (visitor pattern)
+     */
     public final void accept(NodeVisitor visitor) {
         if (visitor == null) {
             throw new IllegalArgumentException("visitor should not be null!");
@@ -79,6 +151,10 @@ public abstract class Node implements NodeComparator, Serializable {
         visitor.postVisit(this);
     }
 
+    /**
+     * traverse the sub-tree downwards, used internally only
+     * @param visitor : traverser (visitor pattern)
+     */
     protected final void accept0(NodeVisitor visitor) {
         if (visitor.visit(this)) {
             for (Node node : getAllChildren()) {
@@ -91,16 +167,9 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     /**
-     * @param nodeType the _nodeType to set
+     * compute the feature vector for current node
+     * @return : feature vector representation
      */
-    public void setNodeType(TYPE nodeType) {
-        this._nodeType = nodeType;
-    }
-
-    public TYPE getNodeType() {
-        return _nodeType;
-    }
-
     public FVector getFeatureVector() {
         if (_fVector == null) {
             computeFeatureVector();
@@ -108,6 +177,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return _fVector;
     }
 
+    /**
+     * obtain the tokens representation of current node
+     * @return
+     */
     public List<String> tokens() {
         if (_tokens == null) {
             tokenize();
@@ -115,6 +188,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return _tokens;
     }
 
+    /**
+     * obtain all defined variables in the sub-tree
+     * @return : all variable definition node (see {@code SName})
+     */
     public Set<SName> getAllVars() {
         Set<SName> set = new HashSet<>();
         if (this instanceof SName) {
@@ -126,20 +203,41 @@ public abstract class Node implements NodeComparator, Serializable {
         return set;
     }
 
-    public Set<String> getNewVars() {
-        return new HashSet<>();
-    }
-
+    /**
+     * output source code with string format
+     * @return : source code string
+     */
     public abstract StringBuffer toSrcString();
 
+    /**
+     * get (non-direct) parent node that is {@code Stmt} type, maybe itself
+     * @return : parent node if exist, otherwise {@code null}
+     */
     public abstract Stmt getParentStmt();
 
+    /**
+     * get all {@code Stmt} child node, does not include itself
+     * NOTE: empty for all {@code Expr} node
+     * @return : all child statement
+     */
     public abstract List<Stmt> getChildren();
 
+    /**
+     * return all child node, does not include itself
+     * @return : child node
+     */
     public abstract List<Node> getAllChildren();
 
+    /**
+     * compute the feature vector for current node recursively
+     * and cache the result
+     */
     public abstract void computeFeatureVector();
 
+    /**
+     * recursively tokenize the sub abstract syntax tree downwards
+     * and cache the result
+     */
     protected abstract void tokenize();
 
 
@@ -148,6 +246,9 @@ public abstract class Node implements NodeComparator, Serializable {
         return toSrcString().toString();
     }
 
+    /**
+     * all types of abstract syntax tree node considered currently
+     */
     public enum TYPE {
 
         METHDECL("MethodDeclaration"),

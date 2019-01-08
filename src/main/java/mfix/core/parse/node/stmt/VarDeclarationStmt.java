@@ -100,15 +100,6 @@ public class VarDeclarationStmt extends Stmt {
 	}
 	
 	@Override
-	public Set<String> getNewVars() {
-		Set<String> vars = new HashSet<>();
-		for(Vdf vdf : _fragments) {
-			vars.add(vdf.getName());
-		}
-		return vars;
-	}
-	
-	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(_fragments.size() + 1);
 		children.add(_declType);
