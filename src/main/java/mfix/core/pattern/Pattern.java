@@ -7,6 +7,7 @@
 
 package mfix.core.pattern;
 
+import mfix.common.util.Constant;
 import mfix.common.util.Pair;
 import mfix.core.pattern.relation.RDef;
 import mfix.core.pattern.relation.RKid;
@@ -158,6 +159,9 @@ public class Pattern implements Serializable {
     public void doAbstraction() {
         ElementCounter counter = new ElementCounter();
         counter.open();
+        try {
+            counter.loadCache(Constant.DB_CACHE_FILE);
+        } catch (Exception e) {}
         for (int i = 0; i < _oldRelations.size(); i++) {
             _oldRelations.get(i).doAbstraction(counter);
         }
@@ -201,6 +205,7 @@ public class Pattern implements Serializable {
             entry.getKey().greedyMatch(entry.getValue(),dependencies,varMapping);
         }
 
+        // check if all the level 0 relation have already matched
         for(Relation r : _oldRelations) {
             if(r.getExpandedLevel() == 0) {
                 if(r.alreadyMatched()) {
