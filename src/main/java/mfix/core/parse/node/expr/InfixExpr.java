@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class InfixExpr extends Expr implements Serializable {
+public class InfixExpr extends Expr {
 
 	private static final long serialVersionUID = -5825228781443981995L;
 	private Expr _lhs = null;

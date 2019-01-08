@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class WhileStmt extends Stmt implements Serializable {
+public class WhileStmt extends Stmt {
 
 	private static final long serialVersionUID = -5763865331484587703L;
 	private Expr _expression = null;

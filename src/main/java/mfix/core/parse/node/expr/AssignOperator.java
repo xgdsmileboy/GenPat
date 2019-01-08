@@ -17,7 +17,7 @@ import java.util.LinkedList;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class AssignOperator extends Operator implements Serializable {
+public class AssignOperator extends Operator {
 
 	private static final long serialVersionUID = 2573726544838821670L;
 	private String _operatorStr;

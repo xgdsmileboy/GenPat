@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Stmt extends Node implements Serializable {
+public abstract class Stmt extends Node {
 
 	private static final long serialVersionUID = -4168850816999087148L;
 

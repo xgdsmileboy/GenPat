@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class Assign extends Expr implements Serializable {
+public class Assign extends Expr {
 
 	private static final long serialVersionUID = 508933142391046341L;
 	private Expr _lhs = null;

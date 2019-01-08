@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class NillLiteral extends Expr implements Serializable {
+public class NillLiteral extends Expr {
 
 	private String _value = "null";
 	

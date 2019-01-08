@@ -18,7 +18,7 @@ import java.util.Map;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class PrefixOperator extends Operator implements Serializable {
+public class PrefixOperator extends Operator {
 
 	private static final long serialVersionUID = -7394935189908328110L;
 	private String _operatorStr;

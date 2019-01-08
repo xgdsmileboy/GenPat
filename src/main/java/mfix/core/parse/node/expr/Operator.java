@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Operator extends Node implements Serializable {
+public abstract class Operator extends Node {
 
 	private static final long serialVersionUID = -6189851424541008969L;
 

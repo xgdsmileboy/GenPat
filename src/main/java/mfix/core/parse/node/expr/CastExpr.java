@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class CastExpr extends Expr implements Serializable {
+public class CastExpr extends Expr {
 
 	private static final long serialVersionUID = -8485318151476589525L;
 	private MType _castType = null;

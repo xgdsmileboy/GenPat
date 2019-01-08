@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class NumLiteral extends Expr implements Serializable {
+public class NumLiteral extends Expr {
 
 	private static final long serialVersionUID = -8592908830390293970L;
 	private String _token = null;

@@ -22,7 +22,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SuperConstructorInv extends Stmt implements Serializable {
+public class SuperConstructorInv extends Stmt {
 
 	private static final long serialVersionUID = -6063679105312839664L;
 	private Expr _expression = null;

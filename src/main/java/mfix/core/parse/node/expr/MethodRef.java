@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class MethodRef extends Expr implements Serializable {
+public class MethodRef extends Expr {
 
 	private static final long serialVersionUID = -6933267554937901141L;
 	private String _str;

@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class PostfixExpr extends Expr implements Serializable {
+public class PostfixExpr extends Expr {
 
 	private static final long serialVersionUID = 3427634272372187596L;
 	private Expr _expression = null;

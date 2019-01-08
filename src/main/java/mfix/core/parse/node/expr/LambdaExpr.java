@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class LambdaExpr extends Expr implements Serializable {
+public class LambdaExpr extends Expr {
 
 	private static final long serialVersionUID = -7877574560065780171L;
 

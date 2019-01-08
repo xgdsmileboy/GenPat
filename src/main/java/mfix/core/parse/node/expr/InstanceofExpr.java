@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class InstanceofExpr extends Expr implements Serializable {
+public class InstanceofExpr extends Expr {
 
 	private static final long serialVersionUID = 8963981016056992635L;
 	private Expr _expression = null;

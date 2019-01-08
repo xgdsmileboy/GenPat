@@ -21,7 +21,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class EnhancedForStmt extends Stmt implements Serializable {
+public class EnhancedForStmt extends Stmt {
 
 	private static final long serialVersionUID = 8332915530003880205L;
 	private Svd _varDecl = null;

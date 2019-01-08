@@ -24,7 +24,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class AssertStmt extends Stmt implements Serializable {
+public class AssertStmt extends Stmt {
 
 	private static final long serialVersionUID = 8494694375316529776L;
 

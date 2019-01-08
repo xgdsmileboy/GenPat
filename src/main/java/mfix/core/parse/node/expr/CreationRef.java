@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class CreationRef extends Expr implements Serializable {
+public class CreationRef extends Expr {
 
 	private static final long serialVersionUID = 6237635456129751926L;
 

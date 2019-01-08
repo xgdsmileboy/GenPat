@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class AnonymousClassDecl extends Node implements Serializable {
+public class AnonymousClassDecl extends Node {
 
 	private String _codeStr;
 

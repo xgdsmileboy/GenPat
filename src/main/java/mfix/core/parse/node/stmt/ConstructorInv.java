@@ -21,7 +21,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ConstructorInv  extends Stmt implements Serializable {
+public class ConstructorInv  extends Stmt {
 
 	private static final long serialVersionUID = -680765569439500998L;
 	private MType _thisType = null;

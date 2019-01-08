@@ -19,7 +19,7 @@ import java.util.*;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class VarDeclarationStmt extends Stmt implements Serializable {
+public class VarDeclarationStmt extends Stmt {
 
 	private static final long serialVersionUID = 3322205918544098505L;
 	private String _modifier = null;

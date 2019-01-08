@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class Svd extends Expr implements Serializable {
+public class Svd extends Expr {
 
 	private static final long serialVersionUID = 3849439897999091912L;
 	private MType _decType = null;

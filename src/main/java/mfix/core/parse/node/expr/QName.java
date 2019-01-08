@@ -20,7 +20,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class QName extends Label implements Serializable {
+public class QName extends Label {
 
 	private static final long serialVersionUID = -7347252879776740292L;
 	private Label _name = null;

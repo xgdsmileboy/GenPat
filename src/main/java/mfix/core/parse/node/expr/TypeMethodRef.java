@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class TypeMethodRef extends Expr implements Serializable {
+public class TypeMethodRef extends Expr {
 
 	private static final long serialVersionUID = 7592430157234480970L;
 

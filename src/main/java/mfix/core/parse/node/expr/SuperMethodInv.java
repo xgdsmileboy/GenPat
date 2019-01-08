@@ -17,7 +17,7 @@ import java.util.*;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SuperMethodInv extends Expr implements Serializable {
+public class SuperMethodInv extends Expr {
 
 	private static final long serialVersionUID = -227589196009347171L;
 	private Label _label = null;

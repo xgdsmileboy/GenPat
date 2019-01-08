@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class CatClause extends Node implements Serializable {
+public class CatClause extends Node {
 
 	private static final long serialVersionUID = 8636697940678019414L;
 	private Svd _exception = null;

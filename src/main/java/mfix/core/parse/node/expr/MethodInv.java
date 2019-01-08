@@ -17,7 +17,7 @@ import java.util.*;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class MethodInv extends Expr implements Serializable {
+public class MethodInv extends Expr {
 
 	private static final long serialVersionUID = 3902854514191993113L;
 	private Expr _expression = null;

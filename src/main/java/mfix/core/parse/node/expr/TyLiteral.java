@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class TyLiteral extends Expr implements Serializable {
+public class TyLiteral extends Expr {
 
 	private static final long serialVersionUID = 5518643646465944075L;
 	private MType _type = null;

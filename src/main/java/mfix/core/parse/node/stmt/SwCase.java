@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SwCase extends Stmt implements Serializable {
+public class SwCase extends Stmt {
 
 	private static final long serialVersionUID = 3371970934436172117L;
 	private Expr _expression = null;

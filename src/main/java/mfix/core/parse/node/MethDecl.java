@@ -24,7 +24,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class MethDecl extends Node implements Serializable {
+public class MethDecl extends Node {
 
     private static final long serialVersionUID = -4279492715496549645L;
     private List<String> _modifiers = new ArrayList<>(5);

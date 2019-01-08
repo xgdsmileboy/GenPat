@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class StrLiteral extends Expr implements Serializable {
+public class StrLiteral extends Expr {
 
 	private static final long serialVersionUID = -8857803991178178009L;
 	private String _value = null;

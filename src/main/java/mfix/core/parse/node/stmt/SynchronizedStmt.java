@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SynchronizedStmt extends Stmt implements Serializable {
+public class SynchronizedStmt extends Stmt {
 
 	private static final long serialVersionUID = -5285955539744811517L;
 	private Expr _expression = null;

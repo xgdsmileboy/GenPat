@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ConditionalExpr extends Expr implements Serializable {
+public class ConditionalExpr extends Expr {
 
 	private static final long serialVersionUID = -6125079576530376280L;
 	private Expr _condition = null;

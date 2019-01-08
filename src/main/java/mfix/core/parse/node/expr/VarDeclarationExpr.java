@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class VarDeclarationExpr extends Expr implements Serializable {
+public class VarDeclarationExpr extends Expr {
 
 	private static final long serialVersionUID = -5908284718888454712L;
 	private MType _declType = null;

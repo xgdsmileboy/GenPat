@@ -16,7 +16,7 @@ import java.util.LinkedList;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class FloatLiteral extends NumLiteral implements Serializable {
+public class FloatLiteral extends NumLiteral {
 
 	private static final long serialVersionUID = -6015309331641968237L;
 	private float _value = .0f;

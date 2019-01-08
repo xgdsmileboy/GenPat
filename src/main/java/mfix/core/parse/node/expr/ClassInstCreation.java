@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ClassInstCreation extends Expr implements Serializable {
+public class ClassInstCreation extends Expr {
 
 	private static final long serialVersionUID = -2405461094348344933L;
 	private Expr _expression = null;

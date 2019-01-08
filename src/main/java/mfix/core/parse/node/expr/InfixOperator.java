@@ -17,7 +17,7 @@ import java.util.LinkedList;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class InfixOperator extends Operator implements Serializable {
+public class InfixOperator extends Operator {
 
 	private static final long serialVersionUID = -4702533056648468078L;
 	private String _operatorStr;

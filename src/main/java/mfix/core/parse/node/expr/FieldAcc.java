@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class FieldAcc extends Expr implements Serializable {
+public class FieldAcc extends Expr {
 
 	private static final long serialVersionUID = -7480080890886474478L;
 	private Expr _expression = null;

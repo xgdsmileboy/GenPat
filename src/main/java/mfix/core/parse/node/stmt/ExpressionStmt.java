@@ -21,7 +21,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ExpressionStmt extends Stmt implements Serializable {
+public class ExpressionStmt extends Stmt {
 
 	private static final long serialVersionUID = 3654727206887515381L;
 	private Expr _expression = null;

@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Label extends Expr implements Serializable {
+public abstract class Label extends Expr {
 
 	private static final long serialVersionUID = -6660200671704024539L;
 

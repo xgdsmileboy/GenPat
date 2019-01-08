@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class Comment extends Expr implements Serializable {
+public class Comment extends Expr {
 
 	private static final long serialVersionUID = -6085082564199071574L;
 	private String _comment;

@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SName extends Label implements Serializable {
+public class SName extends Label {
 
 	private static final long serialVersionUID = 6548845608841663421L;
 	private String _name = null;

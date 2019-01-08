@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public abstract class Expr extends Node implements Serializable {
+public abstract class Expr extends Node {
 
 	private static final long serialVersionUID = 1325289211050496258L;
 	protected String _exprTypeStr = "?";

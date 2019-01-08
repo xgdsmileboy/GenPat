@@ -21,7 +21,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ForStmt extends Stmt implements Serializable {
+public class ForStmt extends Stmt {
 
     private static final long serialVersionUID = -377100625221024477L;
     private ExprList _initializers = null;

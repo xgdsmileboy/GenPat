@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class AryCreation extends Expr implements Serializable {
+public class AryCreation extends Expr {
 
 	private static final long serialVersionUID = -8863515069590314916L;
 	private MType _type = null;

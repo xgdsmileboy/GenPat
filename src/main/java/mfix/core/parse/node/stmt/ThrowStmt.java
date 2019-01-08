@@ -21,7 +21,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ThrowStmt extends Stmt implements Serializable {
+public class ThrowStmt extends Stmt {
 
 	private Expr _expression = null;
 	

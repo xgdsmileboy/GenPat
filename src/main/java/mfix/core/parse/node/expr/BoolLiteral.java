@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class BoolLiteral extends Expr implements Serializable {
+public class BoolLiteral extends Expr {
 
 	private static final long serialVersionUID = 2944431726908480955L;
 	private boolean _value = false;

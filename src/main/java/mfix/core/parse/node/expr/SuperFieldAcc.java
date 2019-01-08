@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class SuperFieldAcc extends Expr implements Serializable {
+public class SuperFieldAcc extends Expr {
 
 	private static final long serialVersionUID = 1921879022776437618L;
 	private Label _name = null;

@@ -27,7 +27,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class Blk extends Stmt implements Serializable {
+public class Blk extends Stmt {
 
     private static final long serialVersionUID = -8152168560236365788L;
     private List<Stmt> _statements = null;

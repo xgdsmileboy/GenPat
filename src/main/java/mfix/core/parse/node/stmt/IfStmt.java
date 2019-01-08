@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class IfStmt extends Stmt implements Serializable {
+public class IfStmt extends Stmt {
 
 	private static final long serialVersionUID = -7247565482784755352L;
 	private Expr _condition = null;

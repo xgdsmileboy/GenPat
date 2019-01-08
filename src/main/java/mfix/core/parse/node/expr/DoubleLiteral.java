@@ -16,7 +16,7 @@ import java.util.LinkedList;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class DoubleLiteral extends NumLiteral implements Serializable {
+public class DoubleLiteral extends NumLiteral {
 
 	private static final long serialVersionUID = 7468689438028560182L;
 	private double _value = 0;

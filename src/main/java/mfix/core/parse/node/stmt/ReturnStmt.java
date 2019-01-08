@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ReturnStmt extends Stmt implements Serializable {
+public class ReturnStmt extends Stmt {
 
 	private static final long serialVersionUID = 1986156793761228319L;
 	private Expr _expression = null;

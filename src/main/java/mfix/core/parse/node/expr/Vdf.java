@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class Vdf extends Node implements Serializable {
+public class Vdf extends Node {
 
 	private static final long serialVersionUID = -1445761649599489420L;
 	private SName _identifier = null;

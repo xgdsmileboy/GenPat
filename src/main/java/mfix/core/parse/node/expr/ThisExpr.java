@@ -19,7 +19,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/21
  */
-public class ThisExpr extends Expr implements Serializable {
+public class ThisExpr extends Expr {
 
 	private static final long serialVersionUID = -6319858838161670401L;
 
