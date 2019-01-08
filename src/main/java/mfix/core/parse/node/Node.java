@@ -7,7 +7,7 @@
 package mfix.core.parse.node;
 
 import mfix.core.comp.Modification;
-import mfix.core.comp.NodeComparator;
+import mfix.core.parse.comp.NodeComparator;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.expr.Operator;
 import mfix.core.parse.node.expr.SName;
@@ -50,20 +50,20 @@ public abstract class Node implements NodeComparator, Serializable {
 		this(fileName, startLine, endLine, oriNode, null);
 	}
 	
-	public int getStartLine() {
-		return _startLine;
-	}
-	
-	public int getEndLine() {
-		return _endLine;
-	}
-	
 	public Node(String fileName, int startLine, int endLine, ASTNode oriNode, Node parent) {
 		_fileName = fileName;
 	    _startLine = startLine;
 		_endLine = endLine;
 		_oriNode = oriNode;
 		_parent = parent;
+	}
+
+	public int getStartLine() {
+		return _startLine;
+	}
+
+	public int getEndLine() {
+		return _endLine;
 	}
 	
 	/**

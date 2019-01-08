@@ -4,7 +4,7 @@
  * strictly prohibited Proprietary and Confidential.
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
-package mfix.core.comp;
+package mfix.core.parse.comp;
 
 import mfix.core.parse.node.Node;
 
@@ -14,6 +14,6 @@ import mfix.core.parse.node.Node;
  */
 public interface NodeComparator {
 
-	public boolean compare(Node other);
+	boolean compare(Node other);
 	
 }
