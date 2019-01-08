@@ -124,7 +124,7 @@ public class RKid extends Relation {
     }
 
     @Override
-    public boolean foldMatching(Map<String, String> varMapping) {
+    public boolean foldMatching(Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
         // TODO : to finish
         return false;
     }

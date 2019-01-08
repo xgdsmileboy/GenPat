@@ -272,15 +272,15 @@ public abstract class Relation implements Serializable {
      * Perform the core pattern matching algorithm when given a potential buggy pattern
      *
      * @param r            : relation in a potential buggy pattern, waiting for repair
-     * @param dependencies : dependencies to match current relations
+     * @param matchedRelationMap : dependencies to match current relations
      * @param varMapping   : variable mapping relation
      * @return true of matches, false otherwise
      */
-    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies,
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap,
                                         Map<String, String> varMapping) {
         if(r == null) return false;
         if(alreadyMatched() || r.alreadyMatched()) {
-            if(dependencies.get(this) != r) {
+            if(matchedRelationMap.get(this) != r) {
                 return false;
             }
         }
@@ -291,19 +291,21 @@ public abstract class Relation implements Serializable {
     }
 
     /**
+     *
+     * @param matchedRelationMap
      * @param varMapping
      * @return
      */
-    public abstract boolean foldMatching(Map<String, String> varMapping);
+    public abstract boolean foldMatching(Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping);
 
 
-    protected boolean matchList(List<Relation> left, List<Relation> right, Map<Relation, Relation> dependencies,
+    protected boolean matchList(List<Relation> left, List<Relation> right, Map<Relation, Relation> matchedRelationMap,
                                 Map<String, String> varMapping) {
         Set<Integer> matched = new HashSet<>();
         for (int i = 0; i < left.size(); i++) {
             for (int j = 0; j < right.size(); j++) {
                 if (matched.contains(j)) continue;
-                if (left.get(i).greedyMatch(right.get(j), dependencies, varMapping)) {
+                if (left.get(i).greedyMatch(right.get(j), matchedRelationMap, varMapping)) {
                     matched.add(j);
                 }
             }
