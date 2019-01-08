@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse;
+package mfix.core.parse.node;
 
 import mfix.common.java.D4jSubject;
 import mfix.common.util.Constant;
@@ -14,6 +14,7 @@ import mfix.common.util.Utils;
 import mfix.core.TestCase;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
+import mfix.core.parse.NodeParser;
 import mfix.core.parse.node.Node;
 import mfix.core.search.ExtractFaultyCode;
 import org.eclipse.jdt.core.dom.CompilationUnit;

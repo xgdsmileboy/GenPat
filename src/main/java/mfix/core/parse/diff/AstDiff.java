@@ -7,7 +7,7 @@
 
 package mfix.core.parse.diff;
 
-import mfix.core.parse.Matcher;
+import mfix.core.parse.match.Matcher;
 import mfix.core.parse.diff.ast.AddTree;
 import mfix.core.parse.diff.ast.DelTree;
 import mfix.core.parse.diff.ast.KeepTree;
@@ -17,10 +17,8 @@ import mfix.core.parse.node.Node;
 import mfix.core.parse.node.stmt.Stmt;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * @author: Jiajun

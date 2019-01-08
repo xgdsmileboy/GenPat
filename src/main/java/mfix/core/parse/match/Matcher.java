@@ -4,7 +4,7 @@
  * strictly prohibited Proprietary and Confidential.
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
-package mfix.core.parse;
+package mfix.core.parse.match;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;

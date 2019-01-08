@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.search;
+package mfix.core.parse.match;
 
 import mfix.core.parse.Pattern;
 

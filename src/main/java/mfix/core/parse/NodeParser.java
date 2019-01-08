@@ -12,6 +12,7 @@ import mfix.core.parse.node.expr.*;
 import mfix.core.parse.node.expr.Comment;
 import mfix.core.parse.node.expr.MethodRef;
 import mfix.core.parse.node.stmt.*;
+import mfix.core.parse.utils.NodeUtils;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;

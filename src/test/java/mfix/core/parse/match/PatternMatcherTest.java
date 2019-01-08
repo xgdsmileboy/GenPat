@@ -5,16 +5,17 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.search;
+package mfix.core.parse.match;
 
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.TestCase;
-import mfix.core.parse.Matcher;
+import mfix.core.parse.match.Matcher;
 import mfix.core.parse.NodeParser;
 import mfix.core.parse.Pattern;
-import mfix.core.parse.PatternExtraction;
+import mfix.core.parse.match.PatternMatcher;
+import mfix.core.parse.utils.PatternExtraction;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;

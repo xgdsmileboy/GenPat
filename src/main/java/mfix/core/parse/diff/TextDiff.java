@@ -8,7 +8,7 @@
 package mfix.core.parse.diff;
 
 import mfix.common.util.Constant;
-import mfix.core.parse.Matcher;
+import mfix.core.parse.match.Matcher;
 import mfix.core.parse.diff.text.AddLine;
 import mfix.core.parse.diff.text.DelLine;
 import mfix.core.parse.diff.text.KeepLine;

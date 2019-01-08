@@ -5,12 +5,13 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse;
+package mfix.core.parse.match;
 
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.TestCase;
+import mfix.core.parse.match.Matcher;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.junit.Assert;

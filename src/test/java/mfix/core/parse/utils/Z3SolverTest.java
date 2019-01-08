@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse.relation;
+package mfix.core.parse.utils;
 
 import com.microsoft.z3.Context;
 import com.microsoft.z3.IntExpr;

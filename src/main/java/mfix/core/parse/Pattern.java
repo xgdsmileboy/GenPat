@@ -12,6 +12,7 @@ import mfix.core.parse.relation.RDef;
 import mfix.core.parse.relation.RKid;
 import mfix.core.parse.relation.RMcall;
 import mfix.core.parse.relation.Relation;
+import mfix.core.parse.utils.Z3Solver;
 import mfix.core.stats.element.ElementCounter;
 
 import java.io.Serializable;

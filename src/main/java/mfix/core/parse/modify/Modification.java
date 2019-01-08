@@ -1,4 +1,4 @@
-package mfix.core.parse.relation.modify;
+package mfix.core.parse.modify;
 
 import mfix.core.parse.relation.Relation;
 

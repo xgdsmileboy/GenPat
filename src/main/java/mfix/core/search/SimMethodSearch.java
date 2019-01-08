@@ -11,7 +11,7 @@ import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.parse.Matcher;
+import mfix.core.parse.match.Matcher;
 import mfix.core.parse.NodeParser;
 import mfix.core.parse.diff.TextDiff;
 import mfix.core.parse.match.metric.FVector;

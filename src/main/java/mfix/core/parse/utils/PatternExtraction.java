@@ -5,9 +5,10 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.parse;
+package mfix.core.parse.utils;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.parse.Pattern;
 import mfix.core.parse.node.MethDecl;
 import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.*;
