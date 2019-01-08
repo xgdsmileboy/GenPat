@@ -67,6 +67,7 @@ public class RArg extends Relation {
 
     @Override
     protected Set<Relation> expandDownward0(Set<Relation> set) {
+        set.add(_function);
         set.add(_arg);
         return set;
     }
@@ -128,9 +129,6 @@ public class RArg extends Relation {
 
     @Override
     public String toString() {
-        if (_function.isConcerned()) {
-            return "";
-        }
         return String.format("[RArg (%d)| %s]", _index, _function.getExprString());
     }
 }
