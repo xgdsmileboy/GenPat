@@ -8,7 +8,7 @@
 package mfix.common.util;
 
 import mfix.common.java.D4jSubject;
-import mfix.core.parse.diff.Diff;
+import mfix.core.node.diff.Diff;
 
 import java.io.File;
 import java.io.FileInputStream;
