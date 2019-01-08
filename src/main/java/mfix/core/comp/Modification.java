@@ -6,6 +6,7 @@
  */
 package mfix.core.comp;
 
+import javafx.beans.DefaultProperty;
 import mfix.core.parse.node.Node;
 
 import java.util.Set;
@@ -14,6 +15,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
+@Deprecated
 public abstract class Modification {
 	
 	protected Node _parent;

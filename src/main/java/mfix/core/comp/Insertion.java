@@ -17,6 +17,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
+@Deprecated
 public class Insertion extends Modification {
 	
 	/**

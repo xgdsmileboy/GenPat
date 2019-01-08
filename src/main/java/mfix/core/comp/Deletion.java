@@ -15,6 +15,7 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2018/9/21
  */
+@Deprecated
 public class Deletion extends Modification {
 
 	private Node _srcNode;
