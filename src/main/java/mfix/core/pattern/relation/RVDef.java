@@ -67,8 +67,8 @@ public class RVDef extends RDef {
     }
 
     @Override
-    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
-        return super.greedyMatch(r, dependencies, varMapping);
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
+        return super.greedyMatch(r, matchedRelationMap, varMapping);
     }
 
     @Override

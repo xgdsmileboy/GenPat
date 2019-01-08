@@ -107,14 +107,14 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
-    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
-        if(super.greedyMatch(r, dependencies, varMapping)) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
+        if(super.greedyMatch(r, matchedRelationMap, varMapping)) {
             RAssign assign = (RAssign) r;
-            if(_lhs.greedyMatch(assign.getLhs(), dependencies, varMapping)
-                    && _rhs.greedyMatch(assign.getRhs(), dependencies, varMapping)) {
-                dependencies.put(this, r);
+            if(_lhs.greedyMatch(assign.getLhs(), matchedRelationMap, varMapping)
+                    && _rhs.greedyMatch(assign.getRhs(), matchedRelationMap, varMapping)) {
+                matchedRelationMap.put(this, r);
                 if(getParent() != null) {
-                    getParent().greedyMatch(r.getParent(), dependencies, varMapping);
+                    getParent().greedyMatch(r.getParent(), matchedRelationMap, varMapping);
                 }
                 return true;
             }

@@ -105,14 +105,14 @@ public class RArg extends Relation {
     }
 
     @Override
-    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
-        if(super.greedyMatch(r, dependencies, varMapping)) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
+        if(super.greedyMatch(r, matchedRelationMap, varMapping)) {
             RArg arg = (RArg) r;
-            if (_function.greedyMatch(arg.getFunctionRelation(), dependencies, varMapping)
-                    && _arg.greedyMatch(arg.getArgument(), dependencies, varMapping)) {
-                dependencies.put(this, r);
+            if (_function.greedyMatch(arg.getFunctionRelation(), matchedRelationMap, varMapping)
+                    && _arg.greedyMatch(arg.getArgument(), matchedRelationMap, varMapping)) {
+                matchedRelationMap.put(this, r);
                 if(getParent() != null) {
-                    getParent().greedyMatch(arg.getParent(), dependencies, varMapping);
+                    getParent().greedyMatch(arg.getParent(), matchedRelationMap, varMapping);
                 }
                 return true;
             }

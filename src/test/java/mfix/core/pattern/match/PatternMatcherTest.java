@@ -99,7 +99,7 @@ public class PatternMatcherTest extends TestCase {
             if (pattern != null) {
                 pattern.minimize(1, 50);
                 if(!pattern.getMinimizedOldRelations(true).isEmpty()) {
-//                    pattern.doAbstraction();
+                    pattern.doAbstraction();
                     patterns.add(pattern);
                 }
             }

@@ -246,7 +246,7 @@ public abstract class Relation implements Serializable {
      * @return {@code true} if {@code relation} match current
      * relation, {@code false} otherwise.
      */
-    public boolean match(Relation relation, Set<Pair<Relation, Relation>> dependencies) {
+    public boolean match(Relation relation, Set<Pair<Relation, Relation>> matchedRelationMap) {
         if (relation == null || relation.getRelationKind() != _relationKind) {
             return false;
         }

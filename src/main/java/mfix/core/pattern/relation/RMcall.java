@@ -252,21 +252,21 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
-        if (super.greedyMatch(r, dependencies, varMapping)) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
+        if (super.greedyMatch(r, matchedRelationMap, varMapping)) {
             RMcall mcall = (RMcall) r;
             if (isAbstract() || (_type == mcall._type && _methodName.equals(mcall._methodName)
                     && _args.size() == mcall._args.size())) {
                 _matchedBinding = r;
                 r._matchedBinding = this;
                 varMapping.put(_objType, mcall.getObjType());
-                dependencies.put(this, r);
+                matchedRelationMap.put(this, r);
                 if (_receiver != null) {
-                    _receiver.greedyMatch(mcall._receiver, dependencies, varMapping);
+                    _receiver.greedyMatch(mcall._receiver, matchedRelationMap, varMapping);
                 }
-                matchList(new LinkedList<>(_args), new LinkedList<>(mcall._args), dependencies, varMapping);
+                matchList(new LinkedList<>(_args), new LinkedList<>(mcall._args), matchedRelationMap, varMapping);
                 if (getParent() != null) {
-                    getParent().greedyMatch(r.getParent(), dependencies, varMapping);
+                    getParent().greedyMatch(r.getParent(), matchedRelationMap, varMapping);
                 }
                 return true;
             }

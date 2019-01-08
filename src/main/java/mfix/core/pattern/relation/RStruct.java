@@ -78,13 +78,13 @@ public class RStruct extends Relation {
     }
 
     @Override
-    public boolean greedyMatch(Relation r, Map<Relation, Relation> dependencies, Map<String, String> varMapping) {
-        if(super.greedyMatch(r, dependencies, varMapping)) {
+    public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
+        if(super.greedyMatch(r, matchedRelationMap, varMapping)) {
             RStruct rStruct = (RStruct) r;
             if(_structure.rskind() == rStruct.getStructure().rskind()) {
                 if(getParent() != null) {
-                    if(getParent().greedyMatch(rStruct.getParent(), dependencies, varMapping)) {
-                        dependencies.put(this, r);
+                    if(getParent().greedyMatch(rStruct.getParent(), matchedRelationMap, varMapping)) {
+                        matchedRelationMap.put(this, r);
                     }
                 }
                 return true;
