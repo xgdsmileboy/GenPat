@@ -125,6 +125,9 @@ public class Pattern implements Serializable {
         }
     }
 
+    /**
+     * do post process to build control dependency
+     */
     public void doPostProcess() {
         if(_oldRelations != null) {
             for (Relation r : _oldRelations) {
