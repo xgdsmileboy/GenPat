@@ -82,8 +82,8 @@ public class PatternMatcherTest extends TestCase {
 
     @Test
     public void test_search_add_try_example() {
-        String srcFile = testbase + Constant.SEP + "examples" + Constant.SEP + "src_Track.java";
-        String tarFile = testbase + Constant.SEP + "examples" + Constant.SEP + "tar_Track.java";
+        String srcFile = testbase + Constant.SEP + "examples" + Constant.SEP + "src_parseLong.java";
+        String tarFile = testbase + Constant.SEP + "examples" + Constant.SEP + "tar_parseLong.java";
 
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
@@ -105,7 +105,7 @@ public class PatternMatcherTest extends TestCase {
             }
         }
 
-        String buggy = testbase + Constant.SEP + "examples" + Constant.SEP + "buggy_RtcpReceivedEvent.java";
+        String buggy = testbase + Constant.SEP + "examples" + Constant.SEP + "buggy_parseLong.java";
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
         unit.accept(new ASTVisitor() {
@@ -124,6 +124,53 @@ public class PatternMatcherTest extends TestCase {
                 p.foldMatching(bp, new HashMap<>());
             }
 //            System.out.println(matched.size());
+        }
+
+    }
+
+    @Test
+    public void test_match_getbytes() {
+        String srcFile = testbase + Constant.SEP + "examples" + Constant.SEP + "src_getbytes.java";
+        String tarFile = testbase + Constant.SEP + "examples" + Constant.SEP + "tar_getbytes.java";
+
+        CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
+        CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        NodeParser nodeParser = NodeParser.getInstance();
+        Set<Pattern> patterns = new HashSet<>();
+        for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+            nodeParser.setCompilationUnit(srcFile, srcUnit);
+            Node srcNode = nodeParser.process(pair.getFirst());
+            nodeParser.setCompilationUnit(tarFile, tarUnit);
+            Node tarNode = nodeParser.process(pair.getSecond());
+            Pattern pattern = PatternExtraction.extract(srcNode, tarNode);
+            if (pattern != null) {
+                pattern.minimize(1, 50);
+                if(!pattern.getMinimizedOldRelations(true).isEmpty()) {
+                    pattern.doAbstraction();
+                    patterns.add(pattern);
+                }
+            }
+        }
+
+        String buggy = testbase + Constant.SEP + "examples" + Constant.SEP + "buggy_getbytes.java";
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                methods.add(node);
+                return true;
+            }
+        });
+
+        nodeParser.setCompilationUnit(buggy, unit);
+        for(MethodDeclaration m : methods) {
+            Node node = nodeParser.process(m);
+            Pattern bp = PatternExtraction.extract(node, true);
+            Set<Pattern> matched = PatternMatcher.filter(bp, patterns);
+            for(Pattern p : matched) {
+                p.foldMatching(bp, new HashMap<>());
+            }
         }
 
     }
