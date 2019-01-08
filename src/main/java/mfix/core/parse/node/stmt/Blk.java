@@ -7,21 +7,13 @@
 package mfix.core.parse.node.stmt;
 
 import mfix.common.util.Constant;
-import mfix.core.comp.Modification;
-import mfix.core.parse.Matcher;
 import mfix.core.parse.match.metric.FVector;
-import mfix.core.parse.node.MethDecl;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author: Jiajun
