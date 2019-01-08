@@ -8,11 +8,11 @@
 package mfix.core.pattern.parser;
 
 import mfix.common.util.LevelLogger;
-import mfix.core.pattern.Pattern;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.*;
 import mfix.core.node.ast.stmt.*;
+import mfix.core.pattern.Pattern;
 import mfix.core.pattern.relation.*;
 import mfix.core.pattern.relation.op.BinaryOp;
 import mfix.core.pattern.relation.op.CopCond;
@@ -486,7 +486,9 @@ public class PatternExtraction {
             relations = process(node.getRhs(), pattern, scope);
             assign.setRhs((ObjRelation) relations.get(0));
             relations.get(0).setParent(assign);
-            scope.addDefine((RDef) r, assign);
+            if(r instanceof RDef) {
+                scope.addDefine((RDef) r, assign);
+            }
 
             pattern.addRelation(assign);
             result.add(assign);
