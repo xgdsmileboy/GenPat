@@ -58,35 +58,6 @@ public class InfixOperator extends Operator implements Serializable {
 	}
 	
 	@Override
-	public StringBuffer printMatchSketch() {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operatorStr);
-		return stringBuffer;
-	}
-
-	@Override
-	public void deepMatch(Node other) {
-		_tarNode = other;
-		if(other instanceof InfixOperator) {
-			_matchNodeType = _operatorStr.equals(((InfixOperator) other)._operatorStr);
-		} else {
-			_matchNodeType = false;
-		}
-	}
-	
-	@Override
-	public boolean matchSketch(Node sketch) {
-		boolean match = false;
-		if(sketch instanceof InfixOperator) {
-			match = true;
-			InfixOperator infixOperator = (InfixOperator) sketch;
-			infixOperator._binding = this;
-			_binding = infixOperator;
-		}
-		return match;
-	}
-
-	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add(_operatorStr);

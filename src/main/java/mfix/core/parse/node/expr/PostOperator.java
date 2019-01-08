@@ -57,37 +57,6 @@ public class PostOperator extends Operator implements Serializable {
 	}
 	
 	@Override
-	public StringBuffer printMatchSketch() {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operatorStr);
-		return stringBuffer;
-	}
-
-	@Override
-	public void deepMatch(Node other) {
-		_tarNode = other;
-		if(other instanceof PostOperator) {
-			_matchNodeType = true;
-			PostOperator postOperator = (PostOperator) other;
-			if(!_operatorStr.equals(postOperator._operatorStr)) {
-				_matchNodeType = false;
-			}
-		} else {
-			_matchNodeType = false;
-		}
-	}
-	
-	@Override
-	public boolean matchSketch(Node sketch) {
-		if(sketch instanceof PostOperator) {
-			((PostOperator) sketch)._binding = this;
-			_binding = sketch;
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add(_operatorStr);

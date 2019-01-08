@@ -67,58 +67,58 @@ public class AstDiff extends mfix.core.parse.diff.Diff<Tree> {
 	
 	@Override
 	public void accurateMatch() {
-		List<Integer> addTrees = new ArrayList<>(_source.size());
-		List<Integer> delTrees = new ArrayList<>(_source.size());
-		Tree tree = null;
-		for(int i = 0; i < _source.size(); i++) {
-			tree = _source.get(i);
-			if(tree instanceof KeepTree) {
-				tree.getNode().setAllNodeTypeMatch();
-			} else if(tree instanceof mfix.core.parse.diff.Add) {
-				addTrees.add(i);
-			} else if(tree instanceof mfix.core.parse.diff.Delete) {
-				delTrees.add(i);
-			}
-		}
-		
-		int last = 0;
-		Map<Integer, Integer> simMap = new HashMap<>();
-		for(int i = 0; i < delTrees.size(); i++) {
-			Object[] delTokens = _source.get(delTrees.get(i)).getNode().tokens().toArray();
-			Object[] addTokens = null;
-			for(int j = last; j < addTrees.size(); j ++) {
-				 addTokens = _source.get(addTrees.get(j)).getNode().tokens().toArray();
-				 Map<Integer, Integer> map = Matcher.match(delTokens, addTokens);
-				 double value = ((double) map.size()) / ((double) delTokens.length);
-				 if(value > 0.5) {
-					 simMap.put(delTrees.get(i), addTrees.get(j));
-					 last = j + 1;
-					 break;
-				 }
-			}
-		}
-		for(Entry<Integer, Integer> entry : simMap.entrySet()) {
-			System.out.println("-------match----------");
-			System.out.println(_source.get(entry.getKey()));
-			System.out.println(_source.get(entry.getValue()));
-			System.out.println("-----------------");
-		}
-		for(Integer index : delTrees) {
-			if(simMap.containsKey(index)) {
-				continue;
-			} else {
-				System.out.println("---------no match - delete---------");
-				System.out.println(_source.get(index));
-			}
-		}
-		for(Integer index : addTrees) {
-			if(simMap.containsValue(index)) {
-				continue;
-			} else {
-				System.out.println("--------no match - add------------");
-				System.out.println(_source.get(index));
-			}
-		}
+//		List<Integer> addTrees = new ArrayList<>(_source.size());
+//		List<Integer> delTrees = new ArrayList<>(_source.size());
+//		Tree tree = null;
+//		for(int i = 0; i < _source.size(); i++) {
+//			tree = _source.get(i);
+//			if(tree instanceof KeepTree) {
+//				tree.getNode().setAllNodeTypeMatch();
+//			} else if(tree instanceof mfix.core.parse.diff.Add) {
+//				addTrees.add(i);
+//			} else if(tree instanceof mfix.core.parse.diff.Delete) {
+//				delTrees.add(i);
+//			}
+//		}
+//
+//		int last = 0;
+//		Map<Integer, Integer> simMap = new HashMap<>();
+//		for(int i = 0; i < delTrees.size(); i++) {
+//			Object[] delTokens = _source.get(delTrees.get(i)).getNode().tokens().toArray();
+//			Object[] addTokens = null;
+//			for(int j = last; j < addTrees.size(); j ++) {
+//				 addTokens = _source.get(addTrees.get(j)).getNode().tokens().toArray();
+//				 Map<Integer, Integer> map = Matcher.match(delTokens, addTokens);
+//				 double value = ((double) map.size()) / ((double) delTokens.length);
+//				 if(value > 0.5) {
+//					 simMap.put(delTrees.get(i), addTrees.get(j));
+//					 last = j + 1;
+//					 break;
+//				 }
+//			}
+//		}
+//		for(Entry<Integer, Integer> entry : simMap.entrySet()) {
+//			System.out.println("-------match----------");
+//			System.out.println(_source.get(entry.getKey()));
+//			System.out.println(_source.get(entry.getValue()));
+//			System.out.println("-----------------");
+//		}
+//		for(Integer index : delTrees) {
+//			if(simMap.containsKey(index)) {
+//				continue;
+//			} else {
+//				System.out.println("---------no match - delete---------");
+//				System.out.println(_source.get(index));
+//			}
+//		}
+//		for(Integer index : addTrees) {
+//			if(simMap.containsValue(index)) {
+//				continue;
+//			} else {
+//				System.out.println("--------no match - add------------");
+//				System.out.println(_source.get(index));
+//			}
+//		}
 		
 	}
 	

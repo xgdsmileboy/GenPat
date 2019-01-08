@@ -6,11 +6,6 @@
  */
 package mfix.core.parse.node.stmt;
 
-import mfix.common.util.Constant;
-import mfix.common.util.LevelLogger;
-import mfix.core.comp.Modification;
-import mfix.core.comp.Update;
-import mfix.core.parse.NodeUtils;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import mfix.core.parse.node.expr.Expr;
@@ -20,13 +15,8 @@ import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -86,86 +76,6 @@ public class SuperConstructorInv extends Stmt implements Serializable {
 	}
 	
 	@Override
-	public StringBuffer applyChange(Map<String, String> exprMap, Set<String> allUsableVars) {
-		StringBuffer expression = null;
-		StringBuffer argument = null;
-		if(_binding != null && _binding instanceof SuperConstructorInv) {
-			SuperConstructorInv superConstructorInv = (SuperConstructorInv) _binding;
-			for(Modification modification : superConstructorInv.getNodeModification()) {
-				if(modification instanceof Update) {
-					Update update = (Update) modification;
-					if(update.getSrcNode() == superConstructorInv._expression) {
-						expression = update.getTarString(exprMap, allUsableVars);
-						if(expression == null) return null;
-					} else {
-						argument = update.getTarString(exprMap, allUsableVars);
-						if(argument == null) return null;
-					}
-				} else {
-					LevelLogger.error("@SuperConstructorInv Should not be this kind of modification : " + modification);
-				}
-			}
-		}
-		StringBuffer stringBuffer = new StringBuffer();
-		StringBuffer tmp = null;
-		if(expression == null) {
-			if(_expression != null){
-				tmp = _expression.applyChange(exprMap, allUsableVars);
-				if(tmp == null) return null;
-				stringBuffer.append(tmp);
-				stringBuffer.append(".");
-			}
-		} else {
-			stringBuffer.append(expression);
-		}
-		stringBuffer.append("super(");
-		if(argument == null) {
-			tmp = _arguments.applyChange(exprMap, allUsableVars);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
-		} else {
-			stringBuffer.append(argument);
-		}
-		stringBuffer.append(");");
-		return stringBuffer;
-	}
-	
-	@Override
-	public StringBuffer replace(Map<String, String> exprMap, Set<String> allUsableVars) {
-		StringBuffer stringBuffer = new StringBuffer();
-		StringBuffer tmp = null;
-		if(_expression != null){
-			tmp = _expression.replace(exprMap, allUsableVars);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
-			stringBuffer.append(".");
-		}
-		stringBuffer.append("super(");
-		tmp = _arguments.replace(exprMap, allUsableVars);
-		if(tmp == null) return null;
-		stringBuffer.append(tmp);
-		stringBuffer.append(");");
-		return stringBuffer;
-	}
-	
-	@Override
-	public StringBuffer printMatchSketch() {
-		StringBuffer stringBuffer = new StringBuffer();
-		if(isKeyPoint()) {
-			if(_expression != null){
-				stringBuffer.append(_expression.printMatchSketch());
-				stringBuffer.append(".");
-			}
-			stringBuffer.append("super(");
-			stringBuffer.append(_arguments.printMatchSketch());
-			stringBuffer.append(");");
-		} else {
-			stringBuffer.append(Constant.PLACE_HOLDER + ";");
-		}
-		return stringBuffer;
-	}
-	
-	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		if(_expression != null){
@@ -213,158 +123,6 @@ public class SuperConstructorInv extends Stmt implements Serializable {
 			match = match && _arguments.compare(superConstructorInv._arguments);
 		}
 		return match;
-	}
-	
-	@Override
-	public Map<String, Set<Node>> getCalledMethods() {
-		if(_keywords == null) {
-			_keywords = new HashMap<>();
-			_keywords.putAll(_arguments.getCalledMethods());
-			avoidDuplicate(_keywords, _expression);
-			String superStr = "super";
-			Set<Node> set = _keywords.get(superStr);
-			if(set == null) {
-				set = new HashSet<>();
-			}
-			set.add(this);
-			_keywords.put(superStr, set);
-		}
-		return _keywords;
-	}
-	
-	@Override
-	public List<Modification> extractModifications() {
-		List<Modification> modifications = new LinkedList<>();
-		if(_matchNodeType) {
-			modifications.addAll(_modifications);
-			if(_expression != null) {
-				modifications.addAll(_expression.extractModifications());
-			}
-			modifications.addAll(_arguments.extractModifications());
-		}
-		return modifications;
-	}
-	
-	@Override
-	public void deepMatch(Node other) {
-		_tarNode = other;
-		if(other instanceof SuperConstructorInv) {
-			SuperConstructorInv superConstructorInv = (SuperConstructorInv) other;
-			_matchNodeType = true;
-			if(_expression == null && superConstructorInv._expression != null) {
-				_matchNodeType = false;
-				return;
-			}
-			if(_expression != null && superConstructorInv._expression != null) {
-				_expression.deepMatch(superConstructorInv._expression);
-				if(!_expression.isNodeTypeMatch()) {
-					Update update = new Update(this, _expression, superConstructorInv._expression);
-					_modifications.add(update);
-				}
-			} else if(_expression != null) {
-				Update update = new Update(this, _expression, superConstructorInv._expression);
-				_modifications.add(update);
-			}
-//			if(_superType != null && superConstructorInv._superType != null) {
-//				_matchNodeType = _matchNodeType && _superType.toString().equals(superConstructorInv._superType.toString());
-//			} else if(_superType != null || superConstructorInv._superType != null) {
-//				_matchNodeType = false;
-//			}
-			_arguments.deepMatch(superConstructorInv._arguments);
-			if(!_arguments.isNodeTypeMatch()) {
-				Update update = new Update(this, _arguments, superConstructorInv._arguments);
-				_modifications.add(update);
-			}
-		} else {
-			_matchNodeType = false;
-		}
-	}
-	
-	@Override
-	public boolean matchSketch(Node sketch) {
-		boolean match = false;
-		if(sketch instanceof SuperConstructorInv) {
-			match = true;
-			SuperConstructorInv superConstructorInv = (SuperConstructorInv) sketch;
-			if(!superConstructorInv.isNodeTypeMatch()) {
-				if(!NodeUtils.matchNode(sketch, this)) {
-					return false;
-				}
-				bindingSketch(sketch);
-			} else {
-				if(superConstructorInv._expression != null && superConstructorInv._expression.isKeyPoint()) {
-					if(_expression == null) {
-						return false;
-					} else {
-						match = _expression.matchSketch(superConstructorInv._expression);
-					}
-				}
-				if(match && superConstructorInv._arguments.isKeyPoint()) {
-					match = _arguments.matchSketch(superConstructorInv._arguments);
-				}
-			}
-			if(match) {
-				superConstructorInv._binding = this;
-				_binding = superConstructorInv;
-			}
-		}
-		if(!match) sketch.resetBinding();
-		return match;
-	}
-	
-	@Override
-	public boolean bindingSketch(Node sketch) {
-		boolean match = false;
-		_binding = sketch;
-		sketch.setBinding(this);
-		if (sketch instanceof SuperConstructorInv) {
-			match = true;
-			SuperConstructorInv superConstructorInv = (SuperConstructorInv) sketch;
-			if (superConstructorInv._expression != null && superConstructorInv._expression.isKeyPoint()) {
-				if (_expression != null) {
-					_expression.bindingSketch(superConstructorInv._expression);
-				}
-			}
-			if (superConstructorInv._arguments.isKeyPoint()) {
-				_arguments.bindingSketch(superConstructorInv._arguments);
-			}
-		}
-		return match;
-	}
-
-	@Override
-	public Node bindingNode(Node patternNode) {
-		if(patternNode instanceof SuperConstructorInv) {
-			Map<String, Set<Node>> map = patternNode.getCalledMethods();
-			Map<String, Set<Node>> thisKeys = getCalledMethods();
-			for(Entry<String, Set<Node>> entry : map.entrySet()) {
-				if(!thisKeys.containsKey(entry.getKey())) {
-					return null;
-				}
-			}
-			return this;
-		} else {
-			return null;
-		}
-	}
-	
-	
-	@Override
-	public void resetAllNodeTypeMatch() {
-		_matchNodeType = false;
-		if(_expression != null) {
-			_expression.resetAllNodeTypeMatch();
-		}
-		_arguments.resetAllNodeTypeMatch();
-	}
-
-	@Override
-	public void setAllNodeTypeMatch() {
-		_matchNodeType = true;
-		if(_expression != null) {
-			_expression.setAllNodeTypeMatch();
-		}
-		_arguments.setAllNodeTypeMatch();
 	}
 	
 	@Override

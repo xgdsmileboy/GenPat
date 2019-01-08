@@ -12,8 +12,6 @@ import org.eclipse.jdt.core.dom.Assignment;
 
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -58,50 +56,6 @@ public class AssignOperator extends Operator implements Serializable {
 		return stringBuffer;
 	}
 	
-	@Override
-	public StringBuffer applyChange(Map<String, String> exprMap, Set<String> allUsableVars) {
-		return toSrcString();
-	}
-	
-	@Override
-	public StringBuffer replace(Map<String, String> exprMap, Set<String> allUsableVars) {
-		String result = exprMap.get(_operatorStr);
-		if(result != null) {
-			return new StringBuffer(result);
-		} else {
-			return toSrcString();
-		}
-	}
-	
-	@Override
-	public StringBuffer printMatchSketch() {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operatorStr);
-		return stringBuffer;
-	}
-	
-	@Override
-	public void deepMatch(Node other) {
-		_tarNode = other;
-		if(other instanceof AssignOperator && _operatorStr.equals(((AssignOperator) other)._operatorStr)) {
-			_matchNodeType = true;
-		} else {
-			_matchNodeType = false;
-		}
-	}
-	
-	@Override
-	public boolean matchSketch(Node sketch) {
-		boolean match = false;
-		if(sketch instanceof AssignOperator) {
-			match = true;
-			AssignOperator assignOperator = (AssignOperator) sketch;
-			assignOperator._binding = this;
-			_binding = assignOperator;
-		}
-		return match;
-	}
-
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

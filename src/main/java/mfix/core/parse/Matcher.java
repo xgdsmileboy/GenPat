@@ -6,29 +6,15 @@
  */
 package mfix.core.parse;
 
-import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
-import mfix.core.comp.Deletion;
-import mfix.core.comp.Insertion;
-import mfix.core.comp.Modification;
-import mfix.core.comp.Update;
 import mfix.core.parse.node.Node;
-import mfix.core.parse.node.stmt.Blk;
 import mfix.core.parse.node.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: Jiajun
@@ -131,174 +117,6 @@ public class Matcher {
 		}
 	}
 
-	public static boolean applyStmtList(List<Modification> modifications, List<? extends Node> statements, Node currentNode, Map<String, String> exprMap,
-			Map<Node, List<StringBuffer>> insertionPositionMap, Map<Node, StringBuffer> changeNodeMap, Set<String> allUsableVars) {
-		StringBuffer tmp = null;
-		for (Modification modification : modifications) {
-			if (modification instanceof Update) {
-				Update update = (Update) modification;
-				Node node = update.getSrcNode().getBinding();
-				assert node != null;
-				// map current node to the updated node string
-				tmp = update.getTarString(exprMap, allUsableVars);
-				if(tmp == null) return false;
-				changeNodeMap.put(node, tmp);
-			} else if(modification instanceof Deletion) {
-				Deletion deletion = (Deletion) modification;
-				Node node = deletion.getSrcNode().getBinding();
-				// node to be deleted to should be completely matched
-				if(!node.isAllBinding(Constant.INGORE_OPERATOR_FOR_DELETE_MATCH)) {
-					return false;
-				}
-				assert node != null;
-				// map deleted node to null
-				changeNodeMap.put(node, null);
-			} else {
-				Insertion insertion = (Insertion) modification;
-				int index = insertion.getIndex();
-				if(index == -1) {
-					// insert at last position
-					List<StringBuffer> list = insertionPositionMap.get(currentNode);
-					if(list == null) {
-						list = new LinkedList<>();
-					}
-					tmp = insertion.getTarString(exprMap, allUsableVars);
-					if(tmp == null) return false;;
-					list.add(tmp);
-					insertionPositionMap.put(currentNode, list);
-				} else {
-					Blk old = (Blk) insertion.getParent();
-					List<Stmt> bro = old.getChildren();
-					// find next match node
-					Node nextNode = null;
-					for(int i = index; nextNode == null && i < bro.size(); i++) {
-						Node binding = bro.get(i).getBinding();
-						while(nextNode == null && binding != null) {
-							for(Node node : statements) {
-								if(node == binding) {
-									nextNode = binding;
-									break;
-								}
-							}
-							binding = binding.getParent();
-						}
-					}
-					// if find next match node, insert at the position of matching node
-					if(nextNode != null) {
-						List<StringBuffer> list = insertionPositionMap.get(nextNode);
-						if(list == null) {
-							list = new LinkedList<>();
-						}
-						tmp = insertion.getTarString(exprMap, allUsableVars);
-						if(tmp == null) return false;
-						list.add(tmp);
-						insertionPositionMap.put(nextNode, list);
-					} else {
-						// failed to find a next node, try to find a previous matching node
-						for(int i = index - 1; nextNode == null && i >= 0; i--) {
-							Node binding = bro.get(i).getBinding();
-							while(binding != null) {
-								for(int j = 0; nextNode == null && j < statements.size(); j ++) {
-									Node node = statements.get(j);
-									if(node == binding) {
-										if((j + 1) < statements.size()) {
-											nextNode = statements.get(j + 1);
-										} else {
-											nextNode = currentNode;
-										}
-									}
-								}
-								binding = binding.getParent();
-							}
-						}
-						// if does not find previous node, just insert it to the last
-						if(nextNode == null) {
-							nextNode = currentNode;
-						}
-						List<StringBuffer> list = insertionPositionMap.get(nextNode);
-						if(list == null) {
-							list = new LinkedList<>();
-						}
-						tmp = insertion.getTarString(exprMap, allUsableVars);
-						if(tmp == null) return false;
-						list.add(tmp);
-						insertionPositionMap.put(nextNode, list);
-					}
-				}
-			}
-		}
-		return true;
-	}
-	
-	public static <T extends Node> List<Modification> matchNodeList(Node parent, List<T> src, List<T> tar) {
-		List<Modification> modifications = new LinkedList<>();
-		Map<Integer, Integer> map = match(src, tar, new Comparator<T>() {
-			@Override
-			public int compare(T o1, T o2) {
-				if(o1.compare(o2)) {
-					return 1;
-				} else {
-					return 0;
-				}
-			}
-		});
-		
-		map.putAll(simMatch(map, src, tar, 0.5));
-		Set<Integer> modifyBro = new HashSet<>();
-		
-		int last = 0;
-		for(int i = 0; i < src.size(); i++) {
-			Integer matchRight = map.get(i);
-			if(matchRight == null) {
-				modifyBro.add(i);
-				src.get(i).resetAllNodeTypeMatch();
-				Deletion deletion = new Deletion(parent, src.get(i));
-				modifications.add(deletion);
-			} else {
-				for(; last < matchRight; last ++) {
-					Insertion insertion = new Insertion(parent, i, tar.get(last));
-					modifications.add(insertion);
-				}
-				last = matchRight + 1;
-				src.get(i).deepMatch(tar.get(matchRight));
-				if(!src.get(i).isNodeTypeMatch()) {
-					modifyBro.add(i);
-					Update update = new Update(parent, src.get(i), tar.get(matchRight));
-					modifications.add(update);
-				}
-			}
-		}
-		
-		for(; last < tar.size(); last ++) {
-			Insertion insertion = new Insertion(parent, -1, tar.get(last));
-			modifications.add(insertion);
-		}
-		
-		for(Modification modification : modifications) {
-			if(modification instanceof Insertion) {
-				Insertion insertion = (Insertion) modification;
-				int index = insertion.getIndex();
-				if(index == -1) {
-					index = src.size();
-				}
-				for(int i = insertion.getIndex() - 1; i >= 0; i --) {
-					if(modifyBro.contains(i)) {
-						insertion.setPreBro(src.get(i));
-						break;
-					}
-				}
-				for(int i = insertion.getIndex(); i < src.size(); i++) {
-					if(modifyBro.contains(i)) {
-						insertion.setNextBro(src.get(i));
-						break;
-					}
-				}
-			}
-		}
-		
-		return modifications;
-	}
-	
 	public static Map<Integer, Integer> simMatch(List<Node> src, List<Node> tar, double similar) {
 		Map<Integer, Integer> map = match(src, tar, new Comparator<Node>() {
 			@Override

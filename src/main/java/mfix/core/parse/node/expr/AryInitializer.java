@@ -6,22 +6,14 @@
  */
 package mfix.core.parse.node.expr;
 
-import mfix.common.util.Constant;
-import mfix.core.comp.Modification;
-import mfix.core.parse.Matcher;
-import mfix.core.parse.NodeUtils;
 import mfix.core.parse.match.metric.FVector;
 import mfix.core.parse.node.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -64,63 +56,7 @@ public class AryInitializer extends Expr implements Serializable {
 		stringBuffer.append("}");
 		return stringBuffer;
 	}
-	
-	@Override
-	public StringBuffer applyChange(Map<String, String> exprMap, Set<String> allUsableVars) {
-		StringBuffer stringBuffer = new StringBuffer("{");
-		StringBuffer tmp = null;
-		if (_expressions.size() > 0) {
-			tmp = _expressions.get(0).applyChange(exprMap, allUsableVars);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
-			for (int i = 1; i < _expressions.size(); i++) {
-				stringBuffer.append(",");
-				tmp = _expressions.get(i).applyChange(exprMap, allUsableVars);
-				stringBuffer.append(tmp);
-			}
-		}
-		stringBuffer.append("}");
-		return stringBuffer;
-	}
-	
-	@Override
-	public StringBuffer replace(Map<String, String> exprMap, Set<String> allUsableVars) {
-		StringBuffer stringBuffer = new StringBuffer("{");
-		StringBuffer tmp = null;
-		if (_expressions.size() > 0) {
-			tmp = _expressions.get(0).replace(exprMap, allUsableVars);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
-			for (int i = 1; i < _expressions.size(); i++) {
-				stringBuffer.append(",");
-				tmp = _expressions.get(i).replace(exprMap, allUsableVars);
-				if(tmp == null) return null;
-				stringBuffer.append(tmp);
-			}
-		}
-		stringBuffer.append("}");
-		return stringBuffer;
-	}
-	
-	@Override
-	public StringBuffer printMatchSketch() {
-		StringBuffer stringBuffer = new StringBuffer();
-		if(isKeyPoint()) {
-			stringBuffer.append("{");
-			if (_expressions.size() > 0) {
-				stringBuffer.append(_expressions.get(0).printMatchSketch());
-				for (int i = 1; i < _expressions.size(); i++) {
-					stringBuffer.append(",");
-					stringBuffer.append(_expressions.get(i).printMatchSketch());
-				}
-			}
-			stringBuffer.append("}");
-		} else {
-			stringBuffer.append(Constant.PLACE_HOLDER);
-		}
-		return stringBuffer;
-	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -146,127 +82,6 @@ public class AryInitializer extends Expr implements Serializable {
 			}
 		}
 		return match;
-	}
-	
-	@Override
-	public Map<String, Set<Node>> getCalledMethods() {
-		if(_keywords == null) {
-			_keywords = new HashMap<>(7);
-			for(Expr expr : _expressions) {
-				avoidDuplicate(_keywords, expr);
-			}
-		}
-		return _keywords;
-	}
-	
-	@Override
-	public List<Modification> extractModifications() {
-		List<Modification> modifications = new LinkedList<>();
-		if(_matchNodeType) {
-			modifications.addAll(_modifications);
-			for(Expr expr : _expressions) {
-				modifications.addAll(expr.extractModifications());
-			}
-		}
-		return modifications;
-	}
-	
-	@Override
-	public void deepMatch(Node other) {
-		_tarNode = other;
-		if(other instanceof AryInitializer) {
-			_matchNodeType = true;
-			AryInitializer aryInitializer = (AryInitializer) other;
-			if(!Matcher.matchNodeList(this, _expressions, aryInitializer._expressions).isEmpty()){
-				_matchNodeType = false;
-			}
-		} else {
-			_matchNodeType = false;
-		}
-	}
-	
-	@Override
-	public boolean matchSketch(Node sketch) {
-		boolean match = false;
-		if(sketch instanceof AryInitializer) {
-			match = true;
-			AryInitializer aryInitializer = (AryInitializer) sketch;
-			if(!aryInitializer.isNodeTypeMatch()) {
-				if(!NodeUtils.matchNode(sketch, this)) {
-					return false;
-				}
-				bindingSketch(sketch);
-			} else {
-				Set<Integer> alreadyMatch = new HashSet<>();
-				for(Expr expr : aryInitializer._expressions) {
-					if(expr.isKeyPoint()) {
-						boolean singleMatch = false;
-						for(int i = 0; i < _expressions.size(); i++) {
-							if(alreadyMatch.contains(i)) {
-								continue;
-							}
-							if(_expressions.get(i).matchSketch(expr)) {
-								singleMatch = true;
-								alreadyMatch.add(i);
-								break;
-							}
-						}
-						if(!singleMatch) {
-							match = false;
-							break;
-						}
-					}
-				}
-			}
-			if(match) {
-				aryInitializer._binding = this;
-				_binding = aryInitializer;
-			}
-		}
-		if(!match) sketch.resetBinding();
-		return match;
-	}
-	
-	@Override
-	public boolean bindingSketch(Node sketch) {
-		_binding = sketch;
-		sketch.setBinding(this);
-		if (sketch instanceof AryInitializer) {
-			AryInitializer aryInitializer = (AryInitializer) sketch;
-			
-			Set<Integer> alreadyMatch = new HashSet<>();
-			for (Expr expr : aryInitializer._expressions) {
-				if (expr.isKeyPoint()) {
-					for (int i = 0; i < _expressions.size(); i++) {
-						if (alreadyMatch.contains(i)) {
-							continue;
-						}
-						if (_expressions.get(i).bindingSketch(expr)) {
-							alreadyMatch.add(i);
-							break;
-						}
-					}
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
-	public void resetAllNodeTypeMatch() {
-		_matchNodeType = false;
-		for(Expr expr : _expressions) {
-			expr.resetAllNodeTypeMatch();
-		}
-	}
-
-	@Override
-	public void setAllNodeTypeMatch() {
-		_matchNodeType = true;
-		for(Expr expr : _expressions) {
-			expr.setAllNodeTypeMatch();
-		}
 	}
 	
 	@Override

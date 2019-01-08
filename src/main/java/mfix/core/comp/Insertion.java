@@ -67,14 +67,6 @@ public class Insertion extends Modification {
 		return newVars;
 	}
 	
-	public StringBuffer getTarString(Map<String, String> exprMap, Set<String> usableVars) {
-		if(_tarNode == null) {
-			return new StringBuffer("null");
-		} else {
-			return _tarNode.replace(exprMap, usableVars);
-		}
-	}
-	
 	@Override
 	public String toString() {
 		return "[INS] : (" + _index + ")" + _tarNode.toSrcString().toString();

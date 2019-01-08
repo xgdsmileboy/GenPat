@@ -69,36 +69,6 @@ public class PrefixOperator extends Operator implements Serializable {
 	}
 	
 	@Override
-	public StringBuffer printMatchSketch() {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_operatorStr);
-		return stringBuffer;
-	}
-
-	@Override
-	public void deepMatch(Node other) {
-		_tarNode = other;
-		if (other instanceof PrefixOperator) {
-			_matchNodeType = true;
-			if (!_operatorStr.equals(((PrefixOperator) other)._operatorStr)) {
-				_matchNodeType = false;
-			}
-		} else {
-			_matchNodeType = false;
-		}
-	}
-	
-	@Override
-	public boolean matchSketch(Node sketch) {
-		if(sketch instanceof PrefixOperator) {
-			PrefixOperator prefixOperator = (PrefixOperator) sketch;
-			return (PrefixOperator._operatorMap.get(_operatorStr) == PrefixOperator._operatorMap
-					.get(prefixOperator._operatorStr));
-		}
-		return false;
-	}
-
-	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add(_operatorStr);

@@ -28,6 +28,4 @@ public abstract class Stmt extends Node implements Serializable {
 		return this;
 	}
 	
-	public abstract Node bindingNode(Node patternNode);
-	
 }

@@ -58,14 +58,6 @@ public class Update extends Modification {
 		return new HashSet<>();
 	}
 	
-	public StringBuffer getTarString(Map<String, String> exprMap, Set<String> allUsableVars) {
-		if(_tarNode == null) {
-			return new StringBuffer("null");
-		} else {
-			return _tarNode.replace(exprMap, allUsableVars);
-		}
-	}
-	
 	@Override
 	public String toString() {
 		if(_srcNode == null){
