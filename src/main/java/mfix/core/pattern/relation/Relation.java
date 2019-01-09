@@ -261,7 +261,7 @@ public abstract class Relation implements Serializable {
     //************ FOR REPAIR **************************************//
     //**************************************************************//
     protected Relation _matchedBinding = null;
-    protected Relation _foldMatchBinding = null;
+    protected Relation _foldParent = null;
 
     public boolean alreadyMatched() {
         return _matchedBinding != null;
