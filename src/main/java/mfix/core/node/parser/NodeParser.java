@@ -6,13 +6,13 @@
  */
 package mfix.core.node.parser;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
-import mfix.core.node.ast.expr.*;
 import mfix.core.node.ast.expr.Comment;
 import mfix.core.node.ast.expr.MethodRef;
+import mfix.core.node.ast.expr.*;
 import mfix.core.node.ast.stmt.*;
-import mfix.core.node.NodeUtils;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
@@ -167,7 +167,7 @@ public class NodeParser {
         expression.setParent(doStmt);
         doStmt.setExpression(expression);
 
-        Stmt stmt = (Stmt) process(node.getBody());
+        Stmt stmt = wrapBlock(node.getBody());
         stmt.setParent(doStmt);
         doStmt.setBody(stmt);
 
@@ -194,7 +194,7 @@ public class NodeParser {
         expression.setParent(enhancedForStmt);
         enhancedForStmt.setExpression(expression);
 
-        Stmt body = (Stmt) process(node.getBody());
+        Stmt body = wrapBlock(node.getBody());
         body.setParent(enhancedForStmt);
         enhancedForStmt.setBody(body);
 
@@ -250,7 +250,7 @@ public class NodeParser {
         exprList.setParent(forStmt);
         forStmt.setUpdaters(exprList);
 
-        Stmt body = (Stmt) process(node.getBody());
+        Stmt body = wrapBlock(node.getBody());
         body.setParent(forStmt);
         forStmt.setBody(body);
 
@@ -266,12 +266,12 @@ public class NodeParser {
         condition.setParent(ifStmt);
         ifStmt.setCondition(condition);
 
-        Stmt then = (Stmt) process(node.getThenStatement());
+        Stmt then = wrapBlock(node.getThenStatement());
         then.setParent(ifStmt);
         ifStmt.setThen(then);
 
         if (node.getElseStatement() != null) {
-            Stmt els = (Stmt) process(node.getElseStatement());
+            Stmt els = wrapBlock(node.getElseStatement());
             els.setParent(ifStmt);
             ifStmt.setElse(els);
         }
@@ -484,7 +484,7 @@ public class NodeParser {
         expression.setParent(whileStmt);
         whileStmt.setExpression(expression);
 
-        Stmt body = (Stmt) process(node.getBody());
+        Stmt body = wrapBlock(node.getBody());
         body.setParent(whileStmt);
         whileStmt.setBody(body);
 
@@ -1342,6 +1342,21 @@ public class NodeParser {
         } catch (Exception e) {
             return ast.newWildcardType();
         }
+    }
+
+    private Blk wrapBlock(Statement node) {
+        Blk blk = null;
+        if(node instanceof Block) {
+            blk = (Blk) process(node);
+        } else {
+            int startLine = _cunit.getLineNumber(node.getStartPosition());
+            int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
+            blk = new Blk(_fileName, startLine, endLine, node);
+            List<Stmt> stmts = new ArrayList<>();
+            stmts.add((Stmt) process(node));
+            blk.setStatement(stmts);
+        }
+        return blk;
     }
 
 }
