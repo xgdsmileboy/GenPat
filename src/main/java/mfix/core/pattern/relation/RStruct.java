@@ -81,13 +81,17 @@ public class RStruct extends Relation {
     public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
         if(super.greedyMatch(r, matchedRelationMap, varMapping)) {
             RStruct rStruct = (RStruct) r;
-            if(_structure.rskind() == rStruct.getStructure().rskind()) {
+            matchedRelationMap.put(this, rStruct);
+            if(_structure.rskind() == rStruct.getStructure().rskind()
+                    && matchDependencies(rStruct.getDependencies(), matchedRelationMap, varMapping)) {
                 if(getParent() != null) {
                     if(getParent().greedyMatch(rStruct.getParent(), matchedRelationMap, varMapping)) {
                         matchedRelationMap.put(this, r);
                     }
                 }
                 return true;
+            } else {
+                matchedRelationMap.remove(this);
             }
         }
         return false;

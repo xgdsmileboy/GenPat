@@ -8,13 +8,20 @@ package mfix.core.node.match;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -115,6 +122,24 @@ public class Matcher {
 			methodDeclarations.add(md);
 			return true;
 		}
+	}
+
+	public static void greedyMatch(MethDecl src, MethDecl tar) {
+		List<Stmt> srcStmts = src.getBody().getStatement();
+		List<Stmt> tarStmts = tar.getBody().getStatement();
+
+		Map<Integer, Integer> map = match(srcStmts, tarStmts, new Comparator<Stmt>() {
+			@Override
+			public int compare(Stmt o1, Stmt o2) {
+				if(o1.compare(o2)) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+		});
+
+
 	}
 
 	public static Map<Integer, Integer> simMatch(List<Node> src, List<Node> tar, double similar) {

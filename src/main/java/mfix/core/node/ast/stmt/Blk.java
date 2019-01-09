@@ -7,8 +7,8 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.Constant;
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -39,6 +39,10 @@ public class Blk extends Stmt {
 
     public void setStatement(List<Stmt> statements) {
         _statements = statements;
+    }
+
+    public List<Stmt> getStatement() {
+        return _statements;
     }
 
     @Override

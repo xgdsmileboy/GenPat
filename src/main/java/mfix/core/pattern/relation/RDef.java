@@ -146,14 +146,16 @@ public class RDef extends ObjRelation {
         if(super.greedyMatch(r, matchedRelationMap, varMapping)
                 || (r.getRelationKind() == RelationKind.VIRTUALDEFINE && ((RDef) r).getName() != null)) {
             RDef def = (RDef) r;
-            String type = varMapping.get(_typeStr);
-            if(type == null || type.equals(def.getTypeString())) {
-                _matchedBinding = r;
-                r._matchedBinding = this;
-                matchedRelationMap.put(this, r);
-                varMapping.put(_typeStr, def.getTypeString());
-                varMapping.put(_name, def.getName());
-                return true;
+            if(matchDependencies(r.getDependencies(), matchedRelationMap, varMapping)) {
+                String type = varMapping.get(_typeStr);
+                if (type == null || type.equals(def.getTypeString())) {
+                    _matchedBinding = r;
+                    r._matchedBinding = this;
+                    matchedRelationMap.put(this, r);
+                    varMapping.put(_typeStr, def.getTypeString());
+                    varMapping.put(_name, def.getName());
+                    return true;
+                }
             }
         }
         return false;

@@ -267,6 +267,10 @@ public abstract class Relation implements Serializable {
         return _matchedBinding != null;
     }
 
+    public void setMatchBinding(Relation binding) {
+        _matchedBinding = binding;
+    }
+
     public Relation getBindingRelation() {
         return _matchedBinding;
     }
@@ -287,7 +291,7 @@ public abstract class Relation implements Serializable {
                 return false;
             }
         }
-        if(r.isConcerned() && r.getRelationKind() == getRelationKind()) {
+        if(!r.isConcerned() || r.getRelationKind() == getRelationKind()) {
             return true;
         }
         return false;
@@ -302,18 +306,48 @@ public abstract class Relation implements Serializable {
     public abstract boolean foldMatching(Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping);
 
 
+    protected boolean matchDependencies(Set<ObjRelation> otherDependencies, Map<Relation, Relation> matchedRelationMap,
+                                        Map<String, String> varMapping) {
+        Set<ObjRelation> relations = new HashSet<>();
+        for(Relation r : _dataDependon) {
+            if(r.isConcerned() && !r.alreadyMatched()) {
+                boolean notMatch = true;
+                for(ObjRelation other : otherDependencies) {
+                    if(!relations.contains(other)) {
+                        if(r.greedyMatch(other, matchedRelationMap, varMapping)) {
+                            relations.add(other);
+                            notMatch = false;
+                        }
+                    }
+                }
+                if(notMatch) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     protected boolean matchList(List<Relation> left, List<Relation> right, Map<Relation, Relation> matchedRelationMap,
                                 Map<String, String> varMapping) {
         Set<Integer> matched = new HashSet<>();
         for (int i = 0; i < left.size(); i++) {
-            for (int j = 0; j < right.size(); j++) {
-                if (matched.contains(j)) continue;
-                if (left.get(i).greedyMatch(right.get(j), matchedRelationMap, varMapping)) {
-                    matched.add(j);
+            Relation r = left.get(i);
+            if(r.isConcerned()) {
+                boolean notMatch = false;
+                for (int j = 0; j < right.size(); j++) {
+                    if (matched.contains(j)) continue;
+                    if (r.greedyMatch(right.get(j), matchedRelationMap, varMapping)) {
+                        matched.add(j);
+                        notMatch = false;
+                    }
+                }
+                if(notMatch) {
+                    return false;
                 }
             }
         }
-        return !matched.isEmpty();
+        return true;
     }
 
 }

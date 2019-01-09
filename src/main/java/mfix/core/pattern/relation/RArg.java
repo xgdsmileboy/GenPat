@@ -109,13 +109,16 @@ public class RArg extends Relation {
     public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
         if(super.greedyMatch(r, matchedRelationMap, varMapping)) {
             RArg arg = (RArg) r;
-            if (_function.greedyMatch(arg.getFunctionRelation(), matchedRelationMap, varMapping)
-                    && _arg.greedyMatch(arg.getArgument(), matchedRelationMap, varMapping)) {
-                matchedRelationMap.put(this, r);
+            matchedRelationMap.put(this, r);
+            if(_function.greedyMatch(arg.getFunctionRelation(), matchedRelationMap, varMapping)
+                    && _arg.greedyMatch(arg.getArgument(), matchedRelationMap, varMapping)
+                    && matchDependencies(arg.getDependencies(), matchedRelationMap, varMapping)) {
                 if(getParent() != null) {
                     getParent().greedyMatch(arg.getParent(), matchedRelationMap, varMapping);
                 }
                 return true;
+            } else {
+                matchedRelationMap.remove(this);
             }
         }
         return false;

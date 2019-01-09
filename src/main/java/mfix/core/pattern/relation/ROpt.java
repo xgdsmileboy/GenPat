@@ -12,6 +12,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.pattern.relation.op.AbsOperation;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,10 @@ public class ROpt extends ObjRelation {
     @Override
     public void addArg(RArg arg) {
         _args.add(arg);
+    }
+
+    public List<RArg> getArgs() {
+        return _args;
     }
 
     @Override
@@ -92,7 +97,20 @@ public class ROpt extends ObjRelation {
 
     @Override
     public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
-        return super.greedyMatch(r, matchedRelationMap, varMapping);
+        if(super.greedyMatch(r, matchedRelationMap, varMapping)) {
+            ROpt opt = (ROpt) r;
+            matchedRelationMap.put(this, opt);
+            if(matchDependencies(opt.getDependencies(), matchedRelationMap, varMapping)
+                    && matchList(new ArrayList<>(_args), new ArrayList<>(opt.getArgs()), matchedRelationMap, varMapping)) {
+                if(getParent() != null) {
+                    getParent().greedyMatch(opt.getParent(), matchedRelationMap, varMapping);
+                }
+                return true;
+            } else {
+                matchedRelationMap.remove(this);
+            }
+        }
+        return false;
     }
 
     @Override

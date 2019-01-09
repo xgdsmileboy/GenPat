@@ -259,29 +259,28 @@ public class RMcall extends ObjRelation {
     @Override
     public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
         if (super.greedyMatch(r, matchedRelationMap, varMapping)) {
-            RMcall mcall = (RMcall) r;
-            if (isAbstract() || (_type == mcall._type && _methodName.equals(mcall._methodName)
-                    && _args.size() == mcall._args.size())) {
-                _matchedBinding = r;
-                r._matchedBinding = this;
-                varMapping.put(_objType, mcall.getObjType());
+            RMcall call = (RMcall) r;
+            if(isAbstract() || (_type == call._type && _methodName.equals(call._methodName)
+                    && _args.size() == call._args.size())) {
+                varMapping.put(_objType, call.getObjType());
                 matchedRelationMap.put(this, r);
-                if(_receiver != null && mcall.getReciever() != null) {
-                    matchedRelationMap.put(_receiver, mcall.getReciever());
-                    _receiver.greedyMatch(mcall._receiver, matchedRelationMap, varMapping);
-                }
-                for(RArg arg : _args) {
-                    for(RArg g : mcall._args) {
-                        if(arg.getIndex() == g.getIndex()) {
-                            matchedRelationMap.put(arg, g);
-                            arg.greedyMatch(g, matchedRelationMap, varMapping);
+                if((_receiver == null || _receiver.greedyMatch(call.getReciever(), matchedRelationMap, varMapping))
+                        && matchDependencies(call.getDependencies(), matchedRelationMap, varMapping)) {
+                    _matchedBinding = r;
+                    r._matchedBinding = this;
+                    for(RArg arg : _args) {
+                        for(RArg g : call._args) {
+                            if(arg.getIndex() == g.getIndex()) {
+                                matchedRelationMap.put(arg, g);
+                                arg.greedyMatch(g, matchedRelationMap, varMapping);
+                            }
                         }
                     }
+                } else {
+                    varMapping.remove(_objType);
+                    matchedRelationMap.remove(this);
                 }
-                if (getParent() != null) {
-                    getParent().greedyMatch(r.getParent(), matchedRelationMap, varMapping);
-                }
-                return true;
+
             }
         }
         return false;

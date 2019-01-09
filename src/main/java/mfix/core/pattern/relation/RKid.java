@@ -111,13 +111,16 @@ public class RKid extends Relation {
     public boolean greedyMatch(Relation r, Map<Relation, Relation> matchedRelationMap, Map<String, String> varMapping) {
         if(super.greedyMatch(r, matchedRelationMap, varMapping)) {
             RKid kid = (RKid) r;
+            matchedRelationMap.put(this, r);
             if(_index == kid._index && _structure.greedyMatch(kid._structure, matchedRelationMap, varMapping)
-                    && _child.greedyMatch(kid._child, matchedRelationMap, varMapping)) {
-                matchedRelationMap.put(this, r);
+                    && _child.greedyMatch(kid._child, matchedRelationMap, varMapping)
+                    && matchDependencies(r.getDependencies(), matchedRelationMap, varMapping)) {
                 if(getParent() != null) {
                     getParent().greedyMatch(kid.getParent(), matchedRelationMap, varMapping);
                 }
                 return true;
+            } else {
+                matchedRelationMap.remove(this);
             }
         }
         return false;
