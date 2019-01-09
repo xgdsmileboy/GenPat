@@ -9,8 +9,12 @@ package mfix.core.pattern.relation;
 
 import mfix.common.util.Pair;
 import mfix.core.node.ast.Node;
+import mfix.core.node.modify.Deletion;
+import mfix.core.node.modify.Insertion;
+import mfix.core.node.modify.Modification;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -132,8 +136,50 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
-    public boolean canGoup(Relation r) {
+    public boolean canGroup(Relation r) {
         return r == _lhs || r == _rhs;
+    }
+
+    @Override
+    public boolean assemble(List<Modification> modifications, boolean isAdded) {
+        if(isAdded) {
+            StringBuffer buffer = buildTargetSource();
+            if (buffer != null) {
+                Insertion insertion = new Insertion(null, 0, buffer.toString(), false);
+                modifications.add(insertion);
+                return true;
+            }
+        } else {
+            if(alreadyMatched()) {
+                Deletion deletion = new Deletion(getBindingRelation().getAstNode());
+                modifications.add(deletion);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public StringBuffer buildTargetSource() {
+        StringBuffer buffer = new StringBuffer();
+        if(_matchedBinding != null) {
+            buffer.append(_matchedBinding.toString());
+        } else {
+            StringBuffer stringBuffer = _lhs.buildTargetSource();
+            if(stringBuffer == null){
+                return null;
+            }
+            buffer.append(stringBuffer);
+            buffer.append("=");
+
+            stringBuffer = _rhs.buildTargetSource();
+            if(stringBuffer == null) {
+                return null;
+            }
+            buffer.append(stringBuffer);
+            buffer.append(";");
+        }
+        return buffer;
     }
 
     @Override

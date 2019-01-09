@@ -10,6 +10,7 @@ package mfix.core.pattern.relation;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.modify.Modification;
 import mfix.core.pattern.Pattern;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
@@ -293,12 +294,24 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
-    public boolean canGoup(Relation r) {
+    public boolean canGroup(Relation r) {
         if(r == _receiver) return true;
         for(RArg arg : _args) {
             if(arg == r) return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean assemble(List<Modification> modifications, boolean isAdded) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public StringBuffer buildTargetSource() {
+        // TODO
+        return null;
     }
 
     @Override

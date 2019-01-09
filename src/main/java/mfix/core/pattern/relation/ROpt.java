@@ -9,6 +9,7 @@ package mfix.core.pattern.relation;
 
 import mfix.common.util.Pair;
 import mfix.core.node.ast.Node;
+import mfix.core.node.modify.Modification;
 import mfix.core.pattern.relation.op.AbsOperation;
 import mfix.core.stats.element.ElementCounter;
 
@@ -120,11 +121,23 @@ public class ROpt extends ObjRelation {
     }
 
     @Override
-    public boolean canGoup(Relation r) {
+    public boolean canGroup(Relation r) {
         for(RArg arg : _args) {
             if(arg == r) return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean assemble(List<Modification> modifications, boolean isAdded) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public StringBuffer buildTargetSource() {
+        // TODO
+        return null;
     }
 
     @Override

@@ -9,14 +9,12 @@ package mfix.core.pattern;
 
 import mfix.common.util.Constant;
 import mfix.common.util.Pair;
-import mfix.core.pattern.relation.ObjRelation;
 import mfix.core.pattern.relation.RDef;
 import mfix.core.pattern.relation.RKid;
 import mfix.core.pattern.relation.RMcall;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.pattern.solver.Z3Solver;
 import mfix.core.stats.element.ElementCounter;
-import org.eclipse.jdt.internal.core.index.Index;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -206,83 +204,76 @@ public class Pattern implements Serializable {
         for(Map.Entry<RMcall, RMcall> entry : rMap.entrySet()) {
             entry.getKey().greedyMatch(entry.getValue(), matchedRelationMap, varMapping);
         }
-
-//        for(Map.Entry<Relation, Relation> entry : matchedRelationMap.entrySet()) {
-//            if(entry.getKey() instanceof RDef || entry.getValue() instanceof RDef) {
-//                continue;
-//            }
-//            Node left = entry.getKey().getAstNode().getParentStmt();
-//            Node right = entry.getValue().getAstNode().getParentStmt();
-//            // top-down match
-//        }
-
-        Map<Relation, Integer> old2Match = new HashMap<>();
-        int index = 0;
-        for(Relation r : _oldRelations) {
-            if(r.isConcerned() && r.alreadyMatched() && r instanceof ObjRelation) {
-                old2Match.put(r, index ++);
-            }
-        }
-
-
-
-        // check if all the level 0 relation have already matched
-        for(Relation r : _oldRelations) {
-            if(r.getExpandedLevel() == 0) {
-                if(r.alreadyMatched()) {
-                    System.out.println(r + " >>>> " + r.getBindingRelation());
-                } else {
-                    System.out.println("?????? " + r );
-                }
-            }
-        }
-
-
-
-
-        List<Relation> newRelations = getMinimizedNewRelations(false);
-        for(Relation r : newRelations) {
-            System.out.println(r);
-        }
-
-
-        return true;
-
-
-//        // TODO : p is an concrete instance for a potential buggy code
-//        List<Relation> pRelations = getMinimizedOldRelations(true);
-//        List<Relation> bRelations = p.getOldRelations();
-//        Map<Relation, Integer> absPtnOldR2IdxMap = mapRelation2LstIndex(pRelations);
-//        Map<Relation, Integer> buggyPtnR2IdexMap = mapRelation2LstIndex(bRelations);
 //
-//        int pLen = pRelations.size();
-//        int bLen = bRelations.size();
-//        int[][] matrix = new int[pLen][bLen];
-//        Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
-//        Map<String, String> varMapping = new HashMap<>();
-//        Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
-//        Set<Pair<Integer, Integer>> set;
-//        for(int i = 0; i < pLen; i++) {
-//            for(int j = 0; j < bLen; j++) {
-//                dependencies.clear();
-//                if(pRelations.get(i).foldMatching(bRelations.get(j), dependencies, varMapping)) {
-//                    matrix[i][j] = 1;
-//                    String key = i + "_" + j;
-//                    set = new HashSet<>();
-//                    for (Pair<Relation, Relation> pair : dependencies) {
-//                        set.add(new Pair<>(absPtnOldR2IdxMap.get(pair.getFirst()), buggyPtnR2IdexMap.get(pair.getSecond())));
-//                    }
-//                    loc2dependencies.put(key, set);
+////        for(Map.Entry<Relation, Relation> entry : matchedRelationMap.entrySet()) {
+////            if(entry.getKey() instanceof RDef || entry.getValue() instanceof RDef) {
+////                continue;
+////            }
+////            Node left = entry.getKey().getAstNode().getParentStmt();
+////            Node right = entry.getValue().getAstNode().getParentStmt();
+////            // top-down match
+////        }
+//
+//        Map<Relation, Integer> old2Match = new HashMap<>();
+//        int index = 0;
+//        for(Relation r : _oldRelations) {
+//            if(r.isConcerned() && r.alreadyMatched() && r instanceof ObjRelation) {
+//                old2Match.put(r, index ++);
+//            }
+//        }
+//
+//        // check if all the level 0 relation have already matched
+//        for(Relation r : _oldRelations) {
+//            if(r.getExpandedLevel() == 0) {
+//                if(r.alreadyMatched()) {
+//                    System.out.println(r + " >>>> " + r.getBindingRelation());
+//                } else {
+//                    System.out.println("?????? " + r );
 //                }
 //            }
 //        }
-//        Z3Solver solver = new Z3Solver();
-//        Map<Integer, Integer> map = solver.checkSat(matrix, loc2dependencies);
-//        if(map != null) {
-//
-//        }
-//
-//        return false;
+
+        List<Relation> source = new ArrayList<>(getMinimizedNewRelations(false));
+        Set<Set<Relation>> groups = new HashSet<>();
+        while(!source.isEmpty()) {
+            Set<Relation> G = new HashSet<>();
+            G.add(source.get(source.size() - 1));
+            source.remove(source.size() - 1);
+            G = grouping(source, G);
+            groups.add(G);
+        }
+
+        for(Set<Relation> relations : groups) {
+            System.out.println("Groups >>> ");
+            for(Relation r : relations) {
+                System.out.println(r);
+            }
+        }
+
+        return true;
+    }
+
+    private Set<Relation> grouping(List<Relation> source, Set<Relation> G) {
+        int expanded = -1;
+        for(int i = source.size() - 1; i >= 0;  i--) {
+            Relation r = source.get(i);
+            for(Relation rInG : G) {
+                if(r.canGroup(rInG) || rInG.canGroup(r)) {
+                    expanded = i;
+                    break;
+                }
+            }
+            if(expanded >= 0) {
+                break;
+            }
+        }
+        if(expanded >= 0) {
+            G.add(source.get(expanded));
+            source.remove(expanded);
+            return grouping(source, G);
+        } else {
+            return G;
+        }
     }
 
     /**

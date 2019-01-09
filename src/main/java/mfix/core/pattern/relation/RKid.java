@@ -9,9 +9,11 @@ package mfix.core.pattern.relation;
 
 import mfix.common.util.Pair;
 import mfix.core.node.ast.Node;
+import mfix.core.node.modify.Modification;
 import mfix.core.stats.element.ElementCounter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -133,8 +135,20 @@ public class RKid extends Relation {
     }
 
     @Override
-    public boolean canGoup(Relation r) {
+    public boolean canGroup(Relation r) {
         return r == _structure || r == _child;
+    }
+
+    @Override
+    public boolean assemble(List<Modification> modifications, boolean isAdded) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public StringBuffer buildTargetSource() {
+        // TODO
+        return null;
     }
 
     @Override

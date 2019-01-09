@@ -9,8 +9,10 @@ package mfix.core.pattern.relation;
 
 import mfix.common.util.Pair;
 import mfix.core.node.ast.Node;
+import mfix.core.node.modify.Modification;
 import mfix.core.stats.element.ElementCounter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -78,8 +80,20 @@ public class RVDef extends RDef {
     }
 
     @Override
-    public boolean canGoup(Relation r) {
-        return super.canGoup(r);
+    public boolean canGroup(Relation r) {
+        return super.canGroup(r);
+    }
+
+    @Override
+    public boolean assemble(List<Modification> modifications, boolean isAdded) {
+        // TODO
+        return super.assemble(modifications, isAdded);
+    }
+
+    @Override
+    public StringBuffer buildTargetSource() {
+        // TODO
+        return super.buildTargetSource();
     }
 
     @Override

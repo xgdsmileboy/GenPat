@@ -9,6 +9,7 @@ package mfix.core.pattern.relation;
 
 import mfix.common.util.Pair;
 import mfix.core.node.ast.Node;
+import mfix.core.node.modify.Modification;
 import mfix.core.stats.element.ElementCounter;
 
 import java.io.Serializable;
@@ -262,6 +263,7 @@ public abstract class Relation implements Serializable {
     //**************************************************************//
     protected Relation _matchedBinding = null;
     protected Relation _foldParent = null;
+    protected boolean _assembled = false;
 
     public boolean alreadyMatched() {
         return _matchedBinding != null;
@@ -275,7 +277,15 @@ public abstract class Relation implements Serializable {
         return _matchedBinding;
     }
 
-    public abstract boolean canGoup(Relation r);
+    public boolean isAssembled() {
+        return _assembled;
+    }
+
+    public abstract boolean canGroup(Relation r);
+
+    public abstract StringBuffer buildTargetSource();
+
+    public abstract boolean assemble(List<Modification> modifications, boolean isAdded);
 
     /**
      * Perform the core pattern matching algorithm when given a potential buggy pattern
