@@ -6,10 +6,11 @@
  */
 package mfix.core.node.ast;
 
-import mfix.core.node.comp.NodeComparator;
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.comp.NodeComparator;
+import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.relation.Relation;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.io.Serializable;
@@ -239,6 +240,19 @@ public abstract class Node implements NodeComparator, Serializable {
      * and cache the result
      */
     protected abstract void tokenize();
+
+    /*********************************************************/
+    /*********** interaction with relation model *************/
+    /*********************************************************/
+
+    private Relation _binding;
+    public void setBindingRelation(Relation r) {
+        _binding = r;
+    }
+
+    public Relation getBindingRelation() {
+        return _binding;
+    }
 
 
     @Override

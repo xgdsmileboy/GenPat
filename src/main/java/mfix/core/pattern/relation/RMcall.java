@@ -9,14 +9,19 @@ package mfix.core.pattern.relation;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.pattern.Pattern;
 import mfix.core.node.ast.Node;
+import mfix.core.pattern.Pattern;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
 import mfix.core.stats.element.MethodElement;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -261,10 +266,18 @@ public class RMcall extends ObjRelation {
                 r._matchedBinding = this;
                 varMapping.put(_objType, mcall.getObjType());
                 matchedRelationMap.put(this, r);
-                if (_receiver != null) {
+                if(_receiver != null && mcall.getReciever() != null) {
+                    matchedRelationMap.put(_receiver, mcall.getReciever());
                     _receiver.greedyMatch(mcall._receiver, matchedRelationMap, varMapping);
                 }
-                matchList(new LinkedList<>(_args), new LinkedList<>(mcall._args), matchedRelationMap, varMapping);
+                for(RArg arg : _args) {
+                    for(RArg g : mcall._args) {
+                        if(arg.getIndex() == g.getIndex()) {
+                            matchedRelationMap.put(arg, g);
+                            arg.greedyMatch(g, matchedRelationMap, varMapping);
+                        }
+                    }
+                }
                 if (getParent() != null) {
                     getParent().greedyMatch(r.getParent(), matchedRelationMap, varMapping);
                 }

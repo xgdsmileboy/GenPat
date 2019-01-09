@@ -9,12 +9,14 @@ package mfix.core.pattern;
 
 import mfix.common.util.Constant;
 import mfix.common.util.Pair;
+import mfix.core.pattern.relation.ObjRelation;
 import mfix.core.pattern.relation.RDef;
 import mfix.core.pattern.relation.RKid;
 import mfix.core.pattern.relation.RMcall;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.pattern.solver.Z3Solver;
 import mfix.core.stats.element.ElementCounter;
+import org.eclipse.jdt.internal.core.index.Index;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -199,22 +201,50 @@ public class Pattern implements Serializable {
             }
         }
 
-        Map<Relation, Relation> dependencies = new HashMap<>();
+        Map<Relation, Relation> matchedRelationMap = new HashMap<>();
         Map<String, String> varMapping = new HashMap<>();
         for(Map.Entry<RMcall, RMcall> entry : rMap.entrySet()) {
-            entry.getKey().greedyMatch(entry.getValue(),dependencies,varMapping);
+            entry.getKey().greedyMatch(entry.getValue(), matchedRelationMap, varMapping);
         }
+
+//        for(Map.Entry<Relation, Relation> entry : matchedRelationMap.entrySet()) {
+//            if(entry.getKey() instanceof RDef || entry.getValue() instanceof RDef) {
+//                continue;
+//            }
+//            Node left = entry.getKey().getAstNode().getParentStmt();
+//            Node right = entry.getValue().getAstNode().getParentStmt();
+//            // top-down match
+//        }
+
+        Map<Relation, Integer> old2Match = new HashMap<>();
+        int index = 0;
+        for(Relation r : _oldRelations) {
+            if(r.isConcerned() && r.alreadyMatched() && r instanceof ObjRelation) {
+                old2Match.put(r, index ++);
+            }
+        }
+
+
 
         // check if all the level 0 relation have already matched
         for(Relation r : _oldRelations) {
             if(r.getExpandedLevel() == 0) {
                 if(r.alreadyMatched()) {
-                    System.out.println(r + " >>>>> " + r.getBindingRelation());
+                    System.out.println(r + " >>>> " + r.getBindingRelation());
                 } else {
-                    System.out.println("?????? -- " + r);
+                    System.out.println("?????? " + r );
                 }
             }
         }
+
+
+
+
+        List<Relation> newRelations = getMinimizedNewRelations(false);
+        for(Relation r : newRelations) {
+            System.out.println(r);
+        }
+
 
         return true;
 

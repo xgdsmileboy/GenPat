@@ -114,6 +114,9 @@ public abstract class Relation implements Serializable {
 
     protected Relation(Node node, RelationKind kind) {
         _node = node;
+        if(_node != null) {
+            _node.setBindingRelation(this);
+        }
         _relationKind = kind;
         _dataDependon = new HashSet<>();
         _usedBy = new HashSet<>();
