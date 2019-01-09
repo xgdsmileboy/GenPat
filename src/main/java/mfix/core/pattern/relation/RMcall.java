@@ -293,6 +293,15 @@ public class RMcall extends ObjRelation {
     }
 
     @Override
+    public boolean canGoup(Relation r) {
+        if(r == _receiver) return true;
+        for(RArg arg : _args) {
+            if(arg == r) return true;
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return getExprString();
     }

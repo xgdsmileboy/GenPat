@@ -131,6 +131,11 @@ public class RArg extends Relation {
     }
 
     @Override
+    public boolean canGoup(Relation r) {
+        return r == _function || r == _arg;
+    }
+
+    @Override
     public String toString() {
         return String.format("[RArg (%d)| %s]", _index, _function.getExprString());
     }

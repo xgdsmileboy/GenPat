@@ -168,6 +168,11 @@ public class RDef extends ObjRelation {
     }
 
     @Override
+    public boolean canGoup(Relation r) {
+        return r == _initializer;
+    }
+
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         if(_modifiers != null) {

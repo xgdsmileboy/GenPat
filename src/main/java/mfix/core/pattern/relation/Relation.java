@@ -275,6 +275,8 @@ public abstract class Relation implements Serializable {
         return _matchedBinding;
     }
 
+    public abstract boolean canGoup(Relation r);
+
     /**
      * Perform the core pattern matching algorithm when given a potential buggy pattern
      *

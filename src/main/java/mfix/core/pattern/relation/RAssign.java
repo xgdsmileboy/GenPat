@@ -132,6 +132,11 @@ public class RAssign extends ObjRelation {
     }
 
     @Override
+    public boolean canGoup(Relation r) {
+        return r == _lhs || r == _rhs;
+    }
+
+    @Override
     public String toString() {
         return _lhs.getExprString() + "=" + _rhs.getExprString();
     }

@@ -104,6 +104,11 @@ public class RStruct extends Relation {
     }
 
     @Override
+    public boolean canGoup(Relation r) {
+        return r.getParent() == this;
+    }
+
+    @Override
     public String toString() {
         return String.format("[%s-%d]", _structure.toString(), _id);
     }

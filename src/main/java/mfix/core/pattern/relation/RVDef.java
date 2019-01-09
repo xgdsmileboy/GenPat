@@ -78,6 +78,11 @@ public class RVDef extends RDef {
     }
 
     @Override
+    public boolean canGoup(Relation r) {
+        return super.canGoup(r);
+    }
+
+    @Override
     public String toString() {
         if(_name != null) {
             return _name;
