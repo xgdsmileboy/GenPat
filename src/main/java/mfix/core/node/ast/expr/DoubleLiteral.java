@@ -53,5 +53,5 @@ public class DoubleLiteral extends NumLiteral {
 		}
 		return false;
 	}
-	
+
 }

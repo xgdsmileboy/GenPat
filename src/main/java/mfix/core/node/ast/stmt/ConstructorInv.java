@@ -6,10 +6,10 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -106,4 +106,23 @@ public class ConstructorInv  extends Stmt {
 		_fVector.combineFeature(_arguments.getFeatureVector());
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		ConstructorInv constructorInv = null;
+		if(getBindingNode() != null) {
+			constructorInv = (ConstructorInv) getBindingNode();
+			match = (constructorInv == node);
+		} else if (canBinding(node)) {
+			constructorInv = (ConstructorInv) node;
+			setBindingNode(constructorInv);
+			match = true;
+		}
+		if(constructorInv == null) {
+			continueTopDownMatchNull();
+		} else {
+			_arguments.postAccurateMatch(constructorInv.getArguments());
+		}
+		return match;
+	}
 }

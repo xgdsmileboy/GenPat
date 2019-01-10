@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -104,6 +104,27 @@ public class WhileStmt extends Stmt {
 		_fVector.inc(FVector.KEY_WHILE);
 		_fVector.combineFeature(_expression.getFeatureVector());
 		_fVector.combineFeature(_body.getFeatureVector());
+	}
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		WhileStmt whileStmt = null;
+		if(getBindingNode() != null) {
+			whileStmt = (WhileStmt) getBindingNode();
+			match = (whileStmt == node);
+		} else if(canBinding(node)) {
+			whileStmt = (WhileStmt) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(whileStmt == null) {
+			continueTopDownMatchNull();
+		} else {
+			_expression.postAccurateMatch(whileStmt.getExpression());
+			_body.postAccurateMatch(whileStmt.getBody());
+		}
+		return match;
 	}
 }
 

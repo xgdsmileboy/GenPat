@@ -6,13 +6,15 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.Vdf;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author: Jiajun
@@ -142,5 +144,24 @@ public class VarDeclarationStmt extends Stmt {
 			_fVector.combineFeature(vdf.getFeatureVector());
 		}
 	}
-	
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		VarDeclarationStmt vds = null;
+		if(getBindingNode() != null) {
+			vds = (VarDeclarationStmt) getBindingNode();
+			match = (vds == node);
+		} else if(canBinding(node)) {
+			vds = (VarDeclarationStmt) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(vds == null) {
+			continueTopDownMatchNull();
+		} else {
+			greedyMatchListNode(_fragments, vds.getFragments());
+		}
+		return match;
+	}
 }

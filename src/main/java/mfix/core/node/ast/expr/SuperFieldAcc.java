@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -101,5 +101,28 @@ public class SuperFieldAcc extends Expr {
 			_fVector.combineFeature(_name.getFeatureVector());
 		}
 		_fVector.combineFeature(_identifier.getFeatureVector());	
+	}
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		SuperFieldAcc superFieldAcc = null;
+		boolean match = false;
+		if(getBindingNode() != null) {
+			superFieldAcc = (SuperFieldAcc) getBindingNode();
+			match = (superFieldAcc == node);
+		} else if(canBinding(node)) {
+			superFieldAcc = (SuperFieldAcc) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(superFieldAcc == null) {
+			continueTopDownMatchNull();
+		} else {
+			if(_name != null) {
+				_name.postAccurateMatch(superFieldAcc._name);
+			}
+			_identifier.postAccurateMatch(superFieldAcc._identifier);
+		}
+		return match;
 	}
 }

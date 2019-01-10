@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -93,5 +93,26 @@ public class AryAcc extends Expr {
 		_fVector.combineFeature(_array.getFeatureVector());
 		_fVector.combineFeature(_index.getFeatureVector());
 	}
-	
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		AryAcc aryAcc = null;
+		if(getBindingNode() != null) {
+			aryAcc = (AryAcc) getBindingNode();
+			match = (aryAcc == node);
+		} else if(canBinding(node)) {
+			aryAcc = (AryAcc) node;
+			setBindingNode(node);
+			match = true;
+		}
+
+		if(aryAcc == null) {
+			continueTopDownMatchNull();
+		} else {
+			_index.postAccurateMatch(aryAcc.getIndex());
+			_array.postAccurateMatch(aryAcc.getArray());
+		}
+		return match;
+	}
 }

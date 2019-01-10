@@ -10,6 +10,7 @@ import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.pattern.relation.Relation;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -242,6 +243,47 @@ public abstract class Node implements NodeComparator, Serializable {
     protected abstract void tokenize();
 
     /*********************************************************/
+    /******* record matched information for change ***********/
+    /*********************************************************/
+    private Node _bindingNode;
+    protected List<Modification> _modifications;
+
+    public void setBindingNode(Node binding) {
+        _bindingNode = binding;
+        if(_bindingNode != null) {
+            binding._bindingNode = this;
+        }
+    }
+
+    public Node getBindingNode() {
+        return _bindingNode;
+    }
+
+    protected boolean canBinding(Node node) {
+        return node != null && node.getNodeType() == _nodeType && node.getBindingNode() == null;
+    }
+
+    protected void continueTopDownMatchNull() {
+        for(Node node : getAllChildren()) {
+            node.postAccurateMatch(null);
+        }
+    }
+
+    protected void greedyMatchListNode(List<? extends Node> lst1, List<? extends  Node> lst2) {
+        Set<Node> set = new HashSet<>();
+        for (Node node : lst1) {
+            for (Node other : lst2) {
+                if(!set.contains(other) && node.postAccurateMatch(other)) {
+                    set.add(other);
+                }
+            }
+        }
+    }
+
+    public abstract boolean postAccurateMatch(Node node);
+
+
+    /*********************************************************/
     /*********** interaction with relation model *************/
     /*********************************************************/
 
@@ -253,7 +295,6 @@ public abstract class Node implements NodeComparator, Serializable {
     public Relation getBindingRelation() {
         return _binding;
     }
-
 
     @Override
     public String toString() {

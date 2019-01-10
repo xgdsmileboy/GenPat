@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -77,4 +77,23 @@ public class TyLiteral extends Expr {
 		_fVector.inc(FVector.E_TYPE);
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		TyLiteral tyLiteral = null;
+		boolean match = false;
+		if(getBindingNode() != null) {
+			tyLiteral = (TyLiteral) getBindingNode();
+			match = (tyLiteral == node);
+		} else if(canBinding(node)) {
+			tyLiteral = (TyLiteral) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(tyLiteral == null) {
+			continueTopDownMatchNull();
+		} else {
+			_type.postAccurateMatch(tyLiteral._type);
+		}
+		return match;
+	}
 }

@@ -6,11 +6,15 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -135,5 +139,28 @@ public class MethodInv extends Expr {
 		}
 		_fVector.combineFeature(_arguments.getFeatureVector());
 	}
-	
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		MethodInv methodInv = null;
+		boolean match = false;
+		if(getBindingNode() != null) {
+			methodInv = (MethodInv) getBindingNode();
+			match = (methodInv == node);
+		} else if(canBinding(node)) {
+			methodInv = (MethodInv) node;
+			setBindingNode(methodInv);
+			match = true;
+		}
+		if (methodInv == null) {
+			continueTopDownMatchNull();
+		} else {
+			if(_expression != null) {
+				_expression.postAccurateMatch(methodInv.getExpression());
+			}
+			_name.postAccurateMatch(methodInv.getName());
+			_arguments.postAccurateMatch(methodInv.getArguments());
+		}
+		return match;
+	}
 }

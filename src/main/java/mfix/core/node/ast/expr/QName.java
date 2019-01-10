@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -103,4 +103,24 @@ public class QName extends Label {
 		}
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		QName qName = null;
+		boolean match = false;
+		if(getBindingNode() != null) {
+			qName = (QName) getBindingNode();
+			match = (qName == node);
+		} else if(canBinding(node)) {
+			qName = (QName) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(qName == null) {
+			continueTopDownMatchNull();
+		} else {
+			_name.postAccurateMatch(qName._name);
+			_sname.postAccurateMatch(qName.getSName());
+		}
+		return match;
+	}
 }

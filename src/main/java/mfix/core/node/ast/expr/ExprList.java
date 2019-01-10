@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -105,4 +105,24 @@ public class ExprList extends Node {
 		}
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		ExprList exprList = null;
+		boolean match = false;
+		if(getBindingNode() != null) {
+			exprList = (ExprList) getBindingNode();
+			match = (exprList == node);
+		} else if(canBinding(node)) {
+			exprList = (ExprList) node;
+			setBindingNode(node);
+			match = true;
+		}
+
+		if(exprList == null) {
+			continueTopDownMatchNull();
+		} else {
+			greedyMatchListNode(_exprs, exprList.getExpr());
+		}
+		return match;
+	}
 }

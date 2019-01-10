@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -121,4 +121,27 @@ public class Svd extends Expr {
 		}
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		Svd svd = null;
+		boolean match = false;
+		if (getBindingNode() != null) {
+			svd = (Svd) getBindingNode();
+			match = (svd == node);
+		} else if(canBinding(node)) {
+			svd = (Svd) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(svd == null) {
+			continueTopDownMatchNull();
+		} else {
+			_decType.postAccurateMatch(svd.getDeclType());
+			_name.postAccurateMatch(svd.getName());
+			if(_initializer != null) {
+				_initializer.postAccurateMatch(svd.getInitializer());
+			}
+		}
+		return match;
+	}
 }

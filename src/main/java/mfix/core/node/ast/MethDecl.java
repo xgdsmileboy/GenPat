@@ -6,11 +6,11 @@
  */
 package mfix.core.node.ast;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Blk;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
@@ -196,6 +196,31 @@ public class MethDecl extends Node {
         if (_body != null) {
             _fVector.combineFeature(_body.getFeatureVector());
         }
+    }
+
+    @Override
+    public boolean postAccurateMatch(Node node) {
+        MethDecl methDecl = null;
+        if (getBindingNode() != null) {
+            methDecl = (MethDecl) getBindingNode();
+        } else if (node != null  && node instanceof MethDecl) {
+            methDecl = (MethDecl) node;
+            if (_name.getName().equals(methDecl.getName().getName())
+                    && _arguments.size() == methDecl.getArguments().size()) {
+                setBindingNode(methDecl);
+            } else {
+                methDecl = null;
+            }
+        }
+        if (methDecl != null) {
+            List<Expr> arguments = methDecl.getArguments();
+            _name.postAccurateMatch(methDecl.getName());
+            for(int i = 0; i < _arguments.size() && i < arguments.size(); i++) {
+                _arguments.get(i).postAccurateMatch(arguments.get(i));
+            }
+            _body.postAccurateMatch(methDecl.getBody());
+        }
+        return true;
     }
 
 }

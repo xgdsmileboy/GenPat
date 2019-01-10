@@ -6,10 +6,10 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ClassInstCreation;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -97,4 +97,23 @@ public class ThrowStmt extends Stmt {
 		_fVector.combineFeature(_expression.getFeatureVector());
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		ThrowStmt throwStmt = null;
+		if(getBindingNode() != null) {
+			throwStmt = (ThrowStmt) getBindingNode();
+			match = (throwStmt == node);
+		} else if(canBinding(node)) {
+			throwStmt = (ThrowStmt) node;
+			match = true;
+		}
+
+		if(throwStmt == null) {
+			continueTopDownMatchNull();
+		} else {
+			_expression.postAccurateMatch(throwStmt.getExpression());
+		}
+		return false;
+	}
 }

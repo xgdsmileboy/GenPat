@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -93,5 +93,26 @@ public class AryInitializer extends Expr {
 			}
 		}
 	}
-	
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		AryInitializer aryInitializer = null;
+		if(getBindingNode() != null) {
+			aryInitializer = (AryInitializer) getBindingNode();
+			match = (aryInitializer == node);
+		} else if(canBinding(node)) {
+			aryInitializer = (AryInitializer) node;
+			setBindingNode(node);
+			match = true;
+		}
+
+		if(aryInitializer == null) {
+			continueTopDownMatchNull();
+		} else {
+			greedyMatchListNode(_expressions, aryInitializer._expressions);
+		}
+
+		return match;
+	}
 }

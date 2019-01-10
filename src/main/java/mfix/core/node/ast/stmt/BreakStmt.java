@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.SName;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -94,4 +94,21 @@ public class BreakStmt extends Stmt {
         }
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		BreakStmt breakStmt = null;
+		if(getBindingNode() != null) {
+			breakStmt = (BreakStmt) getBindingNode();
+			match = (breakStmt == node);
+		} else if(canBinding(node)) {
+			breakStmt = (BreakStmt) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(breakStmt != null && _identifier != null) {
+			_identifier.postAccurateMatch(breakStmt._identifier);
+		}
+		return match;
+	}
 }

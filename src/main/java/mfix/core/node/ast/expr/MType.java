@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
@@ -113,4 +113,13 @@ public class MType extends Node {
 		return _typeStr.equals(mType._typeStr);
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		if(getBindingNode() == node) return true;
+		if(getBindingNode() == null && canBinding(node)) {
+			setBindingNode(node);
+			return true;
+		}
+		return false;
+	}
 }

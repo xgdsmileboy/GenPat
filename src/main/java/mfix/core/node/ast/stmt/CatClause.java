@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Svd;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -109,5 +109,26 @@ public class CatClause extends Node {
 		_fVector.inc(FVector.KEY_CATCH);
 		_fVector.combineFeature(_exception.getFeatureVector());
 		_fVector.combineFeature(_blk.getFeatureVector());
+	}
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		CatClause catClause = null;
+		boolean match = false;
+		if(getBindingNode() != null) {
+			catClause = (CatClause) getBindingNode();
+			match = (catClause == node);
+		} else if(canBinding(node)) {
+			catClause = (CatClause) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(catClause == null) {
+			continueTopDownMatchNull();
+		} else {
+			_exception.postAccurateMatch(catClause.getException());
+			_blk.postAccurateMatch(catClause.getBody());
+		}
+		return match;
 	}
 }

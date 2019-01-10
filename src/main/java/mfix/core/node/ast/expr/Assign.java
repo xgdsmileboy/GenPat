@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -102,4 +102,26 @@ public class Assign extends Expr {
 		_fVector.combineFeature(_rhs.getFeatureVector());
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		Assign assign = null;
+		if(getBindingNode() != null) {
+			assign = (Assign) getBindingNode();
+			match = (assign == node);
+		} else if(canBinding(node)) {
+			assign = (Assign) node;
+			setBindingNode(node);
+			match = true;
+		}
+
+		if(assign == null) {
+			continueTopDownMatchNull();
+		} else {
+			_lhs.postAccurateMatch(assign.getLhs());
+			_rhs.postAccurateMatch(assign.getRhs());
+		}
+
+		return match;
+	}
 }

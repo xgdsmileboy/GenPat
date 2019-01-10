@@ -108,4 +108,23 @@ public class Blk extends Stmt {
         }
     }
 
+    @Override
+    public boolean postAccurateMatch(Node node) {
+        Blk blk = null;
+        boolean match = false;
+        if(getBindingNode() != null) {
+            blk = (Blk) getBindingNode();
+            match = (getBindingNode() == node);
+        } else if(canBinding(node)) {
+            blk = (Blk) node;
+            setBindingNode(node);
+            match = true;
+        }
+        if(blk == null) {
+            continueTopDownMatchNull();
+        } else {
+            greedyMatchListNode(_statements, blk.getStatement());
+        }
+        return match;
+    }
 }

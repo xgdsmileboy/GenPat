@@ -7,9 +7,9 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.Constant;
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -119,4 +119,22 @@ public class SwitchStmt extends Stmt {
 		}
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		SwitchStmt switchStmt = null;
+		if(getBindingNode() != null) {
+			switchStmt = (SwitchStmt) getBindingNode();
+			match = (switchStmt == node);
+		} else if(canBinding(node)) {
+			switchStmt = (SwitchStmt) node;
+			match = true;
+		}
+		if(switchStmt == null) {
+			continueTopDownMatchNull();
+		} else {
+			greedyMatchListNode(_statements, switchStmt.getStatements());
+		}
+		return match;
+	}
 }

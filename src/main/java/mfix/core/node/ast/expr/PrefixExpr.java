@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -89,4 +89,24 @@ public class PrefixExpr extends Expr {
 		_fVector.combineFeature(_expression.getFeatureVector());
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		PrefixExpr prefixExpr = null;
+		boolean match = false;
+		if(getBindingNode() != null) {
+			prefixExpr = (PrefixExpr) getBindingNode();
+			match = (prefixExpr == node);
+		} else if (canBinding(node)) {
+			prefixExpr = (PrefixExpr) node;
+			setBindingNode(prefixExpr);
+			match = true;
+		}
+		if(prefixExpr == null) {
+			continueTopDownMatchNull();
+		} else {
+			_expression.postAccurateMatch(prefixExpr.getExpression());
+			_operator.postAccurateMatch(prefixExpr.getOperator());
+		}
+		return match;
+	}
 }

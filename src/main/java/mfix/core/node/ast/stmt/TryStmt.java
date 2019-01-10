@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.VarDeclarationExpr;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -213,6 +213,34 @@ public class TryStmt extends Stmt {
 			_fVector.combineFeature(_finallyBlk.getFeatureVector());
 		}
 	}
-	
-	
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		TryStmt tryStmt = null;
+		if(getBindingNode() != null) {
+			tryStmt = (TryStmt) getBindingNode();
+			match = (tryStmt == node);
+		} else if(canBinding(node)) {
+			tryStmt = (TryStmt) node;
+			setBindingNode(tryStmt);
+			match = true;
+		}
+		if(tryStmt == null) {
+			continueTopDownMatchNull();
+		} else {
+			if(_resource != null && tryStmt.getResource() != null) {
+				greedyMatchListNode(_resource, tryStmt.getResource());
+			}
+			_blk.postAccurateMatch(tryStmt.getBody());
+			if(_catches != null && tryStmt.getCatches() != null) {
+			    greedyMatchListNode(_catches, tryStmt.getCatches());
+            }
+			if(_finallyBlk != null) {
+			    _finallyBlk.postAccurateMatch(tryStmt.getFinally());
+            }
+		}
+
+		return match;
+	}
 }

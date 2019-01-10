@@ -6,10 +6,10 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.Svd;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class EnhancedForStmt extends Stmt {
 		}
 		return match;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -125,4 +125,31 @@ public class EnhancedForStmt extends Stmt {
 		_fVector.combineFeature(_statement.getFeatureVector());
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		EnhancedForStmt enhancedForStmt = null;
+		if(getBindingNode() != null) {
+			enhancedForStmt = (EnhancedForStmt) getBindingNode();
+			_expression.postAccurateMatch(enhancedForStmt.getExpression());
+			match = (enhancedForStmt == node);
+		} else if(canBinding(node)) {
+			enhancedForStmt = (EnhancedForStmt) node;
+			if(_expression.postAccurateMatch(enhancedForStmt.getExpression())) {
+				setBindingNode(node);
+				match = true;
+			} else {
+				enhancedForStmt = null;
+			}
+		}
+
+		if(enhancedForStmt == null) {
+			continueTopDownMatchNull();
+		} else {
+			_varDecl.postAccurateMatch(enhancedForStmt.getParameter());
+			_statement.postAccurateMatch(enhancedForStmt.getBody());
+		}
+
+		return match;
+	}
 }

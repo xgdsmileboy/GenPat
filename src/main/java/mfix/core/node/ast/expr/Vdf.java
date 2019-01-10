@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -135,4 +135,26 @@ public class Vdf extends Node {
 		}
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		Vdf vdf = null;
+		boolean match = false;
+		if (getBindingNode() != null) {
+			vdf = (Vdf) getBindingNode();
+			match = (vdf == node);
+		} else if(canBinding(node)) {
+			vdf = (Vdf) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(vdf == null) {
+			continueTopDownMatchNull();
+		} else {
+			_identifier.postAccurateMatch(vdf._identifier);
+			if(_expression != null) {
+				_expression.postAccurateMatch(vdf.getExpression());
+			}
+		}
+		return match;
+	}
 }

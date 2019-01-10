@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -91,5 +91,26 @@ public class CastExpr extends Expr {
 		_fVector = new FVector();
 		_fVector.inc(FVector.KEY_CAST);
 		_fVector.combineFeature(_expression.getFeatureVector());
+	}
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		CastExpr castExpr = null;
+		if(getBindingNode() != null) {
+			castExpr = (CastExpr) getBindingNode();
+			match = (castExpr == node);
+		} else if(canBinding(node)) {
+			castExpr = (CastExpr) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(castExpr == null) {
+			continueTopDownMatchNull();
+		} else {
+			_castType.postAccurateMatch(castExpr._castType);
+			_expression.postAccurateMatch(castExpr._expression);
+		}
+		return match;
 	}
 }

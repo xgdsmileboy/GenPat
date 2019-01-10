@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -102,4 +102,24 @@ public class SynchronizedStmt extends Stmt {
 		_fVector.combineFeature(_blk.getFeatureVector());
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		SynchronizedStmt synchronizedStmt = null;
+		if(getBindingNode() != null) {
+			synchronizedStmt = (SynchronizedStmt) getBindingNode();
+			match = (synchronizedStmt == node);
+		} else if(canBinding(node)) {
+			synchronizedStmt = (SynchronizedStmt) node;
+			match = true;
+		}
+
+		if(synchronizedStmt == null) {
+			continueTopDownMatchNull();
+		} else {
+			_expression.postAccurateMatch(synchronizedStmt.getExpression());
+			_blk.postAccurateMatch(synchronizedStmt.getBody());
+		}
+		return match;
+	}
 }

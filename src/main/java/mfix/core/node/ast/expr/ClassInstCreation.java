@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.AnonymousClassDecl;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -142,5 +142,34 @@ public class ClassInstCreation extends Expr {
 			_fVector.combineFeature(_expression.getFeatureVector());
 		}
 		_fVector.combineFeature(_arguments.getFeatureVector());
+	}
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		ClassInstCreation classInstCreation = null;
+		if(getBindingNode() != null) {
+			classInstCreation = (ClassInstCreation) getBindingNode();
+			match = (classInstCreation == node);
+		} else if(canBinding(node)) {
+			classInstCreation = (ClassInstCreation) node;
+			setBindingNode(node);
+			match = true;
+		}
+
+		if(classInstCreation == null) {
+			continueTopDownMatchNull();
+		}else {
+			if(_expression != null) {
+				_expression.postAccurateMatch(classInstCreation.getExpression());
+			}
+			_classType.postAccurateMatch(classInstCreation.getClassType());
+			_arguments.postAccurateMatch(classInstCreation.getArguments());
+			if(_decl != null) {
+				_decl.postAccurateMatch(classInstCreation.getDecl());
+			}
+
+		}
+		return match;
 	}
 }

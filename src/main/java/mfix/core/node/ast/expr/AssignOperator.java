@@ -61,4 +61,13 @@ public class AssignOperator extends Operator {
 		_tokens.add(_operatorStr);
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		if(getBindingNode() == node) return true;
+		if(getBindingNode() == null && canBinding(node)) {
+			setBindingNode(node);
+			return true;
+		}
+		return false;
+	}
 }

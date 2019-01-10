@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -107,5 +107,26 @@ public class ConditionalExpr extends Expr {
 		_fVector.combineFeature(_first.getFeatureVector());
 		_fVector.combineFeature(_snd.getFeatureVector());
 	}
-	
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		ConditionalExpr conditionalExpr = null;
+		if(getBindingNode() != null) {
+			conditionalExpr = (ConditionalExpr) getBindingNode();
+			match = (conditionalExpr == node);
+		} else if(canBinding(node)) {
+			conditionalExpr = (ConditionalExpr) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(conditionalExpr == null) {
+			continueTopDownMatchNull();
+		} else {
+			_condition.postAccurateMatch(conditionalExpr.getCondition());
+			_first.postAccurateMatch(conditionalExpr.getfirst());
+			_snd.postAccurateMatch(conditionalExpr.getSecond());
+		}
+		return match;
+	}
 }

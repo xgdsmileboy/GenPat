@@ -55,6 +55,5 @@ public abstract class Expr extends Node {
 	public List<Stmt> getChildren() {
 		return new ArrayList<>(0);
 	}
-	
-	
+
 }

@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -104,5 +104,26 @@ public class VarDeclarationExpr extends Expr {
 		for(Vdf vdf : _vdfs) {
 			_fVector.combineFeature(vdf.getFeatureVector());
 		}
+	}
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		VarDeclarationExpr vde = null;
+		boolean match = false;
+		if(getBindingNode() != null) {
+			vde = (VarDeclarationExpr) getBindingNode();
+			match = (vde == node);
+		} else if(canBinding(node)) {
+			vde = (VarDeclarationExpr) node;
+			setBindingNode(node);
+			match = true;
+		}
+		if(vde == null) {
+			continueTopDownMatchNull();
+		} else {
+			_declType.postAccurateMatch(vde.getDeclType());
+			greedyMatchListNode(getFragments(), vde.getFragments());
+		}
+		return match;
 	}
 }

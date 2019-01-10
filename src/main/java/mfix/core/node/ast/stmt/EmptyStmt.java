@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -65,5 +65,16 @@ public class EmptyStmt extends Stmt {
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
+	}
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		if(getBindingNode() != null) {
+			return getBindingNode() == node;
+		} else if(canBinding(node)) {
+			setBindingNode(node);
+			return true;
+		}
+		return false;
 	}
 }

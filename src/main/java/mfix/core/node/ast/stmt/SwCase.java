@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -111,4 +111,27 @@ public class SwCase extends Stmt {
 		}
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		SwCase swCase = null;
+		if(getBindingNode() != null) {
+			swCase = (SwCase) getBindingNode();
+			_expression.postAccurateMatch(swCase.getExpression());
+			match = (swCase == node);
+		} else if(canBinding(node)) {
+			swCase = (SwCase) node;
+			if(_expression.postAccurateMatch(swCase.getExpression())) {
+				setBindingNode(node);
+				match = true;
+			} else {
+				swCase = null;
+			}
+		}
+
+		if(swCase == null) {
+			continueTopDownMatchNull();
+		}
+		return match;
+	}
 }

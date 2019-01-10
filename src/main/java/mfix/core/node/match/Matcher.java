@@ -11,6 +11,10 @@ import mfix.common.util.Pair;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.pattern.Pattern;
+import mfix.core.pattern.parser.PatternExtraction;
+import mfix.core.pattern.relation.Relation;
+import mfix.core.pattern.solver.Z3Solver;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -19,9 +23,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -124,22 +130,61 @@ public class Matcher {
 		}
 	}
 
-	public static void greedyMatch(MethDecl src, MethDecl tar) {
-		List<Stmt> srcStmts = src.getBody().getStatement();
-		List<Stmt> tarStmts = tar.getBody().getStatement();
+	private static Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {
+		Map<Relation, Integer> map = new HashMap<>();
+		if (relations != null) {
+			for (int i = 0; i < relations.size(); i++) {
+				map.put(relations.get(i), i);
+			}
+		}
+		return map;
+	}
 
-		Map<Integer, Integer> map = match(srcStmts, tarStmts, new Comparator<Stmt>() {
-			@Override
-			public int compare(Stmt o1, Stmt o2) {
-				if(o1.compare(o2)) {
-					return 1;
-				} else {
-					return 0;
+	public static boolean greedyMatch(MethDecl src, MethDecl tar) {
+		Pattern p = PatternExtraction.extract(src, true);
+		List<Relation> srcRelations = p.getOldRelations();
+		p = PatternExtraction.extract(tar, true);
+		List<Relation> tarRelations = p.getOldRelations();
+		Map<Relation, Integer> oldR2index = mapRelation2LstIndex(srcRelations);
+		Map<Relation, Integer> newR2index = mapRelation2LstIndex(tarRelations);
+
+		int oldLen = srcRelations.size();
+		int newLen = tarRelations.size();
+
+		int[][] matrix = new int[oldLen][newLen];
+		Map<String, Set<Pair<Integer, Integer>>> loc2dependencies = new HashMap<>();
+		Set<Pair<Relation, Relation>> dependencies = new HashSet<>();
+		Set<Pair<Integer, Integer>> set;
+		for (int i = 0; i < oldLen; i++) {
+			for (int j = 0; j < newLen; j++) {
+				dependencies.clear();
+				if (srcRelations.get(i).match(tarRelations.get(j), dependencies)) {
+					matrix[i][j] = 1;
+					String key = i + "_" + j;
+					set = new HashSet<>();
+					for (Pair<Relation, Relation> pair : dependencies) {
+						set.add(new Pair<>(oldR2index.get(pair.getFirst()), newR2index.get(pair.getSecond())));
+					}
+					loc2dependencies.put(key, set);
 				}
 			}
-		});
+		}
+		Z3Solver solver = new Z3Solver();
+		Map<Integer, Integer> oldR2newRidxMap = solver.maxOptimize(matrix, loc2dependencies);
+		if(oldR2newRidxMap.size() * 2 == (srcRelations.size() + tarRelations.size())) {
+			return false;
+		}
 
-
+		Relation l,r;
+		for (Map.Entry<Integer, Integer> entry : oldR2newRidxMap.entrySet()) {
+			l = srcRelations.get(entry.getKey());
+			l.setMatched(true);
+			r = tarRelations.get(entry.getValue());
+			r.setMatched(true);
+			l.getAstNode().setBindingNode(r.getAstNode());
+		}
+		src.postAccurateMatch(tar);
+		return true;
 	}
 
 	public static Map<Integer, Integer> simMatch(List<Node> src, List<Node> tar, double similar) {

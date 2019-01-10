@@ -6,8 +6,8 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -42,12 +42,12 @@ public class AnonymousClassDecl extends Node {
 	}
 	
 	@Override
-	public mfix.core.node.ast.stmt.Stmt getParentStmt() {
+	public Stmt getParentStmt() {
 		return getParent().getParentStmt();
 	}
 	
 	@Override
-	public List<mfix.core.node.ast.stmt.Stmt> getChildren() {
+	public List<Stmt> getChildren() {
 		return new ArrayList<>(0);
 	}
 	
@@ -68,5 +68,15 @@ public class AnonymousClassDecl extends Node {
 	public void computeFeatureVector() {
 		_fVector = new FVector();
 		_fVector.inc(FVector.E_ANONY);
+	}
+
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		if(getBindingNode() == node) return true;
+		if(getBindingNode() == null && canBinding(node)) {
+			setBindingNode(node);
+			return true;
+		}
+		return false;
 	}
 }

@@ -6,10 +6,10 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.ExprList;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -157,5 +157,41 @@ public class ForStmt extends Stmt {
         }
         _fVector.combineFeature(_updaters.getFeatureVector());
         _fVector.combineFeature(_body.getFeatureVector());
+    }
+
+    @Override
+    public boolean postAccurateMatch(Node node) {
+        boolean match = false;
+        ForStmt forStmt = null;
+        if(getBindingNode() != null) {
+            forStmt = (ForStmt) getBindingNode();
+            if(_condition != null) {
+                _condition.postAccurateMatch(forStmt.getCondition());
+            }
+            _initializers.postAccurateMatch(forStmt.getInitializer());
+            _updaters.postAccurateMatch(forStmt.getUpdaters());
+            match = (forStmt == node);
+        } else if(canBinding(node)) {
+            forStmt = (ForStmt) node;
+            boolean flag = false;
+            if(_condition != null) {
+                flag = _condition.postAccurateMatch(forStmt.getCondition()) || flag;
+            }
+            flag = _initializers.postAccurateMatch(forStmt.getInitializer()) || flag;
+            flag = _updaters.postAccurateMatch(forStmt.getUpdaters()) || flag;
+            if(flag){
+                setBindingNode(node);
+                match = true;
+            } else {
+                forStmt = null;
+            }
+        }
+        if(forStmt == null) {
+            continueTopDownMatchNull();
+        } else {
+            _body.postAccurateMatch(forStmt.getBody());
+        }
+
+        return match;
     }
 }

@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -111,4 +111,29 @@ public class DoStmt extends Stmt {
 		_fVector.combineFeature(_stmt.getFeatureVector());
 	}
 
+	@Override
+	public boolean postAccurateMatch(Node node) {
+		boolean match = false;
+		DoStmt doStmt = null;
+		if(getBindingNode() != null) {
+			doStmt = (DoStmt) getBindingNode();
+			_expression.postAccurateMatch(doStmt.getExpression());
+			_stmt.postAccurateMatch(doStmt.getBody());
+			return (doStmt == node);
+		} else if(canBinding(node)) {
+			doStmt = (DoStmt) node;
+			if(_expression.postAccurateMatch(doStmt.getExpression())) {
+				_stmt.postAccurateMatch(doStmt.getBody());
+				setBindingNode(node);
+				match = true;
+			} else {
+				doStmt = null;
+			}
+		}
+
+		if(doStmt == null) {
+			continueTopDownMatchNull();
+		}
+		return match;
+	}
 }
