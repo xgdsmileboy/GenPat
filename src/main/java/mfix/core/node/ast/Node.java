@@ -51,6 +51,14 @@ public abstract class Node implements NodeComparator, Serializable {
      * feature vector to represent current node
      */
     protected FVector _fVector = null;
+    /**
+     * data dependency
+     */
+    private Node _datadependency;
+    /**
+     * control dependency
+     */
+    private Node _controldependency;
 
     /**
      * original AST node in the JDT abstract tree model
@@ -134,6 +142,38 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     public Node getParent() {
         return _parent;
+    }
+
+    /**
+     * set data dependency of node
+     * @param dependency : dependent node, can be {@code null}
+     */
+    public void setDataDependency(Node dependency) {
+        _datadependency = dependency;
+    }
+
+    /**
+     * get data dependency
+     * @return : data dependent node, can be {@code null}
+     */
+    public Node getDataDependency() {
+        return _datadependency;
+    }
+
+    /**
+     * set control dependency of node
+     * @param dependency : dependent node, can be {@code null}
+     */
+    public void setControldependency(Node dependency) {
+        _controldependency = dependency;
+    }
+
+    /**
+     * get control dependency
+     * @return
+     */
+    public Node getControldependency() {
+        return _controldependency;
     }
 
     /**

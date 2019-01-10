@@ -16,7 +16,10 @@ import mfix.core.node.ast.stmt.*;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 
 /**
@@ -47,7 +50,7 @@ public class NodeParser {
     }
 
     /************************** visit start : MethodDeclaration ***********************/
-    private MethDecl visit(MethodDeclaration node) {
+    private MethDecl visit(MethodDeclaration node, VScope scope) {
         int start = _cunit.getLineNumber(node.getStartPosition());
         int end = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         MethDecl methDecl = new MethDecl(_fileName, start, end, node);
@@ -60,12 +63,12 @@ public class NodeParser {
         if(node.getReturnType2() != null) {
             methDecl.setRetType(typeFromBinding(node.getAST(), node.getReturnType2().resolveBinding()));
         }
-        SName name = (SName) process(node.getName());
+        SName name = (SName) process(node.getName(), scope);
         name.setParent(methDecl);
         methDecl.setName(name);
         List<Expr> params = new ArrayList<>(11);
         for (Object arg : node.parameters()) {
-            Expr param = (Expr) process((ASTNode) arg);
+            Expr param = (Expr) process((ASTNode) arg, scope);
             param.setParent(methDecl);
             params.add(param);
         }
@@ -85,7 +88,7 @@ public class NodeParser {
 
         Block body = node.getBody();
         if (body != null) {
-            Blk bBlk = (Blk) process(body);
+            Blk bBlk = (Blk) process(body, scope);
             bBlk.setParent(methDecl);
             methDecl.setBody(bBlk);
         }
@@ -94,14 +97,15 @@ public class NodeParser {
     }
 
     /************************** visit start : Statement ***********************/
-    private AssertStmt visit(AssertStatement node) {
+    private AssertStmt visit(AssertStatement node, VScope scope) {
         int start = _cunit.getLineNumber(node.getStartPosition());
         int end = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AssertStmt assertStmt = new AssertStmt(_fileName, start, end, node);
+        assertStmt.setControldependency(scope.peekStructure());
         return assertStmt;
     }
 
-    private BreakStmt visit(BreakStatement node) {
+    private BreakStmt visit(BreakStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         BreakStmt breakStmt = new BreakStmt(_fileName, startLine, endLine, node);
@@ -110,17 +114,20 @@ public class NodeParser {
             sName.setName(node.getLabel().getFullyQualifiedName());
             sName.setParent(breakStmt);
             breakStmt.setIdentifier(sName);
+            sName.setDataDependency(scope.getDefines(sName.getName()));
         }
+        breakStmt.setControldependency(scope.peekStructure());
         return breakStmt;
     }
 
-    private Blk visit(Block node) {
+    private Blk visit(Block node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Blk blk = new Blk(_fileName, startLine, endLine, node);
         List<Stmt> stmts = new ArrayList<>();
+        VScope newScope = new VScope(scope);
         for (Object object : node.statements()) {
-            Stmt stmt = (Stmt) process((ASTNode) object);
+            Stmt stmt = (Stmt) process((ASTNode) object, newScope);
             stmt.setParent(blk);
             stmts.add(stmt);
         }
@@ -128,24 +135,25 @@ public class NodeParser {
         return blk;
     }
 
-    private ConstructorInv visit(ConstructorInvocation node) {
+    private ConstructorInv visit(ConstructorInvocation node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ConstructorInv constructorInv = new ConstructorInv(_fileName, startLine, endLine, node);
         ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
-            Expr expr = (Expr) process((ASTNode) object);
+            Expr expr = (Expr) process((ASTNode) object, scope);
             expr.setParent(exprList);
             arguments.add(expr);
         }
         exprList.setExprs(arguments);
         exprList.setParent(constructorInv);
         constructorInv.setArguments(exprList);
+        constructorInv.setControldependency(scope.peekStructure());
         return constructorInv;
     }
 
-    private ContinueStmt visit(ContinueStatement node) {
+    private ContinueStmt visit(ContinueStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ContinueStmt continueStmt = new ContinueStmt(_fileName, startLine, endLine, node);
@@ -154,81 +162,89 @@ public class NodeParser {
             sName.setName(node.getLabel().getFullyQualifiedName());
             sName.setParent(continueStmt);
             continueStmt.setIdentifier(sName);
+            sName.setDataDependency(scope.getDefines(sName.getName()));
         }
+        continueStmt.setControldependency(scope.peekStructure());
         return continueStmt;
     }
 
-    private DoStmt visit(DoStatement node) {
+    private DoStmt visit(DoStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         DoStmt doStmt = new DoStmt(_fileName, startLine, endLine, node);
+        doStmt.setControldependency(scope.peekStructure());
+        VScope newScope = new VScope(scope);
 
-        Expr expression = (Expr) process(node.getExpression());
+        Expr expression = (Expr) process(node.getExpression(), newScope);
         expression.setParent(doStmt);
         doStmt.setExpression(expression);
 
-        Stmt stmt = wrapBlock(node.getBody());
+        newScope.pushStructure(expression);
+        Stmt stmt = wrapBlock(node.getBody(), newScope);
         stmt.setParent(doStmt);
         doStmt.setBody(stmt);
 
+        newScope.popStructure();
         return doStmt;
     }
 
-    private EmptyStmt visit(EmptyStatement node) {
+    private EmptyStmt visit(EmptyStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         EmptyStmt emptyStmt = new EmptyStmt(_fileName, startLine, endLine, node);
+        emptyStmt.setControldependency(scope.peekStructure());
         return emptyStmt;
     }
 
-    private EnhancedForStmt visit(EnhancedForStatement node) {
+    private EnhancedForStmt visit(EnhancedForStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         EnhancedForStmt enhancedForStmt = new EnhancedForStmt(_fileName, startLine, endLine, node);
+        enhancedForStmt.setDataDependency(scope.peekStructure());
 
-        Svd svd = (Svd) process(node.getParameter());
+        VScope newScope = new VScope(scope);
+        Svd svd = (Svd) process(node.getParameter(), newScope);
         svd.setParent(enhancedForStmt);
         enhancedForStmt.setParameter(svd);
 
-        Expr expression = (Expr) process(node.getExpression());
+        Expr expression = (Expr) process(node.getExpression(), newScope);
         expression.setParent(enhancedForStmt);
         enhancedForStmt.setExpression(expression);
 
-        Stmt body = wrapBlock(node.getBody());
+        newScope.pushStructure(expression);
+        Stmt body = wrapBlock(node.getBody(), newScope);
         body.setParent(enhancedForStmt);
         enhancedForStmt.setBody(body);
+        newScope.popStructure();
 
         return enhancedForStmt;
     }
 
-    private ExpressionStmt visit(ExpressionStatement node) {
+    private ExpressionStmt visit(ExpressionStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ExpressionStmt expressionStmt = new ExpressionStmt(_fileName, startLine, endLine, node);
 
-        Expr expression = (Expr) process(node.getExpression());
+        Expr expression = (Expr) process(node.getExpression(), scope);
         expression.setParent(expressionStmt);
         expressionStmt.setExpression(expression);
+        expressionStmt.setControldependency(scope.peekStructure());
 
         return expressionStmt;
     }
 
-    private ForStmt visit(ForStatement node) {
+    private ForStmt visit(ForStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ForStmt forStmt = new ForStmt(_fileName, startLine, endLine, node);
-
-        if (node.getExpression() != null) {
-            Expr condition = (Expr) process(node.getExpression());
-            condition.setParent(forStmt);
-            forStmt.setCondition(condition);
-        }
+        forStmt.setControldependency(scope.peekStructure());
+        VScope newScope = new VScope(scope);
 
         ExprList initExprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> initializers = new ArrayList<>();
         if (!node.initializers().isEmpty()) {
             for (Object object : node.initializers()) {
-                Expr initializer = (Expr) process((ASTNode) object);
+                Expr initializer = (Expr) process((ASTNode) object, newScope);
                 initializer.setParent(initExprList);
                 initializers.add(initializer);
             }
@@ -237,11 +253,18 @@ public class NodeParser {
         initExprList.setParent(forStmt);
         forStmt.setInitializer(initExprList);
 
+        if (node.getExpression() != null) {
+            Expr condition = (Expr) process(node.getExpression(), newScope);
+            condition.setParent(forStmt);
+            forStmt.setCondition(condition);
+            newScope.pushStructure(condition);
+        }
+
         ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> updaters = new ArrayList<>();
         if (!node.updaters().isEmpty()) {
             for (Object object : node.updaters()) {
-                Expr update = (Expr) process((ASTNode) object);
+                Expr update = (Expr) process((ASTNode) object, newScope);
                 update.setParent(exprList);
                 updaters.add(update);
             }
@@ -250,49 +273,60 @@ public class NodeParser {
         exprList.setParent(forStmt);
         forStmt.setUpdaters(exprList);
 
-        Stmt body = wrapBlock(node.getBody());
+        Stmt body = wrapBlock(node.getBody(), newScope);
         body.setParent(forStmt);
         forStmt.setBody(body);
+        if (node.getExpression() != null) {
+            newScope.popStructure();
+        }
 
         return forStmt;
     }
 
-    private IfStmt visit(IfStatement node) {
+    private IfStmt visit(IfStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         IfStmt ifStmt = new IfStmt(_fileName, startLine, endLine, node);
+        ifStmt.setControldependency(scope.peekStructure());
 
-        Expr condition = (Expr) process(node.getExpression());
+        VScope newScope = new VScope(scope);
+
+        Expr condition = (Expr) process(node.getExpression(), newScope);
         condition.setParent(ifStmt);
         ifStmt.setCondition(condition);
 
-        Stmt then = wrapBlock(node.getThenStatement());
+        newScope.pushStructure(condition);
+
+        VScope lScope = new VScope(newScope);
+        Stmt then = wrapBlock(node.getThenStatement(), lScope);
         then.setParent(ifStmt);
         ifStmt.setThen(then);
 
         if (node.getElseStatement() != null) {
-            Stmt els = wrapBlock(node.getElseStatement());
+            VScope rScope = new VScope(newScope);
+            Stmt els = wrapBlock(node.getElseStatement(), rScope);
             els.setParent(ifStmt);
             ifStmt.setElse(els);
         }
-
+        newScope.popStructure();
         return ifStmt;
     }
 
-    private LabeledStmt visit(LabeledStatement node) {
+    private LabeledStmt visit(LabeledStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         LabeledStmt labeledStmt = new LabeledStmt(_fileName, startLine, endLine, node);
+        labeledStmt.setControldependency(scope.peekStructure());
         return labeledStmt;
     }
 
-    private ReturnStmt visit(ReturnStatement node) {
+    private ReturnStmt visit(ReturnStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ReturnStmt returnStmt = new ReturnStmt(_fileName, startLine, endLine, node);
-
+        returnStmt.setControldependency(scope.peekStructure());
         if (node.getExpression() != null) {
-            Expr expression = (Expr) process(node.getExpression());
+            Expr expression = (Expr) process(node.getExpression(), scope);
             expression.setParent(returnStmt);
             returnStmt.setExpression(expression);
         }
@@ -300,13 +334,14 @@ public class NodeParser {
         return returnStmt;
     }
 
-    private SuperConstructorInv visit(SuperConstructorInvocation node) {
+    private SuperConstructorInv visit(SuperConstructorInvocation node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         SuperConstructorInv superConstructorInv = new SuperConstructorInv(_fileName, startLine, endLine, node);
+        superConstructorInv.setControldependency(scope.peekStructure());
 
         if (node.getExpression() != null) {
-            Expr expression = (Expr) process(node.getExpression());
+            Expr expression = (Expr) process(node.getExpression(), scope);
             expression.setParent(superConstructorInv);
             superConstructorInv.setExpression(expression);
         }
@@ -314,7 +349,7 @@ public class NodeParser {
         ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
-            Expr arg = (Expr) process((ASTNode) object);
+            Expr arg = (Expr) process((ASTNode) object, scope);
             arg.setParent(exprList);
             arguments.add(arg);
         }
@@ -325,13 +360,13 @@ public class NodeParser {
         return superConstructorInv;
     }
 
-    private SwCase visit(SwitchCase node) {
+    private SwCase visit(SwitchCase node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         SwCase swCase = new SwCase(_fileName, startLine, endLine, node);
-
+        swCase.setControldependency(scope.peekStructure());
         if (node.getExpression() != null) {
-            Expr expression = (Expr) process(node.getExpression());
+            Expr expression = (Expr) process(node.getExpression(), scope);
             expression.setParent(swCase);
             swCase.setExpression(expression);
         }
@@ -339,85 +374,106 @@ public class NodeParser {
         return swCase;
     }
 
-    private SwitchStmt visit(SwitchStatement node) {
+    private SwitchStmt visit(SwitchStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         SwitchStmt switchStmt = new SwitchStmt(_fileName, startLine, endLine, node);
+        switchStmt.setControldependency(scope.peekStructure());
+        VScope newScope = new VScope(scope);
 
-        Expr expression = (Expr) process(node.getExpression());
+        Expr expression = (Expr) process(node.getExpression(), newScope);
         expression.setParent(switchStmt);
         switchStmt.setExpression(expression);
 
+        int push = 0;
         List<Stmt> statements = new ArrayList<>();
         for (Object object : node.statements()) {
-            Stmt stmt = (Stmt) process((ASTNode) object);
+            Stmt stmt = (Stmt) process((ASTNode) object, newScope);
             stmt.setParent(switchStmt);
             statements.add(stmt);
+            if(stmt instanceof SwCase) {
+                newScope.pushStructure(stmt);
+                push ++;
+            }
+        }
+        while(push > 0) {
+            newScope.popStructure();
+            push --;
         }
         switchStmt.setStatements(statements);
+        newScope.popStructure();
 
         return switchStmt;
     }
 
-    private SynchronizedStmt visit(SynchronizedStatement node) {
+    private SynchronizedStmt visit(SynchronizedStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         SynchronizedStmt synchronizedStmt = new SynchronizedStmt(_fileName, startLine, endLine, node);
+        synchronizedStmt.setControldependency(scope.peekStructure());
 
+        VScope newScope = new VScope(scope);
         if (node.getExpression() != null) {
-            Expr expression = (Expr) process(node.getExpression());
+            Expr expression = (Expr) process(node.getExpression(), newScope);
             expression.setParent(synchronizedStmt);
             synchronizedStmt.setExpression(expression);
         }
 
-        Blk blk = (Blk) process(node.getBody());
+        Blk blk = (Blk) process(node.getBody(), newScope);
         blk.setParent(synchronizedStmt);
         synchronizedStmt.setBlock(blk);
 
         return synchronizedStmt;
     }
 
-    private ThrowStmt visit(ThrowStatement node) {
+    private ThrowStmt visit(ThrowStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ThrowStmt throwStmt = new ThrowStmt(_fileName, startLine, endLine, node);
+        throwStmt.setControldependency(scope.peekStructure());
 
-        Expr expression = (Expr) process(node.getExpression());
+        Expr expression = (Expr) process(node.getExpression(), scope);
         expression.setParent(throwStmt);
         throwStmt.setExpression(expression);
 
         return throwStmt;
     }
 
-    private TryStmt visit(TryStatement node) {
+    private TryStmt visit(TryStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         TryStmt tryStmt = new TryStmt(_fileName, startLine, endLine, node);
+        tryStmt.setControldependency(scope.peekStructure());
+
+        VScope newScope = new VScope(scope);
+
         if (node.resources() != null) {
             List<VarDeclarationExpr> resourceList = new ArrayList<>(node.resources().size());
             for (Object object : node.resources()) {
                 VariableDeclarationExpression resource = (VariableDeclarationExpression) object;
-                VarDeclarationExpr vdExpr = (VarDeclarationExpr) process(resource);
+                VarDeclarationExpr vdExpr = (VarDeclarationExpr) process(resource, newScope);
                 vdExpr.setParent(tryStmt);
                 resourceList.add(vdExpr);
             }
             tryStmt.setResource(resourceList);
         }
-        Blk blk = (Blk) process(node.getBody());
+        Blk blk = (Blk) process(node.getBody(), newScope);
         blk.setParent(tryStmt);
         tryStmt.setBody(blk);
 
+        newScope = new VScope(scope);
         List<CatClause> catches = new ArrayList<>(node.catchClauses().size());
         for (Object object : node.catchClauses()) {
             CatchClause catchClause = (CatchClause) object;
-            CatClause catClause = (CatClause) process(catchClause);
+            CatClause catClause = (CatClause) process(catchClause, newScope);
             catClause.setParent(tryStmt);
             catches.add(catClause);
         }
         tryStmt.setCatchClause(catches);
 
+        newScope = new VScope(scope);
         if (node.getFinally() != null) {
-            Blk finallyBlk = (Blk) process(node.getFinally());
+            Blk finallyBlk = (Blk) process(node.getFinally(), newScope);
             finallyBlk.setParent(tryStmt);
             tryStmt.setFinallyBlock(finallyBlk);
         }
@@ -425,30 +481,35 @@ public class NodeParser {
         return tryStmt;
     }
 
-    private CatClause visit(CatchClause node) {
+    private CatClause visit(CatchClause node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         CatClause catClause = new CatClause(_fileName, startLine, endLine, node);
-        Svd svd = (Svd) process(node.getException());
+        catClause.setControldependency(scope.peekStructure());
+
+        VScope newScope = new VScope(scope);
+        Svd svd = (Svd) process(node.getException(), newScope);
         svd.setParent(catClause);
         catClause.setException(svd);
-        Blk body = (Blk) process(node.getBody());
+        Blk body = (Blk) process(node.getBody(), newScope);
         body.setParent(catClause);
         catClause.setBody(body);
         return catClause;
     }
 
-    private TypeDeclarationStmt visit(TypeDeclarationStatement node) {
+    private TypeDeclarationStmt visit(TypeDeclarationStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         TypeDeclarationStmt typeDeclarationStmt = new TypeDeclarationStmt(_fileName, startLine, endLine, node);
+        typeDeclarationStmt.setControldependency(scope.peekStructure());
         return typeDeclarationStmt;
     }
 
-    private VarDeclarationStmt visit(VariableDeclarationStatement node) {
+    private VarDeclarationStmt visit(VariableDeclarationStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         VarDeclarationStmt varDeclarationStmt = new VarDeclarationStmt(_fileName, startLine, endLine, node);
+        varDeclarationStmt.setControldependency(scope.peekStructure());
         String modifier = "";
         if (node.modifiers() != null && node.modifiers().size() > 0) {
             for (Object object : node.modifiers()) {
@@ -466,7 +527,7 @@ public class NodeParser {
 
         List<Vdf> fragments = new ArrayList<>();
         for (Object object : node.fragments()) {
-            Vdf vdf = (Vdf) process((ASTNode) object);
+            Vdf vdf = (Vdf) process((ASTNode) object, scope);
             vdf.setParent(varDeclarationStmt);
             fragments.add(vdf);
         }
@@ -475,40 +536,47 @@ public class NodeParser {
         return varDeclarationStmt;
     }
 
-    private WhileStmt visit(WhileStatement node) {
+    private WhileStmt visit(WhileStatement node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         WhileStmt whileStmt = new WhileStmt(_fileName, startLine, endLine, node);
+        whileStmt.setControldependency(scope.peekStructure());
 
-        Expr expression = (Expr) process(node.getExpression());
+        VScope newScope = new VScope(scope);
+
+        Expr expression = (Expr) process(node.getExpression(), newScope);
         expression.setParent(whileStmt);
         whileStmt.setExpression(expression);
 
-        Stmt body = wrapBlock(node.getBody());
+        newScope.pushStructure(expression);
+
+        Stmt body = wrapBlock(node.getBody(), newScope);
         body.setParent(whileStmt);
         whileStmt.setBody(body);
+
+        newScope.popStructure();
 
         return whileStmt;
     }
 
     /*********************** Visit Expression *********************************/
-    private Comment visit(Annotation node) {
+    private Comment visit(Annotation node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Comment comment = new Comment(_fileName, startLine, endLine, node);
         return comment;
     }
 
-    private AryAcc visit(ArrayAccess node) {
+    private AryAcc visit(ArrayAccess node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AryAcc aryAcc = new AryAcc(_fileName, startLine, endLine, node);
 
-        Expr array = (Expr) process(node.getArray());
+        Expr array = (Expr) process(node.getArray(), scope);
         array.setParent(aryAcc);
         aryAcc.setArray(array);
 
-        Expr indexExpr = (Expr) process(node.getIndex());
+        Expr indexExpr = (Expr) process(node.getIndex(), scope);
         indexExpr.setParent(aryAcc);
         aryAcc.setIndex(indexExpr);
 
@@ -518,7 +586,7 @@ public class NodeParser {
         return aryAcc;
     }
 
-    private AryCreation visit(ArrayCreation node) {
+    private AryCreation visit(ArrayCreation node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AryCreation aryCreation = new AryCreation(_fileName, startLine, endLine, node);
@@ -530,14 +598,14 @@ public class NodeParser {
 
         List<Expr> dimension = new ArrayList<>();
         for (Object object : node.dimensions()) {
-            Expr dim = (Expr) process((ASTNode) object);
+            Expr dim = (Expr) process((ASTNode) object, scope);
             dim.setParent(aryCreation);
             dimension.add(dim);
         }
         aryCreation.setDimension(dimension);
 
         if (node.getInitializer() != null) {
-            AryInitializer arrayInitializer = (AryInitializer) process(node.getInitializer());
+            AryInitializer arrayInitializer = (AryInitializer) process(node.getInitializer(), scope);
             arrayInitializer.setParent(aryCreation);
             aryCreation.setInitializer(arrayInitializer);
         }
@@ -545,14 +613,14 @@ public class NodeParser {
         return aryCreation;
     }
 
-    private AryInitializer visit(ArrayInitializer node) {
+    private AryInitializer visit(ArrayInitializer node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AryInitializer aryInitializer = new AryInitializer(_fileName, startLine, endLine, node);
 
         List<Expr> expressions = new ArrayList<>();
         for (Object object : node.expressions()) {
-            Expr expr = (Expr) process((ASTNode) object);
+            Expr expr = (Expr) process((ASTNode) object, scope);
             expr.setParent(aryInitializer);
             expressions.add(expr);
         }
@@ -561,16 +629,16 @@ public class NodeParser {
         return aryInitializer;
     }
 
-    private Assign visit(Assignment node) {
+    private Assign visit(Assignment node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Assign assign = new Assign(_fileName, startLine, endLine, node);
 
-        Expr lhs = (Expr) process(node.getLeftHandSide());
+        Expr lhs = (Expr) process(node.getLeftHandSide(), scope);
         lhs.setParent(assign);
         assign.setLeftHandSide(lhs);
 
-        Expr rhs = (Expr) process(node.getRightHandSide());
+        Expr rhs = (Expr) process(node.getRightHandSide(), scope);
         rhs.setParent(assign);
         assign.setRightHandSide(rhs);
 
@@ -579,10 +647,12 @@ public class NodeParser {
         assign.setParent(assign);
         assign.setOperator(assignOperator);
 
+        scope.addDefine(lhs.toSrcString().toString(), assign);
+
         return assign;
     }
 
-    private BoolLiteral visit(BooleanLiteral node) {
+    private BoolLiteral visit(BooleanLiteral node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         BoolLiteral literal = new BoolLiteral(_fileName, startLine, endLine, node);
@@ -594,7 +664,7 @@ public class NodeParser {
         return literal;
     }
 
-    private CastExpr visit(CastExpression node) {
+    private CastExpr visit(CastExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         CastExpr castExpr = new CastExpr(_fileName, startLine, endLine, node);
@@ -602,7 +672,7 @@ public class NodeParser {
         mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
         mType.setParent(castExpr);
         castExpr.setCastType(mType);
-        Expr expression = (Expr) process(node.getExpression());
+        Expr expression = (Expr) process(node.getExpression(), scope);
         expression.setParent(castExpr);
         castExpr.setExpression(expression);
         castExpr.setType(node.getType());
@@ -610,7 +680,7 @@ public class NodeParser {
         return castExpr;
     }
 
-    private CharLiteral visit(CharacterLiteral node) {
+    private CharLiteral visit(CharacterLiteral node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         CharLiteral charLiteral = new CharLiteral(_fileName, startLine, endLine, node);
@@ -624,19 +694,20 @@ public class NodeParser {
         return charLiteral;
     }
 
-    private ClassInstCreation visit(ClassInstanceCreation node) {
+    private ClassInstCreation visit(ClassInstanceCreation node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ClassInstCreation classInstCreation = new ClassInstCreation(_fileName, startLine, endLine, node);
 
         if (node.getExpression() != null) {
-            Expr expression = (Expr) process(node.getExpression());
+            Expr expression = (Expr) process(node.getExpression(), scope);
             expression.setParent(classInstCreation);
             classInstCreation.setExpression(expression);
         }
 
         if (node.getAnonymousClassDeclaration() != null) {
-            AnonymousClassDecl anonymousClassDecl = (AnonymousClassDecl) process(node.getAnonymousClassDeclaration());
+            AnonymousClassDecl anonymousClassDecl = (AnonymousClassDecl) process(node.getAnonymousClassDeclaration(),
+                    scope);
             anonymousClassDecl.setParent(classInstCreation);
             classInstCreation.setAnonymousClassDecl(anonymousClassDecl);
         }
@@ -644,7 +715,7 @@ public class NodeParser {
         ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
-            Expr arg = (Expr) process((ASTNode) object);
+            Expr arg = (Expr) process((ASTNode) object, scope);
             arg.setParent(exprList);
             arguments.add(arg);
         }
@@ -662,29 +733,31 @@ public class NodeParser {
         return classInstCreation;
     }
 
-    private AnonymousClassDecl visit(AnonymousClassDeclaration node) {
+    private AnonymousClassDecl visit(AnonymousClassDeclaration node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AnonymousClassDecl anonymousClassDecl = new AnonymousClassDecl(_fileName, startLine, endLine, node);
         return anonymousClassDecl;
     }
 
-    private ConditionalExpr visit(ConditionalExpression node) {
+    private ConditionalExpr visit(ConditionalExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ConditionalExpr conditionalExpr = new ConditionalExpr(_fileName, startLine, endLine, node);
 
-        Expr condition = (Expr) process(node.getExpression());
+        Expr condition = (Expr) process(node.getExpression(), scope);
         condition.setParent(conditionalExpr);
         conditionalExpr.setCondition(condition);
 
-        Expr first = (Expr) process(node.getThenExpression());
+        Expr first = (Expr) process(node.getThenExpression(), scope);
         first.setParent(conditionalExpr);
         conditionalExpr.setFirst(first);
+        first.setControldependency(condition);
 
-        Expr snd = (Expr) process(node.getElseExpression());
+        Expr snd = (Expr) process(node.getElseExpression(), scope);
         snd.setParent(conditionalExpr);
         conditionalExpr.setSecond(snd);
+        snd.setControldependency(condition);
 
         if (first.getType() != null) {
             conditionalExpr.setType(first.getType());
@@ -695,49 +768,50 @@ public class NodeParser {
         return conditionalExpr;
     }
 
-    private CreationRef visit(CreationReference node) {
+    private CreationRef visit(CreationReference node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         CreationRef creationRef = new CreationRef(_fileName, startLine, endLine, node);
         return creationRef;
     }
 
-    private ExpressionMethodRef visit(ExpressionMethodReference node) {
+    private ExpressionMethodRef visit(ExpressionMethodReference node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ExpressionMethodRef expressionMethodRef = new ExpressionMethodRef(_fileName, startLine, endLine, node);
         return expressionMethodRef;
     }
 
-    private FieldAcc visit(FieldAccess node) {
+    private FieldAcc visit(FieldAccess node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         FieldAcc fieldAcc = new FieldAcc(_fileName, startLine, endLine, node);
 
-        Expr expression = (Expr) process(node.getExpression());
+        Expr expression = (Expr) process(node.getExpression(), scope);
         expression.setParent(fieldAcc);
         fieldAcc.setExpression(expression);
 
-        SName identifier = (SName) process(node.getName());
+        SName identifier = (SName) process(node.getName(), scope);
         identifier.setParent(fieldAcc);
         fieldAcc.setIdentifier(identifier);
 
         Type type = typeFromBinding(node.getAST(), node.resolveTypeBinding());
         fieldAcc.setType(type);
 
+        fieldAcc.setDataDependency(scope.getDefines(fieldAcc.toSrcString().toString()));
         return fieldAcc;
     }
 
-    private InfixExpr visit(InfixExpression node) {
+    private InfixExpr visit(InfixExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         InfixExpr infixExpr = new InfixExpr(_fileName, startLine, endLine, node);
 
-        Expr lhs = (Expr) process(node.getLeftOperand());
+        Expr lhs = (Expr) process(node.getLeftOperand(), scope);
         lhs.setParent(infixExpr);
         infixExpr.setLeftHandSide(lhs);
 
-        Expr rhs = (Expr) process(node.getRightOperand());
+        Expr rhs = (Expr) process(node.getRightOperand(), scope);
         rhs.setParent(infixExpr);
         infixExpr.setRightHandSide(rhs);
 
@@ -751,12 +825,12 @@ public class NodeParser {
         return infixExpr;
     }
 
-    private InstanceofExpr visit(InstanceofExpression node) {
+    private InstanceofExpr visit(InstanceofExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         InstanceofExpr instanceofExpr = new InstanceofExpr(_fileName, startLine, endLine, node);
 
-        Expr expression = (Expr) process(node.getLeftOperand());
+        Expr expression = (Expr) process(node.getLeftOperand(), scope);
         expression.setParent(instanceofExpr);
         instanceofExpr.setExpression(expression);
 
@@ -772,21 +846,21 @@ public class NodeParser {
         return instanceofExpr;
     }
 
-    private LambdaExpr visit(LambdaExpression node) {
+    private LambdaExpr visit(LambdaExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         LambdaExpr lambdaExpr = new LambdaExpr(_fileName, startLine, endLine, node);
         return lambdaExpr;
     }
 
-    private MethodInv visit(MethodInvocation node) {
+    private MethodInv visit(MethodInvocation node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         MethodInv methodInv = new MethodInv(_fileName, startLine, endLine, node);
 
         Expr expression = null;
         if (node.getExpression() != null) {
-            expression = (Expr) process(node.getExpression());
+            expression = (Expr) process(node.getExpression(), scope);
             expression.setParent(methodInv);
             methodInv.setExpression(expression);
         }
@@ -799,7 +873,7 @@ public class NodeParser {
         ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
-            Expr expr = (Expr) process((ASTNode) object);
+            Expr expr = (Expr) process((ASTNode) object, scope);
             expr.setParent(exprList);
             arguments.add(expr);
         }
@@ -813,14 +887,14 @@ public class NodeParser {
         return methodInv;
     }
 
-    private MethodRef visit(MethodReference node) {
+    private MethodRef visit(MethodReference node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         MethodRef methodRef = new MethodRef(_fileName, startLine, endLine, node);
         return methodRef;
     }
 
-    private Label visit(Name node) {
+    private Label visit(Name node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Label expr = null;
@@ -837,26 +911,27 @@ public class NodeParser {
             QualifiedName qualifiedName = (QualifiedName) node;
 //			System.out.println(qualifiedName.toString());
             QName qName = new QName(_fileName, startLine, endLine, node);
-            SName sname = (SName) process(qualifiedName.getName());
+            SName sname = (SName) process(qualifiedName.getName(), scope);
             sname.setParent(qName);
-            Label label = (Label) process(qualifiedName.getQualifier());
+            Label label = (Label) process(qualifiedName.getQualifier(), scope);
             label.setParent(qName);
             qName.setName(label, sname);
             qName.setType(sname.getType());
 
             expr = qName;
         }
+        expr.setDataDependency(scope.getDefines(expr.toSrcString().toString()));
         return expr;
     }
 
-    private NillLiteral visit(NullLiteral node) {
+    private NillLiteral visit(NullLiteral node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         NillLiteral nillLiteral = new NillLiteral(_fileName, startLine, endLine, node);
         return nillLiteral;
     }
 
-    private NumLiteral visit(NumberLiteral node) {
+    private NumLiteral visit(NumberLiteral node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         String token = node.getToken();
@@ -927,12 +1002,12 @@ public class NodeParser {
         return expr;
     }
 
-    private ParenthesiszedExpr visit(ParenthesizedExpression node) {
+    private ParenthesiszedExpr visit(ParenthesizedExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
 
         ParenthesiszedExpr parenthesiszedExpr = new ParenthesiszedExpr(_fileName, startLine, endLine, node);
-        Expr expression = (Expr) process(node.getExpression());
+        Expr expression = (Expr) process(node.getExpression(), scope);
         expression.setParent(parenthesiszedExpr);
         parenthesiszedExpr.setExpr(expression);
         parenthesiszedExpr.setType(expression.getType());
@@ -940,12 +1015,12 @@ public class NodeParser {
         return parenthesiszedExpr;
     }
 
-    private PostfixExpr visit(PostfixExpression node) {
+    private PostfixExpr visit(PostfixExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         PostfixExpr postfixExpr = new PostfixExpr(_fileName, startLine, endLine, node);
 
-        Expr expression = (Expr) process(node.getOperand());
+        Expr expression = (Expr) process(node.getOperand(), scope);
         expression.setParent(postfixExpr);
         postfixExpr.setExpression(expression);
 
@@ -958,15 +1033,21 @@ public class NodeParser {
 
         postfixExpr.setType(exprType);
 
+        switch (postOperator.toSrcString().toString()) {
+            case "++":
+            case "--":
+                scope.addDefine(expression.toSrcString().toString(), postfixExpr);
+        }
+
         return postfixExpr;
     }
 
-    private PrefixExpr visit(PrefixExpression node) {
+    private PrefixExpr visit(PrefixExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         PrefixExpr prefixExpr = new PrefixExpr(_fileName, startLine, endLine, node);
 
-        Expr expression = (Expr) process(node.getOperand());
+        Expr expression = (Expr) process(node.getOperand(), scope);
         expression.setParent(prefixExpr);
         prefixExpr.setExpression(expression);
 
@@ -978,10 +1059,16 @@ public class NodeParser {
         Type type = NodeUtils.parseExprType(null, node.getOperator().toString(), expression);
         prefixExpr.setType(type);
 
+        switch (prefixExpr.toSrcString().toString()) {
+            case "++":
+            case "--":
+                scope.addDefine(expression.toSrcString().toString(), prefixExpr);
+        }
+
         return prefixExpr;
     }
 
-    private StrLiteral visit(StringLiteral node) {
+    private StrLiteral visit(StringLiteral node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         StrLiteral literal = new StrLiteral(_fileName, startLine, endLine, node);
@@ -995,28 +1082,31 @@ public class NodeParser {
         return literal;
     }
 
-    private SuperFieldAcc visit(SuperFieldAccess node) {
+    private SuperFieldAcc visit(SuperFieldAccess node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         SuperFieldAcc superFieldAcc = new SuperFieldAcc(_fileName, startLine, endLine, node);
 
-        SName identifier = (SName) process(node.getName());
+        SName identifier = (SName) process(node.getName(), scope);
         identifier.setParent(superFieldAcc);
         superFieldAcc.setIdentifier(identifier);
+        identifier.setDataDependency(null);
 
         if (node.getQualifier() != null) {
-            Label name = (Label) process(node.getQualifier());
+            Label name = (Label) process(node.getQualifier(), scope);
             name.setParent(superFieldAcc);
             superFieldAcc.setName(name);
+            name.setDataDependency(null);
         }
 
         Type exprType = typeFromBinding(node.getAST(), node.resolveTypeBinding());
         superFieldAcc.setType(exprType);
+        superFieldAcc.setDataDependency(scope.getDefines(superFieldAcc.toSrcString().toString()));
 
         return superFieldAcc;
     }
 
-    private SuperMethodInv visit(SuperMethodInvocation node) {
+    private SuperMethodInv visit(SuperMethodInvocation node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         SuperMethodInv superMethodInv = new SuperMethodInv(_fileName, startLine, endLine, node);
@@ -1025,9 +1115,10 @@ public class NodeParser {
         sName.setName(node.getName().getFullyQualifiedName());
         sName.setParent(superMethodInv);
         superMethodInv.setName(sName);
+        sName.setDataDependency(null);
 
         if (node.getQualifier() != null) {
-            Label label = (Label) process(node.getQualifier());
+            Label label = (Label) process(node.getQualifier(), scope);
             label.setParent(superMethodInv);
             superMethodInv.setLabel(label);
         }
@@ -1035,7 +1126,7 @@ public class NodeParser {
         ExprList exprList = new ExprList(_fileName, startLine, endLine, null);
         List<Expr> arguments = new ArrayList<>();
         for (Object object : node.arguments()) {
-            Expr expr = (Expr) process((ASTNode) object);
+            Expr expr = (Expr) process((ASTNode) object, scope);
             expr.setParent(exprList);
             arguments.add(expr);
         }
@@ -1049,7 +1140,7 @@ public class NodeParser {
         return superMethodInv;
     }
 
-    private SuperMethodRef visit(SuperMethodReference node) {
+    private SuperMethodRef visit(SuperMethodReference node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         SuperMethodRef superMethodRef = new SuperMethodRef(_fileName, startLine, endLine, node);
@@ -1057,7 +1148,7 @@ public class NodeParser {
         return superMethodRef;
     }
 
-    private ThisExpr visit(ThisExpression node) {
+    private ThisExpr visit(ThisExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         ThisExpr thisExpr = new ThisExpr(_fileName, startLine, endLine, node);
@@ -1068,7 +1159,7 @@ public class NodeParser {
         return thisExpr;
     }
 
-    private TyLiteral visit(TypeLiteral node) {
+    private TyLiteral visit(TypeLiteral node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         TyLiteral tyLiteral = new TyLiteral(_fileName, startLine, endLine, node);
@@ -1082,14 +1173,14 @@ public class NodeParser {
         return tyLiteral;
     }
 
-    private TypeMethodRef visit(TypeMethodReference node) {
+    private TypeMethodRef visit(TypeMethodReference node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         TypeMethodRef typeMethodRef = new TypeMethodRef(_fileName, startLine, endLine, node);
         return typeMethodRef;
     }
 
-    private VarDeclarationExpr visit(VariableDeclarationExpression node) {
+    private VarDeclarationExpr visit(VariableDeclarationExpression node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         VarDeclarationExpr varDeclarationExpr = new VarDeclarationExpr(_fileName, startLine, endLine, node);
@@ -1101,7 +1192,7 @@ public class NodeParser {
 
         List<Vdf> vdfs = new ArrayList<>();
         for (Object object : node.fragments()) {
-            Vdf vdf = (Vdf) process((ASTNode) object);
+            Vdf vdf = (Vdf) process((ASTNode) object, scope);
             vdf.setParent(varDeclarationExpr);
             vdfs.add(vdf);
         }
@@ -1110,27 +1201,29 @@ public class NodeParser {
         return varDeclarationExpr;
     }
 
-    private Vdf visit(VariableDeclarationFragment node) {
+    private Vdf visit(VariableDeclarationFragment node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Vdf vdf = new Vdf(_fileName, startLine, endLine, node);
 
-        SName identifier = (SName) process(node.getName());
+        SName identifier = (SName) process(node.getName(), scope);
         identifier.setParent(vdf);
         vdf.setName(identifier);
+        identifier.setDataDependency(null);
 
         vdf.setDimensions(node.getExtraDimensions());
 
         if (node.getInitializer() != null) {
-            Expr expression = (Expr) process(node.getInitializer());
+            Expr expression = (Expr) process(node.getInitializer(), scope);
             expression.setParent(vdf);
             vdf.setExpression(expression);
         }
+        scope.addDefine(identifier.getName(), vdf);
 
         return vdf;
     }
 
-    private Svd visit(SingleVariableDeclaration node) {
+    private Svd visit(SingleVariableDeclaration node, VScope scope) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Svd svd = new Svd(_fileName, startLine, endLine, node);
@@ -1140,140 +1233,146 @@ public class NodeParser {
         mType.setParent(svd);
         svd.setDecType(mType);
         if (node.getInitializer() != null) {
-            Expr initializer = (Expr) process(node.getInitializer());
+            Expr initializer = (Expr) process(node.getInitializer(), scope);
             initializer.setParent(svd);
             svd.setInitializer(initializer);
         }
 
-        SName name = (SName) process(node.getName());
+        SName name = (SName) process(node.getName(), scope);
         name.setParent(svd);
         svd.setName(name);
+        name.setDataDependency(null);
 
+        scope.addDefine(name.getName(), svd);
         return svd;
     }
 
     public Node process(ASTNode node) {
+        return process(node, new VScope(null));
+    }
+
+    public Node process(ASTNode node, VScope scope) {
         if (node == null) {
             return null;
         }
         if (node instanceof AssertStatement) {
-            return visit((AssertStatement) node);
+            return visit((AssertStatement) node, scope);
         } else if (node instanceof Block) {
-            return visit((Block) node);
+            return visit((Block) node, scope);
         } else if (node instanceof BreakStatement) {
-            return visit((BreakStatement) node);
+            return visit((BreakStatement) node, scope);
         } else if (node instanceof ConstructorInvocation) {
-            return visit((ConstructorInvocation) node);
+            return visit((ConstructorInvocation) node, scope);
         } else if (node instanceof ContinueStatement) {
-            return visit((ContinueStatement) node);
+            return visit((ContinueStatement) node, scope);
         } else if (node instanceof DoStatement) {
-            return visit((DoStatement) node);
+            return visit((DoStatement) node, scope);
         } else if (node instanceof EmptyStatement) {
-            return visit((EmptyStatement) node);
+            return visit((EmptyStatement) node, scope);
         } else if (node instanceof EnhancedForStatement) {
-            return visit((EnhancedForStatement) node);
+            return visit((EnhancedForStatement) node, scope);
         } else if (node instanceof ExpressionStatement) {
-            return visit((ExpressionStatement) node);
+            return visit((ExpressionStatement) node, scope);
         } else if (node instanceof ForStatement) {
-            return visit((ForStatement) node);
+            return visit((ForStatement) node, scope);
         } else if (node instanceof IfStatement) {
-            return visit((IfStatement) node);
+            return visit((IfStatement) node, scope);
         } else if (node instanceof LabeledStatement) {
-            return visit((LabeledStatement) node);
+            return visit((LabeledStatement) node, scope);
         } else if (node instanceof ReturnStatement) {
-            return visit((ReturnStatement) node);
+            return visit((ReturnStatement) node, scope);
         } else if (node instanceof SuperConstructorInvocation) {
-            return visit((SuperConstructorInvocation) node);
+            return visit((SuperConstructorInvocation) node, scope);
         } else if (node instanceof SwitchCase) {
-            return visit((SwitchCase) node);
+            return visit((SwitchCase) node, scope);
         } else if (node instanceof SwitchStatement) {
-            return visit((SwitchStatement) node);
+            return visit((SwitchStatement) node, scope);
         } else if (node instanceof SynchronizedStatement) {
-            return visit((SynchronizedStatement) node);
+            return visit((SynchronizedStatement) node, scope);
         } else if (node instanceof ThrowStatement) {
-            return visit((ThrowStatement) node);
+            return visit((ThrowStatement) node, scope);
         } else if (node instanceof TryStatement) {
-            return visit((TryStatement) node);
+            return visit((TryStatement) node, scope);
         } else if (node instanceof TypeDeclarationStatement) {
-            return visit((TypeDeclarationStatement) node);
+            return visit((TypeDeclarationStatement) node, scope);
         } else if (node instanceof VariableDeclarationStatement) {
-            return visit((VariableDeclarationStatement) node);
+            return visit((VariableDeclarationStatement) node, scope);
         } else if (node instanceof WhileStatement) {
-            return visit((WhileStatement) node);
+            return visit((WhileStatement) node, scope);
         } else if (node instanceof Annotation) {
-            return visit((Annotation) node);
+            return visit((Annotation) node, scope);
         } else if (node instanceof ArrayAccess) {
-            return visit((ArrayAccess) node);
+            return visit((ArrayAccess) node, scope);
         } else if (node instanceof ArrayCreation) {
-            return visit((ArrayCreation) node);
+            return visit((ArrayCreation) node, scope);
         } else if (node instanceof ArrayInitializer) {
-            return visit((ArrayInitializer) node);
+            return visit((ArrayInitializer) node, scope);
         } else if (node instanceof Assignment) {
-            return visit((Assignment) node);
+            return visit((Assignment) node, scope);
         } else if (node instanceof BooleanLiteral) {
-            return visit((BooleanLiteral) node);
+            return visit((BooleanLiteral) node, scope);
         } else if (node instanceof CastExpression) {
-            return visit((CastExpression) node);
+            return visit((CastExpression) node, scope);
         } else if (node instanceof CharacterLiteral) {
-            return visit((CharacterLiteral) node);
+            return visit((CharacterLiteral) node, scope);
         } else if (node instanceof ClassInstanceCreation) {
-            return visit((ClassInstanceCreation) node);
+            return visit((ClassInstanceCreation) node, scope);
         } else if (node instanceof ConditionalExpression) {
-            return visit((ConditionalExpression) node);
+            return visit((ConditionalExpression) node, scope);
         } else if (node instanceof CreationReference) {
-            return visit((CreationReference) node);
+            return visit((CreationReference) node, scope);
         } else if (node instanceof ExpressionMethodReference) {
-            return visit((ExpressionMethodReference) node);
+            return visit((ExpressionMethodReference) node, scope);
         } else if (node instanceof FieldAccess) {
-            return visit((FieldAccess) node);
+            return visit((FieldAccess) node, scope);
         } else if (node instanceof InfixExpression) {
-            return visit((InfixExpression) node);
+            return visit((InfixExpression) node, scope);
         } else if (node instanceof InstanceofExpression) {
-            return visit((InstanceofExpression) node);
+            return visit((InstanceofExpression) node, scope);
         } else if (node instanceof LambdaExpression) {
-            return visit((LambdaExpression) node);
+            return visit((LambdaExpression) node, scope);
         } else if (node instanceof MethodInvocation) {
-            return visit((MethodInvocation) node);
+            return visit((MethodInvocation) node, scope);
         } else if (node instanceof MethodReference) {
-            return visit((MethodReference) node);
+            return visit((MethodReference) node, scope);
         } else if (node instanceof Name) {
-            return visit((Name) node);
+            return visit((Name) node, scope);
         } else if (node instanceof NullLiteral) {
-            return visit((NullLiteral) node);
+            return visit((NullLiteral) node, scope);
         } else if (node instanceof NumberLiteral) {
-            return visit((NumberLiteral) node);
+            return visit((NumberLiteral) node, scope);
         } else if (node instanceof ParenthesizedExpression) {
-            return visit((ParenthesizedExpression) node);
+            return visit((ParenthesizedExpression) node, scope);
         } else if (node instanceof PostfixExpression) {
-            return visit((PostfixExpression) node);
+            return visit((PostfixExpression) node, scope);
         } else if (node instanceof PrefixExpression) {
-            return visit((PrefixExpression) node);
+            return visit((PrefixExpression) node, scope);
         } else if (node instanceof StringLiteral) {
-            return visit((StringLiteral) node);
+            return visit((StringLiteral) node, scope);
         } else if (node instanceof SuperFieldAccess) {
-            return visit((SuperFieldAccess) node);
+            return visit((SuperFieldAccess) node, scope);
         } else if (node instanceof SuperMethodInvocation) {
-            return visit((SuperMethodInvocation) node);
+            return visit((SuperMethodInvocation) node, scope);
         } else if (node instanceof SuperMethodReference) {
-            return visit((SuperMethodReference) node);
+            return visit((SuperMethodReference) node, scope);
         } else if (node instanceof ThisExpression) {
-            return visit((ThisExpression) node);
+            return visit((ThisExpression) node, scope);
         } else if (node instanceof TypeLiteral) {
-            return visit((TypeLiteral) node);
+            return visit((TypeLiteral) node, scope);
         } else if (node instanceof TypeMethodReference) {
-            return visit((TypeMethodReference) node);
+            return visit((TypeMethodReference) node, scope);
         } else if (node instanceof VariableDeclarationExpression) {
-            return visit((VariableDeclarationExpression) node);
+            return visit((VariableDeclarationExpression) node, scope);
         } else if (node instanceof AnonymousClassDeclaration) {
-            return visit((AnonymousClassDeclaration) node);
+            return visit((AnonymousClassDeclaration) node, scope);
         } else if (node instanceof VariableDeclarationFragment) {
-            return visit((VariableDeclarationFragment) node);
+            return visit((VariableDeclarationFragment) node, scope);
         } else if (node instanceof SingleVariableDeclaration) {
-            return visit((SingleVariableDeclaration) node);
+            return visit((SingleVariableDeclaration) node, scope);
         } else if (node instanceof MethodDeclaration) {
-            return visit((MethodDeclaration) node);
+            return visit((MethodDeclaration) node, scope);
         } else if (node instanceof CatchClause) {
-            return visit((CatchClause) node);
+            return visit((CatchClause) node, scope);
         } else {
             System.out.println("UNKNOWN ASTNode type : " + node.toString());
             return null;
@@ -1344,19 +1443,65 @@ public class NodeParser {
         }
     }
 
-    private Blk wrapBlock(Statement node) {
-        Blk blk = null;
+    private Blk wrapBlock(Statement node, VScope scope) {
+        Blk blk;
         if(node instanceof Block) {
-            blk = (Blk) process(node);
+            blk = (Blk) process(node, scope);
         } else {
             int startLine = _cunit.getLineNumber(node.getStartPosition());
             int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
             blk = new Blk(_fileName, startLine, endLine, node);
             List<Stmt> stmts = new ArrayList<>();
-            stmts.add((Stmt) process(node));
+            stmts.add((Stmt) process(node, scope));
             blk.setStatement(stmts);
         }
         return blk;
+    }
+}
+
+class VScope {
+
+    private VScope _parent;
+    private Map<String, Node> _varDefines = new HashMap<>();
+    private static Stack<Node> _stucture = new Stack<>();
+
+    public VScope(VScope parent) {
+        _parent = parent;
+    }
+
+    public void addDefine(String name, Node node) {
+        if (name == null || node == null) return;
+        _varDefines.put(name, node);
+    }
+
+    public Node getDefines(String name) {
+        return gDefines(name);
+    }
+
+    private Node gDefines(String name) {
+        if (name == null) return null;
+        Node node = _varDefines.get(name);
+        if (node == null && _parent != null) {
+            return _parent.gDefines(name);
+        }
+        return node;
+    }
+
+    public void pushStructure(Node node) {
+        _stucture.push(node);
+    }
+
+    public void popStructure() {
+        if(!_stucture.isEmpty()) {
+            _stucture.pop();
+        }
+    }
+
+    public Node peekStructure() {
+        if(_stucture.isEmpty()) {
+            return null;
+        }
+        return _stucture.peek();
     }
 
 }
