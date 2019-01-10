@@ -12,6 +12,7 @@ import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.relation.Relation;
+import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.io.Serializable;
@@ -286,7 +287,16 @@ public abstract class Node implements NodeComparator, Serializable {
     /******* record matched information for change ***********/
     /*********************************************************/
     private Node _bindingNode;
+    private boolean _considered = false;
     protected List<Modification> _modifications;
+
+    public boolean isConsidered() {
+        return _considered || _bindingNode == null;
+    }
+
+    public void setConsidered(boolean considered) {
+        _considered = considered;
+    }
 
     public void setBindingNode(Node binding) {
         _bindingNode = binding;
@@ -297,6 +307,48 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public Node getBindingNode() {
         return _bindingNode;
+    }
+
+    public Set<Node> getConsideredNodesRec(Set<Node> nodes, boolean includeExpanded) {
+        if((includeExpanded && _considered) || _bindingNode == null) {
+            nodes.add(this);
+        }
+        for(Node node : getAllChildren()) {
+            node.getConsideredNodesRec(nodes, includeExpanded);
+        }
+        return nodes;
+    }
+
+    public Set<Node> expand(Set<Node> nodes) {
+        expandDependency(nodes);
+        expandBottomUp(nodes);
+        expandTopDown(nodes);
+        return nodes;
+    }
+
+    private void expandDependency(Set<Node> nodes) {
+        if(_datadependency != null) {
+            _datadependency.setConsidered(true);
+            nodes.add(_datadependency);
+        }
+        if(_controldependency != null) {
+            _controldependency.setConsidered(true);
+            nodes.add(_controldependency);
+        }
+    }
+
+    private void expandTopDown(Set<Node> nodes) {
+        for(Node node : getAllChildren()) {
+            node.setConsidered(true);
+        }
+        nodes.addAll(getAllChildren());
+    }
+
+    private void expandBottomUp(Set<Node> nodes) {
+        if(_parent != null) {
+            _parent.setConsidered(true);
+            nodes.add(_parent);
+        }
     }
 
     protected boolean canBinding(Node node) {
@@ -334,6 +386,21 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public Relation getBindingRelation() {
         return _binding;
+    }
+
+    /*********************************************************/
+    /**************** pattern abstraction ********************/
+    /*********************************************************/
+    protected boolean _abstract = true;
+
+    public boolean isAbstract() {
+        return _abstract;
+    }
+
+    public void doAbstraction(ElementCounter counter) {
+        for(Node node : getAllChildren()) {
+            node.doAbstraction(counter);
+        }
     }
 
     @Override

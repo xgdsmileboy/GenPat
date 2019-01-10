@@ -8,6 +8,11 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.Pattern;
+import mfix.core.stats.element.ElementCounter;
+import mfix.core.stats.element.ElementException;
+import mfix.core.stats.element.ElementQueryType;
+import mfix.core.stats.element.MethodElement;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -162,5 +167,21 @@ public class MethodInv extends Expr {
 			_arguments.postAccurateMatch(methodInv.getArguments());
 		}
 		return match;
+	}
+
+	@Override
+	public void doAbstraction(ElementCounter counter) {
+		if(isConsidered()) {
+			ElementQueryType qtype = new ElementQueryType(false,
+					false, ElementQueryType.CountType.COUNT_FILES);
+			MethodElement methodElement = new MethodElement(_name.getName(), null);
+			methodElement.setArgsNumber(_arguments.getExpr().size());
+			try {
+				_abstract = counter.count(methodElement, qtype) < Pattern.API_FREQUENCY;
+			} catch (ElementException e) {
+				_abstract = true;
+			}
+		}
+		super.doAbstraction(counter);
 	}
 }

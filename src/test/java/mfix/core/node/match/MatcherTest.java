@@ -14,6 +14,7 @@ import mfix.core.TestCase;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.parser.NodeParser;
+import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -66,6 +67,13 @@ public class MatcherTest extends TestCase {
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = NodeParser.getInstance();
         Set<Node> patterns = new HashSet<>();
+
+        ElementCounter counter = new ElementCounter();
+        counter.open();
+        try {
+            counter.loadCache(Constant.DB_CACHE_FILE);
+        } catch (Exception e) {}
+
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);
             Node srcNode = nodeParser.process(pair.getFirst());
@@ -77,9 +85,23 @@ public class MatcherTest extends TestCase {
             }
 
             if(Matcher.greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
+                Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
+                Set<Node> temp;
+                for(Node node : nodes) {
+                    temp = node.expand(new HashSet<>());
+                    for(Node n : temp) {
+                        if (n.getBindingNode() != null) {
+                            n.getBindingNode().setConsidered(true);
+                        }
+                    }
+                }
+                nodes = srcNode.getConsideredNodesRec(new HashSet<>(), true);
+                srcNode.doAbstraction(counter);
                 patterns.add(srcNode);
             }
         }
+
+        counter.close();
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
