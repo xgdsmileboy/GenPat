@@ -287,15 +287,20 @@ public abstract class Node implements NodeComparator, Serializable {
     /******* record matched information for change ***********/
     /*********************************************************/
     private Node _bindingNode;
-    private boolean _considered = false;
+    private boolean _expanded = false;
+    private boolean _changed = false;
     protected List<Modification> _modifications;
 
+    public boolean isChanged() {
+        return _changed;
+    }
+
     public boolean isConsidered() {
-        return _considered || _bindingNode == null;
+        return _expanded || _bindingNode == null;
     }
 
     public void setConsidered(boolean considered) {
-        _considered = considered;
+        _expanded = considered;
     }
 
     public void setBindingNode(Node binding) {
@@ -310,9 +315,37 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     public Set<Node> getConsideredNodesRec(Set<Node> nodes, boolean includeExpanded) {
-        if((includeExpanded && _considered) || _bindingNode == null) {
+        if(_bindingNode == null) {
             nodes.add(this);
+        } else {
+            boolean notAdded = true;
+            if((includeExpanded && _expanded)) {
+                nodes.add(this);
+            }
+
+            // data dependency changed
+            if(_datadependency == null) {
+                if(_bindingNode.getDataDependency() != null) {
+                    nodes.add(this);
+                    notAdded = false;
+                }
+            } else if(_datadependency.getBindingNode() != _bindingNode.getDataDependency()){
+                nodes.add(this);
+                notAdded = false;
+            }
+
+            if(notAdded) {
+                // control dependency changed
+                if(_controldependency == null) {
+                    if(_bindingNode.getControldependency() != null) {
+                        nodes.add(this);
+                    }
+                } else if(_controldependency.getBindingNode() != _bindingNode.getControldependency()){
+                    nodes.add(this);
+                }
+            }
         }
+
         for(Node node : getAllChildren()) {
             node.getConsideredNodesRec(nodes, includeExpanded);
         }
