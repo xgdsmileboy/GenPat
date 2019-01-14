@@ -6,8 +6,9 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.match.metric.FVector;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -31,12 +32,12 @@ public class SName extends Label {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SNAME;
 	}
-	
-	public void setName(String name){
+
+	public void setName(String name) {
 		_name = name;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return _name;
 	}
 
@@ -50,21 +51,21 @@ public class SName extends Label {
 		_tokens = new LinkedList<>();
 		_tokens.add(_name);
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof SName) {
-			SName sName	= (SName) other;
+		if (other instanceof SName) {
+			SName sName = (SName) other;
 			return _name.equals(sName._name);
 		}
 		return false;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -73,11 +74,23 @@ public class SName extends Label {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return true;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			SName sName = (SName) getBindingNode();
+			if (!_name.equals(sName.getName())) {
+				Update update = new Update(this, this, sName);
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

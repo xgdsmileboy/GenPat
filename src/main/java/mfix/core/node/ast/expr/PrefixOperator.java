@@ -23,7 +23,7 @@ public class PrefixOperator extends Operator {
 	private String _operatorStr;
 	private transient PrefixExpression.Operator _operator;
 	private static Map<String, Integer> _operatorMap;
-	
+
 	static {
 		_operatorMap = new HashMap<>();
 		_operatorMap.put("++", 0);
@@ -66,7 +66,7 @@ public class PrefixOperator extends Operator {
 		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

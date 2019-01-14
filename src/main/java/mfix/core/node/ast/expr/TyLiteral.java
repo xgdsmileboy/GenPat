@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ public class TyLiteral extends Expr {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.TLITERAL;
 	}
-	
-	public void setValue(MType type){
+
+	public void setValue(MType type) {
 		_type = type;
 	}
 
@@ -47,7 +48,7 @@ public class TyLiteral extends Expr {
 		stringBuffer.append(".class");
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -55,22 +56,22 @@ public class TyLiteral extends Expr {
 		_tokens.add(".");
 		_tokens.add("class");
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof TyLiteral) {
+		if (other instanceof TyLiteral) {
 			TyLiteral literal = (TyLiteral) other;
 			match = _type.compare(literal._type);
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -81,15 +82,15 @@ public class TyLiteral extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		TyLiteral tyLiteral = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			tyLiteral = (TyLiteral) getBindingNode();
 			match = (tyLiteral == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			tyLiteral = (TyLiteral) node;
 			setBindingNode(node);
 			match = true;
 		}
-		if(tyLiteral == null) {
+		if (tyLiteral == null) {
 			continueTopDownMatchNull();
 		} else {
 			_type.postAccurateMatch(tyLiteral._type);
@@ -98,7 +99,14 @@ public class TyLiteral extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			TyLiteral tyLiteral = (TyLiteral) getBindingNode();
+			if (!_type.compare(tyLiteral.getDeclType())) {
+				Update update = new Update(this, _type, tyLiteral.getDeclType());
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -30,10 +31,16 @@ public class StrLiteral extends Expr {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SLITERAL;
 	}
-	
-	public void setValue(String value){
-		_value = value.replace("\\", "\\\\").replace("\'", "\\'").replace("\"", "\\\"").replace("\n", "\\n")
-				.replace("\b", "\\b").replace("\t", "\\t").replace("\r", "\\r").replace("\f", "\\f")
+
+	public void setValue(String value) {
+		_value = value.replace("\\", "\\\\")
+				.replace("\'", "\\'")
+				.replace("\"", "\\\"")
+				.replace("\n", "\\n")
+				.replace("\b", "\\b")
+				.replace("\t", "\\t")
+				.replace("\r", "\\r")
+				.replace("\f", "\\f")
 				.replace("\0", "\\0");
 	}
 
@@ -49,28 +56,28 @@ public class StrLiteral extends Expr {
 		stringBuffer.append("\"");
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add("\"" + _value + "\"");
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof StrLiteral) {
+		if (other instanceof StrLiteral) {
 			StrLiteral strLiteral = (StrLiteral) other;
 			match = _value.equals(strLiteral._value);
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -79,8 +86,8 @@ public class StrLiteral extends Expr {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return false;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return false;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -88,7 +95,14 @@ public class StrLiteral extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			StrLiteral literal = (StrLiteral) getBindingNode();
+			if (!getValue().equals(literal.getValue())) {
+				Update update = new Update(this, this, literal);
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

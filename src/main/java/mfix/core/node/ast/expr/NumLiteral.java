@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -30,37 +31,37 @@ public class NumLiteral extends Expr {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.NUMBER;
 	}
-	
-	public void setValue(String token){
+
+	public void setValue(String token) {
 		_token = token;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_token);
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add(_token);
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof NumLiteral) {
+		if (other instanceof NumLiteral) {
 			NumLiteral numLiteral = (NumLiteral) other;
 			match = _token.equals(numLiteral._token);
 		}
-		return match; 
+		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -69,8 +70,8 @@ public class NumLiteral extends Expr {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return true;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -78,7 +79,13 @@ public class NumLiteral extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			if (!compare(getBindingNode())) {
+				Update update = new Update(this, this, getBindingNode());
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class ParenthesiszedExpr extends Expr {
 		_nodeType = TYPE.PARENTHESISZED;
 	}
 
-	public void setExpr(Expr expression){
+	public void setExpr(Expr expression) {
 		_expression = expression;
 	}
 
@@ -48,7 +49,7 @@ public class ParenthesiszedExpr extends Expr {
 		stringBuffer.append(")");
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -56,24 +57,24 @@ public class ParenthesiszedExpr extends Expr {
 		_tokens.addAll(_expression.tokens());
 		_tokens.add(")");
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof ParenthesiszedExpr) {
+		if (other instanceof ParenthesiszedExpr) {
 			ParenthesiszedExpr parenthesiszedExpr = (ParenthesiszedExpr) other;
 			match = _expression.compare(parenthesiszedExpr._expression);
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(1);
 		children.add(_expression);
 		return children;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -84,15 +85,15 @@ public class ParenthesiszedExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		ParenthesiszedExpr parenthesiszedExpr = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			parenthesiszedExpr = (ParenthesiszedExpr) getBindingNode();
 			match = (parenthesiszedExpr == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			parenthesiszedExpr = (ParenthesiszedExpr) node;
 			setBindingNode(node);
 			match = true;
 		}
-		if(parenthesiszedExpr == null) {
+		if (parenthesiszedExpr == null) {
 			continueTopDownMatchNull();
 		} else {
 			_expression.postAccurateMatch(parenthesiszedExpr.getExpression());
@@ -101,7 +102,16 @@ public class ParenthesiszedExpr extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			ParenthesiszedExpr parenthesiszedExpr = (ParenthesiszedExpr) getBindingNode();
+			if (_expression.getBindingNode() != parenthesiszedExpr.getExpression()) {
+				Update update = new Update(this, _expression, parenthesiszedExpr.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+		}
+		return true;
 	}
 }

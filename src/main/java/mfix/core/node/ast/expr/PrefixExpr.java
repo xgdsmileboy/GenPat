@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -32,12 +33,12 @@ public class PrefixExpr extends Expr {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.PREEXPR;
 	}
-	
-	public void setExpression(Expr expression){
+
+	public void setExpression(Expr expression) {
 		_expression = expression;
 	}
-	
-	public void setOperator(PrefixOperator operator){
+
+	public void setOperator(PrefixOperator operator) {
 		_operator = operator;
 	}
 
@@ -56,17 +57,17 @@ public class PrefixExpr extends Expr {
 		stringBuffer.append(_expression.toSrcString());
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.addAll(_operator.tokens());
 		_tokens.addAll(_expression.tokens());
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof PrefixExpr) {
+		if (other instanceof PrefixExpr) {
 			PrefixExpr prefixExpr = (PrefixExpr) other;
 			return _operator.compare(prefixExpr._operator) && _expression.compare(prefixExpr._expression);
 		}
@@ -80,7 +81,7 @@ public class PrefixExpr extends Expr {
 		children.add(_operator);
 		return children;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -93,7 +94,7 @@ public class PrefixExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		PrefixExpr prefixExpr = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			prefixExpr = (PrefixExpr) getBindingNode();
 			match = (prefixExpr == node);
 		} else if (canBinding(node)) {
@@ -101,7 +102,7 @@ public class PrefixExpr extends Expr {
 			setBindingNode(prefixExpr);
 			match = true;
 		}
-		if(prefixExpr == null) {
+		if (prefixExpr == null) {
 			continueTopDownMatchNull();
 		} else {
 			_expression.postAccurateMatch(prefixExpr.getExpression());
@@ -111,7 +112,20 @@ public class PrefixExpr extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			PrefixExpr prefixExpr = (PrefixExpr) getBindingNode();
+			if (_expression.getBindingNode() != prefixExpr.getExpression()) {
+				Update update = new Update(this, _expression, prefixExpr.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+			if (!_operator.compare(prefixExpr.getOperator())) {
+				Update update = new Update(this, _operator, prefixExpr.getOperator());
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

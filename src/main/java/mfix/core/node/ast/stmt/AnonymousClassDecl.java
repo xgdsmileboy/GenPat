@@ -34,36 +34,36 @@ public class AnonymousClassDecl extends Node {
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_codeStr);
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add(_codeStr);
 	}
-	
+
 	@Override
 	public Stmt getParentStmt() {
 		return getParent().getParentStmt();
 	}
-	
+
 	@Override
 	public List<Stmt> getChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof AnonymousClassDecl) {
+		if (other instanceof AnonymousClassDecl) {
 			return _codeStr.equals(((AnonymousClassDecl) other)._codeStr);
 		}
 		return false;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -72,8 +72,8 @@ public class AnonymousClassDecl extends Node {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return true;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -81,7 +81,7 @@ public class AnonymousClassDecl extends Node {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }

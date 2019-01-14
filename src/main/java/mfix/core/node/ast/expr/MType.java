@@ -27,25 +27,25 @@ public class MType extends Node {
 	private static final long serialVersionUID = 1247523997810234312L;
 	private String _typeStr;
 	private transient Type _type;
-	
+
 	public MType(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.TYPE;
 		_typeStr = oriNode.toString();
 	}
-	
+
 	public void setType(Type type) {
-		if(type == null) {
+		if (type == null) {
 			type = AST.newAST(AST.JLS8).newWildcardType();
 		}
 		this._type = type;
 		_typeStr = type.toString();
 	}
-	
+
 	public Type type() {
 		return _type;
 	}
-	
+
 	public boolean isArrayType() {
 		return _type.isArrayType();
 	}
@@ -55,7 +55,7 @@ public class MType extends Node {
 	}
 
 	public Type getElementType() {
-		if(isArrayType()) {
+		if (isArrayType()) {
 			return ((ArrayType) _type).getElementType();
 		} else {
 			return _type;
@@ -64,19 +64,19 @@ public class MType extends Node {
 
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof MType) {
+		if (other instanceof MType) {
 			return _type.toString().equals(((MType) other)._type.toString());
 		}
 		return false;
 	}
-	
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(_typeStr);
 		return stringBuffer;
 	}
-	
+
 	@Override
 	public Stmt getParentStmt() {
 		return getParent().getParentStmt();
@@ -86,7 +86,7 @@ public class MType extends Node {
 	public List<Stmt> getChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
@@ -103,10 +103,10 @@ public class MType extends Node {
 		_tokens = new LinkedList<>();
 		_tokens.add(_typeStr);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == null || !(obj instanceof MType)) {
+		if (obj == null || !(obj instanceof MType)) {
 			return false;
 		}
 		MType mType = (MType) obj;
@@ -115,8 +115,8 @@ public class MType extends Node {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return true;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -124,7 +124,7 @@ public class MType extends Node {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }

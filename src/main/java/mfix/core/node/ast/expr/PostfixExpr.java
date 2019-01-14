@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -33,11 +34,11 @@ public class PostfixExpr extends Expr {
 		_nodeType = TYPE.POSTEXPR;
 	}
 
-	public void setExpression(Expr expression){
+	public void setExpression(Expr expression) {
 		_expression = expression;
 	}
-	
-	public void setOperator(PostOperator operator){
+
+	public void setOperator(PostOperator operator) {
 		_operator = operator;
 	}
 
@@ -56,24 +57,24 @@ public class PostfixExpr extends Expr {
 		stringBuffer.append(_operator.toSrcString());
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.addAll(_expression.tokens());
 		_tokens.addAll(_operator.tokens());
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof PostfixExpr) {
+		if (other instanceof PostfixExpr) {
 			PostfixExpr postfixExpr = (PostfixExpr) other;
 			match = _operator.compare(postfixExpr._operator) && _expression.compare(postfixExpr._expression);
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(2);
@@ -81,7 +82,7 @@ public class PostfixExpr extends Expr {
 		children.add(_operator);
 		return children;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -94,15 +95,15 @@ public class PostfixExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		PostfixExpr postfixExpr = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			postfixExpr = (PostfixExpr) getBindingNode();
 			match = (postfixExpr == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			postfixExpr = (PostfixExpr) node;
 			setBindingNode(node);
 			match = true;
 		}
-		if(postfixExpr == null) {
+		if (postfixExpr == null) {
 			continueTopDownMatchNull();
 		} else {
 			_expression.postAccurateMatch(postfixExpr.getExpression());
@@ -112,7 +113,20 @@ public class PostfixExpr extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			PostfixExpr postfixExpr = (PostfixExpr) getBindingNode();
+			if (_expression.getBindingNode() != postfixExpr.getExpression()) {
+				Update update = new Update(this, _expression, postfixExpr.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+			if (!_operator.compare(postfixExpr.getOperator())) {
+				Update update = new Update(this, _operator, postfixExpr.getOperator());
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

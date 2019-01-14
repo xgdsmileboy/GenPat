@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -27,14 +28,14 @@ public class InstanceofExpr extends Expr {
 	
 	/**
 	 * InstanceofExpression:
-     *	Expression instanceof Type
+     *		Expression instanceof Type
 	 */
 	public InstanceofExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.INSTANCEOF;
 	}
-	
-	public void setExpression(Expr expression){
+
+	public void setExpression(Expr expression) {
 		_expression = expression;
 	}
 
@@ -58,7 +59,7 @@ public class InstanceofExpr extends Expr {
 		stringBuffer.append(_instanceType.toSrcString());
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -77,7 +78,7 @@ public class InstanceofExpr extends Expr {
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(2);
@@ -85,7 +86,7 @@ public class InstanceofExpr extends Expr {
 		children.add(_instanceType);
 		return children;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -98,10 +99,10 @@ public class InstanceofExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		InstanceofExpr instanceofExpr = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			instanceofExpr = (InstanceofExpr) getBindingNode();
 			match = (instanceofExpr == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			instanceofExpr = (InstanceofExpr) node;
 			setBindingNode(node);
 			match = true;
@@ -116,7 +117,21 @@ public class InstanceofExpr extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			InstanceofExpr instanceofExpr = (InstanceofExpr) getBindingNode();
+			if (_expression.getBindingNode() != instanceofExpr.getExpression()) {
+				Update update = new Update(this, _expression, instanceofExpr.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+			if (_instanceType.getBindingNode() != instanceofExpr.getInstanceofType()
+					|| !_instanceType.typeStr().equals(instanceofExpr.getInstanceofType().typeStr())) {
+				Update update = new Update(this, _instanceType, instanceofExpr.getInstanceofType());
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

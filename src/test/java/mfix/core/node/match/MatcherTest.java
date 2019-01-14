@@ -13,6 +13,7 @@ import mfix.common.util.Pair;
 import mfix.core.TestCase;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -97,6 +98,9 @@ public class MatcherTest extends TestCase {
                 }
                 nodes = srcNode.getConsideredNodesRec(new HashSet<>(), true);
                 srcNode.doAbstraction(counter);
+                for (Modification modification : srcNode.getAllModifications(new HashSet<>())) {
+                    System.out.println(modification);
+                }
                 patterns.add(srcNode);
             }
         }

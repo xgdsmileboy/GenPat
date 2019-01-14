@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -114,7 +115,22 @@ public class ContinueStmt extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if(super.genModidications()) {
+			ContinueStmt continueStmt = (ContinueStmt) getBindingNode();
+			if(_identifier == null) {
+				if(continueStmt._identifier != null) {
+					Update update = new Update(this, _identifier, continueStmt._identifier);
+					_modifications.add(update);
+				}
+			} else if (_identifier.getBindingNode() != continueStmt._identifier){
+				Update update = new Update(this, _identifier, continueStmt._identifier);
+				_modifications.add(update);
+			} else {
+				_identifier.genModidications();
+			}
+			return true;
+		}
+		return false;
 	}
 }

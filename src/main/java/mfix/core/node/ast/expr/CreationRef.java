@@ -20,66 +20,66 @@ import java.util.List;
  */
 public class CreationRef extends Expr {
 
-	private static final long serialVersionUID = 6237635456129751926L;
+    private static final long serialVersionUID = 6237635456129751926L;
 
-	private String _str;
+    private String _str;
 
-	/**
-	 * CreationReference:
-     *	Type :: 
-     *     [ < Type { , Type } > ]
-     *     new
-	 */
-	public CreationRef(String fileName, int startLine, int endLine, ASTNode node) {
-		super(fileName, startLine, endLine, node);
-		_str = node.toString();
-	}
+    /**
+     * CreationReference:
+     *      Type ::
+     *          [ < Type { , Type } > ]
+     *      new
+     */
+    public CreationRef(String fileName, int startLine, int endLine, ASTNode node) {
+        super(fileName, startLine, endLine, node);
+        _str = node.toString();
+    }
 
-	@Override
-	public StringBuffer toSrcString() {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_str);
-		return stringBuffer;
-	}
-	
-	@Override
-	protected void tokenize() {
-		_tokens = new LinkedList<>();
-		_tokens.add(_str);
-	}
-	
-	@Override
-	public boolean compare(Node other) {
-		boolean match = false;
-		if(other instanceof CreationRef) {
-			CreationRef creationRef = (CreationRef) other;
-			match = _str.equals(creationRef.toString());
-		}
-		return match;
-	}
-	
-	@Override
-	public List<Node> getAllChildren() {
-		return new ArrayList<>(0);
-	}
-	
-	@Override
-	public void computeFeatureVector() {
-		_fVector = new FVector();
-	}
+    @Override
+    public StringBuffer toSrcString() {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(_str);
+        return stringBuffer;
+    }
 
-	@Override
-	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
-			setBindingNode(node);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    protected void tokenize() {
+        _tokens = new LinkedList<>();
+        _tokens.add(_str);
+    }
 
-	@Override
-	public void genModidications() {
-		//todo
-	}
+    @Override
+    public boolean compare(Node other) {
+        boolean match = false;
+        if (other instanceof CreationRef) {
+            CreationRef creationRef = (CreationRef) other;
+            match = _str.equals(creationRef.toString());
+        }
+        return match;
+    }
+
+    @Override
+    public List<Node> getAllChildren() {
+        return new ArrayList<>(0);
+    }
+
+    @Override
+    public void computeFeatureVector() {
+        _fVector = new FVector();
+    }
+
+    @Override
+    public boolean postAccurateMatch(Node node) {
+        if (getBindingNode() == node) return true;
+        if (getBindingNode() == null && canBinding(node)) {
+            setBindingNode(node);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean genModidications() {
+        return true;
+    }
 }

@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -27,34 +28,34 @@ public class InfixExpr extends Expr {
 	
 	/**
 	 * InfixExpression:
-     *	Expression InfixOperator Expression { InfixOperator Expression }
+     *		Expression InfixOperator Expression { InfixOperator Expression }
 	 */
 	public InfixExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.INFIXEXPR;
 	}
-	
-	public void setLeftHandSide(Expr lhs){
+
+	public void setLeftHandSide(Expr lhs) {
 		_lhs = lhs;
 	}
-	
-	public void setOperator(InfixOperator operator){
+
+	public void setOperator(InfixOperator operator) {
 		_operator = operator;
 	}
-	
-	public void setRightHandSide(Expr rhs){
+
+	public void setRightHandSide(Expr rhs) {
 		_rhs = rhs;
 	}
-	
-	public InfixOperator getOperator(){
+
+	public InfixOperator getOperator() {
 		return _operator;
 	}
-	
-	public Expr getLhs(){
+
+	public Expr getLhs() {
 		return _lhs;
 	}
-	
-	public Expr getRhs(){
+
+	public Expr getRhs() {
 		return _rhs;
 	}
 
@@ -66,7 +67,7 @@ public class InfixExpr extends Expr {
 		stringBuffer.append(_rhs.toSrcString());
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -74,7 +75,7 @@ public class InfixExpr extends Expr {
 		_tokens.addAll(_operator.tokens());
 		_tokens.addAll(_rhs.tokens());
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
@@ -85,7 +86,7 @@ public class InfixExpr extends Expr {
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(3);
@@ -94,7 +95,7 @@ public class InfixExpr extends Expr {
 		children.add(_rhs);
 		return children;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -107,15 +108,15 @@ public class InfixExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		InfixExpr infixExpr = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			infixExpr = (InfixExpr) getBindingNode();
 			match = (infixExpr == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			infixExpr = (InfixExpr) node;
 			setBindingNode(node);
 			match = true;
 		}
-		if(infixExpr == null) {
+		if (infixExpr == null) {
 			continueTopDownMatchNull();
 		} else {
 			_lhs.postAccurateMatch(infixExpr.getLhs());
@@ -126,7 +127,26 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			InfixExpr infixExpr = (InfixExpr) getBindingNode();
+			if (_lhs.getBindingNode() != infixExpr.getLhs()) {
+				Update update = new Update(this, _lhs, infixExpr.getLhs());
+				_modifications.add(update);
+			} else {
+				_lhs.genModidications();
+			}
+			if (_rhs.getBindingNode() != infixExpr.getRhs()) {
+				Update update = new Update(this, _rhs, infixExpr.getRhs());
+				_modifications.add(update);
+			} else {
+				_rhs.genModidications();
+			}
+			if (!_operator.compare(infixExpr.getOperator())) {
+				Update update = new Update(this, _operator, infixExpr.getOperator());
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

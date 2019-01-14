@@ -112,15 +112,15 @@ public class Blk extends Stmt {
     public boolean postAccurateMatch(Node node) {
         Blk blk = null;
         boolean match = false;
-        if(getBindingNode() != null) {
+        if (getBindingNode() != null) {
             blk = (Blk) getBindingNode();
             match = (getBindingNode() == node);
-        } else if(canBinding(node)) {
+        } else if (canBinding(node)) {
             blk = (Blk) node;
             setBindingNode(node);
             match = true;
         }
-        if(blk == null) {
+        if (blk == null) {
             continueTopDownMatchNull();
         } else {
             greedyMatchListNode(_statements, blk.getStatement());
@@ -129,7 +129,12 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public void genModidications() {
-        //todo
+    public boolean genModidications() {
+        if(super.genModidications()) {
+            Blk blk = (Blk) getBindingNode();
+            genModificationList(_statements, blk.getStatement());
+            return true;
+        }
+        return false;
     }
 }

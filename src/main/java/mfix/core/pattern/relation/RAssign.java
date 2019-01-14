@@ -142,20 +142,20 @@ public class RAssign extends ObjRelation {
 
     @Override
     public boolean assemble(List<Modification> modifications, boolean isAdded) {
-        if(isAdded) {
-            StringBuffer buffer = buildTargetSource();
-            if (buffer != null) {
-                Insertion insertion = new Insertion(null, 0, buffer.toString(), false);
-                modifications.add(insertion);
-                return true;
-            }
-        } else {
-            if(alreadyMatched()) {
-                Deletion deletion = new Deletion(getBindingRelation().getAstNode());
-                modifications.add(deletion);
-                return true;
-            }
-        }
+//        if(isAdded) {
+//            StringBuffer buffer = buildTargetSource();
+//            if (buffer != null) {
+//                Insertion insertion = new Insertion(null, 0, buffer.toString());
+//                modifications.add(insertion);
+//                return true;
+//            }
+//        } else {
+//            if(alreadyMatched()) {
+//                Deletion deletion = new Deletion(getBindingRelation().getAstNode());
+//                modifications.add(deletion);
+//                return true;
+//            }
+//        }
         return false;
     }
 

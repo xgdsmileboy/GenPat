@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -136,7 +137,22 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if(super.genModidications()) {
+			SwCase swCase = (SwCase) getBindingNode();
+			if(_expression == null) {
+				if(swCase.getExpression() != null) {
+					Update update = new Update(this, _expression, swCase.getExpression());
+					_modifications.add(update);
+				}
+			} else if(_expression.getBindingNode() != swCase.getExpression()) {
+				Update update = new Update(this, _expression, swCase.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+			return true;
+		}
+		return false;
 	}
 }

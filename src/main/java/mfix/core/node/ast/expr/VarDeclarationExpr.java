@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -34,12 +35,12 @@ public class VarDeclarationExpr extends Expr {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.VARDECLEXPR;
 	}
-	
-	public void setDeclType(MType declType){
+
+	public void setDeclType(MType declType) {
 		_declType = declType;
 	}
-	
-	public void setVarDeclFrags(List<Vdf> vdfs){
+
+	public void setVarDeclFrags(List<Vdf> vdfs) {
 		_vdfs = vdfs;
 	}
 
@@ -63,32 +64,32 @@ public class VarDeclarationExpr extends Expr {
 		}
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.addAll(_declType.tokens());
 		_tokens.addAll(_vdfs.get(0).tokens());
-		for(int i = 1; i < _vdfs.size(); i++ ) {
+		for (int i = 1; i < _vdfs.size(); i++) {
 			_tokens.add(",");
 			_tokens.addAll(_vdfs.get(i).tokens());
 		}
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof VarDeclarationExpr) {
+		if (other instanceof VarDeclarationExpr) {
 			VarDeclarationExpr varDeclarationExpr = (VarDeclarationExpr) other;
 			match = _declType.compare(varDeclarationExpr._declType);
 			match = match && (_vdfs.size() == varDeclarationExpr._vdfs.size());
-			for(int i = 0; match && i < _vdfs.size(); i++) {
+			for (int i = 0; match && i < _vdfs.size(); i++) {
 				match = match && _vdfs.get(i).compare(varDeclarationExpr._vdfs.get(i));
 			}
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(_vdfs.size() + 1);
@@ -96,12 +97,12 @@ public class VarDeclarationExpr extends Expr {
 		children.addAll(_vdfs);
 		return children;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
 		_fVector.combineFeature(_declType.getFeatureVector());
-		for(Vdf vdf : _vdfs) {
+		for (Vdf vdf : _vdfs) {
 			_fVector.combineFeature(vdf.getFeatureVector());
 		}
 	}
@@ -110,15 +111,15 @@ public class VarDeclarationExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		VarDeclarationExpr vde = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			vde = (VarDeclarationExpr) getBindingNode();
 			match = (vde == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			vde = (VarDeclarationExpr) node;
 			setBindingNode(node);
 			match = true;
 		}
-		if(vde == null) {
+		if (vde == null) {
 			continueTopDownMatchNull();
 		} else {
 			_declType.postAccurateMatch(vde.getDeclType());
@@ -128,7 +129,15 @@ public class VarDeclarationExpr extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			VarDeclarationExpr vde = (VarDeclarationExpr) getBindingNode();
+			if (!_declType.compare(vde.getDeclType())) {
+				Update update = new Update(this, _declType, vde.getDeclType());
+				_modifications.add(update);
+			}
+			genModificationList(_vdfs, vde.getFragments(),false);
+		}
+		return true;
 	}
 }

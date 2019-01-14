@@ -25,8 +25,4 @@ public abstract class Label extends Expr {
 		super(fileName, startLine, endLine, node);
 	}
 
-	@Override
-	public void genModidications() {
-		//todo
-	}
 }

@@ -4,10 +4,12 @@ import mfix.core.node.ast.Node;
 
 public class Update extends Modification {
 
+    private Node _parent;
     private Node _srcNode;
     private Node _tarNode;
 
-    public Update(Node srcNode, Node tarNode) {
+    public Update(Node parent, Node srcNode, Node tarNode) {
+        _parent = parent;
         _srcNode = srcNode;
         _tarNode= tarNode;
     }

@@ -10,6 +10,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ClassInstCreation;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -118,7 +119,17 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			ThrowStmt throwStmt = (ThrowStmt) getBindingNode();
+			if(_expression.getBindingNode() != throwStmt.getExpression()) {
+				Update update = new Update(this, _expression, throwStmt.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+			return true;
+		}
+		return false;
 	}
 }

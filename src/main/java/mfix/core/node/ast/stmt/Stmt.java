@@ -25,5 +25,12 @@ public abstract class Stmt extends Node {
 	public Stmt getParentStmt() {
 		return this;
 	}
-	
+
+	@Override
+	public boolean genModidications() {
+		if(getBindingNode() == null) {
+			return false;
+		}
+		return true;
+	}
 }

@@ -79,7 +79,7 @@ public class LabeledStmt extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }

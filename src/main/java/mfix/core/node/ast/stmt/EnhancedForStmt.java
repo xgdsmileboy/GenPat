@@ -10,6 +10,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -154,7 +155,24 @@ public class EnhancedForStmt extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if(super.genModidications()) {
+			EnhancedForStmt enhancedForStmt = (EnhancedForStmt) getBindingNode();
+			if(_varDecl.getBindingNode() != enhancedForStmt.getParameter()) {
+				Update update = new Update(this, _varDecl, enhancedForStmt.getParameter());
+				_modifications.add(update);
+			} else {
+				_varDecl.genModidications();
+			}
+			if(_expression.getBindingNode() != enhancedForStmt.getExpression()) {
+				Update update = new Update(this, _expression, enhancedForStmt.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+			_statement.genModidications();
+			return true;
+		}
+		return false;
 	}
 }

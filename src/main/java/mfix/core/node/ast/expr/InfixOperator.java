@@ -21,17 +21,17 @@ public class InfixOperator extends Operator {
 	private static final long serialVersionUID = -4702533056648468078L;
 	private String _operatorStr;
 	private transient InfixExpression.Operator _operator;
-	
+
 	public InfixOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.INFIXOPERATOR;
 	}
-	
+
 	public void setOperator(InfixExpression.Operator operator) {
 		_operator = operator;
 		_operatorStr = operator.toString();
 	}
-	
+
 	public InfixExpression.Operator getOperator() {
 		return _operator;
 	}
@@ -42,7 +42,7 @@ public class InfixOperator extends Operator {
 
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof InfixOperator) {
+		if (other instanceof InfixOperator) {
 			InfixOperator infixOperator = (InfixOperator) other;
 			return _operatorStr.equals(infixOperator._operatorStr);
 		}
@@ -55,7 +55,7 @@ public class InfixOperator extends Operator {
 		stringBuffer.append(_operatorStr);
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

@@ -10,6 +10,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -127,7 +128,17 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if(super.genModidications()) {
+			ConstructorInv constructorInv = (ConstructorInv) getBindingNode();
+			if(_arguments.getBindingNode() != constructorInv.getArguments()) {
+				Update update = new Update(this, _arguments, constructorInv.getArguments());
+				_modifications.add(update);
+			} else {
+				_arguments.genModidications();
+			}
+			return true;
+		}
+		return false;
 	}
 }

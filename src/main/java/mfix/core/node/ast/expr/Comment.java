@@ -20,63 +20,64 @@ import java.util.List;
  */
 public class Comment extends Expr {
 
-	private static final long serialVersionUID = -6085082564199071574L;
-	private String _comment;
-	/**
-	 * Annotation:
-     *           NormalAnnotation
-     *           MarkerAnnotation
-     *           SingleMemberAnnotation
-	 */
-	public Comment(String fileName, int startLine, int endLine, ASTNode node) {
-		super(fileName, startLine, endLine, node);
-		_nodeType = TYPE.COMMENT;
-		_comment = node.toString();
-	}
-	
-	@Override
-	public StringBuffer toSrcString() {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_comment);
-		return stringBuffer;
-	}
+    private static final long serialVersionUID = -6085082564199071574L;
+    private String _comment;
 
-	@Override
-	protected void tokenize() {
-		_tokens = new LinkedList<>();
-		_tokens.add(_comment);
-	}
-	
-	@Override
-	public boolean compare(Node other) {
-		if(other instanceof Comment) {
-			return _comment.equals(((Comment) other)._comment);
-		}
-		return false;
-	}
-	
-	@Override
-	public List<Node> getAllChildren() {
-		return new ArrayList<>(0);
-	}
-	
-	@Override
-	public void computeFeatureVector() {
-		_fVector = new FVector();
-	}
+    /**
+     * Annotation:
+     * NormalAnnotation
+     * MarkerAnnotation
+     * SingleMemberAnnotation
+     */
+    public Comment(String fileName, int startLine, int endLine, ASTNode node) {
+        super(fileName, startLine, endLine, node);
+        _nodeType = TYPE.COMMENT;
+        _comment = node.toString();
+    }
 
-	@Override
-	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
-			setBindingNode(node);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public StringBuffer toSrcString() {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(_comment);
+        return stringBuffer;
+    }
 
-	@Override
-	public void genModidications() {
-		//todo
-	}
+    @Override
+    protected void tokenize() {
+        _tokens = new LinkedList<>();
+        _tokens.add(_comment);
+    }
+
+    @Override
+    public boolean compare(Node other) {
+        if (other instanceof Comment) {
+            return _comment.equals(((Comment) other)._comment);
+        }
+        return false;
+    }
+
+    @Override
+    public List<Node> getAllChildren() {
+        return new ArrayList<>(0);
+    }
+
+    @Override
+    public void computeFeatureVector() {
+        _fVector = new FVector();
+    }
+
+    @Override
+    public boolean postAccurateMatch(Node node) {
+        if (getBindingNode() == node) return true;
+        if (getBindingNode() == null && canBinding(node)) {
+            setBindingNode(node);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean genModidications() {
+        return true;
+    }
 }

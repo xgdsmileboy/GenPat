@@ -36,7 +36,7 @@ public class TypeMethodRef extends Expr {
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_oriNode.toString());
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -46,17 +46,17 @@ public class TypeMethodRef extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof TypeMethodRef) {
+		if (other instanceof TypeMethodRef) {
 			match = _oriNode.toString().equals(((TypeMethodRef) other)._oriNode.toString());
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -64,8 +64,8 @@ public class TypeMethodRef extends Expr {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return false;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return false;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -73,7 +73,7 @@ public class TypeMethodRef extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }

@@ -10,7 +10,10 @@ import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Deletion;
+import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
+import mfix.core.node.modify.Movement;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -332,7 +335,7 @@ public abstract class Node implements NodeComparator, Serializable {
     /**
      * list of modifications bound to the node
      */
-    protected List<Modification> _modifications;
+    protected List<Modification> _modifications = new LinkedList<>();
 
     public boolean isChanged() {
         return _changed;
@@ -495,6 +498,13 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    public Set<Modification> getAllModifications(Set<Modification> modifications) {
+        modifications.addAll(_modifications);
+        for(Node node : getAllChildren()) {
+            node.getAllModifications(modifications);
+        }
+        return modifications;
+    }
     /**
      * match node after constraint solving
      * @param node : node to match
@@ -505,7 +515,49 @@ public abstract class Node implements NodeComparator, Serializable {
     /**
      * based on the matching result, generate modifications
      */
-    public abstract void genModidications();
+    public abstract boolean genModidications();
+
+    protected void genModificationList(List<? extends Node> src, List<? extends Node> tar) {
+        genModificationList(src, tar, true);
+    }
+
+    protected void genModificationList(List<? extends Node> src, List<? extends Node> tar, boolean move) {
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < src.size(); i++) {
+            boolean notmatch = true;
+            for (int j = 0; j < tar.size(); j++) {
+                if (set.contains(j)) continue;
+                if (src.get(i).getBindingNode() == tar.get(j)) {
+                    set.add(j);
+                    src.get(i).genModidications();
+                    if (i != j && move) {
+                        Movement movement = new Movement(this, i, j, src.get(i));
+                        _modifications.add(movement);
+                    }
+                    notmatch = false;
+                    break;
+                }
+            }
+            if (notmatch) {
+                Deletion deletion = new Deletion(this, src.get(i));
+                _modifications.add(deletion);
+            }
+        }
+        for (int i = 0; i < tar.size(); i++) {
+            if (set.contains(i)) continue;
+            Insertion insertion = new Insertion(this, i, tar.get(i));
+            _modifications.add(insertion);
+        }
+    }
+
+    protected boolean childMatch(Node curNode) {
+        for(Node node : getAllChildren()) {
+            if (node.getBindingNode() == curNode || node.childMatch(node)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     /*********************************************************/

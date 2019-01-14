@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -133,7 +134,18 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (getBindingNode() != null) {
+			CatClause catClause = (CatClause) getBindingNode();
+			if(_exception.getBindingNode() != catClause.getException()) {
+				Update update = new Update(this, _exception, catClause.getException());
+				_modifications.add(update);
+			} else {
+				_exception.genModidications();
+			}
+			_blk.genModidications();
+			return true;
+		}
+		return false;
 	}
 }

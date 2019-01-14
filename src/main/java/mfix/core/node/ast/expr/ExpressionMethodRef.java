@@ -76,7 +76,7 @@ public class ExpressionMethodRef extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }

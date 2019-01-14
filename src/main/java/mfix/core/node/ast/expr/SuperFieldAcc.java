@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -32,12 +33,12 @@ public class SuperFieldAcc extends Expr {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SFIELDACC;
 	}
-	
-	public void setName(Label name){
+
+	public void setName(Label name) {
 		_name = name;
 	}
-	
-	public void setIdentifier(SName identifier){
+
+	public void setIdentifier(SName identifier) {
 		_identifier = identifier;
 	}
 
@@ -48,7 +49,7 @@ public class SuperFieldAcc extends Expr {
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		if(_name != null){
+		if (_name != null) {
 			stringBuffer.append(_name.toSrcString());
 			stringBuffer.append(".");
 		}
@@ -56,11 +57,11 @@ public class SuperFieldAcc extends Expr {
 		stringBuffer.append(_identifier.toSrcString());
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		if(_name != null){
+		if (_name != null) {
 			_tokens.addAll(_name.tokens());
 			_tokens.add(".");
 		}
@@ -68,57 +69,57 @@ public class SuperFieldAcc extends Expr {
 		_tokens.add(".");
 		_tokens.addAll(_identifier.tokens());
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof SuperFieldAcc) {
+		if (other instanceof SuperFieldAcc) {
 			SuperFieldAcc superFieldAcc = (SuperFieldAcc) other;
 			match = (_name == null) ? (superFieldAcc._name == null) : _name.compare(superFieldAcc._name);
-			if(match) {
+			if (match) {
 				match = match && _identifier.compare(superFieldAcc._identifier);
 			}
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(2);
-		if(_name != null) {
+		if (_name != null) {
 			children.add(_name);
 		}
 		children.add(_identifier);
 		return children;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
 		_fVector.inc(FVector.KEY_SUPER);
 		_fVector.inc(FVector.E_FACC);
-		if(_name != null){
+		if (_name != null) {
 			_fVector.combineFeature(_name.getFeatureVector());
 		}
-		_fVector.combineFeature(_identifier.getFeatureVector());	
+		_fVector.combineFeature(_identifier.getFeatureVector());
 	}
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
 		SuperFieldAcc superFieldAcc = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			superFieldAcc = (SuperFieldAcc) getBindingNode();
 			match = (superFieldAcc == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			superFieldAcc = (SuperFieldAcc) node;
 			setBindingNode(node);
 			match = true;
 		}
-		if(superFieldAcc == null) {
+		if (superFieldAcc == null) {
 			continueTopDownMatchNull();
 		} else {
-			if(_name != null) {
+			if (_name != null) {
 				_name.postAccurateMatch(superFieldAcc._name);
 			}
 			_identifier.postAccurateMatch(superFieldAcc._identifier);
@@ -127,7 +128,19 @@ public class SuperFieldAcc extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			SuperFieldAcc superFieldAcc = (SuperFieldAcc) getBindingNode();
+			if (_identifier.getBindingNode() != superFieldAcc.getIdentifier()
+					|| !_identifier.getName().equals(superFieldAcc.getIdentifier().getName())) {
+				Update update = new Update(this, _identifier, superFieldAcc.getIdentifier());
+				_modifications.add(update);
+			}
+			if (!_name.compare(superFieldAcc._name)) {
+				Update update = new Update(this, _name, superFieldAcc._name);
+				_modifications.add(update);
+			}
+		}
+		return true;
 	}
 }

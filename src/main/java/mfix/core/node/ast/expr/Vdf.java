@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -33,21 +34,21 @@ public class Vdf extends Node {
 	public Vdf(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 	}
-	
+
 	public Vdf(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.VARDECLFRAG;
 	}
-	
-	public void setName(SName identifier){
+
+	public void setName(SName identifier) {
 		_identifier = identifier;
 	}
-	
+
 	public String getName() {
 		return _identifier.getName();
 	}
-	
-	public void setDimensions(int dimensions){
+
+	public void setDimensions(int dimensions) {
 		_dimensions = dimensions;
 	}
 
@@ -55,7 +56,7 @@ public class Vdf extends Node {
 		return _dimensions;
 	}
 
-	public void setExpression(Expr expression){
+	public void setExpression(Expr expression) {
 		_expression = expression;
 	}
 
@@ -67,36 +68,36 @@ public class Vdf extends Node {
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(_identifier.toSrcString());
-		for(int i = 0; i < _dimensions; i++){
+		for (int i = 0; i < _dimensions; i++) {
 			stringBuffer.append("[]");
 		}
-		if(_expression != null){
+		if (_expression != null) {
 			stringBuffer.append("=");
 			stringBuffer.append(_expression.toSrcString());
 		}
 		return stringBuffer;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.addAll(_identifier.tokens());
-		for(int i = 0; i < _dimensions; i++){
+		for (int i = 0; i < _dimensions; i++) {
 			_tokens.add("[]");
 		}
-		if(_expression != null){
+		if (_expression != null) {
 			_tokens.add("=");
 			_tokens.addAll(_expression.tokens());
 		}
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof Vdf) {
+		if (other instanceof Vdf) {
 			Vdf vdf = (Vdf) other;
 			match = (_dimensions == vdf._dimensions) && _identifier.compare(vdf._identifier);
-			if(_expression == null) {
+			if (_expression == null) {
 				match = match && (vdf._expression == null);
 			} else {
 				match = match && _expression.compare(vdf._expression);
@@ -104,17 +105,17 @@ public class Vdf extends Node {
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(2);
 		children.add(_identifier);
-		if(_expression != null) {
+		if (_expression != null) {
 			children.add(_expression);
 		}
 		return children;
 	}
-	
+
 	@Override
 	public Stmt getParentStmt() {
 		return getParent().getParentStmt();
@@ -124,13 +125,13 @@ public class Vdf extends Node {
 	public List<Stmt> getChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
 		_fVector.combineFeature(_identifier.getFeatureVector());
-		if(_expression != null){
-		    _fVector.inc(FVector.ARITH_ASSIGN);
+		if (_expression != null) {
+			_fVector.inc(FVector.ARITH_ASSIGN);
 			_fVector.combineFeature(_expression.getFeatureVector());
 		}
 	}
@@ -142,16 +143,16 @@ public class Vdf extends Node {
 		if (getBindingNode() != null) {
 			vdf = (Vdf) getBindingNode();
 			match = (vdf == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			vdf = (Vdf) node;
 			setBindingNode(node);
 			match = true;
 		}
-		if(vdf == null) {
+		if (vdf == null) {
 			continueTopDownMatchNull();
 		} else {
 			_identifier.postAccurateMatch(vdf._identifier);
-			if(_expression != null) {
+			if (_expression != null) {
 				_expression.postAccurateMatch(vdf.getExpression());
 			}
 		}
@@ -159,7 +160,18 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (getBindingNode() != null) {
+			Vdf vdf = (Vdf) getBindingNode();
+			if (_identifier.compare(vdf._identifier)) {
+				if (_expression.getBindingNode() != vdf.getExpression()) {
+					Update update = new Update(this, _expression, vdf.getExpression());
+					_modifications.add(update);
+				} else {
+					_expression.genModidications();
+				}
+			}
+		}
+		return true;
 	}
 }

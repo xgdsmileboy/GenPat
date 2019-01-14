@@ -10,6 +10,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -166,7 +167,16 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if(super.genModidications()) {
+			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) getBindingNode();
+			if (!_declType.compare(varDeclarationStmt.getDeclType())) {
+				Update update = new Update(this, _declType, varDeclarationStmt.getDeclType());
+				_modifications.add(update);
+			}
+			genModificationList(_fragments, varDeclarationStmt.getFragments(), false);
+			return true;
+		}
+		return false;
 	}
 }

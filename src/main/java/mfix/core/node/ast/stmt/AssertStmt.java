@@ -54,7 +54,7 @@ public class AssertStmt extends Stmt {
 
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof AssertStmt) {
+		if (other instanceof AssertStmt) {
 			return _oriNode.toString().equals(((AssertStmt) other)._oriNode.toString());
 		}
 		return false;
@@ -73,8 +73,8 @@ public class AssertStmt extends Stmt {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return true;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -82,7 +82,7 @@ public class AssertStmt extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }

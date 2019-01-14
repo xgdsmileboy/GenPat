@@ -36,27 +36,27 @@ public class SuperMethodRef extends Expr {
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_oriNode.toString());
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add(_oriNode.toString());
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof SuperMethodRef) {
+		if (other instanceof SuperMethodRef) {
 			match = _oriNode.toString().equals(((SuperMethodRef) other)._oriNode.toString());
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -64,7 +64,7 @@ public class SuperMethodRef extends Expr {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
+		if (getBindingNode() == node) return true;
 		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
@@ -73,7 +73,7 @@ public class SuperMethodRef extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }

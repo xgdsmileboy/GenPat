@@ -10,6 +10,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -196,7 +197,35 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public void genModidications() {
-        //todo
+    public boolean genModidications() {
+        if (super.genModidications()) {
+            ForStmt forStmt = (ForStmt) getBindingNode();
+            if(_initializers.getBindingNode() != forStmt.getInitializer()) {
+                Update update = new Update(this, _initializers, forStmt.getInitializer());
+                _modifications.add(update);
+            } else {
+                _initializers.genModidications();
+            }
+            if(_condition == null) {
+                if (forStmt.getCondition() != null) {
+                    Update update = new Update(this, _condition, forStmt.getCondition());
+                    _modifications.add(update);
+                }
+            } else if(_condition.getBindingNode() != forStmt.getCondition()) {
+                Update update = new Update(this, _condition, forStmt.getCondition());
+                _modifications.add(update);
+            } else {
+                _condition.genModidications();
+            }
+            if(_updaters.getBindingNode() != forStmt.getUpdaters()) {
+                Update update = new Update(this, _updaters, forStmt.getUpdaters());
+                _modifications.add(update);
+            } else {
+                _updaters.genModidications();
+            }
+            _body.genModidications();
+            return true;
+        }
+        return false;
     }
 }

@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import mfix.core.pattern.Pattern;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
@@ -42,20 +43,20 @@ public class MethodInv extends Expr {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.MINVOCATION;
 	}
-	
-	public void setExpression(Expr expression){
+
+	public void setExpression(Expr expression) {
 		_expression = expression;
 	}
-	
-	public void setName(SName name){
+
+	public void setName(SName name) {
 		_name = name;
 	}
-	
-	public void setArguments(ExprList arguments){
+
+	public void setArguments(ExprList arguments) {
 		_arguments = arguments;
 	}
-	
-	public Expr getExpression(){
+
+	public Expr getExpression() {
 		return _expression;
 	}
 
@@ -82,7 +83,7 @@ public class MethodInv extends Expr {
 		stringBuffer.append(")");
 		return stringBuffer;
 	}
-	
+
 	@Override
 	public Set<SName> getAllVars() {
 		Set<SName> set = new HashSet<>();
@@ -94,7 +95,7 @@ public class MethodInv extends Expr {
 		}
 		return set;
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -109,11 +110,11 @@ public class MethodInv extends Expr {
 		}
 		_tokens.add(")");
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof MethodInv) {
+		if (other instanceof MethodInv) {
 			MethodInv methodInv = (MethodInv) other;
 			match = _name.compare(methodInv._name);
 			if (match) {
@@ -123,23 +124,23 @@ public class MethodInv extends Expr {
 		}
 		return match;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		List<Node> children = new ArrayList<>(3);
-		if(_expression != null) {
+		if (_expression != null) {
 			children.add(_expression);
 		}
 		children.add(_name);
 		children.add(_arguments);
 		return children;
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
 		_fVector.inc(FVector.E_MINV);
-		if(_expression != null){
+		if (_expression != null) {
 			_fVector.combineFeature(_expression.getFeatureVector());
 		}
 		_fVector.combineFeature(_arguments.getFeatureVector());
@@ -149,10 +150,10 @@ public class MethodInv extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		MethodInv methodInv = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null) {
 			methodInv = (MethodInv) getBindingNode();
 			match = (methodInv == node);
-		} else if(canBinding(node)) {
+		} else if (canBinding(node)) {
 			methodInv = (MethodInv) node;
 			setBindingNode(methodInv);
 			match = true;
@@ -160,7 +161,7 @@ public class MethodInv extends Expr {
 		if (methodInv == null) {
 			continueTopDownMatchNull();
 		} else {
-			if(_expression != null) {
+			if (_expression != null) {
 				_expression.postAccurateMatch(methodInv.getExpression());
 			}
 			_name.postAccurateMatch(methodInv.getName());
@@ -171,7 +172,7 @@ public class MethodInv extends Expr {
 
 	@Override
 	public void doAbstraction(ElementCounter counter) {
-		if(isConsidered()) {
+		if (isConsidered()) {
 			ElementQueryType qtype = new ElementQueryType(false,
 					false, ElementQueryType.CountType.COUNT_FILES);
 			MethodElement methodElement = new MethodElement(_name.getName(), null);
@@ -186,7 +187,31 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+			MethodInv methodInv = (MethodInv) getBindingNode();
+			if (_expression == null) {
+				if (methodInv.getExpression() != null) {
+					Update update = new Update(this, _expression, methodInv.getExpression());
+					_modifications.add(update);
+				}
+			} else if (_expression.getBindingNode() != methodInv.getExpression()) {
+				Update update = new Update(this, _expression, methodInv.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+			if (_name.getBindingNode() != methodInv.getName() || !_name.getName().equals(methodInv.getName().getName())) {
+				Update update = new Update(this, _name, methodInv.getName());
+				_modifications.add(update);
+			}
+			if (_arguments.getBindingNode() != methodInv.getArguments()) {
+				Update update = new Update(this, _arguments, methodInv.getArguments());
+				_modifications.add(update);
+			} else {
+				_arguments.genModidications();
+			}
+		}
+		return true;
 	}
 }

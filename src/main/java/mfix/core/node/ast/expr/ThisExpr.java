@@ -35,26 +35,26 @@ public class ThisExpr extends Expr {
 	public StringBuffer toSrcString() {
 		return new StringBuffer("this");
 	}
-	
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add("this");
 	}
-	
+
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof ThisExpr) {
+		if (other instanceof ThisExpr) {
 			return _oriNode.toString().equals(((ThisExpr) other)._oriNode.toString());
 		}
 		return false;
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public void computeFeatureVector() {
 		_fVector = new FVector();
@@ -63,8 +63,8 @@ public class ThisExpr extends Expr {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return true;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -72,7 +72,7 @@ public class ThisExpr extends Expr {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }

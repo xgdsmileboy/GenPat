@@ -184,6 +184,7 @@ public class Matcher {
 			l.getAstNode().setBindingNode(r.getAstNode());
 		}
 		src.postAccurateMatch(tar);
+		src.genModidications();
 		return true;
 	}
 

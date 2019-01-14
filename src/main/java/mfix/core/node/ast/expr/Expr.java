@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -21,39 +22,47 @@ import java.util.List;
  */
 public abstract class Expr extends Node {
 
-	private static final long serialVersionUID = 1325289211050496258L;
-	protected String _exprTypeStr = "?";
-	protected transient Type _exprType = null;
+    private static final long serialVersionUID = 1325289211050496258L;
+    protected String _exprTypeStr = "?";
+    protected transient Type _exprType = null;
 
-	protected Expr(String fileName, int startLine, int endLine, ASTNode node) {
-		super(fileName, startLine, endLine, node, null);
-	}
-	
-	public void setType(Type exprType){
-		_exprType = exprType;
-		if (exprType == null) {
-			_exprTypeStr = "?";
-		} else {
-			_exprTypeStr = exprType.toString();
-		}
-	}
-	
-	public Type getType(){
-		return _exprType;
-	}
+    protected Expr(String fileName, int startLine, int endLine, ASTNode node) {
+        super(fileName, startLine, endLine, node, null);
+    }
 
-	public String getTypeString() {
-		return _exprTypeStr;
-	}
-	
-	@Override
-	public Stmt getParentStmt() {
-		return getParent().getParentStmt();
-	}
-	
-	@Override
-	public List<Stmt> getChildren() {
-		return new ArrayList<>(0);
-	}
+    public void setType(Type exprType) {
+        _exprType = exprType;
+        if (exprType == null) {
+            _exprTypeStr = "?";
+        } else {
+            _exprTypeStr = exprType.toString();
+        }
+    }
 
+    public Type getType() {
+        return _exprType;
+    }
+
+    public String getTypeString() {
+        return _exprTypeStr;
+    }
+
+    @Override
+    public Stmt getParentStmt() {
+        return getParent().getParentStmt();
+    }
+
+    @Override
+    public List<Stmt> getChildren() {
+        return new ArrayList<>(0);
+    }
+
+    @Override
+    public boolean genModidications() {
+        if (getBindingNode() == null) {
+            LevelLogger.error("Should not be null since we cannot delete an expression");
+            return false;
+        }
+        return true;
+    }
 }

@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.VarDeclarationExpr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -245,7 +246,24 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if (super.genModidications()) {
+            TryStmt tryStmt = (TryStmt) getBindingNode();
+            _blk.genModidications();
+            genModificationList(_catches, tryStmt.getCatches());
+            if (_finallyBlk == null) {
+                if (tryStmt.getFinally() != null) {
+                    Update update = new Update(this, _finallyBlk, tryStmt.getFinally());
+                    _modifications.add(update);
+                }
+            } else if (_finallyBlk.getBindingNode() != tryStmt.getFinally()) {
+                Update update = new Update(this, _finallyBlk, tryStmt.getFinally());
+                _modifications.add(update);
+            } else {
+                _finallyBlk.genModidications();
+            }
+            return true;
+        }
+		return false;
 	}
 }

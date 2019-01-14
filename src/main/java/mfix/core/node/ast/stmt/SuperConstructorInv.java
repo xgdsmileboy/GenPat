@@ -11,6 +11,7 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -161,7 +162,34 @@ public class SuperConstructorInv extends Stmt {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		if(super.genModidications()) {
+			SuperConstructorInv superConstructorInv = (SuperConstructorInv) getBindingNode();
+			if(_expression == null) {
+				if(superConstructorInv.getExpression() != null) {
+					Update update = new Update(this, _expression, superConstructorInv.getExpression());
+					_modifications.add(update);
+				}
+			} else if(_expression.getBindingNode() != superConstructorInv.getExpression()) {
+				Update update = new Update(this, _expression, superConstructorInv.getExpression());
+				_modifications.add(update);
+			} else {
+				_expression.genModidications();
+			}
+			if(_superType != null) {
+				if(superConstructorInv.getSuperType() == null || !_superType.compare(superConstructorInv.getSuperType())) {
+					Update update = new Update(this, _superType, superConstructorInv.getSuperType());
+					_modifications.add(update);
+				}
+			}
+			if(_arguments.getBindingNode() != superConstructorInv.getArgument()) {
+				Update update = new Update(this, _arguments, superConstructorInv.getArgument());
+				_modifications.add(update);
+			} else {
+				_arguments.genModidications();
+			}
+			return true;
+		}
+		return false;
 	}
 }

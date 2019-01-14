@@ -35,7 +35,7 @@ public abstract class Operator extends Node {
 	public List<Stmt> getChildren() {
 		return new ArrayList<>(0);
 	}
-	
+
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
@@ -48,8 +48,8 @@ public abstract class Operator extends Node {
 
 	@Override
 	public boolean postAccurateMatch(Node node) {
-		if(getBindingNode() == node) return true;
-		if(getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == node) return true;
+		if (getBindingNode() == null && canBinding(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -57,7 +57,7 @@ public abstract class Operator extends Node {
 	}
 
 	@Override
-	public void genModidications() {
-		//todo
+	public boolean genModidications() {
+		return true;
 	}
 }
