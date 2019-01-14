@@ -60,7 +60,16 @@ public abstract class Node implements NodeComparator, Serializable {
      * control dependency
      */
     private Node _controldependency;
-
+    /**
+     * current variable is used by {@code Node} {@code _preUseChain} used previously
+     * NOTE: not null for variables only (e.g., Name, FieldAcc, and AryAcc etc.)
+     */
+    private Node _preUseChain;
+    /**
+     * current variable will be used by {@code Node} {@code _nextUseChain} used next
+     * NOTE: not null for variables only (e.g., Name, FieldAcc, and AryAcc etc.)
+     */
+    private Node _nextUseChain;
     /**
      * original AST node in the JDT abstract tree model
      * NOTE: AST node dose not support serialization
@@ -175,6 +184,28 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     public Node getControldependency() {
         return _controldependency;
+    }
+
+    public void setPreUsed(Node node) {
+        _preUseChain = node;
+        if(node != null) {
+            node.setNextUsed(this);
+        }
+    }
+
+    public Node getPreUsed() {
+        return _preUseChain;
+    }
+
+    public void setNextUsed(Node node) {
+        _nextUseChain = node;
+        if(node != null) {
+            node.setPreUsed(this);
+        }
+    }
+
+    public Node getNextUsed() {
+        return _nextUseChain;
     }
 
     /**

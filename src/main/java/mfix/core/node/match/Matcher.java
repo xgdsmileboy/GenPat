@@ -74,7 +74,7 @@ public class Matcher {
 		return matchPair;
 	}
 	
-	static enum DiffType{
+	enum DiffType{
 		DIFF_MODIFIER("different modifiers"),
 		DIFF_NAME("different names"),
 		DIFF_RETURN("different return types"),
@@ -82,7 +82,7 @@ public class Matcher {
 		SAME("same");
 		
 		private String message;
-		private DiffType(String msg) {
+		DiffType(String msg) {
 			message = msg;
 		}
 		

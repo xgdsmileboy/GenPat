@@ -1463,6 +1463,7 @@ class VScope {
 
     private VScope _parent;
     private Map<String, Node> _varDefines = new HashMap<>();
+    private Map<String, Node> _varUsed = new HashMap<>();
     private static Stack<Node> _stucture = new Stack<>();
 
     public VScope(VScope parent) {
@@ -1475,14 +1476,36 @@ class VScope {
     }
 
     public Node getDefines(String name) {
+        if(name == null) {
+            return null;
+        }
         return gDefines(name);
     }
 
     private Node gDefines(String name) {
-        if (name == null) return null;
         Node node = _varDefines.get(name);
         if (node == null && _parent != null) {
             return _parent.gDefines(name);
+        }
+        return node;
+    }
+
+    public void addUse(String name, Node node) {
+        if(name == null || node == null) return;
+        _varUsed.put(name, node);
+    }
+
+    public Node getUse(String name) {
+        if(name == null) {
+            return null;
+        }
+        return gUse(name);
+    }
+
+    private Node gUse(String name) {
+        Node node = _varUsed.get(name);
+        if(name == null && _parent != null) {
+            return gUse(name);
         }
         return node;
     }
