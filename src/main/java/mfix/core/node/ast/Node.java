@@ -317,9 +317,21 @@ public abstract class Node implements NodeComparator, Serializable {
     /*********************************************************/
     /******* record matched information for change ***********/
     /*********************************************************/
+    /**
+     * bind the target node in the fixed version
+     */
     private Node _bindingNode;
+    /**
+     * tag whether the node is expanded or not
+     */
     private boolean _expanded = false;
+    /**
+     * tag whether the node is changed or not after fix
+     */
     private boolean _changed = false;
+    /**
+     * list of modifications bound to the node
+     */
     protected List<Modification> _modifications;
 
     public boolean isChanged() {
@@ -345,6 +357,14 @@ public abstract class Node implements NodeComparator, Serializable {
         return _bindingNode;
     }
 
+    /**
+     * obtain the considered node patterns
+     * i.e., all nodes considered based on the data/control dependency
+     * and the structure information (children and parent)
+     * @param nodes : all nodes to be considered
+     * @param includeExpanded : tag whether consider the expanded node
+     * @return : a set of nodes
+     */
     public Set<Node> getConsideredNodesRec(Set<Node> nodes, boolean includeExpanded) {
         if(_bindingNode == null) {
             nodes.add(this);
@@ -352,17 +372,25 @@ public abstract class Node implements NodeComparator, Serializable {
             boolean notAdded = true;
             if((includeExpanded && _expanded)) {
                 nodes.add(this);
+                notAdded = false;
             }
 
-            // data dependency changed
-            if(_datadependency == null) {
-                if(_bindingNode.getDataDependency() != null) {
+            if(notAdded && _changed) {
+                nodes.add(this);
+                notAdded = false;
+            }
+
+            if(notAdded) {
+                // data dependency changed
+                if (_datadependency == null) {
+                    if (_bindingNode.getDataDependency() != null) {
+                        nodes.add(this);
+                        notAdded = false;
+                    }
+                } else if (_datadependency.getBindingNode() != _bindingNode.getDataDependency()) {
                     nodes.add(this);
                     notAdded = false;
                 }
-            } else if(_datadependency.getBindingNode() != _bindingNode.getDataDependency()){
-                nodes.add(this);
-                notAdded = false;
             }
 
             if(notAdded) {
@@ -383,6 +411,11 @@ public abstract class Node implements NodeComparator, Serializable {
         return nodes;
     }
 
+    /**
+     * expand node considered for match
+     * @param nodes : considered node set
+     * @return : a set of nodes
+     */
     public Set<Node> expand(Set<Node> nodes) {
         expandDependency(nodes);
         expandBottomUp(nodes);
@@ -390,6 +423,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return nodes;
     }
 
+    /**
+     * expand pattern with dependency relations
+     * @param nodes : considered node set
+     */
     private void expandDependency(Set<Node> nodes) {
         if(_datadependency != null) {
             _datadependency.setConsidered(true);
@@ -401,6 +438,10 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    /**
+     * expand children based on syntax
+     * @param nodes : considered node set
+     */
     private void expandTopDown(Set<Node> nodes) {
         for(Node node : getAllChildren()) {
             node.setConsidered(true);
@@ -408,6 +449,10 @@ public abstract class Node implements NodeComparator, Serializable {
         nodes.addAll(getAllChildren());
     }
 
+    /**
+     * expand parent based on syntax
+     * @param nodes : considered node set
+     */
     private void expandBottomUp(Set<Node> nodes) {
         if(_parent != null) {
             _parent.setConsidered(true);
