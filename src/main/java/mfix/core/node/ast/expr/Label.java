@@ -24,4 +24,9 @@ public abstract class Label extends Expr {
 	public Label(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

@@ -126,5 +126,10 @@ public class WhileStmt extends Stmt {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }
 

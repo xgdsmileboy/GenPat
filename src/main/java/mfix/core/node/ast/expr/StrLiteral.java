@@ -86,4 +86,9 @@ public class StrLiteral extends Expr {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

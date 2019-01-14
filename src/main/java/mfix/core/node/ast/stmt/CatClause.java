@@ -131,4 +131,9 @@ public class CatClause extends Node {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

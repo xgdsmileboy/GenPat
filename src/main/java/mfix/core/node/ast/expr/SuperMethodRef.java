@@ -71,4 +71,9 @@ public class SuperMethodRef extends Expr {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

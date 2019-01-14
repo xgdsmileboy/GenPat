@@ -172,4 +172,9 @@ public class ClassInstCreation extends Expr {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

@@ -75,4 +75,9 @@ public class MethodRef extends Expr {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

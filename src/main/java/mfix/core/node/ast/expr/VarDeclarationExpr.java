@@ -126,4 +126,9 @@ public class VarDeclarationExpr extends Expr {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

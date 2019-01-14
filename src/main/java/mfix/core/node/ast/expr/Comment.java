@@ -74,4 +74,9 @@ public class Comment extends Expr {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

@@ -77,4 +77,9 @@ public class LabeledStmt extends Stmt {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

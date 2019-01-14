@@ -124,4 +124,9 @@ public class Assign extends Expr {
 
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

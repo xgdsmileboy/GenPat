@@ -114,6 +114,11 @@ public class ExpressionStmt extends Stmt {
 			continueTopDownMatchNull();
 		}
 
-		return false;
+		return match;
+	}
+
+	@Override
+	public void genModidications() {
+		//todo
 	}
 }

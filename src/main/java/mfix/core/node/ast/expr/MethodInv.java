@@ -184,4 +184,9 @@ public class MethodInv extends Expr {
 		}
 		super.doAbstraction(counter);
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

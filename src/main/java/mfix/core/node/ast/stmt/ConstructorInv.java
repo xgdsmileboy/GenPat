@@ -125,4 +125,9 @@ public class ConstructorInv  extends Stmt {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

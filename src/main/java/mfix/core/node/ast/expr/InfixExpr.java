@@ -124,4 +124,9 @@ public class InfixExpr extends Expr {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

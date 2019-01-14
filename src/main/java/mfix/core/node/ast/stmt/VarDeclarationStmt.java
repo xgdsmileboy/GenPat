@@ -164,4 +164,9 @@ public class VarDeclarationStmt extends Stmt {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

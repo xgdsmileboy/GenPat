@@ -113,4 +113,9 @@ public class CastExpr extends Expr {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

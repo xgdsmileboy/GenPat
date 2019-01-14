@@ -74,4 +74,9 @@ public class ExpressionMethodRef extends Expr {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

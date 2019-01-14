@@ -194,4 +194,9 @@ public class ForStmt extends Stmt {
 
         return match;
     }
+
+    @Override
+    public void genModidications() {
+        //todo
+    }
 }

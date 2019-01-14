@@ -77,4 +77,9 @@ public class EmptyStmt extends Stmt {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

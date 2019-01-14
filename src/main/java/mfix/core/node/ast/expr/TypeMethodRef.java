@@ -71,4 +71,9 @@ public class TypeMethodRef extends Expr {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

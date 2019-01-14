@@ -154,4 +154,9 @@ public class SuperMethodInv extends Expr {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

@@ -243,4 +243,9 @@ public class TryStmt extends Stmt {
 
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

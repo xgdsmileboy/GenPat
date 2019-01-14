@@ -114,4 +114,9 @@ public class InstanceofExpr extends Expr {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

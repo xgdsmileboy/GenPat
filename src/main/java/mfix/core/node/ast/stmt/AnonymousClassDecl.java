@@ -79,4 +79,9 @@ public class AnonymousClassDecl extends Node {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

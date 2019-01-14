@@ -460,16 +460,30 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    /**
+     * judging whether the given {@code node} is compatible or not
+     * @param node : given node
+     * @return : {@code true} is compatible, otherwise {@code false}
+     */
     protected boolean canBinding(Node node) {
         return node != null && node.getNodeType() == _nodeType && node.getBindingNode() == null;
     }
 
+    /**
+     * based on the node binding info, continue to match the child nodes
+     * when parent nodes are not matched
+     */
     protected void continueTopDownMatchNull() {
         for(Node node : getAllChildren()) {
             node.postAccurateMatch(null);
         }
     }
 
+    /**
+     * match two list of nodes greedily
+     * @param lst1 : first list
+     * @param lst2 : second list
+     */
     protected void greedyMatchListNode(List<? extends Node> lst1, List<? extends  Node> lst2) {
         Set<Node> set = new HashSet<>();
         for (Node node : lst1) {
@@ -481,7 +495,17 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    /**
+     * match node after constraint solving
+     * @param node : node to match
+     * @return : {@code true} is current node matches {@code node}, otherwise {@code false}
+     */
     public abstract boolean postAccurateMatch(Node node);
+
+    /**
+     * based on the matching result, generate modifications
+     */
+    public abstract void genModidications();
 
 
     /*********************************************************/

@@ -70,4 +70,9 @@ public class ThisExpr extends Expr {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

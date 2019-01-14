@@ -157,4 +157,9 @@ public class Vdf extends Node {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

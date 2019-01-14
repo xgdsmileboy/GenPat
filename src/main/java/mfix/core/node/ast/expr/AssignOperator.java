@@ -70,4 +70,9 @@ public class AssignOperator extends Operator {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

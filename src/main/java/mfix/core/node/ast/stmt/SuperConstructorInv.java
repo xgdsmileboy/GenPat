@@ -159,4 +159,9 @@ public class SuperConstructorInv extends Stmt {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

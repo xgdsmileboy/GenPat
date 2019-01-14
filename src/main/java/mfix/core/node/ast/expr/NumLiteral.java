@@ -76,4 +76,9 @@ public class NumLiteral extends Expr {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

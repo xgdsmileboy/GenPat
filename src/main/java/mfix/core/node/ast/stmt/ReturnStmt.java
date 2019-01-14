@@ -120,4 +120,9 @@ public class ReturnStmt extends Stmt {
 		}
 		return match;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

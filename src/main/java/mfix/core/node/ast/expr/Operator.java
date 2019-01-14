@@ -55,4 +55,9 @@ public abstract class Operator extends Node {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }

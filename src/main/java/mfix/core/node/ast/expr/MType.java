@@ -122,4 +122,9 @@ public class MType extends Node {
 		}
 		return false;
 	}
+
+	@Override
+	public void genModidications() {
+		//todo
+	}
 }
