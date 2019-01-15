@@ -11,11 +11,9 @@ import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.TestCase;
-import mfix.core.node.ast.MethDecl;
+import mfix.core.node.PatternExtractor;
 import mfix.core.node.ast.Node;
-import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
-import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -63,52 +61,7 @@ public class MatcherTest extends TestCase {
         String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
-        CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
-        CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
-        Set<Node> patterns = new HashSet<>();
-
-        ElementCounter counter = new ElementCounter();
-        counter.open();
-        try {
-            counter.loadCache(Constant.DB_CACHE_FILE);
-        } catch (Exception e) {}
-
-        for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
-            nodeParser.setCompilationUnit(srcFile, srcUnit);
-            Node srcNode = nodeParser.process(pair.getFirst());
-            nodeParser.setCompilationUnit(tarFile, tarUnit);
-            Node tarNode = nodeParser.process(pair.getSecond());
-
-            if(srcNode.toSrcString().toString().equals(tarNode.toSrcString().toString())) {
-                continue;
-            }
-
-            if(Matcher.greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
-                Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
-                Set<Node> temp;
-                for(Node node : nodes) {
-                    temp = node.expand(new HashSet<>());
-                    for(Node n : temp) {
-                        if (n.getBindingNode() != null) {
-                            n.getBindingNode().setConsidered(true);
-                        }
-                    }
-                }
-                nodes = srcNode.getConsideredNodesRec(new HashSet<>(), true);
-                for (Node node : nodes) {
-                    System.out.println(node);
-                }
-                srcNode.doAbstraction(counter);
-                for (Modification modification : srcNode.getAllModifications(new HashSet<>())) {
-                    System.out.println(modification);
-                }
-                patterns.add(srcNode);
-            }
-        }
-
-        counter.close();
+        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
@@ -120,5 +73,14 @@ public class MatcherTest extends TestCase {
             }
         });
 
+        NodeParser parser = NodeParser.getInstance();
+        parser.setCompilationUnit(buggy, unit);
+        for(MethodDeclaration m : methods) {
+            Node node = parser.process(m);
+            Set<Node> matched = Matcher.filter(node, patterns);
+            for(Node p : matched) {
+
+            }
+        }
     }
 }

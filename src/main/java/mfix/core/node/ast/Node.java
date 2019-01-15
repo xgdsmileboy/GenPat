@@ -8,6 +8,7 @@ package mfix.core.node.ast;
 
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
@@ -280,6 +281,22 @@ public abstract class Node implements NodeComparator, Serializable {
             tokenize();
         }
         return _tokens;
+    }
+
+    /**
+     * obtain all defined variables in the sub-tree
+     *
+     * @return : all variable definition node (see {@code SName})
+     */
+    public Set<SName> getAllVars() {
+        Set<SName> set = new HashSet<>();
+        if (this instanceof SName) {
+            set.add((SName) this);
+        }
+        for (Node node : getAllChildren()) {
+            set.addAll(node.getAllVars());
+        }
+        return set;
     }
 
     /**
@@ -649,14 +666,14 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
-    public Set<MethodInv> getUniversalAPIs(Set<MethodInv> set) {
-        if (isConsidered() && !isAbstract()) {
+    public Set<MethodInv> getUniversalAPIs(Set<MethodInv> set, boolean isPattern) {
+        if (!isPattern || (isConsidered() && !isAbstract())) {
             if (this instanceof MethodInv) {
                 set.add((MethodInv) this);
             }
         }
         for (Node node : getAllChildren()) {
-            node.getUniversalAPIs(set);
+            node.getUniversalAPIs(set, isPattern);
         }
         return set;
     }

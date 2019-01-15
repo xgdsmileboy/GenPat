@@ -11,6 +11,7 @@ import mfix.common.util.Pair;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.parser.PatternExtraction;
@@ -35,6 +36,32 @@ import java.util.Set;
  * @date: 2018/9/21
  */
 public class Matcher {
+
+	private static boolean contains(Set<MethodInv> inPattern, Set<MethodInv> inBuggy) {
+		// only consider method name and arguments?
+		for(MethodInv methodInv : inPattern) {
+			for(MethodInv b : inBuggy) {
+				if(methodInv.getArguments().getExpr().size() == b.getArguments().getExpr().size() &&
+						methodInv.getName().getName().equals(b.getName().getName())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static Set<Node> filter(Node buggy, Set<Node> pattern) {
+		Set<MethodInv> inBuggy = buggy.getUniversalAPIs(new HashSet<>(), false);
+		Set<Node> nodes = new HashSet<>();
+		Set<MethodInv> inPattern;
+		for(Node node : pattern) {
+			inPattern = node.getUniversalAPIs(new HashSet<>(), true);
+			if(contains(inPattern, inBuggy)) {
+				nodes.add(node);
+			}
+		}
+		return nodes;
+	}
 
 	public static List<Pair<MethodDeclaration, MethodDeclaration>> match(CompilationUnit src, CompilationUnit tar) {
 		List<Pair<MethodDeclaration, MethodDeclaration>> matchPair = new LinkedList<>();
