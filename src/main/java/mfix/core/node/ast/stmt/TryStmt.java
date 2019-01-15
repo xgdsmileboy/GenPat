@@ -250,7 +250,7 @@ public class TryStmt extends Stmt {
 		if (super.genModidications()) {
             TryStmt tryStmt = (TryStmt) getBindingNode();
             _blk.genModidications();
-            genModificationList(_catches, tryStmt.getCatches());
+            genModificationList(_catches, tryStmt.getCatches(), true);
             if (_finallyBlk == null) {
                 if (tryStmt.getFinally() != null) {
                     Update update = new Update(this, _finallyBlk, tryStmt.getFinally());

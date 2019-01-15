@@ -149,7 +149,7 @@ public class SwitchStmt extends Stmt {
 			} else {
 				_expression.genModidications();
 			}
-			genModificationList(_statements, switchStmt.getStatements());
+			genModificationList(_statements, switchStmt.getStatements(), true);
 			return true;
 		}
 		return false;

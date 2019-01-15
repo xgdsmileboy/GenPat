@@ -589,16 +589,6 @@ public abstract class Node implements NodeComparator, Serializable {
     public abstract boolean genModidications();
 
     /**
-     * match two list of ast nodes and generate modifications
-     *
-     * @param src : a list of source nodes
-     * @param tar : a list of target nodes
-     */
-    protected void genModificationList(List<? extends Node> src, List<? extends Node> tar) {
-        genModificationList(src, tar, true);
-    }
-
-    /**
      * match two list ast nodes and generate modifications
      *
      * @param src  : a list of source nodes

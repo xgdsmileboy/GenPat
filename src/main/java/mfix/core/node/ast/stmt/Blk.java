@@ -132,7 +132,7 @@ public class Blk extends Stmt {
     public boolean genModidications() {
         if(super.genModidications()) {
             Blk blk = (Blk) getBindingNode();
-            genModificationList(_statements, blk.getStatement());
+            genModificationList(_statements, blk.getStatement(), true);
             return true;
         }
         return false;
