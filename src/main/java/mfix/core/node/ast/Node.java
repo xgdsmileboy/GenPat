@@ -186,6 +186,7 @@ public abstract class Node implements NodeComparator, Serializable {
      * @return
      */
     public Node getControldependency() {
+        if(getParentStmt() == null) return null;
         return getParentStmt()._controldependency;
     }
 
@@ -385,12 +386,12 @@ public abstract class Node implements NodeComparator, Serializable {
 
             if(notAdded) {
                 // data dependency changed
-                if (_datadependency == null) {
+                if (getDataDependency() == null) {
                     if (_bindingNode.getDataDependency() != null) {
                         nodes.add(this);
                         notAdded = false;
                     }
-                } else if (_datadependency.getBindingNode() != _bindingNode.getDataDependency()) {
+                } else if (getDataDependency().getBindingNode() != _bindingNode.getDataDependency()) {
                     nodes.add(this);
                     notAdded = false;
                 }
@@ -398,11 +399,11 @@ public abstract class Node implements NodeComparator, Serializable {
 
             if(notAdded) {
                 // control dependency changed
-                if(_controldependency == null) {
+                if(getControldependency() == null) {
                     if(_bindingNode.getControldependency() != null) {
                         nodes.add(this);
                     }
-                } else if(_controldependency.getBindingNode() != _bindingNode.getControldependency()){
+                } else if(getControldependency().getBindingNode() != _bindingNode.getControldependency()){
                     nodes.add(this);
                 }
             }
