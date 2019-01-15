@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast;
 
+import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
@@ -279,6 +280,33 @@ public abstract class Node implements NodeComparator, Serializable {
             set.addAll(node.getAllVars());
         }
         return set;
+    }
+
+    /**
+     * recursively get all child {@code Stmt} node
+     * @param nodes : a list of child {@code Stmt} node
+     * @return : a list of child {@code Stmt} node
+     */
+    public List<Stmt> getAllChildStmt(List<Stmt> nodes) {
+        for (Node node : getAllChildren()) {
+            if(node instanceof Stmt) {
+                nodes.add((Stmt) node);
+                node.getAllChildStmt(nodes);
+            }
+        }
+        return nodes;
+    }
+
+    public List<Expr> getAllChildExpr(List<Expr> nodes) {
+        for (Node node : getAllChildren()) {
+            if(node instanceof Expr) {
+                nodes.add((Expr) node);
+            }
+        }
+        for(Node node : getAllChildren()) {
+            node.getAllChildExpr(nodes);
+        }
+        return nodes;
     }
 
     /**

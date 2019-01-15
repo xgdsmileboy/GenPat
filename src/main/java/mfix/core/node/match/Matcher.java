@@ -10,6 +10,7 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.parser.PatternExtraction;
@@ -141,6 +142,58 @@ public class Matcher {
 	}
 
 	public static boolean greedyMatch(MethDecl src, MethDecl tar) {
+		List<Stmt> srcStmt = src.getAllChildStmt(new ArrayList<>());
+		List<Stmt> tarStmt = tar.getAllChildStmt(new ArrayList<>());
+
+		List<Stmt> srcNotMatched = new ArrayList<>(srcStmt.size());
+		List<Stmt> tarNotMatched = new ArrayList<>(tarStmt.size());
+		Set<Integer> tarMatched = new HashSet<>();
+		for(int i = 0; i < srcStmt.size(); i++) {
+			boolean notmatched = true;
+			for (int j = 0; j < tarStmt.size(); j++) {
+				if(!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
+					srcStmt.get(i).setBindingNode(tarStmt.get(j));
+					tarMatched.add(j);
+					notmatched = false;
+					break;
+				}
+			}
+			if(notmatched) {
+				srcNotMatched.add(srcStmt.get(i));
+			}
+		}
+		for(int i = 0; i < tarStmt.size(); i++) {
+			if(!tarMatched.contains(i)) {
+				tarNotMatched.add(tarStmt.get(i));
+			}
+		}
+
+		if(srcNotMatched.isEmpty() && tarNotMatched.isEmpty()) {
+			return false;
+		}
+
+		// greedy match sub-expressions
+		Map<Integer, Integer> map = greedySimMatch(srcNotMatched, tarNotMatched, 0.6);
+		for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+			List<Expr> srcExprs = srcNotMatched.get(entry.getKey()).getAllChildExpr(new ArrayList<>(11));
+			List<Expr> tarExprs = tarNotMatched.get(entry.getValue()).getAllChildExpr(new ArrayList<>(11));
+			Set<Integer> matchedIndex = new HashSet<>();
+			for(int i = 0; i < srcExprs.size(); i++) {
+				for(int j = 0; j < tarExprs.size(); j++) {
+					if(!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
+						srcExprs.get(i).setBindingNode(tarExprs.get(j));
+						matchedIndex.add(j);
+					}
+				}
+			}
+		}
+
+		src.postAccurateMatch(tar);
+		src.genModidications();
+		return true;
+	}
+
+	public static boolean greedyMatch0(MethDecl src, MethDecl tar) {
 		Pattern p = PatternExtraction.extract(src, true);
 		List<Relation> srcRelations = p.getOldRelations();
 		p = PatternExtraction.extract(tar, true);
@@ -188,6 +241,50 @@ public class Matcher {
 		return true;
 	}
 
+	public static <T extends Node> Map<Integer, Integer> greedySimMatch(List<T> src, List<T> tar, double similar) {
+		if (src.isEmpty() || tar.isEmpty()) return new HashMap<>();
+		double[][] valueMat = new double[src.size()][tar.size()];
+		for (int i = 0; i < src.size(); i++) {
+			Object[] delTokens = src.get(i).tokens().toArray();
+			Object[] addTokens;
+			for (int j = 0; j < tar.size(); j++) {
+				addTokens = tar.get(j).tokens().toArray();
+				Map<Integer, Integer> tmpMap = Matcher.match(delTokens, addTokens);
+				double value = ((double) tmpMap.size()) / ((double) delTokens.length);
+				if (value > similar) {
+					valueMat[i][j] = value;
+				}
+			}
+		}
+
+		Map<Integer, Integer> finalRlst = new HashMap<>();
+		int totalRow = valueMat.length;
+		int totalCol = valueMat[0].length;
+		double value = 1;
+		int row = -1, col = -1;
+		while (value > 0) {
+			value = 0;
+			for (int i = 0; i < totalRow; i++) {
+				for (int j = 0; j < totalCol; j++) {
+					if (valueMat[i][j] > value) {
+						value = valueMat[i][j];
+						row = i; col = j;
+					}
+				}
+			}
+			if (value > 0) {
+				finalRlst.put(row, col);
+				for (int i = 0; i < totalRow; i++) {
+					valueMat[i][col] = 0;
+				}
+				for (int i = 0; i < totalCol; i++) {
+					valueMat[row][i] = 0;
+				}
+			}
+		}
+		return finalRlst;
+	}
+
 	public static Map<Integer, Integer> simMatch(List<Node> src, List<Node> tar, double similar) {
 		Map<Integer, Integer> map = match(src, tar, new Comparator<Node>() {
 			@Override
@@ -199,7 +296,7 @@ public class Matcher {
 				}
 			}
 		});
-		
+
 		return simMatch(map, src, tar, similar);
 	}
 	
@@ -237,7 +334,7 @@ public class Matcher {
 		
 		return result;
 	}
-	
+
 	public static Map<Integer, Integer> match(Object[] src, Object[] tar) {
 		return match(Arrays.asList(src), Arrays.asList(tar), new Comparator<Object>() {
 			@Override
