@@ -1,24 +1,21 @@
 package mfix.core.node.modify;
 
-import mfix.core.pattern.relation.Relation;
+import mfix.core.node.ast.Node;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
-public abstract class Modification {
+public abstract class Modification implements Serializable {
 
-    private Set<Relation> _relatedRelations;
+    private static final long serialVersionUID = 3007384743034824570L;
 
-    protected Modification() {
-        _relatedRelations = new HashSet<>();
+    private Node _parent;
+
+    protected Modification(Node parent) {
+        _parent = parent;
     }
 
-    public void addRelatedRelations(Relation r) {
-        _relatedRelations.add(r);
-    }
-
-    public Set<Relation> getRelatedRelations() {
-        return _relatedRelations;
+    public Node getParent() {
+        return _parent;
     }
 
 }

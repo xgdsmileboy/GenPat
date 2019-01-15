@@ -8,7 +8,6 @@ package mfix.core.node.ast;
 
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
-import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
@@ -24,6 +23,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -283,22 +283,6 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     /**
-     * obtain all defined variables in the sub-tree
-     *
-     * @return : all variable definition node (see {@code SName})
-     */
-    public Set<SName> getAllVars() {
-        Set<SName> set = new HashSet<>();
-        if (this instanceof SName) {
-            set.add((SName) this);
-        }
-        for (Node node : getAllChildren()) {
-            set.addAll(node.getAllVars());
-        }
-        return set;
-    }
-
-    /**
      * recursively get all child {@code Stmt} node
      *
      * @param nodes : a list of child {@code Stmt} node
@@ -372,6 +356,11 @@ public abstract class Node implements NodeComparator, Serializable {
      * and cache the result
      */
     protected abstract void tokenize();
+
+    @Override
+    public String toString() {
+        return toSrcString().toString();
+    }
 
     /*********************************************************/
     /******* record matched information for change ***********/
@@ -628,21 +617,6 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
-    /**
-     * check if current node {@code curNode} is matched some child node of {@code this}
-     *
-     * @param curNode : current node to check
-     * @return : {@code true} if {@code curNode} matches some child node, otherwise {@code false}
-     */
-    protected boolean childMatch(Node curNode) {
-        for (Node node : getAllChildren()) {
-            if (node.getBindingNode() == curNode || node.childMatch(node)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     /*********************************************************/
     /*********** interaction with relation model *************/
@@ -650,14 +624,14 @@ public abstract class Node implements NodeComparator, Serializable {
     // TODO: this part can be removed if use greedy matching
     // process rather than the MaxSolver
 
-    private Relation _binding;
+    private Relation _RelationBinding;
 
     public void setBindingRelation(Relation r) {
-        _binding = r;
+        _RelationBinding = r;
     }
 
     public Relation getBindingRelation() {
-        return _binding;
+        return _RelationBinding;
     }
 
     /*********************************************************/
@@ -687,14 +661,38 @@ public abstract class Node implements NodeComparator, Serializable {
         return set;
     }
 
-    @Override
-    public String toString() {
-        return toSrcString().toString();
+    /*********************************************************/
+    /**************** matching buggy code ********************/
+    /*********************************************************/
+
+    private Node _buggyBinding;
+
+    public void setBuggyBindingNode(Node node) {
+        _bindingNode = node;
     }
 
-    /**
-     * all types of abstract syntax tree node considered currently
-     */
+    public Node getBuggyBindingNode() {
+        return _bindingNode;
+    }
+
+    public boolean isBoundBuggy(){
+        return _bindingNode != null;
+    }
+
+    public boolean expandMatching(Node node, Map<Node, Node> matched) {
+        return false;
+    }
+
+    public boolean adaptModifications() {
+        return false;
+    }
+
+
+    /******************************************************************************************/
+    /********************* The following are node type model **********************************/
+    /******************************************************************************************/
+
+    //all types of abstract syntax tree node considered currently
     public enum TYPE {
 
         METHDECL("MethodDeclaration"),

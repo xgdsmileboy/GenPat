@@ -14,13 +14,12 @@ import mfix.core.node.ast.Node;
  * @date: 2019-01-14
  */
 public class Movement extends Modification {
-    private Node _parent;
     private int _oriIndex;
     private int _tarIndex;
     private Node _movedNode;
 
     public Movement(Node parent, int oriIndex, int tarIndex, Node movedNode) {
-        _parent = parent;
+        super(parent);
         _oriIndex = oriIndex;
         _tarIndex = tarIndex;
         _movedNode = movedNode;
