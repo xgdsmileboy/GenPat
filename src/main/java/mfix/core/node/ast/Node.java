@@ -62,7 +62,7 @@ public abstract class Node implements NodeComparator, Serializable {
     /**
      * control dependency
      */
-    private Node _controldependency;
+    protected Node _controldependency;
     /**
      * current variable is used by {@code Node} {@code _preUseChain} used previously
      * NOTE: not null for variables only (e.g., Name, FieldAcc, and AryAcc etc.)
@@ -186,7 +186,7 @@ public abstract class Node implements NodeComparator, Serializable {
      * @return
      */
     public Node getControldependency() {
-        return _controldependency;
+        return getParentStmt()._controldependency;
     }
 
     public void setPreUsed(Node node) {

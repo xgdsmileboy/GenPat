@@ -20,6 +20,6 @@ public class Insertion extends Modification {
 
     @Override
     public String toString() {
-        return String.format("[INS]INSERT {%s} UNDER {%s} As {%d} CHILD", _insert, _parent, _index);
+        return String.format("[INS]INSERT %s UNDER %s AS {%d} CHILD", _insert, _parent, _index);
     }
 }
