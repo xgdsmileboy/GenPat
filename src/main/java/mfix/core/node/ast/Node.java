@@ -499,6 +499,11 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    /**
+     * return all modifications bound to the ast node
+     * @param modifications : a set of to preserve the modifications
+     * @return : a set of modifications
+     */
     public Set<Modification> getAllModifications(Set<Modification> modifications) {
         modifications.addAll(_modifications);
         for(Node node : getAllChildren()) {
@@ -518,10 +523,21 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     public abstract boolean genModidications();
 
+    /**
+     * match two list of ast nodes and generate modifications
+     * @param src : a list of source nodes
+     * @param tar : a list of target nodes
+     */
     protected void genModificationList(List<? extends Node> src, List<? extends Node> tar) {
         genModificationList(src, tar, true);
     }
 
+    /**
+     * match two list ast nodes and generate modifications
+     * @param src : a list of source nodes
+     * @param tar : a list of target nodes
+     * @param move : permit move operation
+     */
     protected void genModificationList(List<? extends Node> src, List<? extends Node> tar, boolean move) {
         Set<Integer> set = new HashSet<>();
         for (int i = 0; i < src.size(); i++) {
@@ -551,6 +567,11 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    /**
+     * check if current node {@code curNode} is matched some child node of {@code this}
+     * @param curNode : current node to check
+     * @return : {@code true} if {@code curNode} matches some child node, otherwise {@code false}
+     */
     protected boolean childMatch(Node curNode) {
         for(Node node : getAllChildren()) {
             if (node.getBindingNode() == curNode || node.childMatch(node)) {
