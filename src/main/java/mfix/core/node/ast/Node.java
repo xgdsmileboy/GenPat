@@ -7,6 +7,7 @@
 package mfix.core.node.ast;
 
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
@@ -86,21 +87,21 @@ public abstract class Node implements NodeComparator, Serializable {
     protected transient LinkedList<String> _tokens = null;
 
     /**
-     * @param fileName : source file name (with absolute path)
+     * @param fileName  : source file name (with absolute path)
      * @param startLine : start line number of the node in the original source file
-     * @param endLine : end line number of the node in the original source file
-     * @param oriNode : original abstract syntax tree node in the JDT model
+     * @param endLine   : end line number of the node in the original source file
+     * @param oriNode   : original abstract syntax tree node in the JDT model
      */
     public Node(String fileName, int startLine, int endLine, ASTNode oriNode) {
         this(fileName, startLine, endLine, oriNode, null);
     }
 
     /**
-     * @param fileName : source file name (with absolute path)
+     * @param fileName  : source file name (with absolute path)
      * @param startLine : start line number of the node in the original source file
-     * @param endLine : end line number of the node in the original source file
-     * @param oriNode : original abstract syntax tree node in the JDT model
-     * @param parent : parent node in the abstract syntax tree
+     * @param endLine   : end line number of the node in the original source file
+     * @param oriNode   : original abstract syntax tree node in the JDT model
+     * @param parent    : parent node in the abstract syntax tree
      */
     public Node(String fileName, int startLine, int endLine, ASTNode oriNode, Node parent) {
         _fileName = fileName;
@@ -112,6 +113,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * get the start line number of node in the original source file
+     *
      * @return : line number
      */
     public int getStartLine() {
@@ -120,6 +122,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * get the end line number of node in the original source file
+     *
      * @return : line number
      */
     public int getEndLine() {
@@ -128,6 +131,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * set current node type, {@code Node.TYPE.UNKNOWN} as default
+     *
      * @param nodeType : node type
      */
     public void setNodeType(TYPE nodeType) {
@@ -136,6 +140,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * get node type (see {@code Node.TYPE})
+     *
      * @return : current node type
      */
     public TYPE getNodeType() {
@@ -144,6 +149,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * set the parent node in the abstract syntax tree
+     *
      * @param parent : parent node
      */
     public void setParent(Node parent) {
@@ -152,6 +158,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * get parent node in the abstract syntax tree
+     *
      * @return : parent node
      */
     public Node getParent() {
@@ -160,6 +167,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * set data dependency of node
+     *
      * @param dependency : dependent node, can be {@code null}
      */
     public void setDataDependency(Node dependency) {
@@ -168,6 +176,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * get data dependency
+     *
      * @return : data dependent node, can be {@code null}
      */
     public Node getDataDependency() {
@@ -176,6 +185,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * set control dependency of node
+     *
      * @param dependency : dependent node, can be {@code null}
      */
     public void setControldependency(Node dependency) {
@@ -184,16 +194,17 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * get control dependency
+     *
      * @return
      */
     public Node getControldependency() {
-        if(getParentStmt() == null) return null;
+        if (getParentStmt() == null) return null;
         return getParentStmt()._controldependency;
     }
 
     public void setPreUsed(Node node) {
         _preUseChain = node;
-        if(node != null) {
+        if (node != null) {
             node.setNextUsed(this);
         }
     }
@@ -204,7 +215,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public void setNextUsed(Node node) {
         _nextUseChain = node;
-        if(node != null) {
+        if (node != null) {
             node.setPreUsed(this);
         }
     }
@@ -215,6 +226,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * traverse the complete sub-tree with the given {@code visitor}
+     *
      * @param visitor : traverser (visitor pattern)
      */
     public final void accept(NodeVisitor visitor) {
@@ -232,6 +244,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * traverse the sub-tree downwards, used internally only
+     *
      * @param visitor : traverser (visitor pattern)
      */
     protected final void accept0(NodeVisitor visitor) {
@@ -247,6 +260,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * compute the feature vector for current node
+     *
      * @return : feature vector representation
      */
     public FVector getFeatureVector() {
@@ -258,6 +272,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * obtain the tokens representation of current node
+     *
      * @return
      */
     public List<String> tokens() {
@@ -269,6 +284,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * obtain all defined variables in the sub-tree
+     *
      * @return : all variable definition node (see {@code SName})
      */
     public Set<SName> getAllVars() {
@@ -284,12 +300,13 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * recursively get all child {@code Stmt} node
+     *
      * @param nodes : a list of child {@code Stmt} node
      * @return : a list of child {@code Stmt} node
      */
     public List<Stmt> getAllChildStmt(List<Stmt> nodes) {
         for (Node node : getAllChildren()) {
-            if(node instanceof Stmt) {
+            if (node instanceof Stmt) {
                 nodes.add((Stmt) node);
                 node.getAllChildStmt(nodes);
             }
@@ -297,13 +314,19 @@ public abstract class Node implements NodeComparator, Serializable {
         return nodes;
     }
 
+    /**
+     * recursively get all child {@code Expr} node
+     *
+     * @param nodes : a list of child {@code Expr} node
+     * @return : a list of child {@code Expr} node
+     */
     public List<Expr> getAllChildExpr(List<Expr> nodes) {
         for (Node node : getAllChildren()) {
-            if(node instanceof Expr) {
+            if (node instanceof Expr) {
                 nodes.add((Expr) node);
             }
         }
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             node.getAllChildExpr(nodes);
         }
         return nodes;
@@ -311,12 +334,14 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * output source code with string format
+     *
      * @return : source code string
      */
     public abstract StringBuffer toSrcString();
 
     /**
      * get (non-direct) parent node that is {@code Stmt} type, maybe itself
+     *
      * @return : parent node if exist, otherwise {@code null}
      */
     public abstract Stmt getParentStmt();
@@ -324,12 +349,14 @@ public abstract class Node implements NodeComparator, Serializable {
     /**
      * get all {@code Stmt} child node, does not include itself
      * NOTE: empty for all {@code Expr} node
+     *
      * @return : all child statement
      */
     public abstract List<Stmt> getChildren();
 
     /**
      * return all child node, does not include itself
+     *
      * @return : child node
      */
     public abstract List<Node> getAllChildren();
@@ -380,7 +407,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public void setBindingNode(Node binding) {
         _bindingNode = binding;
-        if(_bindingNode != null) {
+        if (_bindingNode != null) {
             binding._bindingNode = this;
         }
     }
@@ -393,58 +420,54 @@ public abstract class Node implements NodeComparator, Serializable {
      * obtain the considered node patterns
      * i.e., all nodes considered based on the data/control dependency
      * and the structure information (children and parent)
-     * @param nodes : all nodes to be considered
+     *
+     * @param nodes           : all nodes to be considered
      * @param includeExpanded : tag whether consider the expanded node
      * @return : a set of nodes
      */
     public Set<Node> getConsideredNodesRec(Set<Node> nodes, boolean includeExpanded) {
-        if(_bindingNode == null) {
+        if (_bindingNode == null) {
             nodes.add(this);
         } else {
-            boolean notAdded = true;
-            if((includeExpanded && _expanded)) {
+            if ((includeExpanded && _expanded) || _changed
+                    || dataDependencyChanged() || controlDependencyChanged()) {
                 nodes.add(this);
-                notAdded = false;
-            }
-
-            if(notAdded && _changed) {
-                nodes.add(this);
-                notAdded = false;
-            }
-
-            if(notAdded) {
-                // data dependency changed
-                if (getDataDependency() == null) {
-                    if (_bindingNode.getDataDependency() != null) {
-                        nodes.add(this);
-                        notAdded = false;
-                    }
-                } else if (getDataDependency().getBindingNode() != _bindingNode.getDataDependency()) {
-                    nodes.add(this);
-                    notAdded = false;
-                }
-            }
-
-            if(notAdded) {
-                // control dependency changed
-                if(getControldependency() == null) {
-                    if(_bindingNode.getControldependency() != null) {
-                        nodes.add(this);
-                    }
-                } else if(getControldependency().getBindingNode() != _bindingNode.getControldependency()){
-                    nodes.add(this);
-                }
             }
         }
 
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             node.getConsideredNodesRec(nodes, includeExpanded);
         }
         return nodes;
     }
 
+    private boolean dataDependencyChanged() {
+        if (getDataDependency() == null) {
+            if (_bindingNode.getDataDependency() != null) {
+                return true;
+            }
+        } else if (getDataDependency().getBindingNode()
+                != _bindingNode.getDataDependency()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean controlDependencyChanged() {
+        if (getControldependency() == null) {
+            if (_bindingNode.getControldependency() != null) {
+                return true;
+            }
+        } else if (getControldependency().getBindingNode()
+                != _bindingNode.getControldependency()) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * expand node considered for match
+     *
      * @param nodes : considered node set
      * @return : a set of nodes
      */
@@ -457,14 +480,15 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * expand pattern with dependency relations
+     *
      * @param nodes : considered node set
      */
     private void expandDependency(Set<Node> nodes) {
-        if(_datadependency != null) {
+        if (_datadependency != null) {
             _datadependency.setConsidered(true);
             nodes.add(_datadependency);
         }
-        if(_controldependency != null) {
+        if (_controldependency != null) {
             _controldependency.setConsidered(true);
             nodes.add(_controldependency);
         }
@@ -472,10 +496,11 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * expand children based on syntax
+     *
      * @param nodes : considered node set
      */
     private void expandTopDown(Set<Node> nodes) {
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             node.setConsidered(true);
         }
         nodes.addAll(getAllChildren());
@@ -483,10 +508,11 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * expand parent based on syntax
+     *
      * @param nodes : considered node set
      */
     private void expandBottomUp(Set<Node> nodes) {
-        if(_parent != null) {
+        if (_parent != null) {
             _parent.setConsidered(true);
             nodes.add(_parent);
         }
@@ -494,6 +520,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * judging whether the given {@code node} is compatible or not
+     *
      * @param node : given node
      * @return : {@code true} is compatible, otherwise {@code false}
      */
@@ -506,21 +533,22 @@ public abstract class Node implements NodeComparator, Serializable {
      * when parent nodes are not matched
      */
     protected void continueTopDownMatchNull() {
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             node.postAccurateMatch(null);
         }
     }
 
     /**
      * match two list of nodes greedily
+     *
      * @param lst1 : first list
      * @param lst2 : second list
      */
-    protected void greedyMatchListNode(List<? extends Node> lst1, List<? extends  Node> lst2) {
+    protected void greedyMatchListNode(List<? extends Node> lst1, List<? extends Node> lst2) {
         Set<Node> set = new HashSet<>();
         for (Node node : lst1) {
             for (Node other : lst2) {
-                if(!set.contains(other) && node.postAccurateMatch(other)) {
+                if (!set.contains(other) && node.postAccurateMatch(other)) {
                     set.add(other);
                 }
             }
@@ -529,18 +557,21 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * return all modifications bound to the ast node
+     *
      * @param modifications : a set of to preserve the modifications
      * @return : a set of modifications
      */
     public Set<Modification> getAllModifications(Set<Modification> modifications) {
         modifications.addAll(_modifications);
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             node.getAllModifications(modifications);
         }
         return modifications;
     }
+
     /**
      * match node after constraint solving
+     *
      * @param node : node to match
      * @return : {@code true} is current node matches {@code node}, otherwise {@code false}
      */
@@ -553,6 +584,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * match two list of ast nodes and generate modifications
+     *
      * @param src : a list of source nodes
      * @param tar : a list of target nodes
      */
@@ -562,8 +594,9 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * match two list ast nodes and generate modifications
-     * @param src : a list of source nodes
-     * @param tar : a list of target nodes
+     *
+     * @param src  : a list of source nodes
+     * @param tar  : a list of target nodes
      * @param move : permit move operation
      */
     protected void genModificationList(List<? extends Node> src, List<? extends Node> tar, boolean move) {
@@ -597,11 +630,12 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * check if current node {@code curNode} is matched some child node of {@code this}
+     *
      * @param curNode : current node to check
      * @return : {@code true} if {@code curNode} matches some child node, otherwise {@code false}
      */
     protected boolean childMatch(Node curNode) {
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             if (node.getBindingNode() == curNode || node.childMatch(node)) {
                 return true;
             }
@@ -613,8 +647,11 @@ public abstract class Node implements NodeComparator, Serializable {
     /*********************************************************/
     /*********** interaction with relation model *************/
     /*********************************************************/
+    // TODO: this part can be removed if use greedy matching
+    // process rather than the MaxSolver
 
     private Relation _binding;
+
     public void setBindingRelation(Relation r) {
         _binding = r;
     }
@@ -633,9 +670,21 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     public void doAbstraction(ElementCounter counter) {
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             node.doAbstraction(counter);
         }
+    }
+
+    public Set<MethodInv> getUniversalAPIs(Set<MethodInv> set) {
+        if (isConsidered() && !isAbstract()) {
+            if (this instanceof MethodInv) {
+                set.add((MethodInv) this);
+            }
+        }
+        for (Node node : getAllChildren()) {
+            node.getUniversalAPIs(set);
+        }
+        return set;
     }
 
     @Override
