@@ -32,5 +32,25 @@ public class MatchInstance {
     public Map<String, String> getStrMap() {
         return _strMap;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof MatchInstance)) {
+            return false;
+        }
+        MatchInstance instance = (MatchInstance) obj;
+        Map<Node, Node> nodeMap = instance.getNodeMap();
+
+        if (_nodeMap.size() != nodeMap.size()) {
+            return false;
+        }
+
+        for (Map.Entry<Node, Node> entry : _nodeMap.entrySet()) {
+            if (nodeMap.get(entry.getKey()) != entry.getValue()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 

@@ -128,7 +128,7 @@ public class SName extends Label {
 			}
 		}
 		if (match) {
-			return super.matchSameNodeType(node, matchedNode, matchedStrings);
+			return super.ifMatch(node, matchedNode, matchedStrings);
 		} else {
 			return false;
 		}
