@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -129,6 +130,18 @@ public class ExpressionStmt extends Stmt {
 				_expression.genModidications();
 			}
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof ExpressionStmt) {
+			ExpressionStmt expressionStmt = (ExpressionStmt) node;
+			if (_expression.ifMatch(expressionStmt.getExpression(), matchedNode, matchedStrings)) {
+				matchedNode.put(this, node);
+				return true;
+			}
 		}
 		return false;
 	}

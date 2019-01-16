@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast;
 
+import mfix.common.util.Utils;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.SName;
@@ -676,6 +677,9 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public void setBuggyBindingNode(Node node) {
         _bindingNode = node;
+        if(_buggyBinding != null) {
+            node.setBuggyBindingNode(this);
+        }
     }
 
     public Node getBuggyBindingNode() {
@@ -686,7 +690,23 @@ public abstract class Node implements NodeComparator, Serializable {
         return _bindingNode != null;
     }
 
-    public boolean expandMatching(Node node, Map<Node, Node> matched) {
+    public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings);
+
+    protected boolean checkDependency(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if(getDataDependency() != null && node.getDataDependency() != null) {
+            if(getDataDependency().ifMatch(node.getDataDependency(), matchedNode, matchedStrings)) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean matchSameNodeType(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if(Utils.checkCompatiblePut(toString(), node.toString(), matchedStrings)) {
+            matchedNode.put(this, node);
+            return true;
+        }
         return false;
     }
 

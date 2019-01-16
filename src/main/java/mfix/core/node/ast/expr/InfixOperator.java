@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.InfixExpression;
 
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -62,4 +63,12 @@ public class InfixOperator extends Operator {
 		_tokens.add(_operatorStr);
 	}
 
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if(node instanceof InfixOperator) {
+			matchedNode.put(this, node);
+			return true;
+		}
+		return false;
+	}
 }

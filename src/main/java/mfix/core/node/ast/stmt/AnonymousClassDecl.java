@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -84,5 +85,15 @@ public class AnonymousClassDecl extends Node {
 	@Override
 	public boolean genModidications() {
 		return true;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof AnonymousClassDecl) {
+			matchedNode.put(this, node);
+			matchedStrings.put(toString(), node.toString());
+			return true;
+		}
+		return false;
 	}
 }

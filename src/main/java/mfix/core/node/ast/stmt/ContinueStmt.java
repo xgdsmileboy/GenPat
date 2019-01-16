@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -130,6 +131,21 @@ public class ContinueStmt extends Stmt {
 				_identifier.genModidications();
 			}
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if(node instanceof ContinueStmt) {
+			ContinueStmt continueStmt = (ContinueStmt) node;
+			if(super.ifMatch(node, matchedNode, matchedStrings)) {
+				if (_identifier != null && continueStmt._identifier != null) {
+					matchedNode.put(_identifier, continueStmt._identifier);
+					matchedStrings.put(_identifier.toString(), continueStmt._identifier.toString());
+				}
+				return true;
+			}
 		}
 		return false;
 	}

@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -27,7 +28,7 @@ public class CastExpr extends Expr {
 
     /**
      * CastExpression:
-     *      ( Type ) Expression
+     * ( Type ) Expression
      */
     public CastExpr(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);

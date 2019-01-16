@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -264,6 +265,19 @@ public class TryStmt extends Stmt {
             }
             return true;
         }
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof TryStmt) {
+			TryStmt tryStmt = (TryStmt) node;
+			boolean match = _blk.ifMatch(tryStmt.getBody(), matchedNode, matchedStrings);
+			if(_finallyBlk != null && tryStmt.getFinally() != null) {
+				match = match && _finallyBlk.ifMatch(tryStmt.getFinally(), matchedNode, matchedStrings);
+			}
+			return match && super.ifMatch(node, matchedNode, matchedStrings);
+		}
 		return false;
 	}
 }

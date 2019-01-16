@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -139,5 +140,15 @@ public class VarDeclarationExpr extends Expr {
 			genModificationList(_vdfs, vde.getFragments(),false);
 		}
 		return true;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if(node instanceof VarDeclarationExpr) {
+			return checkDependency(node, matchedNode, matchedStrings)
+					&& matchSameNodeType(node, matchedNode, matchedStrings);
+		} else {
+			return false;
+		}
 	}
 }

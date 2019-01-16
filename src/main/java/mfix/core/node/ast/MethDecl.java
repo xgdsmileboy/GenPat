@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.dom.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -229,5 +230,17 @@ public class MethDecl extends Node {
             node.genModidications();
         }
         return true;
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof MethDecl) {
+            MethDecl methDecl = (MethDecl) node;
+            return _name.ifMatch(methDecl.getName(), matchedNode, matchedStrings)
+                    && _body.ifMatch(methDecl.getBody(), matchedNode, matchedStrings)
+                    && checkDependency(node, matchedNode, matchedStrings)
+                    && matchSameNodeType(node, matchedNode, matchedStrings);
+        }
+        return false;
     }
 }

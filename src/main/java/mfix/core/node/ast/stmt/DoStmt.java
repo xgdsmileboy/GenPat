@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -150,6 +151,17 @@ public class DoStmt extends Stmt {
 			}
 			_stmt.genModidications();
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if(node instanceof DoStmt) {
+			DoStmt doStmt = (DoStmt) node;
+			return _expression.ifMatch(doStmt.getExpression(), matchedNode, matchedStrings)
+					&& _stmt.ifMatch(doStmt.getBody(), matchedNode, matchedStrings)
+					&& super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
 	}

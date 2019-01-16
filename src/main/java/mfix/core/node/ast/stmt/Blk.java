@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -134,6 +135,28 @@ public class Blk extends Stmt {
             Blk blk = (Blk) getBindingNode();
             genModificationList(_statements, blk.getStatement(), true);
             return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if(node instanceof Blk) {
+            if(super.matchSameNodeType(node, matchedNode, matchedStrings)) {
+                if (matchedNode.containsKey(getParent())) {
+                    if(matchedNode.get(getParent()) == node.getParent()) {
+                        return true;
+                    }
+                    return false;
+                } else {
+                    if(getParent().getNodeType() == node.getParent().getNodeType()) {
+                        matchedNode.put(getParent(), node.getParent());
+                        matchedStrings.put(getParent().toString(), node.getParent().toString());
+                        return true;
+                    }
+                    return false;
+                }
+            }
         }
         return false;
     }

@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
 
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -69,5 +70,15 @@ public class AssignOperator extends Operator {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof AssignOperator) {
+            matchedNode.put(this, node);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

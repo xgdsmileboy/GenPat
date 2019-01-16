@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -129,6 +130,16 @@ public class ThrowStmt extends Stmt {
 				_expression.genModidications();
 			}
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof ThrowStmt) {
+			ThrowStmt throwStmt = (ThrowStmt) node;
+			return _expression.ifMatch(throwStmt.getExpression(), matchedNode, matchedStrings)
+					&& super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
 	}

@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.dom.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -126,5 +127,15 @@ public class MType extends Node {
 	@Override
 	public boolean genModidications() {
 		return true;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if(node instanceof MType) {
+			return checkDependency(node, matchedNode, matchedStrings)
+					&& matchSameNodeType(node, matchedNode, matchedStrings);
+		} else {
+			return false;
+		}
 	}
 }

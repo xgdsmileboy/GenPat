@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -129,6 +130,21 @@ public class BreakStmt extends Stmt {
 				_identifier.genModidications();
 			}
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if(node instanceof BreakStmt) {
+			BreakStmt breakStmt = (BreakStmt) node;
+			if(super.ifMatch(node, matchedNode, matchedStrings)) {
+				if (_identifier != null && breakStmt._identifier != null) {
+					matchedNode.put(_identifier, breakStmt._identifier);
+					matchedStrings.put(_identifier.toString(), breakStmt._identifier.toString());
+				}
+				return true;
+			}
 		}
 		return false;
 	}

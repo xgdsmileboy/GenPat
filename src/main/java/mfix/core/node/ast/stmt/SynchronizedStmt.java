@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -136,6 +137,17 @@ public class SynchronizedStmt extends Stmt {
 			}
 			_blk.genModidications();
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof SynchronizedStmt) {
+			SynchronizedStmt stmt = (SynchronizedStmt) node;
+			return _expression.ifMatch(stmt.getExpression(), matchedNode, matchedStrings)
+					&& _blk.ifMatch(stmt.getBody(), matchedNode, matchedStrings)
+					&& super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
 	}

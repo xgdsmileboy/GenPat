@@ -47,6 +47,17 @@ public class Utils {
         return buffer.toString();
     }
 
+    public static boolean checkCompatiblePut(String obj1, String obj2, Map<String, String> map) {
+        if(map.containsKey(obj1)) {
+            if (!map.get(obj1).equals(obj2)) {
+                return false;
+            }
+        } else {
+            map.put(obj1, obj2);
+        }
+        return true;
+    }
+
     /**
      * Select project {@code whichProject} with bug ids{@code whichBugs}.
      * @param base

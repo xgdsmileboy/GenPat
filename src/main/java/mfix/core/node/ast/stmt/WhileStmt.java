@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -140,6 +141,17 @@ public class WhileStmt extends Stmt {
 			}
 			_body.genModidications();
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof WhileStmt) {
+			WhileStmt whileStmt = (WhileStmt) node;
+			return _expression.ifMatch(whileStmt.getExpression(), matchedNode, matchedStrings)
+					&& _body.ifMatch(whileStmt.getBody(), matchedNode, matchedStrings)
+					&& super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
 	}

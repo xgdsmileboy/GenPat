@@ -9,6 +9,8 @@ package mfix.core.node.ast.stmt;
 import mfix.core.node.ast.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.util.Map;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
@@ -20,7 +22,7 @@ public abstract class Stmt extends Node {
 	protected Stmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 	}
-	
+
 	@Override
 	public Stmt getParentStmt() {
 		return this;
@@ -28,9 +30,15 @@ public abstract class Stmt extends Node {
 
 	@Override
 	public boolean genModidications() {
-		if(getBindingNode() == null) {
+		if (getBindingNode() == null) {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		return checkDependency(node, matchedNode, matchedStrings)
+				&& matchSameNodeType(node, matchedNode, matchedStrings);
 	}
 }

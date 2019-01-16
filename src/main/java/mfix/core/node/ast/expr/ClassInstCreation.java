@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -205,5 +206,37 @@ public class ClassInstCreation extends Expr {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if(node instanceof Expr) {
+            if(isAbstract()) {
+                return checkDependency(node, matchedNode, matchedStrings)
+                        && matchSameNodeType(node, matchedNode, matchedStrings);
+            } else if (node instanceof ClassInstCreation){
+                ClassInstCreation classInstCreation = (ClassInstCreation) node;
+                List<Expr> exprs = _arguments.getExpr();
+                List<Expr> others = classInstCreation.getArguments().getExpr();
+                if (_classType.compare(classInstCreation.getClassType()) && exprs.size() == others.size()) {
+                    matchedNode.put(_classType, classInstCreation.getClassType());
+                    matchedNode.put(this, node);
+                    matchedStrings.put(toString(), node.toString());
+                    if(_expression != null && classInstCreation.getExpression() != null) {
+                        matchedNode.put(_expression, classInstCreation.getExpression());
+                        matchedStrings.put(_expression.toString(), classInstCreation.getExpression().toString());
+                    }
+                    for(int i = 0; i < exprs.size(); i++) {
+                        matchedNode.put(exprs.get(i), others.get(i));
+                        matchedStrings.put(exprs.get(i).toString(), others.get(i).toString());
+                    }
+                    return true;
+                }
+                return false;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 }

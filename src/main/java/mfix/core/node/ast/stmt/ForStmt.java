@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -225,6 +226,21 @@ public class ForStmt extends Stmt {
             }
             _body.genModidications();
             return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof ForStmt) {
+            ForStmt forStmt = (ForStmt) node;
+            boolean match = _initializers.ifMatch(forStmt.getInitializer(), matchedNode, matchedStrings);
+            if(_condition != null && forStmt.getCondition() != null) {
+                match = match && _condition.ifMatch(forStmt.getCondition(), matchedNode, matchedStrings);
+            }
+            match = match && _updaters.ifMatch(forStmt.getUpdaters(), matchedNode, matchedStrings);
+            match = match && _body.ifMatch(forStmt.getBody(), matchedNode, matchedStrings);
+            return match && super.ifMatch(node, matchedNode, matchedStrings);
         }
         return false;
     }

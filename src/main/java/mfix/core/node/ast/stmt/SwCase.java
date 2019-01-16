@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -152,6 +153,20 @@ public class SwCase extends Stmt {
 				_expression.genModidications();
 			}
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof SwCase) {
+			SwCase swCase = (SwCase) node;
+			if(_expression == null && swCase.getExpression() != null) {
+				return _expression.ifMatch(swCase.getExpression(), matchedNode, matchedStrings)
+						&& super.ifMatch(node, matchedNode, matchedStrings);
+			} else {
+				return super.ifMatch(node, matchedNode, matchedStrings);
+			}
 		}
 		return false;
 	}

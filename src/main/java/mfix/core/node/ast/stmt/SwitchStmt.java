@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -151,6 +152,16 @@ public class SwitchStmt extends Stmt {
 			}
 			genModificationList(_statements, switchStmt.getStatements(), true);
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof SwitchStmt) {
+			SwitchStmt switchStmt = (SwitchStmt) node;
+			return _expression.ifMatch(switchStmt.getExpression(), matchedNode, matchedStrings)
+					&& super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
 	}

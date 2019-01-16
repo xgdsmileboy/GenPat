@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.Type;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -64,5 +65,14 @@ public abstract class Expr extends Node {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if(node instanceof Expr) {
+            return checkDependency(node, matchedNode, matchedStrings)
+                    && matchSameNodeType(node, matchedNode, matchedStrings);
+        }
+        return false;
     }
 }

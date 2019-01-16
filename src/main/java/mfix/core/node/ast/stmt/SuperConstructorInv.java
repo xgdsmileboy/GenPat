@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -189,6 +190,20 @@ public class SuperConstructorInv extends Stmt {
 				_arguments.genModidications();
 			}
 			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof SuperConstructorInv) {
+			SuperConstructorInv superConstructorInv = (SuperConstructorInv) node;
+			boolean match = true;
+			if (_expression != null && superConstructorInv.getExpression() != null) {
+				match = match && _expression.ifMatch(superConstructorInv.getExpression(), matchedNode, matchedStrings);
+			}
+			match = match && _arguments.ifMatch(superConstructorInv.getArgument(), matchedNode, matchedStrings);
+			return match && super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
 	}
