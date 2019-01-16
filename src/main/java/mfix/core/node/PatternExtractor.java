@@ -70,10 +70,10 @@ public class PatternExtractor {
                         }
                     }
                 }
-                nodes = srcNode.getConsideredNodesRec(new HashSet<>(), true);
-                for (Node node : nodes) {
-                    System.out.println(node);
-                }
+//                nodes = srcNode.getConsideredNodesRec(new HashSet<>(), true);
+//                for (Node node : nodes) {
+//                    System.out.println(node);
+//                }
                 srcNode.doAbstraction(counter);
 //                for (Modification modification : srcNode.getAllModifications(new HashSet<>())) {
 //                    System.out.println(modification);
