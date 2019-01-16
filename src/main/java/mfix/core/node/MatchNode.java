@@ -15,12 +15,12 @@ import java.util.Map;
  * @author: Jiajun
  * @date: 2019-01-16
  */
-public class MatchedNode {
+public class MatchNode {
     private Node _node;
     private Map<Node, Node> _nodeMap;
     private Map<String, String> _strMap;
 
-    public MatchedNode(Node node, Map<Node, Node> nodeMap, Map<String, String> strMap) {
+    public MatchNode(Node node, Map<Node, Node> nodeMap, Map<String, String> strMap) {
         _node = node;
         _nodeMap = nodeMap;
         _strMap = strMap;

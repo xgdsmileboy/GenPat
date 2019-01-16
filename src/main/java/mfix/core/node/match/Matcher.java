@@ -8,6 +8,9 @@ package mfix.core.node.match;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
+import mfix.core.node.MatchInstance;
+import mfix.core.node.MatchList;
+import mfix.core.node.MatchNode;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
@@ -21,47 +24,13 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: Jiajun
  * @date: 2018/9/21
  */
 public class Matcher {
-
-	private static boolean contains(Set<MethodInv> inPattern, Set<MethodInv> inBuggy) {
-		// only consider method name and arguments?
-		for(MethodInv methodInv : inPattern) {
-			for(MethodInv b : inBuggy) {
-				if(methodInv.getArguments().getExpr().size() == b.getArguments().getExpr().size() &&
-						methodInv.getName().getName().equals(b.getName().getName())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public static Set<Node> filter(Node buggy, Set<Node> pattern) {
-		Set<MethodInv> inBuggy = buggy.getUniversalAPIs(new HashSet<>(), false);
-		Set<Node> nodes = new HashSet<>();
-		Set<MethodInv> inPattern;
-		for(Node node : pattern) {
-			inPattern = node.getUniversalAPIs(new HashSet<>(), true);
-			if(contains(inPattern, inBuggy)) {
-				nodes.add(node);
-			}
-		}
-		return nodes;
-	}
 
 	public static List<Pair<MethodDeclaration, MethodDeclaration>> match(CompilationUnit src, CompilationUnit tar) {
 		List<Pair<MethodDeclaration, MethodDeclaration>> matchPair = new LinkedList<>();
@@ -156,6 +125,186 @@ public class Matcher {
 			methodDeclarations.add(md);
 			return true;
 		}
+	}
+
+	/**
+	 * check whether two sets of {@code MethodInv} have intersection
+	 *
+	 * @param inPattern : {@code MethodInv}s in pattern code
+	 * @param inBuggy : {@code MethodInv}s in buggy code
+	 * @return : {@code true} if they have intersection, otherwise {@code false}
+	 */
+	private static boolean contains(Set<MethodInv> inPattern, Set<MethodInv> inBuggy) {
+		// only consider method name and arguments?
+		for(MethodInv methodInv : inPattern) {
+			for(MethodInv b : inBuggy) {
+				if(methodInv.getArguments().getExpr().size() == b.getArguments().getExpr().size() &&
+						methodInv.getName().getName().equals(b.getName().getName())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Based on shared {@code MethodInv} to filter patterns
+	 * that can be applied to the buggy node {@code buggy}
+	 * @param buggy : buggy node to check
+	 * @param pattern : pattern nodes to filter
+	 * @return : a subset of pattern nodes in {@code pattern}
+	 */
+	public static Set<Node> filter(Node buggy, Set<Node> pattern) {
+		Set<MethodInv> inBuggy = buggy.getUniversalAPIs(new HashSet<>(), false);
+		Set<Node> nodes = new HashSet<>();
+		Set<MethodInv> inPattern;
+		for(Node node : pattern) {
+			inPattern = node.getUniversalAPIs(new HashSet<>(), true);
+			if(contains(inPattern, inBuggy)) {
+				nodes.add(node);
+			}
+		}
+		return nodes;
+	}
+
+	/**
+	 * Try to figure out all possible matching solutions between
+	 * buggy node {@code buggy} and pattern node {@code pattern}.
+	 * @param buggy : buggy node
+	 * @param pattern : pattern node
+	 * @return : a set of possible solutions
+	 */
+	public static Set<MatchInstance> tryMatch(Node buggy, Node pattern) {
+		List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
+		List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodesRec(new HashSet<>(), true));
+
+		int bSize = bNodes.size();
+		int pSize = pNodes.size();
+
+		ArrayList<MatchList> matchLists = new ArrayList<>(pSize);
+		Map<Node, Node> nodeMap;
+		Map<String, String> strMap;
+		for (int i = 0; i < pSize; i++) {
+			List<MatchNode> matchNodes = new LinkedList<>();
+			for (int j = 0; j < bSize; j++) {
+				nodeMap = new HashMap<>();
+				strMap = new HashMap<>();
+				if (pNodes.get(i).ifMatch(bNodes.get(j), nodeMap, strMap)) {
+					matchNodes.add(new MatchNode(bNodes.get(j), nodeMap, strMap));
+				}
+			}
+			if (matchNodes.isEmpty()) {
+				return new HashSet<>();
+			}
+			matchLists.add(new MatchList(pNodes.get(i)).setMatchedNodes(matchNodes));
+		}
+
+		Collections.sort(matchLists, new Comparator<MatchList>() {
+			@Override
+			public int compare(MatchList o1, MatchList o2) {
+				return o1.getMatchedNodes().size() - o2.getMatchedNodes().size();
+			}
+		});
+
+		return permutePossibleMatches(matchLists);
+	}
+
+	/**
+	 * Given the node matching result {@code matchLists},
+	 * permute all possible matching solutions.
+	 *
+	 * @param matchLists : node matching result
+	 * @return : all possible matching solutions
+	 */
+	private static Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists) {
+		Set<MatchInstance> results = new HashSet<>();
+		matchNext(new HashMap<>(), matchLists, 0, new HashSet<>(), results);
+		return results;
+	}
+
+	/**
+	 * Recursively match each node in the pattern based on the matching result in {@code list}
+	 *
+	 * @param matchedNodeMap : already matched node maps
+	 * @param list           : contains all nodes can be matched for each node in the pattern
+	 * @param i              : index of pattern node in {@code list} to match
+	 * @param alreadyMatched : a set of node to contain already matched node in the buggy code
+	 *                       to avoid duplicate matching.
+	 * @param instances      : contains possible matching solutions
+	 */
+	private static void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
+						   Set<Node> alreadyMatched, Set<MatchInstance> instances) {
+		if (i == list.size()) {
+			Map<Node, Node> nodeMap = new HashMap<>();
+			Map<String, String> strMap = new HashMap<>();
+			for (Map.Entry<Node, MatchNode> entry : matchedNodeMap.entrySet()) {
+				nodeMap.putAll(entry.getValue().getNodeMap());
+				strMap.putAll(entry.getValue().getStrMap());
+			}
+			MatchInstance matchInstance = new MatchInstance(nodeMap, strMap);
+			instances.add(matchInstance);
+		} else {
+			Iterator<MatchNode> itor = list.get(i).getIterator();
+			Node toMatch, curNode = list.get(i).getNode();
+			MatchNode curMatchNode;
+			while (itor.hasNext()) {
+				curMatchNode = itor.next();
+				toMatch = curMatchNode.getNode();
+				if(alreadyMatched.contains(toMatch)) {
+					continue;
+				}
+				if (checkCompatibility(matchedNodeMap, curNode, curMatchNode)) {
+					matchedNodeMap.put(curNode, curMatchNode);
+					alreadyMatched.add(toMatch);
+					matchNext(matchedNodeMap, list, i + 1, alreadyMatched, instances);
+					matchedNodeMap.remove(curNode);
+					alreadyMatched.remove(toMatch);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Given already matched node pairs {@code matchedNodeMap},
+	 * checking syntax relation and dependency relation compatibility
+	 * for the new match between {@code curNode} and {@code curMatchNode}.
+	 *
+	 * @param matchedNodeMap : already matched node pairs
+	 * @param curNode        : current node under match (in pattern)
+	 * @param curMatchNode   : the node to match (in buggy code)
+	 * @return : {@code true} if node {@code curNode} can match {@code curMatchNode},
+	 * otherwise {@code false}
+	 */
+	private static boolean checkCompatibility(Map<Node, MatchNode> matchedNodeMap, Node curNode,
+									   MatchNode curMatchNode) {
+		Node node, previous;
+		MatchNode matchNode;
+		Node toMatch = curMatchNode.getNode();
+		for (Map.Entry<Node, MatchNode> entry : matchedNodeMap.entrySet()) {
+			node = entry.getKey();
+			matchNode = entry.getValue();
+			previous = matchNode.getNode();
+			if ((node.isParentOf(curNode) && !previous.isParentOf(toMatch))
+					|| (curNode.isParentOf(node) && !toMatch.isParentOf(previous))
+					|| (node.isDataDependOn(curNode) && !previous.isDataDependOn(toMatch))
+					|| (curNode.isDataDependOn(node) && !toMatch.isDataDependOn(previous))) {
+//                    || node.isControlDependOn(curNode) != previous.isControlDependOn(toMatch)){
+				return false;
+			}
+			Map<Node, Node> nodeMap = matchNode.getNodeMap();
+			for (Map.Entry<Node, Node> inner : curMatchNode.getNodeMap().entrySet()) {
+				if (nodeMap.containsKey(inner.getKey()) && nodeMap.get(inner.getKey()) != inner.getValue()) {
+					return false;
+				}
+			}
+			Map<String, String> strMap = matchNode.getStrMap();
+			for (Map.Entry<String, String> inner : curMatchNode.getStrMap().entrySet()) {
+				if (strMap.containsKey(inner.getKey()) && !strMap.get(inner.getKey()).equals(inner.getValue())) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	private static Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {

@@ -19,14 +19,14 @@ import java.util.List;
  */
 public class MatchList {
     private Node _pNode;
-    private List<MatchedNode> _matchedNodes;
+    private List<MatchNode> _matchNodes;
 
     public MatchList(Node node) {
         _pNode = node;
     }
 
-    public MatchList setMatchedNodes(List<MatchedNode> nodes) {
-        _matchedNodes = new ArrayList<>(nodes);
+    public MatchList setMatchedNodes(List<MatchNode> nodes) {
+        _matchNodes = new ArrayList<>(nodes);
         return this;
     }
 
@@ -34,12 +34,12 @@ public class MatchList {
         return _pNode;
     }
 
-    public List<MatchedNode> getMatchedNodes() {
-        return _matchedNodes;
+    public List<MatchNode> getMatchedNodes() {
+        return _matchNodes;
     }
 
-    public Iterator<MatchedNode> getIterator() {
-        return _matchedNodes.iterator();
+    public Iterator<MatchNode> getIterator() {
+        return _matchNodes.iterator();
     }
 
 }
