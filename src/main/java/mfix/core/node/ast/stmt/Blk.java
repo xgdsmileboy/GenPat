@@ -142,21 +142,7 @@ public class Blk extends Stmt {
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if(node instanceof Blk) {
-            if(super.matchSameNodeType(node, matchedNode, matchedStrings)) {
-                if (matchedNode.containsKey(getParent())) {
-                    if(matchedNode.get(getParent()) == node.getParent()) {
-                        return true;
-                    }
-                    return false;
-                } else {
-                    if(getParent().getNodeType() == node.getParent().getNodeType()) {
-                        matchedNode.put(getParent(), node.getParent());
-                        matchedStrings.put(getParent().toString(), node.getParent().toString());
-                        return true;
-                    }
-                    return false;
-                }
-            }
+            return super.ifMatch(node, matchedNode, matchedStrings);
         }
         return false;
     }

@@ -6,7 +6,6 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
@@ -146,5 +145,13 @@ public class Assign extends Expr {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof Assign) {
+            return super.ifMatch(node, matchedNode, matchedStrings);
+        }
+        return false;
     }
 }

@@ -300,6 +300,37 @@ public abstract class Node implements NodeComparator, Serializable {
         return set;
     }
 
+    public boolean isParentOf(Node node) {
+        while (node != null) {
+            if (node.getParent() == this) {
+                return true;
+            }
+            node = node.getParent();
+        }
+        return false;
+    }
+
+    public boolean isDataDependOn(Node node) {
+        return getDataDependency() == node;
+    }
+
+    public boolean isControlDependOn(Node node) {
+        return getControldependency() == node;
+    }
+
+    /**
+     * flatten abstract tree as a list of {@code Node}
+     * @param nodes : list contains the {@code Node}
+     * @return : a list of {@code Node}s after flattening
+     */
+    public List<Node> flattenTreeNode(List<Node> nodes) {
+        nodes.add(this);
+        for(Node node : getAllChildren()) {
+            node.flattenTreeNode(nodes);
+        }
+        return nodes;
+    }
+
     /**
      * recursively get all child {@code Stmt} node
      *

@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -61,4 +62,12 @@ public class PostOperator extends Operator {
 		_tokens.add(_operatorStr);
 	}
 
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof PostOperator) {
+			matchedNode.put(this, node);
+			return true;
+		}
+		return false;
+	}
 }

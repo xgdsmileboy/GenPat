@@ -73,4 +73,12 @@ public class PrefixOperator extends Operator {
 		_tokens.add(_operatorStr);
 	}
 
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof PrefixOperator) {
+			matchedNode.put(this, node);
+			return true;
+		}
+		return false;
+	}
 }

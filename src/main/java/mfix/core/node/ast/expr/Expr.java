@@ -69,7 +69,7 @@ public abstract class Expr extends Node {
 
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if(node instanceof Expr) {
+        if (node instanceof Expr) {
             return checkDependency(node, matchedNode, matchedStrings)
                     && matchSameNodeType(node, matchedNode, matchedStrings);
         }

@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -92,5 +93,45 @@ public class SName extends Label {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		Node parent = getParent();
+		boolean isMethodName = false;
+		if (parent instanceof MethodInv) {
+			MethodInv methodInv = (MethodInv) parent;
+			if (methodInv.getName() == this) {
+				isMethodName = true;
+			}
+		} else if (parent instanceof SuperMethodInv){
+			SuperMethodInv methodInv = (SuperMethodInv) parent;
+			if (methodInv.getMethodName() == this) {
+				isMethodName = true;
+			}
+		}
+		boolean match = true;
+		if (isMethodName) {
+			parent = node.getParent();
+			if (parent instanceof MethodInv) {
+				MethodInv methodInv = (MethodInv) parent;
+				if (methodInv.getName() != node) {
+					match = false;
+				}
+			} else if (parent instanceof SuperMethodInv){
+				SuperMethodInv methodInv = (SuperMethodInv) parent;
+				if (methodInv.getMethodName() != node) {
+					match = false;
+				}
+			} else {
+				match = false;
+			}
+		}
+		if (match) {
+			return super.matchSameNodeType(node, matchedNode, matchedStrings);
+		} else {
+			return false;
+		}
+
 	}
 }
