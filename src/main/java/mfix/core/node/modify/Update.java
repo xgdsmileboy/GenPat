@@ -14,6 +14,11 @@ public class Update extends Modification {
     }
 
     @Override
+    public boolean apply() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "[UPD]" + _srcNode + " TO " + _tarNode;
     }
