@@ -18,6 +18,11 @@ public class Insertion extends Modification {
     }
 
     @Override
+    public boolean apply() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return String.format("[INS]INSERT %s UNDER %s AS {%d} CHILD", _insert, getParent(), _index);
     }

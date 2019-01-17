@@ -26,6 +26,11 @@ public class Movement extends Modification {
     }
 
     @Override
+    public boolean apply() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return String.format("[MOV] %s FROM %d TO %d", _movedNode, _oriIndex, _tarIndex);
     }

@@ -12,6 +12,11 @@ public class Deletion extends Modification {
     }
 
     @Override
+    public boolean apply() {
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "[DEL]" + _node2Del.toSrcString().toString();
     }

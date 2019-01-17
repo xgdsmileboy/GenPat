@@ -25,6 +25,10 @@ public class Wrap extends Insertion {
         _nodes = wrapped;
     }
 
+    @Override
+    public boolean apply() {
+        return super.apply();
+    }
 
     @Override
     public String toString() {

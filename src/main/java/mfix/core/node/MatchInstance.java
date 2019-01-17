@@ -33,6 +33,12 @@ public class MatchInstance {
         return _strMap;
     }
 
+    public void apply() {
+        for(Map.Entry<Node, Node> entry : _nodeMap.entrySet()) {
+            entry.getKey().setBuggyBindingNode(entry.getValue());
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof MatchInstance)) {
