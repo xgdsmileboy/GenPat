@@ -17,6 +17,14 @@ public class Insertion extends Modification {
         _insert = insert;
     }
 
+    public int getIndex() {
+        return _index;
+    }
+
+    public Node getInsertedNode() {
+        return _insert;
+    }
+
     @Override
     public boolean apply() {
         return false;

@@ -17,6 +17,7 @@ import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Movement;
+import mfix.core.node.modify.Update;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -629,6 +630,8 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     protected void genModificationList(List<? extends Node> src, List<? extends Node> tar, boolean move) {
         Set<Integer> set = new HashSet<>();
+        List<Deletion> deletions = new LinkedList<>();
+        List<Insertion> insertions = new LinkedList<>();
         for (int i = 0; i < src.size(); i++) {
             boolean notmatch = true;
             for (int j = 0; j < tar.size(); j++) {
@@ -645,15 +648,48 @@ public abstract class Node implements NodeComparator, Serializable {
                 }
             }
             if (notmatch) {
-                Deletion deletion = new Deletion(this, src.get(i));
-                _modifications.add(deletion);
+                Deletion deletion = new Deletion(this, src.get(i), i);
+                deletions.add(deletion);
             }
         }
         for (int i = 0; i < tar.size(); i++) {
             if (set.contains(i)) continue;
             Insertion insertion = new Insertion(this, i, tar.get(i));
-            _modifications.add(insertion);
+            insertions.add(insertion);
         }
+
+        Set<Integer> matched = new HashSet<>();
+        Insertion insertion;
+        Update update;
+        for (Deletion d : deletions) {
+            Node binding = d.getDelNode().getBindingNode();
+            update = null;
+            if (binding != null) {
+                for (int i = 0; i < insertions.size(); i++) {
+                    if (matched.contains(i)) {
+                        continue;
+                    }
+                    insertion = insertions.get(i);
+                    if (d.getIndex() == insertion.getIndex() || binding.isParentOf(insertion.getInsertedNode())
+                            || insertion.getInsertedNode().isParentOf(binding)) {
+                        matched.add(i);
+                        update = new Update(d.getParent(), d.getDelNode(), insertion.getInsertedNode());
+                    }
+                }
+            }
+            if (update == null) {
+                _modifications.add(d);
+            } else {
+                _modifications.add(update);
+            }
+        }
+        for (int i = 0; i < insertions.size(); i++) {
+            if (matched.contains(i)) {
+                continue;
+            }
+            _modifications.add(insertions.get(i));
+        }
+
     }
 
 
@@ -741,9 +777,7 @@ public abstract class Node implements NodeComparator, Serializable {
         return false;
     }
 
-    public boolean adaptModifications() {
-        return false;
-    }
+//    public abstract StringBuffer adaptModifications();
 
 
     /******************************************************************************************/
