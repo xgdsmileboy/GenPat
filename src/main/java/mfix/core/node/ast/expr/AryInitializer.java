@@ -13,7 +13,6 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -126,4 +125,46 @@ public class AryInitializer extends Expr {
         }
         return true;
     }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer("{");
+            StringBuffer tmp;
+            if (_expressions.size() > 0) {
+                tmp = _expressions.get(0).transfer();
+                if (tmp == null) return null;
+                stringBuffer.append(tmp);
+                for (int i = 1; i < _expressions.size(); i++) {
+                    stringBuffer.append(",");
+                    tmp = _expressions.get(i).transfer();
+                    if (tmp == null) return null;
+                    stringBuffer.append(tmp);
+                }
+            }
+            stringBuffer.append("}");
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer stringBuffer = new StringBuffer("{");
+        StringBuffer tmp;
+        // not consider modification
+        if (_expressions.size() > 0) {
+            tmp = _expressions.get(0).adaptModifications();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            for (int i = 1; i < _expressions.size(); i++) {
+                stringBuffer.append(",");
+                tmp = _expressions.get(i).adaptModifications();
+                stringBuffer.append(tmp);
+            }
+        }
+        stringBuffer.append("}");
+        return stringBuffer;
+    }
+
 }

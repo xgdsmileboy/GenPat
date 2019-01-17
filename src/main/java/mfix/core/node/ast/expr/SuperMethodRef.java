@@ -76,4 +76,18 @@ public class SuperMethodRef extends Expr {
 	public boolean genModidications() {
 		return true;
 	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = toSrcString();
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		return toSrcString();
+	}
 }

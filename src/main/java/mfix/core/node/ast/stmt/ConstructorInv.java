@@ -6,10 +6,12 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -150,5 +152,52 @@ public class ConstructorInv  extends Stmt {
 					&& matchSameNodeType(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			stringBuffer.append("this(");
+			StringBuffer tmp = _arguments.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(");");
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer arguments = null;
+		Node pnode = checkModification();
+		if (pnode != null) {
+			ConstructorInv constructorInv = (ConstructorInv) pnode;
+			for(Modification modification : constructorInv.getModifications()) {
+				if(modification instanceof Update) {
+					Update update = (Update) modification;
+					if(update.getSrcNode() == constructorInv._arguments) {
+						arguments = update.apply();
+						if(arguments == null) return null;
+					} else {
+						LevelLogger.error("@ConstructorInv ERROR");
+					}
+				} else {
+					LevelLogger.error("@ConstructorInv Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("this(");
+		if(arguments == null) {
+			StringBuffer tmp = _arguments.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(arguments);
+		}
+		stringBuffer.append(");");
+		return stringBuffer;
 	}
 }

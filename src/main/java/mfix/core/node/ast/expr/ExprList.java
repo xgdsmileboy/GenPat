@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -132,6 +133,10 @@ public class ExprList extends Node {
         if (getBindingNode() != null) {
             ExprList exprList = (ExprList) getBindingNode();
             genModificationList(_exprs, exprList.getExpr(), true);
+            if (!_modifications.isEmpty()) {
+                _modifications.clear();
+                _modifications.add(new Update(this, this, exprList));
+            }
         }
         return true;
     }
@@ -143,5 +148,49 @@ public class ExprList extends Node {
                     && matchSameNodeType(node, matchedNode, matchedStrings);
         }
         return false;
+    }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            if (!_exprs.isEmpty()) {
+                tmp = _exprs.get(0).transfer();
+                if (tmp == null) return null;
+                stringBuffer.append(tmp);
+                for (int i = 1; i < _exprs.size(); i++) {
+                    stringBuffer.append(",");
+                    tmp = _exprs.get(i).transfer();
+                    if (tmp == null) return null;
+                    stringBuffer.append(tmp);
+                }
+            }
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer tmp;
+        Node node = checkModification();
+        if (node != null) {
+            return ((Update) node.getModifications().get(0)).apply();
+        }
+
+        if(!_exprs.isEmpty()) {
+            tmp = _exprs.get(0).adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+            for(int i = 1; i < _exprs.size(); i++) {
+                stringBuffer.append(",");
+                tmp = _exprs.get(i).adaptModifications();
+                if(tmp == null) return null;
+                stringBuffer.append(tmp);
+            }
+        }
+        return stringBuffer;
     }
 }

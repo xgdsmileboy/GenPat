@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -127,5 +129,62 @@ public class PrefixExpr extends Expr {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp = _operator.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			tmp = _expression.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer operator = null;
+		StringBuffer expression = null;
+		Node node = checkModification();
+		if (node != null) {
+			PrefixExpr prefixExpr = (PrefixExpr) node;
+			for (Modification modification : prefixExpr.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					if (update.getSrcNode() == prefixExpr._operator) {
+						operator = update.apply();
+						if (operator == null) return null;
+					} else {
+						expression = update.apply();
+						if (expression == null) return null;
+					}
+				} else {
+					LevelLogger.error("@PrefixExpr Should not be this kind of modification : " + modification);
+				}
+
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp = null;
+		if(operator == null) {
+			tmp = _operator.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(operator);
+		}
+		if(expression == null) {
+			tmp = _expression.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(expression);
+		}
+		return stringBuffer;
 	}
 }

@@ -6,9 +6,11 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -164,5 +166,65 @@ public class DoStmt extends Stmt {
 					&& super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			stringBuffer.append("do ");
+			tmp = _stmt.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(" while(");
+			tmp = _expression.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(");");
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer stmt = null;
+		StringBuffer expression = null;
+		Node pnode = checkModification();
+		if (pnode != null) {
+			DoStmt doStmt = (DoStmt) pnode;
+			for (Modification modification : doStmt.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					if (update.getSrcNode() == doStmt._expression) {
+						expression = update.apply();
+						if (expression == null) return null;
+					}
+				} else {
+					LevelLogger.error("@DoStmt Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		stringBuffer.append("do ");
+		if (stmt == null) {
+			tmp = _stmt.adaptModifications();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(stmt);
+		}
+		stringBuffer.append(" while(");
+		if (expression == null) {
+			tmp = _expression.adaptModifications();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(expression);
+		}
+		stringBuffer.append(");");
+		return stringBuffer;
 	}
 }

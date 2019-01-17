@@ -138,4 +138,18 @@ public class MType extends Node {
 			return false;
 		}
 	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = toSrcString();
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		return toSrcString();
+	}
 }

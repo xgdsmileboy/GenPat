@@ -6,9 +6,11 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -213,5 +215,88 @@ public class IfStmt extends Stmt {
 			return match && super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer("if(");
+			StringBuffer tmp;
+			tmp = _condition.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(")");
+			tmp = _then.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			if(_else != null) {
+				stringBuffer.append("else ");
+				tmp = _else.transfer();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer condition = null;
+		StringBuffer then = null;
+		StringBuffer els = null;
+		Node pnode = checkModification();
+		if (pnode != null) {
+			IfStmt ifStmt = (IfStmt) pnode;
+			for(Modification modification : ifStmt.getModifications()) {
+				if(modification instanceof Update) {
+					Update update = (Update) modification;
+					Node node = update.getSrcNode();
+					if(node == ifStmt._condition) {
+						condition = update.apply();
+						if(condition == null) return null;
+					} else if(node == ifStmt._then) {
+						then = update.apply();
+						if(then == null) return null;
+					} else {
+						els = update.apply();
+						if(els == null) return null;
+					}
+				} else {
+					LevelLogger.error("@IfStmt Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer("if(");
+		StringBuffer tmp;
+		if(condition == null) {
+			tmp = _condition.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(condition);
+		}
+		stringBuffer.append(")");
+		if(then == null) {
+			tmp = _then.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(then);
+		}
+		if(els == null) {
+			if(_else != null) {
+				stringBuffer.append("else ");
+				tmp = _else.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+		} else {
+			if (!els.toString().isEmpty()) {
+				stringBuffer.append("else ");
+				stringBuffer.append(els);
+			}
+		}
+		return stringBuffer;
 	}
 }

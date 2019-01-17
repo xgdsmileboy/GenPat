@@ -243,4 +243,43 @@ public class MethDecl extends Node {
         }
         return false;
     }
+
+    @Override
+    public StringBuffer transfer() {
+        return null;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer stringBuffer = new StringBuffer();
+        for(Object modifier : _modifiers) {
+            stringBuffer.append(modifier.toString() + " ");
+        }
+        if(_retTypeStr != null) {
+            stringBuffer.append(_retTypeStr + " ");
+        }
+        stringBuffer.append(_name.toSrcString());
+        stringBuffer.append("(");
+        if(_arguments != null && _arguments.size() > 0) {
+            stringBuffer.append(_arguments.get(0).toSrcString());
+            for(int i = 1; i < _arguments.size(); i++) {
+                stringBuffer.append("," + _arguments.get(i).toSrcString());
+            }
+        }
+        stringBuffer.append(")");
+        if(_throws != null && _throws.size() > 0) {
+            stringBuffer.append(" throws " + _throws.get(0).toString());
+            for(int i = 1; i < _throws.size(); i++) {
+                stringBuffer.append("," + _throws.get(i).toString());
+            }
+        }
+        if(_body == null) {
+            stringBuffer.append(";");
+        } else {
+            StringBuffer tmp = _body.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        }
+        return stringBuffer;
+    }
 }

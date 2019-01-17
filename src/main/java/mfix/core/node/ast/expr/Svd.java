@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -182,5 +184,62 @@ public class Svd extends Expr {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer declType = null;
+		StringBuffer name = null;
+		StringBuffer initializer = null;
+		Node node = checkModification();
+		if (node != null) {
+			Svd svd = (Svd) node;
+			for (Modification modification : svd.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					Node changedNode = update.getSrcNode();
+					if (changedNode == svd._decType) {
+						declType = update.apply();
+						if (declType == null) return null;
+					} else if (changedNode == svd._name) {
+						name = update.apply();
+						if (name == null) return null;
+					} else {
+						initializer = update.apply();
+						if (initializer == null) return null;
+					}
+				} else {
+					LevelLogger.error("@Svd Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		if (declType == null) {
+			tmp = _decType.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(declType);
+		}
+		stringBuffer.append(" ");
+		if(name == null) {
+			tmp = _name.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(name);
+		}
+		if(initializer == null) {
+			if(_initializer != null){
+				stringBuffer.append("=");
+				tmp = _initializer.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+		} else {
+			stringBuffer.append(initializer);
+		}
+		return stringBuffer;
 	}
 }

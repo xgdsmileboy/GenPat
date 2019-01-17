@@ -8,10 +8,12 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.Constant;
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -145,5 +147,85 @@ public class Blk extends Stmt {
             return super.ifMatch(node, matchedNode, matchedStrings);
         }
         return false;
+    }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            stringBuffer.append("{" + Constant.NEW_LINE);
+            for (int i = 0; i < _statements.size(); i++) {
+                tmp = _statements.get(i).transfer();
+                if(tmp == null) return null;
+                stringBuffer.append(tmp);
+                stringBuffer.append(Constant.NEW_LINE);
+            }
+            stringBuffer.append("}");
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        Node pnode = checkModification();
+        if (pnode != null) {
+            Blk blk = (Blk) pnode;
+            Map<Node, List<StringBuffer>> insertBefore = new HashMap<>();
+            Map<Node, List<StringBuffer>> insertAfter = new HashMap<>();
+            Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
+            if (!Matcher.applyNodeListModifications(blk.getModifications(), _statements,
+                    insertBefore, insertAfter, map)) {
+                return null;
+            }
+            StringBuffer stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            stringBuffer.append("{" + Constant.NEW_LINE);
+            for (Node node : _statements) {
+                List<StringBuffer> list = insertBefore.get(node);
+                if (list != null) {
+                    for (int i = 0; i < list.size(); i++) {
+                        stringBuffer.append(list.get(i));
+                        stringBuffer.append(Constant.NEW_LINE);
+                    }
+                }
+                if (map.containsKey(node)) {
+                    StringBuffer update = map.get(node);
+                    if (update != null) {
+                        stringBuffer.append(update);
+                        stringBuffer.append(Constant.NEW_LINE);
+                    }
+                } else {
+                    tmp = node.adaptModifications();
+                    if(tmp == null) return null;
+                    stringBuffer.append(tmp);
+                    stringBuffer.append(Constant.NEW_LINE);
+                }
+                list = insertAfter.get(node);
+                if (list != null) {
+                    for (int i = 0; i < list.size(); i++) {
+                        stringBuffer.append(list.get(i));
+                        stringBuffer.append(Constant.NEW_LINE);
+                    }
+                }
+            }
+            stringBuffer.append("}");
+            return stringBuffer;
+
+        } else {
+            StringBuffer stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            stringBuffer.append("{" + Constant.NEW_LINE);
+            for (int i = 0; i < _statements.size(); i++) {
+                tmp = _statements.get(i).adaptModifications();
+                if(tmp == null) return null;
+                stringBuffer.append(tmp);
+                stringBuffer.append(Constant.NEW_LINE);
+            }
+            stringBuffer.append("}");
+            return stringBuffer;
+        }
+
     }
 }

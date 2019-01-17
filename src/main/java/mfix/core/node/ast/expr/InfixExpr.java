@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -148,5 +150,77 @@ public class InfixExpr extends Expr {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			tmp = _lhs.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			tmp = _operator.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			tmp = _rhs.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer lhs = null;
+		StringBuffer operator = null;
+		StringBuffer rhs = null;
+		Node node = checkModification();
+		if (node != null) {
+			InfixExpr infixExpr = (InfixExpr) node;
+			for (Modification modification : infixExpr.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					Node changedNode = update.getSrcNode();
+					if (changedNode == infixExpr._lhs) {
+						lhs = update.apply();
+						if (lhs == null) return null;
+					} else if (changedNode == infixExpr._operator) {
+						operator = update.apply();
+						if (operator == null) return null;
+					} else {
+						rhs = update.apply();
+						if (rhs == null) return null;
+					}
+				} else {
+					LevelLogger.error("@InfixExpr Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		if(lhs == null) {
+			tmp = _lhs.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(lhs);
+		}
+		if(operator == null) {
+			tmp = _operator.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(operator);
+		}
+		if(rhs == null) {
+			tmp = _rhs.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(rhs);
+		}
+		return stringBuffer;
 	}
 }

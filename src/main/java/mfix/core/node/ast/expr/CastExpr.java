@@ -6,15 +6,16 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -132,5 +133,66 @@ public class CastExpr extends Expr {
             }
         }
         return true;
+    }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            stringBuffer.append("(");
+            tmp = _castType.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            stringBuffer.append(")");
+            tmp = _expression.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer castType = null;
+        StringBuffer expression = null;
+        Node node = checkModification();
+        if (node != null) {
+            CastExpr castExpr = (CastExpr) node;
+            for (Modification modification : castExpr.getModifications()) {
+                if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    if (update.getSrcNode() == _castType) {
+                        castType = update.apply();
+                        if (castType == null) return null;
+                    } else {
+                        expression = update.apply();
+                        if (expression == null) return null;
+                    }
+                } else {
+                    LevelLogger.error("@CastExpr Should not ");
+                }
+            }
+        }
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer tmp;
+        stringBuffer.append("(");
+        if (castType == null) {
+            tmp = _castType.adaptModifications();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(castType);
+        }
+        stringBuffer.append(")");
+        if(expression == null) {
+            tmp = _expression.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(expression);
+        }
+        return stringBuffer;
     }
 }

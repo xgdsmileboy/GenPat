@@ -6,11 +6,13 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -206,5 +208,76 @@ public class SuperConstructorInv extends Stmt {
 			return match && super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			if(_expression != null){
+				tmp = _expression.transfer();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+				stringBuffer.append(".");
+			}
+			stringBuffer.append("super(");
+			tmp = _arguments.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(");");
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer expression = null;
+		StringBuffer superType = null;
+		StringBuffer argument = null;
+		Node pnode = checkModification();
+		if (pnode != null) {
+			SuperConstructorInv superConstructorInv = (SuperConstructorInv) pnode;
+			for(Modification modification : superConstructorInv.getModifications()) {
+				if(modification instanceof Update) {
+					Update update = (Update) modification;
+					if(update.getSrcNode() == superConstructorInv._expression) {
+						expression = update.apply();
+						if(expression == null) return null;
+					} else if (update.getSrcNode() == superConstructorInv._superType) {
+						superType = update.apply();
+						if (superType == null) return null;
+					} else {
+						argument = update.apply();
+						if(argument == null) return null;
+					}
+				} else {
+					LevelLogger.error("@SuperConstructorInv Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp ;
+		if(expression == null) {
+			if(_expression != null){
+				tmp = _expression.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+				stringBuffer.append(".");
+			}
+		} else {
+			stringBuffer.append(expression);
+		}
+		stringBuffer.append("super(");
+		if(argument == null) {
+			tmp = _arguments.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(argument);
+		}
+		stringBuffer.append(");");
+		return stringBuffer;
 	}
 }

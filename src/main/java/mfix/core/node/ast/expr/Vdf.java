@@ -6,9 +6,11 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -193,5 +195,45 @@ public class Vdf extends Node {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer expression = null;
+		Node node = checkModification();
+		if (node != null) {
+			Vdf vdf = (Vdf) node;
+			for (Modification modification : vdf.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					if (update.getSrcNode() == vdf._expression) {
+						expression = update.apply();
+						if (expression == null) return null;
+					}
+				} else {
+					LevelLogger.error("@Vdf Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		tmp = _identifier.adaptModifications();
+		if (tmp == null) return null;
+		stringBuffer.append(tmp);
+		for (int i = 0; i < _dimensions; i++){
+			stringBuffer.append("[]");
+		}
+		if(expression == null) {
+			if(_expression != null){
+				stringBuffer.append("=");
+				tmp = _expression.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+		} else {
+			stringBuffer.append("=");
+			stringBuffer.append(expression);
+		}
+		return stringBuffer;
 	}
 }

@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.Pattern;
 import mfix.core.stats.element.ElementCounter;
@@ -246,5 +248,87 @@ public class MethodInv extends Expr {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			if (_expression != null) {
+				tmp = _expression.transfer();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+				stringBuffer.append(".");
+			}
+			stringBuffer.append(_name.getName());
+			stringBuffer.append("(");
+			if (_arguments != null) {
+				tmp = _arguments.transfer();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+			stringBuffer.append(")");
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer expression = null;
+		StringBuffer name = null;
+		StringBuffer arguments = null;
+		Node node = checkModification();
+		if (node != null) {
+			MethodInv methodInv = (MethodInv) node;
+			for (Modification modification : methodInv.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					Node changedNode = update.getSrcNode();
+					if (changedNode == methodInv._expression) {
+						expression = update.apply();
+						if (expression == null) return null;
+					} else if (changedNode == methodInv._name) {
+						name = update.apply();
+						if (name == null) return null;
+					} else {
+						arguments = update.apply();
+						if (arguments == null) return null;
+					}
+				} else {
+					LevelLogger.error("@MethodInv Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		if(expression == null) {
+			if (_expression != null) {
+				tmp = _expression.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+				stringBuffer.append(".");
+			}
+		} else {
+			stringBuffer.append(expression + ".");
+		}
+		if (name == null) {
+			stringBuffer.append(_name.getName());
+		} else {
+			stringBuffer.append(name);
+		}
+		stringBuffer.append("(");
+		if(arguments == null) {
+			if (_arguments != null) {
+				tmp = _arguments.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+		} else {
+			stringBuffer.append(arguments);
+		}
+		stringBuffer.append(")");
+		return stringBuffer;
 	}
 }

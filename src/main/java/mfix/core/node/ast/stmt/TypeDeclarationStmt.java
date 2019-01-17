@@ -97,4 +97,14 @@ public class TypeDeclarationStmt extends Stmt {
 		}
 		return false;
 	}
+
+	@Override
+	public StringBuffer transfer() {
+		return super.transfer();
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		return toSrcString();
+	}
 }

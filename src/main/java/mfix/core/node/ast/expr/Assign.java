@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -137,6 +139,10 @@ public class Assign extends Expr {
             } else {
                 _lhs.genModidications();
             }
+            if (!_operator.compare(assign.getOperator())) {
+                Update update = new Update(this, _operator, assign.getOperator());
+                _modifications.add(update);
+            }
             if (_rhs.getBindingNode() != assign.getRhs()) {
                 Update update = new Update(this, _rhs, assign.getRhs());
                 _modifications.add(update);
@@ -153,5 +159,77 @@ public class Assign extends Expr {
             return super.ifMatch(node, matchedNode, matchedStrings);
         }
         return false;
+    }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            tmp = _lhs.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            tmp = _operator.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            tmp = _rhs.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer operator = null;
+        StringBuffer lhs = null;
+        StringBuffer rhs = null;
+        Node node = checkModification();
+        if (node != null) {
+            Assign assign = (Assign) node;
+            for (Modification modification : assign.getModifications()) {
+                if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    if (update.getSrcNode() == assign._operator) {
+                        operator = update.apply();
+                        if (operator == null) return null;
+                    } else if (update.getSrcNode() == assign._lhs) {
+                        lhs = update.apply();
+                        if (lhs == null) return null;
+                    } else {
+                        rhs = update.apply();
+                        if (rhs == null) return null;
+                    }
+                } else {
+                    LevelLogger.error("@Assign Should not be this kind of modification : " + modification.toString());
+                }
+
+            }
+        }
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer tmp;
+        if(lhs == null) {
+            tmp = _lhs.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(lhs);
+        }
+        if(operator == null) {
+            tmp = _operator.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(operator);
+        }
+        if(rhs == null) {
+            tmp = _rhs.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(rhs);
+        }
+        return stringBuffer;
     }
 }

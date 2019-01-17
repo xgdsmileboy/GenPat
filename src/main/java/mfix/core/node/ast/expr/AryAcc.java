@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -135,5 +137,65 @@ public class AryAcc extends Expr {
             _array.genModidications();
         }
         return true;
+    }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp = _array.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            stringBuffer.append("[");
+            tmp = _index.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            stringBuffer.append("]");
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer array = null;
+        StringBuffer index = null;
+        Node node = checkModification();
+        if (node != null) {
+            AryAcc aryAcc = (AryAcc) node;
+            for (Modification modification : aryAcc.getModifications()) {
+                if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    if (update.getSrcNode() == aryAcc._array) {
+                        array = update.apply();
+                        if (array == null) return null;
+                    } else {
+                        index = update.apply();
+                        if (index == null) return null;
+                    }
+                } else {
+                    LevelLogger.error("@ArrayAcc Should not be this kind of modification : " + modification.toString());
+                }
+            }
+        }
+        StringBuffer tmp;
+        if(array == null) {
+            tmp = _array.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(array);
+        }
+        stringBuffer.append("[");
+        if(index == null) {
+            tmp = _index.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(index);
+        }
+        stringBuffer.append("]");
+        return stringBuffer;
     }
 }

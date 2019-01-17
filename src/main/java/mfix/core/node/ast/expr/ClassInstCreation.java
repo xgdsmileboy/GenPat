@@ -6,9 +6,11 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.AnonymousClassDecl;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -238,5 +240,97 @@ public class ClassInstCreation extends Expr {
             }
         }
         return false;
+    }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            if (_expression != null) {
+                tmp = _expression.transfer();
+                if (tmp == null) return null;
+                stringBuffer.append(tmp);
+                stringBuffer.append(".");
+            }
+            stringBuffer.append("new ");
+            stringBuffer.append(_classType.transfer());
+            stringBuffer.append("(");
+            tmp = _arguments.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            stringBuffer.append(")");
+            if (_decl != null) {
+                tmp = _decl.transfer();
+                if (tmp == null) return null;
+                stringBuffer.append(tmp);
+            }
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer expression = null;
+        StringBuffer classType = null;
+        StringBuffer arguments = null;
+        Node node = checkModification();
+        if (node != null) {
+            ClassInstCreation classInstCreation = (ClassInstCreation) node;
+            for (Modification modification : classInstCreation.getModifications()) {
+                if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    Node changedNode = update.getSrcNode();
+                    if (changedNode == classInstCreation._expression) {
+                        expression = update.apply();
+                        if (expression == null) return null;
+                    } else if (changedNode == classInstCreation._classType) {
+                        classType = update.apply();
+                        if (classType == null) return null;
+                    } else if (changedNode == classInstCreation._arguments) {
+                        arguments = update.apply();
+                        if (arguments == null) return null;
+                    }
+                } else {
+                    LevelLogger.error("@ClassInstanceCreate Should not be this kind of modification : " + modification);
+                }
+            }
+        }
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer tmp;
+        if (expression == null) {
+            if (_expression != null) {
+                tmp = _expression.adaptModifications();
+                if(tmp == null) return null;
+                stringBuffer.append(tmp);
+                stringBuffer.append(".");
+            }
+        } else {
+            stringBuffer.append(expression);
+        }
+        stringBuffer.append("new ");
+        if(classType == null) {
+            tmp = _classType.adaptModifications();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(classType);
+        }
+        stringBuffer.append("(");
+        if(arguments == null) {
+            tmp = _arguments.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(arguments);
+        }
+        stringBuffer.append(")");
+        if (_decl != null) {
+            tmp = _decl.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        }
+        return stringBuffer;
     }
 }

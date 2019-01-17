@@ -5,6 +5,8 @@ import mfix.core.node.ast.Node;
 public class Insertion extends Modification {
 
     private int _index;
+    private Node _preNode;
+    private Node _nexNode;
     private Node _insert;
 
     protected Insertion(Node parent) {
@@ -17,6 +19,22 @@ public class Insertion extends Modification {
         _insert = insert;
     }
 
+    public void setPrenode(Node node) {
+        _preNode = node;
+    }
+
+    public Node getPrenode() {
+        return _preNode;
+    }
+
+    public void setNextnode(Node node) {
+        _nexNode = node;
+    }
+
+    public Node getNextnode() {
+        return _nexNode;
+    }
+
     public int getIndex() {
         return _index;
     }
@@ -25,9 +43,12 @@ public class Insertion extends Modification {
         return _insert;
     }
 
-    @Override
-    public boolean apply() {
-        return false;
+    public StringBuffer apply() {
+        if(_insert == null) {
+            return new StringBuffer("null");
+        } else {
+            return _insert.transfer();
+        }
     }
 
     @Override

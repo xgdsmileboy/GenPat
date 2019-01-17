@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -133,5 +135,64 @@ public class InstanceofExpr extends Expr {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			tmp = _expression.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(" instanceof ");
+			tmp = _instanceType.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer expression = null;
+		StringBuffer instanceType = null;
+		Node node = checkModification();
+		if (node != null) {
+			InstanceofExpr instanceofExpr = (InstanceofExpr) node;
+			for (Modification modification : instanceofExpr.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					if (update.getSrcNode() == instanceofExpr._expression) {
+						expression = update.apply();
+						if (expression == null) return null;
+					} else {
+						instanceType = update.apply();
+						if (instanceofExpr == null) return null;
+					}
+				} else {
+					LevelLogger.error("@InstanceofExpr Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		if(expression == null) {
+			tmp = _expression.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(expression);
+		}
+		stringBuffer.append(" instanceof ");
+		if(instanceType == null) {
+			tmp = _instanceType.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(instanceType);
+		}
+		return stringBuffer;
 	}
 }

@@ -92,4 +92,23 @@ public class BoolLiteral extends Expr {
         }
         return false;
     }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = toSrcString();
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        Node node = checkModification();
+        if (node != null) {
+            Update update = (Update) node.getModifications().get(0);
+            return update.apply();
+        }
+        return toSrcString();
+    }
 }

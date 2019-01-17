@@ -16,6 +16,10 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.modify.Deletion;
+import mfix.core.node.modify.Insertion;
+import mfix.core.node.modify.Modification;
+import mfix.core.node.modify.Update;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.parser.PatternExtraction;
 import mfix.core.pattern.relation.Relation;
@@ -594,6 +598,90 @@ public class Matcher {
 		
 		assert map.size() == score[srcLen][tarLen];
 		return map;
+	}
+
+	public static boolean applyNodeListModifications(List<Modification> modifications,
+													 List<? extends Node> statements,
+													 Map<Node, List<StringBuffer>> insertionBefore,
+													 Map<Node, List<StringBuffer>> insertionAfter,
+													 Map<Node, StringBuffer> changeNodeMap) {
+		StringBuffer tmp;
+		for (Modification modification : modifications) {
+			if (modification instanceof Update) {
+				Update update = (Update) modification;
+				Node node = update.getSrcNode().getBuggyBindingNode();
+				assert node != null;
+				// map current node to the updated node string
+				tmp = update.apply();
+				if(tmp == null) return false;
+				changeNodeMap.put(node, tmp);
+			} else if(modification instanceof Deletion) {
+				Deletion deletion = (Deletion) modification;
+				Node node = deletion.getDelNode().getBuggyBindingNode();
+				// node to be deleted to should be completely matched
+				assert node != null;
+				// map deleted node to null
+				changeNodeMap.put(node, null);
+			} else {
+				Insertion insertion = (Insertion) modification;
+				Node insNode = insertion.getInsertedNode();
+				Set<Node> before = new HashSet<>();
+				Set<Node> after = new HashSet<>();
+				Set<Node> depends = insNode.recursivelyGetDataDependency(new HashSet<>());
+				if (!depends.isEmpty()) {
+					for (Node n : depends) {
+						if (n.getBindingNode() == null || n.getBindingNode().getBuggyBindingNode() == null) {
+							return false;
+						}
+						after.add(n.getBindingNode().getBuggyBindingNode());
+					}
+
+				} else if (insertion.getPrenode() != null && insertion.getPrenode().getBindingNode() != null
+						&& insertion.getPrenode().getBindingNode().getBuggyBindingNode() != null) {
+					after.add(insertion.getPrenode().getBindingNode().getBuggyBindingNode());
+				} else if (insertion.getNextnode() != null && insertion.getNextnode().getBindingNode() != null
+						&&insertion.getNextnode().getBindingNode().getBuggyBindingNode() != null) {
+					before.add(insertion.getNextnode().getBindingNode().getBuggyBindingNode());
+				}
+
+				if (after.isEmpty() && before.isEmpty()) {
+					return false;
+				}
+
+				if (!after.isEmpty()) {
+					int tag = 0;
+					for (int i = 0; i < statements.size(); i++) {
+						if (after.contains(statements.get(i))) {
+							tag = i;
+						}
+					}
+					List<StringBuffer> list = insertionAfter.get(statements.get(tag));
+					if(list == null) {
+						list = new LinkedList<>();
+						insertionAfter.put(statements.get(tag), list);
+					}
+					tmp = insertion.apply();
+					if(tmp == null) return false;;
+					list.add(tmp);
+				} else {
+					int tag = 0;
+					for (int i = 0; i < statements.size(); i++) {
+						if (after.contains(statements.get(i))) {
+							tag = i;
+						}
+					}
+					List<StringBuffer> list = insertionBefore.get(statements.get(tag));
+					if(list == null) {
+						list = new LinkedList<>();
+						insertionBefore.put(statements.get(tag), list);
+					}
+					tmp = insertion.apply();
+					if(tmp == null) return false;;
+					list.add(tmp);
+				}
+			}
+		}
+		return true;
 	}
 
 }
