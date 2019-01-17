@@ -165,7 +165,8 @@ public class Vdf extends Node {
 		if (getBindingNode() != null) {
 			Vdf vdf = (Vdf) getBindingNode();
 			if (_identifier.compare(vdf._identifier)) {
-				if (_expression.getBindingNode() != vdf.getExpression()) {
+				if ((_expression == null && vdf.getExpression() != null)
+						|| (_expression.getBindingNode() != vdf.getExpression())) {
 					Update update = new Update(this, _expression, vdf.getExpression());
 					_modifications.add(update);
 				} else {

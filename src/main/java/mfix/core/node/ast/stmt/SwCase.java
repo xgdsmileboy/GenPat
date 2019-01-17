@@ -119,16 +119,19 @@ public class SwCase extends Stmt {
 		SwCase swCase = null;
 		if(getBindingNode() != null) {
 			swCase = (SwCase) getBindingNode();
-			_expression.postAccurateMatch(swCase.getExpression());
+			if (_expression  != null && swCase.getExpression() != null) {
+				_expression.postAccurateMatch(swCase.getExpression());
+			}
 			match = (swCase == node);
 		} else if(canBinding(node)) {
 			swCase = (SwCase) node;
-			if(_expression.postAccurateMatch(swCase.getExpression())) {
-				setBindingNode(node);
-				match = true;
-			} else {
-				swCase = null;
-			}
+			if(_expression == swCase.getExpression()
+					|| (_expression != null &&  _expression.postAccurateMatch(swCase.getExpression()))) {
+					setBindingNode(node);
+					match = true;
+				} else {
+					swCase = null;
+				}
 		}
 
 		if(swCase == null) {

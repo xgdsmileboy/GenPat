@@ -26,7 +26,7 @@ public class Constant {
     public final static String PATCH_DEL_LEADING = "-";
     public final static String PATCH_ADD_LEADING = "+";
 
-    public final static String DB_CACHE_FILE = Utils.join(SEP, RES_DIR, "forTest", "MethodTableElements.txt");
+    public final static String DB_CACHE_FILE = Utils.join(SEP, RES_DIR, "db", "MethodTableElements.txt");
 
     /*
      * markers
