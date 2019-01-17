@@ -14,7 +14,6 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -154,7 +153,9 @@ public class AryCreation extends Expr {
             continueTopDownMatchNull();
         } else {
             greedyMatchListNode(_dimension, aryCreation.getDimention());
-            _initializer.postAccurateMatch(aryCreation._initializer);
+            if (_initializer != null && aryCreation._initializer != null) {
+                _initializer.postAccurateMatch(aryCreation._initializer);
+            }
         }
 
         return match;
