@@ -8,7 +8,7 @@
 package mfix.common.util;
 
 import mfix.common.java.D4jSubject;
-import mfix.core.parse.diff.Diff;
+import mfix.core.node.diff.Diff;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,6 +45,17 @@ public class Utils {
             buffer.append(elements.get(i));
         }
         return buffer.toString();
+    }
+
+    public static boolean checkCompatiblePut(String obj1, String obj2, Map<String, String> map) {
+        if(map.containsKey(obj1)) {
+            if (!map.get(obj1).equals(obj2)) {
+                return false;
+            }
+        } else {
+            map.put(obj1, obj2);
+        }
+        return true;
     }
 
     /**
