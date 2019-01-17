@@ -707,18 +707,18 @@ public abstract class Node implements NodeComparator, Serializable {
     private Node _buggyBinding;
 
     public void setBuggyBindingNode(Node node) {
-        _bindingNode = node;
-        if(_buggyBinding != null) {
-            node.setBuggyBindingNode(this);
+        _buggyBinding = node;
+        if(node != null) {
+            node._buggyBinding = this;
         }
     }
 
     public Node getBuggyBindingNode() {
-        return _bindingNode;
+        return _buggyBinding;
     }
 
     public boolean isBoundBuggy(){
-        return _bindingNode != null;
+        return _buggyBinding != null;
     }
 
     public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings);
