@@ -136,7 +136,12 @@ public class SuperFieldAcc extends Expr {
 				Update update = new Update(this, _identifier, superFieldAcc.getIdentifier());
 				_modifications.add(update);
 			}
-			if (!_name.compare(superFieldAcc._name)) {
+			if (_name != null && superFieldAcc._name != null) {
+				if (!_name.compare(superFieldAcc._name)) {
+					Update update = new Update(this, _name, superFieldAcc._name);
+					_modifications.add(update);
+				}
+			} else if(_name != superFieldAcc._name) {
 				Update update = new Update(this, _name, superFieldAcc._name);
 				_modifications.add(update);
 			}
