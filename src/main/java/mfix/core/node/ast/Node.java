@@ -191,7 +191,7 @@ public abstract class Node implements NodeComparator, Serializable {
             nodes.add(_datadependency);
         }
         for (Node node : getAllChildren()) {
-            recursivelyGetDataDependency(nodes);
+            node.recursivelyGetDataDependency(nodes);
         }
         return nodes;
     }
