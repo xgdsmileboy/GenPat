@@ -9,11 +9,14 @@ package mfix.core.node.ast.stmt;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.Vdf;
+import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -187,5 +190,141 @@ public class VarDeclarationStmt extends Stmt {
 			return super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			if (_modifier != null) {
+				stringBuffer.append(_modifier + " ");
+			}
+			StringBuffer tmp = _declType.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(" ");
+			tmp = _fragments.get(0).transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			for (int i = 1; i < _fragments.size(); i++) {
+				stringBuffer.append(",");
+				tmp = _fragments.get(i).transfer();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+			stringBuffer.append(";");
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		Node pnode = checkModification();
+		if (pnode != null) {
+			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) pnode;
+			StringBuffer declType = null;
+			List<Modification> modifications = new LinkedList<>();
+			for (Modification modification : varDeclarationStmt.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					if (update.getSrcNode() == varDeclarationStmt._declType) {
+						declType = update.apply();
+						if (declType == null) return null;
+					} else {
+						modifications.add(update);
+					}
+				} else {
+					modifications.add(modification);
+				}
+			}
+
+			Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
+			Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
+			Map<Node, StringBuffer> map = new HashMap<>(_fragments.size());
+			if (!Matcher.applyNodeListModifications(modifications, _fragments, insertionBefore, insertionAfter, map)) {
+				return null;
+			}
+
+			StringBuffer stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			if (_modifier != null) {
+				stringBuffer.append(_modifier + " ");
+			}
+			if(declType == null) {
+				tmp = _declType.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			} else {
+				stringBuffer.append(declType);
+			}
+			stringBuffer.append(" ");
+
+			boolean first = true;
+			for(int index = 0; index < _fragments.size(); index ++) {
+				Node node = _fragments.get(index);
+				List<StringBuffer> list = insertionBefore.get(node);
+				if (list != null) {
+					for (int i = 0; i < list.size(); i++) {
+						if(!first) {
+							stringBuffer.append(",");
+						}
+						first = false;
+						stringBuffer.append(list.get(i));
+					}
+				}
+				if (map.containsKey(node)) {
+					StringBuffer update = map.get(node);
+					if (update != null) {
+						if(!first) {
+							stringBuffer.append(",");
+						}
+						first = false;
+						stringBuffer.append(update);
+					}
+				} else {
+					if(!first) {
+						stringBuffer.append(",");
+					}
+					first = false;
+					tmp = node.adaptModifications();
+					if(tmp == null) return null;
+					stringBuffer.append(tmp);
+				}
+				list = insertionAfter.get(node);
+				if (list != null) {
+					for (int i = 0; i < list.size(); i++) {
+						if(!first) {
+							stringBuffer.append(",");
+						}
+						first = false;
+						stringBuffer.append(list.get(i));
+					}
+				}
+			}
+			stringBuffer.append(";");
+			return stringBuffer;
+		} else {
+			StringBuffer stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			if (_modifier != null) {
+				stringBuffer.append(_modifier + " ");
+			}
+			tmp = _declType.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(" ");
+			tmp = _fragments.get(0).adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			for (int i = 1; i < _fragments.size(); i++) {
+				stringBuffer.append(",");
+				tmp = _fragments.get(i).adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+			stringBuffer.append(";");
+			return stringBuffer;
+		}
 	}
 }

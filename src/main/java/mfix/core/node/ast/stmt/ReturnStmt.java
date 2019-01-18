@@ -6,9 +6,11 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -155,5 +157,58 @@ public class ReturnStmt extends Stmt {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer("return ");
+			if(_expression != null){
+				StringBuffer tmp = _expression.transfer();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+			stringBuffer.append(";");
+			return stringBuffer;
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer expression = null;
+		Node pnode = checkModification();
+		if (pnode != null) {
+			ReturnStmt returnStmt = (ReturnStmt) pnode;
+			for(Modification modification : returnStmt.getModifications()) {
+				if(modification instanceof Update) {
+					Update update = (Update) modification;
+					if(update.getSrcNode() == returnStmt._expression) {
+						expression = update.apply();
+						if(expression == null) return null;
+					} else {
+						LevelLogger.error("@ReturnStmt ERROR");
+					}
+				} else {
+					LevelLogger.error("@ReturnStmt Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer("return ");
+		if(expression == null) {
+			if(_expression != null){
+				StringBuffer tmp = _expression.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+		} else {
+			if (_expression == null) {
+				return null;
+			}
+			stringBuffer.append(expression);
+		}
+		stringBuffer.append(";");
+		return stringBuffer;
 	}
 }

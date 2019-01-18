@@ -6,10 +6,12 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -187,5 +189,75 @@ public class EnhancedForStmt extends Stmt {
 					&& super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			stringBuffer.append("for(");
+			tmp = _varDecl.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(" : ");
+			tmp = _expression.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(")");
+			tmp = _statement.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer varDecl = null;
+		StringBuffer expression = null;
+		Node pnode = checkModification();
+		if (pnode != null) {
+			EnhancedForStmt enhancedForStmt = (EnhancedForStmt) pnode;
+			for (Modification modification : enhancedForStmt.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					Node node = update.getSrcNode();
+					if (node == enhancedForStmt._varDecl) {
+						varDecl = update.apply();
+						if (varDecl == null) return null;
+					} else if (node == enhancedForStmt._expression) {
+						expression = update.apply();
+						if (expression == null) return null;
+					}
+				} else {
+					LevelLogger.error("@EnhancedForStmt Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		stringBuffer.append("for(");
+		if (varDecl == null) {
+			tmp = _varDecl.adaptModifications();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(varDecl);
+		}
+		stringBuffer.append(" : ");
+		if (expression == null) {
+			tmp = _expression.adaptModifications();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(expression);
+		}
+		stringBuffer.append(")");
+		tmp = _statement.adaptModifications();
+		if (tmp == null) return null;
+		stringBuffer.append(tmp);
+		return stringBuffer;
 	}
 }

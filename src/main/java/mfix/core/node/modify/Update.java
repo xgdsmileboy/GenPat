@@ -13,9 +13,19 @@ public class Update extends Modification {
         _tarNode= tarNode;
     }
 
-    @Override
-    public boolean apply() {
-        return false;
+    public Node getSrcNode() {
+        return _srcNode;
+    }
+
+    public Node getTarNode() {
+        return _tarNode;
+    }
+
+    public StringBuffer apply() {
+        if (_tarNode == null) {
+            return new StringBuffer();
+        }
+        return _tarNode.transfer();
     }
 
     @Override

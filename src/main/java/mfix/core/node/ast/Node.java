@@ -186,6 +186,16 @@ public abstract class Node implements NodeComparator, Serializable {
         return _datadependency;
     }
 
+    public Set<Node> recursivelyGetDataDependency(Set<Node> nodes) {
+        if (_datadependency != null) {
+            nodes.add(_datadependency);
+        }
+        for (Node node : getAllChildren()) {
+            recursivelyGetDataDependency(nodes);
+        }
+        return nodes;
+    }
+
     /**
      * set control dependency of node
      *
@@ -428,6 +438,10 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     private boolean _changed = false;
     /**
+     *
+     */
+    private boolean _insertDepend = false;
+    /**
      * list of modifications bound to the node
      */
     protected List<Modification> _modifications = new LinkedList<>();
@@ -444,6 +458,10 @@ public abstract class Node implements NodeComparator, Serializable {
         _expanded = considered;
     }
 
+    public void setInsertDepend(boolean insertDepend) {
+        _insertDepend = insertDepend;
+    }
+
     public void setBindingNode(Node binding) {
         _bindingNode = binding;
         if (_bindingNode != null) {
@@ -453,6 +471,10 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public Node getBindingNode() {
         return _bindingNode;
+    }
+
+    public List<Modification> getModifications() {
+        return _modifications;
     }
 
     /**
@@ -468,7 +490,7 @@ public abstract class Node implements NodeComparator, Serializable {
         if (_bindingNode == null) {
             nodes.add(this);
         } else {
-            if ((includeExpanded && _expanded) || _changed
+            if ((includeExpanded && _expanded) || _changed || _insertDepend
                     || dataDependencyChanged() || controlDependencyChanged()) {
                 nodes.add(this);
             }
@@ -687,7 +709,32 @@ public abstract class Node implements NodeComparator, Serializable {
             if (matched.contains(i)) {
                 continue;
             }
-            _modifications.add(insertions.get(i));
+            Insertion ins = insertions.get(i);
+            Set<Node> nodes = ins.getInsertedNode().recursivelyGetDataDependency(new HashSet<>());
+            if (nodes.isEmpty()) {
+                Node insertNode = ins.getInsertedNode();
+                Node parent = insertNode.getParent();
+                List<Node> children = parent.getAllChildren();
+                for (int index = 0; index < children.size(); index ++) {
+                    if (insertNode == children.get(index)) {
+                        if (index > 0) {
+                            children.get(index - 1).setInsertDepend(true);
+                            ins.setPrenode(children.get(index - 1));
+                        }
+                        if (index < children.size() - 1) {
+                            children.get(index + 1).setInsertDepend(true);
+                            ins.setNextnode(children.get(index + 1));
+                        }
+                    }
+                }
+            } else {
+                for (Node node : nodes) {
+                    if (node.getBindingNode() != null) {
+                        node.getBindingNode().setInsertDepend(true);
+                    }
+                }
+            }
+            _modifications.add(ins);
         }
 
     }
@@ -777,7 +824,21 @@ public abstract class Node implements NodeComparator, Serializable {
         return false;
     }
 
-//    public abstract StringBuffer adaptModifications();
+    public StringBuffer transfer() {
+        if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
+            return getBindingNode().getBuggyBindingNode().toSrcString();
+        }
+        return null;
+    }
+
+    public Node checkModification() {
+        if (getBuggyBindingNode() != null && !getBuggyBindingNode().getModifications().isEmpty()) {
+            return getBuggyBindingNode();
+        }
+        return null;
+    }
+
+    public abstract StringBuffer adaptModifications();
 
 
     /******************************************************************************************/

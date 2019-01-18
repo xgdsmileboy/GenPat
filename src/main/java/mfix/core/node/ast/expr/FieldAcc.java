@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -134,5 +136,65 @@ public class FieldAcc extends Expr {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			tmp = _expression.transfer();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(".");
+			tmp = _identifier.transfer();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer expression = null;
+		StringBuffer identifier = null;
+		Node node = checkModification();
+		if (node != null) {
+			FieldAcc fieldAcc = (FieldAcc) node;
+			for (Modification modification : fieldAcc.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					if (update.getSrcNode() == fieldAcc._expression) {
+						expression = update.apply();
+						if (expression == null) return null;
+					} else {
+						identifier = update.apply();
+						if (identifier == null) return null;
+					}
+				} else {
+					LevelLogger.error("@FieldAcc Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		if(expression == null) {
+			tmp = _expression.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(expression);
+		}
+		stringBuffer.append(".");
+		if(identifier == null) {
+			tmp = _identifier.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(identifier);
+		}
+		return stringBuffer;
 	}
 }

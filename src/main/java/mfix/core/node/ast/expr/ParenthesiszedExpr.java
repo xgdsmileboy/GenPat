@@ -114,4 +114,34 @@ public class ParenthesiszedExpr extends Expr {
 		}
 		return true;
 	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			stringBuffer.append("(");
+			StringBuffer tmp = _expression.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(")");
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		Node node = checkModification();
+		if (node != null) {
+			return ((Update) node.getModifications().get(0)).apply();
+		}
+
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("(");
+		StringBuffer tmp = _expression.adaptModifications();
+		if (tmp == null) return null;
+		stringBuffer.append(tmp);
+		stringBuffer.append(")");
+		return stringBuffer;
+	}
 }

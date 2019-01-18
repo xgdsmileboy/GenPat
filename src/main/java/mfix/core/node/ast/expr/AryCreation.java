@@ -6,14 +6,18 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Jiajun
@@ -192,4 +196,85 @@ public class AryCreation extends Expr {
         }
         return true;
     }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            stringBuffer.append("new ");
+            stringBuffer.append(_type.transfer());
+            for (Expr expr : _dimension) {
+                stringBuffer.append("[");
+                tmp = expr.transfer();
+                if (tmp == null) return null;
+                stringBuffer.append(tmp);
+                stringBuffer.append("]");
+            }
+            if (_initializer != null) {
+                stringBuffer.append("=");
+                tmp = _initializer.transfer();
+                if (tmp == null) return null;
+                stringBuffer.append(tmp);
+            }
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer stringBuffer = new StringBuffer();
+        Map<Integer, StringBuffer> dimensionMap = new HashMap<>();
+        StringBuffer initializer = null;
+        Node node = checkModification();
+        if (node != null) {
+            AryCreation aryCreation = (AryCreation) node;
+            for (Modification modification : aryCreation.getModifications()) {
+                if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    if (update.getSrcNode() == aryCreation._initializer) {
+                        initializer = update.apply();
+                        if (initializer == null) return null;
+                    } else {
+                        for (int i = 0; i < aryCreation._dimension.size(); i++) {
+                            if (update.getSrcNode() == aryCreation._dimension.get(i)) {
+                                StringBuffer buffer = update.apply();
+                                if (buffer == null) return null;
+                                dimensionMap.put(i, buffer);
+                            }
+                        }
+                    }
+                } else {
+                    LevelLogger.error("@ArrayCreate Should not be this kind of modification : " + modification.toString());
+                }
+            }
+        }
+        stringBuffer.append("new ");
+        StringBuffer tmp;
+        stringBuffer.append(_type.transfer());
+        for(int i = 0; i < _dimension.size(); i++) {
+            stringBuffer.append("[");
+            tmp = dimensionMap.get(i);
+            if (tmp == null) {
+                tmp = _dimension.get(i).adaptModifications();
+            }
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+            stringBuffer.append("]");
+        }
+        if(initializer == null) {
+            if(_initializer != null) {
+                stringBuffer.append("=");
+                tmp = _initializer.adaptModifications();
+                if(tmp == null) return null;
+                stringBuffer.append(tmp);
+            }
+        } else {
+            stringBuffer.append("=");
+            stringBuffer.append(initializer);
+        }
+        return stringBuffer;
+    }
+
 }

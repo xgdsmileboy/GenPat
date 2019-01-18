@@ -8,13 +8,19 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Deletion;
+import mfix.core.node.modify.Insertion;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -25,8 +31,8 @@ public class VarDeclarationExpr extends Expr {
 	private static final long serialVersionUID = -5908284718888454712L;
 	private MType _declType = null;
 	private List<Vdf> _vdfs = null;
-	
-	
+
+
 	/**
 	 * VariableDeclarationExpression:
      *	{ ExtendedModifier } Type VariableDeclarationFragment
@@ -150,5 +156,113 @@ public class VarDeclarationExpr extends Expr {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp = _declType.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(" ");
+			tmp = _vdfs.get(0).transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			for (int i = 1; i < _vdfs.size(); i++) {
+				stringBuffer.append(",");
+				tmp = _vdfs.get(i).transfer();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer declType = null;
+		Map<Integer, StringBuffer> insertion = new HashMap<>();
+        Set<Node> deletion = new HashSet<>();
+        Map<Node, StringBuffer> updates = new HashMap<>();
+        Node node = checkModification();
+        if (node != null) {
+            VarDeclarationExpr varDeclarationExpr = (VarDeclarationExpr) node;
+            for (Modification modification : varDeclarationExpr.getModifications()) {
+                if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    if (update.getSrcNode() == varDeclarationExpr._declType) {
+                        declType = update.apply();
+                        if (declType == null) return null;
+                    } else {
+                        StringBuffer buffer = update.apply();
+                        if (buffer == null) return null;
+                        if (update.getSrcNode().getBuggyBindingNode() != null) {
+                            updates.put(update.getSrcNode().getBuggyBindingNode(), buffer);
+                        }
+                    }
+                } else {
+                    if (modification instanceof Insertion) {
+                        Insertion ins = (Insertion) modification;
+                        StringBuffer buffer = ins.apply();
+                        if (buffer == null) return null;
+                        insertion.put(ins.getIndex(), buffer);
+                    } else if (modification instanceof Deletion) {
+                        Deletion del = (Deletion) modification;
+                        if (del.getDelNode().getBuggyBindingNode() != null) {
+                            deletion.add(del.getDelNode().getBuggyBindingNode());
+                        }
+                    }
+                }
+            }
+        }
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer tmp;
+        if (declType == null) {
+            tmp = _declType.adaptModifications();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+			stringBuffer.append(declType);
+		}
+		stringBuffer.append(" ");
+		int start = 0;
+		while(start < _vdfs.size()) {
+			if (insertion.containsKey(start)) {
+				stringBuffer.append(insertion.get(start));
+				insertion.remove(start);
+				break;
+			} else if (deletion.contains(_vdfs.get(start))) {
+				start ++;
+			} else if (updates.containsKey(_vdfs.get(start))){
+				stringBuffer.append(updates.get(_vdfs.get(start)));
+				start ++;
+				break;
+			} else {
+				tmp = _vdfs.get(start).adaptModifications();
+				if (tmp == null) return null;
+				stringBuffer.append(tmp);
+				break;
+			}
+		}
+		for (int i = start; i < _vdfs.size(); i++) {
+			if (insertion.containsKey(i)) {
+				stringBuffer.append(",");
+				stringBuffer.append(insertion.get(i));
+			}
+			if (deletion.contains(_vdfs.get(i))) {
+				continue;
+			} else if (updates.containsKey(_vdfs.get(i))) {
+				stringBuffer.append(",");
+				stringBuffer.append(updates.get(_vdfs.get(i)));
+			} else {
+				tmp = _vdfs.get(i).adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(",");
+				stringBuffer.append(tmp);
+			}
+		}
+		return stringBuffer;
 	}
 }

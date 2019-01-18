@@ -82,4 +82,14 @@ public class EmptyStmt extends Stmt {
 	public boolean genModidications() {
 		return true;
 	}
+
+	@Override
+	public StringBuffer transfer() {
+		return toSrcString();
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		return toSrcString();
+	}
 }

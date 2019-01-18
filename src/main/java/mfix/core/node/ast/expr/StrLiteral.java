@@ -105,4 +105,22 @@ public class StrLiteral extends Expr {
 		}
 		return true;
 	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = toSrcString();
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		Node node = checkModification();
+		if (node != null) {
+			return ((Update) node.getModifications().get(0)).apply();
+		}
+		return toSrcString();
+	}
 }

@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -157,5 +159,82 @@ public class ConditionalExpr extends Expr {
             }
         }
         return true;
+    }
+
+    @Override
+    public StringBuffer transfer() {
+        StringBuffer stringBuffer = super.transfer();
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            tmp = _condition.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            stringBuffer.append("?");
+            tmp = _first.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            stringBuffer.append(":");
+            tmp = _snd.transfer();
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        StringBuffer condition = null;
+        StringBuffer first = null;
+        StringBuffer snd = null;
+        Node node = checkModification();
+        if (node != null) {
+            ConditionalExpr conditionalExpr = (ConditionalExpr) node;
+            for (Modification modification : conditionalExpr.getModifications()) {
+                if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    Node changedNode = update.getSrcNode();
+                    if (changedNode == conditionalExpr._condition) {
+                        condition = update.apply();
+                        if (condition == null) return null;
+                    } else if (changedNode == conditionalExpr._first) {
+                        first = update.apply();
+                        if (first == null) return null;
+                    } else if (changedNode == conditionalExpr._snd) {
+                        snd = update.apply();
+                        if (snd == null) return null;
+                    }
+                } else {
+                    LevelLogger.error("@ConditionalExpr Should not be this kind of modification : " + modification);
+                }
+            }
+        }
+
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer tmp;
+        if(condition == null) {
+            tmp = _condition.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(condition);
+        }
+        stringBuffer.append("?");
+        if(first == null) {
+            tmp = _first.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(first);
+        }
+        stringBuffer.append(":");
+        if(snd == null) {
+            tmp = _snd.adaptModifications();
+            if(tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(snd);
+        }
+        return stringBuffer;
     }
 }

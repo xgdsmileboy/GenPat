@@ -26,11 +26,6 @@ public class Wrap extends Insertion {
     }
 
     @Override
-    public boolean apply() {
-        return super.apply();
-    }
-
-    @Override
     public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
         for (Node node : _nodes) {

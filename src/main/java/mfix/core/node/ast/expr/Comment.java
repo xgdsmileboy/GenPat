@@ -80,4 +80,14 @@ public class Comment extends Expr {
     public boolean genModidications() {
         return true;
     }
+
+    @Override
+    public StringBuffer transfer() {
+        return toSrcString();
+    }
+
+    @Override
+    public StringBuffer adaptModifications() {
+        return toSrcString();
+    }
 }

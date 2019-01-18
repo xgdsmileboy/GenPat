@@ -69,7 +69,8 @@ public abstract class Expr extends Node {
 
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if (node instanceof Expr) {
+        if ((!_modifications.isEmpty() && node.getNodeType() == getNodeType())
+                || (_modifications.isEmpty() && node instanceof Expr)) {
             if ((!"boolean".equals(getTypeString()) || "boolean".equals(((Expr) node).getTypeString()))
                     && !(node instanceof Operator)) {
                 return checkDependency(node, matchedNode, matchedStrings)

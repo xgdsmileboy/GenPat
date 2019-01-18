@@ -6,13 +6,17 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.Constant;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.VarDeclarationExpr;
+import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -279,5 +283,177 @@ public class TryStmt extends Stmt {
 			return match && super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer("try");
+			StringBuffer tmp;
+			if (_resource != null && _resource.size() > 0) {
+				stringBuffer.append("(");
+				tmp = _resource.get(0).transfer();
+				if (tmp == null) return null;
+				stringBuffer.append(tmp);
+				for (int i = 1; i < _resource.size(); i++) {
+					stringBuffer.append(";");
+					tmp = _resource.get(i).transfer();
+					if (tmp == null) return null;
+					stringBuffer.append(tmp);
+				}
+				stringBuffer.append(")");
+			}
+			tmp = _blk.transfer();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+			if (_catches != null) {
+				for (CatClause catClause : _catches) {
+					tmp = catClause.transfer();
+					if (tmp == null) return null;
+					stringBuffer.append(tmp);
+				}
+			}
+			if (_finallyBlk != null) {
+				stringBuffer.append("finally");
+				tmp = _finallyBlk.transfer();
+				if (tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		Node pnode = checkModification();
+		if (pnode != null) {
+			TryStmt tryStmt = (TryStmt) pnode;
+			List<Modification> catchModifications = new LinkedList<>();
+			StringBuffer finallyBlock = null;
+			for (Modification modification : tryStmt.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					Node node = update.getSrcNode();
+					if (node == tryStmt._finallyBlk) {
+						finallyBlock = update.apply();
+						if (finallyBlock == null) return null;
+					} else {
+						catchModifications.add(modification);
+					}
+				} else {
+					catchModifications.add(modification);
+				}
+			}
+
+			StringBuffer stringBuffer = new StringBuffer("try");
+			StringBuffer tmp;
+			if (_resource != null && _resource.size() > 0) {
+				stringBuffer.append("(");
+				stringBuffer.append(_resource.get(0).toSrcString());
+				for (int i = 1; i < _resource.size(); i++) {
+					stringBuffer.append(";");
+					stringBuffer.append(_resource.get(i).toSrcString());
+				}
+				stringBuffer.append(")");
+			}
+
+			tmp = _blk.adaptModifications();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+
+
+			if (_catches != null && _catches.size() > 0) {
+				if (catchModifications.size() > 0) {
+					Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
+					Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
+					Map<Node, StringBuffer> map = new HashMap<>(_catches.size());
+					if (!Matcher.applyNodeListModifications(catchModifications, _catches, insertionBefore,
+							insertionAfter, map)) {
+						return null;
+					}
+					for (Node node : _catches) {
+						List<StringBuffer> list = insertionBefore.get(node);
+						if (list != null) {
+							for (int i = 0; i < list.size(); i++) {
+								stringBuffer.append(list.get(i));
+								stringBuffer.append(Constant.NEW_LINE);
+							}
+						}
+						if (map.containsKey(node)) {
+							StringBuffer update = map.get(node);
+							if (update != null) {
+								stringBuffer.append(update);
+								stringBuffer.append(Constant.NEW_LINE);
+							}
+						} else {
+							tmp = node.adaptModifications();
+							if (tmp == null) return null;
+							stringBuffer.append(tmp);
+							stringBuffer.append(Constant.NEW_LINE);
+						}
+						list = insertionAfter.get(node);
+						if (list != null) {
+							for (int i = 0; i < list.size(); i++) {
+								stringBuffer.append(list.get(i));
+								stringBuffer.append(Constant.NEW_LINE);
+							}
+						}
+					}
+				} else {
+					for (CatClause catClause : _catches) {
+						tmp = catClause.adaptModifications();
+						if (tmp == null) return null;
+						stringBuffer.append(tmp);
+					}
+				}
+			}
+			if (finallyBlock == null) {
+				if (_finallyBlk != null) {
+					stringBuffer.append("finally");
+					tmp = _finallyBlk.adaptModifications();
+					if (tmp == null) return null;
+					stringBuffer.append(tmp);
+				}
+			} else {
+				stringBuffer.append("finally");
+				stringBuffer.append(finallyBlock);
+			}
+			return stringBuffer;
+
+		} else {
+			StringBuffer stringBuffer = new StringBuffer("try");
+			StringBuffer tmp;
+			if (_resource != null && _resource.size() > 0) {
+				stringBuffer.append("(");
+				tmp = _resource.get(0).adaptModifications();
+				if (tmp == null) return null;
+				stringBuffer.append(tmp);
+				for (int i = 1; i < _resource.size(); i++) {
+					stringBuffer.append(";");
+					tmp = _resource.get(i).adaptModifications();
+					if (tmp == null) return null;
+					stringBuffer.append(tmp);
+				}
+				stringBuffer.append(")");
+			}
+			tmp = _blk.adaptModifications();
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
+			if (_catches != null) {
+				for (CatClause catClause : _catches) {
+					tmp = catClause.adaptModifications();
+					if (tmp == null) return null;
+					stringBuffer.append(tmp);
+				}
+			}
+			if (_finallyBlk != null) {
+				stringBuffer.append("finally");
+				tmp = _finallyBlk.adaptModifications();
+				if (tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
+			return stringBuffer;
+		}
 	}
 }

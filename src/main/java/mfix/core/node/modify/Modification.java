@@ -18,6 +18,4 @@ public abstract class Modification implements Serializable {
         return _parent;
     }
 
-    public abstract boolean apply();
-
 }

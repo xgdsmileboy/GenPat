@@ -6,9 +6,11 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -172,5 +174,67 @@ public class SwCase extends Stmt {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			if (_expression == null) {
+				stringBuffer.append("default :\n");
+			} else {
+				stringBuffer.append("case ");
+				StringBuffer tmp = _expression.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+				stringBuffer.append(" :\n");
+			}
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer expression = null;
+		Node pnode = checkModification();
+		if (pnode != null) {
+			SwCase swCase = (SwCase) pnode;
+			for(Modification modification : swCase.getModifications()) {
+				if(modification instanceof Update) {
+					Update update = (Update) modification;
+					if(update.getSrcNode() == swCase._expression) {
+						expression = update.apply();
+						if(expression == null) return null;
+					} else {
+						LevelLogger.error("SwCase ERROR");
+					}
+				} else {
+					LevelLogger.error("@SwCase Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		if(expression == null) {
+			if (_expression == null) {
+				stringBuffer.append("default :\n");
+			} else {
+				stringBuffer.append("case ");
+				StringBuffer tmp = _expression.adaptModifications();
+				if(tmp == null) return null;
+				stringBuffer.append(tmp);
+				stringBuffer.append(" :\n");
+			}
+		} else {
+			if (expression.toString().isEmpty()) {
+				if (_expression != null) return null;
+				stringBuffer.append("default :\n");
+			} else {
+				stringBuffer.append("case ");
+				stringBuffer.append(expression);
+				stringBuffer.append(" :\n");
+			}
+		}
+		return stringBuffer;
 	}
 }

@@ -6,8 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -141,5 +143,62 @@ public class QName extends Label {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp = _name.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(".");
+			tmp = _sname.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer name = null;
+		StringBuffer sname = null;
+		Node node = checkModification();
+		if (node != null) {
+			QName qName = (QName) node;
+			for (Modification modification : qName.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					if (update.getSrcNode() == qName._name) {
+						name = update.apply();
+						if (name == null) return null;
+					} else {
+						sname = update.apply();
+						if (sname == null) return null;
+					}
+				} else {
+					LevelLogger.error("@QName Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		if (name == null) {
+			tmp = _name.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(name);
+		}
+		stringBuffer.append(".");
+		if(sname == null) {
+			tmp = _sname.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(sname);
+		}
+		return stringBuffer;
 	}
 }

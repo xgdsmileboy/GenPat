@@ -6,9 +6,11 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -160,5 +162,58 @@ public class CatClause extends Node {
 					&& matchSameNodeType(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer() {
+		StringBuffer stringBuffer = super.transfer();
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp;
+			stringBuffer.append("catch(");
+			tmp = _exception.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			stringBuffer.append(")");
+			tmp = _blk.transfer();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications() {
+		StringBuffer exception = null;
+		Node pnode = checkModification();
+		if (pnode != null) {
+			CatClause catClause = (CatClause) pnode;
+			for (Modification modification : catClause.getModifications()) {
+				if (modification instanceof Update) {
+					Update update = (Update) modification;
+					if (update.getSrcNode() == catClause._exception) {
+						exception = update.apply();
+						if (exception == null) return null;
+					}
+				} else {
+					LevelLogger.error("@CatClause Should not be this kind of modification : " + modification);
+				}
+			}
+		}
+		StringBuffer stringBuffer = new StringBuffer();
+		StringBuffer tmp;
+		stringBuffer.append("catch(");
+		if(exception == null) {
+			tmp = _exception.adaptModifications();
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		} else {
+			stringBuffer.append(exception);
+		}
+		stringBuffer.append(")");
+		tmp = _blk.adaptModifications();
+		if (tmp == null) return null;
+		stringBuffer.append(tmp);
+		return stringBuffer;
 	}
 }
