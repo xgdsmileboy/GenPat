@@ -83,9 +83,12 @@ public class MatcherTest extends TestCase {
                 Set<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
+                    System.out.println("------------ Before ---------------");
+                    System.out.println(node.toSrcString());
+                    System.out.println("------------ After ---------------");
                     System.out.println(node.adaptModifications());
-                    System.out.println("------------ Solution ---------------");
-                    System.out.println(matchInstance.getNodeMap());
+//                    System.out.println("------------ Solution ---------------");
+//                    System.out.println(matchInstance.getNodeMap());
                 }
             }
         }
