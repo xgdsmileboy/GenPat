@@ -363,6 +363,7 @@ public class Matcher {
 					if(!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
 						srcExprs.get(i).setBindingNode(tarExprs.get(j));
 						matchedIndex.add(j);
+						break;
 					}
 				}
 			}

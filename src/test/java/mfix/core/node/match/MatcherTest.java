@@ -7,6 +7,7 @@
 
 package mfix.core.node.match;
 
+import com.sun.xml.internal.ws.policy.AssertionSet;
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
@@ -14,6 +15,8 @@ import mfix.core.TestCase;
 import mfix.core.node.MatchInstance;
 import mfix.core.node.PatternExtractor;
 import mfix.core.node.ast.Node;
+import mfix.core.node.modify.Modification;
+import mfix.core.node.modify.Update;
 import mfix.core.node.parser.NodeParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -55,6 +58,24 @@ public class MatcherTest extends TestCase {
 
         // all methods are well matched
         Assert.assertTrue(matchMap.size() == 108);
+    }
+
+    @Test
+    public void test_modification_generation() {
+        String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
+        String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
+
+        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+
+        // there is only one method changed
+        Assert.assertTrue(patterns.size() == 1);
+
+        Node node = patterns.iterator().next();
+        // there should be only one modification, which surrounds
+        // a method invocation with an if statement
+        Assert.assertTrue(node.getAllModifications(new HashSet<>()).size() == 1);
+        Modification modification = node.getAllModifications(new HashSet<>()).iterator().next();
+        Assert.assertTrue(modification instanceof Update);
     }
 
     @Test
