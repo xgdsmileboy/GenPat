@@ -54,6 +54,8 @@ public class Main {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+        	e.printStackTrace();
         }
         return null;
     }
@@ -216,6 +218,7 @@ public class Main {
     }
     
     
+    // static String APIMappingFile = "/home/jack/Desktop/rly/api-test.txt";
     static String APIMappingFile = "/home/jack/Desktop/rly/API_Mapping.txt";
     // TODO(rly): is hashset could avoid repeat??
     static Map<Pair<String, Integer>, Set<String>> method2PatternFiles;
@@ -258,7 +261,8 @@ public class Main {
                 	System.out.println(cnt);
                 }
                 
-                if (cnt >= 500000) {
+                
+                if (cnt >= 400000) {
                 	break;
                 }
                 
@@ -279,12 +283,11 @@ public class Main {
     }
 
 
-    public static void patternMatch(Node buggy, Node pattern) {
-    	// System.out.println("------------ Original ---------------");
-    	// System.out.println(buggy.toString());
-    	
+    public static void tryMatchAndFix(Node buggy, Node pattern) throws Exception {
 		Set<MatchInstance> set = Matcher.tryMatch(buggy, pattern);
-  
+		
+		String origin = buggy.toString();
+		
         for (MatchInstance matchInstance : set) {
             matchInstance.apply();
             
@@ -293,7 +296,7 @@ public class Main {
             if (fixedProg != null) {
                 String fixed = fixedProg.toString().replaceAll(" ", "");
                 
-                if (!fixed.equals(buggy.toString().replaceAll(" ", ""))) {
+                if (!fixed.equals(origin.replaceAll(" ", ""))) {
                 	System.out.println("------------ Solution ---------------");
                 	System.out.println(fixedProg);
                 	System.out.println("------------ End ---------------");
@@ -341,21 +344,32 @@ public class Main {
                                 
                 Set<String> patternFileList = method2PatternFiles.getOrDefault(new Pair<String, Integer>(MethodName, MethodArgsNum), new HashSet<String>());
                 
-                
                 System.out.println(" Size of patternList : " + patternFileList.size());
+               
                 
-                
+                /*
                 if (!(MethodName.equals("dismiss") && MethodArgsNum == 0)) {
                 	continue;
                 }
+                */
+                
+                /*
+                if (!(MethodName.equals("isAJavaToken"))) {
+                	continue;
+                }
+                */
                 
                 
                 System.out.println("Start matching!");
                 
+            	// System.out.println("------------ Original ---------------");
+            	// System.out.println(node.toString());
+            	
                 for (String patternFile : patternFileList) {
 	                try {
 	                	// System.out.println(patternFile);
-	                	patternMatch(node, loadPatternFromFile(patternFile));
+	                	
+	                	tryMatchAndFix(node, loadPatternFromFile(patternFile));
 	                } catch (Exception e) {
 	                    e.printStackTrace();
 	                }
@@ -398,7 +412,7 @@ public class Main {
     	loadAPI();
     	
     	String buggyFilePath = "/home/jack/code/workspace/eclipse/MineFix/resources/forTest/buggy_SimpleSecureBrowser.java";
-    	// String buggyFilePath = "/home/jack/Desktop/rly/cases/4/base-all.java";
+    	// String buggyFilePath = "/home/jack/Desktop/rly/cases/5/base-all.java";
     	
     	tryFix(buggyFilePath);
     	
