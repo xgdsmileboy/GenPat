@@ -115,6 +115,19 @@ public class MatcherTest extends TestCase {
         }
     }
 
+    @Test
+    public void test_matcho() {
+        String srcFile = testbase + Constant.SEP + "1.java";
+        String tarFile = testbase + Constant.SEP + "2.java";
+
+        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+        for (Node node : patterns) {
+            System.out.println("------------------");
+            for (Modification modification : node.getAllModifications(new HashSet<>())) {
+                System.out.println(modification);
+            }
+        }
+    }
 
 
 }

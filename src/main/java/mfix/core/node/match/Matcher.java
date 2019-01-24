@@ -623,7 +623,7 @@ public class Matcher {
 				assert node != null;
 				// map deleted node to null
 				changeNodeMap.put(node, null);
-			} else {
+			} else if(modification instanceof Insertion){
 				Insertion insertion = (Insertion) modification;
 				Node insNode = insertion.getInsertedNode();
 				Set<Node> before = new HashSet<>();
