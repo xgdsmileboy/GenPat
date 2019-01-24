@@ -363,6 +363,7 @@ public class Matcher {
 					if(!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
 						srcExprs.get(i).setBindingNode(tarExprs.get(j));
 						matchedIndex.add(j);
+						break;
 					}
 				}
 			}
@@ -622,7 +623,7 @@ public class Matcher {
 				assert node != null;
 				// map deleted node to null
 				changeNodeMap.put(node, null);
-			} else {
+			} else if(modification instanceof Insertion){
 				Insertion insertion = (Insertion) modification;
 				Node insNode = insertion.getInsertedNode();
 				Set<Node> before = new HashSet<>();
