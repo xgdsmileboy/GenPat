@@ -222,6 +222,9 @@ public class Main {
     static String APIMappingFile = "/home/jack/Desktop/rly/API_Mapping.txt";
     // TODO(rly): is hashset could avoid repeat??
     static Map<Pair<String, Integer>, Set<String>> method2PatternFiles;
+    
+    static Set<String> fixedRet = new HashSet<String>();
+    
     static void loadAPI() {
         System.out.println("Start Load API Mappings!");
         method2PatternFiles = new HashMap<Pair<String, Integer>, Set<String>>();
@@ -262,9 +265,10 @@ public class Main {
                 }
                 
                 
-                if (cnt >= 400000) {
+                if (cnt >= 100000) {
                 	break;
                 }
+                
                 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -283,7 +287,7 @@ public class Main {
     }
 
 
-    public static void tryMatchAndFix(Node buggy, Node pattern) throws Exception {
+    public static void tryMatchAndFix(Node buggy, Node pattern, String patternFile) throws Exception {
 		Set<MatchInstance> set = Matcher.tryMatch(buggy, pattern);
 		
 		String origin = buggy.toString();
@@ -297,8 +301,18 @@ public class Main {
                 String fixed = fixedProg.toString().replaceAll(" ", "");
                 
                 if (!fixed.equals(origin.replaceAll(" ", ""))) {
+                	if (fixedRet.contains(fixed)) {
+                		continue;
+                	}
+                	fixedRet.add(fixed);
+                	
+                	System.out.println(patternFile);
                 	System.out.println("------------ Solution ---------------");
                 	System.out.println(fixedProg);
+                	
+                	JavaFile.writeStringToFile("/home/jack/Desktop/rly/fix_result.txt",
+                			fixedProg + "\n---------------\n", true);
+                	
                 	System.out.println("------------ End ---------------");
                 }
             }
@@ -353,6 +367,7 @@ public class Main {
                 }
                 */
                 
+            
                 /*
                 if (!(MethodName.equals("isAJavaToken"))) {
                 	continue;
@@ -369,7 +384,7 @@ public class Main {
 	                try {
 	                	// System.out.println(patternFile);
 	                	
-	                	tryMatchAndFix(node, loadPatternFromFile(patternFile));
+	                	tryMatchAndFix(node, loadPatternFromFile(patternFile), patternFile);
 	                } catch (Exception e) {
 	                    e.printStackTrace();
 	                }
