@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -165,17 +166,17 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			stringBuffer.append("catch(");
-			tmp = _exception.transfer();
+			tmp = _exception.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _blk.transfer();
+			tmp = _blk.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -183,7 +184,7 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer exception = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -192,7 +193,7 @@ public class CatClause extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == catClause._exception) {
-						exception = update.apply();
+						exception = update.apply(vars);
 						if (exception == null) return null;
 					}
 				} else {
@@ -204,14 +205,14 @@ public class CatClause extends Node {
 		StringBuffer tmp;
 		stringBuffer.append("catch(");
 		if(exception == null) {
-			tmp = _exception.adaptModifications();
+			tmp = _exception.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(exception);
 		}
 		stringBuffer.append(")");
-		tmp = _blk.adaptModifications();
+		tmp = _blk.adaptModifications(vars);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		return stringBuffer;

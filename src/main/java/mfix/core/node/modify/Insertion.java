@@ -2,6 +2,8 @@ package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
 
+import java.util.Set;
+
 public class Insertion extends Modification {
 
     private int _index;
@@ -43,11 +45,11 @@ public class Insertion extends Modification {
         return _insert;
     }
 
-    public StringBuffer apply() {
+    public StringBuffer apply(Set<String> vars) {
         if(_insert == null) {
             return new StringBuffer("null");
         } else {
-            return _insert.transfer();
+            return _insert.transfer(vars);
         }
     }
 

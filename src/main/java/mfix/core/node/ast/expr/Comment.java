@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -82,12 +83,12 @@ public class Comment extends Expr {
     }
 
     @Override
-    public StringBuffer transfer() {
+    public StringBuffer transfer(Set<String> vars) {
         return toSrcString();
     }
 
     @Override
-    public StringBuffer adaptModifications() {
+    public StringBuffer adaptModifications(Set<String> vars) {
         return toSrcString();
     }
 }

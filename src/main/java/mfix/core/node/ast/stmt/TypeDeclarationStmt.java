@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -99,12 +100,12 @@ public class TypeDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		return super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		return super.transfer(vars);
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		return toSrcString();
 	}
 }

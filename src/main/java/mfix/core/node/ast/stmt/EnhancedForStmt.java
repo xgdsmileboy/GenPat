@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -192,21 +193,21 @@ public class EnhancedForStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			stringBuffer.append("for(");
-			tmp = _varDecl.transfer();
+			tmp = _varDecl.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" : ");
-			tmp = _expression.transfer();
+			tmp = _expression.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _statement.transfer();
+			tmp = _statement.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -214,7 +215,7 @@ public class EnhancedForStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer varDecl = null;
 		StringBuffer expression = null;
 		Node pnode = checkModification();
@@ -225,10 +226,10 @@ public class EnhancedForStmt extends Stmt {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode();
 					if (node == enhancedForStmt._varDecl) {
-						varDecl = update.apply();
+						varDecl = update.apply(vars);
 						if (varDecl == null) return null;
 					} else if (node == enhancedForStmt._expression) {
-						expression = update.apply();
+						expression = update.apply(vars);
 						if (expression == null) return null;
 					}
 				} else {
@@ -240,7 +241,7 @@ public class EnhancedForStmt extends Stmt {
 		StringBuffer tmp;
 		stringBuffer.append("for(");
 		if (varDecl == null) {
-			tmp = _varDecl.adaptModifications();
+			tmp = _varDecl.adaptModifications(vars);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -248,14 +249,14 @@ public class EnhancedForStmt extends Stmt {
 		}
 		stringBuffer.append(" : ");
 		if (expression == null) {
-			tmp = _expression.adaptModifications();
+			tmp = _expression.adaptModifications(vars);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(expression);
 		}
 		stringBuffer.append(")");
-		tmp = _statement.adaptModifications();
+		tmp = _statement.adaptModifications(vars);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		return stringBuffer;

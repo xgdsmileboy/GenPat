@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -218,21 +219,21 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("if(");
 			StringBuffer tmp;
-			tmp = _condition.transfer();
+			tmp = _condition.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _then.transfer();
+			tmp = _then.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.transfer();
+				tmp = _else.transfer(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -241,7 +242,7 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer condition = null;
 		StringBuffer then = null;
 		StringBuffer els = null;
@@ -253,13 +254,13 @@ public class IfStmt extends Stmt {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode();
 					if(node == ifStmt._condition) {
-						condition = update.apply();
+						condition = update.apply(vars);
 						if(condition == null) return null;
 					} else if(node == ifStmt._then) {
-						then = update.apply();
+						then = update.apply(vars);
 						if(then == null) return null;
 					} else {
-						els = update.apply();
+						els = update.apply(vars);
 						if(els == null) return null;
 					}
 				} else {
@@ -270,7 +271,7 @@ public class IfStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("if(");
 		StringBuffer tmp;
 		if(condition == null) {
-			tmp = _condition.adaptModifications();
+			tmp = _condition.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -278,7 +279,7 @@ public class IfStmt extends Stmt {
 		}
 		stringBuffer.append(")");
 		if(then == null) {
-			tmp = _then.adaptModifications();
+			tmp = _then.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -287,7 +288,7 @@ public class IfStmt extends Stmt {
 		if(els == null) {
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.adaptModifications();
+				tmp = _else.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -152,13 +153,13 @@ public class BreakStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("break");
 			if(_identifier != null){
 				stringBuffer.append(" ");
-				StringBuffer tmp = _identifier.adaptModifications();
+				StringBuffer tmp = _identifier.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -168,7 +169,7 @@ public class BreakStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer identifier = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -177,7 +178,7 @@ public class BreakStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == breakStmt._identifier) {
-						identifier = update.apply();
+						identifier = update.apply(vars);
 						if (identifier == null) return null;
 					} else {
 						LevelLogger.error("@BreakStmt ERROR");
@@ -191,7 +192,7 @@ public class BreakStmt extends Stmt {
 		if (identifier == null) {
 			if (_identifier != null) {
 				stringBuffer.append(" ");
-				StringBuffer tmp = _identifier.adaptModifications();
+				StringBuffer tmp = _identifier.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

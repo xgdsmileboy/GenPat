@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -127,18 +128,18 @@ public class AryInitializer extends Expr {
     }
 
     @Override
-    public StringBuffer transfer() {
-        StringBuffer stringBuffer = super.transfer();
+    public StringBuffer transfer(Set<String> vars) {
+        StringBuffer stringBuffer = super.transfer(vars);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("{");
             StringBuffer tmp;
             if (_expressions.size() > 0) {
-                tmp = _expressions.get(0).transfer();
+                tmp = _expressions.get(0).transfer(vars);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _expressions.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _expressions.get(i).transfer();
+                    tmp = _expressions.get(i).transfer(vars);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }
@@ -149,17 +150,17 @@ public class AryInitializer extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications() {
+    public StringBuffer adaptModifications(Set<String> vars) {
         StringBuffer stringBuffer = new StringBuffer("{");
         StringBuffer tmp;
         // not consider modification
         if (_expressions.size() > 0) {
-            tmp = _expressions.get(0).adaptModifications();
+            tmp = _expressions.get(0).adaptModifications(vars);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             for (int i = 1; i < _expressions.size(); i++) {
                 stringBuffer.append(",");
-                tmp = _expressions.get(i).adaptModifications();
+                tmp = _expressions.get(i).adaptModifications(vars);
                 stringBuffer.append(tmp);
             }
         }

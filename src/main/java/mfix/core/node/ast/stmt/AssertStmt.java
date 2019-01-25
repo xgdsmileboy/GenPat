@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -96,8 +97,8 @@ public class AssertStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
 		}
@@ -105,7 +106,7 @@ public class AssertStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		return toSrcString();
 	}
 }
