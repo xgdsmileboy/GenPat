@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -153,18 +154,18 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _lhs.transfer();
+			tmp = _lhs.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _operator.transfer();
+			tmp = _operator.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _rhs.transfer();
+			tmp = _rhs.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -172,7 +173,7 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer lhs = null;
 		StringBuffer operator = null;
 		StringBuffer rhs = null;
@@ -184,13 +185,13 @@ public class InfixExpr extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == infixExpr._lhs) {
-						lhs = update.apply();
+						lhs = update.apply(vars);
 						if (lhs == null) return null;
 					} else if (changedNode == infixExpr._operator) {
-						operator = update.apply();
+						operator = update.apply(vars);
 						if (operator == null) return null;
 					} else {
-						rhs = update.apply();
+						rhs = update.apply(vars);
 						if (rhs == null) return null;
 					}
 				} else {
@@ -201,21 +202,21 @@ public class InfixExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(lhs == null) {
-			tmp = _lhs.adaptModifications();
+			tmp = _lhs.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(lhs);
 		}
 		if(operator == null) {
-			tmp = _operator.adaptModifications();
+			tmp = _operator.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(operator);
 		}
 		if(rhs == null) {
-			tmp = _rhs.adaptModifications();
+			tmp = _rhs.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

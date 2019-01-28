@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -151,18 +152,18 @@ public class ExprList extends Node {
     }
 
     @Override
-    public StringBuffer transfer() {
-        StringBuffer stringBuffer = super.transfer();
+    public StringBuffer transfer(Set<String> vars) {
+        StringBuffer stringBuffer = super.transfer(vars);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             if (!_exprs.isEmpty()) {
-                tmp = _exprs.get(0).transfer();
+                tmp = _exprs.get(0).transfer(vars);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _exprs.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _exprs.get(i).transfer();
+                    tmp = _exprs.get(i).transfer(vars);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }
@@ -172,21 +173,21 @@ public class ExprList extends Node {
     }
 
     @Override
-    public StringBuffer adaptModifications() {
+    public StringBuffer adaptModifications(Set<String> vars) {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         Node node = checkModification();
         if (node != null) {
-            return ((Update) node.getModifications().get(0)).apply();
+            return ((Update) node.getModifications().get(0)).apply(vars);
         }
 
         if(!_exprs.isEmpty()) {
-            tmp = _exprs.get(0).adaptModifications();
+            tmp = _exprs.get(0).adaptModifications(vars);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
             for(int i = 1; i < _exprs.size(); i++) {
                 stringBuffer.append(",");
-                tmp = _exprs.get(i).adaptModifications();
+                tmp = _exprs.get(i).adaptModifications(vars);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }

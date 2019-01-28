@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -149,11 +150,11 @@ public class ExpressionStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _expression.transfer();
+			StringBuffer tmp = _expression.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(";");
@@ -162,7 +163,7 @@ public class ExpressionStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer expression = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -171,7 +172,7 @@ public class ExpressionStmt extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == expressionStmt._expression) {
-						expression = update.apply();
+						expression = update.apply(vars);
 						if(expression == null) return null;
 					} else {
 						LevelLogger.error("@ExpressionStmt ERROR");
@@ -183,7 +184,7 @@ public class ExpressionStmt extends Stmt {
 		}
 		StringBuffer stringBuffer = new StringBuffer();
 		if(expression == null) {
-			StringBuffer tmp = _expression.adaptModifications();
+			StringBuffer tmp = _expression.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

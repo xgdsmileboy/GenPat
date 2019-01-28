@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -139,16 +140,16 @@ public class FieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _expression.transfer();
+			tmp = _expression.transfer(vars);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(".");
-			tmp = _identifier.transfer();
+			tmp = _identifier.transfer(vars);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -156,7 +157,7 @@ public class FieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer expression = null;
 		StringBuffer identifier = null;
 		Node node = checkModification();
@@ -166,10 +167,10 @@ public class FieldAcc extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == fieldAcc._expression) {
-						expression = update.apply();
+						expression = update.apply(vars);
 						if (expression == null) return null;
 					} else {
-						identifier = update.apply();
+						identifier = update.apply(vars);
 						if (identifier == null) return null;
 					}
 				} else {
@@ -181,7 +182,7 @@ public class FieldAcc extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expression.adaptModifications();
+			tmp = _expression.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -189,7 +190,7 @@ public class FieldAcc extends Expr {
 		}
 		stringBuffer.append(".");
 		if(identifier == null) {
-			tmp = _identifier.adaptModifications();
+			tmp = _identifier.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

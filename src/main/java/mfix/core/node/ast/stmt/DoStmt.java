@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -169,17 +170,17 @@ public class DoStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			stringBuffer.append("do ");
-			tmp = _stmt.transfer();
+			tmp = _stmt.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" while(");
-			tmp = _expression.transfer();
+			tmp = _expression.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(");");
@@ -188,7 +189,7 @@ public class DoStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer stmt = null;
 		StringBuffer expression = null;
 		Node pnode = checkModification();
@@ -198,7 +199,7 @@ public class DoStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == doStmt._expression) {
-						expression = update.apply();
+						expression = update.apply(vars);
 						if (expression == null) return null;
 					}
 				} else {
@@ -210,7 +211,7 @@ public class DoStmt extends Stmt {
 		StringBuffer tmp;
 		stringBuffer.append("do ");
 		if (stmt == null) {
-			tmp = _stmt.adaptModifications();
+			tmp = _stmt.adaptModifications(vars);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -218,7 +219,7 @@ public class DoStmt extends Stmt {
 		}
 		stringBuffer.append(" while(");
 		if (expression == null) {
-			tmp = _expression.adaptModifications();
+			tmp = _expression.adaptModifications(vars);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

@@ -2,6 +2,8 @@ package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
 
+import java.util.Set;
+
 public class Update extends Modification {
 
     private Node _srcNode;
@@ -21,11 +23,11 @@ public class Update extends Modification {
         return _tarNode;
     }
 
-    public StringBuffer apply() {
+    public StringBuffer apply(Set<String> vars) {
         if (_tarNode == null) {
             return new StringBuffer();
         }
-        return _tarNode.transfer();
+        return _tarNode.transfer(vars);
     }
 
     @Override

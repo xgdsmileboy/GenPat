@@ -146,14 +146,14 @@ public class QName extends Label {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _name.transfer();
+			StringBuffer tmp = _name.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(".");
-			tmp = _sname.transfer();
+			tmp = _sname.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -161,7 +161,7 @@ public class QName extends Label {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer name = null;
 		StringBuffer sname = null;
 		Node node = checkModification();
@@ -171,10 +171,10 @@ public class QName extends Label {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == qName._name) {
-						name = update.apply();
+						name = update.apply(vars);
 						if (name == null) return null;
 					} else {
-						sname = update.apply();
+						sname = update.apply(vars);
 						if (sname == null) return null;
 					}
 				} else {
@@ -185,7 +185,7 @@ public class QName extends Label {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if (name == null) {
-			tmp = _name.adaptModifications();
+			tmp = _name.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -193,7 +193,7 @@ public class QName extends Label {
 		}
 		stringBuffer.append(".");
 		if(sname == null) {
-			tmp = _sname.adaptModifications();
+			tmp = _sname.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

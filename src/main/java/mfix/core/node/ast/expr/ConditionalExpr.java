@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -162,20 +163,20 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public StringBuffer transfer() {
-        StringBuffer stringBuffer = super.transfer();
+    public StringBuffer transfer(Set<String> vars) {
+        StringBuffer stringBuffer = super.transfer(vars);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
-            tmp = _condition.transfer();
+            tmp = _condition.transfer(vars);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append("?");
-            tmp = _first.transfer();
+            tmp = _first.transfer(vars);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(":");
-            tmp = _snd.transfer();
+            tmp = _snd.transfer(vars);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -183,7 +184,7 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications() {
+    public StringBuffer adaptModifications(Set<String> vars) {
         StringBuffer condition = null;
         StringBuffer first = null;
         StringBuffer snd = null;
@@ -195,13 +196,13 @@ public class ConditionalExpr extends Expr {
                     Update update = (Update) modification;
                     Node changedNode = update.getSrcNode();
                     if (changedNode == conditionalExpr._condition) {
-                        condition = update.apply();
+                        condition = update.apply(vars);
                         if (condition == null) return null;
                     } else if (changedNode == conditionalExpr._first) {
-                        first = update.apply();
+                        first = update.apply(vars);
                         if (first == null) return null;
                     } else if (changedNode == conditionalExpr._snd) {
-                        snd = update.apply();
+                        snd = update.apply(vars);
                         if (snd == null) return null;
                     }
                 } else {
@@ -213,7 +214,7 @@ public class ConditionalExpr extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         if(condition == null) {
-            tmp = _condition.adaptModifications();
+            tmp = _condition.adaptModifications(vars);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -221,7 +222,7 @@ public class ConditionalExpr extends Expr {
         }
         stringBuffer.append("?");
         if(first == null) {
-            tmp = _first.adaptModifications();
+            tmp = _first.adaptModifications(vars);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -229,7 +230,7 @@ public class ConditionalExpr extends Expr {
         }
         stringBuffer.append(":");
         if(snd == null) {
-            tmp = _snd.adaptModifications();
+            tmp = _snd.adaptModifications(vars);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -22,7 +23,7 @@ import java.util.Map;
 public class AssertStmt extends Stmt {
 
 	private static final long serialVersionUID = 8494694375316529776L;
-
+	private String _codeStr;
 	// TODO: assert statement should be added
 	/**
 	 * AssertStatement:
@@ -35,17 +36,18 @@ public class AssertStmt extends Stmt {
 	public AssertStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.ASSERT;
+		_codeStr = node.toString();
 	}
 
 	@Override
 	public StringBuffer toSrcString() {
-		return new StringBuffer(_oriNode.toString());
+		return new StringBuffer(_codeStr);
 	}
 
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_oriNode.toString());
+		_tokens.add(_codeStr);
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class AssertStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		if (other instanceof AssertStmt) {
-			return _oriNode.toString().equals(((AssertStmt) other)._oriNode.toString());
+			return _codeStr.equals(((AssertStmt) other)._codeStr);
 		}
 		return false;
 	}
@@ -96,8 +98,8 @@ public class AssertStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
 		}
@@ -105,7 +107,7 @@ public class AssertStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		return toSrcString();
 	}
 }

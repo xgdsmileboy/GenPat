@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -153,13 +154,13 @@ public class ContinueStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("continue");
 			if(_identifier != null){
 				stringBuffer.append(" ");
-				StringBuffer tmp = _identifier.transfer();
+				StringBuffer tmp = _identifier.transfer(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -170,7 +171,7 @@ public class ContinueStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer identifier = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -179,7 +180,7 @@ public class ContinueStmt extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == continueStmt._identifier) {
-						identifier = update.apply();
+						identifier = update.apply(vars);
 						if(identifier == null) return null;
 					} else {
 						LevelLogger.error("@ContinueStmt ERROR");
@@ -193,7 +194,7 @@ public class ContinueStmt extends Stmt {
 		if(identifier == null) {
 			if(_identifier != null){
 				stringBuffer.append(" ");
-				StringBuffer tmp = _identifier.adaptModifications();
+				StringBuffer tmp = _identifier.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

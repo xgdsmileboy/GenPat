@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -94,8 +95,8 @@ public class BoolLiteral extends Expr {
     }
 
     @Override
-    public StringBuffer transfer() {
-        StringBuffer stringBuffer = super.transfer();
+    public StringBuffer transfer(Set<String> vars) {
+        StringBuffer stringBuffer = super.transfer(vars);
         if (stringBuffer == null) {
             stringBuffer = toSrcString();
         }
@@ -103,11 +104,11 @@ public class BoolLiteral extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications() {
+    public StringBuffer adaptModifications(Set<String> vars) {
         Node node = checkModification();
         if (node != null) {
             Update update = (Update) node.getModifications().get(0);
-            return update.apply();
+            return update.apply(vars);
         }
         return toSrcString();
     }
