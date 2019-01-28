@@ -23,6 +23,7 @@ public class LambdaExpr extends Expr {
 
 	private static final long serialVersionUID = -7877574560065780171L;
 
+	private String _codeStr;
 	//TODO : add support for lambda expression
 
 	/**
@@ -33,26 +34,27 @@ public class LambdaExpr extends Expr {
 	 */
 	public LambdaExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
+		_codeStr = node.toString();
 	}
 
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_oriNode.toString());
+		stringBuffer.append(_codeStr);
 		return stringBuffer;
 	}
 
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_oriNode.toString());
+		_tokens.add(_codeStr);
 	}
 
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
 		if (other instanceof LambdaExpr) {
-			match = _oriNode.toString().equals(((LambdaExpr) other)._oriNode.toString());
+			match = _codeStr.equals(((LambdaExpr) other)._codeStr);
 		}
 		return match;
 	}
