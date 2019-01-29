@@ -796,6 +796,10 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    public void resetBuggyBinding() {
+        _buggyBinding = null;
+    }
+
     public Node getBuggyBindingNode() {
         return _buggyBinding;
     }
