@@ -50,6 +50,7 @@ public class ElementCounter {
                 allNumber = cacheTotalNumber;
             }
         } else {
+            System.out.println("[ERROR] Query on Database.");
             countNumber = _connector.query(element.toQueryRow(queryType));
             allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
         }
