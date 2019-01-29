@@ -39,6 +39,13 @@ public class MatchInstance {
         }
     }
 
+    public void reset() {
+        for(Map.Entry<Node, Node> entry : _nodeMap.entrySet()) {
+            entry.getKey().resetBuggyBinding();
+            entry.getValue().resetBuggyBinding();
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof MatchInstance)) {

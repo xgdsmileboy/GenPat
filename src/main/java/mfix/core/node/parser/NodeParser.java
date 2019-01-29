@@ -1452,7 +1452,9 @@ public class NodeParser {
             int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
             blk = new Blk(_fileName, startLine, endLine, node);
             List<Stmt> stmts = new ArrayList<>();
-            stmts.add((Stmt) process(node, scope));
+            Stmt stmt = (Stmt) process(node, scope);
+            stmt.setParent(blk);
+            stmts.add(stmt);
             blk.setStatement(stmts);
         }
         return blk;
