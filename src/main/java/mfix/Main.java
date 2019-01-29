@@ -228,7 +228,7 @@ public class Main {
     static void loadAPI() {
         System.out.println("Start Load API Mappings!");
         method2PatternFiles = new HashMap<Pair<String, Integer>, Set<String>>();
-        		
+
         FileInputStream inputStream = null;
         try {
             inputStream = new FileInputStream(APIMappingFile);
