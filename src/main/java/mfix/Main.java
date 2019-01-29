@@ -32,15 +32,18 @@ import java.util.concurrent.*;
 
 
 public class Main {
-    // static String APIMappingFile = "/home/jack/Desktop/rly/api-test.txt";
     static String APIMappingFile = "/home/jack/Desktop/rly/API_Mapping.txt";
-    // TODO(rly): is hashset could avoid repeat??
+
     static Map<Pair<String, Integer>, Set<String>> method2PatternFiles;
     
     static Set<String> fixedRet = new HashSet<String>();
     
     static String versionFolder = "ver6";
-    
+
+    static String pointedAPI = null;
+
+    static Integer cntLimit = 200000;
+
     static void loadAPI() {
         System.out.println("Start Load API Mappings!");
         method2PatternFiles = new HashMap<Pair<String, Integer>, Set<String>>();
@@ -66,8 +69,7 @@ public class Main {
                 String MethodName = splited[0];
                 Integer MethodArgsNum = Integer.parseInt(splited[1]);
                 String patternFile = splited[2];
-              
-                
+
                 Pair<String, Integer> key = new Pair<String, Integer>(MethodName, MethodArgsNum);
                 if (!method2PatternFiles.containsKey(key)) {
                 	method2PatternFiles.put(key, new HashSet<String>());
@@ -79,10 +81,10 @@ public class Main {
                 if (cnt % 100000 == 0) {
                 	System.out.println(cnt);
                 }
-                
-//                if (cnt >= 5000000) {
-//                	break;	
-//                }
+
+                if ((cntLimit != null) && (cnt >= cntLimit)) {
+                	break;
+                }
                 
                 
             } catch (Exception e) {
@@ -130,7 +132,7 @@ public class Main {
                 	System.out.println(fixedProg);
                 	
                 	JavaFile.writeStringToFile("/home/jack/Desktop/rly/new_fix_result.txt",
-                			buggyFile + ":\n" + fixedProg + "\n---------------\n", true);
+                			"FILE:" + buggyFile + "\n" + "PATTERN:" + patternFile + "\n------------ Origin ---------------\n" + origin + "\n------------ Solution --------------\n" + fixedProg + "\n---------------\n", true);
                 	
                 	System.out.println("------------ End ---------------");
                 }
@@ -139,6 +141,47 @@ public class Main {
             matchInstance.reset();
             // System.out.println(matchInstance.getNodeMap());   
         }
+    }
+
+
+    static boolean extractAndSave(String filePath, String file) throws Exception {
+        Set<Node> patternCandidates = PatternExtractor.extractPattern(
+                filePath + "/buggy-version/" + file,
+                filePath + "/fixed-version/" + file);
+
+        for (Node fixPattern : patternCandidates) {
+            MethDecl methDecl = (MethDecl) fixPattern;
+            String patternFuncName = methDecl.getName().getName();
+
+            String savePatternPath = filePath + "/" + versionFolder + "/" + file + "-" + patternFuncName + ".pattern";
+            System.out.println("save pattern: " + savePatternPath);
+            Utils.serialize(fixPattern, savePatternPath);
+        }
+
+        return true;
+    }
+
+    static void timeoutMethod(int timeout, String filePath, String file) {
+        FutureTask<Boolean> futureTask = new FutureTask<>(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                return extractAndSave(filePath, file);
+            }
+        });
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        executorService.execute(futureTask);
+
+        try {
+            boolean result = futureTask.get(timeout, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+            System.out.println("Timeout or other error for" + filePath + " " + file);
+            futureTask.cancel(true);
+        }
+
+        executorService.shutdownNow();
     }
 
 
@@ -188,14 +231,17 @@ public class Main {
                 System.out.println(" Size of patternList : " + patternFileList.size());
                
                 
-                if (!(MethodName.equals("dismiss") && MethodArgsNum == 0)) {
-                	continue;
-                }
+//                if (!(MethodName.equals("dismiss") && MethodArgsNum == 0)) {
+//                	continue;
+//                }
                 
 //                if (!(MethodName.equals("getAsString") && MethodArgsNum == 0)) {
 //                	continue;
 //                }
-                
+
+                if ((pointedAPI != null) && (!MethodName.equals(pointedAPI))) {
+                    continue;
+                }
              
                 System.out.println("Start matching!");
                 
@@ -230,42 +276,37 @@ public class Main {
 	            		
 	            		
 	            		if (!(new File(patternSerializePath)).exists()) {
-		            		Set<Node> patternCandidates = PatternExtractor.extractPattern(
-		            				filePath + "/buggy-version/" + file,
-		            				filePath + "/fixed-version/" + file);
-		            		
-		            		for (Node fixPattern : patternCandidates) {
-		            			MethDecl methDecl = (MethDecl) fixPattern;
-		            			String patternFuncName = methDecl.getName().getName();
 
-		            			String savePatternPath = filePath + "/" + versionFolder + "/" + file + "-" + patternFuncName + ".pattern";
-		            			System.out.println("save pattern: " + savePatternPath);
-		            			
-		            			Utils.serialize(fixPattern, savePatternPath);
-		            		}
-		   
+//		            		Set<Node> patternCandidates = PatternExtractor.extractPattern(
+//		            				filePath + "/buggy-version/" + file,
+//		            				filePath + "/fixed-version/" + file);
+//
+//		            		for (Node fixPattern : patternCandidates) {
+//		            			MethDecl methDecl = (MethDecl) fixPattern;
+//		            			String patternFuncName = methDecl.getName().getName();
+//
+//		            			String savePatternPath = filePath + "/" + versionFolder + "/" + file + "-" + patternFuncName + ".pattern";
+//		            			System.out.println("save pattern: " + savePatternPath);
+//
+//		            			Utils.serialize(fixPattern, savePatternPath);
+//		            		}
+
+
+                            timeoutMethod(30, filePath, file);
+                            // TODO(rly) mark as timeout
+
 	            		} else {
-	            			// System.out.println("skip for " + patternSerializePath);
+	            		    // Already saved!
+	            			System.out.println("skip for " + patternSerializePath);
 	            		}
 	            		
 
-	            		// System.out.println("current:" + patternSerializePath);
+	            		System.out.println("current:" + patternSerializePath);
 	            		
 	            		Node fixPattern = (Node)Utils.deserialize(patternSerializePath);
 	            		
 	            		tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
-	            		
-	            		/*
-	            		System.out.println(filePath);
-	            		System.out.println(file);
-	            		System.out.println(method);
-	            		
-	            		// System.out.println(patternFile);
-	            		
-	                	
-	                	// System.out.println("-------");
-	                	*/
-	                
+
 	                } catch (Exception e) {
 	                    e.printStackTrace();
 	                }
@@ -319,12 +360,27 @@ public class Main {
     		}
     	});
     	*/
+
+
+        // String buggyFilePath = "/home/jack/code/workspace/eclipse/MineFix/resources/forTest/buggy_SimpleSecureBrowser.java";
+
+        /*
+        if (args.length < 1) {
+            System.out.println(versionFolder + ": Input Error!");
+            return;
+        }
+        buggyFilePath = args[0];
+
+
+        if (args.length == 2) {
+            pointedAPI = args[1];
+            System.out.println("pointedAPI: " + pointedAPI);
+        }
+        */
+
+        loadAPI();
     	
-		
-    	loadAPI();
-    	
-    	String buggyFilePath = "/home/jack/code/workspace/eclipse/MineFix/resources/forTest/buggy_SimpleSecureBrowser.java";
-    	// String buggyFilePath = "/home/jack/Desktop/rly/cases/5/base-all.java";
+    	String buggyFilePath = "/home/jack/Desktop/rly/cases/4/base-all.java";
     	
     	tryFix(buggyFilePath);
     	
