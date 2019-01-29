@@ -187,13 +187,13 @@ public class SuperMethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if(_label != null){
-				tmp = _label.transfer();
+				tmp = _label.transfer(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -201,7 +201,7 @@ public class SuperMethodInv extends Expr {
 			stringBuffer.append("super.");
 			stringBuffer.append(_name.getName());
 			stringBuffer.append("(");
-			tmp = _arguments.transfer();
+			tmp = _arguments.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
@@ -210,7 +210,7 @@ public class SuperMethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer label = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
@@ -222,13 +222,13 @@ public class SuperMethodInv extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == superMethodInv._label) {
-						label = update.apply();
+						label = update.apply(vars);
 						if (label == null) return null;
 					} else if (changedNode == superMethodInv._name) {
-						name = update.apply();
+						name = update.apply(vars);
 						if (name == null) return null;
 					} else {
-						arguments = update.apply();
+						arguments = update.apply(vars);
 						if (arguments == null) return null;
 					}
 				} else {
@@ -240,7 +240,7 @@ public class SuperMethodInv extends Expr {
 		StringBuffer tmp;
 		if(label == null) {
 			if(_label != null){
-				tmp = _label.adaptModifications();
+				tmp = _label.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -250,7 +250,7 @@ public class SuperMethodInv extends Expr {
 		}
 		stringBuffer.append("super.");
 		if(name == null) {
-			tmp = _name.adaptModifications();
+			tmp = _name.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -258,7 +258,7 @@ public class SuperMethodInv extends Expr {
 		}
 		stringBuffer.append("(");
 		if(arguments == null) {
-			tmp = _arguments.adaptModifications();
+			tmp = _arguments.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

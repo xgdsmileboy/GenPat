@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -22,7 +23,7 @@ import java.util.Map;
 public class LabeledStmt extends Stmt {
 
 	private static final long serialVersionUID = -2484110665315045636L;
-
+	private String _codeStr;
 	/**
 	 * LabeledStatement:
      *	Identifier : Statement
@@ -33,11 +34,12 @@ public class LabeledStmt extends Stmt {
 
 	public LabeledStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
+		_codeStr = node.toString();
 	}
 	
 	@Override
 	public StringBuffer toSrcString() {
-		return new StringBuffer(_oriNode.toString());
+		return new StringBuffer(_codeStr);
 	}
 	
 	@Override
@@ -59,7 +61,7 @@ public class LabeledStmt extends Stmt {
 	public boolean compare(Node other) {
 		boolean match = false;
 		if(other instanceof LabeledStmt) {
-			match = _oriNode.toString().equals(((LabeledStmt) other)._oriNode.toString());
+			match = _codeStr.equals(((LabeledStmt) other)._codeStr);
 		}
 		return match;
 	}
@@ -93,8 +95,8 @@ public class LabeledStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
 		}
@@ -102,7 +104,7 @@ public class LabeledStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		return toSrcString();
 	}
 }

@@ -824,7 +824,7 @@ public abstract class Node implements NodeComparator, Serializable {
         return false;
     }
 
-    public StringBuffer transfer() {
+    public StringBuffer transfer(Set<String> vars) {
         if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
             return getBindingNode().getBuggyBindingNode().toSrcString();
         }
@@ -838,7 +838,7 @@ public abstract class Node implements NodeComparator, Serializable {
         return null;
     }
 
-    public abstract StringBuffer adaptModifications();
+    public abstract StringBuffer adaptModifications(Set<String> vars);
 
 
     /******************************************************************************************/

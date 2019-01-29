@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -198,7 +199,7 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer expression = null;
 		Node node = checkModification();
 		if (node != null) {
@@ -207,7 +208,7 @@ public class Vdf extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == vdf._expression) {
-						expression = update.apply();
+						expression = update.apply(vars);
 						if (expression == null) return null;
 					}
 				} else {
@@ -217,7 +218,7 @@ public class Vdf extends Node {
 		}
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
-		tmp = _identifier.adaptModifications();
+		tmp = _identifier.adaptModifications(vars);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		for (int i = 0; i < _dimensions; i++){
@@ -226,7 +227,7 @@ public class Vdf extends Node {
 		if(expression == null) {
 			if(_expression != null){
 				stringBuffer.append("=");
-				tmp = _expression.adaptModifications();
+				tmp = _expression.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

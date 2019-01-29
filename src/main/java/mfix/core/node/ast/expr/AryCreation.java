@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -198,23 +199,23 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public StringBuffer transfer() {
-        StringBuffer stringBuffer = super.transfer();
+    public StringBuffer transfer(Set<String> vars) {
+        StringBuffer stringBuffer = super.transfer(vars);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("new ");
-            stringBuffer.append(_type.transfer());
+            stringBuffer.append(_type.transfer(vars));
             for (Expr expr : _dimension) {
                 stringBuffer.append("[");
-                tmp = expr.transfer();
+                tmp = expr.transfer(vars);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append("]");
             }
             if (_initializer != null) {
                 stringBuffer.append("=");
-                tmp = _initializer.transfer();
+                tmp = _initializer.transfer(vars);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -223,7 +224,7 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications() {
+    public StringBuffer adaptModifications(Set<String> vars) {
         StringBuffer stringBuffer = new StringBuffer();
         Map<Integer, StringBuffer> dimensionMap = new HashMap<>();
         StringBuffer initializer = null;
@@ -234,12 +235,12 @@ public class AryCreation extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == aryCreation._initializer) {
-                        initializer = update.apply();
+                        initializer = update.apply(vars);
                         if (initializer == null) return null;
                     } else {
                         for (int i = 0; i < aryCreation._dimension.size(); i++) {
                             if (update.getSrcNode() == aryCreation._dimension.get(i)) {
-                                StringBuffer buffer = update.apply();
+                                StringBuffer buffer = update.apply(vars);
                                 if (buffer == null) return null;
                                 dimensionMap.put(i, buffer);
                             }
@@ -252,12 +253,12 @@ public class AryCreation extends Expr {
         }
         stringBuffer.append("new ");
         StringBuffer tmp;
-        stringBuffer.append(_type.transfer());
+        stringBuffer.append(_type.transfer(vars));
         for(int i = 0; i < _dimension.size(); i++) {
             stringBuffer.append("[");
             tmp = dimensionMap.get(i);
             if (tmp == null) {
-                tmp = _dimension.get(i).adaptModifications();
+                tmp = _dimension.get(i).adaptModifications(vars);
             }
             if(tmp == null) return null;
             stringBuffer.append(tmp);
@@ -266,7 +267,7 @@ public class AryCreation extends Expr {
         if(initializer == null) {
             if(_initializer != null) {
                 stringBuffer.append("=");
-                tmp = _initializer.adaptModifications();
+                tmp = _initializer.adaptModifications(vars);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }

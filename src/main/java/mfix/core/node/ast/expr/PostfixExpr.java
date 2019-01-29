@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -133,14 +134,14 @@ public class PostfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _expression.transfer();
+			StringBuffer tmp = _expression.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _operator.transfer();
+			tmp = _operator.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -148,7 +149,7 @@ public class PostfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer expression = null;
 		StringBuffer operator = null;
 		Node node = checkModification();
@@ -158,10 +159,10 @@ public class PostfixExpr extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == postfixExpr._expression) {
-						expression = update.apply();
+						expression = update.apply(vars);
 						if (expression == null) return null;
 					} else {
-						operator = update.apply();
+						operator = update.apply(vars);
 						if (operator == null) return null;
 					}
 				} else {
@@ -172,14 +173,14 @@ public class PostfixExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expression.adaptModifications();
+			tmp = _expression.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(expression);
 		}
 		if(operator == null) {
-			tmp = _operator.adaptModifications();
+			tmp = _operator.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -147,12 +148,12 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			stringBuffer.append("throw ");
-			StringBuffer tmp = _expression.transfer();
+			StringBuffer tmp = _expression.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(";");
@@ -161,7 +162,7 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer expression = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -170,7 +171,7 @@ public class ThrowStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == throwStmt._expression) {
-						expression = update.apply();
+						expression = update.apply(vars);
 						if (expression == null) return null;
 					} else {
 						LevelLogger.error("ThrowStmt ERROR");
@@ -183,7 +184,7 @@ public class ThrowStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("throw ");
 		if (expression == null) {
-			StringBuffer tmp = _expression.adaptModifications();
+			StringBuffer tmp = _expression.adaptModifications(vars);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

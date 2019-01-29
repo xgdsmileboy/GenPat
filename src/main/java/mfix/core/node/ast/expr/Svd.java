@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -187,7 +188,7 @@ public class Svd extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer declType = null;
 		StringBuffer name = null;
 		StringBuffer initializer = null;
@@ -199,13 +200,13 @@ public class Svd extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == svd._decType) {
-						declType = update.apply();
+						declType = update.apply(vars);
 						if (declType == null) return null;
 					} else if (changedNode == svd._name) {
-						name = update.apply();
+						name = update.apply(vars);
 						if (name == null) return null;
 					} else {
-						initializer = update.apply();
+						initializer = update.apply(vars);
 						if (initializer == null) return null;
 					}
 				} else {
@@ -216,7 +217,7 @@ public class Svd extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if (declType == null) {
-			tmp = _decType.adaptModifications();
+			tmp = _decType.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -224,7 +225,7 @@ public class Svd extends Expr {
 		}
 		stringBuffer.append(" ");
 		if(name == null) {
-			tmp = _name.adaptModifications();
+			tmp = _name.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -233,7 +234,7 @@ public class Svd extends Expr {
 		if(initializer == null) {
 			if(_initializer != null){
 				stringBuffer.append("=");
-				tmp = _initializer.adaptModifications();
+				tmp = _initializer.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

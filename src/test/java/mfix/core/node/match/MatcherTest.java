@@ -7,12 +7,12 @@
 
 package mfix.core.node.match;
 
-import com.sun.xml.internal.ws.policy.AssertionSet;
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.TestCase;
 import mfix.core.node.MatchInstance;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.PatternExtractor;
 import mfix.core.node.ast.Node;
 import mfix.core.node.modify.Modification;
@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -86,6 +87,9 @@ public class MatcherTest extends TestCase {
         Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
+
+        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
         unit.accept(new ASTVisitor() {
@@ -107,7 +111,7 @@ public class MatcherTest extends TestCase {
                     System.out.println("------------ Before ---------------");
                     System.out.println(node.toSrcString());
                     System.out.println("------------ After ---------------");
-                    System.out.println(node.adaptModifications());
+                    System.out.println(node.adaptModifications(varMaps.get(node.getStartLine())));
 //                    System.out.println("------------ Solution ---------------");
 //                    System.out.println(matchInstance.getNodeMap());
                 }

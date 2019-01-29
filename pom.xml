@@ -181,6 +181,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M2</version>
                 <configuration>
+                    <skipTests>
+                        true
+                    </skipTests>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>

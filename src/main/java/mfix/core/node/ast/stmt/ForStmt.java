@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -248,26 +249,26 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer() {
-        StringBuffer stringBuffer = super.transfer();
+    public StringBuffer transfer(Set<String> vars) {
+        StringBuffer stringBuffer = super.transfer(vars);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("for(");
             StringBuffer tmp;
-            tmp = _initializers.transfer();
+            tmp = _initializers.transfer(vars);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(";");
             if (_condition != null) {
-                tmp = _condition.transfer();
+                tmp = _condition.transfer(vars);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }
             stringBuffer.append(";");
-            tmp = _updaters.transfer();
+            tmp = _updaters.transfer(vars);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
-            tmp = _body.transfer();
+            tmp = _body.transfer(vars);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -275,7 +276,7 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications() {
+    public StringBuffer adaptModifications(Set<String> vars) {
         StringBuffer initializer = null;
         StringBuffer condition = null;
         StringBuffer updater = null;
@@ -287,13 +288,13 @@ public class ForStmt extends Stmt {
                     Update update = (Update) modification;
                     Node node = update.getSrcNode();
                     if (node == forStmt._initializers) {
-                        initializer = update.apply();
+                        initializer = update.apply(vars);
                         if (initializer == null) return null;
                     } else if (node == forStmt._condition) {
-                        condition = update.apply();
+                        condition = update.apply(vars);
                         if (condition == null) return null;
                     } else if (node == forStmt._updaters) {
-                        updater = update.apply();
+                        updater = update.apply(vars);
                         if (updater == null) return null;
                     } else {
                         LevelLogger.error("@ForStmt ERROR");
@@ -307,7 +308,7 @@ public class ForStmt extends Stmt {
         StringBuffer stringBuffer = new StringBuffer("for(");
         StringBuffer tmp;
         if (initializer == null) {
-            tmp = _initializers.adaptModifications();
+            tmp = _initializers.adaptModifications(vars);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -316,7 +317,7 @@ public class ForStmt extends Stmt {
         stringBuffer.append(";");
         if (condition == null) {
             if (_condition != null) {
-                tmp = _condition.adaptModifications();
+                tmp = _condition.adaptModifications(vars);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -325,14 +326,14 @@ public class ForStmt extends Stmt {
         }
         stringBuffer.append(";");
         if (updater == null) {
-            tmp = _updaters.adaptModifications();
+            tmp = _updaters.adaptModifications(vars);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(updater);
         }
         stringBuffer.append(")");
-        tmp = _body.adaptModifications();
+        tmp = _body.adaptModifications(vars);
         if (tmp == null) return null;
         stringBuffer.append(tmp);
         return stringBuffer;

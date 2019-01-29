@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -177,15 +178,15 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			if (_expression == null) {
 				stringBuffer.append("default :\n");
 			} else {
 				stringBuffer.append("case ");
-				StringBuffer tmp = _expression.adaptModifications();
+				StringBuffer tmp = _expression.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(" :\n");
@@ -195,7 +196,7 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer expression = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -204,7 +205,7 @@ public class SwCase extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == swCase._expression) {
-						expression = update.apply();
+						expression = update.apply(vars);
 						if(expression == null) return null;
 					} else {
 						LevelLogger.error("SwCase ERROR");
@@ -220,7 +221,7 @@ public class SwCase extends Stmt {
 				stringBuffer.append("default :\n");
 			} else {
 				stringBuffer.append("case ");
-				StringBuffer tmp = _expression.adaptModifications();
+				StringBuffer tmp = _expression.adaptModifications(vars);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(" :\n");

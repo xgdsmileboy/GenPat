@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -22,7 +23,7 @@ import java.util.Map;
 public class TypeDeclarationStmt extends Stmt {
 
 	private static final long serialVersionUID = -6511516466512533760L;
-
+	private String _codeStr;
 	/**
 	 * TypeDeclarationStatement:
      *	TypeDeclaration
@@ -35,17 +36,18 @@ public class TypeDeclarationStmt extends Stmt {
 	public TypeDeclarationStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.TYPEDECL;
+		_codeStr = node.toString();
 	}
 	
 	@Override
 	public StringBuffer toSrcString() {
-		return new StringBuffer(_oriNode.toString());
+		return new StringBuffer(_codeStr);
 	}
 	
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add(_oriNode.toString());
+		_tokens.add(_codeStr);
 	}
 	
 	@Override
@@ -62,7 +64,7 @@ public class TypeDeclarationStmt extends Stmt {
 	public boolean compare(Node other) {
 		boolean match = false;
 		if(other instanceof TypeDeclarationStmt) {
-			match = _oriNode.toString().equals(((TypeDeclarationStmt) other)._oriNode.toString());
+			match = _codeStr.equals(((TypeDeclarationStmt) other)._codeStr);
 		}
 		return match;
 	}
@@ -99,12 +101,12 @@ public class TypeDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		return super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		return super.transfer(vars);
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		return toSrcString();
 	}
 }

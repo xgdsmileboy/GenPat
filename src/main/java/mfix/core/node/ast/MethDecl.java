@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -245,12 +246,12 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public StringBuffer transfer() {
+    public StringBuffer transfer(Set<String> vars) {
         return null;
     }
 
     @Override
-    public StringBuffer adaptModifications() {
+    public StringBuffer adaptModifications(Set<String> vars) {
         StringBuffer stringBuffer = new StringBuffer();
         for(Object modifier : _modifiers) {
             stringBuffer.append(modifier.toString() + " ");
@@ -276,7 +277,7 @@ public class MethDecl extends Node {
         if(_body == null) {
             stringBuffer.append(";");
         } else {
-            StringBuffer tmp = _body.adaptModifications();
+            StringBuffer tmp = _body.adaptModifications(vars);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         }

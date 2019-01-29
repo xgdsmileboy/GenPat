@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -155,12 +156,12 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			stringBuffer.append("this(");
-			StringBuffer tmp = _arguments.transfer();
+			StringBuffer tmp = _arguments.transfer(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(");");
@@ -169,7 +170,7 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		StringBuffer arguments = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -178,7 +179,7 @@ public class ConstructorInv  extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == constructorInv._arguments) {
-						arguments = update.apply();
+						arguments = update.apply(vars);
 						if(arguments == null) return null;
 					} else {
 						LevelLogger.error("@ConstructorInv ERROR");
@@ -191,7 +192,7 @@ public class ConstructorInv  extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("this(");
 		if(arguments == null) {
-			StringBuffer tmp = _arguments.adaptModifications();
+			StringBuffer tmp = _arguments.adaptModifications(vars);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

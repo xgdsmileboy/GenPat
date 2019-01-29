@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -135,19 +136,22 @@ public class SName extends Label {
 	}
 
 	@Override
-	public StringBuffer transfer() {
-		StringBuffer stringBuffer = super.transfer();
+	public StringBuffer transfer(Set<String> vars) {
+		StringBuffer stringBuffer = super.transfer(vars);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
+			if (!vars.contains(stringBuffer.toString())) {
+				return null;
+			}
 		}
 		return stringBuffer;
 	}
 
 	@Override
-	public StringBuffer adaptModifications() {
+	public StringBuffer adaptModifications(Set<String> vars) {
 		Node node = checkModification();
 		if (node != null) {
-			return ((Update) node.getModifications().get(0)).apply();
+			return ((Update) node.getModifications().get(0)).apply(vars);
 		}
 		return toSrcString();
 	}
