@@ -37,8 +37,8 @@ public class Main {
 
     static String versionFolder = "ver6";
 
-    // static String pointedAPI = null;
-    static String pointedAPI = "dismiss";
+    static String pointedAPI = null;
+    // static String pointedAPI = "dismiss";
 
     static Integer cntLimit = null;
 
@@ -51,7 +51,8 @@ public class Main {
 
     static int timeoutForFix = 10;
 
-    static String[] bannedAPIs = {"length", "indexOf", "substring"};  // Skip these apis.
+    static String[] bannedAPIs = {};
+    //static String[] bannedAPIs = {"length", "indexOf", "substring"};  // Skip these apis.
 
     static void loadAPI() {
         System.out.println("Start Load API Mappings!");
