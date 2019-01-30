@@ -14,17 +14,13 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.PatternExtractor;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
-import mfix.core.node.ast.NodeVisitor;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.match.Matcher;
-import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
 
-import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.internal.eval.VariablesEvaluator;
 
 import java.io.*;
 import java.util.*;
@@ -35,28 +31,31 @@ public class Main {
     // Change the file path in API_Mapping.txt to your local path.
     static String APIMappingFile = "/home/jack/Desktop/rly/API_Mapping.txt";
 
-    static Map<Pair<String, Integer>, Set<String>> method2PatternFiles;
-    
-    static Set<String> fixedRet = new HashSet<String>();
-    
+    static Map<Pair<String, Integer>, HashSet<String>> method2PatternFiles; // (MethodName, ArgsNumber) -> Pattern contains this API.
+
+    static Set<String> fixedRet = new HashSet<String>(); // Used for avoid repeat fix.
+
     static String versionFolder = "ver6";
 
-    static String pointedAPI = null;
+    // static String pointedAPI = null;
+    static String pointedAPI = "dismiss";
 
     static Integer cntLimit = null;
 
     static String resultFile = "/home/jack/Desktop/rly/fix_result.txt";
 
-    static String buggyFilePath = "/home/jack/Desktop/rly/cases/2/base.java";;
-    // static String buggyFilePath = "/home/jack/code/workspace/eclipse/MineFix/resources/forTest/buggy_SimpleSecureBrowser.java";
+    static String buggyFilePath = "/home/jack/code/workspace/eclipse/MineFix/resources/forTest/buggy_SimpleSecureBrowser.java";
+    // static String buggyFilePath = "/home/jack/Desktop/rly/cases/4/base-all.java";;
 
-    static int timeoutSecond = 60;
+    static int timeoutForExtractOneFile = 60;
 
-    static String[] bannedAPIs = {"length", "indexOf"};
+    static int timeoutForFix = 10;
+
+    static String[] bannedAPIs = {"length", "indexOf", "substring"};  // Skip these apis.
 
     static void loadAPI() {
         System.out.println("Start Load API Mappings!");
-        method2PatternFiles = new HashMap<Pair<String, Integer>, Set<String>>();
+        method2PatternFiles = new HashMap<Pair<String, Integer>, HashSet<String>>();
 
         FileInputStream inputStream = null;
         try {
@@ -64,11 +63,11 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        
+
         Integer cnt = 0;
-        
+
         while(true) {
             try {
                 String str = bufferedReader.readLine();
@@ -85,8 +84,7 @@ public class Main {
                 	method2PatternFiles.put(key, new HashSet<String>());
                 }
                 method2PatternFiles.get(key).add(patternFile);
-                
-                
+
                 cnt += 1;
                 if (cnt % 100000 == 0) {
                 	System.out.println(cnt);
@@ -95,13 +93,12 @@ public class Main {
                 if ((cntLimit != null) && (cnt >= cntLimit)) {
                 	break;
                 }
-                
-                
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
 
         try {
         	bufferedReader.close();
@@ -109,47 +106,46 @@ public class Main {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        
+
         System.out.println("Load API Mappings successfully!");
     }
 
 
     public static void tryMatchAndFix(Node buggy, Node pattern, Set<String> buggyMethodVar, String buggyFile, String patternFile) throws Exception {
 		Set<MatchInstance> fixPositions = Matcher.tryMatch(buggy, pattern);
-		
+
 		String origin = buggy.toString();
-		
+
         for (MatchInstance matchInstance : fixPositions) {
             matchInstance.apply();
-            
+
             StringBuffer fixedProg = buggy.adaptModifications(buggyMethodVar);
-            
+
             if (fixedProg != null) {
                 String fixed = fixedProg.toString().replaceAll(" ", "");
-                
+
                 if (!fixed.equals(origin.replaceAll(" ", ""))) {
                 	if (fixedRet.contains(fixed)) {
                 		continue;
                 	}
                 	fixedRet.add(fixed);
-                	
+
                 	System.out.println(patternFile);
 
                 	System.out.println("------------ Origin ---------------");
                 	System.out.println(origin);
-                	
+
                 	System.out.println("------------ Solution ---------------");
                 	System.out.println(fixedProg);
-                	
+
                 	JavaFile.writeStringToFile(resultFile,
                 			"FILE:" + buggyFile + "\n" + "PATTERN:" + patternFile + "\n------------ Origin ---------------\n" + origin + "\n------------ Solution --------------\n" + fixedProg + "\n---------------\n", true);
-                	
+
                 	System.out.println("------------ End ---------------");
                 }
             }
-            
+
             matchInstance.reset();
-            // System.out.println(matchInstance.getNodeMap());   
         }
     }
 
@@ -170,14 +166,16 @@ public class Main {
     }
 
 
-    static void timeoutMethod(int timeout, String filePath, String file, String patternSerializePath, String buggyFile, Node node, Set<String> buggyMethodVar) {
+
+    static void timeoutMethodForFix(String patternSerializePath, String buggyFile, Node node, Set<String> buggyMethodVar) {
         FutureTask<Boolean> futureTask = new FutureTask<>(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                extractAndSave(filePath, file);
-                Node fixPattern = (Node)Utils.deserialize(patternSerializePath);
-                tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
-                return false;
+                Node fixPattern = (Node) Utils.deserialize(patternSerializePath);
+                if (fixPattern != null) {
+                    tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
+                }
+                return true;
             }
         });
 
@@ -186,14 +184,50 @@ public class Main {
         executorService.execute(futureTask);
 
         try {
-            boolean result = futureTask.get(timeout, TimeUnit.SECONDS);
+            futureTask.get(timeoutForFix, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
-            System.out.println("Timeout or other error for" + filePath + " " + file);
+            System.out.println("Timeout or other error for fixing " + buggyFile + " using " + patternSerializePath);
             futureTask.cancel(true);
         }
 
         executorService.shutdownNow();
+    }
+
+    static void timeoutMethodForExtractAndFix(String filePath, String file, String patternSerializePath, String buggyFile, Node node, Set<String> buggyMethodVar) {
+        FutureTask<Boolean> futureTask = new FutureTask<>(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                extractAndSave(filePath, file);
+                return true;
+            }
+        });
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        executorService.execute(futureTask);
+
+        boolean success = false;
+
+        try {
+            futureTask.get(timeoutForExtractOneFile, TimeUnit.SECONDS);
+            success = true;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            e.printStackTrace();
+            System.out.println("Timeout or other error for" + filePath + " " + file);
+            try {
+                Utils.serialize(null, patternSerializePath);
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+            futureTask.cancel(true);
+        }
+
+        executorService.shutdownNow();
+
+        if (success) {
+            timeoutMethodForFix(patternSerializePath, buggyFile, node, buggyMethodVar);
+        }
     }
 
 
@@ -209,39 +243,39 @@ public class Main {
 
         NodeParser parser = NodeParser.getInstance();
         parser.setCompilationUnit(buggyFile, unit);
-        
+
         Map<Integer, Set<String>> buggyFileVarMap = NodeUtils.getUsableVarTypes(buggyFile);
-		
+
         for(MethodDeclaration m : methods) {
-        	
+
         	System.out.println("Method: " + m.getName().getFullyQualifiedName());
-        	
+
             Node node = parser.process(m);
-            
+
             Set<String> buggyMethodVar = buggyFileVarMap.getOrDefault(node.getStartLine(), new HashSet<String>());
 
             Set<MethodInv> ContainMethodInvs = node.getUniversalAPIs(new HashSet<MethodInv>(), false);
-            
+
             // System.out.println(" Size of ContainMethodInvs in " + m.toString() + ": " + ContainMethodInvs.size());
-            
+
             Set<Pair<String, Integer>> runned = new HashSet<Pair<String, Integer>>();
-            
+
             for (MethodInv containMethod : ContainMethodInvs) {
                 String MethodName = containMethod.getName().getName();
                 Integer MethodArgsNum = containMethod.getArguments().getExpr().size();
-                
+
                 if (runned.contains(new Pair<String, Integer>(MethodName, MethodArgsNum))) {
                 	continue;
                 }
-                
+
                 runned.add(new Pair<String, Integer>(MethodName, MethodArgsNum));
-                
+
                 System.out.println(buggyFile + " contains: " + MethodName + " " + MethodArgsNum);
-                                
+
                 Set<String> patternFileList = method2PatternFiles.getOrDefault(new Pair<String, Integer>(MethodName, MethodArgsNum), new HashSet<String>());
-                
+
                 System.out.println(" Size of patternList : " + patternFileList.size());
-               
+
 
                 if ((pointedAPI != null) && (!MethodName.equals(pointedAPI))) {
                     continue;
@@ -257,68 +291,64 @@ public class Main {
                 if (skip) {
                     continue;
                 }
-             
+
                 System.out.println("Start matching!");
 
                 for (String patternFile : patternFileList) {
-	                try {
-	            		int ind = patternFile.indexOf("pattern-ver4-serial");
-	            		int indLen = "pattern-ver4-serial".length();
-	            		String filePath = patternFile.substring(0, ind - 1);
-	            		String fileAndMethod = patternFile.substring(ind + indLen + 1);
+                    int ind = patternFile.indexOf("pattern-ver4-serial");
+                    int indLen = "pattern-ver4-serial".length();
+                    String filePath = patternFile.substring(0, ind - 1);
+                    String fileAndMethod = patternFile.substring(ind + indLen + 1);
 
-	            		int dashIndex = fileAndMethod.lastIndexOf("-");
-	            		String file = fileAndMethod.substring(0, dashIndex);
-	            		String method = fileAndMethod.substring(dashIndex + 1);
-	            		
-	            		
-	            		File versionAbsFolder = new File(filePath + "/" + versionFolder);
-	                    if (!versionAbsFolder.exists()) {
-	                    	versionAbsFolder.mkdirs();
-	                    }
+                    int dashIndex = fileAndMethod.lastIndexOf("-");
+                    String file = fileAndMethod.substring(0, dashIndex);
+                    String method = fileAndMethod.substring(dashIndex + 1);
 
-	            		String patternSerializePath = filePath + "/" + versionFolder + "/" + fileAndMethod;
-	            		
-	            		
-//	            		String mypattern = "/home/lee/Xia/GitHubData/MissSome/2012-2014/V64/6552/ver6/CacheCleaner.src.main.java.com.frozendevs.cache.cleaner.activity.CleanerActivity.java-onScanStarted.pattern";
-//	            		
-//	            		if (!(patternSerializePath.equals(mypattern))) {
-//	            			continue;
-//	            		}
-	            		
-	            		
-	            		if (!(new File(patternSerializePath)).exists()) {
 
-	            		    // Not set timeout
-//		            		Set<Node> patternCandidates = PatternExtractor.extractPattern(
-//		            				filePath + "/buggy-version/" + file,
-//		            				filePath + "/fixed-version/" + file);
+                    String patternSerializePath = filePath + "/" + versionFolder + "/" + fileAndMethod;
+
+//	            	String mypattern = "/home/lee/Xia/GitHubData/MissSome/2012-2014/V15/2065" + "/" + versionFolder + "/" +
+//                            "question-reply.question-reply-war.src.main.java.com.silverpeas.questionReply.servlets.QuestionReplyRequestRouter.java";
 //
-//		            		for (Node fixPattern : patternCandidates) {
-//		            			MethDecl methDecl = (MethDecl) fixPattern;
-//		            			String patternFuncName = methDecl.getName().getName();
+//	            	String mypattern = "/home/lee/Xia/GitHubData/MissSome/2012-2014/V49/776/ver6/src.co.ords.w.Endpoint.java-doGet.pattern";
 //
-//		            			String savePatternPath = filePath + "/" + versionFolder + "/" + file + "-" + patternFuncName + ".pattern";
-//		            			System.out.println("save pattern: " + savePatternPath);
+//	            	if (!(patternSerializePath.equals(mypattern))) {
+//	            		continue;
+//	            	}
+
+                    // System.out.println("current:" + patternSerializePath);
+
+                    // Make the folder for saving patterns if it doesn't exist.
+                    File versionAbsFolder = new File(filePath + "/" + versionFolder);
+                    if (!versionAbsFolder.exists()) {
+                        versionAbsFolder.mkdirs();
+                    }
+
+                    if (!(new File(patternSerializePath)).exists()) {
+
+//                        // Not set timeout
+//                        Set<Node> patternCandidates = PatternExtractor.extractPattern(
+//                                filePath + "/buggy-version/" + file,
+//                                filePath + "/fixed-version/" + file);
 //
-//		            			Utils.serialize(fixPattern, savePatternPath);
-//		            		}
+//                        for (Node fixPattern : patternCandidates) {
+//                            MethDecl methDecl = (MethDecl) fixPattern;
+//                            String patternFuncName = methDecl.getName().getName();
+//
+//                            String savePatternPath = filePath + "/" + versionFolder + "/" + file + "-" + patternFuncName + ".pattern";
+//                            System.out.println("save pattern: " + savePatternPath);
+//
+//                            Utils.serialize(fixPattern, savePatternPath);
+//                        }
 
-                            // TODO(rly) mark as timeout, skip for next timeout
+                        timeoutMethodForExtractAndFix(filePath, file, patternSerializePath, buggyFile, node, buggyMethodVar);
+                    } else {
+                        // Already saved!
+                        // System.out.println("skip for " + patternSerializePath);
+                        timeoutMethodForFix(patternSerializePath, buggyFile, node, buggyMethodVar);
+                    }
 
-                            timeoutMethod(timeoutSecond, filePath, file, patternSerializePath, buggyFile, node, buggyMethodVar);
-	            		} else {
-	            		    // Already saved!
-	            			// System.out.println("skip for " + patternSerializePath);
-                            Node fixPattern = (Node)Utils.deserialize(patternSerializePath);
-                            tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
-                        }
 
-	            		// System.out.println("current:" + patternSerializePath);
-
-	                } catch (Exception e) {
-	                    e.printStackTrace();
-	                }
                 }
             }
 
