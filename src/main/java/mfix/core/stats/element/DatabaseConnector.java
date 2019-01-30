@@ -1,5 +1,7 @@
 package mfix.core.stats.element;
 
+import mfix.common.util.LevelLogger;
+
 import java.sql.*;
 import java.util.Map;
 
@@ -30,7 +32,7 @@ public class DatabaseConnector {
         try {
             conn = DriverManager.getConnection(databaseURL, DB_USER, DB_PASSWORD);
         } catch (Exception e) {
-            e.printStackTrace();
+            LevelLogger.warn("Open database failed!", e);
         }
     }
 
