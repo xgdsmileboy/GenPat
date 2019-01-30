@@ -35,6 +35,7 @@ public class Constant {
     public static String PATTERN_VERSION;
     public static int PATTERN_NUMBER;
     public static String RESULT_PATH;
+    public static String DATASET_PATH;
 
     /*
      * markers
@@ -63,6 +64,7 @@ public class Constant {
             String number = prop.getProperty("PATTERN.NUMBER", "All");
             Constant.PATTERN_NUMBER = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
             Constant.RESULT_PATH = prop.getProperty("PATH.RESULT", HOME);
+            Constant.DATASET_PATH = prop.getProperty("PATH.DATASET");
 
         } catch (IOException e) {
             LevelLogger.error("#Constant get properties failed!" + e.getMessage());
