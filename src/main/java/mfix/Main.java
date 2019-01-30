@@ -36,7 +36,7 @@ public class Main {
         Set<MatchInstance> fixPositions = Matcher.tryMatch(buggy, pattern);
         String origin = buggy.toSrcString().toString();
         String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH,
-                Constant.PATTERN_VERSION,  "/fix_result.txt");
+                Constant.PATTERN_VERSION,  "/fix_result.diff");
 
         for (MatchInstance matchInstance : fixPositions) {
             matchInstance.apply();
