@@ -18,91 +18,24 @@ import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.Matcher;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 public class Main {
 
-    private static Map<Pair<String, Integer>, Set<String>> method2PatternFiles;
-
-    private static Set<String> fixedRet = new HashSet<>();
-
-    private static void loadAPI() {
-        LevelLogger.info("Start Load API Mappings!");
-        method2PatternFiles = new HashMap<>();
-
-        FileInputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(Constant.API_MAPPING_FILE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-        int cnt = 0;
-
-        while (true) {
-            try {
-                String str = bufferedReader.readLine();
-                if (str == null) {
-                    break;
-                }
-                String[] splited = str.split("\\s+");
-                String MethodName = splited[0];
-                Integer MethodArgsNum = Integer.parseInt(splited[1]);
-                String patternFile = splited[2];
-
-                Pair<String, Integer> key = new Pair<>(MethodName, MethodArgsNum);
-                if (!method2PatternFiles.containsKey(key)) {
-                    method2PatternFiles.put(key, new HashSet<>());
-                }
-                method2PatternFiles.get(key).add(patternFile);
-
-                if ((++cnt) % 100000 == 0) {
-                    LevelLogger.debug(cnt);
-                }
-                if (cnt >= Constant.PATTERN_NUMBER) {
-                    break;
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        try {
-            bufferedReader.close();
-            inputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        LevelLogger.info("Load API Mappings successfully!");
-    }
-
-
     private static void tryMatchAndFix(Node buggy, Node pattern, Set<String> buggyMethodVar,
-                                       String buggyFile, String patternFile) {
+                                       String buggyFile, String patternFile, Set<String> alreadyGenerated) {
 
         Set<MatchInstance> fixPositions = Matcher.tryMatch(buggy, pattern);
         String origin = buggy.toSrcString().toString();
+        String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH,
+                Constant.PATTERN_VERSION,  "/fix_result.txt");
 
         for (MatchInstance matchInstance : fixPositions) {
             matchInstance.apply();
@@ -113,10 +46,10 @@ public class Main {
                 String fixed = fixedProg.toString().replaceAll(" ", "");
 
                 if (!fixed.equals(origin.replaceAll(" ", ""))) {
-                    if (fixedRet.contains(fixed)) {
+                    if (alreadyGenerated.contains(fixed)) {
                         continue;
                     }
-                    fixedRet.add(fixed);
+                    alreadyGenerated.add(fixed);
 
                     LevelLogger.debug(patternFile);
                     LevelLogger.debug("------------ Origin ---------------");
@@ -126,71 +59,51 @@ public class Main {
                     LevelLogger.debug("------------ End ---------------");
                     LevelLogger.info("Find a solution!");
 
-                    JavaFile.writeStringToFile(Utils.join(Constant.SEP, Constant.RESULT_PATH, "/new_fix_result.txt"),
-                            "FILE:" + buggyFile + "\n" + "PATTERN:" + patternFile + "\n" +
-                                    "------------ Origin ---------------\n" + origin + "\n" +
-                                    "------------ Solution --------------\n" + fixedProg + "\n" +
-                                    "---------------\n", true);
+                    JavaFile.writeStringToFile(tarFile, "FILE:" + buggyFile + "\n" +
+                            "PATTERN:" + patternFile + "\n" +
+                            "------------ Origin ---------------\n" + origin + "\n" +
+                            "------------ Solution --------------\n" + fixedProg + "\n" +
+                            "---------------\n", true);
                 }
             }
             matchInstance.reset();
         }
     }
 
-
-    private static boolean extractAndSave(String filePath, String file) throws Exception {
-        Set<Node> patternCandidates = PatternExtractor.extractPattern(
-                filePath + "/buggy-version/" + file,
-                filePath + "/fixed-version/" + file);
-
-        for (Node fixPattern : patternCandidates) {
-            MethDecl methDecl = (MethDecl) fixPattern;
-            String patternFuncName = methDecl.getName().getName();
-
-            String savePatternPath = Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION,
-                    file + "-" + patternFuncName + ".pattern");
-            LevelLogger.info("Save pattern: " + savePatternPath);
-            Utils.serialize(fixPattern, savePatternPath);
-        }
-
-        return true;
-    }
-
-    private static boolean timeoutMethod(int timeout, String filePath, String file) {
+    private static boolean extractAndSave(int timeout, String filePath, String file) {
         FutureTask<Boolean> futureTask = new FutureTask<>(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                return extractAndSave(filePath, file);
+                Set<Node> patternCandidates = PatternExtractor.extractPattern(
+                        filePath + "/buggy-version/" + file,
+                        filePath + "/fixed-version/" + file);
+
+                for (Node fixPattern : patternCandidates) {
+                    MethDecl methDecl = (MethDecl) fixPattern;
+                    String patternFuncName = methDecl.getName().getName();
+
+                    String savePatternPath = Utils.join(Constant.SEP, filePath,
+                            Constant.PATTERN_VERSION, file + "-" + patternFuncName + ".pattern");
+                    LevelLogger.info("Save pattern: " + savePatternPath);
+                    Utils.serialize(fixPattern, savePatternPath);
+                }
+                return true;
             }
         });
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(futureTask);
-
-        boolean success;
-        try {
-            futureTask.get(timeout, TimeUnit.SECONDS);
-            success = true;
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            success = false;
-            LevelLogger.error(e);
-            LevelLogger.error("Timeout or other error for" + filePath + " " + file);
-            futureTask.cancel(true);
-        }
-
-        executorService.shutdownNow();
-        return success;
+        return Utils.futureTaskWithin(timeout, futureTask);
     }
 
 
-    private static void tryFix(String buggyFile) {
+    private static void tryFix(Map<Pair<String, Integer>, Set<String>> method2PatternFiles, String buggyFile,
+                               String pointedAPI) {
 
         Set<Node> buggyNodes = Utils.getAllMethods(buggyFile);
         Map<Integer, Set<String>> buggyFileVarMap = NodeUtils.getUsableVarTypes(buggyFile);
 
+        Set<String> alreadyGenerated = new HashSet<>();
         for (Node node : buggyNodes) {
-            fixedRet.clear();
-            LevelLogger.debug("Method: " + ((MethDecl) node).getName().getName());
+            alreadyGenerated.clear();
+            LevelLogger.info("Method: " + ((MethDecl) node).getName().getName());
 
             Set<String> buggyMethodVar = buggyFileVarMap.getOrDefault(node.getStartLine(), new HashSet<>());
             Set<Pair<String, Integer>> containMethodInvs = node.getUniversalAPIs(false, new HashSet<>());
@@ -199,13 +112,17 @@ public class Main {
                 String methodName = pair.getFirst();
                 int methodArgsNum = pair.getSecond();
 
-                LevelLogger.debug(buggyFile + " contains: " + methodName + " " + methodArgsNum);
+                if (pointedAPI != null && !pointedAPI.equals(methodName)){
+                    continue;
+                }
+
+                LevelLogger.info(buggyFile + " contains: " + methodName + " " + methodArgsNum);
 
                 Set<String> patternFileList = method2PatternFiles.getOrDefault(new Pair<>(methodName,
                         methodArgsNum), new HashSet<>());
 
-                LevelLogger.debug("Size of patternList : " + patternFileList.size());
-                LevelLogger.debug("Start matching!");
+                LevelLogger.info("Size of patternList : " + patternFileList.size());
+                LevelLogger.info("Start matching!");
 
                 for (String patternFile : patternFileList) {
                     // TODO(jiang) : The following hard encode should be optimized finally
@@ -228,12 +145,15 @@ public class Main {
 
                     boolean success = true;
                     if (!(new File(patternSerializePath)).exists()) {
-                        success = timeoutMethod(Constant.PATTERN_EXTRAT_TIMEOUT, filePath, file);
+                        LevelLogger.info("Serialize pattern : " + patternSerializePath);
+                        success = extractAndSave(Constant.PATTERN_EXTRAT_TIMEOUT, filePath, file);
                     } else {
                         // Already saved!
-                        LevelLogger.debug("skip for " + patternSerializePath);
+                        LevelLogger.info("Existing pattern : " + patternSerializePath);
                     }
+
                     if (success) {
+                        LevelLogger.info("Try match and fix!");
                         Node fixPattern;
                         try {
                              fixPattern = (Node) Utils.deserialize(patternSerializePath);
@@ -241,7 +161,9 @@ public class Main {
                             LevelLogger.error("Deserialize pattern failed!", e);
                             continue;
                         }
-                        tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
+                        tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath, alreadyGenerated);
+                    } else {
+                        LevelLogger.error("Serialization failed!");
                     }
                 }
             }
@@ -255,8 +177,15 @@ public class Main {
         }
         String buggyFilePath = args[0];
 
-        loadAPI();
-        tryFix(buggyFilePath);
+
+        String pointedAPI = null;
+        if (args.length == 2) {
+            pointedAPI = args[1];
+            LevelLogger.debug("pointedAPI: " + pointedAPI);
+        }
+
+        Set<String> bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
+        tryFix(Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs), buggyFilePath, pointedAPI);
     }
 }
 
