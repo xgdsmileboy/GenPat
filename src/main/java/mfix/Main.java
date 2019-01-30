@@ -200,6 +200,10 @@ public class Main {
             @Override
             public Boolean call() throws Exception {
                 extractAndSave(filePath, file);
+                Node fixPattern = (Node) Utils.deserialize(patternSerializePath);
+                if (fixPattern != null) {
+                    tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
+                }
                 return true;
             }
         });
@@ -208,11 +212,9 @@ public class Main {
 
         executorService.execute(futureTask);
 
-        boolean success = false;
 
         try {
-            futureTask.get(timeoutForExtractOneFile, TimeUnit.SECONDS);
-            success = true;
+            futureTask.get(timeoutForExtractOneFile + timeoutForFix, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
             System.out.println("Timeout or other error for" + filePath + " " + file);
@@ -226,9 +228,6 @@ public class Main {
 
         executorService.shutdownNow();
 
-        if (success) {
-            timeoutMethodForFix(patternSerializePath, buggyFile, node, buggyMethodVar);
-        }
     }
 
 
@@ -358,7 +357,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        /*
         if (args.length < 1) {
             System.out.println(versionFolder + ": Input Error!");
             return;
@@ -370,7 +368,6 @@ public class Main {
             pointedAPI = args[1];
             System.out.println("pointedAPI: " + pointedAPI);
         }
-        */
 
         loadAPI();
 
