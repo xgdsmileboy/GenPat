@@ -128,8 +128,7 @@ public class Main {
                     // TODO(jiang) : The following hard encode should be optimized finally
                     int ind = patternFile.indexOf("pattern-ver4-serial");
                     int indLen = "pattern-ver4-serial".length();
-                    String filePath = Utils.join(Constant.SEP, Constant.DATASET_PATH, patternFile.substring(0,
-                            ind - 1));
+                    String filePath = Constant.DATASET_PATH +  patternFile.substring(0, ind - 1);
                     String fileAndMethod = patternFile.substring(ind + indLen + 1);
 
                     int dashIndex = fileAndMethod.lastIndexOf("-");
