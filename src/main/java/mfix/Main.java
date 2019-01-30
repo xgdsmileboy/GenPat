@@ -32,6 +32,7 @@ import java.util.concurrent.*;
 
 
 public class Main {
+    // Change the file path in API_Mapping.txt to your local path.
     static String APIMappingFile = "/home/jack/Desktop/rly/API_Mapping.txt";
 
     static Map<Pair<String, Integer>, Set<String>> method2PatternFiles;
@@ -42,7 +43,16 @@ public class Main {
 
     static String pointedAPI = null;
 
-    static Integer cntLimit = 200000;
+    static Integer cntLimit = null;
+
+    static String resultFile = "/home/jack/Desktop/rly/fix_result.txt";
+
+    static String buggyFilePath = "/home/jack/Desktop/rly/cases/2/base.java";;
+    // static String buggyFilePath = "/home/jack/code/workspace/eclipse/MineFix/resources/forTest/buggy_SimpleSecureBrowser.java";
+
+    static int timeoutSecond = 60;
+
+    static String[] bannedAPIs = {"length", "indexOf"};
 
     static void loadAPI() {
         System.out.println("Start Load API Mappings!");
@@ -131,7 +141,7 @@ public class Main {
                 	System.out.println("------------ Solution ---------------");
                 	System.out.println(fixedProg);
                 	
-                	JavaFile.writeStringToFile("/home/jack/Desktop/rly/new_fix_result.txt",
+                	JavaFile.writeStringToFile(resultFile,
                 			"FILE:" + buggyFile + "\n" + "PATTERN:" + patternFile + "\n------------ Origin ---------------\n" + origin + "\n------------ Solution --------------\n" + fixedProg + "\n---------------\n", true);
                 	
                 	System.out.println("------------ End ---------------");
@@ -144,7 +154,7 @@ public class Main {
     }
 
 
-    static boolean extractAndSave(String filePath, String file) throws Exception {
+    static void extractAndSave(String filePath, String file) throws Exception {
         Set<Node> patternCandidates = PatternExtractor.extractPattern(
                 filePath + "/buggy-version/" + file,
                 filePath + "/fixed-version/" + file);
@@ -157,15 +167,17 @@ public class Main {
             System.out.println("save pattern: " + savePatternPath);
             Utils.serialize(fixPattern, savePatternPath);
         }
-
-        return true;
     }
 
-    static void timeoutMethod(int timeout, String filePath, String file) {
+
+    static void timeoutMethod(int timeout, String filePath, String file, String patternSerializePath, String buggyFile, Node node, Set<String> buggyMethodVar) {
         FutureTask<Boolean> futureTask = new FutureTask<>(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                return extractAndSave(filePath, file);
+                extractAndSave(filePath, file);
+                Node fixPattern = (Node)Utils.deserialize(patternSerializePath);
+                tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
+                return false;
             }
         });
 
@@ -230,24 +242,24 @@ public class Main {
                 
                 System.out.println(" Size of patternList : " + patternFileList.size());
                
-                
-//                if (!(MethodName.equals("dismiss") && MethodArgsNum == 0)) {
-//                	continue;
-//                }
-                
-//                if (!(MethodName.equals("getAsString") && MethodArgsNum == 0)) {
-//                	continue;
-//                }
 
                 if ((pointedAPI != null) && (!MethodName.equals(pointedAPI))) {
                     continue;
                 }
+
+                boolean skip = false;
+                for (String bannedAPI : bannedAPIs) {
+                    if (MethodName.equals(bannedAPI)) {
+                        skip = true;
+                        break;
+                    }
+                }
+                if (skip) {
+                    continue;
+                }
              
                 System.out.println("Start matching!");
-                
-            	// System.out.println("------------ Original ---------------");
-            	// System.out.println(node.toString());
-            	
+
                 for (String patternFile : patternFileList) {
 	                try {
 	            		int ind = patternFile.indexOf("pattern-ver4-serial");
@@ -277,6 +289,7 @@ public class Main {
 	            		
 	            		if (!(new File(patternSerializePath)).exists()) {
 
+	            		    // Not set timeout
 //		            		Set<Node> patternCandidates = PatternExtractor.extractPattern(
 //		            				filePath + "/buggy-version/" + file,
 //		            				filePath + "/fixed-version/" + file);
@@ -291,21 +304,17 @@ public class Main {
 //		            			Utils.serialize(fixPattern, savePatternPath);
 //		            		}
 
+                            // TODO(rly) mark as timeout, skip for next timeout
 
-                            timeoutMethod(30, filePath, file);
-                            // TODO(rly) mark as timeout
-
+                            timeoutMethod(timeoutSecond, filePath, file, patternSerializePath, buggyFile, node, buggyMethodVar);
 	            		} else {
 	            		    // Already saved!
-	            			System.out.println("skip for " + patternSerializePath);
-	            		}
-	            		
+	            			// System.out.println("skip for " + patternSerializePath);
+                            Node fixPattern = (Node)Utils.deserialize(patternSerializePath);
+                            tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
+                        }
 
-	            		System.out.println("current:" + patternSerializePath);
-	            		
-	            		Node fixPattern = (Node)Utils.deserialize(patternSerializePath);
-	            		
-	            		tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
+	            		// System.out.println("current:" + patternSerializePath);
 
 	                } catch (Exception e) {
 	                    e.printStackTrace();
@@ -318,52 +327,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // long start = System.currentTimeMillis();
-    	
-    	/*
-        if (args.length != 1) {
-            System.out.println("version5: Input Error!");
-            return;
-        }
-        String fileListFilePath = args[0];
-        
-
-        // String fileListFilePath = "/home/renly/test/small_files_test.txt";
-        // String fileListFilePath = "/Users/luyaoren/workplace/file_list.txt";
-
-        work(fileListFilePath);
-        */
-    	
-    	/*
-    	if (args.length != 1) {
-            System.out.println("version5 (Fix): Input Error!");
-            return;
-        }
-    	
-    	String buggyFilePath = args[0];
-    	*/
-    	
-    	
-    	// Node p = loadPatternFromFile("/home/lee/Xia/GitHubData/MissSome/2015/V26/7040/pattern-ver4-serial/app.src.main.java.com.sqbnet.expressassistant.registrationActivity.java-run.pattern");
-    	
-		
-    	/*
-    	Node p = loadPatternFromFile("/home/jack/Desktop/0.pattern");
-    	    	
-    	p.accept(new NodeVisitor(){
-    		public boolean visit(MethodInv method) {
-    			System.out.println(method.getName().getName());
-    			System.out.println(method.isAbstract());
-    			System.out.println("----");
-    			
-    			return true;
-    		}
-    	});
-    	*/
-
-
-        // String buggyFilePath = "/home/jack/code/workspace/eclipse/MineFix/resources/forTest/buggy_SimpleSecureBrowser.java";
-
         /*
         if (args.length < 1) {
             System.out.println(versionFolder + ": Input Error!");
@@ -379,12 +342,8 @@ public class Main {
         */
 
         loadAPI();
-    	
-    	String buggyFilePath = "/home/jack/Desktop/rly/cases/4/base-all.java";
-    	
+
     	tryFix(buggyFilePath);
-    	
-    	
     }
 }
 
