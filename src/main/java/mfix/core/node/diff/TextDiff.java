@@ -36,6 +36,7 @@ public class TextDiff extends Diff<Line> {
 		super(null, null);
 		_srcString = src;
 		_tarString = tar;
+		extractDiff();
 	}
 
 	private void extractTextDiff(String[] srcText, String[] tarText) {
