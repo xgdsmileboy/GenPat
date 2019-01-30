@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast;
 
+import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
@@ -769,6 +770,14 @@ public abstract class Node implements NodeComparator, Serializable {
         for (Node node : getAllChildren()) {
             node.doAbstraction(counter);
         }
+    }
+
+    public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
+        Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
+        for (MethodInv m : mSet) {
+            set.add(new Pair<>(m.getName().getName(), m.getArguments().getExpr().size()));
+        }
+        return set;
     }
 
     public Set<MethodInv> getUniversalAPIs(Set<MethodInv> set, boolean isPattern) {

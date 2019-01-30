@@ -608,7 +608,7 @@ public class JavaFile {
     public static void sourceReplace(String fileName, List<String> source, int startLine, int endLine, String replace) throws IOException{
         File file = new File(fileName);
         if(!file.exists()){
-            System.out.println("File : " + fileName + " does not exist!");
+            LevelLogger.error("File : " + fileName + " does not exist!");
             return;
         }
         boolean flag = false;

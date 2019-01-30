@@ -8,7 +8,12 @@
 package mfix.common.util;
 
 import mfix.common.java.D4jSubject;
+import mfix.core.node.ast.Node;
 import mfix.core.node.diff.Diff;
+import mfix.core.node.parser.NodeParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -185,6 +190,27 @@ public class Utils {
         return (Serializable) objectInputStream.readObject();
     }
 
+    public static Set<Node> getAllMethods(String file) {
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                methods.add(node);
+                return true;
+            }
+        });
+
+        NodeParser parser = NodeParser.getInstance();
+        parser.setCompilationUnit(file, unit);
+        Set<Node> nodes = new HashSet<>();
+        Node node;
+        for (MethodDeclaration m : methods) {
+            node = parser.process(m);
+            nodes.add(node);
+        }
+        return nodes;
+    }
 
     public static void log(String logFile, String content, boolean append) {
         JavaFile.writeStringToFile(logFile, "[" + new Date().toString() +  "] " + content, append);
