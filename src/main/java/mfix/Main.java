@@ -35,8 +35,8 @@ public class Main {
 
         Set<MatchInstance> fixPositions = Matcher.tryMatch(buggy, pattern);
         String origin = buggy.toSrcString().toString();
-        String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH,
-                Constant.PATTERN_VERSION,  buggyFile, ".diff");
+        String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH, Constant.PATTERN_VERSION,
+                buggyFile.replace("/", "_") + ".diff");
 
         for (MatchInstance matchInstance : fixPositions) {
             matchInstance.apply();
@@ -186,8 +186,8 @@ public class Main {
         }
 
         // clear previous result
-        String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH,
-                Constant.PATTERN_VERSION,  buggyFilePath, ".diff");
+        String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH, Constant.PATTERN_VERSION,
+                buggyFilePath.replace("/", "_") + ".diff");
         JavaFile.writeStringToFile(tarFile, "", false);
 
         Set<String> bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
