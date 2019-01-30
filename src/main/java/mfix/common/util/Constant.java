@@ -36,6 +36,7 @@ public class Constant {
     public static int PATTERN_NUMBER;
     public static String RESULT_PATH;
     public static String DATASET_PATH;
+    public static int PATTERN_EXTRAT_TIMEOUT;
 
     /*
      * markers
@@ -65,6 +66,7 @@ public class Constant {
             Constant.PATTERN_NUMBER = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
             Constant.RESULT_PATH = prop.getProperty("PATH.RESULT", HOME);
             Constant.DATASET_PATH = prop.getProperty("PATH.DATASET");
+            Constant.PATTERN_EXTRAT_TIMEOUT = Integer.parseInt(prop.getProperty("PEXTRACTION.TIMEOUT", "30"));
 
         } catch (IOException e) {
             LevelLogger.error("#Constant get properties failed!" + e.getMessage());

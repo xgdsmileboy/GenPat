@@ -21,6 +21,7 @@ import mfix.core.node.match.Matcher;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -155,7 +156,7 @@ public class Main {
         return true;
     }
 
-    private static void timeoutMethod(int timeout, String filePath, String file) {
+    private static boolean timeoutMethod(int timeout, String filePath, String file) {
         FutureTask<Boolean> futureTask = new FutureTask<>(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -166,15 +167,19 @@ public class Main {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(futureTask);
 
+        boolean success;
         try {
-            boolean result = futureTask.get(timeout, TimeUnit.SECONDS);
+            futureTask.get(timeout, TimeUnit.SECONDS);
+            success = true;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            e.printStackTrace();
+            success = false;
+            LevelLogger.error(e);
             LevelLogger.error("Timeout or other error for" + filePath + " " + file);
             futureTask.cancel(true);
         }
 
         executorService.shutdownNow();
+        return success;
     }
 
 
@@ -203,40 +208,40 @@ public class Main {
                 LevelLogger.debug("Start matching!");
 
                 for (String patternFile : patternFileList) {
-                    try {
-                        // TODO(jiang) : The following hard encode should be optimized finally
-                        int ind = patternFile.indexOf("pattern-ver4-serial");
-                        int indLen = "pattern-ver4-serial".length();
-                        String filePath = Utils.join(Constant.SEP, Constant.DATASET_PATH, patternFile.substring(0,
-                                ind - 1));
-                        String fileAndMethod = patternFile.substring(ind + indLen + 1);
+                    // TODO(jiang) : The following hard encode should be optimized finally
+                    int ind = patternFile.indexOf("pattern-ver4-serial");
+                    int indLen = "pattern-ver4-serial".length();
+                    String filePath = Utils.join(Constant.SEP, Constant.DATASET_PATH, patternFile.substring(0,
+                            ind - 1));
+                    String fileAndMethod = patternFile.substring(ind + indLen + 1);
 
-                        int dashIndex = fileAndMethod.lastIndexOf("-");
-                        String file = fileAndMethod.substring(0, dashIndex);
+                    int dashIndex = fileAndMethod.lastIndexOf("-");
+                    String file = fileAndMethod.substring(0, dashIndex);
 
-                        File versionAbsFolder = new File(Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION));
-                        if (!versionAbsFolder.exists()) {
-                            versionAbsFolder.mkdirs();
+                    File versionAbsFolder = new File(Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION));
+                    if (!versionAbsFolder.exists()) {
+                        versionAbsFolder.mkdirs();
+                    }
+
+                    String patternSerializePath = Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION,
+                            fileAndMethod);
+
+                    boolean success = true;
+                    if (!(new File(patternSerializePath)).exists()) {
+                        success = timeoutMethod(Constant.PATTERN_EXTRAT_TIMEOUT, filePath, file);
+                    } else {
+                        // Already saved!
+                        LevelLogger.debug("skip for " + patternSerializePath);
+                    }
+                    if (success) {
+                        Node fixPattern;
+                        try {
+                             fixPattern = (Node) Utils.deserialize(patternSerializePath);
+                        } catch (IOException | ClassNotFoundException e) {
+                            LevelLogger.error("Deserialize pattern failed!", e);
+                            continue;
                         }
-
-                        String patternSerializePath = Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION,
-                                fileAndMethod);
-
-                        if (!(new File(patternSerializePath)).exists()) {
-
-                            timeoutMethod(30, filePath, file);
-                            // TODO(rly) mark as timeout
-
-                        } else {
-                            // Already saved!
-                            LevelLogger.debug("skip for " + patternSerializePath);
-                        }
-
-                        Node fixPattern = (Node) Utils.deserialize(patternSerializePath);
                         tryMatchAndFix(node, fixPattern, buggyMethodVar, buggyFile, patternSerializePath);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
             }
@@ -244,7 +249,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
         if (args.length < 1) {
             System.err.println("Please provide the java file to detect!");
             System.exit(0);
