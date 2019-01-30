@@ -32,7 +32,7 @@ public class DatabaseConnector {
         try {
             conn = DriverManager.getConnection(databaseURL, DB_USER, DB_PASSWORD);
         } catch (Exception e) {
-            LevelLogger.warn("Open database failed!", e);
+            LevelLogger.warn("Open database failed!");
         }
     }
 
