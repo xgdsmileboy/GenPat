@@ -36,7 +36,7 @@ public class Main {
         Set<MatchInstance> fixPositions = Matcher.tryMatch(buggy, pattern);
         String origin = buggy.toSrcString().toString();
         String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH,
-                Constant.PATTERN_VERSION,  "/fix_result.diff");
+                Constant.PATTERN_VERSION,  buggyFile, ".diff");
 
         for (MatchInstance matchInstance : fixPositions) {
             matchInstance.apply();
@@ -184,6 +184,11 @@ public class Main {
             pointedAPI = args[1];
             LevelLogger.debug("pointedAPI: " + pointedAPI);
         }
+
+        // clear previous result
+        String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH,
+                Constant.PATTERN_VERSION,  buggyFilePath, ".diff");
+        JavaFile.writeStringToFile(tarFile, "", false);
 
         Set<String> bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
         tryFix(Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs), buggyFilePath, pointedAPI);
