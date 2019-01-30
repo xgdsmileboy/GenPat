@@ -16,6 +16,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.PatternExtractor;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.Matcher;
 
 import java.io.File;
@@ -59,10 +60,11 @@ public class Main {
                     LevelLogger.debug("------------ End ---------------");
                     LevelLogger.info("Find a solution!");
 
+                    TextDiff diff = new TextDiff(origin, fixedProg.toString());
                     JavaFile.writeStringToFile(tarFile, "FILE:" + buggyFile + "\n" +
                             "PATTERN:" + patternFile + "\n" +
                             "------------ Origin ---------------\n" + origin + "\n" +
-                            "------------ Solution --------------\n" + fixedProg + "\n" +
+                            "------------ Solution --------------\n" + diff + "\n" +
                             "---------------\n", true);
                 }
             }
