@@ -147,7 +147,7 @@ public class Main {
                             fileAndMethod);
 
                     boolean success = true;
-                    if (!(new File(patternSerializePath)).exists()) {
+                    if (Constant.PATTERN_EXTRACT_FORCE || !(new File(patternSerializePath)).exists()) {
                         LevelLogger.info("Serialize pattern : " + patternSerializePath);
                         success = extractAndSave(Constant.PATTERN_EXTRAT_TIMEOUT, filePath, file);
                     } else {
