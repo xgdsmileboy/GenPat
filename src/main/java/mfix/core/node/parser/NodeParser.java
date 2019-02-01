@@ -6,6 +6,7 @@
  */
 package mfix.core.node.parser;
 
+import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
@@ -1374,7 +1375,7 @@ public class NodeParser {
         } else if (node instanceof CatchClause) {
             return visit((CatchClause) node, scope);
         } else {
-            System.out.println("UNKNOWN ASTNode type : " + node.toString());
+            LevelLogger.error("UNKNOWN ASTNode type : " + node.toString());
             return null;
         }
     }

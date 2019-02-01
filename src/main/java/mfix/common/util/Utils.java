@@ -8,16 +8,29 @@
 package mfix.common.util;
 
 import mfix.common.java.D4jSubject;
+import mfix.core.node.ast.Node;
 import mfix.core.node.diff.Diff;
+import mfix.core.node.parser.NodeParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author: Jiajun
@@ -185,6 +198,99 @@ public class Utils {
         return (Serializable) objectInputStream.readObject();
     }
 
+    public static Set<Node> getAllMethods(String file) {
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                methods.add(node);
+                return true;
+            }
+        });
+
+        NodeParser parser = NodeParser.getInstance();
+        parser.setCompilationUnit(file, unit);
+        Set<Node> nodes = new HashSet<>();
+        Node node;
+        for (MethodDeclaration m : methods) {
+            node = parser.process(m);
+            nodes.add(node);
+        }
+        return nodes;
+    }
+
+    public static Map<Pair<String, Integer>, Set<String>> loadAPI(String apiMappingFile, int cntLimit,
+                                                                  Set<String> bannedAPIs) {
+        LevelLogger.info("Start Load API Mappings!");
+        Map<Pair<String, Integer>, Set<String>> method2PatternFiles = new HashMap<>();
+
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(apiMappingFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+        int cnt = 0;
+        while (true) {
+            try {
+                String str = bufferedReader.readLine();
+                if (str == null || cnt >= cntLimit) {
+                    break;
+                }
+                String[] splited = str.split("\\s+");
+                String methodName = splited[0];
+                Integer methodArgsNum = Integer.parseInt(splited[1]);
+                String patternFile = splited[2];
+                if (bannedAPIs.contains(methodName)) {
+                    continue;
+                }
+
+                Pair<String, Integer> key = new Pair<>(methodName, methodArgsNum);
+                if (!method2PatternFiles.containsKey(key)) {
+                    method2PatternFiles.put(key, new HashSet<>());
+                }
+                method2PatternFiles.get(key).add(patternFile);
+
+                if ((++cnt) % 100000 == 0) {
+                    LevelLogger.debug(cnt);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            bufferedReader.close();
+            inputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        LevelLogger.info("Load API Mappings successfully!");
+        return method2PatternFiles;
+    }
+
+    public static boolean futureTaskWithin(int timeout, FutureTask futureTask) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(futureTask);
+
+        boolean success;
+        try {
+            futureTask.get(timeout, TimeUnit.SECONDS);
+            success = true;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            success = false;
+            LevelLogger.error(e);
+            futureTask.cancel(true);
+        }
+
+        executorService.shutdownNow();
+        return success;
+    }
 
     public static void log(String logFile, String content, boolean append) {
         JavaFile.writeStringToFile(logFile, "[" + new Date().toString() +  "] " + content, append);

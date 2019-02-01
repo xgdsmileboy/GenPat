@@ -158,8 +158,10 @@ public class MethodInv extends Expr {
 			match = (methodInv == node);
 		} else if (canBinding(node)) {
 			methodInv = (MethodInv) node;
-			setBindingNode(methodInv);
-			match = true;
+			if (methodInv.getName().getName().equals(getName().getName())) {
+				setBindingNode(methodInv);
+				match = true;
+			}
 		}
 		if (methodInv == null) {
 			continueTopDownMatchNull();

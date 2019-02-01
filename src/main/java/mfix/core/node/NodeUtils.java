@@ -7,6 +7,7 @@
 package mfix.core.node;
 
 import mfix.common.util.JavaFile;
+import mfix.common.util.LevelLogger;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.match.metric.FVector.ALGO;
 import mfix.core.node.ast.Node;
@@ -54,7 +55,7 @@ public class NodeUtils {
 //				return false;
 //			}
 //		}
-		System.out.println("----Similarity filter");
+		LevelLogger.debug("----Similarity filter");
 		return false;
 	}
 	

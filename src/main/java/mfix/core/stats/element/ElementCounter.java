@@ -1,5 +1,6 @@
 package mfix.core.stats.element;
 
+import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 
 import java.io.BufferedReader;
@@ -50,7 +51,7 @@ public class ElementCounter {
                 allNumber = cacheTotalNumber;
             }
         } else {
-            System.out.println("[ERROR] Query on Database.");
+            LevelLogger.error("[ERROR] Query on Database.");
             countNumber = _connector.query(element.toQueryRow(queryType));
             allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
         }

@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -510,6 +511,50 @@ public class JavaFile {
     }
 
     /**
+     * read string from file
+     *
+     * @param filePath
+     *            : file path
+     * @return : set of string in the file
+     */
+    public static Set<String> readFileToStringSet(String filePath) {
+        if (filePath == null) {
+            LevelLogger.error(__name__ + "#readFileToStringSet Illegal input file path : null.");
+            return new HashSet<>();
+        }
+        File file = new File(filePath);
+        if (!file.exists() || !file.isFile()) {
+            LevelLogger.error(__name__ + "#readFileToStringSet Illegal input file path : " + filePath);
+            return new HashSet<>();
+        }
+        return readFileToStringSet(file);
+    }
+
+    /**
+     * read string from file
+     *
+     * @param file
+     *            : file of type {@code File}
+     * @return : set of string in the file
+     */
+    public static Set<String> readFileToStringSet(File file) {
+        Set<String> results = new HashSet<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while((line = reader.readLine()) != null) {
+                results.add(line);
+            }
+            reader.close();
+        } catch (FileNotFoundException e) {
+            LevelLogger.error(__name__ + "#readFileToStringSet file not found : " + file.getAbsolutePath());
+        } catch (IOException e) {
+            LevelLogger.error(__name__ + "#readFileToStringSet IO exception : " + file.getAbsolutePath(), e);
+        }
+        return results;
+    }
+
+    /**
      * @see List<File> ergodic(File file, List<File> fileList, String srcFilePostfix)
      */
     public static List<File> ergodic(File file, List<File> fileList) {
@@ -608,7 +653,7 @@ public class JavaFile {
     public static void sourceReplace(String fileName, List<String> source, int startLine, int endLine, String replace) throws IOException{
         File file = new File(fileName);
         if(!file.exists()){
-            System.out.println("File : " + fileName + " does not exist!");
+            LevelLogger.error("File : " + fileName + " does not exist!");
             return;
         }
         boolean flag = false;

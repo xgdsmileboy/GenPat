@@ -167,4 +167,43 @@ public class MatcherTest extends TestCase {
 
     }
 
+    @Test
+    public void test_match_demo2() {
+        String srcFile = testbase + Constant.SEP + "b.java";
+        String tarFile = testbase + Constant.SEP + "f.java";
+
+        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+
+        String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
+
+        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                methods.add(node);
+                return true;
+            }
+        });
+
+        NodeParser parser = NodeParser.getInstance();
+        parser.setCompilationUnit(buggy, unit);
+        for (MethodDeclaration m : methods) {
+            Node node = parser.process(m);
+            Set<Node> matched = Matcher.filter(node, patterns);
+            for (Node p : matched) {
+                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                for (MatchInstance matchInstance : set) {
+                    matchInstance.apply();
+                    System.out.println("------------ Before ---------------");
+                    System.out.println(node.toSrcString());
+                    System.out.println("------------ After ---------------");
+                    System.out.println(node.adaptModifications(varMaps.get(node.getStartLine())));
+                    matchInstance.reset();
+                }
+            }
+        }
+    }
+
 }
