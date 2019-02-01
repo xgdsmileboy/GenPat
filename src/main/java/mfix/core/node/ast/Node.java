@@ -520,7 +520,8 @@ public abstract class Node implements NodeComparator, Serializable {
                 return true;
             }
         } else if (getControldependency().getBindingNode()
-                != _bindingNode.getControldependency()) {
+                != _bindingNode.getControldependency()
+                || _bindingNode.getControldependency() == null) {
             return true;
         }
         return false;
