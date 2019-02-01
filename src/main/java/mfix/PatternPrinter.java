@@ -17,6 +17,8 @@ import mfix.core.node.modify.Modification;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -81,6 +83,8 @@ public class PatternPrinter {
 
         print(Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, new HashSet<>()), mName, argNumber,
                 outPath);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+        System.out.println("Finish : " + mName + " | " + argNumber + " > " + simpleDateFormat.format(new Date()));
     }
 
 }
