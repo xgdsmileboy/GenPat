@@ -21,6 +21,8 @@ import mfix.core.node.match.Matcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -192,6 +194,9 @@ public class Main {
 
         Set<String> bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
         tryFix(Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs), buggyFilePath, pointedAPI);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+        System.out.println("Finish : " + buggyFilePath + " > " + simpleDateFormat.format(new Date()));
     }
 }
 
