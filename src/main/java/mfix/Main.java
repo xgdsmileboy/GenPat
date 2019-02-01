@@ -83,7 +83,7 @@ public class Main {
                         filePath + "/fixed-version/" + file);
                 boolean sucess = false;
                 for (Node fixPattern : patternCandidates) {
-                    if (fixPattern.getModifications().isEmpty()
+                    if (fixPattern.getAllModifications(new HashSet<>()).isEmpty()
                             || fixPattern.getUniversalAPIs(new HashSet<>(), true).isEmpty()) {
                         continue;
                     }
