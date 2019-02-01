@@ -44,7 +44,7 @@ public class PatternPrinter {
 
             String patternSerializePath = Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION,
                     fileAndMethod);
-            File file = new File(patternFile);
+            File file = new File(patternSerializePath);
             if (!file.exists()) {
                 stringBuffer = new StringBuffer();
                 continue;
