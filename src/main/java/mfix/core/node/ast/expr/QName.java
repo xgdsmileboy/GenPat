@@ -131,8 +131,8 @@ public class QName extends Label {
 	public boolean genModidications() {
 		if (super.genModidications()) {
 			QName qName = (QName) getBindingNode();
-			if (_name.getBindingNode() != qName.getBindingNode()) {
-				Update update = new Update(this, _name, qName.getSName());
+			if (_name.getBindingNode() != qName._name) {
+				Update update = new Update(this, _name, qName._name);
 				_modifications.add(update);
 			} else {
 				_name.genModidications();

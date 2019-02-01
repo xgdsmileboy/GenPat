@@ -612,6 +612,7 @@ public abstract class Node implements NodeComparator, Serializable {
             for (Node other : lst2) {
                 if (!set.contains(other) && node.postAccurateMatch(other)) {
                     set.add(other);
+                    break;
                 }
             }
         }
@@ -662,10 +663,10 @@ public abstract class Node implements NodeComparator, Serializable {
                 if (src.get(i).getBindingNode() == tar.get(j)) {
                     set.add(j);
                     src.get(i).genModidications();
-                    if (i != j && move) {
-                        Movement movement = new Movement(this, i, j, src.get(i));
-                        _modifications.add(movement);
-                    }
+//                    if (i != j && move) {
+//                        Movement movement = new Movement(this, i, j, src.get(i));
+//                        _modifications.add(movement);
+//                    }
                     notmatch = false;
                     break;
                 }

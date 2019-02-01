@@ -333,6 +333,7 @@ public class Matcher {
 			for (int j = 0; j < tarStmt.size(); j++) {
 				if(!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
 					srcStmt.get(i).setBindingNode(tarStmt.get(j));
+					srcStmt.get(i).postAccurateMatch(tarStmt.get(j));
 					tarMatched.add(j);
 					notmatched = false;
 					break;
@@ -359,11 +360,13 @@ public class Matcher {
 			List<Expr> tarExprs = tarNotMatched.get(entry.getValue()).getAllChildExpr(new ArrayList<>(11));
 			Set<Integer> matchedIndex = new HashSet<>();
 			for(int i = 0; i < srcExprs.size(); i++) {
-				for(int j = 0; j < tarExprs.size(); j++) {
-					if(!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
-						srcExprs.get(i).setBindingNode(tarExprs.get(j));
-						matchedIndex.add(j);
-						break;
+				if (srcExprs.get(i).getBindingNode() == null) {
+					for(int j = 0; j < tarExprs.size(); j++) {
+						if (!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
+							srcExprs.get(i).setBindingNode(tarExprs.get(j));
+							matchedIndex.add(j);
+							break;
+						}
 					}
 				}
 			}

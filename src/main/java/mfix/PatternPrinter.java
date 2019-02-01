@@ -35,7 +35,7 @@ public class PatternPrinter {
                 argNumber), new HashSet<>());
         outFile = outFile + "/" + mName + "_" + argNumber + ".txt";
         StringBuffer stringBuffer = new StringBuffer(">>>>>>> " + mName + " | " + argNumber + "<<<<<<<<");
-        stringBuffer.append("-------------------");
+        stringBuffer.append("\n-------------------\n");
         for (String patternFile : patternFileList) {
             int ind = patternFile.indexOf("pattern-ver4-serial");
             int indLen = "pattern-ver4-serial".length();
@@ -61,11 +61,11 @@ public class PatternPrinter {
             Set<Modification> modifications = fixPattern.getAllModifications(new HashSet<>());
             if (modifications.size() > 0) {
                 stringBuffer.append("FILE: " + patternSerializePath + "\n");
-                stringBuffer.append(">>>>>>");
+                stringBuffer.append("\n>>>>>>\n");
                 for (Modification m : modifications) {
-                    stringBuffer.append(m.toString());
+                    stringBuffer.append(m.toString() + "\n");
                 }
-                stringBuffer.append("-------------------");
+                stringBuffer.append("-------------------\n");
                 JavaFile.writeStringToFile(outFile, stringBuffer.toString(), true);
             }
             stringBuffer = new StringBuffer();
