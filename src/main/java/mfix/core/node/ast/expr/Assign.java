@@ -124,6 +124,7 @@ public class Assign extends Expr {
             continueTopDownMatchNull();
         } else {
             _lhs.postAccurateMatch(assign.getLhs());
+            _operator.postAccurateMatch(assign.getOperator());
             _rhs.postAccurateMatch(assign.getRhs());
         }
 

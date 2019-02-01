@@ -645,7 +645,7 @@ public class NodeParser {
 
         AssignOperator assignOperator = new AssignOperator(_fileName, startLine, endLine, null);
         assignOperator.setOperator(node.getOperator());
-        assign.setParent(assign);
+        assignOperator.setParent(assign);
         assign.setOperator(assignOperator);
 
         scope.addDefine(lhs.toSrcString().toString(), assign);
