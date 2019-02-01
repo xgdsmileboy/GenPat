@@ -27,6 +27,7 @@ import mfix.core.pattern.solver.Z3Solver;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import java.util.*;
 
@@ -98,13 +99,14 @@ public class Matcher {
 		if(!sm.getName().getFullyQualifiedName().equals(tm.getName().getFullyQualifiedName())) return DiffType.DIFF_NAME;
 		String sType = sm.getReturnType2() == null ? "?" : sm.getReturnType2().toString();
 		String tType = tm.getReturnType2() == null ? "?" : tm.getReturnType2().toString(); 
-		if(!sType.equals(tType)) return DiffType.DIFF_RETURN; 
-		List<Object> sp = sm.typeParameters();
-		List<Object> tp = tm.typeParameters();
+		if(!sType.equals(tType)) return DiffType.DIFF_RETURN;
+		List<SingleVariableDeclaration> sp = sm.parameters();
+		List<SingleVariableDeclaration> tp = tm.parameters();
 		if(sp.size() != tp.size()) return DiffType.DIFF_PARAM;
 		for(int i = 0; i < sp.size(); i++){
-			if(!sp.get(i).toString().equals(tp.get(i).toString()))
+			if (!sp.get(i).getType().toString().equals(tp.get(i).getType().toString())) {
 				return DiffType.DIFF_PARAM;
+			}
 		}
 		return DiffType.SAME;
 	}
