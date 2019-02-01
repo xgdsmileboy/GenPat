@@ -81,8 +81,13 @@ public class Main {
                 Set<Node> patternCandidates = PatternExtractor.extractPattern(
                         filePath + "/buggy-version/" + file,
                         filePath + "/fixed-version/" + file);
-
+                boolean sucess = false;
                 for (Node fixPattern : patternCandidates) {
+                    if (fixPattern.getModifications().isEmpty()
+                            || fixPattern.getUniversalAPIs(new HashSet<>(), true).isEmpty()) {
+                        continue;
+                    }
+                    sucess = true;
                     MethDecl methDecl = (MethDecl) fixPattern;
                     String patternFuncName = methDecl.getName().getName();
 
@@ -91,7 +96,7 @@ public class Main {
                     LevelLogger.info("Save pattern: " + savePatternPath);
                     Utils.serialize(fixPattern, savePatternPath);
                 }
-                return true;
+                return sucess;
             }
         });
         return Utils.futureTaskWithin(timeout, futureTask);
