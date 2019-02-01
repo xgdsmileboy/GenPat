@@ -52,7 +52,7 @@ public class SimMatcher {
 		
 		public MethodIdentifyVisitor(Map<String, Set<Node>> keywords) {
 			_keywords = keywords;
-			_nodePaser = NodeParser.getInstance();
+			_nodePaser = new NodeParser();
 		}
 		
 		public List<Node> getCandidates() {

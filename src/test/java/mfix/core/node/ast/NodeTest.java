@@ -40,7 +40,7 @@ public class NodeTest extends TestCase {
             String file = Utils.join(Constant.SEP, subject.getHome(), subject.getSsrc(), location.getRelClazzFile());
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(unit, location.getLine());
-            NodeParser parser = NodeParser.getInstance();
+            NodeParser parser = new NodeParser();
             parser.setCompilationUnit(file, unit);
             Node node = parser.process(method);
 //            System.out.println(node.toSrcString().toString());
@@ -62,7 +62,7 @@ public class NodeTest extends TestCase {
         String file = Utils.join(Constant.SEP, subject.getHome(), subject.getSsrc(), location.getRelClazzFile());
         CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
         MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(unit, location.getLine());
-        NodeParser parser = NodeParser.getInstance();
+        NodeParser parser = new NodeParser();
         parser.setCompilationUnit(file, unit);
         Node node = parser.process(method);
         Utils.serialize(node, "/tmp/node");

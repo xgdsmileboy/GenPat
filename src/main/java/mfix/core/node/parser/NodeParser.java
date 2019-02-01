@@ -29,18 +29,10 @@ import java.util.Stack;
  */
 public class NodeParser {
 
-    private static NodeParser _instance;
     private CompilationUnit _cunit;
     private String _fileName;
 
-    public static NodeParser getInstance() {
-        if (_instance == null) {
-            _instance = new NodeParser();
-        }
-        return _instance;
-    }
-
-    private NodeParser() {
+    public NodeParser() {
 
     }
 

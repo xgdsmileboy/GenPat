@@ -41,7 +41,7 @@ public class PatternMatcherTest extends TestCase {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
+        NodeParser nodeParser = new NodeParser();
         Set<Pattern> patterns = new HashSet<>();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);
@@ -88,7 +88,7 @@ public class PatternMatcherTest extends TestCase {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
+        NodeParser nodeParser = new NodeParser();
         Set<Pattern> patterns = new HashSet<>();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);
@@ -136,7 +136,7 @@ public class PatternMatcherTest extends TestCase {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
+        NodeParser nodeParser = new NodeParser();
         Set<Pattern> patterns = new HashSet<>();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);

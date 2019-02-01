@@ -209,7 +209,7 @@ public class Utils {
             }
         });
 
-        NodeParser parser = NodeParser.getInstance();
+        NodeParser parser = new NodeParser();
         parser.setCompilationUnit(file, unit);
         Set<Node> nodes = new HashSet<>();
         Node node;

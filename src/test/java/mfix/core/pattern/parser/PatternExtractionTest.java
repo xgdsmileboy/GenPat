@@ -40,7 +40,7 @@ public class PatternExtractionTest extends TestCase {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
+        NodeParser nodeParser = new NodeParser();
         Set<String> changedMethod = new HashSet<>();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);
@@ -70,7 +70,7 @@ public class PatternExtractionTest extends TestCase {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
+        NodeParser nodeParser = new NodeParser();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             if (pair.getFirst().getName().getIdentifier().equals("fireBuildStarted")) {
                 nodeParser.setCompilationUnit(srcFile, srcUnit);
@@ -102,7 +102,7 @@ public class PatternExtractionTest extends TestCase {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
+        NodeParser nodeParser = new NodeParser();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             if (pair.getFirst().getName().getIdentifier().equals("fireBuildStarted")) {
                 nodeParser.setCompilationUnit(srcFile, srcUnit);
@@ -149,7 +149,7 @@ public class PatternExtractionTest extends TestCase {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
+        NodeParser nodeParser = new NodeParser();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             if (pair.getFirst().getName().getIdentifier().equals("onItemClick")) {
                 nodeParser.setCompilationUnit(srcFile, srcUnit);
@@ -175,7 +175,7 @@ public class PatternExtractionTest extends TestCase {
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile);
 
         List<Pair<MethodDeclaration, MethodDeclaration>> pairs = Matcher.match(srcUnit, tarUnit);
-        NodeParser parser = NodeParser.getInstance();
+        NodeParser parser = new NodeParser();
         for (Pair<MethodDeclaration, MethodDeclaration> pair : pairs) {
             parser.setCompilationUnit(srcFile, srcUnit);
             Node srcNode = parser.process(pair.getFirst());

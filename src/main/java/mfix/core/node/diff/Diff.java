@@ -85,7 +85,7 @@ public abstract class Diff<T> {
 		CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
 		CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
 		List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-		NodeParser nodePaser = NodeParser.getInstance();
+		NodeParser nodePaser = new NodeParser();
 		for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
 			nodePaser.setCompilationUnit(srcFile, srcUnit);
 			Node srcNode = nodePaser.process(pair.getFirst()); 

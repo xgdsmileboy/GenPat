@@ -103,7 +103,7 @@ public class MatcherTest extends TestCase {
             }
         });
 
-        NodeParser parser = NodeParser.getInstance();
+        NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
@@ -187,7 +187,7 @@ public class MatcherTest extends TestCase {
             }
         });
 
-        NodeParser parser = NodeParser.getInstance();
+        NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
