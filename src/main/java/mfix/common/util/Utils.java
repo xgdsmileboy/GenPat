@@ -281,7 +281,6 @@ public class Utils {
         boolean success;
         try {
             success = ((Boolean) futureTask.get(timeout, TimeUnit.SECONDS)).booleanValue();
-            success = true & success;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             success = false;
             LevelLogger.error(e);

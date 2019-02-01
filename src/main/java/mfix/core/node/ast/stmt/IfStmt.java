@@ -151,12 +151,14 @@ public class IfStmt extends Stmt {
 		if(getBindingNode() != null) {
 			ifStmt = (IfStmt) getBindingNode();
 			_condition.postAccurateMatch(ifStmt.getCondition());
+			_then.postAccurateMatch(ifStmt.getThen());
 			match = (ifStmt == node);
 		} else if(canBinding(node)) {
 			ifStmt = (IfStmt) node;
-			if(_condition.postAccurateMatch(ifStmt.getCondition())) {
+			match = _condition.postAccurateMatch(ifStmt.getCondition());
+			match = _then.postAccurateMatch(ifStmt.getThen()) || match;
+			if(match) {
 				setBindingNode(node);
-				match = true;
 			}else {
 				ifStmt = null;
 			}
