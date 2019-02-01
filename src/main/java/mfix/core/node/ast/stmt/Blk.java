@@ -151,14 +151,14 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars) {
-        StringBuffer stringBuffer = super.transfer(vars);
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("{" + Constant.NEW_LINE);
             for (int i = 0; i < _statements.size(); i++) {
-                tmp = _statements.get(i).transfer(vars);
+                tmp = _statements.get(i).transfer(vars, exprMap);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append(Constant.NEW_LINE);
@@ -169,7 +169,7 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars) {
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         Node pnode = checkModification();
         if (pnode != null) {
             Blk blk = (Blk) pnode;
@@ -177,7 +177,7 @@ public class Blk extends Stmt {
             Map<Node, List<StringBuffer>> insertAfter = new HashMap<>();
             Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
             if (!Matcher.applyNodeListModifications(blk.getModifications(), _statements,
-                    insertBefore, insertAfter, map, vars)) {
+                    insertBefore, insertAfter, map, vars, exprMap)) {
                 return null;
             }
             StringBuffer stringBuffer = new StringBuffer();
@@ -198,7 +198,7 @@ public class Blk extends Stmt {
                         stringBuffer.append(Constant.NEW_LINE);
                     }
                 } else {
-                    tmp = node.adaptModifications(vars);
+                    tmp = node.adaptModifications(vars, exprMap);
                     if(tmp == null) return null;
                     stringBuffer.append(tmp);
                     stringBuffer.append(Constant.NEW_LINE);
@@ -219,7 +219,7 @@ public class Blk extends Stmt {
             StringBuffer tmp;
             stringBuffer.append("{" + Constant.NEW_LINE);
             for (int i = 0; i < _statements.size(); i++) {
-                tmp = _statements.get(i).adaptModifications(vars);
+                tmp = _statements.get(i).adaptModifications(vars, exprMap);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append(Constant.NEW_LINE);

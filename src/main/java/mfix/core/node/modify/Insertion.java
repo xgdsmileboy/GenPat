@@ -2,6 +2,7 @@ package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
 
+import java.util.Map;
 import java.util.Set;
 
 public class Insertion extends Modification {
@@ -45,11 +46,11 @@ public class Insertion extends Modification {
         return _insert;
     }
 
-    public StringBuffer apply(Set<String> vars) {
+    public StringBuffer apply(Set<String> vars, Map<String, String> exprMap) {
         if(_insert == null) {
             return new StringBuffer("null");
         } else {
-            return _insert.transfer(vars);
+            return _insert.transfer(vars, exprMap);
         }
     }
 

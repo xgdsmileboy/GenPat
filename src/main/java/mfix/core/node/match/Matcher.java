@@ -611,7 +611,7 @@ public class Matcher {
 													 Map<Node, List<StringBuffer>> insertionBefore,
 													 Map<Node, List<StringBuffer>> insertionAfter,
 													 Map<Node, StringBuffer> changeNodeMap,
-													 Set<String> vars) {
+													 Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer tmp;
 		for (Modification modification : modifications) {
 			if (modification instanceof Update) {
@@ -619,7 +619,7 @@ public class Matcher {
 				Node node = update.getSrcNode().getBuggyBindingNode();
 				assert node != null;
 				// map current node to the updated node string
-				tmp = update.apply(vars);
+				tmp = update.apply(vars, exprMap);
 				if(tmp == null) return false;
 				changeNodeMap.put(node, tmp);
 			} else if(modification instanceof Deletion) {
@@ -667,7 +667,7 @@ public class Matcher {
 						list = new LinkedList<>();
 						insertionAfter.put(statements.get(tag), list);
 					}
-					tmp = insertion.apply(vars);
+					tmp = insertion.apply(vars, exprMap);
 					if(tmp == null) return false;;
 					list.add(tmp);
 				} else {
@@ -682,7 +682,7 @@ public class Matcher {
 						list = new LinkedList<>();
 						insertionBefore.put(statements.get(tag), list);
 					}
-					tmp = insertion.apply(vars);
+					tmp = insertion.apply(vars, exprMap);
 					if(tmp == null) return false;;
 					list.add(tmp);
 				}

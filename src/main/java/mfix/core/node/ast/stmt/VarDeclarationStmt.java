@@ -194,23 +194,23 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			if (_modifier != null) {
 				stringBuffer.append(_modifier + " ");
 			}
-			StringBuffer tmp = _declType.transfer(vars);
+			StringBuffer tmp = _declType.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" ");
-			tmp = _fragments.get(0).transfer(vars);
+			tmp = _fragments.get(0).transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			for (int i = 1; i < _fragments.size(); i++) {
 				stringBuffer.append(",");
-				tmp = _fragments.get(i).transfer(vars);
+				tmp = _fragments.get(i).transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -220,7 +220,7 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		Node pnode = checkModification();
 		if (pnode != null) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) pnode;
@@ -230,7 +230,7 @@ public class VarDeclarationStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == varDeclarationStmt._declType) {
-						declType = update.apply(vars);
+						declType = update.apply(vars, exprMap);
 						if (declType == null) return null;
 					} else {
 						modifications.add(update);
@@ -244,7 +244,7 @@ public class VarDeclarationStmt extends Stmt {
 			Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
 			Map<Node, StringBuffer> map = new HashMap<>(_fragments.size());
 			if (!Matcher.applyNodeListModifications(modifications, _fragments, insertionBefore, insertionAfter, map,
-					vars)) {
+					vars, exprMap)) {
 				return null;
 			}
 
@@ -254,7 +254,7 @@ public class VarDeclarationStmt extends Stmt {
 				stringBuffer.append(_modifier + " ");
 			}
 			if(declType == null) {
-				tmp = _declType.adaptModifications(vars);
+				tmp = _declType.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			} else {
@@ -289,7 +289,7 @@ public class VarDeclarationStmt extends Stmt {
 						stringBuffer.append(",");
 					}
 					first = false;
-					tmp = node.adaptModifications(vars);
+					tmp = node.adaptModifications(vars, exprMap);
 					if(tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
@@ -312,16 +312,16 @@ public class VarDeclarationStmt extends Stmt {
 			if (_modifier != null) {
 				stringBuffer.append(_modifier + " ");
 			}
-			tmp = _declType.adaptModifications(vars);
+			tmp = _declType.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" ");
-			tmp = _fragments.get(0).adaptModifications(vars);
+			tmp = _fragments.get(0).adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			for (int i = 1; i < _fragments.size(); i++) {
 				stringBuffer.append(",");
-				tmp = _fragments.get(i).adaptModifications(vars);
+				tmp = _fragments.get(i).adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

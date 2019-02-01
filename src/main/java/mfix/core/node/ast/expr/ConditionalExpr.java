@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -163,20 +164,20 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars) {
-        StringBuffer stringBuffer = super.transfer(vars);
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
-            tmp = _condition.transfer(vars);
+            tmp = _condition.transfer(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append("?");
-            tmp = _first.transfer(vars);
+            tmp = _first.transfer(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(":");
-            tmp = _snd.transfer(vars);
+            tmp = _snd.transfer(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -184,7 +185,7 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars) {
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer condition = null;
         StringBuffer first = null;
         StringBuffer snd = null;
@@ -196,13 +197,13 @@ public class ConditionalExpr extends Expr {
                     Update update = (Update) modification;
                     Node changedNode = update.getSrcNode();
                     if (changedNode == conditionalExpr._condition) {
-                        condition = update.apply(vars);
+                        condition = update.apply(vars, exprMap);
                         if (condition == null) return null;
                     } else if (changedNode == conditionalExpr._first) {
-                        first = update.apply(vars);
+                        first = update.apply(vars, exprMap);
                         if (first == null) return null;
                     } else if (changedNode == conditionalExpr._snd) {
-                        snd = update.apply(vars);
+                        snd = update.apply(vars, exprMap);
                         if (snd == null) return null;
                     }
                 } else {
@@ -214,7 +215,7 @@ public class ConditionalExpr extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         if(condition == null) {
-            tmp = _condition.adaptModifications(vars);
+            tmp = _condition.adaptModifications(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -222,7 +223,7 @@ public class ConditionalExpr extends Expr {
         }
         stringBuffer.append("?");
         if(first == null) {
-            tmp = _first.adaptModifications(vars);
+            tmp = _first.adaptModifications(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -230,7 +231,7 @@ public class ConditionalExpr extends Expr {
         }
         stringBuffer.append(":");
         if(snd == null) {
-            tmp = _snd.adaptModifications(vars);
+            tmp = _snd.adaptModifications(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

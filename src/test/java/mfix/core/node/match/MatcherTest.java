@@ -115,7 +115,7 @@ public class MatcherTest extends TestCase {
                     System.out.println("------------ Before ---------------");
                     System.out.println(node.toSrcString());
                     System.out.println("------------ After ---------------");
-                    System.out.println(node.adaptModifications(varMaps.get(node.getStartLine())));
+                    System.out.println(node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap()));
                     matchInstance.reset();
                 }
             }
@@ -199,11 +199,65 @@ public class MatcherTest extends TestCase {
                     System.out.println("------------ Before ---------------");
                     System.out.println(node.toSrcString());
                     System.out.println("------------ After ---------------");
-                    System.out.println(node.adaptModifications(varMaps.get(node.getStartLine())));
+                    System.out.println(node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap()));
                     matchInstance.reset();
                 }
             }
         }
+    }
+
+    @Test
+    public void temp() throws Exception {
+        String srcFile = "/Users/Jiajun/Desktop/buggy.java";
+        String tarFile = "/Users/Jiajun/Desktop/fixed.java";
+
+        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+
+        for (Node pattern : patterns) {
+
+            Set<Modification> modifications = pattern.getAllModifications(new HashSet<>());
+            for (Modification m : modifications) {
+                System.out.println(m);
+            }
+
+//            Set<Node> nodes = pattern.getConsideredNodesRec(new HashSet<>(), true);
+//            for (Node node : nodes) {
+//                System.out.println(node);
+//            }
+
+            Set<MethodInv> APIs = pattern.getUniversalAPIs(new HashSet<>(), true);
+            for (MethodInv api : APIs) {
+                System.out.println(api.getName().getName());
+            }
+        }
+
+//        String buggy = "/Users/Jiajun/Desktop/RtcpReceivedEvent.java";
+//
+//        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+//
+//        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+//        final Set<MethodDeclaration> methods = new HashSet<>();
+//        unit.accept(new ASTVisitor() {
+//            public boolean visit(MethodDeclaration node) {
+//                methods.add(node);
+//                return true;
+//            }
+//        });
+//
+//        NodeParser parser = NodeParser.getInstance();
+//        parser.setCompilationUnit(buggy, unit);
+//        for (MethodDeclaration m : methods) {
+//            Node node = parser.process(m);
+//            Set<MatchInstance> set = Matcher.tryMatch(node, pattern);
+//            for (MatchInstance matchInstance : set) {
+//                matchInstance.apply();
+//                System.out.println("------------ Before ---------------");
+//                System.out.println(node.toSrcString());
+//                System.out.println("------------ After ---------------");
+//                System.out.println(node.adaptModifications(varMaps.get(node.getStartLine())));
+//                matchInstance.reset();
+//            }
+//        }
     }
 
 }

@@ -156,15 +156,15 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("synchronized(");
-			StringBuffer tmp = _expression.transfer(vars);
+			StringBuffer tmp = _expression.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _blk.transfer(vars);
+			tmp = _blk.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -172,7 +172,7 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -181,7 +181,7 @@ public class SynchronizedStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == synchronizedStmt._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if (expression == null) return null;
 					}
 				} else {
@@ -192,14 +192,14 @@ public class SynchronizedStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("synchronized(");
 		StringBuffer tmp;
 		if (expression == null) {
-			tmp = _expression.adaptModifications(vars);
+			tmp = _expression.adaptModifications(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(expression);
 		}
 		stringBuffer.append(")");
-		tmp = _blk.adaptModifications(vars);
+		tmp = _blk.adaptModifications(vars, exprMap);
 		if(tmp == null) return null;
 		stringBuffer.append(tmp);
 		return stringBuffer;

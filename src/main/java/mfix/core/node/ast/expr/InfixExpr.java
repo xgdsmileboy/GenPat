@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -154,18 +155,18 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _lhs.transfer(vars);
+			tmp = _lhs.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _operator.transfer(vars);
+			tmp = _operator.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _rhs.transfer(vars);
+			tmp = _rhs.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -173,7 +174,7 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer lhs = null;
 		StringBuffer operator = null;
 		StringBuffer rhs = null;
@@ -185,13 +186,13 @@ public class InfixExpr extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == infixExpr._lhs) {
-						lhs = update.apply(vars);
+						lhs = update.apply(vars, exprMap);
 						if (lhs == null) return null;
 					} else if (changedNode == infixExpr._operator) {
-						operator = update.apply(vars);
+						operator = update.apply(vars, exprMap);
 						if (operator == null) return null;
 					} else {
-						rhs = update.apply(vars);
+						rhs = update.apply(vars, exprMap);
 						if (rhs == null) return null;
 					}
 				} else {
@@ -202,21 +203,21 @@ public class InfixExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(lhs == null) {
-			tmp = _lhs.adaptModifications(vars);
+			tmp = _lhs.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(lhs);
 		}
 		if(operator == null) {
-			tmp = _operator.adaptModifications(vars);
+			tmp = _operator.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(operator);
 		}
 		if(rhs == null) {
-			tmp = _rhs.adaptModifications(vars);
+			tmp = _rhs.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

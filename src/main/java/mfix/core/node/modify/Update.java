@@ -2,6 +2,7 @@ package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
 
+import java.util.Map;
 import java.util.Set;
 
 public class Update extends Modification {
@@ -23,11 +24,11 @@ public class Update extends Modification {
         return _tarNode;
     }
 
-    public StringBuffer apply(Set<String> vars) {
+    public StringBuffer apply(Set<String> vars, Map<String, String> exprMap) {
         if (_tarNode == null) {
             return new StringBuffer();
         }
-        return _tarNode.transfer(vars);
+        return _tarNode.transfer(vars, exprMap);
     }
 
     @Override

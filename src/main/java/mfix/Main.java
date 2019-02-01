@@ -43,7 +43,7 @@ public class Main {
         for (MatchInstance matchInstance : fixPositions) {
             matchInstance.apply();
 
-            StringBuffer fixedProg = buggy.adaptModifications(buggyMethodVar);
+            StringBuffer fixedProg = buggy.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
 
             if (fixedProg != null) {
                 String fixed = fixedProg.toString().replaceAll(" ", "");

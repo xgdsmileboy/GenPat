@@ -249,26 +249,26 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars) {
-        StringBuffer stringBuffer = super.transfer(vars);
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("for(");
             StringBuffer tmp;
-            tmp = _initializers.transfer(vars);
+            tmp = _initializers.transfer(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(";");
             if (_condition != null) {
-                tmp = _condition.transfer(vars);
+                tmp = _condition.transfer(vars, exprMap);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }
             stringBuffer.append(";");
-            tmp = _updaters.transfer(vars);
+            tmp = _updaters.transfer(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
-            tmp = _body.transfer(vars);
+            tmp = _body.transfer(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -276,7 +276,7 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars) {
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer initializer = null;
         StringBuffer condition = null;
         StringBuffer updater = null;
@@ -288,13 +288,13 @@ public class ForStmt extends Stmt {
                     Update update = (Update) modification;
                     Node node = update.getSrcNode();
                     if (node == forStmt._initializers) {
-                        initializer = update.apply(vars);
+                        initializer = update.apply(vars, exprMap);
                         if (initializer == null) return null;
                     } else if (node == forStmt._condition) {
-                        condition = update.apply(vars);
+                        condition = update.apply(vars, exprMap);
                         if (condition == null) return null;
                     } else if (node == forStmt._updaters) {
-                        updater = update.apply(vars);
+                        updater = update.apply(vars, exprMap);
                         if (updater == null) return null;
                     } else {
                         LevelLogger.error("@ForStmt ERROR");
@@ -308,7 +308,7 @@ public class ForStmt extends Stmt {
         StringBuffer stringBuffer = new StringBuffer("for(");
         StringBuffer tmp;
         if (initializer == null) {
-            tmp = _initializers.adaptModifications(vars);
+            tmp = _initializers.adaptModifications(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -317,7 +317,7 @@ public class ForStmt extends Stmt {
         stringBuffer.append(";");
         if (condition == null) {
             if (_condition != null) {
-                tmp = _condition.adaptModifications(vars);
+                tmp = _condition.adaptModifications(vars, exprMap);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -326,14 +326,14 @@ public class ForStmt extends Stmt {
         }
         stringBuffer.append(";");
         if (updater == null) {
-            tmp = _updaters.adaptModifications(vars);
+            tmp = _updaters.adaptModifications(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(updater);
         }
         stringBuffer.append(")");
-        tmp = _body.adaptModifications(vars);
+        tmp = _body.adaptModifications(vars, exprMap);
         if (tmp == null) return null;
         stringBuffer.append(tmp);
         return stringBuffer;

@@ -156,12 +156,12 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			stringBuffer.append("this(");
-			StringBuffer tmp = _arguments.transfer(vars);
+			StringBuffer tmp = _arguments.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(");");
@@ -170,7 +170,7 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer arguments = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -179,7 +179,7 @@ public class ConstructorInv  extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == constructorInv._arguments) {
-						arguments = update.apply(vars);
+						arguments = update.apply(vars, exprMap);
 						if(arguments == null) return null;
 					} else {
 						LevelLogger.error("@ConstructorInv ERROR");
@@ -192,7 +192,7 @@ public class ConstructorInv  extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("this(");
 		if(arguments == null) {
-			StringBuffer tmp = _arguments.adaptModifications(vars);
+			StringBuffer tmp = _arguments.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

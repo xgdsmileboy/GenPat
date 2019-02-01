@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -153,19 +154,19 @@ public class SuperFieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if(_name != null){
-				tmp = _name.transfer(vars);
+				tmp = _name.transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
 			}
 			stringBuffer.append("super.");
-			tmp = _identifier.transfer(vars);
+			tmp = _identifier.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -173,7 +174,7 @@ public class SuperFieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer name = null;
 		StringBuffer identifier = null;
 		Node node = checkModification();
@@ -183,10 +184,10 @@ public class SuperFieldAcc extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == superFieldAcc._name) {
-						name = update.apply(vars);
+						name = update.apply(vars, exprMap);
 						if (name == null) return null;
 					} else {
-						identifier = update.apply(vars);
+						identifier = update.apply(vars, exprMap);
 						if (identifier == null) return null;
 					}
 				} else {
@@ -198,7 +199,7 @@ public class SuperFieldAcc extends Expr {
 		StringBuffer tmp = null;
 		if (name == null) {
 			if (_name != null){
-				tmp = _name.adaptModifications(vars);
+				tmp = _name.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -208,7 +209,7 @@ public class SuperFieldAcc extends Expr {
 		}
 		stringBuffer.append("super.");
 		if(identifier == null) {
-			tmp = _identifier.adaptModifications(vars);
+			tmp = _identifier.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

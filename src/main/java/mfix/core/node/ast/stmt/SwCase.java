@@ -178,15 +178,15 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			if (_expression == null) {
 				stringBuffer.append("default :\n");
 			} else {
 				stringBuffer.append("case ");
-				StringBuffer tmp = _expression.adaptModifications(vars);
+				StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(" :\n");
@@ -196,7 +196,7 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -205,7 +205,7 @@ public class SwCase extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == swCase._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if(expression == null) return null;
 					} else {
 						LevelLogger.error("SwCase ERROR");
@@ -221,7 +221,7 @@ public class SwCase extends Stmt {
 				stringBuffer.append("default :\n");
 			} else {
 				stringBuffer.append("case ");
-				StringBuffer tmp = _expression.adaptModifications(vars);
+				StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(" :\n");

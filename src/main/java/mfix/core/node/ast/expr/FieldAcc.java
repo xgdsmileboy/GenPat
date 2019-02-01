@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -140,16 +141,16 @@ public class FieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _expression.transfer(vars);
+			tmp = _expression.transfer(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(".");
-			tmp = _identifier.transfer(vars);
+			tmp = _identifier.transfer(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -157,7 +158,7 @@ public class FieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		StringBuffer identifier = null;
 		Node node = checkModification();
@@ -167,10 +168,10 @@ public class FieldAcc extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == fieldAcc._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if (expression == null) return null;
 					} else {
-						identifier = update.apply(vars);
+						identifier = update.apply(vars, exprMap);
 						if (identifier == null) return null;
 					}
 				} else {
@@ -182,7 +183,7 @@ public class FieldAcc extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expression.adaptModifications(vars);
+			tmp = _expression.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -190,7 +191,7 @@ public class FieldAcc extends Expr {
 		}
 		stringBuffer.append(".");
 		if(identifier == null) {
-			tmp = _identifier.adaptModifications(vars);
+			tmp = _identifier.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

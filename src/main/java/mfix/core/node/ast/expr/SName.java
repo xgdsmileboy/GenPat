@@ -136,8 +136,8 @@ public class SName extends Label {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
 			if (!vars.contains(stringBuffer.toString())) {
@@ -148,10 +148,10 @@ public class SName extends Label {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		Node node = checkModification();
 		if (node != null) {
-			return ((Update) node.getModifications().get(0)).apply(vars);
+			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
 		}
 		return toSrcString();
 	}

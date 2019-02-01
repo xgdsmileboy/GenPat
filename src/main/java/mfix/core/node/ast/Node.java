@@ -17,7 +17,6 @@ import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
-import mfix.core.node.modify.Movement;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
@@ -838,9 +837,11 @@ public abstract class Node implements NodeComparator, Serializable {
         return false;
     }
 
-    public StringBuffer transfer(Set<String> vars) {
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
         if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
             return getBindingNode().getBuggyBindingNode().toSrcString();
+        } else if (exprMap.containsKey(toSrcString().toString())) {
+            return new StringBuffer(exprMap.get(toSrcString().toString()));
         }
         return null;
     }
@@ -852,7 +853,7 @@ public abstract class Node implements NodeComparator, Serializable {
         return null;
     }
 
-    public abstract StringBuffer adaptModifications(Set<String> vars);
+    public abstract StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap);
 
 
     /******************************************************************************************/

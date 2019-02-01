@@ -253,13 +253,13 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if (_expression != null) {
-				tmp = _expression.transfer(vars);
+				tmp = _expression.transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -267,7 +267,7 @@ public class MethodInv extends Expr {
 			stringBuffer.append(_name.getName());
 			stringBuffer.append("(");
 			if (_arguments != null) {
-				tmp = _arguments.transfer(vars);
+				tmp = _arguments.transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -277,7 +277,7 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
@@ -289,13 +289,13 @@ public class MethodInv extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == methodInv._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if (expression == null) return null;
 					} else if (changedNode == methodInv._name) {
-						name = update.apply(vars);
+						name = update.apply(vars, exprMap);
 						if (name == null) return null;
 					} else {
-						arguments = update.apply(vars);
+						arguments = update.apply(vars, exprMap);
 						if (arguments == null) return null;
 					}
 				} else {
@@ -307,7 +307,7 @@ public class MethodInv extends Expr {
 		StringBuffer tmp;
 		if(expression == null) {
 			if (_expression != null) {
-				tmp = _expression.adaptModifications(vars);
+				tmp = _expression.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -323,7 +323,7 @@ public class MethodInv extends Expr {
 		stringBuffer.append("(");
 		if(arguments == null) {
 			if (_arguments != null) {
-				tmp = _arguments.adaptModifications(vars);
+				tmp = _arguments.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
