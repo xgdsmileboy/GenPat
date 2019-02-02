@@ -151,6 +151,7 @@ public class SuperConstructorInv extends Stmt {
 			match = (superConstructorInv == node);
 		} else if(canBinding(node)) {
 			superConstructorInv = (SuperConstructorInv) node;
+			setBindingNode(superConstructorInv);
 			match = true;
 		}
 

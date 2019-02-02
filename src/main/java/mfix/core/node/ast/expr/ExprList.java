@@ -112,13 +112,13 @@ public class ExprList extends Node {
     public boolean postAccurateMatch(Node node) {
         ExprList exprList = null;
         boolean match = false;
-        if (getBindingNode() != null) {
-            exprList = (ExprList) getBindingNode();
-            match = (exprList == node);
-        } else if (canBinding(node)) {
+        if (canBinding(node)) {
             exprList = (ExprList) node;
             setBindingNode(node);
             match = true;
+        } else if (getBindingNode() != null) {
+            exprList = (ExprList) getBindingNode();
+            match = (exprList == node);
         }
 
         if (exprList == null) {

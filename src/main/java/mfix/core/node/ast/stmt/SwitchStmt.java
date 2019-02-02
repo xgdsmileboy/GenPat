@@ -134,11 +134,13 @@ public class SwitchStmt extends Stmt {
 			match = (switchStmt == node);
 		} else if(canBinding(node)) {
 			switchStmt = (SwitchStmt) node;
+			setBindingNode(switchStmt);
 			match = true;
 		}
 		if(switchStmt == null) {
 			continueTopDownMatchNull();
 		} else {
+			_expression.postAccurateMatch(switchStmt.getExpression());
 			greedyMatchListNode(_statements, switchStmt.getStatements());
 		}
 		return match;

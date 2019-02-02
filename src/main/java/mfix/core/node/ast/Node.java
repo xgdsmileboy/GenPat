@@ -9,6 +9,7 @@ package mfix.core.node.ast;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.ast.expr.Label;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
@@ -364,14 +365,16 @@ public abstract class Node implements NodeComparator, Serializable {
      * @param nodes : a list of child {@code Expr} node
      * @return : a list of child {@code Expr} node
      */
-    public List<Expr> getAllChildExpr(List<Expr> nodes) {
+    public List<Expr> getAllChildExpr(List<Expr> nodes, boolean filterName) {
         for (Node node : getAllChildren()) {
             if (node instanceof Expr) {
-                nodes.add((Expr) node);
+                if (!filterName || !(node instanceof Label)) {
+                    nodes.add((Expr) node);
+                }
             }
         }
         for (Node node : getAllChildren()) {
-            node.getAllChildExpr(nodes);
+            node.getAllChildExpr(nodes, filterName);
         }
         return nodes;
     }

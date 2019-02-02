@@ -116,6 +116,7 @@ public class ReturnStmt extends Stmt {
 			match = (returnStmt == node);
 		} else if(canBinding(node)){
 			returnStmt = (ReturnStmt) node;
+			setBindingNode(returnStmt);
 			match = true;
 		}
 		if(returnStmt == null) {

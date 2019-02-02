@@ -358,8 +358,8 @@ public class Matcher {
 		// greedy match sub-expressions
 		Map<Integer, Integer> map = greedySimMatch(srcNotMatched, tarNotMatched, 0.6);
 		for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
-			List<Expr> srcExprs = srcNotMatched.get(entry.getKey()).getAllChildExpr(new ArrayList<>(11));
-			List<Expr> tarExprs = tarNotMatched.get(entry.getValue()).getAllChildExpr(new ArrayList<>(11));
+			List<Expr> srcExprs = srcNotMatched.get(entry.getKey()).getAllChildExpr(new ArrayList<>(11), true);
+			List<Expr> tarExprs = tarNotMatched.get(entry.getValue()).getAllChildExpr(new ArrayList<>(11), true);
 			Set<Integer> matchedIndex = new HashSet<>();
 			for(int i = 0; i < srcExprs.size(); i++) {
 				if (srcExprs.get(i).getBindingNode() == null) {

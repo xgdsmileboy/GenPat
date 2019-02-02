@@ -116,6 +116,7 @@ public class SynchronizedStmt extends Stmt {
 			match = (synchronizedStmt == node);
 		} else if(canBinding(node)) {
 			synchronizedStmt = (SynchronizedStmt) node;
+			setBindingNode(synchronizedStmt);
 			match = true;
 		}
 

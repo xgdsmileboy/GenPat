@@ -111,6 +111,7 @@ public class ThrowStmt extends Stmt {
 			match = (throwStmt == node);
 		} else if(canBinding(node)) {
 			throwStmt = (ThrowStmt) node;
+			setBindingNode(throwStmt);
 			match = true;
 		}
 
@@ -119,7 +120,7 @@ public class ThrowStmt extends Stmt {
 		} else {
 			_expression.postAccurateMatch(throwStmt.getExpression());
 		}
-		return false;
+		return match;
 	}
 
 	@Override
