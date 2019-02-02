@@ -154,13 +154,13 @@ public class ContinueStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("continue");
 			if(_identifier != null){
 				stringBuffer.append(" ");
-				StringBuffer tmp = _identifier.transfer(vars);
+				StringBuffer tmp = _identifier.transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -171,7 +171,7 @@ public class ContinueStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer identifier = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -180,7 +180,7 @@ public class ContinueStmt extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == continueStmt._identifier) {
-						identifier = update.apply(vars);
+						identifier = update.apply(vars, exprMap);
 						if(identifier == null) return null;
 					} else {
 						LevelLogger.error("@ContinueStmt ERROR");
@@ -194,7 +194,7 @@ public class ContinueStmt extends Stmt {
 		if(identifier == null) {
 			if(_identifier != null){
 				stringBuffer.append(" ");
-				StringBuffer tmp = _identifier.adaptModifications(vars);
+				StringBuffer tmp = _identifier.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

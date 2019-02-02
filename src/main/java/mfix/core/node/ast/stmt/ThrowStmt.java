@@ -111,6 +111,7 @@ public class ThrowStmt extends Stmt {
 			match = (throwStmt == node);
 		} else if(canBinding(node)) {
 			throwStmt = (ThrowStmt) node;
+			setBindingNode(throwStmt);
 			match = true;
 		}
 
@@ -119,7 +120,7 @@ public class ThrowStmt extends Stmt {
 		} else {
 			_expression.postAccurateMatch(throwStmt.getExpression());
 		}
-		return false;
+		return match;
 	}
 
 	@Override
@@ -148,12 +149,12 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			stringBuffer.append("throw ");
-			StringBuffer tmp = _expression.transfer(vars);
+			StringBuffer tmp = _expression.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(";");
@@ -162,7 +163,7 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -171,7 +172,7 @@ public class ThrowStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == throwStmt._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if (expression == null) return null;
 					} else {
 						LevelLogger.error("ThrowStmt ERROR");
@@ -184,7 +185,7 @@ public class ThrowStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("throw ");
 		if (expression == null) {
-			StringBuffer tmp = _expression.adaptModifications(vars);
+			StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

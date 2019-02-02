@@ -111,7 +111,11 @@ public class Assign extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         Assign assign = null;
-        if (getBindingNode() != null) {
+        if (compare(node)) {
+            assign = (Assign) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             assign = (Assign) getBindingNode();
             match = (assign == node);
         } else if (canBinding(node)) {
@@ -124,6 +128,7 @@ public class Assign extends Expr {
             continueTopDownMatchNull();
         } else {
             _lhs.postAccurateMatch(assign.getLhs());
+            _operator.postAccurateMatch(assign.getOperator());
             _rhs.postAccurateMatch(assign.getRhs());
         }
 
@@ -163,18 +168,18 @@ public class Assign extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars) {
-        StringBuffer stringBuffer = super.transfer(vars);
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
-            tmp = _lhs.transfer(vars);
+            tmp = _lhs.transfer(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
-            tmp = _operator.transfer(vars);
+            tmp = _operator.transfer(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
-            tmp = _rhs.transfer(vars);
+            tmp = _rhs.transfer(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -182,7 +187,7 @@ public class Assign extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars) {
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer operator = null;
         StringBuffer lhs = null;
         StringBuffer rhs = null;
@@ -193,13 +198,13 @@ public class Assign extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == assign._operator) {
-                        operator = update.apply(vars);
+                        operator = update.apply(vars, exprMap);
                         if (operator == null) return null;
                     } else if (update.getSrcNode() == assign._lhs) {
-                        lhs = update.apply(vars);
+                        lhs = update.apply(vars, exprMap);
                         if (lhs == null) return null;
                     } else {
-                        rhs = update.apply(vars);
+                        rhs = update.apply(vars, exprMap);
                         if (rhs == null) return null;
                     }
                 } else {
@@ -211,21 +216,21 @@ public class Assign extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         if(lhs == null) {
-            tmp = _lhs.adaptModifications(vars);
+            tmp = _lhs.adaptModifications(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(lhs);
         }
         if(operator == null) {
-            tmp = _operator.adaptModifications(vars);
+            tmp = _operator.adaptModifications(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(operator);
         }
         if(rhs == null) {
-            tmp = _rhs.adaptModifications(vars);
+            tmp = _rhs.adaptModifications(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

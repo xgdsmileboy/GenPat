@@ -166,17 +166,17 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			stringBuffer.append("catch(");
-			tmp = _exception.transfer(vars);
+			tmp = _exception.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _blk.transfer(vars);
+			tmp = _blk.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -184,7 +184,7 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer exception = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -193,7 +193,7 @@ public class CatClause extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == catClause._exception) {
-						exception = update.apply(vars);
+						exception = update.apply(vars, exprMap);
 						if (exception == null) return null;
 					}
 				} else {
@@ -205,14 +205,14 @@ public class CatClause extends Node {
 		StringBuffer tmp;
 		stringBuffer.append("catch(");
 		if(exception == null) {
-			tmp = _exception.adaptModifications(vars);
+			tmp = _exception.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(exception);
 		}
 		stringBuffer.append(")");
-		tmp = _blk.adaptModifications(vars);
+		tmp = _blk.adaptModifications(vars, exprMap);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		return stringBuffer;

@@ -112,13 +112,13 @@ public class ExprList extends Node {
     public boolean postAccurateMatch(Node node) {
         ExprList exprList = null;
         boolean match = false;
-        if (getBindingNode() != null) {
-            exprList = (ExprList) getBindingNode();
-            match = (exprList == node);
-        } else if (canBinding(node)) {
+        if (canBinding(node)) {
             exprList = (ExprList) node;
             setBindingNode(node);
             match = true;
+        } else if (getBindingNode() != null) {
+            exprList = (ExprList) getBindingNode();
+            match = (exprList == node);
         }
 
         if (exprList == null) {
@@ -152,18 +152,18 @@ public class ExprList extends Node {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars) {
-        StringBuffer stringBuffer = super.transfer(vars);
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             if (!_exprs.isEmpty()) {
-                tmp = _exprs.get(0).transfer(vars);
+                tmp = _exprs.get(0).transfer(vars, exprMap);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _exprs.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _exprs.get(i).transfer(vars);
+                    tmp = _exprs.get(i).transfer(vars, exprMap);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }
@@ -173,21 +173,21 @@ public class ExprList extends Node {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars) {
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         Node node = checkModification();
         if (node != null) {
-            return ((Update) node.getModifications().get(0)).apply(vars);
+            return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
         }
 
         if(!_exprs.isEmpty()) {
-            tmp = _exprs.get(0).adaptModifications(vars);
+            tmp = _exprs.get(0).adaptModifications(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
             for(int i = 1; i < _exprs.size(); i++) {
                 stringBuffer.append(",");
-                tmp = _exprs.get(i).adaptModifications(vars);
+                tmp = _exprs.get(i).adaptModifications(vars, exprMap);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }

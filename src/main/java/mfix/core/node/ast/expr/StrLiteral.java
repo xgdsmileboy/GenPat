@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -108,8 +109,8 @@ public class StrLiteral extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
 		}
@@ -117,10 +118,10 @@ public class StrLiteral extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		Node node = checkModification();
 		if (node != null) {
-			return ((Update) node.getModifications().get(0)).apply(vars);
+			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
 		}
 		return toSrcString();
 	}

@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -97,7 +98,11 @@ public class PrefixExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		PrefixExpr prefixExpr = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			prefixExpr = (PrefixExpr) node;
+			setBindingNode(prefixExpr);
+			match = true;
+		} else if (getBindingNode() != null) {
 			prefixExpr = (PrefixExpr) getBindingNode();
 			match = (prefixExpr == node);
 		} else if (canBinding(node)) {
@@ -133,14 +138,14 @@ public class PrefixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _operator.transfer(vars);
+			StringBuffer tmp = _operator.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _expression.transfer(vars);
+			tmp = _expression.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -148,7 +153,7 @@ public class PrefixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer operator = null;
 		StringBuffer expression = null;
 		Node node = checkModification();
@@ -158,10 +163,10 @@ public class PrefixExpr extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == prefixExpr._operator) {
-						operator = update.apply(vars);
+						operator = update.apply(vars, exprMap);
 						if (operator == null) return null;
 					} else {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if (expression == null) return null;
 					}
 				} else {
@@ -173,14 +178,14 @@ public class PrefixExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp = null;
 		if(operator == null) {
-			tmp = _operator.adaptModifications(vars);
+			tmp = _operator.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(operator);
 		}
 		if(expression == null) {
-			tmp = _expression.adaptModifications(vars);
+			tmp = _expression.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

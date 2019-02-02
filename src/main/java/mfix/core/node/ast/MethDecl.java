@@ -246,12 +246,12 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars) {
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
         return null;
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars) {
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = new StringBuffer();
         for(Object modifier : _modifiers) {
             stringBuffer.append(modifier.toString() + " ");
@@ -277,7 +277,7 @@ public class MethDecl extends Node {
         if(_body == null) {
             stringBuffer.append(";");
         } else {
-            StringBuffer tmp = _body.adaptModifications(vars);
+            StringBuffer tmp = _body.adaptModifications(vars, exprMap);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         }

@@ -150,11 +150,11 @@ public class ExpressionStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _expression.transfer(vars);
+			StringBuffer tmp = _expression.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(";");
@@ -163,7 +163,7 @@ public class ExpressionStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node pnode = checkModification();
 		if (pnode != null) {
@@ -172,7 +172,7 @@ public class ExpressionStmt extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == expressionStmt._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if(expression == null) return null;
 					} else {
 						LevelLogger.error("@ExpressionStmt ERROR");
@@ -184,7 +184,7 @@ public class ExpressionStmt extends Stmt {
 		}
 		StringBuffer stringBuffer = new StringBuffer();
 		if(expression == null) {
-			StringBuffer tmp = _expression.adaptModifications(vars);
+			StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

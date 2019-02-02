@@ -144,7 +144,11 @@ public class Vdf extends Node {
 	public boolean postAccurateMatch(Node node) {
 		Vdf vdf = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			vdf = (Vdf) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			vdf = (Vdf) getBindingNode();
 			match = (vdf == node);
 		} else if (canBinding(node)) {
@@ -199,7 +203,7 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node node = checkModification();
 		if (node != null) {
@@ -208,7 +212,7 @@ public class Vdf extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == vdf._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if (expression == null) return null;
 					}
 				} else {
@@ -218,7 +222,7 @@ public class Vdf extends Node {
 		}
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
-		tmp = _identifier.adaptModifications(vars);
+		tmp = _identifier.adaptModifications(vars, exprMap);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		for (int i = 0; i < _dimensions; i++){
@@ -227,7 +231,7 @@ public class Vdf extends Node {
 		if(expression == null) {
 			if(_expression != null){
 				stringBuffer.append("=");
-				tmp = _expression.adaptModifications(vars);
+				tmp = _expression.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

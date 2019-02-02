@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -85,12 +86,12 @@ public class EmptyStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
 		return toSrcString();
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		return toSrcString();
 	}
 }

@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -102,7 +103,11 @@ public class InstanceofExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		InstanceofExpr instanceofExpr = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			instanceofExpr = (InstanceofExpr) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			instanceofExpr = (InstanceofExpr) getBindingNode();
 			match = (instanceofExpr == node);
 		} else if (canBinding(node)) {
@@ -139,16 +144,16 @@ public class InstanceofExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _expression.transfer(vars);
+			tmp = _expression.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" instanceof ");
-			tmp = _instanceType.transfer(vars);
+			tmp = _instanceType.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -156,7 +161,7 @@ public class InstanceofExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		StringBuffer instanceType = null;
 		Node node = checkModification();
@@ -166,10 +171,10 @@ public class InstanceofExpr extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == instanceofExpr._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if (expression == null) return null;
 					} else {
-						instanceType = update.apply(vars);
+						instanceType = update.apply(vars, exprMap);
 						if (instanceofExpr == null) return null;
 					}
 				} else {
@@ -180,7 +185,7 @@ public class InstanceofExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expression.adaptModifications(vars);
+			tmp = _expression.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -188,7 +193,7 @@ public class InstanceofExpr extends Expr {
 		}
 		stringBuffer.append(" instanceof ");
 		if(instanceType == null) {
-			tmp = _instanceType.adaptModifications(vars);
+			tmp = _instanceType.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

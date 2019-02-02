@@ -151,12 +151,14 @@ public class IfStmt extends Stmt {
 		if(getBindingNode() != null) {
 			ifStmt = (IfStmt) getBindingNode();
 			_condition.postAccurateMatch(ifStmt.getCondition());
+			_then.postAccurateMatch(ifStmt.getThen());
 			match = (ifStmt == node);
 		} else if(canBinding(node)) {
 			ifStmt = (IfStmt) node;
-			if(_condition.postAccurateMatch(ifStmt.getCondition())) {
+			match = _condition.postAccurateMatch(ifStmt.getCondition());
+			match = _then.postAccurateMatch(ifStmt.getThen()) || match;
+			if(match) {
 				setBindingNode(node);
-				match = true;
 			}else {
 				ifStmt = null;
 			}
@@ -219,21 +221,21 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("if(");
 			StringBuffer tmp;
-			tmp = _condition.transfer(vars);
+			tmp = _condition.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _then.transfer(vars);
+			tmp = _then.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.transfer(vars);
+				tmp = _else.transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -242,7 +244,7 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer condition = null;
 		StringBuffer then = null;
 		StringBuffer els = null;
@@ -254,13 +256,13 @@ public class IfStmt extends Stmt {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode();
 					if(node == ifStmt._condition) {
-						condition = update.apply(vars);
+						condition = update.apply(vars, exprMap);
 						if(condition == null) return null;
 					} else if(node == ifStmt._then) {
-						then = update.apply(vars);
+						then = update.apply(vars, exprMap);
 						if(then == null) return null;
 					} else {
-						els = update.apply(vars);
+						els = update.apply(vars, exprMap);
 						if(els == null) return null;
 					}
 				} else {
@@ -271,7 +273,7 @@ public class IfStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("if(");
 		StringBuffer tmp;
 		if(condition == null) {
-			tmp = _condition.adaptModifications(vars);
+			tmp = _condition.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -279,7 +281,7 @@ public class IfStmt extends Stmt {
 		}
 		stringBuffer.append(")");
 		if(then == null) {
-			tmp = _then.adaptModifications(vars);
+			tmp = _then.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -288,7 +290,7 @@ public class IfStmt extends Stmt {
 		if(els == null) {
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.adaptModifications(vars);
+				tmp = _else.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

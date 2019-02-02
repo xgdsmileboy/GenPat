@@ -118,7 +118,11 @@ public class VarDeclarationExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		VarDeclarationExpr vde = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			vde = (VarDeclarationExpr) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			vde = (VarDeclarationExpr) getBindingNode();
 			match = (vde == node);
 		} else if (canBinding(node)) {
@@ -159,20 +163,20 @@ public class VarDeclarationExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _declType.transfer(vars);
+			StringBuffer tmp = _declType.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" ");
-			tmp = _vdfs.get(0).transfer(vars);
+			tmp = _vdfs.get(0).transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			for (int i = 1; i < _vdfs.size(); i++) {
 				stringBuffer.append(",");
-				tmp = _vdfs.get(i).transfer(vars);
+				tmp = _vdfs.get(i).transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -181,7 +185,7 @@ public class VarDeclarationExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer declType = null;
 		Map<Integer, StringBuffer> insertion = new HashMap<>();
         Set<Node> deletion = new HashSet<>();
@@ -193,10 +197,10 @@ public class VarDeclarationExpr extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == varDeclarationExpr._declType) {
-                        declType = update.apply(vars);
+                        declType = update.apply(vars, exprMap);
                         if (declType == null) return null;
                     } else {
-                        StringBuffer buffer = update.apply(vars);
+                        StringBuffer buffer = update.apply(vars, exprMap);
                         if (buffer == null) return null;
                         if (update.getSrcNode().getBuggyBindingNode() != null) {
                             updates.put(update.getSrcNode().getBuggyBindingNode(), buffer);
@@ -205,7 +209,7 @@ public class VarDeclarationExpr extends Expr {
                 } else {
                     if (modification instanceof Insertion) {
                         Insertion ins = (Insertion) modification;
-                        StringBuffer buffer = ins.apply(vars);
+                        StringBuffer buffer = ins.apply(vars, exprMap);
                         if (buffer == null) return null;
                         insertion.put(ins.getIndex(), buffer);
                     } else if (modification instanceof Deletion) {
@@ -220,7 +224,7 @@ public class VarDeclarationExpr extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         if (declType == null) {
-            tmp = _declType.adaptModifications(vars);
+            tmp = _declType.adaptModifications(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -240,7 +244,7 @@ public class VarDeclarationExpr extends Expr {
 				start ++;
 				break;
 			} else {
-				tmp = _vdfs.get(start).adaptModifications(vars);
+				tmp = _vdfs.get(start).adaptModifications(vars, exprMap);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 				break;
@@ -257,7 +261,7 @@ public class VarDeclarationExpr extends Expr {
 				stringBuffer.append(",");
 				stringBuffer.append(updates.get(_vdfs.get(i)));
 			} else {
-				tmp = _vdfs.get(i).adaptModifications(vars);
+				tmp = _vdfs.get(i).adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(",");
 				stringBuffer.append(tmp);

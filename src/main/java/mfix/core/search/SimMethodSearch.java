@@ -41,7 +41,7 @@ public class SimMethodSearch {
         CompilationUnit sunit = JavaFile.genASTFromFileWithType(searchfile);
         CompilationUnit ounit = JavaFile.genASTFromFileWithType(oriFile);
         if(ounit == null) return new HashMap<>();
-        final NodeParser parser = NodeParser.getInstance();
+        final NodeParser parser = new NodeParser();
         parser.setCompilationUnit(oriFile, ounit);
         Node node = parser.process(method);
         return searchSimMethod(sunit, node, simThreshold);
@@ -61,7 +61,7 @@ public class SimMethodSearch {
                                                                   final double simThreshold) {
         final Map<Node, Pair<Double, Double>> map = new HashMap<>();
         if(unit == null) return map;
-        final NodeParser parser = NodeParser.getInstance();
+        final NodeParser parser = new NodeParser();
         parser.setCompilationUnit(null, unit);
         final FVector fVector = node.getFeatureVector();
         if (fVector == null) return map;
@@ -98,7 +98,7 @@ public class SimMethodSearch {
         if(buggyUnit == null || fixedUnit == null) return map;
         Set<Pair<Node, TextDiff>> set = new HashSet<>();
         List<Pair<MethodDeclaration, MethodDeclaration>> pairs = Matcher.match(buggyUnit, fixedUnit);
-        NodeParser parser = NodeParser.getInstance();
+        NodeParser parser = new NodeParser();
         File file = new File(buggyFile);
         String name = file.getName();
         String path = file.getParentFile().getParentFile().getAbsolutePath() + Constant.SEP + "serial";

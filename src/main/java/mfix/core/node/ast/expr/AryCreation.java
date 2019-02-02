@@ -145,7 +145,11 @@ public class AryCreation extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         AryCreation aryCreation = null;
-        if (getBindingNode() != null) {
+        if(compare(node)) {
+            aryCreation = (AryCreation) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             aryCreation = (AryCreation) getBindingNode();
             match = (aryCreation == node);
         } else if (canBinding(node)) {
@@ -199,23 +203,23 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars) {
-        StringBuffer stringBuffer = super.transfer(vars);
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("new ");
-            stringBuffer.append(_type.transfer(vars));
+            stringBuffer.append(_type.transfer(vars, exprMap));
             for (Expr expr : _dimension) {
                 stringBuffer.append("[");
-                tmp = expr.transfer(vars);
+                tmp = expr.transfer(vars, exprMap);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append("]");
             }
             if (_initializer != null) {
                 stringBuffer.append("=");
-                tmp = _initializer.transfer(vars);
+                tmp = _initializer.transfer(vars, exprMap);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -224,7 +228,7 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars) {
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = new StringBuffer();
         Map<Integer, StringBuffer> dimensionMap = new HashMap<>();
         StringBuffer initializer = null;
@@ -235,12 +239,12 @@ public class AryCreation extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == aryCreation._initializer) {
-                        initializer = update.apply(vars);
+                        initializer = update.apply(vars, exprMap);
                         if (initializer == null) return null;
                     } else {
                         for (int i = 0; i < aryCreation._dimension.size(); i++) {
                             if (update.getSrcNode() == aryCreation._dimension.get(i)) {
-                                StringBuffer buffer = update.apply(vars);
+                                StringBuffer buffer = update.apply(vars, exprMap);
                                 if (buffer == null) return null;
                                 dimensionMap.put(i, buffer);
                             }
@@ -253,12 +257,12 @@ public class AryCreation extends Expr {
         }
         stringBuffer.append("new ");
         StringBuffer tmp;
-        stringBuffer.append(_type.transfer(vars));
+        stringBuffer.append(_type.transfer(vars, exprMap));
         for(int i = 0; i < _dimension.size(); i++) {
             stringBuffer.append("[");
             tmp = dimensionMap.get(i);
             if (tmp == null) {
-                tmp = _dimension.get(i).adaptModifications(vars);
+                tmp = _dimension.get(i).adaptModifications(vars, exprMap);
             }
             if(tmp == null) return null;
             stringBuffer.append(tmp);
@@ -267,7 +271,7 @@ public class AryCreation extends Expr {
         if(initializer == null) {
             if(_initializer != null) {
                 stringBuffer.append("=");
-                tmp = _initializer.adaptModifications(vars);
+                tmp = _initializer.adaptModifications(vars, exprMap);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }

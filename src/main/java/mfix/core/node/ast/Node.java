@@ -8,16 +8,13 @@ package mfix.core.node.ast;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.node.ast.expr.Expr;
-import mfix.core.node.ast.expr.MethodInv;
-import mfix.core.node.ast.expr.SName;
+import mfix.core.node.ast.expr.*;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
-import mfix.core.node.modify.Movement;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
@@ -365,16 +362,42 @@ public abstract class Node implements NodeComparator, Serializable {
      * @param nodes : a list of child {@code Expr} node
      * @return : a list of child {@code Expr} node
      */
-    public List<Expr> getAllChildExpr(List<Expr> nodes) {
+    public List<Expr> getAllChildExpr(List<Expr> nodes, boolean filterName) {
         for (Node node : getAllChildren()) {
             if (node instanceof Expr) {
-                nodes.add((Expr) node);
+                if (!filterName || !isSimpleExpr(node)) {
+                    nodes.add((Expr) node);
+                }
             }
         }
         for (Node node : getAllChildren()) {
-            node.getAllChildExpr(nodes);
+            node.getAllChildExpr(nodes, filterName);
         }
         return nodes;
+    }
+
+    private boolean isSimpleExpr(Node node) {
+        switch (node.getNodeType()) {
+            case SNAME:
+            case QNAME:
+            case NUMBER:
+            case INTLITERAL:
+            case FLITERAL:
+            case DLITERAL:
+            case NULL:
+            case ASSIGNOPERATOR:
+            case POSTOPERATOR:
+            case PREFIXOPERATOR:
+            case INFIXOPERATOR:
+            case TYPE:
+            case SLITERAL:
+            case THIS:
+            case BLITERAL:
+            case CLITERAL:
+                return true;
+            default:
+        }
+        return false;
     }
 
     /**
@@ -521,7 +544,8 @@ public abstract class Node implements NodeComparator, Serializable {
                 return true;
             }
         } else if (getControldependency().getBindingNode()
-                != _bindingNode.getControldependency()) {
+                != _bindingNode.getControldependency()
+                || _bindingNode.getControldependency() == null) {
             return true;
         }
         return false;
@@ -612,6 +636,7 @@ public abstract class Node implements NodeComparator, Serializable {
             for (Node other : lst2) {
                 if (!set.contains(other) && node.postAccurateMatch(other)) {
                     set.add(other);
+                    break;
                 }
             }
         }
@@ -662,10 +687,10 @@ public abstract class Node implements NodeComparator, Serializable {
                 if (src.get(i).getBindingNode() == tar.get(j)) {
                     set.add(j);
                     src.get(i).genModidications();
-                    if (i != j && move) {
-                        Movement movement = new Movement(this, i, j, src.get(i));
-                        _modifications.add(movement);
-                    }
+//                    if (i != j && move) {
+//                        Movement movement = new Movement(this, i, j, src.get(i));
+//                        _modifications.add(movement);
+//                    }
                     notmatch = false;
                     break;
                 }
@@ -837,9 +862,11 @@ public abstract class Node implements NodeComparator, Serializable {
         return false;
     }
 
-    public StringBuffer transfer(Set<String> vars) {
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
         if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
             return getBindingNode().getBuggyBindingNode().toSrcString();
+        } else if (exprMap.containsKey(toSrcString().toString())) {
+            return new StringBuffer(exprMap.get(toSrcString().toString()));
         }
         return null;
     }
@@ -851,7 +878,7 @@ public abstract class Node implements NodeComparator, Serializable {
         return null;
     }
 
-    public abstract StringBuffer adaptModifications(Set<String> vars);
+    public abstract StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap);
 
 
     /******************************************************************************************/

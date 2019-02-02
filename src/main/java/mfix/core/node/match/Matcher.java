@@ -27,6 +27,7 @@ import mfix.core.pattern.solver.Z3Solver;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import java.util.*;
 
@@ -98,13 +99,14 @@ public class Matcher {
 		if(!sm.getName().getFullyQualifiedName().equals(tm.getName().getFullyQualifiedName())) return DiffType.DIFF_NAME;
 		String sType = sm.getReturnType2() == null ? "?" : sm.getReturnType2().toString();
 		String tType = tm.getReturnType2() == null ? "?" : tm.getReturnType2().toString(); 
-		if(!sType.equals(tType)) return DiffType.DIFF_RETURN; 
-		List<Object> sp = sm.typeParameters();
-		List<Object> tp = tm.typeParameters();
+		if(!sType.equals(tType)) return DiffType.DIFF_RETURN;
+		List<SingleVariableDeclaration> sp = sm.parameters();
+		List<SingleVariableDeclaration> tp = tm.parameters();
 		if(sp.size() != tp.size()) return DiffType.DIFF_PARAM;
 		for(int i = 0; i < sp.size(); i++){
-			if(!sp.get(i).toString().equals(tp.get(i).toString()))
+			if (!sp.get(i).getType().toString().equals(tp.get(i).getType().toString())) {
 				return DiffType.DIFF_PARAM;
+			}
 		}
 		return DiffType.SAME;
 	}
@@ -333,6 +335,7 @@ public class Matcher {
 			for (int j = 0; j < tarStmt.size(); j++) {
 				if(!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
 					srcStmt.get(i).setBindingNode(tarStmt.get(j));
+					srcStmt.get(i).postAccurateMatch(tarStmt.get(j));
 					tarMatched.add(j);
 					notmatched = false;
 					break;
@@ -355,15 +358,17 @@ public class Matcher {
 		// greedy match sub-expressions
 		Map<Integer, Integer> map = greedySimMatch(srcNotMatched, tarNotMatched, 0.6);
 		for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
-			List<Expr> srcExprs = srcNotMatched.get(entry.getKey()).getAllChildExpr(new ArrayList<>(11));
-			List<Expr> tarExprs = tarNotMatched.get(entry.getValue()).getAllChildExpr(new ArrayList<>(11));
+			List<Expr> srcExprs = srcNotMatched.get(entry.getKey()).getAllChildExpr(new ArrayList<>(11), true);
+			List<Expr> tarExprs = tarNotMatched.get(entry.getValue()).getAllChildExpr(new ArrayList<>(11), true);
 			Set<Integer> matchedIndex = new HashSet<>();
 			for(int i = 0; i < srcExprs.size(); i++) {
-				for(int j = 0; j < tarExprs.size(); j++) {
-					if(!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
-						srcExprs.get(i).setBindingNode(tarExprs.get(j));
-						matchedIndex.add(j);
-						break;
+				if (srcExprs.get(i).getBindingNode() == null) {
+					for(int j = 0; j < tarExprs.size(); j++) {
+						if (!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
+							srcExprs.get(i).setBindingNode(tarExprs.get(j));
+							matchedIndex.add(j);
+							break;
+						}
 					}
 				}
 			}
@@ -606,7 +611,7 @@ public class Matcher {
 													 Map<Node, List<StringBuffer>> insertionBefore,
 													 Map<Node, List<StringBuffer>> insertionAfter,
 													 Map<Node, StringBuffer> changeNodeMap,
-													 Set<String> vars) {
+													 Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer tmp;
 		for (Modification modification : modifications) {
 			if (modification instanceof Update) {
@@ -614,7 +619,7 @@ public class Matcher {
 				Node node = update.getSrcNode().getBuggyBindingNode();
 				assert node != null;
 				// map current node to the updated node string
-				tmp = update.apply(vars);
+				tmp = update.apply(vars, exprMap);
 				if(tmp == null) return false;
 				changeNodeMap.put(node, tmp);
 			} else if(modification instanceof Deletion) {
@@ -662,7 +667,7 @@ public class Matcher {
 						list = new LinkedList<>();
 						insertionAfter.put(statements.get(tag), list);
 					}
-					tmp = insertion.apply(vars);
+					tmp = insertion.apply(vars, exprMap);
 					if(tmp == null) return false;;
 					list.add(tmp);
 				} else {
@@ -677,7 +682,7 @@ public class Matcher {
 						list = new LinkedList<>();
 						insertionBefore.put(statements.get(tag), list);
 					}
-					tmp = insertion.apply(vars);
+					tmp = insertion.apply(vars, exprMap);
 					if(tmp == null) return false;;
 					list.add(tmp);
 				}

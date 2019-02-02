@@ -209,7 +209,7 @@ public class Utils {
             }
         });
 
-        NodeParser parser = NodeParser.getInstance();
+        NodeParser parser = new NodeParser();
         parser.setCompilationUnit(file, unit);
         Set<Node> nodes = new HashSet<>();
         Node node;
@@ -280,8 +280,7 @@ public class Utils {
 
         boolean success;
         try {
-            futureTask.get(timeout, TimeUnit.SECONDS);
-            success = true;
+            success = ((Boolean) futureTask.get(timeout, TimeUnit.SECONDS)).booleanValue();
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             success = false;
             LevelLogger.error(e);

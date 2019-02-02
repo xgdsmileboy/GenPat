@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -131,8 +132,8 @@ public class QName extends Label {
 	public boolean genModidications() {
 		if (super.genModidications()) {
 			QName qName = (QName) getBindingNode();
-			if (_name.getBindingNode() != qName.getBindingNode()) {
-				Update update = new Update(this, _name, qName.getSName());
+			if (_name.getBindingNode() != qName._name) {
+				Update update = new Update(this, _name, qName._name);
 				_modifications.add(update);
 			} else {
 				_name.genModidications();
@@ -146,14 +147,14 @@ public class QName extends Label {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _name.transfer(vars);
+			StringBuffer tmp = _name.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(".");
-			tmp = _sname.transfer(vars);
+			tmp = _sname.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -161,7 +162,7 @@ public class QName extends Label {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer name = null;
 		StringBuffer sname = null;
 		Node node = checkModification();
@@ -171,10 +172,10 @@ public class QName extends Label {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == qName._name) {
-						name = update.apply(vars);
+						name = update.apply(vars, exprMap);
 						if (name == null) return null;
 					} else {
-						sname = update.apply(vars);
+						sname = update.apply(vars, exprMap);
 						if (sname == null) return null;
 					}
 				} else {
@@ -185,7 +186,7 @@ public class QName extends Label {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if (name == null) {
-			tmp = _name.adaptModifications(vars);
+			tmp = _name.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -193,7 +194,7 @@ public class QName extends Label {
 		}
 		stringBuffer.append(".");
 		if(sname == null) {
-			tmp = _sname.adaptModifications(vars);
+			tmp = _sname.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

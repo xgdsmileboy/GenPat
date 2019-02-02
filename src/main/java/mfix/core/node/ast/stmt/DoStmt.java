@@ -170,17 +170,17 @@ public class DoStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			stringBuffer.append("do ");
-			tmp = _stmt.transfer(vars);
+			tmp = _stmt.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" while(");
-			tmp = _expression.transfer(vars);
+			tmp = _expression.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(");");
@@ -189,7 +189,7 @@ public class DoStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer stmt = null;
 		StringBuffer expression = null;
 		Node pnode = checkModification();
@@ -199,7 +199,7 @@ public class DoStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == doStmt._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if (expression == null) return null;
 					}
 				} else {
@@ -211,7 +211,7 @@ public class DoStmt extends Stmt {
 		StringBuffer tmp;
 		stringBuffer.append("do ");
 		if (stmt == null) {
-			tmp = _stmt.adaptModifications(vars);
+			tmp = _stmt.adaptModifications(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -219,7 +219,7 @@ public class DoStmt extends Stmt {
 		}
 		stringBuffer.append(" while(");
 		if (expression == null) {
-			tmp = _expression.adaptModifications(vars);
+			tmp = _expression.adaptModifications(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

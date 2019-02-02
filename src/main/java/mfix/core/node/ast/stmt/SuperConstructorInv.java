@@ -151,6 +151,7 @@ public class SuperConstructorInv extends Stmt {
 			match = (superConstructorInv == node);
 		} else if(canBinding(node)) {
 			superConstructorInv = (SuperConstructorInv) node;
+			setBindingNode(superConstructorInv);
 			match = true;
 		}
 
@@ -212,19 +213,19 @@ public class SuperConstructorInv extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if(_expression != null){
-				tmp = _expression.transfer(vars);
+				tmp = _expression.transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
 			}
 			stringBuffer.append("super(");
-			tmp = _arguments.transfer(vars);
+			tmp = _arguments.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(");");
@@ -233,7 +234,7 @@ public class SuperConstructorInv extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		StringBuffer superType = null;
 		StringBuffer argument = null;
@@ -244,13 +245,13 @@ public class SuperConstructorInv extends Stmt {
 				if(modification instanceof Update) {
 					Update update = (Update) modification;
 					if(update.getSrcNode() == superConstructorInv._expression) {
-						expression = update.apply(vars);
+						expression = update.apply(vars, exprMap);
 						if(expression == null) return null;
 					} else if (update.getSrcNode() == superConstructorInv._superType) {
-						superType = update.apply(vars);
+						superType = update.apply(vars, exprMap);
 						if (superType == null) return null;
 					} else {
-						argument = update.apply(vars);
+						argument = update.apply(vars, exprMap);
 						if(argument == null) return null;
 					}
 				} else {
@@ -262,7 +263,7 @@ public class SuperConstructorInv extends Stmt {
 		StringBuffer tmp ;
 		if(expression == null) {
 			if(_expression != null){
-				tmp = _expression.adaptModifications(vars);
+				tmp = _expression.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -272,7 +273,7 @@ public class SuperConstructorInv extends Stmt {
 		}
 		stringBuffer.append("super(");
 		if(argument == null) {
-			tmp = _arguments.adaptModifications(vars);
+			tmp = _arguments.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

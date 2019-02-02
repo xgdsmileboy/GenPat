@@ -40,7 +40,7 @@ public class PatternExtractor {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
-        NodeParser nodeParser = NodeParser.getInstance();
+        NodeParser nodeParser = new NodeParser();
         Set<Node> patterns = new HashSet<>();
 
         ElementCounter counter = new ElementCounter();

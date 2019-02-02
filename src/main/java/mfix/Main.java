@@ -21,6 +21,8 @@ import mfix.core.node.match.Matcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +43,7 @@ public class Main {
         for (MatchInstance matchInstance : fixPositions) {
             matchInstance.apply();
 
-            StringBuffer fixedProg = buggy.adaptModifications(buggyMethodVar);
+            StringBuffer fixedProg = buggy.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
 
             if (fixedProg != null) {
                 String fixed = fixedProg.toString().replaceAll(" ", "");
@@ -79,8 +81,13 @@ public class Main {
                 Set<Node> patternCandidates = PatternExtractor.extractPattern(
                         filePath + "/buggy-version/" + file,
                         filePath + "/fixed-version/" + file);
-
+                boolean sucess = false;
                 for (Node fixPattern : patternCandidates) {
+                    if (fixPattern.getAllModifications(new HashSet<>()).isEmpty()
+                            || fixPattern.getUniversalAPIs(new HashSet<>(), true).isEmpty()) {
+                        continue;
+                    }
+                    sucess = true;
                     MethDecl methDecl = (MethDecl) fixPattern;
                     String patternFuncName = methDecl.getName().getName();
 
@@ -89,7 +96,7 @@ public class Main {
                     LevelLogger.info("Save pattern: " + savePatternPath);
                     Utils.serialize(fixPattern, savePatternPath);
                 }
-                return true;
+                return sucess;
             }
         });
         return Utils.futureTaskWithin(timeout, futureTask);
@@ -145,7 +152,7 @@ public class Main {
                             fileAndMethod);
 
                     boolean success = true;
-                    if (!(new File(patternSerializePath)).exists()) {
+                    if (Constant.PATTERN_EXTRACT_FORCE || !(new File(patternSerializePath)).exists()) {
                         LevelLogger.info("Serialize pattern : " + patternSerializePath);
                         success = extractAndSave(Constant.PATTERN_EXTRAT_TIMEOUT, filePath, file);
                     } else {
@@ -192,6 +199,9 @@ public class Main {
 
         Set<String> bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
         tryFix(Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs), buggyFilePath, pointedAPI);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+        System.out.println("Finish : " + buggyFilePath + " > " + simpleDateFormat.format(new Date()));
     }
 }
 

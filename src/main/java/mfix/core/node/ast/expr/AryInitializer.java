@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -100,7 +101,11 @@ public class AryInitializer extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         AryInitializer aryInitializer = null;
-        if (getBindingNode() != null) {
+        if (compare(node)) {
+            aryInitializer = (AryInitializer) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             aryInitializer = (AryInitializer) getBindingNode();
             match = (aryInitializer == node);
         } else if (canBinding(node)) {
@@ -128,18 +133,18 @@ public class AryInitializer extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars) {
-        StringBuffer stringBuffer = super.transfer(vars);
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("{");
             StringBuffer tmp;
             if (_expressions.size() > 0) {
-                tmp = _expressions.get(0).transfer(vars);
+                tmp = _expressions.get(0).transfer(vars, exprMap);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _expressions.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _expressions.get(i).transfer(vars);
+                    tmp = _expressions.get(i).transfer(vars, exprMap);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }
@@ -150,17 +155,17 @@ public class AryInitializer extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars) {
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = new StringBuffer("{");
         StringBuffer tmp;
         // not consider modification
         if (_expressions.size() > 0) {
-            tmp = _expressions.get(0).adaptModifications(vars);
+            tmp = _expressions.get(0).adaptModifications(vars, exprMap);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             for (int i = 1; i < _expressions.size(); i++) {
                 stringBuffer.append(",");
-                tmp = _expressions.get(i).adaptModifications(vars);
+                tmp = _expressions.get(i).adaptModifications(vars, exprMap);
                 stringBuffer.append(tmp);
             }
         }

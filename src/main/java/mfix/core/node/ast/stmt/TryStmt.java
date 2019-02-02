@@ -287,37 +287,37 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("try");
 			StringBuffer tmp;
 			if (_resource != null && _resource.size() > 0) {
 				stringBuffer.append("(");
-				tmp = _resource.get(0).transfer(vars);
+				tmp = _resource.get(0).transfer(vars, exprMap);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 				for (int i = 1; i < _resource.size(); i++) {
 					stringBuffer.append(";");
-					tmp = _resource.get(i).transfer(vars);
+					tmp = _resource.get(i).transfer(vars, exprMap);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
 				stringBuffer.append(")");
 			}
-			tmp = _blk.transfer(vars);
+			tmp = _blk.transfer(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			if (_catches != null) {
 				for (CatClause catClause : _catches) {
-					tmp = catClause.transfer(vars);
+					tmp = catClause.transfer(vars, exprMap);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
 			}
 			if (_finallyBlk != null) {
 				stringBuffer.append("finally");
-				tmp = _finallyBlk.transfer(vars);
+				tmp = _finallyBlk.transfer(vars, exprMap);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -326,7 +326,7 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		Node pnode = checkModification();
 		if (pnode != null) {
 			TryStmt tryStmt = (TryStmt) pnode;
@@ -337,7 +337,7 @@ public class TryStmt extends Stmt {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode();
 					if (node == tryStmt._finallyBlk) {
-						finallyBlock = update.apply(vars);
+						finallyBlock = update.apply(vars, exprMap);
 						if (finallyBlock == null) return null;
 					} else {
 						catchModifications.add(modification);
@@ -359,7 +359,7 @@ public class TryStmt extends Stmt {
 				stringBuffer.append(")");
 			}
 
-			tmp = _blk.adaptModifications(vars);
+			tmp = _blk.adaptModifications(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 
@@ -370,7 +370,7 @@ public class TryStmt extends Stmt {
 					Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
 					Map<Node, StringBuffer> map = new HashMap<>(_catches.size());
 					if (!Matcher.applyNodeListModifications(catchModifications, _catches, insertionBefore,
-							insertionAfter, map, vars)) {
+							insertionAfter, map, vars, exprMap)) {
 						return null;
 					}
 					for (Node node : _catches) {
@@ -388,7 +388,7 @@ public class TryStmt extends Stmt {
 								stringBuffer.append(Constant.NEW_LINE);
 							}
 						} else {
-							tmp = node.adaptModifications(vars);
+							tmp = node.adaptModifications(vars, exprMap);
 							if (tmp == null) return null;
 							stringBuffer.append(tmp);
 							stringBuffer.append(Constant.NEW_LINE);
@@ -403,7 +403,7 @@ public class TryStmt extends Stmt {
 					}
 				} else {
 					for (CatClause catClause : _catches) {
-						tmp = catClause.adaptModifications(vars);
+						tmp = catClause.adaptModifications(vars, exprMap);
 						if (tmp == null) return null;
 						stringBuffer.append(tmp);
 					}
@@ -412,7 +412,7 @@ public class TryStmt extends Stmt {
 			if (finallyBlock == null) {
 				if (_finallyBlk != null) {
 					stringBuffer.append("finally");
-					tmp = _finallyBlk.adaptModifications(vars);
+					tmp = _finallyBlk.adaptModifications(vars, exprMap);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
@@ -427,30 +427,30 @@ public class TryStmt extends Stmt {
 			StringBuffer tmp;
 			if (_resource != null && _resource.size() > 0) {
 				stringBuffer.append("(");
-				tmp = _resource.get(0).adaptModifications(vars);
+				tmp = _resource.get(0).adaptModifications(vars, exprMap);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 				for (int i = 1; i < _resource.size(); i++) {
 					stringBuffer.append(";");
-					tmp = _resource.get(i).adaptModifications(vars);
+					tmp = _resource.get(i).adaptModifications(vars, exprMap);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
 				stringBuffer.append(")");
 			}
-			tmp = _blk.adaptModifications(vars);
+			tmp = _blk.adaptModifications(vars, exprMap);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			if (_catches != null) {
 				for (CatClause catClause : _catches) {
-					tmp = catClause.adaptModifications(vars);
+					tmp = catClause.adaptModifications(vars, exprMap);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
 			}
 			if (_finallyBlk != null) {
 				stringBuffer.append("finally");
-				tmp = _finallyBlk.adaptModifications(vars);
+				tmp = _finallyBlk.adaptModifications(vars, exprMap);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

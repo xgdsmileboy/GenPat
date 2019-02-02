@@ -42,7 +42,7 @@ public class SimMethodSearchTest extends TestCase {
             String file = Utils.join(Constant.SEP, subject.getHome(), subject.getSsrc(), location.getRelClazzFile());
             MethodDeclaration method = ExtractFaultyCode.extractFaultyMethod(file, location.getLine());
             CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
-            NodeParser parser = NodeParser.getInstance();
+            NodeParser parser = new NodeParser();
             parser.setCompilationUnit(file, unit);
             Node fnode = parser.process(method);
             for(String f : files) {

@@ -130,7 +130,11 @@ public class Svd extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		Svd svd = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			svd = (Svd) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			svd = (Svd) getBindingNode();
 			match = (svd == node);
 		} else if (canBinding(node)) {
@@ -188,7 +192,7 @@ public class Svd extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer declType = null;
 		StringBuffer name = null;
 		StringBuffer initializer = null;
@@ -200,13 +204,13 @@ public class Svd extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == svd._decType) {
-						declType = update.apply(vars);
+						declType = update.apply(vars, exprMap);
 						if (declType == null) return null;
 					} else if (changedNode == svd._name) {
-						name = update.apply(vars);
+						name = update.apply(vars, exprMap);
 						if (name == null) return null;
 					} else {
-						initializer = update.apply(vars);
+						initializer = update.apply(vars, exprMap);
 						if (initializer == null) return null;
 					}
 				} else {
@@ -217,7 +221,7 @@ public class Svd extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if (declType == null) {
-			tmp = _decType.adaptModifications(vars);
+			tmp = _decType.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -225,7 +229,7 @@ public class Svd extends Expr {
 		}
 		stringBuffer.append(" ");
 		if(name == null) {
-			tmp = _name.adaptModifications(vars);
+			tmp = _name.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -234,7 +238,7 @@ public class Svd extends Expr {
 		if(initializer == null) {
 			if(_initializer != null){
 				stringBuffer.append("=");
-				tmp = _initializer.adaptModifications(vars);
+				tmp = _initializer.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

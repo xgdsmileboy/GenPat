@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -138,7 +139,11 @@ public class SuperMethodInv extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		SuperMethodInv methodInv = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			methodInv = (SuperMethodInv) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			methodInv = (SuperMethodInv) getBindingNode();
 			match = (methodInv == node);
 		} else if (canBinding(node)) {
@@ -187,13 +192,13 @@ public class SuperMethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars) {
-		StringBuffer stringBuffer = super.transfer(vars);
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if(_label != null){
-				tmp = _label.transfer(vars);
+				tmp = _label.transfer(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -201,7 +206,7 @@ public class SuperMethodInv extends Expr {
 			stringBuffer.append("super.");
 			stringBuffer.append(_name.getName());
 			stringBuffer.append("(");
-			tmp = _arguments.transfer(vars);
+			tmp = _arguments.transfer(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
@@ -210,7 +215,7 @@ public class SuperMethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars) {
+	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer label = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
@@ -222,13 +227,13 @@ public class SuperMethodInv extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == superMethodInv._label) {
-						label = update.apply(vars);
+						label = update.apply(vars, exprMap);
 						if (label == null) return null;
 					} else if (changedNode == superMethodInv._name) {
-						name = update.apply(vars);
+						name = update.apply(vars, exprMap);
 						if (name == null) return null;
 					} else {
-						arguments = update.apply(vars);
+						arguments = update.apply(vars, exprMap);
 						if (arguments == null) return null;
 					}
 				} else {
@@ -240,7 +245,7 @@ public class SuperMethodInv extends Expr {
 		StringBuffer tmp;
 		if(label == null) {
 			if(_label != null){
-				tmp = _label.adaptModifications(vars);
+				tmp = _label.adaptModifications(vars, exprMap);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -250,7 +255,7 @@ public class SuperMethodInv extends Expr {
 		}
 		stringBuffer.append("super.");
 		if(name == null) {
-			tmp = _name.adaptModifications(vars);
+			tmp = _name.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -258,7 +263,7 @@ public class SuperMethodInv extends Expr {
 		}
 		stringBuffer.append("(");
 		if(arguments == null) {
-			tmp = _arguments.adaptModifications(vars);
+			tmp = _arguments.adaptModifications(vars, exprMap);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
