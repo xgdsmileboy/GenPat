@@ -8,10 +8,7 @@ package mfix.core.node.ast;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.node.ast.expr.Expr;
-import mfix.core.node.ast.expr.Label;
-import mfix.core.node.ast.expr.MethodInv;
-import mfix.core.node.ast.expr.SName;
+import mfix.core.node.ast.expr.*;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
@@ -368,7 +365,7 @@ public abstract class Node implements NodeComparator, Serializable {
     public List<Expr> getAllChildExpr(List<Expr> nodes, boolean filterName) {
         for (Node node : getAllChildren()) {
             if (node instanceof Expr) {
-                if (!filterName || !(node instanceof Label)) {
+                if (!filterName || !isSimpleExpr(node)) {
                     nodes.add((Expr) node);
                 }
             }
@@ -377,6 +374,30 @@ public abstract class Node implements NodeComparator, Serializable {
             node.getAllChildExpr(nodes, filterName);
         }
         return nodes;
+    }
+
+    private boolean isSimpleExpr(Node node) {
+        switch (node.getNodeType()) {
+            case SNAME:
+            case QNAME:
+            case NUMBER:
+            case INTLITERAL:
+            case FLITERAL:
+            case DLITERAL:
+            case NULL:
+            case ASSIGNOPERATOR:
+            case POSTOPERATOR:
+            case PREFIXOPERATOR:
+            case INFIXOPERATOR:
+            case TYPE:
+            case SLITERAL:
+            case THIS:
+            case BLITERAL:
+            case CLITERAL:
+                return true;
+            default:
+        }
+        return false;
     }
 
     /**
