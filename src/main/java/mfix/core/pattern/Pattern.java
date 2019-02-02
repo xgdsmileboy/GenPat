@@ -159,9 +159,7 @@ public class Pattern implements Serializable {
     public void doAbstraction() {
         ElementCounter counter = new ElementCounter();
         counter.open();
-        try {
-            counter.loadCache(Constant.DB_CACHE_FILE);
-        } catch (Exception e) {}
+        counter.loadCache();
         for (int i = 0; i < _oldRelations.size(); i++) {
             _oldRelations.get(i).doAbstraction(counter);
         }
