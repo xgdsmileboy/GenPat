@@ -101,7 +101,11 @@ public class AryInitializer extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         AryInitializer aryInitializer = null;
-        if (getBindingNode() != null) {
+        if (compare(node)) {
+            aryInitializer = (AryInitializer) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             aryInitializer = (AryInitializer) getBindingNode();
             match = (aryInitializer == node);
         } else if (canBinding(node)) {

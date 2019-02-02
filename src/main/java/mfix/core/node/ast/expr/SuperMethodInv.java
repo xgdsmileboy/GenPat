@@ -139,7 +139,11 @@ public class SuperMethodInv extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		SuperMethodInv methodInv = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			methodInv = (SuperMethodInv) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			methodInv = (SuperMethodInv) getBindingNode();
 			match = (methodInv == node);
 		} else if (canBinding(node)) {

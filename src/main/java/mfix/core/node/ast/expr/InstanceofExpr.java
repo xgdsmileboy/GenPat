@@ -103,7 +103,11 @@ public class InstanceofExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		InstanceofExpr instanceofExpr = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			instanceofExpr = (InstanceofExpr) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			instanceofExpr = (InstanceofExpr) getBindingNode();
 			match = (instanceofExpr == node);
 		} else if (canBinding(node)) {

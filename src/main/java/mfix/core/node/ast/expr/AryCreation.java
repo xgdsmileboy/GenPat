@@ -145,7 +145,11 @@ public class AryCreation extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         AryCreation aryCreation = null;
-        if (getBindingNode() != null) {
+        if(compare(node)) {
+            aryCreation = (AryCreation) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             aryCreation = (AryCreation) getBindingNode();
             match = (aryCreation == node);
         } else if (canBinding(node)) {

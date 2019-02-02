@@ -104,7 +104,11 @@ public class AryAcc extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         AryAcc aryAcc = null;
-        if (getBindingNode() != null) {
+        if(compare(node)) {
+            aryAcc = (AryAcc) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             aryAcc = (AryAcc) getBindingNode();
             match = (aryAcc == node);
         } else if (canBinding(node)) {

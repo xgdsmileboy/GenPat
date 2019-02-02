@@ -87,7 +87,11 @@ public class ParenthesiszedExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		ParenthesiszedExpr parenthesiszedExpr = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			parenthesiszedExpr = (ParenthesiszedExpr) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			parenthesiszedExpr = (ParenthesiszedExpr) getBindingNode();
 			match = (parenthesiszedExpr == node);
 		} else if (canBinding(node)) {

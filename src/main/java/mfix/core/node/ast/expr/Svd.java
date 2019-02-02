@@ -130,7 +130,11 @@ public class Svd extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		Svd svd = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			svd = (Svd) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			svd = (Svd) getBindingNode();
 			match = (svd == node);
 		} else if (canBinding(node)) {

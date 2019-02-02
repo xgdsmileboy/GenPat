@@ -99,7 +99,11 @@ public class PostfixExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		PostfixExpr postfixExpr = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			postfixExpr = (PostfixExpr) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			postfixExpr = (PostfixExpr) getBindingNode();
 			match = (postfixExpr == node);
 		} else if (canBinding(node)) {

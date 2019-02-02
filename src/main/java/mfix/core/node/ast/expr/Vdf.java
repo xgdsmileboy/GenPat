@@ -144,7 +144,11 @@ public class Vdf extends Node {
 	public boolean postAccurateMatch(Node node) {
 		Vdf vdf = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			vdf = (Vdf) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			vdf = (Vdf) getBindingNode();
 			match = (vdf == node);
 		} else if (canBinding(node)) {

@@ -112,7 +112,11 @@ public class InfixExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		InfixExpr infixExpr = null;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			infixExpr = (InfixExpr) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			infixExpr = (InfixExpr) getBindingNode();
 			match = (infixExpr == node);
 		} else if (canBinding(node)) {

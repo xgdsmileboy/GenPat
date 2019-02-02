@@ -153,7 +153,11 @@ public class MethodInv extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		MethodInv methodInv = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			methodInv = (MethodInv) node;
+			setBindingNode(methodInv);
+			match = true;
+		} else if (getBindingNode() != null) {
 			methodInv = (MethodInv) getBindingNode();
 			match = (methodInv == node);
 		} else if (canBinding(node)) {

@@ -103,7 +103,11 @@ public class CastExpr extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         CastExpr castExpr = null;
-        if (getBindingNode() != null) {
+        if (compare(node)) {
+            castExpr = (CastExpr) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             castExpr = (CastExpr) getBindingNode();
             match = (castExpr == node);
         } else if (canBinding(node)) {

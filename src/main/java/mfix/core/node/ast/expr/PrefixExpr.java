@@ -98,7 +98,11 @@ public class PrefixExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		PrefixExpr prefixExpr = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			prefixExpr = (PrefixExpr) node;
+			setBindingNode(prefixExpr);
+			match = true;
+		} else if (getBindingNode() != null) {
 			prefixExpr = (PrefixExpr) getBindingNode();
 			match = (prefixExpr == node);
 		} else if (canBinding(node)) {

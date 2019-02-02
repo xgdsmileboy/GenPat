@@ -112,7 +112,11 @@ public class SuperFieldAcc extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		SuperFieldAcc superFieldAcc = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			superFieldAcc = (SuperFieldAcc) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			superFieldAcc = (SuperFieldAcc) getBindingNode();
 			match = (superFieldAcc == node);
 		} else if (canBinding(node)) {

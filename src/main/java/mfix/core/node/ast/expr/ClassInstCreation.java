@@ -155,7 +155,11 @@ public class ClassInstCreation extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         ClassInstCreation classInstCreation = null;
-        if (getBindingNode() != null) {
+        if (compare(node)) {
+            classInstCreation = (ClassInstCreation) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             classInstCreation = (ClassInstCreation) getBindingNode();
             match = (classInstCreation == node);
         } else if (canBinding(node)) {

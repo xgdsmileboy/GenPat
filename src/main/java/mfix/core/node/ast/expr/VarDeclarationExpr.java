@@ -118,7 +118,11 @@ public class VarDeclarationExpr extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		VarDeclarationExpr vde = null;
 		boolean match = false;
-		if (getBindingNode() != null) {
+		if (compare(node)) {
+			vde = (VarDeclarationExpr) node;
+			setBindingNode(node);
+			match = true;
+		} else if (getBindingNode() != null) {
 			vde = (VarDeclarationExpr) getBindingNode();
 			match = (vde == node);
 		} else if (canBinding(node)) {

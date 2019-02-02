@@ -111,7 +111,11 @@ public class Assign extends Expr {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         Assign assign = null;
-        if (getBindingNode() != null) {
+        if (compare(node)) {
+            assign = (Assign) node;
+            setBindingNode(node);
+            match = true;
+        } else if (getBindingNode() != null) {
             assign = (Assign) getBindingNode();
             match = (assign == node);
         } else if (canBinding(node)) {
