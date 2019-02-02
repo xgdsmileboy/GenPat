@@ -780,6 +780,14 @@ public abstract class Node implements NodeComparator, Serializable {
         return set;
     }
 
+    public Set<Pair<Pair<String, Integer>, String>> getUniversalAPIsWithType(boolean isPattern, Set<Pair<Pair<String, Integer>, String>> set) {
+        Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
+        for (MethodInv m : mSet) {
+            set.add(new Pair<>(new Pair<> (m.getName().getName(), m.getArguments().getExpr().size()), m.getExpression().getTypeString()));
+        }
+        return set;
+    }
+
     public Set<MethodInv> getUniversalAPIs(Set<MethodInv> set, boolean isPattern) {
         if (!isPattern || (isConsidered() && !isAbstract())) {
             if (this instanceof MethodInv) {
