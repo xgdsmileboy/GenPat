@@ -19,8 +19,6 @@ public class ElementCounter {
     private static HashMap<Pair<String, Integer>, Integer> cacheMapForAPI = null;
     private static HashMap<Pair<Pair<String, Integer>, String>, Integer> cacheMapForAPIWithType = null;
 
-    private static Integer cacheTotalNumber = null;
-
     public void open() {
         _connector = new DatabaseConnector();
         _connector.open();
@@ -47,10 +45,8 @@ public class ElementCounter {
             }
             countNumber = cacheMapForAPI.getOrDefault(new Pair<String, Integer>(methodElement._elementName, methodElement._argsNumber), 0);
             if (queryType.getWithPercent()) {
-                if (cacheTotalNumber == null) {
-                    cacheTotalNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
-                }
-                allNumber = cacheTotalNumber;
+                LevelLogger.error("[ERROR] Query on Database.");
+                allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
             }
         } else if ((cacheMapForAPIWithType != null) && (element instanceof MethodElement) && (queryType.getWithType()) && (queryType._countType == ElementQueryType.CountType.COUNT_FILES)) {
             MethodElement methodElement = (MethodElement)element;
@@ -67,10 +63,8 @@ public class ElementCounter {
 
             countNumber = cacheMapForAPIWithType.getOrDefault(new Pair<>(new Pair<>(methodElement._elementName, methodElement._argsNumber), methodElement._objType), 0);
             if (queryType.getWithPercent()) {
-                if (cacheTotalNumber == null) {
-                    cacheTotalNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
-                }
-                allNumber = cacheTotalNumber;
+                LevelLogger.error("[ERROR] Query on Database.");
+                allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));;
             }
         } else {
             LevelLogger.error("[ERROR] Query on Database.");
@@ -95,7 +89,7 @@ public class ElementCounter {
             String elementName = st.nextToken();
             Integer argsNumber = Integer.parseInt(st.nextToken());
             Integer countNumber = Integer.parseInt(st.nextToken());
-            cacheMapForAPI.put(new Pair<String, Integer>(elementName, argsNumber), countNumber);
+            cacheMapForAPI.put(new Pair<>(elementName, argsNumber), countNumber);
         }
     }
 
