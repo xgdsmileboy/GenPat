@@ -45,9 +45,7 @@ public class PatternExtractor {
 
         ElementCounter counter = new ElementCounter();
         counter.open();
-        try {
-            counter.loadCache(Constant.DB_CACHE_FILE);
-        } catch (Exception e) {}
+        counter.loadCache();
 
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);

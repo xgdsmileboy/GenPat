@@ -122,7 +122,7 @@ public class AnalyzerTest extends TestCase {
 
         ElementCounter counter = new ElementCounter();
         counter.open();
-        counter.loadCache(cacheResourceFile);
+        counter.loadCacheWithoutType(cacheResourceFile);
 
         ElementQueryType withoutTypeCountFiles = new ElementQueryType(false, false, ElementQueryType.CountType.COUNT_FILES);
         ElementQueryType withoutTypeCountFilesOutputPercent = new ElementQueryType(false, true, ElementQueryType.CountType.COUNT_FILES);
