@@ -65,15 +65,19 @@ public class Repair {
 
     private void tryMatchAndFix(Node buggy, Node pattern, Set<String> buggyMethodVar,
                                 String buggyFile, String patternFile, Set<String> alreadyGenerated) {
-
+        if (alreadyGenerated.size() > Constant.FIX_NUMBER) {
+            return;
+        }
         Set<MatchInstance> fixPositions = Matcher.tryMatch(buggy, pattern);
         String origin = buggy.toSrcString().toString();
         String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH, Constant.PATTERN_VERSION,
                 buggyFile.replace("/", "_") + ".diff");
 
         for (MatchInstance matchInstance : fixPositions) {
+            if (alreadyGenerated.size() > Constant.FIX_NUMBER) {
+                return;
+            }
             matchInstance.apply();
-
             StringBuffer fixedProg = buggy.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
 
             if (fixedProg != null) {
@@ -82,6 +86,9 @@ public class Repair {
                 if (!fixed.equals(origin.replaceAll(" ", ""))) {
                     if (alreadyGenerated.contains(fixed)) {
                         continue;
+                    }
+                    if (alreadyGenerated.size() > Constant.FIX_NUMBER) {
+                        return;
                     }
                     alreadyGenerated.add(fixed);
 
@@ -185,7 +192,7 @@ public class Repair {
                     boolean success = true;
                     if (Constant.PATTERN_EXTRACT_FORCE || !(new File(patternSerializePath)).exists()) {
                         LevelLogger.info("Serialize pattern : " + patternSerializePath);
-                        success = extractAndSave(Constant.PATTERN_EXTRAT_TIMEOUT, filePath, file);
+                        success = extractAndSave(Constant.PATTERN_EXTRACT_TIMEOUT, filePath, file);
                     } else {
                         // Already saved!
                         LevelLogger.info("Existing pattern : " + patternSerializePath);
