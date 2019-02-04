@@ -8,9 +8,13 @@
 package mfix.common.util;
 
 import mfix.common.java.D4jSubject;
+import mfix.common.java.Subject;
 import mfix.core.node.ast.Node;
-import mfix.core.node.diff.Diff;
 import mfix.core.node.parser.NodeParser;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -291,29 +295,87 @@ public class Utils {
         return success;
     }
 
-    public static void log(String logFile, String content, boolean append) {
-        JavaFile.writeStringToFile(logFile, "[" + new Date().toString() +  "] " + content, append);
-    }
+    public static List<Subject> getSubjectFromXML(String xmlFile) throws NumberFormatException {
+        List<Subject> list = new LinkedList<>();
 
-    public static void log(String logFile, String path, int startLine, int endLine, String content,
-                           boolean append) {
-        log(logFile, path, startLine, endLine, 0, 0, content, null, append);
-    }
+        File inputXml = new File(xmlFile);
+        SAXReader saxReader = new SAXReader();
+        try {
+            Document document = saxReader.read(inputXml);
+            Element root = document.getRootElement();
 
-    public static <T> void log(String logFile, String path, int startLine, int endLine, double normSim,
-                           double cosineSim, String content, Diff<T> diff,
-                           boolean append) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("path : " + path + Constant.NEW_LINE);
-        buffer.append("range : <" + startLine + "," + endLine + ">" + Constant.NEW_LINE);
-        buffer.append("DIST : " + normSim + Constant.NEW_LINE);
-        buffer.append("COSIN : " + cosineSim + Constant.NEW_LINE);
-        buffer.append("-----------------------------" + Constant.NEW_LINE);
-        buffer.append(content);
-        if(diff != null) {
-            buffer.append("-----------------------------" + Constant.NEW_LINE);
-            buffer.append(diff.miniDiff() + Constant.NEW_LINE);
+            for (Iterator iterator = root.elementIterator(); iterator.hasNext();) {
+                Element element = (Element) iterator.next();
+                String name = element.attributeValue("name");
+                String base = element.elementText("home");
+                String ssrc = element.elementText("ssrc");
+                String tsrc = element.elementText("tsrc");
+                String sbin = element.elementText("sbin");
+                String tbin = element.elementText("tbin");
+                String jversion = element.elementText("jversion");
+
+                Element pathElem = element.element("classpath");
+
+                List<String> classpath = new ArrayList<>();
+                if (pathElem != null) {
+                    for (Iterator iterInner = pathElem.elementIterator(); iterInner.hasNext();) {
+                        Element path = (Element) iterInner.next();
+                        String clp = path.getText();
+                        if (clp != null) {
+                            classpath.addAll(getJarFile(new File(clp)));
+                        }
+                    }
+                }
+
+                Subject subject = new Subject(base, name, ssrc, tsrc, sbin, tbin,
+                        Subject.SOURCE_LEVEL.valueOf(jversion), classpath);
+                list.add(subject);
+            }
+        } catch (DocumentException e) {
+            LevelLogger.fatal("Utils#getSubjectFromXML parse xml file failed !", e);
         }
-        JavaFile.writeStringToFile(logFile, buffer.toString(), append);
+        return list;
     }
+
+    private static List<String> getJarFile(File path) {
+        List<String> jars = new ArrayList<>();
+        if (path.isFile()) {
+            String file = path.getAbsolutePath();
+            if (file.endsWith(".jar")) {
+                jars.add(file);
+            }
+        } else if (path.isDirectory()) {
+            File[] files = path.listFiles();
+            for (File f : files) {
+                jars.addAll(getJarFile(f));
+            }
+        }
+        return jars;
+    }
+
+//    public static void log(String logFile, String content, boolean append) {
+//        JavaFile.writeStringToFile(logFile, "[" + new Date().toString() +  "] " + content, append);
+//    }
+//
+//    public static void log(String logFile, String path, int startLine, int endLine, String content,
+//                           boolean append) {
+//        log(logFile, path, startLine, endLine, 0, 0, content, null, append);
+//    }
+//
+//    public static <T> void log(String logFile, String path, int startLine, int endLine, double normSim,
+//                           double cosineSim, String content, Diff<T> diff,
+//                           boolean append) {
+//        StringBuffer buffer = new StringBuffer();
+//        buffer.append("path : " + path + Constant.NEW_LINE);
+//        buffer.append("range : <" + startLine + "," + endLine + ">" + Constant.NEW_LINE);
+//        buffer.append("DIST : " + normSim + Constant.NEW_LINE);
+//        buffer.append("COSIN : " + cosineSim + Constant.NEW_LINE);
+//        buffer.append("-----------------------------" + Constant.NEW_LINE);
+//        buffer.append(content);
+//        if(diff != null) {
+//            buffer.append("-----------------------------" + Constant.NEW_LINE);
+//            buffer.append(diff.miniDiff() + Constant.NEW_LINE);
+//        }
+//        JavaFile.writeStringToFile(logFile, buffer.toString(), append);
+//    }
 }

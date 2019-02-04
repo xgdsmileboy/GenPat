@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<projects>
+    <project name="groovy">
+        <home></home>
+        <ssrc></ssrc>
+        <sbin></sbin>
+        <tsrc></tsrc>
+        <tbin></tbin>
+        <jversion>1.7</jversion>
+        <classpath>
+            <ele></ele>
+        </classpath>
+    </project>
+</projects>

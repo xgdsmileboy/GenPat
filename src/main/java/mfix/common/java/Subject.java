@@ -17,13 +17,15 @@ import java.util.List;
  */
 public class Subject {
 
-    protected String _base = null;
-    protected String _name = null;
-    protected String _ssrc = null;
-    protected String _tsrc = null;
-    protected String _sbin = null;
-    protected String _tbin = null;
-    protected SOURCE_LEVEL _src_level = null;
+    protected String _base;
+    protected String _name;
+    protected String _ssrc;
+    protected String _tsrc;
+    protected String _sbin;
+    protected String _tbin;
+
+    // for compile
+    protected SOURCE_LEVEL _src_level;
     protected List<String> _classpath;
 
     protected Subject(String base, String name) {
@@ -40,7 +42,7 @@ public class Subject {
      * @param tbin : relative path for test byte code, e.g., "/test-classes"
      */
     public Subject(String base, String name, String ssrc, String tsrc, String sbin, String tbin) {
-        this(base, name, ssrc, tsrc, sbin, tbin, SOURCE_LEVEL.L_1_6, new LinkedList<String>());
+        this(base, name, ssrc, tsrc, sbin, tbin, SOURCE_LEVEL.L_1_6, new LinkedList<>());
     }
 
     public Subject(String base, String name, String ssrc, String tsrc, String sbin, String tbin, SOURCE_LEVEL sourceLevel, List<String> classpath) {
@@ -108,34 +110,15 @@ public class Subject {
                 + ", _tbin=" + _tbin + "]";
     }
 
-    public static enum SOURCE_LEVEL {
+    public enum SOURCE_LEVEL {
         L_1_4("1.4"),
         L_1_5("1.5"),
         L_1_6("1.6"),
         L_1_7("1.7");
 
-        public static SOURCE_LEVEL toSourceLevel(String string) {
-            switch (string) {
-                case "1.4":
-                case "1_4":
-                    return SOURCE_LEVEL.L_1_4;
-                case "1.5":
-                case "1_5":
-                    return SOURCE_LEVEL.L_1_5;
-                case "1.6":
-                case "1_6":
-                    return SOURCE_LEVEL.L_1_6;
-                case "1.7":
-                case "1_7":
-                    return SOURCE_LEVEL.L_1_7;
-                default:
-                    return SOURCE_LEVEL.L_1_4;
-            }
-        }
-
         private String value;
 
-        private SOURCE_LEVEL(String val) {
+        SOURCE_LEVEL(String val) {
             value = val;
         }
 
