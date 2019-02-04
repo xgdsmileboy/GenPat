@@ -114,9 +114,22 @@ public class Subject {
         L_1_4("1.4"),
         L_1_5("1.5"),
         L_1_6("1.6"),
-        L_1_7("1.7");
+        L_1_7("1.7"),
+        L_1_8("1.8");
 
         private String value;
+
+        public static SOURCE_LEVEL toSourceLevel(String string) {
+            if (string == null) return L_1_7;
+            switch (string) {
+                case "1.4": return L_1_4;
+                case "1.5": return L_1_5;
+                case "1.6": return L_1_5;
+                case "1.7": return L_1_5;
+                case "1.8": return L_1_8;
+            }
+            return L_1_7;
+        }
 
         SOURCE_LEVEL(String val) {
             value = val;

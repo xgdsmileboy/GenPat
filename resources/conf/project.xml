@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <projects>
-    <project name="groovy">
-        <home></home>
-        <ssrc></ssrc>
-        <sbin></sbin>
-        <tsrc></tsrc>
-        <tbin></tbin>
+    <project name="aclang">
+        <home>/Users/Jiajun/Code/IntelliJ/MineFix/resources/forTest/aclang</home>
+        <ssrc>/src/java</ssrc>
+        <sbin>/target/classes</sbin>
+        <tsrc>/src/test</tsrc>
+        <tbin>/target/test-classes</tbin>
         <jversion>1.7</jversion>
         <classpath>
-            <ele></ele>
+            <ele>/Users/Jiajun/Code/IntelliJ/MineFix/resources/forTest/aclang/lib</ele>
         </classpath>
     </project>
 </projects>

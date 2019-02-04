@@ -328,7 +328,7 @@ public class Utils {
                 }
 
                 Subject subject = new Subject(base, name, ssrc, tsrc, sbin, tbin,
-                        Subject.SOURCE_LEVEL.valueOf(jversion), classpath);
+                        Subject.SOURCE_LEVEL.toSourceLevel(jversion), classpath);
                 list.add(subject);
             }
         } catch (DocumentException e) {
