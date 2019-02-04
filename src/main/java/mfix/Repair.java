@@ -310,7 +310,8 @@ public class Repair {
             repairFiles(null, bfiles, bannedAPIs, pointedAPI);
         } else {
             for (Subject subject : subjects) {
-                bfiles = JavaFile.ergodic(subject.getSsrc(), new LinkedList<>());
+                bfiles = JavaFile.ergodic(subject.getHome() + subject.getSsrc(),
+                        new LinkedList<>());
                 repairFiles(subject, bfiles, bannedAPIs, pointedAPI);
             }
         }
