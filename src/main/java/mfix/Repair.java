@@ -268,7 +268,12 @@ public class Repair {
             int patch = tryFix(subject, Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs),
                     file, pointedAPI);
 
-            System.out.println("Finish : " + file + " > patch : " + patch + " | " + simpleDateFormat.format(new Date()));
+            if (patch == 0) {
+                new File(tarFile).delete();
+            }
+            String message = "Finish : " + file + " > patch : " + patch + " | " + simpleDateFormat.format(new Date());
+            System.out.println(message);
+            LevelLogger.info(message);
         }
     }
 
