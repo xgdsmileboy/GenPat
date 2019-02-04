@@ -66,64 +66,9 @@ public class Repair {
         return options;
     }
 
-    private int tryMatchAndFix(Subject subject, String buggyFile, String clazzName, Node buggy,
-                               Set<String> buggyMethodVar, StringBuffer aboveBuggyNode,
-                               StringBuffer belowBuggyNode, String patternFile, Node pattern,
-                               Set<String> alreadyGenerated, int passed) {
-
-        if (passed > Constant.FIX_NUMBER) { return passed; }
-
-        Set<MatchInstance> fixPositions = Matcher.tryMatch(buggy, pattern);
-        String origin = buggy.toSrcString().toString();
-        String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH, Constant.PATTERN_VERSION,
-                buggyFile.replace("/", "_") + ".diff");
-
-        JCompiler compiler = JCompiler.getInstance();
-        for (MatchInstance matchInstance : fixPositions) {
-            if (passed > Constant.FIX_NUMBER) { return passed; }
-
-            matchInstance.apply();
-            StringBuffer fixedProg = buggy.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
-
-            if (fixedProg != null) {
-                String fixed = fixedProg.toString().replaceAll(" ", "");
-
-                if (!fixed.equals(origin.replaceAll(" ", ""))) {
-                    if (alreadyGenerated.contains(fixed)) {
-                        continue;
-                    }
-
-                    alreadyGenerated.add(fixed);
-                    StringBuffer replaced = new StringBuffer(aboveBuggyNode);
-                    replaced.append("\n");
-                    replaced.append(fixed);
-                    replaced.append("\n");
-                    replaced.append(belowBuggyNode);
-
-                    if (subject == null || compiler.compile(subject, clazzName, replaced.toString())) {
-                        LevelLogger.debug(patternFile);
-                        LevelLogger.debug("------------ Origin ---------------");
-                        LevelLogger.debug(origin);
-                        LevelLogger.debug("------------ Solution ---------------");
-                        LevelLogger.debug(fixedProg);
-                        LevelLogger.debug("------------ End ---------------");
-                        LevelLogger.info("Find a solution!");
-
-                        TextDiff diff = new TextDiff(origin, fixedProg.toString());
-                        JavaFile.writeStringToFile(tarFile, "FILE:" + buggyFile + "\n" +
-                                "PATTERN:" + patternFile + "\n" +
-                                "------------ Origin ---------------\n" + origin + "\n" +
-                                "------------ Solution --------------\n" + diff + "\n" +
-                                "---------------\n", true);
-
-                        if ((++ passed) >= Constant.FIX_NUMBER) { return passed; }
-                    }
-                }
-            }
-            matchInstance.reset();
-        }
-        return passed;
-    }
+    private Map<Pair<String, Integer>, Set<String>> method2PatternFiles;
+    private Set<String> bannedAPIs;
+    private String pointedAPI = null;
 
     private boolean extractAndSave(int timeout, String filePath, String file) {
         FutureTask<Boolean> futureTask = new FutureTask<>(new Callable<Boolean>() {
@@ -154,109 +99,169 @@ public class Repair {
     }
 
 
-    private int tryFix(Map<Pair<String, Integer>, Set<String>> method2PatternFiles, String pointedAPI,
-                       Subject subject, String buggyFile, String clazzName, Node node, Set<String> buggyMethodVar,
+    private Node readPattern(String patternFile) {
+
+        // TODO(jiang) : The following hard encode should be optimized finally
+        int ind = patternFile.indexOf("pattern-ver4-serial");
+        int indLen = "pattern-ver4-serial".length();
+        String filePath = Constant.DATASET_PATH + patternFile.substring(0, ind - 1);
+        String fileAndMethod = patternFile.substring(ind + indLen + 1);
+
+        int dashIndex = fileAndMethod.lastIndexOf("-");
+        String file = fileAndMethod.substring(0, dashIndex);
+
+        File versionAbsFolder = new File(Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION));
+        if (!versionAbsFolder.exists()) {
+            versionAbsFolder.mkdirs();
+        }
+
+        String patternSerializePath = Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION,
+                fileAndMethod);
+
+        boolean success = true;
+        if (Constant.PATTERN_EXTRACT_FORCE || !(new File(patternSerializePath)).exists()) {
+            LevelLogger.info("Serialize pattern : " + patternFile);
+            success = extractAndSave(Constant.PATTERN_EXTRACT_TIMEOUT, filePath, file);
+        } else {
+            // Already saved!
+            LevelLogger.info("Existing pattern : " + patternSerializePath);
+        }
+
+        Node fixPattern = null;
+        if (success) {
+            LevelLogger.info("Try match and fix!");
+            try {
+                fixPattern = (Node) Utils.deserialize(patternSerializePath);
+            } catch (IOException | ClassNotFoundException e) {
+                LevelLogger.error("Deserialize pattern failed!", e);
+                return null;
+            }
+
+        } else {
+            LevelLogger.error("Serialization failed!");
+        }
+
+        return fixPattern;
+    }
+
+    private Set<String> listPatternFiles(Pair<String, Integer> pair) {
+        String methodName = pair.getFirst();
+        int methodArgsNum = pair.getSecond();
+
+        if (pointedAPI != null && !pointedAPI.equals(methodName)) {
+            return new HashSet<>();
+        }
+
+        return method2PatternFiles.getOrDefault(new Pair<>(methodName, methodArgsNum), new HashSet<>());
+    }
+
+    private int tryFix(Subject subject, Node bNode, Set<String> buggyMethodVar,
                        StringBuffer aboveBuggyNode, StringBuffer belowBuggyNode) {
 
+        String origin = bNode.toSrcString().toString();
+        String buggyFile = bNode.getFileName();
+        String clazzName = new File(buggyFile).getName();
+        String tarFile = Utils.join(Constant.SEP, Constant.RESULT_PATH, Constant.PATTERN_VERSION,
+                buggyFile.replace("/", "_") + ".diff");
+
+        LevelLogger.info("Method: " + ((MethDecl) bNode).getName().getName());
+
+        JCompiler compiler = JCompiler.getInstance();
         Set<String> alreadyGenerated = new HashSet<>();
         int successRepair = 0;
 
-        LevelLogger.info("Method: " + ((MethDecl) node).getName().getName());
-
-        Set<Pair<String, Integer>> containMethodInvs = node.getUniversalAPIs(false, new HashSet<>());
+        Set<Pair<String, Integer>> containMethodInvs = bNode.getUniversalAPIs(false, new HashSet<>());
 
         for (Pair<String, Integer> pair : containMethodInvs) {
-            String methodName = pair.getFirst();
-            int methodArgsNum = pair.getSecond();
-
-            if (pointedAPI != null && !pointedAPI.equals(methodName)) {
-                continue;
-            }
-
-            LevelLogger.info(buggyFile + " contains: " + methodName + " " + methodArgsNum);
-
-            Set<String> patternFileList = method2PatternFiles.getOrDefault(new Pair<>(methodName,
-                    methodArgsNum), new HashSet<>());
+            Set<String> patternFileList = listPatternFiles(pair);
 
             LevelLogger.info("Size of patternList : " + patternFileList.size());
             LevelLogger.info("Start matching!");
 
-            for (String patternFile : patternFileList) {
-                // TODO(jiang) : The following hard encode should be optimized finally
-                int ind = patternFile.indexOf("pattern-ver4-serial");
-                int indLen = "pattern-ver4-serial".length();
-                String filePath = Constant.DATASET_PATH + patternFile.substring(0, ind - 1);
-                String fileAndMethod = patternFile.substring(ind + indLen + 1);
-
-                int dashIndex = fileAndMethod.lastIndexOf("-");
-                String file = fileAndMethod.substring(0, dashIndex);
-
-                File versionAbsFolder = new File(Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION));
-                if (!versionAbsFolder.exists()) {
-                    versionAbsFolder.mkdirs();
+            for (String f : patternFileList) {
+                if (successRepair > Constant.FIX_NUMBER) {
+                    return successRepair;
                 }
+                Node pattern = readPattern(f);
+                if (pattern == null) continue;
+                String patterFileName = pattern.getFileName();
 
-                String patternSerializePath = Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION,
-                        fileAndMethod);
+                Set<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern);
 
-                boolean success = true;
-                if (Constant.PATTERN_EXTRACT_FORCE || !(new File(patternSerializePath)).exists()) {
-                    LevelLogger.info("Serialize pattern : " + patternSerializePath);
-                    success = extractAndSave(Constant.PATTERN_EXTRACT_TIMEOUT, filePath, file);
-                } else {
-                    // Already saved!
-                    LevelLogger.info("Existing pattern : " + patternSerializePath);
-                }
+                for (MatchInstance matchInstance : fixPositions) {
+                    if (successRepair > Constant.FIX_NUMBER) {
+                        return successRepair;
+                    }
 
-                if (success) {
-                    LevelLogger.info("Try match and fix!");
-                    Node fixPattern;
-                    try {
-                        fixPattern = (Node) Utils.deserialize(patternSerializePath);
-                    } catch (IOException | ClassNotFoundException e) {
-                        LevelLogger.error("Deserialize pattern failed!", e);
+                    matchInstance.apply();
+                    StringBuffer fixedProg = bNode.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
+
+                    if (fixedProg == null) continue;
+                    String fixed = fixedProg.toString();
+
+                    if (origin.equals(fixed) || alreadyGenerated.contains(fixed)) {
                         continue;
                     }
 
-                    successRepair = tryMatchAndFix(subject, buggyFile, clazzName, node, buggyMethodVar,
-                            aboveBuggyNode, belowBuggyNode, patternFile, fixPattern, alreadyGenerated, successRepair);
+                    alreadyGenerated.add(fixed);
+                    StringBuffer replaced = new StringBuffer(aboveBuggyNode);
+                    replaced.append("\n");
+                    replaced.append(fixed);
+                    replaced.append("\n");
+                    replaced.append(belowBuggyNode);
 
-                    if (successRepair >= Constant.FIX_NUMBER) return successRepair;
-                } else {
-                    LevelLogger.error("Serialization failed!");
+                    if (subject == null || compiler.compile(subject, clazzName, replaced.toString())) {
+                        LevelLogger.debug(pattern.getFileName());
+                        LevelLogger.debug("------------ Origin ---------------");
+                        LevelLogger.debug(origin);
+                        LevelLogger.debug("------------ Solution ---------------");
+                        LevelLogger.debug(fixedProg);
+                        LevelLogger.debug("------------ End ---------------");
+                        LevelLogger.info("Find a solution!");
+
+                        TextDiff diff = new TextDiff(origin, fixedProg.toString());
+                        JavaFile.writeStringToFile(tarFile, "FILE:" + buggyFile + "\n" +
+                                "PATTERN:" + patterFileName + "\n" +
+                                "------------ Origin ---------------\n" + origin + "\n" +
+                                "------------ Solution --------------\n" + diff + "\n" +
+                                "---------------\n", true);
+
+                        if ((++successRepair) >= Constant.FIX_NUMBER) {
+                            return successRepair;
+                        }
+                    }
+                    matchInstance.reset();
                 }
             }
         }
         return successRepair;
     }
 
-    private int tryFix(Subject subject, Map<Pair<String, Integer>, Set<String>> method2PatternFiles, String buggyFile,
-                        String pointedAPI) {
+    private int tryFix(Subject subject, String buggyFile) {
 
         Set<Node> buggyNodes = Utils.getAllMethods(buggyFile);
         Map<Integer, Set<String>> buggyFileVarMap = NodeUtils.getUsableVarTypes(buggyFile);
         List<String> source = JavaFile.readFileToStringList(buggyFile);
-        String clazzName = new File(buggyFile).getName();
         int totalFix = 0;
         for (Node node : buggyNodes) {
             StringBuffer before = new StringBuffer();
             StringBuffer after = new StringBuffer();
             int start = node.getStartLine(), end = node.getEndLine();
-            for (int i = 0; i < start; i ++) {
+            for (int i = 0; i < start; i++) {
                 before.append(source.get(i) + "\n");
             }
             for (int i = end + 1; i < source.size(); i++) {
                 after.append(source.get(i) + "\n");
             }
 
-            totalFix += tryFix(method2PatternFiles, pointedAPI, subject, buggyFile, clazzName, node,
-            buggyFileVarMap.getOrDefault(node.getStartLine(), new HashSet<>()), before, after);
+            Set<String> vars = buggyFileVarMap.getOrDefault(node.getStartLine(), new HashSet<>());
+            totalFix += tryFix(subject, node, vars, before, after);
 
         }
         return totalFix;
     }
 
-    private void repairFiles(Subject subject, List<String> bFiles, Set<String> bannedAPIs, String pointedAPI) {
+    private void repairFiles(Subject subject, List<String> bFiles) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
         for (String file : bFiles) {
             // clear previous result
@@ -265,8 +270,7 @@ public class Repair {
 
             JavaFile.writeStringToFile(tarFile, "", false);
 
-            int patch = tryFix(subject, Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs),
-                    file, pointedAPI);
+            int patch = tryFix(subject, file);
 
             if (patch == 0) {
                 new File(tarFile).delete();
@@ -292,13 +296,10 @@ public class Repair {
             System.exit(1);
         }
 
-        String pointedAPI = null;
         if (cmd.hasOption("m")) {
             pointedAPI = cmd.getOptionValue("m");
             LevelLogger.debug("pointedAPI: " + pointedAPI);
         }
-
-        Set<String> bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
 
         List<String> bfiles = new LinkedList<>();
         List<Subject> subjects = null;
@@ -311,13 +312,16 @@ public class Repair {
             bfiles = JavaFile.ergodic(cmd.getOptionValue("p"), new LinkedList<>());
         }
 
+        method2PatternFiles = Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs);
+        bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
+
         if (subjects == null) {
-            repairFiles(null, bfiles, bannedAPIs, pointedAPI);
+            repairFiles(null, bfiles);
         } else {
             for (Subject subject : subjects) {
                 bfiles = JavaFile.ergodic(subject.getHome() + subject.getSsrc(),
                         new LinkedList<>());
-                repairFiles(subject, bfiles, bannedAPIs, pointedAPI);
+                repairFiles(subject, bfiles);
             }
         }
     }

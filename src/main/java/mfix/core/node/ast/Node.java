@@ -130,6 +130,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return _endLine;
     }
 
+    public String getFileName() {
+        return _fileName;
+    }
+
     /**
      * set current node type, {@code Node.TYPE.UNKNOWN} as default
      *
