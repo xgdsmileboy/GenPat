@@ -312,8 +312,8 @@ public class Repair {
             bfiles = JavaFile.ergodic(cmd.getOptionValue("p"), new LinkedList<>());
         }
 
-        method2PatternFiles = Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs);
         bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
+        method2PatternFiles = Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs);
 
         if (subjects == null) {
             repairFiles(null, bfiles);
