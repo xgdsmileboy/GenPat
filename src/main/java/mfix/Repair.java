@@ -10,6 +10,7 @@ package mfix;
 import mfix.common.java.JCompiler;
 import mfix.common.java.Subject;
 import mfix.common.util.Constant;
+import mfix.common.util.ExecuteCommand;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
@@ -66,6 +67,15 @@ public class Repair {
         return options;
     }
 
+    private boolean validate(Subject subject, String clazzName, String source) {
+        if (subject.comileFile()) {
+            return JCompiler.getInstance().compile(subject, clazzName, source);
+        } else {
+            List<String> message = ExecuteCommand.executeCompiling(subject);
+            return subject.compileSuccess(message);
+        }
+    }
+
     private Map<Pair<String, Integer>, Set<String>> method2PatternFiles;
     private Set<String> bannedAPIs;
     private String pointedAPI = null;
@@ -97,7 +107,6 @@ public class Repair {
         });
         return Utils.futureTaskWithin(timeout, futureTask);
     }
-
 
     private Node readPattern(String patternFile) {
 
@@ -210,7 +219,7 @@ public class Repair {
                     replaced.append("\n");
                     replaced.append(belowBuggyNode);
 
-                    if (subject == null || compiler.compile(subject, clazzName, replaced.toString())) {
+                    if (subject == null || validate(subject, clazzName, replaced.toString())) {
                         LevelLogger.debug(pattern.getFileName());
                         LevelLogger.debug("------------ Origin ---------------");
                         LevelLogger.debug(origin);

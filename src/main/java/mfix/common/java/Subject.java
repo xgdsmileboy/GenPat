@@ -24,9 +24,14 @@ public class Subject {
     protected String _sbin;
     protected String _tbin;
 
+    protected boolean _compile_file;
     // for compile
     protected SOURCE_LEVEL _src_level;
     protected List<String> _classpath;
+    // for compile the complete subject
+    protected String _compile_command;
+    protected String _key_compile_suc;
+    protected String _jdk_home;
 
     protected Subject(String base, String name) {
         this(base, name, null, null, null, null);
@@ -45,7 +50,8 @@ public class Subject {
         this(base, name, ssrc, tsrc, sbin, tbin, SOURCE_LEVEL.L_1_6, new LinkedList<>());
     }
 
-    public Subject(String base, String name, String ssrc, String tsrc, String sbin, String tbin, SOURCE_LEVEL sourceLevel, List<String> classpath) {
+    private Subject(String base, String name, String ssrc, String tsrc, String sbin, String tbin,
+                  SOURCE_LEVEL sourceLevel, List<String> classpath) {
         _base = base;
         _name = name;
         _ssrc = ssrc;
@@ -80,6 +86,22 @@ public class Subject {
         return _tbin;
     }
 
+    public void setCompileFile(boolean compileFile) {
+        _compile_file = compileFile;
+    }
+
+    public boolean comileFile() {
+        return _compile_file;
+    }
+
+    public void setSourceLevel(String sourceLeve) {
+        setSourceLevel(SOURCE_LEVEL.toSourceLevel(sourceLeve));
+    }
+
+    public void setSourceLevel(SOURCE_LEVEL sourceLevel) {
+        _src_level = sourceLevel;
+    }
+
     public String getSourceLevelStr() {
         return _src_level.toString();
     }
@@ -90,6 +112,35 @@ public class Subject {
 
     public List<String> getClasspath() {
         return _classpath;
+    }
+
+    public void setCompileCommand(String command) {
+        _compile_command = command;
+    }
+
+    public String getCompileCommand() {
+        return _compile_command;
+    }
+
+    public void setCompileSuccessMessage(String string) {
+        _key_compile_suc = string;
+    }
+
+    public void setJDKHome(String jdkHome) {
+        _jdk_home = jdkHome;
+    }
+
+    public  String getJDKHome() {
+        return _jdk_home;
+    }
+
+    public boolean compileSuccess(List<String> compileMessage) {
+        for (String string : compileMessage) {
+            if (string.contains(_key_compile_suc)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean checkAndInitBuildDir() {

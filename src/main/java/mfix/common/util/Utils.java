@@ -312,7 +312,11 @@ public class Utils {
                 String tsrc = element.elementText("tsrc");
                 String sbin = element.elementText("sbin");
                 String tbin = element.elementText("tbin");
+
+                Subject subject = new Subject(base, name, ssrc, tsrc, sbin, tbin);
+
                 String jversion = element.elementText("jversion");
+                subject.setSourceLevel(jversion);
 
                 Element pathElem = element.element("classpath");
 
@@ -322,13 +326,25 @@ public class Utils {
                         Element path = (Element) iterInner.next();
                         String clp = path.getText();
                         if (clp != null) {
-                            classpath.addAll(getJarFile(new File(clp)));
+                            classpath.addAll(getJarFile(new File(Utils.join(Constant.SEP, base, clp))));
                         }
                     }
                 }
 
-                Subject subject = new Subject(base, name, ssrc, tsrc, sbin, tbin,
-                        Subject.SOURCE_LEVEL.toSourceLevel(jversion), classpath);
+                subject.setClasspath(classpath);
+
+                boolean cplfile = true;
+                Element compileEle = element.element("compilefile");
+                if (compileEle != null) {
+                    cplfile = Boolean.parseBoolean(compileEle.attributeValue("value"));
+                }
+                subject.setCompileFile(cplfile);
+                if (!cplfile) {
+                    subject.setCompileCommand(compileEle.elementText("command"));
+                    subject.setCompileSuccessMessage(compileEle.elementText("suc-msg"));
+                    subject.setJDKHome(compileEle.elementText("jdk-home"));
+                }
+
                 list.add(subject);
             }
         } catch (DocumentException e) {
