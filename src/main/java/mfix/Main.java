@@ -6,6 +6,9 @@
 
 package mfix;
 
+import mfix.tools.Cleaner;
+import mfix.tools.PatternPrinter;
+
 public class Main {
 
     public static void main(String[] args) {
