@@ -7,6 +7,7 @@
 package mfix;
 
 import mfix.tools.Cleaner;
+import mfix.tools.Filter;
 import mfix.tools.PatternPrinter;
 
 public class Main {
@@ -18,6 +19,7 @@ public class Main {
             System.err.println("\tclean : delete serialized pattern files.");
             System.err.println("\tprint : print serialized patterns.");
             System.err.println("\trepair : repair bugs.");
+            System.err.println("\tfilter : serialize and filter patterns and output API mapping info.");
             System.exit(1);
         }
 
@@ -29,6 +31,10 @@ public class Main {
             case "print":
                 PatternPrinter patternPrinter = new PatternPrinter();
                 patternPrinter.print(args);
+                break;
+            case "filter":
+                Filter filter = new Filter();
+                filter.filter(args);
                 break;
             default:
                 Repair repair = new Repair();
