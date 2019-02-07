@@ -578,10 +578,10 @@ public abstract class Node implements NodeComparator, Serializable {
             _datadependency.setConsidered(true);
             nodes.add(_datadependency);
         }
-        if (_controldependency != null) {
-            _controldependency.setConsidered(true);
-            nodes.add(_controldependency);
-        }
+//        if (_controldependency != null) {
+//            _controldependency.setConsidered(true);
+//            nodes.add(_controldependency);
+//        }
     }
 
     /**

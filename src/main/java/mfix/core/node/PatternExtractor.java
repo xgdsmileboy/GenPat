@@ -63,6 +63,9 @@ public class PatternExtractor {
                 Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
                 Set<Node> temp;
                 for(Node node : nodes) {
+                    if (node.getBindingNode() != null) {
+                        node.getBindingNode().setConsidered(true);
+                    }
                     temp = node.expand(new HashSet<>());
                     for(Node n : temp) {
                         if (n.getBindingNode() != null) {

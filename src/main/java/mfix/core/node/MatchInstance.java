@@ -8,6 +8,7 @@
 package mfix.core.node;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.stmt.Stmt;
 
 import java.util.Map;
 

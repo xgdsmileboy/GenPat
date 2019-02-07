@@ -24,6 +24,9 @@ public class Insertion extends Modification {
 
     public void setPrenode(Node node) {
         _preNode = node;
+        if (_preNode != null) {
+            _preNode.setInsertDepend(true);
+        }
     }
 
     public Node getPrenode() {
@@ -32,6 +35,9 @@ public class Insertion extends Modification {
 
     public void setNextnode(Node node) {
         _nexNode = node;
+        if (_nexNode != null) {
+            _nexNode.setInsertDepend(true);
+        }
     }
 
     public Node getNextnode() {
