@@ -301,7 +301,7 @@ public class Repair {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             LevelLogger.error(e.getMessage());
-            formatter.printHelp("utility-name", options);
+            formatter.printHelp("<command> -f <arg> | -p <arg> | xml [-m <arg>] ", options);
             System.exit(1);
         }
 

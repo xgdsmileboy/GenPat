@@ -172,7 +172,7 @@ public class Filter {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             LevelLogger.error(e.getMessage());
-            formatter.printHelp("utility-name", options);
+            formatter.printHelp("<command> -ip <arg> [-line <arg>] [-change <arg>] [-of | -op <arg>]", options);
             System.exit(1);
         }
 

@@ -107,7 +107,7 @@ public class PatternPrinter {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             LevelLogger.error(e.getMessage());
-            formatter.printHelp("utility-name", options);
+            formatter.printHelp("<command> -m <arg> -n <arg> -o <arg>", options);
             System.exit(1);
         }
         String mName = cmd.getOptionValue("m");
