@@ -263,7 +263,7 @@ class ParseNode implements Callable<Boolean> {
             String savePatternPath = _srcFile.replace("buggy-version", "pattern-" + Constant.PATTERN_VERSION + "-serial");
             savePatternPath = savePatternPath + "-" + methDecl.getName().getName() +".pattern";
             File file = new File(savePatternPath);
-            if (!file.exists()) {
+            if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
             try {
