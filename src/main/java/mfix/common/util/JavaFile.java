@@ -281,7 +281,8 @@ public class JavaFile {
      *            : the base of source file
      * @return AST
      */
-    public static ASTNode genASTFromSourceWithType(String icu, String jversion, int astLevel, int type, String filePath, String srcPath) {
+    public synchronized static ASTNode genASTFromSourceWithType(String icu, String jversion, int astLevel, int type,
+                                                    String filePath, String srcPath) {
         if(icu == null || icu.isEmpty()) return null;
         ASTParser astParser = ASTParser.newParser(astLevel);
         Map<?, ?> options = JavaCore.getOptions();

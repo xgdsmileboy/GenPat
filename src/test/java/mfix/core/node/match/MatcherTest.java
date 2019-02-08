@@ -70,7 +70,8 @@ public class MatcherTest extends TestCase {
         String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
-        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
 
         // there is only one method changed
         Assert.assertTrue(patterns.size() == 1);
@@ -88,7 +89,8 @@ public class MatcherTest extends TestCase {
         String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
-        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
 
@@ -128,7 +130,8 @@ public class MatcherTest extends TestCase {
         String srcFile = testbase + Constant.SEP + "1.java";
         String tarFile = testbase + Constant.SEP + "2.java";
 
-        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
         for (Node node : patterns) {
             System.out.println("------------------");
             for (Modification modification : node.getAllModifications(new HashSet<>())) {
@@ -142,7 +145,8 @@ public class MatcherTest extends TestCase {
         String srcFile = testbase + Constant.SEP + "src_registrationActivity.java";
         String tarFile = testbase + Constant.SEP + "tar_registrationActivity.java";
 
-        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
         String path = "/tmp";
         int i = 0;
         try {
@@ -172,7 +176,8 @@ public class MatcherTest extends TestCase {
         String srcFile = testbase + Constant.SEP + "b.java";
         String tarFile = testbase + Constant.SEP + "f.java";
 
-        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
 
@@ -211,7 +216,8 @@ public class MatcherTest extends TestCase {
         String srcFile = "/Users/Jiajun/Desktop/buggy.java";
         String tarFile = "/Users/Jiajun/Desktop/fixed.java";
 
-        Set<Node> patterns = PatternExtractor.extractPattern(srcFile, tarFile);
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
 
         for (Node pattern : patterns) {
 

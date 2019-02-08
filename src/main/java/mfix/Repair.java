@@ -84,7 +84,8 @@ public class Repair {
         FutureTask<Boolean> futureTask = new FutureTask<>(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                Set<Node> patternCandidates = PatternExtractor.extractPattern(
+                PatternExtractor extractor = new PatternExtractor();
+                Set<Node> patternCandidates = extractor.extractPattern(
                         filePath + "/buggy-version/" + file,
                         filePath + "/fixed-version/" + file);
                 boolean sucess = false;

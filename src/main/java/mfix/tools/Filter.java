@@ -234,7 +234,8 @@ class ParseNode implements Callable<Set<String>> {
             LevelLogger.info("Following file may not exist ... SKIP.\n" + _srcFile + "\n" + _tarFile);
             return null;
         }
-        Set<Node> patternCandidates = PatternExtractor.extractPattern(_srcFile, _tarFile);
+        PatternExtractor patternExtractor = new PatternExtractor();
+        Set<Node> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile);
         if (patternCandidates.isEmpty()) {
             LevelLogger.info("No pattern node ... SKIP.");
             return null;

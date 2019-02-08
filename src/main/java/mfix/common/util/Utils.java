@@ -189,14 +189,14 @@ public class Utils {
         }
     }
 
-    public static void serialize(Serializable object, String fileName) throws IOException {
+    public synchronized static void serialize(Serializable object, String fileName) throws IOException {
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileName));
         objectOutputStream.writeObject(object);
         objectOutputStream.flush();
         objectOutputStream.close();
     }
 
-    public static Serializable deserialize(String fileName) throws IOException, ClassNotFoundException {
+    public synchronized static Serializable deserialize(String fileName) throws IOException, ClassNotFoundException {
         File file = new File(fileName);
         ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
         return (Serializable) objectInputStream.readObject();

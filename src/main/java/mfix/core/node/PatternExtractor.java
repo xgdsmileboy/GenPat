@@ -28,7 +28,7 @@ import java.util.Set;
  */
 public class PatternExtractor {
 
-    public static Set<Node> extractPattern(Set<Pair<String, String>> fixPairs) {
+    public Set<Node> extractPattern(Set<Pair<String, String>> fixPairs) {
         Set<Node> nodes = new HashSet<>();
         for(Pair<String, String> pair : fixPairs) {
             nodes.addAll(extractPattern(pair.getFirst(), pair.getSecond()));
@@ -36,7 +36,7 @@ public class PatternExtractor {
         return nodes;
     }
 
-    public static Set<Node> extractPattern(String srcFile, String tarFile) {
+    public Set<Node> extractPattern(String srcFile, String tarFile) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);

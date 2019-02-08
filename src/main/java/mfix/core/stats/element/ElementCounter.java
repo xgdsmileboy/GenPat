@@ -5,7 +5,7 @@ import mfix.common.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 /**
@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 public class ElementCounter {
     private DatabaseConnector _connector = null;
 
-    private static HashMap<Pair<String, Integer>, Integer> cacheMap = null;
+    private static Hashtable<Pair<String, Integer>, Integer> cacheMap = null;
     private static Integer cacheTotalNumber = null;
     static final String DEFAULT_CACHE_FILE = "/home/renly/MethodTableElements.txt";
 
@@ -64,16 +64,18 @@ public class ElementCounter {
         }
     }
 
-    public void loadCache(String cacheFile) throws Exception {
+    public synchronized void loadCache(String cacheFile) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(cacheFile));
         String line;
-        cacheMap = new HashMap<Pair<String, Integer>, Integer>();
-        while ((line = br.readLine()) != null) {
-            StringTokenizer st = new StringTokenizer(line);
-            String elementName = st.nextToken();
-            Integer argsNumber = Integer.parseInt(st.nextToken());
-            Integer countNumber = Integer.parseInt(st.nextToken());
-            cacheMap.put(new Pair<String, Integer>(elementName, argsNumber), countNumber);
+        if (cacheMap == null) {
+            cacheMap = new Hashtable<>();
+            while ((line = br.readLine()) != null) {
+                StringTokenizer st = new StringTokenizer(line);
+                String elementName = st.nextToken();
+                Integer argsNumber = Integer.parseInt(st.nextToken());
+                Integer countNumber = Integer.parseInt(st.nextToken());
+                cacheMap.put(new Pair<>(elementName, argsNumber), countNumber);
+            }
         }
     }
 
