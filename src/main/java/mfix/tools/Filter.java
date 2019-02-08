@@ -15,6 +15,7 @@ import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.diff.TextDiff;
 import mfix.core.node.modify.Modification;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -45,17 +46,18 @@ import java.util.concurrent.Future;
  */
 public class Filter {
 
-    private BufferedWriter bw;
-    private int MAX_CHANGE_LINE;
+    private BufferedWriter _bufferedWriter;
+    private int _maxChangeLine = 50;
+    private int _maxChangeAction = 20;
 
-    private List<String> cacheList;
-    private int currItemCount = 0;
-    private int cacheSize = 10000;
+    private List<String> _cacheList;
+    private int _currItemCount = 0;
+    private int _cacheSize = 10000;
 
-    private int currThreadCount = 0;
-    private int maxThreadCount = 9;
-    private ExecutorService threadPool;
-    private List<Future<Set<String>>> threadResultList = new ArrayList<>();
+    private int _currThreadCount = 0;
+    private int _maxThreadCount = 9;
+    private ExecutorService _threadPool;
+    private List<Future<Set<String>>> _threadResultList = new ArrayList<>();
 
     private Options options() {
         Options options = new Options();
@@ -64,8 +66,12 @@ public class Filter {
         option.setRequired(true);
         options.addOption(option);
 
-        option = new Option("line", "maxLine", true, "max changed line number");
-        option.setRequired(true);
+        option = new Option("line", "maxLine", true, "max number of changed lines within one pattern.");
+        option.setRequired(false);
+        options.addOption(option);
+
+        option = new Option("change", "maxAction", true, "max number of modifications within one pattern.");
+        option.setRequired(false);
         options.addOption(option);
 
         OptionGroup optionGroup = new OptionGroup();
@@ -78,7 +84,7 @@ public class Filter {
     }
 
     public Filter() {
-        cacheList = new ArrayList<>(cacheSize);
+        _cacheList = new ArrayList<>(_cacheSize);
     }
 
     private void initWriter(String filePath) throws IOException {
@@ -92,7 +98,7 @@ public class Filter {
                 System.exit(1);
             }
         }
-        bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), "UTF-8"));
+        _bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), "UTF-8"));
     }
 
     private void filter(File file) {
@@ -103,19 +109,20 @@ public class Filter {
                     String srcFileName = f.getAbsolutePath();
                     String tarFileName = srcFileName.replace("buggy-version", "fixed-version");
                     try {
-                        if (currThreadCount >= maxThreadCount) {
-                            for (Future<Set<String>> fs : threadResultList) {
+                        if (_currThreadCount >= _maxThreadCount) {
+                            for (Future<Set<String>> fs : _threadResultList) {
                                 Set<String> result = fs.get();
-                                currThreadCount--;
+                                _currThreadCount--;
                                 if (result != null) {
                                     writeFile(result);
                                 }
                             }
-                            threadResultList.clear();
-                            currThreadCount = threadResultList.size();
+                            _threadResultList.clear();
+                            _currThreadCount = _threadResultList.size();
                         }
-                        Future<Set<String>> future = threadPool.submit(new ParseNode(srcFileName, tarFileName));
-                        threadResultList.add(future);
+                        Future<Set<String>> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
+                                _maxChangeLine, _maxChangeAction));
+                        _threadResultList.add(future);
 
                     } catch (Exception e) {
                         LevelLogger.error("Parse node failed : " + e.getMessage());
@@ -132,25 +139,26 @@ public class Filter {
 
     private synchronized void writeFile(Set<String> values) throws IOException {
         if (values != null) {
-            cacheList.addAll(values);
-            currItemCount += values.size();
-            if (currItemCount >= cacheSize) {
+            _cacheList.addAll(values);
+            _currItemCount += values.size();
+            if (_currItemCount >= _cacheSize) {
                 flush();
             }
         }
     }
 
     private synchronized void flush() throws IOException {
-        for (String s : cacheList) {
-            bw.write(s + Constant.NEW_LINE);
+        for (String s : _cacheList) {
+            _bufferedWriter.write(s + Constant.NEW_LINE);
         }
-        cacheList.clear();
-        currItemCount = 0;
+        _bufferedWriter.flush();
+        _cacheList.clear();
+        _currItemCount = 0;
     }
 
     private void close() throws IOException{
-        if (bw != null) {
-            bw.close();
+        if (_bufferedWriter != null) {
+            _bufferedWriter.close();
         }
     }
 
@@ -168,8 +176,13 @@ public class Filter {
             System.exit(1);
         }
 
-        final String inpath = cmd.getOptionValue("ip");
-        MAX_CHANGE_LINE = Integer.parseInt(cmd.getOptionValue("line"));
+        final String inPath = cmd.getOptionValue("ip");
+        if (cmd.hasOption("line")) {
+            _maxChangeLine = Integer.parseInt(cmd.getOptionValue("line"));
+        }
+        if (cmd.hasOption("change")) {
+            _maxChangeAction = Integer.parseInt(cmd.getOptionValue("change"));
+        }
 
         try {
             if (cmd.hasOption("of")) {
@@ -184,9 +197,9 @@ public class Filter {
             System.exit(1);
         }
 
-        threadPool = Executors.newFixedThreadPool(maxThreadCount);
+        _threadPool = Executors.newFixedThreadPool(_maxThreadCount);
 
-        filter(new File(inpath));
+        filter(new File(inPath));
 
         try {
             flush();
@@ -194,7 +207,7 @@ public class Filter {
         } catch (IOException e) {
             LevelLogger.error("Output data to file failed!");
         }
-        threadPool.shutdown();
+        _threadPool.shutdown();
 
         System.out.println("Finish filtering !");
     }
@@ -210,10 +223,14 @@ class ParseNode implements Callable<Set<String>> {
 
     private String _srcFile;
     private String _tarFile;
+    private int _maxChangeLine;
+    private int _maxChangeAction;
 
-    public ParseNode(String srcFile, String tarFile) {
+    public ParseNode(String srcFile, String tarFile, int maxChangeLine, int maxChangeAction) {
         _srcFile = srcFile;
         _tarFile = tarFile;
+        _maxChangeLine = maxChangeLine;
+        _maxChangeAction = maxChangeAction;
     }
 
     @Override
@@ -229,8 +246,17 @@ class ParseNode implements Callable<Set<String>> {
         // the following is the filter process
         for (Node node : patternCandidates) {
             Set<Modification> modifications = node.getAllModifications(new HashSet<>());
-            if (modifications.size() > 20) {
+            // filter by modifications
+            if (modifications.size() > _maxChangeAction) {
                 continue;
+            }
+            // filter by changed lines
+            if (node.getBindingNode() != null) {
+                Node other = node.getBindingNode();
+                TextDiff diff = new TextDiff(node, other);
+                if (diff.getMiniDiff().size() > _maxChangeLine) {
+                    continue;
+                }
             }
             MethDecl methDecl = (MethDecl) node;
 
