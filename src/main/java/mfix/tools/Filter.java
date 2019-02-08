@@ -231,10 +231,12 @@ class ParseNode implements Callable<Set<String>> {
     public Set<String> call() {
         LevelLogger.info("PARSE > " + _srcFile);
         if (!(new File(_srcFile).exists()) || !(new File(_tarFile).exists())) {
+            LevelLogger.info("Following file may not exist ... SKIP.\n" + _srcFile + "\n" + _tarFile);
             return null;
         }
         Set<Node> patternCandidates = PatternExtractor.extractPattern(_srcFile, _tarFile);
         if (patternCandidates.isEmpty()) {
+            LevelLogger.info("No pattern node ... SKIP.");
             return null;
         }
         Set<String> result = new HashSet<>();
@@ -243,13 +245,16 @@ class ParseNode implements Callable<Set<String>> {
             Set<Modification> modifications = node.getAllModifications(new HashSet<>());
             // filter by modifications
             if (modifications.size() > _maxChangeAction) {
+                LevelLogger.info("Too many modifications : " + modifications.size() + " ... SKIP.");
                 continue;
             }
             // filter by changed lines
             if (node.getBindingNode() != null) {
                 Node other = node.getBindingNode();
                 TextDiff diff = new TextDiff(node, other);
-                if (diff.getMiniDiff().size() > _maxChangeLine) {
+                int size = diff.getMiniDiff().size();
+                if (size > _maxChangeLine) {
+                    LevelLogger.info("Too many changed lines : " + size + " ... SKIP.");
                     continue;
                 }
             }
@@ -260,10 +265,11 @@ class ParseNode implements Callable<Set<String>> {
             try {
                 Utils.serialize(node, savePatternPath);
             } catch (IOException e) {
+                LevelLogger.warn("Serialization failed : " + savePatternPath);
                 continue;
             }
             Set<MethodInv> methods = node.getUniversalAPIs(new HashSet<>(), true);
-            if (methods.isEmpty()) {
+            if (!methods.isEmpty()) {
                 for (MethodInv methodInv : methods) {
                     String rType = methodInv.getTypeString();
                     String name = methodInv.getName().getName();
@@ -279,6 +285,8 @@ class ParseNode implements Callable<Set<String>> {
 
                     result.add(String.format("%s\t%d\t%s\t%s\t%s\t%s", name, argNum, rType, oType, argType, savePatternPath));
                 }
+            } else {
+                LevelLogger.info("No API info .... SKIP.");
             }
         }
         return result;
