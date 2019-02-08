@@ -59,7 +59,7 @@ public class Filter {
     private int _currThreadCount = 0;
     private int _maxThreadCount = 9;
     private ExecutorService _threadPool;
-    private List<Future<Set<String>>> _threadResultList = new ArrayList<>();
+    private List<Future<Boolean>> _threadResultList = new ArrayList<>();
 
     private Options options() {
         Options options = new Options();
@@ -111,19 +111,16 @@ public class Filter {
                     try {
                         if (_currThreadCount >= _maxThreadCount) {
                             LevelLogger.info("Thread pool is full ....");
-                            for (Future<Set<String>> fs : _threadResultList) {
-                                Set<String> result = fs.get();
+                            for (Future<Boolean> fs : _threadResultList) {
+                                Boolean result = fs.get();
                                 _currThreadCount--;
-                                if (result != null) {
-                                    writeFile(result);
-                                }
                             }
                             _threadResultList.clear();
                             _currThreadCount = _threadResultList.size();
                             LevelLogger.info("Cleared thread pool : " + _currThreadCount);
                         }
-                        Future<Set<String>> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
-                                _maxChangeLine, _maxChangeAction));
+                        Future<Boolean> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
+                                _maxChangeLine, _maxChangeAction, this));
                         _threadResultList.add(future);
 
                     } catch (Exception e) {
@@ -139,7 +136,7 @@ public class Filter {
         }
     }
 
-    private synchronized void writeFile(Set<String> values) throws IOException {
+    public synchronized void writeFile(Set<String> values) throws IOException {
         if (values != null) {
             _cacheList.addAll(values);
             _currItemCount += values.size();
@@ -213,32 +210,34 @@ public class Filter {
 
 }
 
-class ParseNode implements Callable<Set<String>> {
+class ParseNode implements Callable<Boolean> {
 
     private String _srcFile;
     private String _tarFile;
     private int _maxChangeLine;
     private int _maxChangeAction;
+    private Filter _filter;
 
-    public ParseNode(String srcFile, String tarFile, int maxChangeLine, int maxChangeAction) {
+    public ParseNode(String srcFile, String tarFile, int maxChangeLine, int maxChangeAction, Filter filter) {
         _srcFile = srcFile;
         _tarFile = tarFile;
         _maxChangeLine = maxChangeLine;
         _maxChangeAction = maxChangeAction;
+        _filter = filter;
     }
 
     @Override
-    public Set<String> call() {
+    public Boolean call() {
         LevelLogger.info("PARSE > " + _srcFile);
         if (!(new File(_srcFile).exists()) || !(new File(_tarFile).exists())) {
             LevelLogger.info("Following file may not exist ... SKIP.\n" + _srcFile + "\n" + _tarFile);
-            return null;
+            return false;
         }
         PatternExtractor patternExtractor = new PatternExtractor();
         Set<Node> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile);
         if (patternCandidates.isEmpty()) {
             LevelLogger.info("No pattern node ... SKIP.");
-            return null;
+            return false;
         }
         Set<String> result = new HashSet<>();
         // the following is the filter process
@@ -295,7 +294,12 @@ class ParseNode implements Callable<Set<String>> {
                 LevelLogger.info("No API info .... SKIP.");
             }
         }
-        return result;
+        try {
+            _filter.writeFile(result);
+        } catch (IOException e) {
+            LevelLogger.error("Write to file failed in parse thread!");
+        }
+        return true;
     }
 
 }
