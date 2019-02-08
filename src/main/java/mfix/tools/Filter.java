@@ -110,6 +110,7 @@ public class Filter {
                     String tarFileName = srcFileName.replace("buggy-version", "fixed-version");
                     try {
                         if (_currThreadCount >= _maxThreadCount) {
+                            LevelLogger.info("Thread pool is full ....");
                             for (Future<Set<String>> fs : _threadResultList) {
                                 Set<String> result = fs.get();
                                 _currThreadCount--;
@@ -119,6 +120,7 @@ public class Filter {
                             }
                             _threadResultList.clear();
                             _currThreadCount = _threadResultList.size();
+                            LevelLogger.info("Cleared thread pool : " + _currThreadCount);
                         }
                         Future<Set<String>> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
                                 _maxChangeLine, _maxChangeAction));
@@ -141,6 +143,7 @@ public class Filter {
         if (values != null) {
             _cacheList.addAll(values);
             _currItemCount += values.size();
+            LevelLogger.info("Current cache size : " + _currItemCount);
             if (_currItemCount >= _cacheSize) {
                 flush();
             }
@@ -148,6 +151,7 @@ public class Filter {
     }
 
     private synchronized void flush() throws IOException {
+        LevelLogger.info("........FLUSHING.......");
         for (String s : _cacheList) {
             _bufferedWriter.write(s + Constant.NEW_LINE);
         }
@@ -235,6 +239,7 @@ class ParseNode implements Callable<Set<String>> {
 
     @Override
     public Set<String> call() {
+        LevelLogger.info("PARSE > " + _srcFile);
         if (!(new File(_srcFile).exists()) || !(new File(_tarFile).exists())) {
             return null;
         }
