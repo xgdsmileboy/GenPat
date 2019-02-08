@@ -8,6 +8,7 @@
 package mfix.tools;
 
 import mfix.common.util.Constant;
+import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.PatternExtractor;
@@ -25,6 +26,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,7 +48,7 @@ import java.util.concurrent.Future;
  */
 public class Filter {
 
-    private BufferedWriter _bufferedWriter;
+    private String _outFile;
     private int _maxChangeLine = 50;
     private int _maxChangeAction = 20;
 
@@ -87,18 +89,16 @@ public class Filter {
         _cacheList = new ArrayList<>(_cacheSize);
     }
 
-    private void initWriter(String filePath) throws IOException {
-        initWriter(new File(Utils.join(Constant.SEP, filePath, "API_Mapping.txt")));
-    }
-
-    private void initWriter(File file) throws IOException {
+    private void init(String fileName) {
+        File file = new File(fileName);
         if (!file.exists()) {
-            if (!file.createNewFile()) {
-                LevelLogger.error("Create file failed : " + file.getAbsolutePath());
-                System.exit(1);
+            try {
+                FileUtils.moveFile(file, new File(fileName + ".bak"));
+            } catch (IOException e) {
+                LevelLogger.error("Backup previous out file failed!" + fileName);
             }
         }
-        _bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), "UTF-8"));
+        JavaFile.writeStringToFile(fileName, "");
     }
 
     private void filter(File file) {
@@ -152,18 +152,13 @@ public class Filter {
 
     private synchronized void flush() throws IOException {
         LevelLogger.info("........FLUSHING.......");
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_outFile, true), "UTF-8"));
         for (String s : _cacheList) {
-            _bufferedWriter.write(s + Constant.NEW_LINE);
+            bw.write(s + Constant.NEW_LINE);
         }
-        _bufferedWriter.flush();
         _cacheList.clear();
         _currItemCount = 0;
-    }
-
-    private void close() throws IOException{
-        if (_bufferedWriter != null) {
-            _bufferedWriter.close();
-        }
+        bw.close();
     }
 
     public void filter(String[] args) {
@@ -188,26 +183,21 @@ public class Filter {
             _maxChangeAction = Integer.parseInt(cmd.getOptionValue("change"));
         }
 
-        try {
-            if (cmd.hasOption("of")) {
-                initWriter(new File(cmd.getOptionValue("of")));
-            } else if (cmd.hasOption("op")) {
-                initWriter(cmd.getOptionValue("op"));
-            } else {
-                initWriter(System.getProperty("user.dir"));
-            }
-        } catch (IOException e) {
-            LevelLogger.error("Init output file failed!");
-            System.exit(1);
+        if (cmd.hasOption("of")) {
+            _outFile = cmd.getOptionValue("of");
+        } else if (cmd.hasOption("op")) {
+            _outFile = Utils.join(Constant.SEP, cmd.getOptionValue("op"), "API_Mapping.txt");
+        } else {
+            _outFile = Utils.join(Constant.SEP, System.getProperty("user.dir"), "API_Mapping.txt");
         }
 
+        init(_outFile);
         _threadPool = Executors.newFixedThreadPool(_maxThreadCount);
 
         filter(new File(inPath));
 
         try {
             flush();
-            close();
         } catch (IOException e) {
             LevelLogger.error("Output data to file failed!");
         }
