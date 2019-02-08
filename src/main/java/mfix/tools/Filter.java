@@ -91,7 +91,7 @@ public class Filter {
 
     private void init(String fileName) {
         File file = new File(fileName);
-        if (!file.exists()) {
+        if (file.exists()) {
             try {
                 FileUtils.moveFile(file, new File(fileName + ".bak"));
             } catch (IOException e) {
