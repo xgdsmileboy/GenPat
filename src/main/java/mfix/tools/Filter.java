@@ -263,7 +263,12 @@ class ParseNode implements Callable<Set<String>> {
 
             String savePatternPath = _srcFile.replace("buggy-version", "pattern-" + Constant.PATTERN_VERSION + "-serial");
             savePatternPath = savePatternPath + "-" + methDecl.getName().getName() +".pattern";
+            File file = new File(savePatternPath);
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+            }
             try {
+                file.createNewFile();
                 Utils.serialize(node, savePatternPath);
             } catch (IOException e) {
                 LevelLogger.warn("Serialization failed : " + savePatternPath);
