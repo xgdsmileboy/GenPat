@@ -33,6 +33,9 @@ public class Constant {
     public final static String BANNED_API_FILE = Utils.join(SEP, RES_DIR, "conf", "whiteList.txt");
     public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");
 
+    public final static int API_FREQUENCY = 100;
+    public final static double TF_IDF_FREQUENCY = 0.6;
+
     public static String API_MAPPING_FILE;
     public static String PATTERN_VERSION;
     public static int PATTERN_NUMBER;

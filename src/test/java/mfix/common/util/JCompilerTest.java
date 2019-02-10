@@ -71,11 +71,10 @@ public class JCompilerTest {
         Assert.assertTrue(compiler.compile(subject, "org/apache/commons/lang3/ArrayUtils.java", content));
     }
 
-    @Test
+//    @Test
     public void test_aclang() {
         List<Subject> subjects = Utils.getSubjectFromXML(Constant.DEFAULT_SUBJECT_XML);
-        String file = "/Users/Jiajun/Code/IntelliJ/MineFix/resources/forTest/aclang/src/java/org/apache/commons/lang" +
-                "/text/StrBuilder.java";
+        String file = base + "/aclang/src/java/org/apache/commons/lang/text/StrBuilder.java";
         String source = JavaFile.readFileToString(file);
         JCompiler compiler = JCompiler.getInstance();
         System.out.println(compiler.compile(subjects.get(0), "StrBuilder.java", source));

@@ -16,8 +16,11 @@ import mfix.core.node.MatchInstance;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.PatternExtractor;
 import mfix.core.node.ast.Node;
-import mfix.core.node.ast.NodeVisitor;
 import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.ast.stmt.ReturnStmt;
+import mfix.core.node.ast.stmt.SwCase;
+import mfix.core.node.ast.stmt.SwitchStmt;
+import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.node.parser.NodeParser;
@@ -28,6 +31,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +89,7 @@ public class MatcherTest extends TestCase {
     }
 
     @Test
-    public void test_match_demo() {
+    public void test_match_demo_fix() {
         String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
@@ -93,88 +97,99 @@ public class MatcherTest extends TestCase {
         Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
-
         Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
 
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration node) {
-                methods.add(node);
+                if ("onPostExecute".equals(node.getName().getIdentifier())
+                        && node.parameters().size() == 1) {
+                    methods.add(node);
+                    return false;
+                }
                 return true;
             }
         });
 
+        Assert.assertTrue(methods.size() == 1);
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
-        for (MethodDeclaration m : methods) {
-            Node node = parser.process(m);
-            Set<Node> matched = Matcher.filter(node, patterns);
-            for (Node p : matched) {
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
-                for (MatchInstance matchInstance : set) {
-                    matchInstance.apply();
-                    System.out.println("------------ Before ---------------");
-                    System.out.println(node.toSrcString());
-                    System.out.println("------------ After ---------------");
-                    System.out.println(node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap()));
-                    matchInstance.reset();
-                }
-            }
-        }
+        Node node = parser.process(methods.iterator().next());
+        Assert.assertTrue(node != null);
+
+        String target = "@Override protected void onPostExecute(AnswerObject result){\n" +
+                "if(outerCallingListActivity==null){\n" +
+                "dialog.setTitle(outerCallingActivity.getResources().getString(R.string.ui_calc));\n" +
+                "outerCallingActivity.onPostExecute(result);\n" +
+                "}else {\n" +
+                "dialog.setTitle(outerCallingListActivity.getResources().getString(R.string.ui_calc));\n" +
+                "outerCallingListActivity.onPostExecute(result);\n" +
+                "}\n" +
+                "if(dialog.isShowing()){\n" +
+                "dialog.dismiss();\n" +
+                "}\n" +
+                "}";
+
+        Set<Node> matched = Matcher.filter(node, patterns);
+        Assert.assertTrue(matched.size() == 1);
+
+        Set<MatchInstance> set = Matcher.tryMatch(node, matched.iterator().next());
+        Assert.assertTrue(set.size() == 1);
+
+        MatchInstance instance = set.iterator().next();
+        instance.apply();
+        StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), instance.getStrMap());
+
+        Assert.assertTrue(buffer != null);
+        Assert.assertTrue(target.equals(buffer.toString()));
+        instance.reset();
     }
 
     @Test
-    public void test_matcho() {
-        // insert the whole switch statement, should be refined
-        String srcFile = testbase + Constant.SEP + "1.java";
-        String tarFile = testbase + Constant.SEP + "2.java";
+    public void test_match_switch_stmt() {
+        String srcFile = testbase + Constant.SEP + "src_insert_under_switch.java";
+        String tarFile = testbase + Constant.SEP + "tar_insert_under_switch.java";
 
         PatternExtractor extractor = new PatternExtractor();
         Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
-        for (Node node : patterns) {
-            System.out.println("------------------");
-            for (Modification modification : node.getAllModifications(new HashSet<>())) {
-                System.out.println(modification);
-            }
-        }
+        Node node = patterns.iterator().next();
+        List<Modification> modifications = new ArrayList<>(node.getAllModifications(new HashSet<>()));
+
+        Assert.assertTrue(modifications.size() == 1);
+        Assert.assertTrue(modifications.get(0) instanceof Insertion);
+
+        Insertion insertion = (Insertion) modifications.get(0);
+        Assert.assertTrue(insertion.getInsertedNode() instanceof SwCase);
+        Assert.assertTrue(insertion.getParent() instanceof SwitchStmt);
+        Assert.assertTrue(insertion.getPrenode() instanceof ReturnStmt);
+        Assert.assertTrue(insertion.getNextnode() instanceof SwCase);
+
     }
 
     @Test
-    public void test_serialization_deserialization() {
+    public void test_node_serialization_deserialization() throws Exception {
         String srcFile = testbase + Constant.SEP + "src_registrationActivity.java";
         String tarFile = testbase + Constant.SEP + "tar_registrationActivity.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
-        String path = "/tmp";
-        int i = 0;
-        try {
-            for (Node node : patterns) {
-                Utils.serialize(node, path + i + ".pattern");
-                i++;
-            }
-            for (int j = 0; j < i; j++) {
-                Node node = (Node) Utils.deserialize(path + j + ".pattern");
-                node.accept(new NodeVisitor() {
-                    public boolean visit(MethodInv m) {
-                        System.out.println(m.getName().getName() + " : " + m.isAbstract());
-                        return true;
-                    }
-                });
-                new File(path + j + ".pattern").delete();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<Node> patterns = new ArrayList<>(extractor.extractPattern(srcFile, tarFile));
+        String path = "/tmp/";
+        int index = 0;
+        for (; index < patterns.size(); index++) {
+            Utils.serialize(patterns.get(index), path + index + ".pattern");
         }
-
+        for (int j = 0; j < index; j++) {
+            Node node = (Node) Utils.deserialize(path + j + ".pattern");
+            Assert.assertTrue(patterns.get(j).toSrcString().toString().equals(node.toSrcString().toString()));
+            new File(path + j + ".pattern").delete();
+        }
     }
 
     @Test
-    public void test_match_demo2() {
-        String srcFile = testbase + Constant.SEP + "b.java";
-        String tarFile = testbase + Constant.SEP + "f.java";
+    public void test_match_demo_fix_fail() {
+        String srcFile = testbase + Constant.SEP + "src_false_dismiss.java";
+        String tarFile = testbase + Constant.SEP + "tar_false_dismiss.java";
 
         PatternExtractor extractor = new PatternExtractor();
         Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
@@ -201,18 +216,16 @@ public class MatcherTest extends TestCase {
                 Set<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
-                    System.out.println("------------ Before ---------------");
-                    System.out.println(node.toSrcString());
-                    System.out.println("------------ After ---------------");
-                    System.out.println(node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap()));
+                    Assert.assertTrue(node.adaptModifications(varMaps.get(node.getStartLine()),
+                            matchInstance.getStrMap()) == null);
                     matchInstance.reset();
                 }
             }
         }
     }
 
-    @Test
-    public void temp() throws Exception {
+//    @Test
+    public void temp() {
         String srcFile = "/Users/Jiajun/Desktop/buggy.java";
         String tarFile = "/Users/Jiajun/Desktop/fixed.java";
 
@@ -226,44 +239,11 @@ public class MatcherTest extends TestCase {
                 System.out.println(m);
             }
 
-//            Set<Node> nodes = pattern.getConsideredNodesRec(new HashSet<>(), true);
-//            for (Node node : nodes) {
-//                System.out.println(node);
-//            }
-
             Set<MethodInv> APIs = pattern.getUniversalAPIs(new HashSet<>(), true);
             for (MethodInv api : APIs) {
                 System.out.println(api.getName().getName());
             }
         }
-
-//        String buggy = "/Users/Jiajun/Desktop/RtcpReceivedEvent.java";
-//
-//        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
-//
-//        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
-//        final Set<MethodDeclaration> methods = new HashSet<>();
-//        unit.accept(new ASTVisitor() {
-//            public boolean visit(MethodDeclaration node) {
-//                methods.add(node);
-//                return true;
-//            }
-//        });
-//
-//        NodeParser parser = NodeParser.getInstance();
-//        parser.setCompilationUnit(buggy, unit);
-//        for (MethodDeclaration m : methods) {
-//            Node node = parser.process(m);
-//            Set<MatchInstance> set = Matcher.tryMatch(node, pattern);
-//            for (MatchInstance matchInstance : set) {
-//                matchInstance.apply();
-//                System.out.println("------------ Before ---------------");
-//                System.out.println(node.toSrcString());
-//                System.out.println("------------ After ---------------");
-//                System.out.println(node.adaptModifications(varMaps.get(node.getStartLine())));
-//                matchInstance.reset();
-//            }
-//        }
     }
 
 }
