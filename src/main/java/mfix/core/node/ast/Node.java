@@ -8,7 +8,9 @@ package mfix.core.node.ast;
 
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.node.ast.expr.*;
+import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
@@ -16,6 +18,7 @@ import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.Vector;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -828,6 +831,24 @@ public abstract class Node implements NodeComparator, Serializable {
         }
         return set;
     }
+
+    /*********************************************************/
+    /***************** pattern clustering ********************/
+    /*********************************************************/
+
+    private Vector _patternVec;
+
+    public Vector getPatternVector(){
+        if (_patternVec == null) {
+            computePatternVector();
+        }
+        return _patternVec;
+    }
+
+    private void computePatternVector() {
+
+    }
+
 
     /*********************************************************/
     /**************** matching buggy code ********************/
