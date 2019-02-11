@@ -6,7 +6,7 @@ import mfix.common.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 /**
@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 public class ElementCounter {
     private DatabaseConnector _connector = null;
 
-    private static HashMap<Pair<String, Integer>, Integer> cacheMapForAPI = null;
+    private static Hashtable<Pair<String, Integer>, Integer> cacheMapForAPI = null;
     private static HashMap<Pair<Pair<String, Integer>, String>, Integer> cacheMapForAPIWithType = null;
 
     private static Integer cacheTotalNumberforAPI = null;
@@ -92,10 +92,10 @@ public class ElementCounter {
         }
     }
 
-    public void loadCacheWithoutType(String cacheFile) throws Exception {
+    public synchronized void loadCacheWithoutType(String cacheFile) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(cacheFile));
         String line;
-        cacheMapForAPI = new HashMap<>();
+        cacheMapForAPI = new Hashtable<>();
         while ((line = br.readLine()) != null) {
             StringTokenizer st = new StringTokenizer(line);
             String elementName = st.nextToken();

@@ -166,6 +166,7 @@ public class VarDeclarationStmt extends Stmt {
 		if(vds == null) {
 			continueTopDownMatchNull();
 		} else {
+			_declType.postAccurateMatch(vds.getDeclType());
 			greedyMatchListNode(_fragments, vds.getFragments());
 		}
 		return match;

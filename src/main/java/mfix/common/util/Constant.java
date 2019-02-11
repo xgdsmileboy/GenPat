@@ -33,14 +33,19 @@ public class Constant {
     public final static String DB_CACHE_FILE_WITH_TYPE = Utils.join(SEP, RES_DIR, "db", "MethodTableElementsWithType.txt");
 
     public final static String BANNED_API_FILE = Utils.join(SEP, RES_DIR, "conf", "whiteList.txt");
+    public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");
+
+    public final static int API_FREQUENCY = 100;
+    public final static double TF_IDF_FREQUENCY = 0.6;
 
     public static String API_MAPPING_FILE;
     public static String PATTERN_VERSION;
     public static int PATTERN_NUMBER;
     public static String RESULT_PATH;
     public static String DATASET_PATH;
-    public static int PATTERN_EXTRAT_TIMEOUT;
+    public static int PATTERN_EXTRACT_TIMEOUT;
     public static boolean PATTERN_EXTRACT_FORCE;
+    public static int FIX_NUMBER;
 
     /*
      * markers
@@ -70,8 +75,9 @@ public class Constant {
             Constant.PATTERN_NUMBER = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
             Constant.RESULT_PATH = prop.getProperty("PATH.RESULT", HOME);
             Constant.DATASET_PATH = prop.getProperty("PATH.DATASET");
-            Constant.PATTERN_EXTRAT_TIMEOUT = Integer.parseInt(prop.getProperty("PEXTRACTION.TIMEOUT", "30"));
+            Constant.PATTERN_EXTRACT_TIMEOUT = Integer.parseInt(prop.getProperty("PEXTRACTION.TIMEOUT", "30"));
             Constant.PATTERN_EXTRACT_FORCE = Boolean.parseBoolean(prop.getProperty("EXTRACT.FORCE", "false"));
+            Constant.FIX_NUMBER = Integer.parseInt(prop.getProperty("FIX.MAX", "100"));
 
         } catch (IOException e) {
             LevelLogger.error("#Constant get properties failed!" + e.getMessage());

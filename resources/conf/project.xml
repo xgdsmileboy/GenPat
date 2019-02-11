@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<projects>
+    <project name="aclang">
+        <home>/Users/Jiajun/Code/IntelliJ/MineFix/resources/forTest/aclang</home>
+        <ssrc>/src/java</ssrc>
+        <sbin>/target/classes</sbin>
+        <tsrc>/src/test</tsrc>
+        <tbin>/target/test-classes</tbin>
+        <jversion>1.7</jversion>
+        <classpath>
+            <ele>lib</ele>
+        </classpath>
+        <compilefile value="true">
+        </compilefile>
+    </project>
+    <project name="TuCanMobile">
+        <home>/Users/Jiajun/Code/MUBenchData/done/TuCanMobile</home>
+        <ssrc></ssrc>
+        <sbin></sbin>
+        <tsrc></tsrc>
+        <tbin></tbin>
+        <jversion>1.8</jversion>
+        <classpath>
+            <ele>lib</ele>
+        </classpath>
+        <compilefile value="false">
+            <command>/Users/Jiajun/Desktop/gradle-5.2/bin/gradle</command>
+            <suc-msg>BUILD SUCCESSFUL</suc-msg>
+            <jdk-home>/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home</jdk-home>
+        </compilefile>
+    </project>
+</projects>

@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix;
+package mfix.tools;
 
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
@@ -14,6 +14,13 @@ import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.modify.Modification;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +35,24 @@ import java.util.Set;
  * @date: 2019-02-01
  */
 public class PatternPrinter {
+
+    private Options options() {
+        Options options = new Options();
+
+        Option option = new Option("m", "APIName", true, "the name of API to focus on.");
+        option.setRequired(true);
+        options.addOption(option);
+
+        option = new Option("n", "argNumber", true, "number of argument number.");
+        option.setRequired(true);
+        options.addOption(option);
+
+        option = new Option("o", "outpath", true, "output path.");
+        option.setRequired(true);
+        options.addOption(option);
+
+        return options;
+    }
 
     public static void print(Map<Pair<String, Integer>, Set<String>> method2PatternFiles, String mName, int argNumber
             , String outFile) {
@@ -72,19 +97,31 @@ public class PatternPrinter {
         }
     }
 
-    public static void main(String[] args) {
-        if (args.length < 3) {
-            System.err.println("Please provide the method name, arg number and output file path!");
-            System.exit(0);
-        }
-        String mName = args[0];
-        int argNumber = Integer.parseInt(args[1]);
-        String outPath = args[2];
+    public void print(String[] args) {
+        Options options = options();
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd = null;
 
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            LevelLogger.error(e.getMessage());
+            formatter.printHelp("<command> -m <arg> -n <arg> -o <arg>", options);
+            System.exit(1);
+        }
+        String mName = cmd.getOptionValue("m");
+        int argNumber = Integer.parseInt(cmd.getOptionValue("n"));
+        String outPath = cmd.getOptionValue("o");
         print(Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, new HashSet<>()), mName, argNumber,
                 outPath);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
         System.out.println("Finish : " + mName + " | " + argNumber + " > " + simpleDateFormat.format(new Date()));
+    }
+
+    public static void main(String[] args) {
+        PatternPrinter patternPrinter = new PatternPrinter();
+        patternPrinter.print(args);
     }
 
 }

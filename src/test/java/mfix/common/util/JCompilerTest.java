@@ -13,6 +13,8 @@ import mfix.common.java.Subject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/21
@@ -68,6 +70,16 @@ public class JCompilerTest {
         JCompiler compiler = JCompiler.getInstance();
         Assert.assertTrue(compiler.compile(subject, "org/apache/commons/lang3/ArrayUtils.java", content));
     }
+
+//    @Test
+    public void test_aclang() {
+        List<Subject> subjects = Utils.getSubjectFromXML(Constant.DEFAULT_SUBJECT_XML);
+        String file = base + "/aclang/src/java/org/apache/commons/lang/text/StrBuilder.java";
+        String source = JavaFile.readFileToString(file);
+        JCompiler compiler = JCompiler.getInstance();
+        System.out.println(compiler.compile(subjects.get(0), "StrBuilder.java", source));
+    }
+
 
 
 }

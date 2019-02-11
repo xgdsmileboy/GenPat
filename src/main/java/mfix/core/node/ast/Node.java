@@ -130,6 +130,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return _endLine;
     }
 
+    public String getFileName() {
+        return _fileName;
+    }
+
     /**
      * set current node type, {@code Node.TYPE.UNKNOWN} as default
      *
@@ -574,10 +578,10 @@ public abstract class Node implements NodeComparator, Serializable {
             _datadependency.setConsidered(true);
             nodes.add(_datadependency);
         }
-        if (_controldependency != null) {
-            _controldependency.setConsidered(true);
-            nodes.add(_controldependency);
-        }
+//        if (_controldependency != null) {
+//            _controldependency.setConsidered(true);
+//            nodes.add(_controldependency);
+//        }
     }
 
     /**

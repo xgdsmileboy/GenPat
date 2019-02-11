@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
@@ -187,7 +188,7 @@ public class MethodInv extends Expr {
 			MethodElement methodElement = new MethodElement(_name.getName(), null);
 			methodElement.setArgsNumber(_arguments.getExpr().size());
 			try {
-				_abstract = counter.count(methodElement, qtype) < Pattern.API_FREQUENCY;
+				_abstract = counter.count(methodElement, qtype) < Constant.API_FREQUENCY;
 			} catch (ElementException e) {
 				_abstract = true;
 			}
