@@ -193,6 +193,11 @@ public class Filter {
 
         filter(new File(inPath));
 
+        for (Future<Boolean> fs : _threadResultList) {
+            try {
+                Boolean result = fs.get();
+            } catch (Exception e) { }
+        }
         try {
             flush();
         } catch (IOException e) {
