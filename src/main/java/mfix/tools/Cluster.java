@@ -8,6 +8,7 @@
 package mfix.tools;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.vector.Vector;
 
 /**
  * @author: Jiajun
@@ -23,6 +24,12 @@ public class Cluster {
      * @return : true if pattern {@code p1} is the same as {@code p2}
      */
     private boolean isSame(Node p1, Node p2) {
+        Vector v1 = p1.getPatternVector();
+        Vector v2 = p2.getPatternVector();
+        if (!v1.equals(v2)) {
+            return false;
+        }
+        // TODO: otherwise, perform more accurate pattern matching
 
         return false;
     }

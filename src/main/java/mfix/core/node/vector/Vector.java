@@ -14,16 +14,23 @@ package mfix.core.node.vector;
 public class Vector {
 
     private long _vec;
+    private final int size = VIndex.LENGTH;
 
     public Vector() {
         _vec = 0L;
     }
 
     public void set(int index) {
+        if (index < 0 || index > size) {
+            throw new IllegalArgumentException("Illegal argument :" + index);
+        }
         _vec |= (1L << index);
     }
 
     public void clear(int index) {
+        if (index < 0 || index > size) {
+            throw new IllegalArgumentException("Illegal argument :" + index);
+        }
         _vec &= ~(1L << index);
     }
 
@@ -32,6 +39,9 @@ public class Vector {
     }
 
     public int get(int index) {
+        if (index < 0 || index > size) {
+            throw new IllegalArgumentException("Illegal argument :" + index);
+        }
         return (int) ((_vec >> index) & 1L);
     }
 

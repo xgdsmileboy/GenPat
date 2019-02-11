@@ -8,6 +8,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.vector.VIndex;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class Wrap extends Insertion {
     private Node _wrapper;
     private List<Node> _nodes;
     public Wrap(Node parent, Node wrapper, List<Node> wrapped) {
-        super(parent);
+        super(parent, VIndex.MOD_WRAP);
         _wrapper = wrapper;
         _nodes = wrapped;
     }

@@ -1,6 +1,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.vector.VIndex;
 
 public class Deletion extends Modification {
 
@@ -8,7 +9,7 @@ public class Deletion extends Modification {
     private int _index;
 
     public Deletion(Node parent, Node node, int index) {
-        super(parent);
+        super(parent, VIndex.MOD_DELETE);
         _node2Del = node;
         _index = index;
     }
