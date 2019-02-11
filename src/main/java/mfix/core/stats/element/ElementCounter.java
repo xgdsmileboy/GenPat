@@ -1,5 +1,6 @@
 package mfix.core.stats.element;
 
+import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 
@@ -15,9 +16,13 @@ import java.util.StringTokenizer;
 public class ElementCounter {
     private DatabaseConnector _connector = null;
 
-    private static Hashtable<Pair<String, Integer>, Integer> cacheMap = null;
-    private static Integer cacheTotalNumber = null;
-    static final String DEFAULT_CACHE_FILE = "/home/renly/MethodTableElements.txt";
+    private static Hashtable<Pair<String, Integer>, Integer> cacheMapForAPI = null;
+    private static HashMap<Pair<Pair<String, Integer>, String>, Integer> cacheMapForAPIWithType = null;
+
+    private static Integer cacheTotalNumberforAPI = null;
+    private static Integer cacheTotalNumberforAPIWithType = null;
+
+    static final String WARNNING_FOR_QUERY_DB = "[WARNING] Query on Database.";
 
     public void open() {
         _connector = new DatabaseConnector();
@@ -34,7 +39,7 @@ public class ElementCounter {
 
     public float count(Element element, ElementQueryType queryType) throws ElementException {
         Integer countNumber, allNumber = 0;
-        if ((cacheMap != null) && (element instanceof MethodElement) && (!queryType.getWithType()) && (queryType._countType == ElementQueryType.CountType.COUNT_FILES)) {
+        if ((cacheMapForAPI != null) && (element instanceof MethodElement) && (!queryType.getWithType()) && (queryType._countType == ElementQueryType.CountType.COUNT_FILES)) {
             MethodElement methodElement = (MethodElement)element;
 
             if (methodElement._elementName == null) {
@@ -43,15 +48,38 @@ public class ElementCounter {
             if (methodElement._argsNumber == null) {
                 throw new ElementException(element.DBKEY_ARGS_NUMBER);
             }
-            countNumber = cacheMap.getOrDefault(new Pair<String, Integer>(methodElement._elementName, methodElement._argsNumber), 0);
+            countNumber = cacheMapForAPI.getOrDefault(new Pair<String, Integer>(methodElement._elementName, methodElement._argsNumber), 0);
+
             if (queryType.getWithPercent()) {
-                if (cacheTotalNumber == null) {
-                    cacheTotalNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
+                if (cacheTotalNumberforAPI == null) {
+                    LevelLogger.warn(WARNNING_FOR_QUERY_DB);
+                    cacheTotalNumberforAPI = _connector.query(element.toQueryRowWithoutLimit(queryType));
                 }
-                allNumber = cacheTotalNumber;
+                allNumber = cacheTotalNumberforAPI;
+            }
+        } else if ((cacheMapForAPIWithType != null) && (element instanceof MethodElement) && (queryType.getWithType()) && (queryType._countType == ElementQueryType.CountType.COUNT_FILES)) {
+            MethodElement methodElement = (MethodElement)element;
+
+            if (methodElement._elementName == null) {
+                throw new ElementException(element.DBKEY_ELEMENT_NAME);
+            }
+            if (methodElement._argsNumber == null) {
+                throw new ElementException(element.DBKEY_ARGS_NUMBER);
+            }
+            if (methodElement._objType == null) {
+                throw new ElementException(element.DBKEY_OBJ_TYPE);
+            }
+            countNumber = cacheMapForAPIWithType.getOrDefault(new Pair<>(new Pair<>(methodElement._elementName, methodElement._argsNumber), methodElement._objType), 0);
+
+            if (queryType.getWithPercent()) {
+                if (cacheTotalNumberforAPIWithType == null) {
+                    LevelLogger.warn(WARNNING_FOR_QUERY_DB);
+                    cacheTotalNumberforAPIWithType = _connector.query(element.toQueryRowWithoutLimit(queryType));
+                }
+                allNumber = cacheTotalNumberforAPIWithType;
             }
         } else {
-            LevelLogger.error("[ERROR] Query on Database.");
+            LevelLogger.warn(WARNNING_FOR_QUERY_DB);
             countNumber = _connector.query(element.toQueryRow(queryType));
             allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
         }
@@ -64,22 +92,39 @@ public class ElementCounter {
         }
     }
 
-    public synchronized void loadCache(String cacheFile) throws Exception {
+    public synchronized void loadCacheWithoutType(String cacheFile) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(cacheFile));
         String line;
-        if (cacheMap == null) {
-            cacheMap = new Hashtable<>();
-            while ((line = br.readLine()) != null) {
-                StringTokenizer st = new StringTokenizer(line);
-                String elementName = st.nextToken();
-                Integer argsNumber = Integer.parseInt(st.nextToken());
-                Integer countNumber = Integer.parseInt(st.nextToken());
-                cacheMap.put(new Pair<>(elementName, argsNumber), countNumber);
-            }
+        cacheMapForAPI = new Hashtable<>();
+        while ((line = br.readLine()) != null) {
+            StringTokenizer st = new StringTokenizer(line);
+            String elementName = st.nextToken();
+            Integer argsNumber = Integer.parseInt(st.nextToken());
+            Integer countNumber = Integer.parseInt(st.nextToken());
+            cacheMapForAPI.put(new Pair<>(elementName, argsNumber), countNumber);
         }
     }
 
-    public void loadCache() throws Exception {
-        loadCache(DEFAULT_CACHE_FILE);
+    public void loadCacheWithType(String cacheFile) throws Exception {
+        BufferedReader br = new BufferedReader(new FileReader(cacheFile));
+        String line;
+        cacheMapForAPIWithType = new HashMap<>();
+        while ((line = br.readLine()) != null) {
+            StringTokenizer st = new StringTokenizer(line);
+            String elementName = st.nextToken();
+            Integer argsNumber = Integer.parseInt(st.nextToken());
+            String objType = st.nextToken();
+            Integer countNumber = Integer.parseInt(st.nextToken());
+            cacheMapForAPIWithType.put(new Pair<>(new Pair<>(elementName, argsNumber), objType), countNumber);
+        }
+    }
+
+    public void loadCache() {
+        try {
+            loadCacheWithoutType(Constant.DB_CACHE_FILE);
+            loadCacheWithType(Constant.DB_CACHE_FILE_WITH_TYPE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
