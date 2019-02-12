@@ -69,7 +69,7 @@ public class Repair {
 
     private boolean validate(Subject subject, String clazzName, String source) {
         if (subject.comileFile()) {
-            return JCompiler.getInstance().compile(subject, clazzName, source);
+            return new JCompiler().compile(subject, clazzName, source);
         } else {
             List<String> message = ExecuteCommand.executeCompiling(subject);
             return subject.compileSuccess(message);
@@ -176,7 +176,6 @@ public class Repair {
 
         LevelLogger.info("Method: " + ((MethDecl) bNode).getName().getName());
 
-        JCompiler compiler = JCompiler.getInstance();
         Set<String> alreadyGenerated = new HashSet<>();
         int successRepair = 0;
 

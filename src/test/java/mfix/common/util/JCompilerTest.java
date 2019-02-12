@@ -26,7 +26,7 @@ public class JCompilerTest {
     @Test
     public void test_compile_lang() {
         Subject subject = new D4jSubject(base, "lang", 1);
-        JCompiler compiler = JCompiler.getInstance();
+        JCompiler compiler = new JCompiler();
         // TODO : build failed
 //        Assert.assertTrue(compiler.compile(subject));
     }
@@ -34,21 +34,21 @@ public class JCompilerTest {
     @Test
     public void test_compile_math() {
         Subject subject = new D4jSubject(base, "math", 3);
-        JCompiler compiler = JCompiler.getInstance();
+        JCompiler compiler = new JCompiler();
         Assert.assertTrue(compiler.compile(subject));
     }
 
     @Test
     public void test_compile_chart() {
         Subject subject = new D4jSubject(base, "chart", 1);
-        JCompiler compiler = JCompiler.getInstance();
+        JCompiler compiler = new JCompiler();
         Assert.assertTrue(compiler.compile(subject));
     }
 
     @Test
     public void test_compile_time() {
         Subject subject = new D4jSubject(base, "time", 1);
-        JCompiler compiler = JCompiler.getInstance();
+        JCompiler compiler = new JCompiler();
         Assert.assertTrue(compiler.compile(subject));
     }
 
@@ -57,7 +57,7 @@ public class JCompilerTest {
         // TODO : need to compile the whole project first from command line,
         // since it needs to compile the .proto files first.
         Subject subject = new D4jSubject(base, "closure", 1);
-        JCompiler compiler = JCompiler.getInstance();
+        JCompiler compiler = new JCompiler();
         Assert.assertTrue(compiler.compile(subject));
     }
 
@@ -67,7 +67,7 @@ public class JCompilerTest {
         String content = JavaFile
                 .readFileToString(base + relJavaFile);
         Subject subject = new D4jSubject(base, "lang", 1);
-        JCompiler compiler = JCompiler.getInstance();
+        JCompiler compiler = new JCompiler();
         Assert.assertTrue(compiler.compile(subject, "org/apache/commons/lang3/ArrayUtils.java", content));
     }
 
@@ -76,7 +76,7 @@ public class JCompilerTest {
         List<Subject> subjects = Utils.getSubjectFromXML(Constant.DEFAULT_SUBJECT_XML);
         String file = base + "/aclang/src/java/org/apache/commons/lang/text/StrBuilder.java";
         String source = JavaFile.readFileToString(file);
-        JCompiler compiler = JCompiler.getInstance();
+        JCompiler compiler = new JCompiler();
         System.out.println(compiler.compile(subjects.get(0), "StrBuilder.java", source));
     }
 
