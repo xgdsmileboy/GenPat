@@ -204,7 +204,13 @@ public class Repair {
                     }
 
                     matchInstance.apply();
-                    StringBuffer fixedProg = bNode.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
+                    StringBuffer fixedProg;
+                    try{
+                        fixedProg = bNode.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
+                    } catch (Exception e) {
+                        LevelLogger.error("AdaptModification causes exception ....", e);
+                        continue;
+                    }
 
                     if (fixedProg == null) continue;
                     String fixed = fixedProg.toString();
