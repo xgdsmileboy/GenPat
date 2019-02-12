@@ -122,8 +122,8 @@ public class MethodInv extends Expr {
 			MethodInv methodInv = (MethodInv) other;
 			match = _name.compare(methodInv._name);
 			if (match) {
-				match = _expression == null ? (methodInv._expression == null)
-						: _expression.compare(methodInv._expression) && _arguments.compare(methodInv._arguments);
+				match = (_expression == null ? (methodInv._expression == null)
+						: _expression.compare(methodInv._expression)) && _arguments.compare(methodInv._arguments);
 			}
 		}
 		return match;
