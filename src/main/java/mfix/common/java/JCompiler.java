@@ -33,19 +33,19 @@ import java.util.Locale;
 public class JCompiler {
 
     private final char separator = File.pathSeparatorChar;
-    private static JCompiler instance = null;
-
-    public static JCompiler getInstance() {
-        if (instance == null) {
-            instance = new JCompiler();
-        }
-        return instance;
-    }
+//    private static JCompiler instance = null;
+//
+//    public static JCompiler getInstance() {
+//        if (instance == null) {
+//            instance = new JCompiler();
+//        }
+//        return instance;
+//    }
 
     private JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private MDiagnosticListener mDiagnosticListener = new MDiagnosticListener();
 
-    private JCompiler() {
+    public JCompiler() {
     }
 
     public static class MDiagnosticListener implements DiagnosticListener<JavaFileObject> {
