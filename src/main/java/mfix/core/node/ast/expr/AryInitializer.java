@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.cluster.VIndex;
@@ -129,7 +130,7 @@ public class AryInitializer extends Expr {
     public boolean genModidications() {
         if (super.genModidications()) {
             AryInitializer aryInitializer = (AryInitializer) getBindingNode();
-            genModificationList(_expressions, aryInitializer._expressions, true);
+            _modifications = NodeUtils.genModificationList(this, _expressions, aryInitializer._expressions);
         }
         return true;
     }

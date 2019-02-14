@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.Constant;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.VarDeclarationExpr;
 import mfix.core.node.match.Matcher;
@@ -258,7 +259,7 @@ public class TryStmt extends Stmt {
 		if (super.genModidications()) {
             TryStmt tryStmt = (TryStmt) getBindingNode();
             _blk.genModidications();
-            genModificationList(_catches, tryStmt.getCatches(), true);
+            _modifications.addAll(NodeUtils.genModificationList(this, _catches, tryStmt.getCatches()));
             if (_finallyBlk == null) {
                 if (tryStmt.getFinally() != null) {
                     Update update = new Update(this, _finallyBlk, tryStmt.getFinally());

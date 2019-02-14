@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.Vdf;
@@ -182,7 +183,7 @@ public class VarDeclarationStmt extends Stmt {
 				Update update = new Update(this, _declType, varDeclarationStmt.getDeclType());
 				_modifications.add(update);
 			}
-			genModificationList(_fragments, varDeclarationStmt.getFragments(), false);
+			_modifications.addAll(NodeUtils.genModificationList(this, _fragments, varDeclarationStmt.getFragments()));
 			return true;
 		}
 		return false;

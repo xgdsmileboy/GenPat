@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
@@ -135,7 +136,7 @@ public class ExprList extends Node {
     public boolean genModidications() {
         if (getBindingNode() != null) {
             ExprList exprList = (ExprList) getBindingNode();
-            genModificationList(_exprs, exprList.getExpr(), true);
+            _modifications = NodeUtils.genModificationList(this, _exprs, exprList.getExpr());
             if (!_modifications.isEmpty()) {
                 _modifications.clear();
                 _modifications.add(new Update(this, this, exprList));

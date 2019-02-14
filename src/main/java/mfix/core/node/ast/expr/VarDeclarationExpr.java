@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Deletion;
@@ -149,7 +150,7 @@ public class VarDeclarationExpr extends Expr {
 				Update update = new Update(this, _declType, vde.getDeclType());
 				_modifications.add(update);
 			}
-			genModificationList(_vdfs, vde.getFragments(),false);
+			_modifications.addAll(NodeUtils.genModificationList(this, _vdfs, vde.getFragments()));
 		}
 		return true;
 	}

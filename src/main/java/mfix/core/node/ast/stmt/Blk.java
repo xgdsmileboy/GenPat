@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.Constant;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
@@ -138,7 +139,7 @@ public class Blk extends Stmt {
     public boolean genModidications() {
         if(super.genModidications()) {
             Blk blk = (Blk) getBindingNode();
-            genModificationList(_statements, blk.getStatement(), true);
+            _modifications = NodeUtils.genModificationList(this, _statements, blk.getStatement());
             return true;
         }
         return false;
