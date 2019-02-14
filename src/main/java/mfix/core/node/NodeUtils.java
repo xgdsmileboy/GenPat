@@ -39,6 +39,54 @@ public class NodeUtils {
             "hashCode"));
 
     /**
+     * match two list of nodes greedily
+     *
+     * @param lst1 : first list
+     * @param lst2 : second list
+     */
+    public static void greedyMatchListNode(List<? extends Node> lst1, List<? extends Node> lst2) {
+        Set<Node> set = new HashSet<>();
+        for (Node node : lst1) {
+            for (Node other : lst2) {
+                if (!set.contains(other) && node.postAccurateMatch(other)) {
+                    set.add(other);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * check whether the given node is a simple node,
+     * which usually represents a one token
+     * @param node
+     * @return
+     */
+    public static boolean isSimpleExpr(Node node) {
+        switch (node.getNodeType()) {
+            case SNAME:
+            case QNAME:
+            case NUMBER:
+            case INTLITERAL:
+            case FLITERAL:
+            case DLITERAL:
+            case NULL:
+            case ASSIGNOPERATOR:
+            case POSTOPERATOR:
+            case PREFIXOPERATOR:
+            case INFIXOPERATOR:
+            case TYPE:
+            case SLITERAL:
+            case THIS:
+            case BLITERAL:
+            case CLITERAL:
+                return true;
+            default:
+        }
+        return false;
+    }
+
+    /**
      * check whether the bound buggy node contains any modifications
      *
      * @param node : the node for checking

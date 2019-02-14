@@ -7,6 +7,7 @@
 package mfix.core.node.ast;
 
 import mfix.common.util.Pair;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.SName;
@@ -368,7 +369,7 @@ public abstract class Node implements NodeComparator, Serializable {
     public List<Expr> getAllChildExpr(List<Expr> nodes, boolean filterName) {
         for (Node node : getAllChildren()) {
             if (node instanceof Expr) {
-                if (!filterName || !isSimpleExpr(node)) {
+                if (!filterName || !NodeUtils.isSimpleExpr(node)) {
                     nodes.add((Expr) node);
                 }
             }
@@ -377,30 +378,6 @@ public abstract class Node implements NodeComparator, Serializable {
             node.getAllChildExpr(nodes, filterName);
         }
         return nodes;
-    }
-
-    private boolean isSimpleExpr(Node node) {
-        switch (node.getNodeType()) {
-            case SNAME:
-            case QNAME:
-            case NUMBER:
-            case INTLITERAL:
-            case FLITERAL:
-            case DLITERAL:
-            case NULL:
-            case ASSIGNOPERATOR:
-            case POSTOPERATOR:
-            case PREFIXOPERATOR:
-            case INFIXOPERATOR:
-            case TYPE:
-            case SLITERAL:
-            case THIS:
-            case BLITERAL:
-            case CLITERAL:
-                return true;
-            default:
-        }
-        return false;
     }
 
     /**
@@ -624,24 +601,6 @@ public abstract class Node implements NodeComparator, Serializable {
     protected void continueTopDownMatchNull() {
         for (Node node : getAllChildren()) {
             node.postAccurateMatch(null);
-        }
-    }
-
-    /**
-     * match two list of nodes greedily
-     *
-     * @param lst1 : first list
-     * @param lst2 : second list
-     */
-    protected void greedyMatchListNode(List<? extends Node> lst1, List<? extends Node> lst2) {
-        Set<Node> set = new HashSet<>();
-        for (Node node : lst1) {
-            for (Node other : lst2) {
-                if (!set.contains(other) && node.postAccurateMatch(other)) {
-                    set.add(other);
-                    break;
-                }
-            }
         }
     }
 

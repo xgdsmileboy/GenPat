@@ -127,7 +127,7 @@ public class ExprList extends Node {
         if (exprList == null) {
             continueTopDownMatchNull();
         } else {
-            greedyMatchListNode(_exprs, exprList.getExpr());
+            NodeUtils.greedyMatchListNode(_exprs, exprList.getExpr());
         }
         return match;
     }

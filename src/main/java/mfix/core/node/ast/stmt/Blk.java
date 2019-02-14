@@ -130,7 +130,7 @@ public class Blk extends Stmt {
         if (blk == null) {
             continueTopDownMatchNull();
         } else {
-            greedyMatchListNode(_statements, blk.getStatement());
+            NodeUtils.greedyMatchListNode(_statements, blk.getStatement());
         }
         return match;
     }

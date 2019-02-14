@@ -144,7 +144,7 @@ public class SwitchStmt extends Stmt {
 			continueTopDownMatchNull();
 		} else {
 			_expression.postAccurateMatch(switchStmt.getExpression());
-			greedyMatchListNode(_statements, switchStmt.getStatements());
+			NodeUtils.greedyMatchListNode(_statements, switchStmt.getStatements());
 		}
 		return match;
 	}

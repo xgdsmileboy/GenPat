@@ -164,7 +164,7 @@ public class AryCreation extends Expr {
         if (aryCreation == null) {
             continueTopDownMatchNull();
         } else {
-            greedyMatchListNode(_dimension, aryCreation.getDimention());
+            NodeUtils.greedyMatchListNode(_dimension, aryCreation.getDimention());
             if (_initializer != null && aryCreation._initializer != null) {
                 _initializer.postAccurateMatch(aryCreation._initializer);
             }

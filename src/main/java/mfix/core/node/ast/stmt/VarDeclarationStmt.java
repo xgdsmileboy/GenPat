@@ -170,7 +170,7 @@ public class VarDeclarationStmt extends Stmt {
 			continueTopDownMatchNull();
 		} else {
 			_declType.postAccurateMatch(vds.getDeclType());
-			greedyMatchListNode(_fragments, vds.getFragments());
+			NodeUtils.greedyMatchListNode(_fragments, vds.getFragments());
 		}
 		return match;
 	}

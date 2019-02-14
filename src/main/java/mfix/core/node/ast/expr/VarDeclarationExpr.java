@@ -137,7 +137,7 @@ public class VarDeclarationExpr extends Expr {
 			continueTopDownMatchNull();
 		} else {
 			_declType.postAccurateMatch(vde.getDeclType());
-			greedyMatchListNode(getFragments(), vde.getFragments());
+			NodeUtils.greedyMatchListNode(getFragments(), vde.getFragments());
 		}
 		return match;
 	}

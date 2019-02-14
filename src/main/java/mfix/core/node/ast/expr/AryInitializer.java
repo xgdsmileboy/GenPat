@@ -120,7 +120,7 @@ public class AryInitializer extends Expr {
         if (aryInitializer == null) {
             continueTopDownMatchNull();
         } else {
-            greedyMatchListNode(_expressions, aryInitializer._expressions);
+            NodeUtils.greedyMatchListNode(_expressions, aryInitializer._expressions);
         }
 
         return match;

@@ -240,11 +240,11 @@ public class TryStmt extends Stmt {
 			continueTopDownMatchNull();
 		} else {
 			if(_resource != null && tryStmt.getResource() != null) {
-				greedyMatchListNode(_resource, tryStmt.getResource());
+				NodeUtils.greedyMatchListNode(_resource, tryStmt.getResource());
 			}
 			_blk.postAccurateMatch(tryStmt.getBody());
 			if(_catches != null && tryStmt.getCatches() != null) {
-			    greedyMatchListNode(_catches, tryStmt.getCatches());
+				NodeUtils.greedyMatchListNode(_catches, tryStmt.getCatches());
             }
 			if(_finallyBlk != null) {
 			    _finallyBlk.postAccurateMatch(tryStmt.getFinally());
