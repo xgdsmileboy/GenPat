@@ -8,6 +8,7 @@ package mfix.core.node.ast;
 
 import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.SName;
@@ -662,6 +663,8 @@ public abstract class Node implements NodeComparator, Serializable {
             node.doAbstraction(counter);
         }
     }
+
+    public void doAbstractionNew(CodeAbstraction abstraction) {} //TODO: to finish for each node
 
     public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
         Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
