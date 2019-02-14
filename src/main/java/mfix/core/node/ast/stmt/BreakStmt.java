@@ -12,6 +12,7 @@ import mfix.core.node.ast.expr.SName;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class BreakStmt extends Stmt {
 	public BreakStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.BREACK;
+		_fIndex = VIndex.STMT_BREAK;
 	}
 	
 	public void setIdentifier(SName identifier){

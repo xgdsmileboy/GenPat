@@ -13,6 +13,7 @@ import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class EnhancedForStmt extends Stmt {
 	public EnhancedForStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.EFOR;
+		_fIndex = VIndex.STMT_ENHANCEDFOR;
 	}
 	
 	public void setParameter(Svd varDecl){

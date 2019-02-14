@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
@@ -33,6 +34,7 @@ public class MType extends Node {
 	public MType(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.TYPE;
+		_fIndex = VIndex.EXP_TYPE;
 		_typeStr = oriNode.toString();
 	}
 

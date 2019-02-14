@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ public class DoubleLiteral extends NumLiteral {
     public DoubleLiteral(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.DLITERAL;
+        _fIndex = VIndex.EXP_DOUBLE_LIT;
     }
 
     public void setValue(double value) {

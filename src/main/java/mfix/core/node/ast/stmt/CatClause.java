@@ -12,6 +12,7 @@ import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class CatClause extends Node {
 	public CatClause(String fileName, int startLine, int endLine, ASTNode oriNode, Node parent) {
 		super(fileName, startLine, endLine, oriNode, parent);
 		_nodeType = TYPE.CATCHCLAUSE;
+		_fIndex = VIndex.STMT_CATCH;
 	}
 	
 	public void setException(Svd svd) {

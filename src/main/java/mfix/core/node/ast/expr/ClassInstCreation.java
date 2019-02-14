@@ -12,6 +12,7 @@ import mfix.core.node.ast.stmt.AnonymousClassDecl;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class ClassInstCreation extends Expr {
     public ClassInstCreation(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.CLASSCREATION;
+        _fIndex = VIndex.EXP_CLASSINS_CRT;
     }
 
     public void setExpression(Expr expression) {

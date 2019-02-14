@@ -12,6 +12,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import mfix.core.pattern.Pattern;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
@@ -46,6 +47,7 @@ public class MethodInv extends Expr {
 	public MethodInv(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.MINVOCATION;
+		_fIndex = VIndex.EXP_METHOD_INV;
 	}
 
 	public void setExpression(Expr expression) {

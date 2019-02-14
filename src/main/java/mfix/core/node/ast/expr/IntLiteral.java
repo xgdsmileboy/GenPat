@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.LinkedList;
@@ -23,6 +24,7 @@ public class IntLiteral extends NumLiteral {
 	public IntLiteral(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.INTLITERAL;
+		_fIndex = VIndex.EXP_INT_LIT;
 	}
 
 	public void setValue(int value) {

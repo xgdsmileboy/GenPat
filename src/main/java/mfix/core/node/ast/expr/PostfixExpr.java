@@ -11,6 +11,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class PostfixExpr extends Expr {
 	public PostfixExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.POSTEXPR;
+		_fIndex = VIndex.EXP_POSTFIX;
 	}
 
 	public void setExpression(Expr expression) {

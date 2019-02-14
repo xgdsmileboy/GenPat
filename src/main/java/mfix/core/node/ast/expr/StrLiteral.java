@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class StrLiteral extends Expr {
 	public StrLiteral(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SLITERAL;
+		_fIndex = VIndex.EXP_STR_LIT;
 	}
 
 	public void setValue(String value) {

@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 
@@ -26,6 +27,7 @@ public class PostOperator extends Operator {
 	public PostOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.POSTOPERATOR;
+		_fIndex = VIndex.EXP_POSTFIX_OP;
 	}
 
 	public void setOperator(PostfixExpression.Operator operator) {

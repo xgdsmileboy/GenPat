@@ -10,6 +10,7 @@ import mfix.common.util.Constant;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class Blk extends Stmt {
     public Blk(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
         super(fileName, startLine, endLine, node, parent);
         _nodeType = TYPE.BLOCK;
+        _fIndex = VIndex.STMT_BLK;
     }
 
     public void setStatement(List<Stmt> statements) {

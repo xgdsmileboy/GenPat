@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class AssertStmt extends Stmt {
 	public AssertStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.ASSERT;
+		_fIndex = VIndex.STMT_ASSERT;
 		_codeStr = node.toString();
 	}
 

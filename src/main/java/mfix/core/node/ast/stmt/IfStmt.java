@@ -12,6 +12,7 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class IfStmt extends Stmt {
 	public IfStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.IF;
+		_fIndex = VIndex.STMT_IF;
 	}
 	
 	public void setCondition(Expr condition){

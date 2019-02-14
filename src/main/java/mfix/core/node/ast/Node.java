@@ -837,7 +837,7 @@ public abstract class Node implements NodeComparator, Serializable {
     /*********************************************************/
 
     private Vector _patternVec;
-    protected int _fIndex;
+    protected int _fIndex = -1;
 
     public Vector getPatternVector(){
         if (_patternVec == null) {
@@ -851,7 +851,7 @@ public abstract class Node implements NodeComparator, Serializable {
         for (Node node : getAllChildren()) {
             _patternVec.or(node.getPatternVector());
         }
-        if (!_abstract) {
+        if (!_abstract && _fIndex >= 0) {
             _patternVec.set(_fIndex);
         }
         if(!_modifications.isEmpty()) {

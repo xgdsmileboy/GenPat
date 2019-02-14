@@ -10,6 +10,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class ExprList extends Node {
     public ExprList(String fileName, int startLine, int endLine, ASTNode oriNode) {
         super(fileName, startLine, endLine, oriNode);
         _nodeType = TYPE.EXPRLST;
+        _fIndex = VIndex.EXP_LIST;
     }
 
     public void setExprs(List<Expr> exprs) {

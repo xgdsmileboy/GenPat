@@ -12,6 +12,7 @@ import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -36,12 +37,13 @@ public class Vdf extends Node {
      *	Identifier { Dimension } [ = Expression ]
 	 */
 	public Vdf(String fileName, int startLine, int endLine, ASTNode node) {
-		super(fileName, startLine, endLine, node);
+		this(fileName, startLine, endLine, node, null);
 	}
 
 	public Vdf(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.VARDECLFRAG;
+		_fIndex = VIndex.EXP_VAR_FRAG;
 	}
 
 	public void setName(SName identifier) {
