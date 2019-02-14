@@ -9,7 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
-import mfix.core.node.vector.VIndex;
+import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;

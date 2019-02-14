@@ -18,7 +18,7 @@ import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.vector.Vector;
+import mfix.core.node.cluster.Vector;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;

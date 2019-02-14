@@ -12,7 +12,6 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;

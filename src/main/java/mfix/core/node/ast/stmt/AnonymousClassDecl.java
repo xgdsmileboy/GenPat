@@ -8,7 +8,6 @@ package mfix.core.node.ast.stmt;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
-import mfix.core.node.vector.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;

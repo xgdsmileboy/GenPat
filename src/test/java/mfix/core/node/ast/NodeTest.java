@@ -16,7 +16,7 @@ import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import mfix.core.node.PatternExtractor;
 import mfix.core.node.parser.NodeParser;
-import mfix.core.node.vector.Vector;
+import mfix.core.node.cluster.Vector;
 import mfix.core.search.ExtractFaultyCode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;

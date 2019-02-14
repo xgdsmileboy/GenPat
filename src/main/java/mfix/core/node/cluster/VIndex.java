@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node.vector;
+package mfix.core.node.cluster;
 
 /**
  * @author: Jiajun
