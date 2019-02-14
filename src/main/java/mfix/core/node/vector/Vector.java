@@ -65,4 +65,15 @@ public class Vector {
         return false;
     }
 
+    @Override
+    public String toString() {
+        String string = Long.toBinaryString(_vec);
+        int complement = size - string.length();
+        if (complement == 0) return string;
+        StringBuffer buffer = new StringBuffer();
+        while(complement-- >= 0) {
+            buffer.append('0');
+        }
+        return buffer.append(string).toString();
+    }
 }

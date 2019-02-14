@@ -14,8 +14,9 @@ import mfix.common.util.Utils;
 import mfix.core.TestCase;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
+import mfix.core.node.PatternExtractor;
 import mfix.core.node.parser.NodeParser;
-import mfix.core.node.ast.Node;
+import mfix.core.node.vector.Vector;
 import mfix.core.search.ExtractFaultyCode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -24,6 +25,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -68,5 +70,23 @@ public class NodeTest extends TestCase {
         Utils.serialize(node, "/tmp/node");
         Node recoverNode = (Node) Utils.deserialize("/tmp/node");
         Assert.assertEquals("", node.toString(), recoverNode.toString());
+    }
+
+    @Test
+    public void test_node_vector() {
+        String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
+        String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
+
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
+
+        // there is only one method changed
+        Assert.assertTrue(patterns.size() == 1);
+
+        Node node = patterns.iterator().next();
+
+        Vector vector = node.getPatternVector();
+        System.out.println(vector.toString());
+
     }
 }
