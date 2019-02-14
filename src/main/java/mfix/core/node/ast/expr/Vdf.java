@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
@@ -194,8 +195,8 @@ public class Vdf extends Node {
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if(node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;
-			if(checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings)) {
+			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				matchedNode.put(_identifier, vdf._identifier);
 				matchedStrings.put(_identifier.getName(), vdf.getName());
 				return true;
@@ -207,7 +208,7 @@ public class Vdf extends Node {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			Vdf vdf = (Vdf) node;
 			for (Modification modification : vdf.getModifications()) {

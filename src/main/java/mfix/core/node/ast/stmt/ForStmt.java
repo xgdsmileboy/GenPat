@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.ExprList;
@@ -282,7 +283,7 @@ public class ForStmt extends Stmt {
         StringBuffer initializer = null;
         StringBuffer condition = null;
         StringBuffer updater = null;
-        Node pnode = checkModification();
+        Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
             ForStmt forStmt = (ForStmt) pnode;
             for (Modification modification : forStmt.getModifications()) {

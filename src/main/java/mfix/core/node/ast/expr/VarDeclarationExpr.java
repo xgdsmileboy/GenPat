@@ -158,8 +158,8 @@ public class VarDeclarationExpr extends Expr {
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if(node instanceof VarDeclarationExpr) {
-			return checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings);
+			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		} else {
 			return false;
 		}
@@ -193,7 +193,7 @@ public class VarDeclarationExpr extends Expr {
 		Map<Integer, StringBuffer> insertion = new HashMap<>();
         Set<Node> deletion = new HashSet<>();
         Map<Node, StringBuffer> updates = new HashMap<>();
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             VarDeclarationExpr varDeclarationExpr = (VarDeclarationExpr) node;
             for (Modification modification : varDeclarationExpr.getModifications()) {

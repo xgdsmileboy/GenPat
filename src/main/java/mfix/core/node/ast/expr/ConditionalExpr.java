@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -195,7 +196,7 @@ public class ConditionalExpr extends Expr {
         StringBuffer condition = null;
         StringBuffer first = null;
         StringBuffer snd = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             ConditionalExpr conditionalExpr = (ConditionalExpr) node;
             for (Modification modification : conditionalExpr.getModifications()) {

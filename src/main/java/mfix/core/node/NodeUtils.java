@@ -8,6 +8,7 @@ package mfix.core.node;
 
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
+import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
@@ -35,11 +36,79 @@ import java.util.Set;
 public class NodeUtils {
 
     public static Set<String> IGNORE_METHOD_INVOKE = new HashSet<String>(Arrays.asList("toString", "equals",
-			"hashCode"));
+            "hashCode"));
 
-    public static List<Modification> genModificationList(Node pNode, List<? extends Node> src, List<? extends Node> tar) {
+    /**
+     * check whether the bound buggy node contains any modifications
+     *
+     * @param node : the node for checking
+     * @return : null if {@code node} does not have binding node
+     * or the binding node has no modification, otherwise, the binding node
+     * will be returned
+     */
+    public static Node checkModification(Node node) {
+        if (node.getBuggyBindingNode() != null && !node.getBuggyBindingNode().getModifications().isEmpty()) {
+            return node.getBuggyBindingNode();
+        }
+        return null;
+    }
+
+    /**
+     * check whether the data dependencies of nodes {@code node} and {@code other}
+     * match each other or not
+     *
+     * @param node           : source node for match
+     * @param other          : target node for match
+     * @param matchedNode    : map of nodes that already matches
+     * @param matchedStrings : map of string that already matches
+     * @return : true if their data dependencies match each other, otherwise false
+     */
+    public static boolean checkDependency(Node node, Node other, Map<Node, Node> matchedNode,
+                                          Map<String, String> matchedStrings) {
+        if (node.getDataDependency() != null && other.getDataDependency() != null) {
+            if (node.getDataDependency().ifMatch(other.getDataDependency(), matchedNode, matchedStrings)) {
+                return true;
+            }
+            return false;
+        }
+        return node.getDataDependency() == other.getDataDependency();
+    }
+
+    /**
+     * check whether the source code of {@code node} and {@code other} can match
+     * each other or not according to existing matching result {@code matchedStrings}.
+     * If they can match each other, the mapping relation will be added to both
+     * {@code matchedNode} and {@code matchedStrings}
+     *
+     * @param node           : source node to match
+     * @param other          : target node to match
+     * @param matchedNode    : already matched nodes
+     * @param matchedStrings : already matched strings
+     * @return : true if they can match each other, otherwise false
+     */
+    public static boolean matchSameNodeType(Node node, Node other, Map<Node, Node> matchedNode,
+                                            Map<String, String> matchedStrings) {
+        if (Utils.checkCompatiblePut(node.toString(), other.toString(), matchedStrings)) {
+            matchedNode.put(node, other);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * match two lists of nodes and return a list of modifications
+     * according to the matching result
+     *
+     * @param pNode : parent node of nodes in {@code src}
+     * @param src   : list of nodes for match
+     * @param tar   : list of nodes for match
+     * @return : a list of modifications
+     */
+    public static List<Modification> genModificationList(Node pNode, List<? extends Node> src,
+                                                         List<? extends Node> tar) {
         return genModificationList(pNode, src, tar, false);
     }
+
     /**
      * match two list ast nodes and generate modifications
      *
@@ -49,7 +118,7 @@ public class NodeUtils {
      * @param move  : permit move operation
      */
     public static List<Modification> genModificationList(Node pNode, List<? extends Node> src,
-                                                          List<? extends Node> tar, boolean move) {
+                                                         List<? extends Node> tar, boolean move) {
         Set<Integer> set = new HashSet<>();
         List<Deletion> deletions = new LinkedList<>();
         List<Insertion> insertions = new LinkedList<>();
@@ -143,7 +212,7 @@ public class NodeUtils {
         FVector fVector = sketch.getParent().getFeatureVector();
         FVector otherVector = candidate.getParent().getFeatureVector();
         if (fVector.computeSimilarity(otherVector, ALGO.COSINE) > 0.8 && fVector.computeSimilarity(otherVector,
-				ALGO.NORM_2) < 0.5) {
+                ALGO.NORM_2) < 0.5) {
             return true;
         }
 //		Map<String, Set<Node>> map = sketch.getCalledMethods();

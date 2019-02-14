@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Blk;
@@ -239,8 +240,8 @@ public class MethDecl extends Node {
             MethDecl methDecl = (MethDecl) node;
             return _name.ifMatch(methDecl.getName(), matchedNode, matchedStrings)
                     && _body.ifMatch(methDecl.getBody(), matchedNode, matchedStrings)
-                    && checkDependency(node, matchedNode, matchedStrings)
-                    && matchSameNodeType(node, matchedNode, matchedStrings);
+                    && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
         }
         return false;
     }

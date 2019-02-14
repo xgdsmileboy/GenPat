@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.match.metric.FVector;
@@ -173,7 +174,7 @@ public class BreakStmt extends Stmt {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer identifier = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			BreakStmt breakStmt = (BreakStmt) pnode;
 			for (Modification modification : breakStmt.getModifications()) {

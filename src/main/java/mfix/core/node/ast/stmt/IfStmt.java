@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
@@ -250,7 +251,7 @@ public class IfStmt extends Stmt {
 		StringBuffer condition = null;
 		StringBuffer then = null;
 		StringBuffer els = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			IfStmt ifStmt = (IfStmt) pnode;
 			for(Modification modification : ifStmt.getModifications()) {

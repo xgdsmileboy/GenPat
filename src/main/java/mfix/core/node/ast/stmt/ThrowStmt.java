@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ClassInstCreation;
 import mfix.core.node.ast.expr.Expr;
@@ -167,7 +168,7 @@ public class ThrowStmt extends Stmt {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			ThrowStmt throwStmt = (ThrowStmt) pnode;
 			for (Modification modification : throwStmt.getModifications()) {

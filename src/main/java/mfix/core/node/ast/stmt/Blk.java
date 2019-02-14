@@ -173,7 +173,7 @@ public class Blk extends Stmt {
 
     @Override
     public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-        Node pnode = checkModification();
+        Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
             Blk blk = (Blk) pnode;
             Map<Node, List<StringBuffer>> insertBefore = new HashMap<>();

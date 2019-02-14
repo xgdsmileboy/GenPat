@@ -197,7 +197,7 @@ public class SwitchStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			SwitchStmt switchStmt = (SwitchStmt) pnode;
 			StringBuffer expression = null;

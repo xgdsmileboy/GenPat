@@ -330,7 +330,7 @@ public class TryStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			TryStmt tryStmt = (TryStmt) pnode;
 			List<Modification> catchModifications = new LinkedList<>();

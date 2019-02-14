@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -165,7 +166,7 @@ public class CastExpr extends Expr {
     public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer castType = null;
         StringBuffer expression = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             CastExpr castExpr = (CastExpr) node;
             for (Modification modification : castExpr.getModifications()) {

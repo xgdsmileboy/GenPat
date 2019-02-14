@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -183,7 +184,7 @@ public class SuperFieldAcc extends Expr {
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer name = null;
 		StringBuffer identifier = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			SuperFieldAcc superFieldAcc = (SuperFieldAcc) node;
 			for (Modification modification : superFieldAcc.getModifications()) {

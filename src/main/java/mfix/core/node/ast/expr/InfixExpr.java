@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -184,7 +185,7 @@ public class InfixExpr extends Expr {
 		StringBuffer lhs = null;
 		StringBuffer operator = null;
 		StringBuffer rhs = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			InfixExpr infixExpr = (InfixExpr) node;
 			for (Modification modification : infixExpr.getModifications()) {

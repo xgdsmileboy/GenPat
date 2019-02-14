@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -169,7 +170,7 @@ public class AryAcc extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer array = null;
         StringBuffer index = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             AryAcc aryAcc = (AryAcc) node;
             for (Modification modification : aryAcc.getModifications()) {

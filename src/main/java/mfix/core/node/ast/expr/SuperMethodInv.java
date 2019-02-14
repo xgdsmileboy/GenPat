@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -221,7 +222,7 @@ public class SuperMethodInv extends Expr {
 		StringBuffer label = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			SuperMethodInv superMethodInv = (SuperMethodInv) node;
 			for (Modification modification : superMethodInv.getModifications()) {

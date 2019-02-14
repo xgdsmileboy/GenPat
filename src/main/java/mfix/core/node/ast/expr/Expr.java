@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -73,8 +74,8 @@ public abstract class Expr extends Node {
                 || (_modifications.isEmpty() && node instanceof Expr)) {
             if ((!"boolean".equals(getTypeString()) || "boolean".equals(((Expr) node).getTypeString()))
                     && !(node instanceof Operator)) {
-                return checkDependency(node, matchedNode, matchedStrings)
-                        && matchSameNodeType(node, matchedNode, matchedStrings);
+                return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
             }
         }
         return false;

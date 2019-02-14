@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.AnonymousClassDecl;
 import mfix.core.node.match.metric.FVector;
@@ -221,8 +222,8 @@ public class ClassInstCreation extends Expr {
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if(node instanceof Expr) {
             if(isAbstract()) {
-                return checkDependency(node, matchedNode, matchedStrings)
-                        && matchSameNodeType(node, matchedNode, matchedStrings);
+                return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
             } else if (node instanceof ClassInstCreation){
                 ClassInstCreation classInstCreation = (ClassInstCreation) node;
                 List<Expr> exprs = _arguments.getExpr();
@@ -282,7 +283,7 @@ public class ClassInstCreation extends Expr {
         StringBuffer expression = null;
         StringBuffer classType = null;
         StringBuffer arguments = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             ClassInstCreation classInstCreation = (ClassInstCreation) node;
             for (Modification modification : classInstCreation.getModifications()) {

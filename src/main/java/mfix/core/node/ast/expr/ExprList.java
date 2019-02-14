@@ -148,8 +148,8 @@ public class ExprList extends Node {
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if(node instanceof ExprList) {
-            return checkDependency(node, matchedNode, matchedStrings)
-                    && matchSameNodeType(node, matchedNode, matchedStrings);
+            return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
         }
         return false;
     }
@@ -179,7 +179,7 @@ public class ExprList extends Node {
     public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
         }

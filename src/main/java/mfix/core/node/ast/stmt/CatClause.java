@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
@@ -161,8 +162,8 @@ public class CatClause extends Node {
 			CatClause catClause = (CatClause) node;
 			return _exception.ifMatch(catClause.getException(), matchedNode, matchedStrings)
 					&& _blk.ifMatch(catClause.getBody(), matchedNode, matchedStrings)
-					&& checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings);
+					&& NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		}
 		return false;
 	}
@@ -188,7 +189,7 @@ public class CatClause extends Node {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer exception = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			CatClause catClause = (CatClause) pnode;
 			for (Modification modification : catClause.getModifications()) {
