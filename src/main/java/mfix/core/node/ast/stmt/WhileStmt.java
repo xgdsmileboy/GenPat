@@ -135,16 +135,16 @@ public class WhileStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			WhileStmt whileStmt = (WhileStmt) getBindingNode();
 			if (_expression.getBindingNode() != whileStmt.getExpression()) {
 				Update update = new Update(this, _expression, whileStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
-			_body.genModidications();
+			_body.genModifications();
 			return true;
 		}
 		return false;

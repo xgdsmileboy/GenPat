@@ -176,8 +176,8 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) getBindingNode();
 			if (!_declType.compare(varDeclarationStmt.getDeclType())) {
 				Update update = new Update(this, _declType, varDeclarationStmt.getDeclType());

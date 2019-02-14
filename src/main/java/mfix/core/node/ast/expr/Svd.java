@@ -157,8 +157,8 @@ public class Svd extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			Svd svd = (Svd) getBindingNode();
 			if (!_decType.compare(svd.getDeclType())) {
 				Update update = new Update(this, _decType, svd.getDeclType());
@@ -177,7 +177,7 @@ public class Svd extends Expr {
 				Update update = new Update(this, _initializer, svd.getInitializer());
 				_modifications.add(update);
 			} else {
-				_initializer.genModidications();
+				_initializer.genModifications();
 			}
 		}
 		return true;

@@ -161,22 +161,22 @@ public class EnhancedForStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			EnhancedForStmt enhancedForStmt = (EnhancedForStmt) getBindingNode();
 			if(_varDecl.getBindingNode() != enhancedForStmt.getParameter()) {
 				Update update = new Update(this, _varDecl, enhancedForStmt.getParameter());
 				_modifications.add(update);
 			} else {
-				_varDecl.genModidications();
+				_varDecl.genModifications();
 			}
 			if(_expression.getBindingNode() != enhancedForStmt.getExpression()) {
 				Update update = new Update(this, _expression, enhancedForStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
-			_statement.genModidications();
+			_statement.genModifications();
 			return true;
 		}
 		return false;

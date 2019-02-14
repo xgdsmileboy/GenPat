@@ -137,20 +137,20 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			InfixExpr infixExpr = (InfixExpr) getBindingNode();
 			if (_lhs.getBindingNode() != infixExpr.getLhs()) {
 				Update update = new Update(this, _lhs, infixExpr.getLhs());
 				_modifications.add(update);
 			} else {
-				_lhs.genModidications();
+				_lhs.genModifications();
 			}
 			if (_rhs.getBindingNode() != infixExpr.getRhs()) {
 				Update update = new Update(this, _rhs, infixExpr.getRhs());
 				_modifications.add(update);
 			} else {
-				_rhs.genModidications();
+				_rhs.genModifications();
 			}
 			if (!_operator.compare(infixExpr.getOperator())) {
 				Update update = new Update(this, _operator, infixExpr.getOperator());

@@ -130,19 +130,19 @@ public class AryAcc extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
+    public boolean genModifications() {
         AryAcc bind = (AryAcc) getBindingNode();
         if (_index.getBindingNode() != bind.getIndex()) {
             Update update = new Update(this, _index, bind.getIndex());
             _modifications.add(update);
         } else {
-            _index.genModidications();
+            _index.genModifications();
         }
         if (_array.getBindingNode() != bind.getArray()) {
             Update update = new Update(this, _array, bind.getArray());
             _modifications.add(update);
         } else {
-            _array.genModidications();
+            _array.genModifications();
         }
         return true;
     }

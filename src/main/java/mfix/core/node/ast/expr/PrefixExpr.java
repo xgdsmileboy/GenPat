@@ -122,14 +122,14 @@ public class PrefixExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			PrefixExpr prefixExpr = (PrefixExpr) getBindingNode();
 			if (_expression.getBindingNode() != prefixExpr.getExpression()) {
 				Update update = new Update(this, _expression, prefixExpr.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (!_operator.compare(prefixExpr.getOperator())) {
 				Update update = new Update(this, _operator, prefixExpr.getOperator());

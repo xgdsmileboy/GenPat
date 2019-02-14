@@ -96,8 +96,8 @@ public class CharLiteral extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             CharLiteral charLiteral = (CharLiteral) getBindingNode();
             if (getValue() != charLiteral.getValue()) {
                 Update update = new Update(getParent(), this, charLiteral);

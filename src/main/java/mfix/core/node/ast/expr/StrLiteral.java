@@ -99,8 +99,8 @@ public class StrLiteral extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			StrLiteral literal = (StrLiteral) getBindingNode();
 			if (!getValue().equals(literal.getValue())) {
 				Update update = new Update(this, this, literal);

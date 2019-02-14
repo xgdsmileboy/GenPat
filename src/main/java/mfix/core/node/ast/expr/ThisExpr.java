@@ -76,7 +76,7 @@ public class ThisExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 

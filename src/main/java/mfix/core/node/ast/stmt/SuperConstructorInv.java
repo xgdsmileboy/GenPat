@@ -169,8 +169,8 @@ public class SuperConstructorInv extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			SuperConstructorInv superConstructorInv = (SuperConstructorInv) getBindingNode();
 			if(_expression == null) {
 				if(superConstructorInv.getExpression() != null) {
@@ -181,7 +181,7 @@ public class SuperConstructorInv extends Stmt {
 				Update update = new Update(this, _expression, superConstructorInv.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if(_superType != null) {
 				if(superConstructorInv.getSuperType() == null || !_superType.compare(superConstructorInv.getSuperType())) {
@@ -193,7 +193,7 @@ public class SuperConstructorInv extends Stmt {
 				Update update = new Update(this, _arguments, superConstructorInv.getArgument());
 				_modifications.add(update);
 			} else {
-				_arguments.genModidications();
+				_arguments.genModifications();
 			}
 			return true;
 		}

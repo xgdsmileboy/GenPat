@@ -86,8 +86,8 @@ public class BoolLiteral extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             BoolLiteral literal = (BoolLiteral) getBindingNode();
             if (_value != literal.getValue()) {
                 Update update = new Update(this, this, literal);

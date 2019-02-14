@@ -177,20 +177,20 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			IfStmt ifStmt = (IfStmt) getBindingNode();
 			if(_condition.getBindingNode() != ifStmt.getCondition()) {
 				Update update = new Update(this, _condition, ifStmt.getCondition());
 				_modifications.add(update);
 			} else {
-				_condition.genModidications();
+				_condition.genModifications();
 			}
 			if(_then.getBindingNode() != ifStmt.getThen()) {
 				Update update = new Update(this, _then, ifStmt.getThen());
 				_modifications.add(update);
 			} else {
-				_then.genModidications();
+				_then.genModifications();
 			}
 			if(_else == null) {
 				if (ifStmt.getElse() != null) {
@@ -201,7 +201,7 @@ public class IfStmt extends Stmt {
 				Update update = new Update(this, _else, ifStmt.getElse());
 				_modifications.add(update);
 			} else {
-				_else.genModidications();
+				_else.genModifications();
 			}
 			return true;
 		}

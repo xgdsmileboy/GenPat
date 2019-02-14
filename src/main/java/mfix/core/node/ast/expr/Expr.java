@@ -59,7 +59,7 @@ public abstract class Expr extends Node {
     }
 
     @Override
-    public boolean genModidications() {
+    public boolean genModifications() {
         if (getBindingNode() == null) {
             LevelLogger.error("Should not be null since we cannot delete an expression");
             return false;

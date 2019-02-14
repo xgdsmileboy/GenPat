@@ -103,8 +103,8 @@ public class TyLiteral extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			TyLiteral tyLiteral = (TyLiteral) getBindingNode();
 			if (!_type.compare(tyLiteral.getDeclType())) {
 				Update update = new Update(this, _type, tyLiteral.getDeclType());

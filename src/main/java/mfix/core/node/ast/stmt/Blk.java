@@ -136,8 +136,8 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public boolean genModidications() {
-        if(super.genModidications()) {
+    public boolean genModifications() {
+        if(super.genModifications()) {
             Blk blk = (Blk) getBindingNode();
             _modifications = NodeUtils.genModificationList(this, _statements, blk.getStatement());
             return true;

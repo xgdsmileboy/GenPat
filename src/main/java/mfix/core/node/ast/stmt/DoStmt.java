@@ -145,16 +145,16 @@ public class DoStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			DoStmt doStmt = (DoStmt) getBindingNode();
 			if(_expression.getBindingNode() != doStmt.getExpression()) {
 				Update update = new Update(this, _expression, doStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
-			_stmt.genModidications();
+			_stmt.genModifications();
 			return true;
 		}
 		return false;

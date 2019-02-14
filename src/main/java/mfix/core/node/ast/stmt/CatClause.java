@@ -140,16 +140,16 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		if (getBindingNode() != null) {
 			CatClause catClause = (CatClause) getBindingNode();
 			if(_exception.getBindingNode() != catClause.getException()) {
 				Update update = new Update(this, _exception, catClause.getException());
 				_modifications.add(update);
 			} else {
-				_exception.genModidications();
+				_exception.genModifications();
 			}
-			_blk.genModidications();
+			_blk.genModifications();
 			return true;
 		}
 		return false;

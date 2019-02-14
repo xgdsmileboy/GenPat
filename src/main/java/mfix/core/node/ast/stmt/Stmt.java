@@ -29,7 +29,7 @@ public abstract class Stmt extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		if (getBindingNode() == null) {
 			return false;
 		}

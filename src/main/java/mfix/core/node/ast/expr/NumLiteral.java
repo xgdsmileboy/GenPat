@@ -83,8 +83,8 @@ public class NumLiteral extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			if (!compare(getBindingNode())) {
 				Update update = new Update(this, this, getBindingNode());
 				_modifications.add(update);

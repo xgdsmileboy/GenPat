@@ -187,8 +187,8 @@ public class ClassInstCreation extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             ClassInstCreation classInstCreation = (ClassInstCreation) getBindingNode();
             if (_expression == null) {
                 if (classInstCreation.getExpression() != null) {
@@ -199,7 +199,7 @@ public class ClassInstCreation extends Expr {
                 Update update = new Update(this, _expression, classInstCreation.getExpression());
                 _modifications.add(update);
             } else {
-                _expression.genModidications();
+                _expression.genModifications();
             }
             if (_classType.getBindingNode() != classInstCreation.getClassType()
                     || !_classType.typeStr().equals(classInstCreation.getClassType().typeStr())) {
@@ -210,7 +210,7 @@ public class ClassInstCreation extends Expr {
                 Update update = new Update(this, _arguments, classInstCreation.getArguments());
                 _modifications.add(update);
             } else {
-                _arguments.genModidications();
+                _arguments.genModifications();
             }
         }
 

@@ -134,14 +134,14 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			ConstructorInv constructorInv = (ConstructorInv) getBindingNode();
 			if(_arguments.getBindingNode() != constructorInv.getArguments()) {
 				Update update = new Update(this, _arguments, constructorInv.getArguments());
 				_modifications.add(update);
 			} else {
-				_arguments.genModidications();
+				_arguments.genModifications();
 			}
 			return true;
 		}

@@ -130,8 +130,8 @@ public class ReturnStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			ReturnStmt returnStmt = (ReturnStmt) getBindingNode();
 			if(_expression == null) {
 				if(returnStmt.getExpression() != null) {
@@ -142,7 +142,7 @@ public class ReturnStmt extends Stmt {
 				Update update = new Update(this, _expression, returnStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			return true;
 		}

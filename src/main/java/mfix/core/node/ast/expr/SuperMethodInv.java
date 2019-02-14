@@ -166,8 +166,8 @@ public class SuperMethodInv extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			SuperMethodInv methodInv = (SuperMethodInv) getBindingNode();
 			if (_label == null) {
 				if (methodInv._label != null) {
@@ -187,7 +187,7 @@ public class SuperMethodInv extends Expr {
 				Update update = new Update(this, _arguments, methodInv.getArguments());
 				_modifications.add(update);
 			} else {
-				_arguments.genModidications();
+				_arguments.genModifications();
 			}
 		}
 		return true;

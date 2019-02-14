@@ -110,14 +110,14 @@ public class ParenthesiszedExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			ParenthesiszedExpr parenthesiszedExpr = (ParenthesiszedExpr) getBindingNode();
 			if (_expression.getBindingNode() != parenthesiszedExpr.getExpression()) {
 				Update update = new Update(this, _expression, parenthesiszedExpr.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 		}
 		return true;

@@ -84,7 +84,7 @@ public class AnonymousClassDecl extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 

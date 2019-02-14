@@ -170,7 +170,7 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		if (getBindingNode() != null) {
 			Vdf vdf = (Vdf) getBindingNode();
 			if (_identifier.compare(vdf._identifier)) {
@@ -183,7 +183,7 @@ public class Vdf extends Node {
 					Update update = new Update(this, _expression, vdf.getExpression());
 					_modifications.add(update);
 				} else {
-					_expression.genModidications();
+					_expression.genModifications();
 				}
 			}
 		}

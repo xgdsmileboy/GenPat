@@ -124,14 +124,14 @@ public class FieldAcc extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			FieldAcc fieldAcc = (FieldAcc) getBindingNode();
 			if (_expression.getBindingNode() != fieldAcc.getExpression()) {
 				Update update = new Update(this, _expression, fieldAcc.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (_identifier.getBindingNode() != fieldAcc.getIdentifier()
 					|| !_identifier.compare(fieldAcc.getIdentifier())) {

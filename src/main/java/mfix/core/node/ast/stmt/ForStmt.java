@@ -203,14 +203,14 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             ForStmt forStmt = (ForStmt) getBindingNode();
             if(_initializers.getBindingNode() != forStmt.getInitializer()) {
                 Update update = new Update(this, _initializers, forStmt.getInitializer());
                 _modifications.add(update);
             } else {
-                _initializers.genModidications();
+                _initializers.genModifications();
             }
             if(_condition == null) {
                 if (forStmt.getCondition() != null) {
@@ -221,15 +221,15 @@ public class ForStmt extends Stmt {
                 Update update = new Update(this, _condition, forStmt.getCondition());
                 _modifications.add(update);
             } else {
-                _condition.genModidications();
+                _condition.genModifications();
             }
             if(_updaters.getBindingNode() != forStmt.getUpdaters()) {
                 Update update = new Update(this, _updaters, forStmt.getUpdaters());
                 _modifications.add(update);
             } else {
-                _updaters.genModidications();
+                _updaters.genModifications();
             }
-            _body.genModidications();
+            _body.genModifications();
             return true;
         }
         return false;

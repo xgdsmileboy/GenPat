@@ -121,8 +121,8 @@ public class ContinueStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			ContinueStmt continueStmt = (ContinueStmt) getBindingNode();
 			if(_identifier == null) {
 				if(continueStmt._identifier != null) {
@@ -133,7 +133,7 @@ public class ContinueStmt extends Stmt {
 				Update update = new Update(this, _identifier, continueStmt._identifier);
 				_modifications.add(update);
 			} else {
-				_identifier.genModidications();
+				_identifier.genModifications();
 			}
 			return true;
 		}

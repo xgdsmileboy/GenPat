@@ -138,8 +138,8 @@ public class SuperFieldAcc extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			SuperFieldAcc superFieldAcc = (SuperFieldAcc) getBindingNode();
 			if (_identifier.getBindingNode() != superFieldAcc.getIdentifier()
 					|| !_identifier.getName().equals(superFieldAcc.getIdentifier().getName())) {

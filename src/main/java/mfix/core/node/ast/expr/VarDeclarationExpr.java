@@ -143,8 +143,8 @@ public class VarDeclarationExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			VarDeclarationExpr vde = (VarDeclarationExpr) getBindingNode();
 			if (!_declType.compare(vde.getDeclType())) {
 				Update update = new Update(this, _declType, vde.getDeclType());

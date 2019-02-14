@@ -133,7 +133,7 @@ public class ExprList extends Node {
     }
 
     @Override
-    public boolean genModidications() {
+    public boolean genModifications() {
         if (getBindingNode() != null) {
             ExprList exprList = (ExprList) getBindingNode();
             _modifications = NodeUtils.genModificationList(this, _exprs, exprList.getExpr());

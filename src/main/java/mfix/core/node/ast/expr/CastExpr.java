@@ -127,8 +127,8 @@ public class CastExpr extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             CastExpr castExpr = (CastExpr) getBindingNode();
             if (_castType.getBindingNode() != castExpr.getCastType()
                     || !_castType.typeStr().equals(castExpr.getCastType().typeStr())) {

@@ -173,8 +173,8 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             AryCreation aryCreation = (AryCreation) getBindingNode();
             List<Expr> exprs = aryCreation.getDimention();
             if (exprs.size() == _dimension.size()) {
@@ -183,7 +183,7 @@ public class AryCreation extends Expr {
                         Update update = new Update(this, _dimension.get(i), exprs.get(i));
                         _modifications.add(update);
                     } else {
-                        _dimension.get(i).genModidications();
+                        _dimension.get(i).genModifications();
                     }
                 }
             }
@@ -197,7 +197,7 @@ public class AryCreation extends Expr {
                     Update update = new Update(this, _initializer, aryCreation._initializer);
                     _modifications.add(update);
                 } else {
-                    _initializer.genModidications();
+                    _initializer.genModifications();
                 }
             }
         }

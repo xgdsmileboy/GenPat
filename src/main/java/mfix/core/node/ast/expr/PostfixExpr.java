@@ -123,14 +123,14 @@ public class PostfixExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			PostfixExpr postfixExpr = (PostfixExpr) getBindingNode();
 			if (_expression.getBindingNode() != postfixExpr.getExpression()) {
 				Update update = new Update(this, _expression, postfixExpr.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (!_operator.compare(postfixExpr.getOperator())) {
 				Update update = new Update(this, _operator, postfixExpr.getOperator());

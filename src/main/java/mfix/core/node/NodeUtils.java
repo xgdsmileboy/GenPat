@@ -59,7 +59,7 @@ public class NodeUtils {
                 if (set.contains(j)) continue;
                 if (src.get(i).getBindingNode() == tar.get(j)) {
                     set.add(j);
-                    src.get(i).genModidications();
+                    src.get(i).genModifications();
                     notmatch = false;
                     break;
                 }

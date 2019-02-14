@@ -150,14 +150,14 @@ public class SwitchStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			SwitchStmt switchStmt = (SwitchStmt) getBindingNode();
 			if(_expression.getBindingNode() != switchStmt.getExpression()) {
 				Update update = new Update(this, _expression, switchStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			_modifications.addAll(NodeUtils.genModificationList(this, _statements, switchStmt.getStatements()));
 			return true;

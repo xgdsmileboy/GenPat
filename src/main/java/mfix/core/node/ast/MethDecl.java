@@ -226,9 +226,9 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public boolean genModidications() {
+    public boolean genModifications() {
         for(Node node : getAllChildren()) {
-            node.genModidications();
+            node.genModifications();
         }
         return true;
     }

@@ -59,7 +59,7 @@ public abstract class Operator extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 

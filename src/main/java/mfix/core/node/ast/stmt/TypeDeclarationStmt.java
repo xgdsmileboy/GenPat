@@ -85,8 +85,8 @@ public class TypeDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			return true;
 		}
 		return false;

@@ -255,10 +255,10 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
             TryStmt tryStmt = (TryStmt) getBindingNode();
-            _blk.genModidications();
+            _blk.genModifications();
             _modifications.addAll(NodeUtils.genModificationList(this, _catches, tryStmt.getCatches()));
             if (_finallyBlk == null) {
                 if (tryStmt.getFinally() != null) {
@@ -269,7 +269,7 @@ public class TryStmt extends Stmt {
                 Update update = new Update(this, _finallyBlk, tryStmt.getFinally());
                 _modifications.add(update);
             } else {
-                _finallyBlk.genModidications();
+                _finallyBlk.genModifications();
             }
             return true;
         }

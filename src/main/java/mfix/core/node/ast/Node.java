@@ -674,7 +674,7 @@ public abstract class Node implements NodeComparator, Serializable {
     /**
      * based on the matching result, generate modifications
      */
-    public abstract boolean genModidications();
+    public abstract boolean genModifications();
 
 
     /*********************************************************/

@@ -120,8 +120,8 @@ public class BreakStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			BreakStmt breakStmt = (BreakStmt) getBindingNode();
 			if (_identifier == null) {
 				if (breakStmt._identifier != null) {
@@ -132,7 +132,7 @@ public class BreakStmt extends Stmt {
 				Update update = new Update(this, _identifier, breakStmt._identifier);
 				_modifications.add(update);
 			} else {
-				_identifier.genModidications();
+				_identifier.genModifications();
 			}
 			return true;
 		}

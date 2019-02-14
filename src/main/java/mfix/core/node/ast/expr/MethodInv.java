@@ -198,8 +198,8 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			MethodInv methodInv = (MethodInv) getBindingNode();
 			if (_expression == null) {
 				if (methodInv.getExpression() != null) {
@@ -210,7 +210,7 @@ public class MethodInv extends Expr {
 				Update update = new Update(this, _expression, methodInv.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (_name.getBindingNode() != methodInv.getName() || !_name.getName().equals(methodInv.getName().getName())) {
 				Update update = new Update(this, _name, methodInv.getName());
@@ -220,7 +220,7 @@ public class MethodInv extends Expr {
 				Update update = new Update(this, _arguments, methodInv.getArguments());
 				_modifications.add(update);
 			} else {
-				_arguments.genModidications();
+				_arguments.genModifications();
 			}
 		}
 		return true;

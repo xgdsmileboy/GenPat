@@ -138,14 +138,14 @@ public class Assign extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             Assign assign = (Assign) getBindingNode();
             if (_lhs.getBindingNode() != assign.getLhs()) {
                 Update update = new Update(this, _lhs, assign.getLhs());
                 _modifications.add(update);
             } else {
-                _lhs.genModidications();
+                _lhs.genModifications();
             }
             if (!_operator.compare(assign.getOperator())) {
                 Update update = new Update(this, _operator, assign.getOperator());
@@ -155,7 +155,7 @@ public class Assign extends Expr {
                 Update update = new Update(this, _rhs, assign.getRhs());
                 _modifications.add(update);
             } else {
-                _rhs.genModidications();
+                _rhs.genModifications();
             }
         }
         return true;

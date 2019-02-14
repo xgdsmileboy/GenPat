@@ -127,8 +127,8 @@ public class AryInitializer extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             AryInitializer aryInitializer = (AryInitializer) getBindingNode();
             _modifications = NodeUtils.genModificationList(this, _expressions, aryInitializer._expressions);
         }

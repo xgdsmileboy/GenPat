@@ -127,14 +127,14 @@ public class InstanceofExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			InstanceofExpr instanceofExpr = (InstanceofExpr) getBindingNode();
 			if (_expression.getBindingNode() != instanceofExpr.getExpression()) {
 				Update update = new Update(this, _expression, instanceofExpr.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (_instanceType.getBindingNode() != instanceofExpr.getInstanceofType()
 					|| !_instanceType.typeStr().equals(instanceofExpr.getInstanceofType().typeStr())) {

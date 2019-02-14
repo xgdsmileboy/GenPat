@@ -131,14 +131,14 @@ public class QName extends Label {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			QName qName = (QName) getBindingNode();
 			if (_name.getBindingNode() != qName._name) {
 				Update update = new Update(this, _name, qName._name);
 				_modifications.add(update);
 			} else {
-				_name.genModidications();
+				_name.genModifications();
 			}
 			if (!_sname.compare(qName.getSName())) {
 				Update update = new Update(this, _sname, qName.getSName());

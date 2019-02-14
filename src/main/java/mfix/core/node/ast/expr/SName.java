@@ -87,8 +87,8 @@ public class SName extends Label {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			SName sName = (SName) getBindingNode();
 			if (!_name.equals(sName.getName())) {
 				Update update = new Update(this, this, sName);

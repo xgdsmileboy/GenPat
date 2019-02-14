@@ -146,8 +146,8 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			SwCase swCase = (SwCase) getBindingNode();
 			if(_expression == null) {
 				if(swCase.getExpression() != null) {
@@ -158,7 +158,7 @@ public class SwCase extends Stmt {
 				Update update = new Update(this, _expression, swCase.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			return true;
 		}

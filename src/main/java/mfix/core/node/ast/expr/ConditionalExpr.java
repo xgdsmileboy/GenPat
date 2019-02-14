@@ -142,28 +142,28 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             ConditionalExpr conditionalExpr = (ConditionalExpr) getBindingNode();
             if (_condition.getBindingNode() != conditionalExpr.getCondition()) {
                 Update update = new Update(this, _condition, conditionalExpr.getCondition());
                 _modifications.add(update);
             } else {
-                _condition.genModidications();
+                _condition.genModifications();
             }
 
             if (_first.getBindingNode() != conditionalExpr.getfirst()) {
                 Update update = new Update(this, _first, conditionalExpr.getfirst());
                 _modifications.add(update);
             } else {
-                _first.genModidications();
+                _first.genModifications();
             }
 
             if (_snd.getBindingNode() != conditionalExpr.getSecond()) {
                 Update update = new Update(this, _snd, conditionalExpr.getSecond());
                 _modifications.add(update);
             } else {
-                _snd.genModidications();
+                _snd.genModifications();
             }
         }
         return true;
