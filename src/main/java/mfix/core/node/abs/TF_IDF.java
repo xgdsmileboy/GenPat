@@ -87,7 +87,7 @@ public class TF_IDF implements CodeAbstraction {
     public boolean shouldAbstract(Node node) {
         String token = node.toString();
         double numInFile = _tokenMapInFile.getOrDefault(token, 1);
-        double numInDoc = _tokenMapInFile.getOrDefault(token, 1) + 1;
+        double numInDoc = _tokenMap.getOrDefault(token, 1) + 1;
         double tf = numInFile / _tokenSizeInFile;
         double idf = Math.log(TOTAL_FILE_NUM / numInDoc);
         // The smaller the value of TF_IDF, the more prevalent of the token
