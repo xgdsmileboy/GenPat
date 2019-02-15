@@ -41,14 +41,15 @@ public class TF_IDF implements CodeAbstraction {
     private Map<String, Integer> _tokenMapInFile;
     private double _tokenSizeInFile = 0;
 
-    public TF_IDF(String fileName, double threshold) {
-        if (_tokenMap == null) {
-            try {
-                loadTokenMap(Constant.TF_IDF_TOKENS);
-            } catch (IOException e) {
-                LevelLogger.fatal("Load token mapping ");
-            }
+    static {
+        try {
+            loadTokenMap(Constant.TF_IDF_TOKENS);
+        } catch (IOException e) {
+            LevelLogger.fatal("Load token mapping ");
         }
+    }
+
+    public TF_IDF(String fileName, double threshold) {
         _fileName = fileName;
         _threshold = threshold;
     }
@@ -62,7 +63,7 @@ public class TF_IDF implements CodeAbstraction {
         }
     }
 
-    private synchronized void loadTokenMap(String mapFile) throws IOException {
+    private static void loadTokenMap(String mapFile) throws IOException {
         File file = new File(mapFile);
         if (!file.exists()) {
             throw new IOException("Token mapping file does not exist : " + file.getAbsolutePath());
