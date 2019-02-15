@@ -62,7 +62,7 @@ public class TF_IDF implements CodeAbstraction {
         }
     }
 
-    private void loadTokenMap(String mapFile) throws IOException {
+    private synchronized void loadTokenMap(String mapFile) throws IOException {
         File file = new File(mapFile);
         if (!file.exists()) {
             throw new IOException("Token mapping file does not exist : " + file.getAbsolutePath());
