@@ -12,8 +12,10 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
@@ -146,6 +148,16 @@ public class TF_IDF implements CodeAbstraction {
 
         public boolean visit(TypeLiteral literal) {
             addToken(literal.toString());
+            return true;
+        }
+
+        public boolean visit(BooleanLiteral literal) {
+            addToken(literal.toString());
+            return true;
+        }
+
+        public boolean visit(NullLiteral literal) {
+            addToken("null");
             return true;
         }
 
