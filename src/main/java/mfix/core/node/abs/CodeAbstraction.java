@@ -17,6 +17,6 @@ public interface CodeAbstraction {
 
     boolean shouldAbstract(Node node);
 
-    void lazyInit();
+    CodeAbstraction lazyInit();
 
 }

@@ -7,14 +7,13 @@
 
 package mfix.core.node;
 
-import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
+import mfix.core.node.abs.TF_IDF;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.parser.NodeParser;
-import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
@@ -42,10 +41,10 @@ public class PatternExtractor {
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = new NodeParser();
         Set<Node> patterns = new HashSet<>();
-
-        ElementCounter counter = new ElementCounter();
-        counter.open();
-        counter.loadCache();
+        TF_IDF tf_idf = new TF_IDF(srcFile, 0.5);
+//        ElementCounter counter = new ElementCounter();
+//        counter.open();
+//        counter.loadCache();
 
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
             nodeParser.setCompilationUnit(srcFile, srcUnit);
@@ -71,12 +70,13 @@ public class PatternExtractor {
                         }
                     }
                 }
-                srcNode.doAbstraction(counter);
+//                srcNode.doAbstraction(counter);
+                srcNode.doAbstractionNew(tf_idf.lazyInit());
                 patterns.add(srcNode);
             }
         }
 
-        counter.close();
+//        counter.close();
         return patterns;
     }
 }

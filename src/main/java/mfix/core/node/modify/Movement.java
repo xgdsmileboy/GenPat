@@ -8,19 +8,19 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.VIndex;
 
 /**
  * @author: Jiajun
  * @date: 2019-01-14
  */
+@Deprecated
 public class Movement extends Modification {
     private int _oriIndex;
     private int _tarIndex;
     private Node _movedNode;
 
     public Movement(Node parent, int oriIndex, int tarIndex, Node movedNode) {
-        super(parent, VIndex.MOD_MOVE);
+        super(parent, -1);
         _oriIndex = oriIndex;
         _tarIndex = tarIndex;
         _movedNode = movedNode;

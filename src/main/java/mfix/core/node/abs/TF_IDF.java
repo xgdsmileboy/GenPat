@@ -57,12 +57,13 @@ public class TF_IDF implements CodeAbstraction {
     }
 
     @Override
-    public void lazyInit() {
+    public TF_IDF lazyInit() {
         if (_tokenMapInFile == null) {
             _tokenMapInFile = new Hashtable<>();
             TokenCollector tokenCollector = new TokenCollector(_fileName);
             _tokenSizeInFile = tokenCollector.collect().tokenSize();
         }
+        return this;
     }
 
     private static void loadTokenMap(String mapFile) throws IOException {
@@ -75,11 +76,12 @@ public class TF_IDF implements CodeAbstraction {
         String token = br.readLine();
         String number = br.readLine();
         Integer num;
-        while(token != null && number != null) {
+        while(token != null && number != null && _tokenMap.size() < 2000) {
             try {
                 num = (Integer.parseInt(number) >> 1); //TODO: the shift operation should be removed
                 _tokenMap.put(token, num);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
             token = br.readLine();
             number = br.readLine();
         }
@@ -92,9 +94,10 @@ public class TF_IDF implements CodeAbstraction {
         double numInFile = _tokenMapInFile.getOrDefault(token, 1);
         double numInDoc = _tokenMap.getOrDefault(token, 1) + 1;
         double tf = numInFile / _tokenSizeInFile;
-        double idf = Math.log(TOTAL_FILE_NUM / numInDoc);
+        double idf = Math.log10(TOTAL_FILE_NUM / numInDoc);
         // The smaller the value of TF_IDF, the more prevalent of the token
-        return tf * idf < _threshold;
+        double tfidf = tf * idf;
+        return tfidf > _threshold;
     }
 
     private class TokenCollector extends ASTVisitor {
