@@ -267,14 +267,16 @@ public class VIndex {
      * delete modification
      */
     public final static int MOD_DELETE = 61;
+
     /**
-     * move modification
+     * represent the abstract expression
      */
-    public final static int MOD_MOVE = 62;
+    public final static int ABS_EXPRESSION = 62;
     /**
-     * wrap modification
+     * represent the abstract statement
      */
-    public final static int MOD_WRAP = 63;
+    public final static int ABS_STATEMENT = 63;
+
 
     public final static int LENGTH = 64;
 }

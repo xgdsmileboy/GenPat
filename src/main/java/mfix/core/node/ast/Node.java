@@ -11,6 +11,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.ast.expr.Operator;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.cluster.Vector;
@@ -664,7 +665,21 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
-    public void doAbstractionNew(CodeAbstraction abstraction) {} //TODO: to finish for each node
+    public void doAbstractionNew(CodeAbstraction abstraction) {
+        if (this instanceof Operator) {
+            _abstract = true;
+        } else {
+            if (NodeUtils.isSimpleExpr(this)) {
+                _abstract = abstraction.shouldAbstract(this);
+            } else {
+                _abstract = true;
+                for (Node node : getAllChildren()) {
+                    node.doAbstractionNew(abstraction);
+                    _abstract = _abstract && node.isAbstract();
+                }
+            }
+        }
+    }
 
     public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
         Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
@@ -717,6 +732,7 @@ public abstract class Node implements NodeComparator, Serializable {
         _frequency += frequency;
     }
 
+    // TODO : need to rewrite
     private void computePatternVector() {
         _patternVec = new Vector();
         for (Node node : getAllChildren()) {

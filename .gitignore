@@ -8,4 +8,5 @@
 /resources/**/build
 /resources/**/build-tests
 /resources/**/target
+resources/db/AllTokens.txt
 *.log
