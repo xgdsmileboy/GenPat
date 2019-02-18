@@ -99,10 +99,7 @@ public class TokenCounter {
             return;
         }
         token = replaceSpecialChar(token);
-
-        System.out.println(token);
-
-
+        
         if (counter != null) {
             if (!currentFileToken.contains(token)) {
                 currentFileToken.add(token);
