@@ -18,7 +18,6 @@ import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.Matcher;
-import mfix.core.stats.TokenCounter;
 
 import java.io.File;
 import java.io.IOException;
@@ -173,7 +172,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        /*
         if (args.length < 1) {
             System.err.println("Please provide the java file to detect!");
             System.exit(0);
@@ -194,9 +192,6 @@ public class Main {
 
         Set<String> bannedAPIs = JavaFile.readFileToStringSet(Constant.BANNED_API_FILE);
         tryFix(Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, bannedAPIs), buggyFilePath, pointedAPI);
-        */
-        TokenCounter t = new TokenCounter();
-        t.work();
     }
 }
 
