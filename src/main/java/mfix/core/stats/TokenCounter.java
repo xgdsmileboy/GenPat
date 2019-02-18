@@ -13,11 +13,11 @@ public class TokenCounter {
 
     static private HashSet<String> currentFileToken;
 
-    // static final String LOAD_FILE_LIST = "/home/renly/test/FilFilesListLOC50.txt";
-    static final String LOAD_FILE_LIST = "/Users/luyaoren/workplace/testfile.txt";
+    static final String LOAD_FILE_LIST = "/home/renly/test/FilFilesListLOC50.txt";
+    // static final String LOAD_FILE_LIST = "/Users/luyaoren/workplace/testfile.txt";
 
-    // static final String SAVE_FILE = "/home/renly/tokenSerial/data";
-    static final String SAVE_FILE = "/Users/luyaoren/workplace/tokenSerial/data";
+    static final String SAVE_FILE = "/home/renly/tokenSerial/data";
+    // static final String SAVE_FILE = "/Users/luyaoren/workplace/tokenSerial/data";
 
     static private int batchSize = 10000;
 
@@ -96,8 +96,6 @@ public class TokenCounter {
             return;
         }
         token = replaceSpecialChar(token);
-
-        System.out.println(token);
 
         if (counter != null) {
             if (!currentFileToken.contains(token)) {
