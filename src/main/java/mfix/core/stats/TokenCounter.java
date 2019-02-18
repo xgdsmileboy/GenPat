@@ -36,6 +36,9 @@ public class TokenCounter {
         }
         List<File> files = JavaFile.ergodic(rootFile, new LinkedList<>());
         for (File file : files) {
+            if (!file.getAbsolutePath().contains("buggy-version")) {
+                continue;
+            }
             runFile(file.getAbsolutePath());
         }
     }
@@ -96,6 +99,9 @@ public class TokenCounter {
             return;
         }
         token = replaceSpecialChar(token);
+
+        System.out.println(token);
+
 
         if (counter != null) {
             if (!currentFileToken.contains(token)) {
