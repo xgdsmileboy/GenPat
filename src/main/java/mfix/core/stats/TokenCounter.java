@@ -9,34 +9,22 @@ import java.util.*;
 import java.io.FileInputStream;
 
 public class TokenCounter {
-    private static mfix.core.stats.TokenCounter _instance;
-
     static private HashMap<String, Integer> counter;
 
     static private HashSet<String> currentFileToken;
 
-    static private HashMap<String, Integer> currentFileTokenCounter;
+    // static final String LOAD_FILE_LIST = "/home/renly/test/FilFilesListLOC50.txt";
+    static final String LOAD_FILE_LIST = "/Users/luyaoren/workplace/testfile.txt";
 
-    static final String SAVE_FILE = "/home/renly/tokenSerial/data";
+    // static final String SAVE_FILE = "/home/renly/tokenSerial/data";
+    static final String SAVE_FILE = "/Users/luyaoren/workplace/tokenSerial/data";
 
-    static final String LOAD_FILE_LIST = "/home/renly/test/FilFilesListLOC50.txt";
-    // static final String LOAD_FILE_LIST = "/home/renly/test/FilFilesListLOC50FirstPart.txt";
+    static private int batchSize = 10000;
 
-    public static mfix.core.stats.TokenCounter getInstance() {
-        if (_instance == null) {
-            _instance = new mfix.core.stats.TokenCounter();
-        }
-        return _instance;
-    }
-
-    public HashMap<String, Integer> getTokenCounterInOneFile(String file) {
-        runFile(file);
-        return currentFileTokenCounter;
-    }
+    static private int tokenLenLimit = 100;
 
     public void runFile(String srcFile) {
         currentFileToken = new HashSet<String>();
-        currentFileTokenCounter = new HashMap<String, Integer>();
         CompilationUnit _cunit = JavaFile.genASTFromFileWithType(srcFile, null);
         _cunit.accept(new mfix.core.stats.TokenCounter.Collector());
     }
@@ -91,8 +79,25 @@ public class TokenCounter {
         return fileList;
     }
 
+    public String replaceSpecialChar(String value) {
+        return value.replace("\\", "\\\\")
+                .replace("\'", "\\'")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\b", "\\b")
+                .replace("\t", "\\t")
+                .replace("\r", "\\r")
+                .replace("\f", "\\f")
+                .replace("\0", "\\0");
+    }
+
     public void addToken(String token) {
-        currentFileTokenCounter.put(token, currentFileTokenCounter.getOrDefault(token, 0) + 1);
+        if (token.length() >= tokenLenLimit) {
+            return;
+        }
+        token = replaceSpecialChar(token);
+
+        System.out.println(token);
 
         if (counter != null) {
             if (!currentFileToken.contains(token)) {
@@ -105,21 +110,37 @@ public class TokenCounter {
 
     private class Collector extends ASTVisitor {
         public boolean visit(SimpleName name) {
-            // System.out.println("SName:" + name.getFullyQualifiedName());
             addToken(name.getFullyQualifiedName());
             return true;
         }
 
         public boolean visit(NumberLiteral name) {
-            // System.out.println("Number:" + name.getToken());
             addToken(name.getToken());
             return true;
         }
 
         public boolean visit(StringLiteral name) {
-            // System.out.println("String:" + name.getLiteralValue());
-            // System.out.println("-------");
-            addToken(name.getLiteralValue());
+            addToken(name.getEscapedValue());
+            return true;
+        }
+
+        public boolean visit(CharacterLiteral literal) {
+            addToken(literal.getEscapedValue());
+            return true;
+        }
+
+        public boolean visit(TypeLiteral literal) {
+            addToken(literal.toString());
+            return true;
+        }
+
+        public boolean visit(BooleanLiteral literal) {
+            addToken(literal.toString());
+            return true;
+        }
+
+        public boolean visit(NullLiteral literal) {
+            addToken(literal.toString());
             return true;
         }
     }
@@ -139,7 +160,7 @@ public class TokenCounter {
         int batchNumber = 0;
 
         for (String fileFolder : fileFolderList) {
-            if (cnt % 10000 == 0) {
+            if (cnt % batchSize == 0) {
                 if (counter != null) {
                     loadToFile(batchNumber);
                 }
@@ -149,13 +170,12 @@ public class TokenCounter {
             cnt += 1;
 
             System.out.println("run: " + cnt.toString() + " " + fileFolder);
-            
+
             try {
                 runFolder(fileFolder);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            
         }
 
         loadToFile(batchNumber);
