@@ -10,11 +10,12 @@ import mfix.common.util.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class SwitchStmt extends Stmt {
 	
 	@Override
 	public StringBuffer toSrcString() {
-		StringBuffer stringBuffer = new StringBuffer("swtich (");
+		StringBuffer stringBuffer = new StringBuffer("switch (");
 		stringBuffer.append(_expression.toSrcString());
 		stringBuffer.append("){" + Constant.NEW_LINE);
 		for (Stmt stmt : _statements) {
@@ -76,7 +77,35 @@ public class SwitchStmt extends Stmt {
 		stringBuffer.append("}");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		List<StringBuffer> strings = new ArrayList<>(_statements.size());
+		StringBuffer b;
+		for (int i = 0; i < _statements.size(); i++) {
+			b = _statements.get(i).formalForm(nameMapping, false);
+			if (b != null) {
+				strings.add(b);
+			}
+		}
+		if (isConsidered() || exp != null || !strings.isEmpty()) {
+			StringBuffer buffer = new StringBuffer("switch (");
+			buffer.append(nameMapping.getExprID(_expression)).append("){");
+			if (!strings.isEmpty()) {
+				for (int i = 0; i < strings.size(); i++) {
+					buffer.append('\n').append(strings.get(i));
+				}
+				buffer.append("\n}");
+			} else {
+				buffer.append('}');
+			}
+			return buffer;
+		}
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

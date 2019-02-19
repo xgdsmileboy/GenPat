@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -75,5 +76,10 @@ public abstract class Operator extends Node {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		return toSrcString();
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return null;
 	}
 }

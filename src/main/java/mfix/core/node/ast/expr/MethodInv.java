@@ -10,10 +10,11 @@ import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
@@ -88,6 +89,27 @@ public class MethodInv extends Expr {
 		}
 		stringBuffer.append(")");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer exp = null;
+		if (_expression != null) {
+			exp = _expression.formalForm(nameMapping, consider);
+		}
+		StringBuffer name = _name.formalForm(nameMapping, consider);
+		StringBuffer arg = _arguments.formalForm(nameMapping, consider);
+		if (exp == null && name == null && arg == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		if (_expression != null) {
+			buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp).append('.');
+		}
+		buffer.append(name == null ? nameMapping.getMethodID(_name) : name)
+				.append('(').append(arg == null ? "" : arg).append(')');
+		return buffer;
 	}
 
 	@Override

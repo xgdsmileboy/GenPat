@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -63,6 +64,16 @@ public class PostfixExpr extends Expr {
 		stringBuffer.append(_expression.toSrcString());
 		stringBuffer.append(_operator.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		StringBuffer buffer = _expression.formalForm(nameMapping, isConsidered() || parentConsidered);
+		if (buffer == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		buffer.append(_operator.toSrcString());
+		return buffer;
 	}
 
 	@Override

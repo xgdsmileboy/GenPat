@@ -10,6 +10,7 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -58,6 +59,21 @@ public class ExpressionStmt extends Stmt {
 		stringBuffer.append(_expression.toSrcString());
 		stringBuffer.append(";");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		if (exp == null) {
+			if (isConsidered()) {
+				return new StringBuffer(nameMapping.getExprID(_expression)).append(';');
+			} else {
+				return null;
+			}
+		}
+		StringBuffer buffer = new StringBuffer(exp).append(';');
+		return buffer;
 	}
 
 	@Override

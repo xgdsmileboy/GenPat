@@ -11,10 +11,11 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ClassInstCreation;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -67,7 +68,19 @@ public class ThrowStmt extends Stmt {
 		stringBuffer.append(";");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		if (isConsidered() || exp != null) {
+			StringBuffer buffer = new StringBuffer("throw ");
+			buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp).append(';');
+			return buffer;
+		}
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

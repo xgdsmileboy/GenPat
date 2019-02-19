@@ -12,10 +12,11 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -81,7 +82,23 @@ public class SuperConstructorInv extends Stmt {
 		stringBuffer.append(");");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer arg = _arguments.formalForm(nameMapping, isConsidered());
+		if (isConsidered() || exp != null || arg == null) {
+			StringBuffer buffer = new StringBuffer();
+			if (_expression != null) {
+				buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp).append('.');
+			}
+			buffer.append("super(").append(arg == null ? "" : arg).append(");");
+			return buffer;
+		}
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

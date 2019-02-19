@@ -10,6 +10,7 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
 
@@ -80,4 +81,22 @@ public abstract class Expr extends Node {
         }
         return false;
     }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        if (isConsidered()) {
+            return new StringBuffer(nameMapping.getExprID(this));
+        } else {
+            return null;
+        }
+    }
+
+    protected StringBuffer leafFormalForm(boolean parentConsidered) {
+        if (!isAbstract() && (parentConsidered || isConsidered())) {
+            return toSrcString();
+        } else {
+            return null;
+        }
+    }
+
 }

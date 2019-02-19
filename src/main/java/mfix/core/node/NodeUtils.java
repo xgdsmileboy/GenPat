@@ -80,6 +80,7 @@ public class NodeUtils {
             case THIS:
             case BLITERAL:
             case CLITERAL:
+            case TLITERAL:
                 return true;
             default:
         }

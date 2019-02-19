@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -75,6 +76,24 @@ public class ConditionalExpr extends Expr {
         stringBuffer.append(":");
         stringBuffer.append(_snd.toSrcString());
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        StringBuffer cond = _condition.formalForm(nameMapping, consider);
+        StringBuffer first = _first.formalForm(nameMapping, consider);
+        StringBuffer snd = _snd.formalForm(nameMapping, consider);
+        if (cond == null && first == null && snd == null) {
+            return super.toFormalForm0(nameMapping, parentConsidered);
+        }
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(cond == null ? nameMapping.getExprID(_condition) : cond)
+                .append('?')
+                .append(first == null ? nameMapping.getExprID(_first) : first)
+                .append(':')
+                .append(snd == null ? nameMapping.getExprID(_snd) : snd);
+        return buffer;
     }
 
     @Override

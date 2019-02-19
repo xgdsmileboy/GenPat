@@ -11,10 +11,11 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -78,8 +79,24 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer arg = _arguments.formalForm(nameMapping, isConsidered());
+		if (arg == null) {
+			if (isConsidered()) {
+				StringBuffer buffer = new StringBuffer("this();");
+				return buffer;
+			}
+			return null;
+		}
+		return new StringBuffer("this(").append(arg).append(')');
+
+	}
+
+	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
+		_tokens.add("(");
 		_tokens.addAll(_arguments.tokens());
 		_tokens.add(")");
 		_tokens.add(";");

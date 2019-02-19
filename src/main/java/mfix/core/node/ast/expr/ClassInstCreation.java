@@ -10,10 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.AnonymousClassDecl;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -92,6 +93,37 @@ public class ClassInstCreation extends Expr {
             stringBuffer.append(_decl.toSrcString());
         }
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        StringBuffer exp = null;
+        if (_expression != null) {
+            exp = _expression.formalForm(nameMapping, consider);
+        }
+        StringBuffer type = _classType.formalForm(nameMapping, consider);
+        StringBuffer arg = _arguments.formalForm(nameMapping, consider);
+        StringBuffer dec = null;
+        if (_decl != null) {
+            dec = _decl.formalForm(nameMapping, consider);
+        }
+        if (exp == null && type == null && arg == null && dec == null) {
+            return super.toFormalForm0(nameMapping, parentConsidered);
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        if (_expression != null) {
+            buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp);
+            buffer.append('.');
+        }
+        buffer.append("new ")
+                .append(type == null ? nameMapping.getTypeID(_classType) : type)
+                .append('(').append(arg == null ? "" : arg).append(')');
+        if (_decl != null) {
+            buffer.append(dec == null ? "{}" : dec);
+        }
+        return buffer;
     }
 
     @Override

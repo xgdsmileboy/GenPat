@@ -11,6 +11,7 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Blk;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -119,6 +120,35 @@ public class MethDecl extends Node {
             stringBuffer.append(";");
         } else {
             stringBuffer.append(_body.toSrcString());
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("METHOD");
+        stringBuffer.append("(");
+
+        if (_arguments != null && _arguments.size() > 0) {
+            List<StringBuffer> strings = new ArrayList<>(_arguments.size());
+            for (int i = 0; i < _arguments.size(); i++) {
+                if (_arguments.get(i).formalForm(nameMapping, false) != null) {
+                    strings.add(_arguments.get(i).formalForm(nameMapping, false));
+                }
+            }
+            if (strings.size() > 0) {
+                stringBuffer.append(strings.get(0));
+                for (int i = 1; i < strings.size(); i++) {
+                    stringBuffer.append("," + strings.get(i));
+                }
+            }
+        }
+        stringBuffer.append(")");
+        if (_body == null) {
+            stringBuffer.append(";");
+        } else {
+            stringBuffer.append(_body.formalForm(nameMapping, false));
         }
         return stringBuffer;
     }

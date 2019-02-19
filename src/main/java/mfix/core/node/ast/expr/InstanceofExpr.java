@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -65,6 +66,21 @@ public class InstanceofExpr extends Expr {
 		stringBuffer.append(" instanceof ");
 		stringBuffer.append(_instanceType.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer exp = _expression.formalForm(nameMapping, consider);
+		StringBuffer type = _instanceType.formalForm(nameMapping, consider);
+		if (exp == null && type == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp)
+				.append(" instanceof ")
+				.append(type == null ? nameMapping.getTypeID(_instanceType) : type);
+		return buffer;
 	}
 
 	@Override

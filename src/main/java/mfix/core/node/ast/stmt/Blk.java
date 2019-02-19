@@ -9,9 +9,10 @@ package mfix.core.node.ast.stmt;
 import mfix.common.util.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -62,6 +63,29 @@ public class Blk extends Stmt {
         }
         stringBuffer.append("}");
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        if (isAbstract()) return null;
+        List<StringBuffer> strings = new ArrayList<>(_statements.size());
+        StringBuffer b;
+        for (int i = 0; i < _statements.size(); i++) {
+            b = _statements.get(i).formalForm(nameMapping, false);
+            if (b != null) {
+                strings.add(b);
+            }
+        }
+        if (strings.isEmpty()) {
+            return isConsidered() ? new StringBuffer("{}") : null;
+        } else {
+            StringBuffer buffer = new StringBuffer('{');
+            for (int i = 0; i < strings.size(); i++) {
+                buffer.append('\n').append(strings.get(i));
+            }
+            buffer.append(strings.isEmpty() ? '}' : "\n}");
+            return buffer;
+        }
     }
 
     @Override

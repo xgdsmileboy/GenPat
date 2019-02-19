@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -65,6 +66,21 @@ public class QName extends Label {
 		stringBuffer.append(".");
 		stringBuffer.append(_sname.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer name = _name.formalForm(nameMapping, consider);
+		StringBuffer sname = _sname.formalForm(nameMapping, consider);
+		if (name == null && sname == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(name == null ? nameMapping.getExprID(_name) : name)
+				.append('.')
+				.append(sname == null ? nameMapping.getExprID(_sname) : sname);
+		return buffer;
 	}
 
 	public Set<SName> getAllVars() {

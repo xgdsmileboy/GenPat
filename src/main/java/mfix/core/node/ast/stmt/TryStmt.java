@@ -10,11 +10,12 @@ import mfix.common.util.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.VarDeclarationExpr;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -109,7 +110,69 @@ public class TryStmt extends Stmt {
 		}
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer res = null;
+		boolean hasRes = false;
+		if (_resource != null && _resource.size() > 0) {
+			res = new StringBuffer('(');
+			StringBuffer b = _resource.get(0).formalForm(nameMapping, isConsidered());
+			if (b == null) {
+				res.append(nameMapping.getExprID(_resource.get(0)));
+			} else {
+				hasRes = true;
+				res.append(b);
+			}
+			for (int i = 1; i < _resource.size(); i++) {
+				res.append(';');
+				b = _resource.get(i).formalForm(nameMapping, isConsidered());
+				if (b != null) {
+					hasRes = true;
+					res.append(b);
+				} else {
+					res.append(nameMapping.getExprID(_resource.get(0)));
+				}
+			}
+			res.append(')');
+		}
+		StringBuffer blk = _blk.formalForm(nameMapping, false);
+		StringBuffer catches = null;
+		boolean hasCatch = false;
+		if (_catches != null && _catches.size() > 0) {
+			catches = new StringBuffer();
+			CatClause cc;
+			StringBuffer b;
+			for (int i = 0; i < _catches.size(); i++) {
+				b = _catches.get(i).formalForm(nameMapping, false);
+				if (b != null) {
+					hasCatch = true;
+					catches.append('\n').append(b);
+				} else {
+					cc = _catches.get(i);
+					catches.append("\ncatch(")
+							.append(nameMapping.getTypeID(cc.getException().getDeclType()))
+							.append(' ')
+							.append(nameMapping.getExprID(cc.getException().getName()))
+							.append("){}");
+				}
+			}
+		}
+		StringBuffer finalblk = _finallyBlk == null ? null : _finallyBlk.formalForm(nameMapping, false);
+		if (isConsidered() || hasRes || blk != null || hasCatch || finalblk != null) {
+			StringBuffer buffer = new StringBuffer("try");
+			buffer.append(res == null ? "" : res)
+					.append(blk == null ? "{}" : blk)
+					.append(catches == null ? "" : catches);
+			if (finalblk != null) {
+				buffer.append('\n').append("finally").append(finalblk);
+			}
+			return buffer;
+		}
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

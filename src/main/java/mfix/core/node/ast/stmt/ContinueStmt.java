@@ -10,10 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.SName;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -59,7 +60,22 @@ public class ContinueStmt extends Stmt {
 		stringBuffer.append(";");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer identifier = _identifier == null ? null : _identifier.formalForm(nameMapping, isConsidered());
+		if (identifier == null) {
+			if (isConsidered()) {
+				return new StringBuffer("continue ")
+						.append(_identifier == null ? "" : nameMapping.getExprID(_identifier)).append(';');
+			} else {
+				return null;
+			}
+		}
+		return new StringBuffer("continue ").append(identifier).append(';');
+	}
+
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add("continue");

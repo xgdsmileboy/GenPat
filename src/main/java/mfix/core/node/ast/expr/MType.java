@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.AST;
@@ -80,6 +81,15 @@ public class MType extends Node {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(_typeStr);
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (!isAbstract() && (parentConsidered || isConsidered())) {
+			return toSrcString();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -78,6 +79,27 @@ public class SuperMethodInv extends Expr {
 		stringBuffer.append(_arguments.toSrcString());
 		stringBuffer.append(")");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer label = null;
+		if (_label != null) {
+			label = _label.formalForm(nameMapping, consider);
+		}
+		StringBuffer name = _name.formalForm(nameMapping, consider);
+		StringBuffer arg = _arguments.formalForm(nameMapping, consider);
+		if (label == null && name == null && arg == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		if (_label != null) {
+			buffer.append(label == null ? nameMapping.getExprID(_label) : label).append('.');
+		}
+		buffer.append("super.").append(name == null ? nameMapping.getExprID(_name) : name)
+				.append('(').append(arg == null ? "" : arg).append(')');
+		return buffer;
 	}
 
 	@Override

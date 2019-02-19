@@ -11,10 +11,11 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.Svd;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -85,7 +86,38 @@ public class EnhancedForStmt extends Stmt {
 		stringBuffer.append(_statement.toSrcString());
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer var = _varDecl.formalForm(nameMapping, isConsidered());
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer body = _statement.formalForm(nameMapping, false);
+		if (var == null && exp == null && body == null) {
+			if (isConsidered()) {
+				return new StringBuffer("for(")
+						.append(nameMapping.getTypeID(_varDecl.getDeclType()))
+						.append(' ')
+						.append(nameMapping.getExprID(_varDecl.getName()))
+						.append(nameMapping.getExprID(_expression))
+						.append("){}");
+			} else {
+				return null;
+			}
+		}
+		StringBuffer buffer = new StringBuffer("for(");
+		if (var == null) {
+			buffer.append(nameMapping.getTypeID(_varDecl.getDeclType())).append(' ');
+			buffer.append(nameMapping.getExprID(_varDecl.getName()));
+		} else {
+			buffer.append(var);
+		}
+		buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp);
+		body.append(')');
+		buffer.append(body == null ? "{}" : body);
+		return buffer;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

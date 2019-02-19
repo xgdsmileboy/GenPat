@@ -8,8 +8,9 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.match.metric.FVector;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.cluster.VIndex;
+import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -60,6 +61,32 @@ public class AryInitializer extends Expr {
         }
         stringBuffer.append("}");
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        if (_expressions.size() > 0) {
+            List<StringBuffer> strings = new ArrayList<>(_expressions.size());
+            for (int i = 0; i < _expressions.size(); i++) {
+                if (_expressions.get(i).formalForm(nameMapping, consider) != null) {
+                    strings.add(_expressions.get(i).formalForm(nameMapping, consider));
+                }
+            }
+            if (!strings.isEmpty()) {
+                StringBuffer stringBuffer = new StringBuffer("{");
+                stringBuffer.append(strings.get(0));
+                for (int i = 1; i < strings.size(); i++) {
+                    stringBuffer.append(",");
+                    stringBuffer.append(strings.get(i));
+                }
+                stringBuffer.append("}");
+                return stringBuffer;
+            } else {
+                return super.toFormalForm0(nameMapping, parentConsidered);
+            }
+        }
+        return null;
     }
 
     @Override

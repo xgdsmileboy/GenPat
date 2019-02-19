@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -63,6 +64,26 @@ public class SuperFieldAcc extends Expr {
 		stringBuffer.append("super.");
 		stringBuffer.append(_identifier.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer name = null;
+		if (_name != null) {
+			name = _name.formalForm(nameMapping, consider);
+		}
+		StringBuffer identifier = _identifier.formalForm(nameMapping, consider);
+		if (name == null && identifier == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		if (_name != null) {
+			buffer.append(name == null ? nameMapping.getExprID(_name) : name);
+			buffer.append('.');
+		}
+		buffer.append("super.").append(identifier == null ? nameMapping.getExprID(_identifier) : identifier);
+		return buffer;
 	}
 
 	@Override

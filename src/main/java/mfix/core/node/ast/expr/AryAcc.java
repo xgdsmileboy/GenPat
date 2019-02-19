@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class AryAcc extends Expr {
 
     /**
      * ArrayAccess:
-     *      Expression [ Expression ]
+     * Expression [ Expression ]
      */
     public AryAcc(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
@@ -73,6 +74,24 @@ public class AryAcc extends Expr {
         stringBuffer.append(_index.toSrcString());
         stringBuffer.append("]");
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        StringBuffer array, index;
+        boolean consider = parentConsidered || isConsidered();
+        array = _array.formalForm(nameMapping, consider);
+        index = _index.formalForm(nameMapping, consider);
+        if (array == null && index == null) {
+            super.toFormalForm0(nameMapping, parentConsidered);
+        }
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(array == null ? nameMapping.getExprID(_array) : array)
+                .append("[")
+                .append(index == null ? nameMapping.getExprID(_index) : index)
+                .append("]");
+
+        return null;
     }
 
     @Override

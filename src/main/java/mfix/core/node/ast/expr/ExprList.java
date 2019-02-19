@@ -9,9 +9,10 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -72,6 +73,34 @@ public class ExprList extends Node {
             }
         }
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        if (_exprs.size() > 0) {
+            List<StringBuffer> strings = new ArrayList<>(_exprs.size());
+            for (Expr expr : _exprs) {
+                if (expr.formalForm(nameMapping, consider) != null) {
+                    strings.add(expr.formalForm(nameMapping, consider));
+                } else if (isConsidered()) {
+                    strings.add(new StringBuffer(nameMapping.getExprID(expr)));
+                }
+            }
+            StringBuffer buffer = null;
+            if (!strings.isEmpty()) {
+                buffer = new StringBuffer(strings.get(0));
+                for (int i = 1; i < strings.size(); i++) {
+                    buffer.append(',');
+                    buffer.append(strings.get(i));
+                }
+            }
+            return buffer;
+        } else if (isConsidered()) {
+            return new StringBuffer();
+        } else {
+            return null;
+        }
     }
 
     @Override

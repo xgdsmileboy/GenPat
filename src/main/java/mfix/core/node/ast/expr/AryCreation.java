@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -90,6 +91,51 @@ public class AryCreation extends Expr {
             stringBuffer.append(_initializer.toSrcString());
         }
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = parentConsidered || isConsidered();
+        StringBuffer typeStr = _type.formalForm(nameMapping, consider);
+        StringBuffer dimension = new StringBuffer();
+        boolean contain = false;
+        for (Expr expr : _dimension) {
+            dimension.append("[");
+            if(expr.formalForm(nameMapping, consider) != null) {
+                dimension.append(expr.formalForm(nameMapping, consider));
+                contain = true;
+            } else {
+                dimension.append(nameMapping.getExprID(expr));
+            }
+            dimension.append("]");
+        }
+        StringBuffer initializer = null;
+        if (_initializer != null) {
+            initializer = _initializer.formalForm(nameMapping, consider);
+        }
+
+        if (typeStr == null && !contain && initializer == null) {
+            return super.toFormalForm0(nameMapping, parentConsidered);
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("new ");
+        if (typeStr == null) {
+            buffer.append(nameMapping.getTypeID(_type));
+        } else {
+            buffer.append(typeStr);
+        }
+        buffer.append(dimension);
+        if (_initializer != null) {
+            buffer.append("=");
+            if (initializer == null) {
+                buffer.append(nameMapping.getExprID(_initializer));
+            } else {
+                buffer.append(initializer);
+            }
+        }
+
+        return buffer;
     }
 
     @Override

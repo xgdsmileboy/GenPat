@@ -9,10 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -73,6 +74,21 @@ public class InfixExpr extends Expr {
 		stringBuffer.append(_operator.toSrcString());
 		stringBuffer.append(_rhs.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer lhs = _lhs.formalForm(nameMapping, consider);
+		StringBuffer rhs = _rhs.formalForm(nameMapping, consider);
+		if (lhs == null && rhs == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(lhs == null ? nameMapping.getExprID(_lhs) : lhs)
+				.append(_operator.toSrcString().toString())
+				.append(rhs == null ? nameMapping.getExprID(_rhs) : rhs);
+		return buffer;
 	}
 
 	@Override

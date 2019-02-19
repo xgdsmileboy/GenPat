@@ -10,10 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -72,7 +73,25 @@ public class DoStmt extends Stmt {
 		stringBuffer.append(");");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer body = _stmt.formalForm(nameMapping, false);
+		StringBuffer cond = _expression.formalForm(nameMapping, isConsidered());
+		if (body == null && cond == null) {
+			if (isConsidered()) {
+				return new StringBuffer("do {} while(").append(nameMapping.getExprID(_expression)).append(')');
+			} else {
+				return null;
+			}
+		}
+		StringBuffer buffer = new StringBuffer("do ");
+		buffer.append(body == null ? "{}" : body).append(" while(")
+				.append(cond == null ? nameMapping.getExprID(_expression) : cond).append(')');
+		return buffer;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

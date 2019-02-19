@@ -16,10 +16,10 @@ import mfix.core.node.MatchInstance;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.PatternExtractor;
 import mfix.core.node.ast.Node;
-import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.stmt.ReturnStmt;
 import mfix.core.node.ast.stmt.SwCase;
 import mfix.core.node.ast.stmt.SwitchStmt;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -224,26 +224,56 @@ public class MatcherTest extends TestCase {
         }
     }
 
-//    @Test
+    @Test
     public void temp() {
-        String srcFile = "/Users/Jiajun/Desktop/buggy.java";
-        String tarFile = "/Users/Jiajun/Desktop/fixed.java";
+//        String srcFile = testbase + Constant.SEP + "src_Project.java";
+//        String tarFile = testbase + Constant.SEP + "tar_Project.java";
+        String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
+        String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
         PatternExtractor extractor = new PatternExtractor();
         Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
 
-        for (Node pattern : patterns) {
-
-            Set<Modification> modifications = pattern.getAllModifications(new HashSet<>());
-            for (Modification m : modifications) {
-                System.out.println(m);
+        for (Node p : patterns) {
+            Set<Node> nodes = p.getConsideredNodesRec(new HashSet<>(), true);
+            for (Node n : nodes) {
+                System.out.println(n.toSrcString());
             }
-
-            Set<MethodInv> APIs = pattern.getUniversalAPIs(new HashSet<>(), true);
-            for (MethodInv api : APIs) {
-                System.out.println(api.getName().getName());
-            }
+            System.out.println(p.formalForm(new NameMapping(), false));
+//            Set<Modification> modifications = p.getAllModifications(new HashSet<>());
+//            for (Modification m : modifications) {
+//                System.out.println(m.toString());
+//            }
         }
+//
+//        String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
+//
+//        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+//
+//        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+//        final Set<MethodDeclaration> methods = new HashSet<>();
+//        unit.accept(new ASTVisitor() {
+//            public boolean visit(MethodDeclaration node) {
+//                methods.add(node);
+//                return true;
+//            }
+//        });
+//
+//        NodeParser parser = new NodeParser();
+//        parser.setCompilationUnit(buggy, unit);
+//        for (MethodDeclaration m : methods) {
+//            Node node = parser.process(m);
+//            Set<Node> matched = Matcher.filter(node, patterns);
+//            for (Node p : matched) {
+//                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+//                for (MatchInstance matchInstance : set) {
+//                    matchInstance.apply();
+//                    Assert.assertTrue(node.adaptModifications(varMaps.get(node.getStartLine()),
+//                            matchInstance.getStrMap()) == null);
+//                    matchInstance.reset();
+//                }
+//            }
+//        }
     }
 
 }

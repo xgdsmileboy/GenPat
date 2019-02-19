@@ -8,12 +8,13 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -73,6 +74,34 @@ public class VarDeclarationExpr extends Expr {
 			stringBuffer.append(_vdfs.get(i).toSrcString());
 		}
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer dec = _declType.formalForm(nameMapping, consider);
+		List<StringBuffer> buffers = new ArrayList<>(_vdfs.size());
+		StringBuffer b;
+		boolean contain = false;
+		for (int i = 0; i < _vdfs.size(); i++) {
+			b = _vdfs.get(i).formalForm(nameMapping, consider);
+			if (b == null) {
+				b = new StringBuffer(nameMapping.getExprID(_vdfs.get(i)));
+			} else {
+				contain = true;
+			}
+			buffers.add(b);
+		}
+		if (dec == null && !contain && !isConsidered()) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(dec == null ? nameMapping.getTypeID(_declType) : dec)
+				.append(' ').append(buffers.get(0));
+		for (int i = 1; i < buffers.size(); i++) {
+			buffer.append(',').append(buffers.get(i));
+		}
+		return buffer;
 	}
 
 	@Override

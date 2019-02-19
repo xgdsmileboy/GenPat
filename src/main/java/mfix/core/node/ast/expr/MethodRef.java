@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -41,6 +42,11 @@ public class MethodRef extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(_str);
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return null;
 	}
 
 	@Override

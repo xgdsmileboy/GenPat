@@ -10,10 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Svd;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -71,7 +72,22 @@ public class CatClause extends Node {
 		stringBuffer.append(_blk.toSrcString());
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer excep = _exception.formalForm(nameMapping, isConsidered());
+		StringBuffer blk = _blk.formalForm(nameMapping, isConsidered());
+		if (excep == null && blk == null) {
+			return isConsidered() ? new StringBuffer("catch(").append(nameMapping.getExprID(_exception))
+					.append(')').append("{}") : null;
+		}
+		StringBuffer buffer = new StringBuffer("catch(");
+		buffer.append(excep == null ? nameMapping.getExprID(_exception) : excep)
+				.append(')').append(blk == null ? "{}" : blk);
+		return buffer;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();

@@ -14,6 +14,7 @@ import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.Operator;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.cluster.Vector;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
@@ -335,12 +336,13 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * flatten abstract tree as a list of {@code Node}
+     *
      * @param nodes : list contains the {@code Node}
      * @return : a list of {@code Node}s after flattening
      */
     public List<Node> flattenTreeNode(List<Node> nodes) {
         nodes.add(this);
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             node.flattenTreeNode(nodes);
         }
         return nodes;
@@ -654,6 +656,9 @@ public abstract class Node implements NodeComparator, Serializable {
     /**************** pattern abstraction ********************/
     /*********************************************************/
     protected boolean _abstract = true;
+    // to avoid duplicate object;
+    private final static StringBuffer BUFFER = new StringBuffer();
+    private transient StringBuffer _formalFormCache = BUFFER;
 
     public boolean isAbstract() {
         return _abstract;
@@ -681,6 +686,15 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    public StringBuffer formalForm(NameMapping nameMapping, boolean parentConsidered) {
+        if (_formalFormCache != null && _formalFormCache.length() == 0) {
+            _formalFormCache = toFormalForm0(nameMapping, parentConsidered);
+        }
+        return _formalFormCache;
+    }
+
+    protected abstract StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered);
+
     public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
         Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
         for (MethodInv m : mSet) {
@@ -689,10 +703,12 @@ public abstract class Node implements NodeComparator, Serializable {
         return set;
     }
 
-    public Set<Pair<Pair<String, Integer>, String>> getUniversalAPIsWithType(boolean isPattern, Set<Pair<Pair<String, Integer>, String>> set) {
+    public Set<Pair<Pair<String, Integer>, String>> getUniversalAPIsWithType(boolean isPattern,
+                                                                             Set<Pair<Pair<String, Integer>, String>> set) {
         Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
         for (MethodInv m : mSet) {
-            set.add(new Pair<>(new Pair<> (m.getName().getName(), m.getArguments().getExpr().size()), m.getExpression().getTypeString()));
+            set.add(new Pair<>(new Pair<>(m.getName().getName(), m.getArguments().getExpr().size()),
+                    m.getExpression().getTypeString()));
         }
         return set;
     }
@@ -717,7 +733,7 @@ public abstract class Node implements NodeComparator, Serializable {
     protected int _fIndex = -1;
     private int _frequency = 1;
 
-    public Vector getPatternVector(){
+    public Vector getPatternVector() {
         if (_patternVec == null) {
             computePatternVector();
         }
@@ -741,12 +757,14 @@ public abstract class Node implements NodeComparator, Serializable {
         if (!_abstract && _fIndex >= 0) {
             _patternVec.set(_fIndex);
         }
-        if(!_modifications.isEmpty()) {
+        if (!_modifications.isEmpty()) {
             for (Modification modification : _modifications) {
                 _patternVec.set(modification.getFeatureIndex());
             }
         }
     }
+
+//    public boolean abSame(Node node) { }
 
 
     /*********************************************************/
@@ -757,7 +775,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public void setBuggyBindingNode(Node node) {
         _buggyBinding = node;
-        if(node != null) {
+        if (node != null) {
             node._buggyBinding = this;
         }
     }
@@ -770,7 +788,7 @@ public abstract class Node implements NodeComparator, Serializable {
         return _buggyBinding;
     }
 
-    public boolean isBoundBuggy(){
+    public boolean isBoundBuggy() {
         return _buggyBinding != null;
     }
 

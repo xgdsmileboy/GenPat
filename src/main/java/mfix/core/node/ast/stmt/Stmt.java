@@ -42,4 +42,5 @@ public abstract class Stmt extends Node {
 		return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
 				&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 	}
+
 }
