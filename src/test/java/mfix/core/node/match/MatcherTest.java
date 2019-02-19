@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * @author: Jiajun
@@ -221,6 +222,41 @@ public class MatcherTest extends TestCase {
                     matchInstance.reset();
                 }
             }
+        }
+    }
+
+    @Test
+    public void test_formal_form() {
+        String srcFile = testbase + Constant.SEP + "src_Project.java";
+        String tarFile = testbase + Constant.SEP + "tar_Project.java";
+
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
+
+        /*  // Pattern form
+        METHOD(){
+            TYPE_0 listeners=EXPR_1;
+            for(EXPR_4;i<listeners.size();EXPR_5){}
+        }
+        */
+
+        String p1str = "METHOD\\(\\)\\{\n" +
+                "TYPE_\\d+\\s{1}listeners=EXPR_\\d+;\n" +
+                "for\\(EXPR_\\d+;i<listeners.size\\(\\);EXPR_\\d+\\)\\{\\}\n" +
+                "\\}";
+        String p2str = "METHOD\\(\\)\\{\n" +
+                "TYPE_\\d+\\s{1}listeners=EXPR_\\d+;\n" +
+                "synchronized\\(EXPR_\\d+\\)\\{\n" +
+                "for\\(EXPR_\\d+;i<listeners.size\\(\\);EXPR_\\d+\\)\\{\\}\n" +
+                "\\}\n" +
+                "\\}";
+
+        Pattern p1 = Pattern.compile(p1str);
+        Pattern p2 = Pattern.compile(p2str);
+
+        for (Node p : patterns) {
+            String formal = p.formalForm(new NameMapping(), false).toString();
+            Assert.assertTrue(p1.matcher(formal).matches() || p2.matcher(formal).matches());
         }
     }
 
