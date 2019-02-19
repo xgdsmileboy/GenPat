@@ -76,9 +76,9 @@ public class TF_IDF implements CodeAbstraction {
         String token = br.readLine();
         String number = br.readLine();
         Integer num;
-        while(token != null && number != null && _tokenMap.size() < 2000) {
+        while(token != null && number != null) {
             try {
-                num = (Integer.parseInt(number) >> 1); //TODO: the shift operation should be removed
+                num = Integer.parseInt(number);
                 _tokenMap.put(token, num);
             } catch (Exception e) {
             }

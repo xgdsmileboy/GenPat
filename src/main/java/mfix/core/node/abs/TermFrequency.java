@@ -28,7 +28,6 @@ public class TermFrequency implements CodeAbstraction {
     private final static int TOTAL_FILE_NUM = Constant.TOTAL_BUGGY_FILE_NUMBER;
 
     private double _threshold;
-    private double _tokenSizeInFile = 0;
 
     static {
         try {
@@ -57,9 +56,9 @@ public class TermFrequency implements CodeAbstraction {
         String token = br.readLine();
         String number = br.readLine();
         Integer num;
-        while(token != null && number != null && _tokenMap.size() < 2000) {
+        while(token != null && number != null) {
             try {
-                num = (Integer.parseInt(number) >> 1); //TODO: the shift operation should be removed
+                num = Integer.parseInt(number);
                 _tokenMap.put(token, num);
             } catch (Exception e) {
             }
