@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node.cluster;
+package mfix.core.pattern.cluster;
 
 import mfix.core.node.ast.Node;
 

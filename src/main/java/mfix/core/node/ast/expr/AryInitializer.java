@@ -8,8 +8,8 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 

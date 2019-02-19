@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node;
+package mfix.core.pattern;
 
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;

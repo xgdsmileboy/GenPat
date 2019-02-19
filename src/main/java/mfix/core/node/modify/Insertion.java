@@ -1,7 +1,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.VIndex;
 
 import java.util.Map;
 import java.util.Set;

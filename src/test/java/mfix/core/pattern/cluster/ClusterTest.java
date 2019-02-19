@@ -5,11 +5,11 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node.cluster;
+package mfix.core.pattern.cluster;
 
 import mfix.common.util.Constant;
 import mfix.core.TestCase;
-import mfix.core.node.PatternExtractor;
+import mfix.core.pattern.PatternExtractor;
 import mfix.core.node.ast.Node;
 import org.junit.Test;
 

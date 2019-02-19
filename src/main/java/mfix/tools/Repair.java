@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix;
+package mfix.tools;
 
 import mfix.common.java.JCompiler;
 import mfix.common.java.Subject;
@@ -15,9 +15,9 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.node.MatchInstance;
+import mfix.core.node.match.MatchInstance;
 import mfix.core.node.NodeUtils;
-import mfix.core.node.PatternExtractor;
+import mfix.core.pattern.PatternExtractor;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.diff.TextDiff;

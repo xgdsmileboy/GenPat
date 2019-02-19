@@ -8,7 +8,7 @@
 package mfix.tools;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.Vector;
+import mfix.core.pattern.cluster.Vector;
 
 /**
  * @author: Jiajun

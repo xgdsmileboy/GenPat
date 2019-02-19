@@ -1,7 +1,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.VIndex;
 
 public class Deletion extends Modification {
 

@@ -8,9 +8,6 @@ package mfix.core.node.match;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
-import mfix.core.node.MatchInstance;
-import mfix.core.node.MatchList;
-import mfix.core.node.MatchNode;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
@@ -20,7 +17,6 @@ import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.pattern.Pattern;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;

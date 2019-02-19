@@ -11,7 +11,7 @@ import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
-import mfix.core.node.PatternExtractor;
+import mfix.core.pattern.PatternExtractor;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
