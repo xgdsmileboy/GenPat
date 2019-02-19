@@ -459,7 +459,7 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     public boolean isConsidered() {
-        return _expanded || _bindingNode == null;
+        return _expanded || _changed || _insertDepend || _bindingNode == null;
     }
 
     public void setConsidered(boolean considered) {

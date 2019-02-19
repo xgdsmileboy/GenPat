@@ -104,7 +104,7 @@ public class Vdf extends Node {
 			buffer.append("[]");
 		}
 		if (_expression != null) {
-			buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp);
+			buffer.append('=').append(exp == null ? nameMapping.getExprID(_expression) : exp);
 		}
 		return buffer;
 	}
