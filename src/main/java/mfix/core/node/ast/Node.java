@@ -22,7 +22,6 @@ import mfix.core.node.modify.Modification;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
 
-import javax.management.relation.Relation;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
