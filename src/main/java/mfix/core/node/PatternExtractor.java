@@ -7,9 +7,11 @@
 
 package mfix.core.node;
 
+import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.abs.TF_IDF;
 import mfix.core.node.abs.TermFrequency;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
@@ -42,8 +44,8 @@ public class PatternExtractor {
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = new NodeParser();
         Set<Node> patterns = new HashSet<>();
-//        CodeAbstraction abstraction = new TF_IDF(srcFile, 0.5);
-        CodeAbstraction abstraction = new TermFrequency(0.01);
+//        CodeAbstraction abstraction = new TF_IDF(srcFile, Constant.TF_IDF_FREQUENCY);
+        CodeAbstraction abstraction = new TermFrequency(Constant.TOKEN_FREQENCY);
 //        ElementCounter counter = new ElementCounter();
 //        counter.open();
 //        counter.loadCache();

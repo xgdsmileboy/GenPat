@@ -36,9 +36,10 @@ public class Constant {
     public final static String BANNED_API_FILE = Utils.join(SEP, RES_DIR, "conf", "whiteList.txt");
     public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");
 
-    public final static int TOTAL_BUGGY_FILE_NUMBER = 700000; // used to compute TF-IDF
+    public final static int TOTAL_BUGGY_FILE_NUMBER = 723457; // used to compute TF-IDF
     public final static int API_FREQUENCY = 100;
-    public final static double TF_IDF_FREQUENCY = 0.6;
+    public final static double TF_IDF_FREQUENCY = 0.5;
+    public final static double TOKEN_FREQENCY = 0.01;
 
     public static String API_MAPPING_FILE;
     public static String PATTERN_VERSION;
