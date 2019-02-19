@@ -261,8 +261,6 @@ public class MatcherTest extends TestCase {
 
 //    @Test
     public void temp() {
-//        String srcFile = testbase + Constant.SEP + "src_Project.java";
-//        String tarFile = testbase + Constant.SEP + "tar_Project.java";
         String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
@@ -275,40 +273,7 @@ public class MatcherTest extends TestCase {
                 System.out.println(n.toSrcString());
             }
             System.out.println(p.formalForm(new NameMapping(), false));
-//            Set<Modification> modifications = p.getAllModifications(new HashSet<>());
-//            for (Modification m : modifications) {
-//                System.out.println(m.toString());
-//            }
         }
-//
-//        String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
-//
-//        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
-//
-//        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
-//        final Set<MethodDeclaration> methods = new HashSet<>();
-//        unit.accept(new ASTVisitor() {
-//            public boolean visit(MethodDeclaration node) {
-//                methods.add(node);
-//                return true;
-//            }
-//        });
-//
-//        NodeParser parser = new NodeParser();
-//        parser.setCompilationUnit(buggy, unit);
-//        for (MethodDeclaration m : methods) {
-//            Node node = parser.process(m);
-//            Set<Node> matched = Matcher.filter(node, patterns);
-//            for (Node p : matched) {
-//                Set<MatchInstance> set = Matcher.tryMatch(node, p);
-//                for (MatchInstance matchInstance : set) {
-//                    matchInstance.apply();
-//                    Assert.assertTrue(node.adaptModifications(varMaps.get(node.getStartLine()),
-//                            matchInstance.getStrMap()) == null);
-//                    matchInstance.reset();
-//                }
-//            }
-//        }
     }
 
 }
