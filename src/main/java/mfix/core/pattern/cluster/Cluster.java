@@ -193,9 +193,8 @@ public class Cluster {
 
         @Override
         public Void call() {
-            LevelLogger.debug(Thread.currentThread().getName() + " : " );
             if (_fstPatterns != null && _sndPatterns != null) {
-                LevelLogger.debug(" >>>> " + (_fstPatterns.size() + _sndPatterns.size()));
+                LevelLogger.debug(Thread.currentThread().getName() + " : "  + (_fstPatterns.size() + _sndPatterns.size()));
                 for (Pattern fstPattern : _fstPatterns) {
                     for (Iterator<Pattern> iter = _sndPatterns.iterator(); iter.hasNext(); ) {
                         Pattern sndPattern = iter.next();
