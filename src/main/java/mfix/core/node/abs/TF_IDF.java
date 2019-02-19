@@ -90,7 +90,7 @@ public class TF_IDF implements CodeAbstraction {
 
     @Override
     public boolean shouldAbstract(Node node) {
-        String token = node.toString();
+        String token = node.toSrcString().toString();
         double numInFile = _tokenMapInFile.getOrDefault(token, 1);
         double numInDoc = _tokenMap.getOrDefault(token, 1) + 1;
         double tf = numInFile / _tokenSizeInFile;

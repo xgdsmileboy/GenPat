@@ -13,6 +13,7 @@ import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -38,6 +39,11 @@ public class StrLiteral extends Expr {
 		_fIndex = VIndex.EXP_STR_LIT;
 	}
 
+	public void setValue(StringLiteral literal) {
+		_value = literal.getEscapedValue();
+	}
+
+	@Deprecated
 	public void setValue(String value) {
 		_value = value.replace("\\", "\\\\")
 				.replace("\'", "\\'")
@@ -57,9 +63,9 @@ public class StrLiteral extends Expr {
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append("\"");
+//		stringBuffer.append("\"");
 		stringBuffer.append(_value);
-		stringBuffer.append("\"");
+//		stringBuffer.append("\"");
 		return stringBuffer;
 	}
 
@@ -71,7 +77,8 @@ public class StrLiteral extends Expr {
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add("\"" + _value + "\"");
+//		_tokens.add("\"" + _value + "\"");
+		_tokens.add(_value);
 	}
 
 	@Override
