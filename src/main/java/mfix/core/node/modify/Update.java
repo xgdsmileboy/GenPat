@@ -1,6 +1,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.VIndex;
 
 import java.util.Map;
 import java.util.Set;
@@ -11,7 +12,7 @@ public class Update extends Modification {
     private Node _tarNode;
 
     public Update(Node parent, Node srcNode, Node tarNode) {
-        super(parent);
+        super(parent, VIndex.MOD_UPDATE);
         _srcNode = srcNode;
         _tarNode= tarNode;
     }

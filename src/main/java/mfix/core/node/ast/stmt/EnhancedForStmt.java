@@ -7,9 +7,12 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.Svd;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -45,6 +48,7 @@ public class EnhancedForStmt extends Stmt {
 	public EnhancedForStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.EFOR;
+		_fIndex = VIndex.STMT_ENHANCEDFOR;
 	}
 	
 	public void setParameter(Svd varDecl){
@@ -82,7 +86,38 @@ public class EnhancedForStmt extends Stmt {
 		stringBuffer.append(_statement.toSrcString());
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer var = _varDecl.formalForm(nameMapping, isConsidered());
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer body = _statement.formalForm(nameMapping, false);
+		if (var == null && exp == null && body == null) {
+			if (isConsidered()) {
+				return new StringBuffer("for(")
+						.append(nameMapping.getTypeID(_varDecl.getDeclType()))
+						.append(' ')
+						.append(nameMapping.getExprID(_varDecl.getName()))
+						.append(nameMapping.getExprID(_expression))
+						.append("){}");
+			} else {
+				return null;
+			}
+		}
+		StringBuffer buffer = new StringBuffer("for(");
+		if (var == null) {
+			buffer.append(nameMapping.getTypeID(_varDecl.getDeclType())).append(' ');
+			buffer.append(nameMapping.getExprID(_varDecl.getName()));
+		} else {
+			buffer.append(var);
+		}
+		buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp);
+		body.append(')');
+		buffer.append(body == null ? "{}" : body);
+		return buffer;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -159,22 +194,22 @@ public class EnhancedForStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			EnhancedForStmt enhancedForStmt = (EnhancedForStmt) getBindingNode();
 			if(_varDecl.getBindingNode() != enhancedForStmt.getParameter()) {
 				Update update = new Update(this, _varDecl, enhancedForStmt.getParameter());
 				_modifications.add(update);
 			} else {
-				_varDecl.genModidications();
+				_varDecl.genModifications();
 			}
 			if(_expression.getBindingNode() != enhancedForStmt.getExpression()) {
 				Update update = new Update(this, _expression, enhancedForStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
-			_statement.genModidications();
+			_statement.genModifications();
 			return true;
 		}
 		return false;
@@ -218,7 +253,7 @@ public class EnhancedForStmt extends Stmt {
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer varDecl = null;
 		StringBuffer expression = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			EnhancedForStmt enhancedForStmt = (EnhancedForStmt) pnode;
 			for (Modification modification : enhancedForStmt.getModifications()) {

@@ -15,12 +15,13 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2019-01-14
  */
+@Deprecated
 public class Wrap extends Insertion {
 
     private Node _wrapper;
     private List<Node> _nodes;
     public Wrap(Node parent, Node wrapper, List<Node> wrapped) {
-        super(parent);
+        super(parent, -1);
         _wrapper = wrapper;
         _nodes = wrapped;
     }

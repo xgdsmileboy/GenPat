@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -46,6 +47,11 @@ public class LambdaExpr extends Expr {
 	}
 
 	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return null;
+	}
+
+	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add(_codeStr);
@@ -81,7 +87,7 @@ public class LambdaExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 

@@ -6,7 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -32,6 +35,7 @@ public class NumLiteral extends Expr {
 	public NumLiteral(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.NUMBER;
+		_fIndex = VIndex.EXP_NUM_LIT;
 	}
 
 	public void setValue(String token) {
@@ -41,6 +45,11 @@ public class NumLiteral extends Expr {
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_token);
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return leafFormalForm(parentConsidered);
 	}
 
 	@Override
@@ -81,8 +90,8 @@ public class NumLiteral extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			if (!compare(getBindingNode())) {
 				Update update = new Update(this, this, getBindingNode());
 				_modifications.add(update);
@@ -102,7 +111,7 @@ public class NumLiteral extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
 		}

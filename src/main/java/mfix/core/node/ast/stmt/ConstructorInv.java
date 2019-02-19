@@ -7,9 +7,12 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -43,6 +46,7 @@ public class ConstructorInv  extends Stmt {
 	public ConstructorInv(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.CONSTRUCTORINV;
+		_fIndex = VIndex.STMT_CONSTRUCTOR;
 	}
 
 	public String getClassStr() {
@@ -75,8 +79,24 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer arg = _arguments.formalForm(nameMapping, isConsidered());
+		if (arg == null) {
+			if (isConsidered()) {
+				StringBuffer buffer = new StringBuffer("this();");
+				return buffer;
+			}
+			return null;
+		}
+		return new StringBuffer("this(").append(arg).append(')');
+
+	}
+
+	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
+		_tokens.add("(");
 		_tokens.addAll(_arguments.tokens());
 		_tokens.add(")");
 		_tokens.add(";");
@@ -132,14 +152,14 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			ConstructorInv constructorInv = (ConstructorInv) getBindingNode();
 			if(_arguments.getBindingNode() != constructorInv.getArguments()) {
 				Update update = new Update(this, _arguments, constructorInv.getArguments());
 				_modifications.add(update);
 			} else {
-				_arguments.genModidications();
+				_arguments.genModifications();
 			}
 			return true;
 		}
@@ -149,8 +169,8 @@ public class ConstructorInv  extends Stmt {
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if (node instanceof ConstructorInv) {
-			return checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings);
+			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		}
 		return false;
 	}
@@ -172,7 +192,7 @@ public class ConstructorInv  extends Stmt {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer arguments = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			ConstructorInv constructorInv = (ConstructorInv) pnode;
 			for(Modification modification : constructorInv.getModifications()) {

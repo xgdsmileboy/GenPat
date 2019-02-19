@@ -7,8 +7,10 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -57,6 +59,21 @@ public class ExpressionStmt extends Stmt {
 		stringBuffer.append(_expression.toSrcString());
 		stringBuffer.append(";");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		if (exp == null) {
+			if (isConsidered()) {
+				return new StringBuffer(nameMapping.getExprID(_expression)).append(';');
+			} else {
+				return null;
+			}
+		}
+		StringBuffer buffer = new StringBuffer(exp).append(';');
+		return buffer;
 	}
 
 	@Override
@@ -123,14 +140,14 @@ public class ExpressionStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			ExpressionStmt expressionStmt = (ExpressionStmt) getBindingNode();
 			if(_expression.getBindingNode() != expressionStmt.getExpression()) {
 				Update update = new Update(this, _expression, expressionStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			return true;
 		}
@@ -165,7 +182,7 @@ public class ExpressionStmt extends Stmt {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			ExpressionStmt expressionStmt = (ExpressionStmt) pnode;
 			for(Modification modification : expressionStmt.getModifications()) {

@@ -6,7 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -33,6 +36,7 @@ public class ParenthesiszedExpr extends Expr {
 	public ParenthesiszedExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.PARENTHESISZED;
+		_fIndex = VIndex.EXP_PARENTHESISED;
 	}
 
 	public void setExpr(Expr expression) {
@@ -50,6 +54,19 @@ public class ParenthesiszedExpr extends Expr {
 		stringBuffer.append(_expression.toSrcString());
 		stringBuffer.append(")");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer buffer = _expression.formalForm(nameMapping, consider);
+		if (buffer != null) {
+			if (nameMapping.isPlaceHolder(buffer.toString())) {
+				return buffer;
+			}
+			return new StringBuffer("(").append(buffer).append(')');
+		}
+		return super.toFormalForm0(nameMapping, parentConsidered);
 	}
 
 	@Override
@@ -108,14 +125,14 @@ public class ParenthesiszedExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			ParenthesiszedExpr parenthesiszedExpr = (ParenthesiszedExpr) getBindingNode();
 			if (_expression.getBindingNode() != parenthesiszedExpr.getExpression()) {
 				Update update = new Update(this, _expression, parenthesiszedExpr.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 		}
 		return true;
@@ -137,7 +154,7 @@ public class ParenthesiszedExpr extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
 		}

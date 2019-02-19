@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -37,6 +40,7 @@ public class Svd extends Expr {
 	public Svd(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SINGLEVARDECL;
+		_fIndex = VIndex.EXP_SVD;
 	}
 
 	public void setDecType(MType decType) {
@@ -74,6 +78,27 @@ public class Svd extends Expr {
 			stringBuffer.append(_initializer.toSrcString());
 		}
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer type = _decType.formalForm(nameMapping, consider);
+		StringBuffer name = _name.formalForm(nameMapping, consider);
+		StringBuffer init = null;
+		if (_initializer != null) {
+			init = _initializer.formalForm(nameMapping, consider);
+		}
+		if (type == null && name == null && init == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(type == null ? nameMapping.getTypeID(_decType) : type).append(' ')
+				.append(name == null ? nameMapping.getExprID(_name) : name);
+		if (_initializer != null) {
+			buffer.append(init == null ? nameMapping.getExprID(_initializer) : init);
+		}
+		return buffer;
 	}
 
 	@Override
@@ -155,8 +180,8 @@ public class Svd extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			Svd svd = (Svd) getBindingNode();
 			if (!_decType.compare(svd.getDeclType())) {
 				Update update = new Update(this, _decType, svd.getDeclType());
@@ -175,7 +200,7 @@ public class Svd extends Expr {
 				Update update = new Update(this, _initializer, svd.getInitializer());
 				_modifications.add(update);
 			} else {
-				_initializer.genModidications();
+				_initializer.genModifications();
 			}
 		}
 		return true;
@@ -184,8 +209,8 @@ public class Svd extends Expr {
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if (node instanceof Svd) {
-			return checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings);
+			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		} else {
 			return false;
 		}
@@ -196,7 +221,7 @@ public class Svd extends Expr {
 		StringBuffer declType = null;
 		StringBuffer name = null;
 		StringBuffer initializer = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			Svd svd = (Svd) node;
 			for (Modification modification : svd.getModifications()) {

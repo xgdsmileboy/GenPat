@@ -7,7 +7,9 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -35,13 +37,19 @@ public class LabeledStmt extends Stmt {
 	public LabeledStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_codeStr = node.toString();
+		_fIndex = VIndex.STMT_LABEL;
 	}
 	
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_codeStr);
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -82,7 +90,7 @@ public class LabeledStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 

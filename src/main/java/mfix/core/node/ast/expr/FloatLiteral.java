@@ -7,6 +7,8 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.LinkedList;
@@ -24,6 +26,7 @@ public class FloatLiteral extends NumLiteral {
 	public FloatLiteral(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.FLITERAL;
+		_fIndex = VIndex.EXP_FLOAT_LIT;
 	}
 
 	public void setValue(float value) {

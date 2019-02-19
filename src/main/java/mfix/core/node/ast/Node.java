@@ -7,15 +7,18 @@
 package mfix.core.node.ast;
 
 import mfix.common.util.Pair;
-import mfix.common.util.Utils;
-import mfix.core.node.ast.expr.*;
+import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.ast.expr.Operator;
+import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.Vector;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
-import mfix.core.node.modify.Deletion;
-import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
-import mfix.core.node.modify.Update;
 import mfix.core.pattern.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -333,12 +336,13 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * flatten abstract tree as a list of {@code Node}
+     *
      * @param nodes : list contains the {@code Node}
      * @return : a list of {@code Node}s after flattening
      */
     public List<Node> flattenTreeNode(List<Node> nodes) {
         nodes.add(this);
-        for(Node node : getAllChildren()) {
+        for (Node node : getAllChildren()) {
             node.flattenTreeNode(nodes);
         }
         return nodes;
@@ -369,7 +373,7 @@ public abstract class Node implements NodeComparator, Serializable {
     public List<Expr> getAllChildExpr(List<Expr> nodes, boolean filterName) {
         for (Node node : getAllChildren()) {
             if (node instanceof Expr) {
-                if (!filterName || !isSimpleExpr(node)) {
+                if (!filterName || !NodeUtils.isSimpleExpr(node)) {
                     nodes.add((Expr) node);
                 }
             }
@@ -378,30 +382,6 @@ public abstract class Node implements NodeComparator, Serializable {
             node.getAllChildExpr(nodes, filterName);
         }
         return nodes;
-    }
-
-    private boolean isSimpleExpr(Node node) {
-        switch (node.getNodeType()) {
-            case SNAME:
-            case QNAME:
-            case NUMBER:
-            case INTLITERAL:
-            case FLITERAL:
-            case DLITERAL:
-            case NULL:
-            case ASSIGNOPERATOR:
-            case POSTOPERATOR:
-            case PREFIXOPERATOR:
-            case INFIXOPERATOR:
-            case TYPE:
-            case SLITERAL:
-            case THIS:
-            case BLITERAL:
-            case CLITERAL:
-                return true;
-            default:
-        }
-        return false;
     }
 
     /**
@@ -479,7 +459,7 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     public boolean isConsidered() {
-        return _expanded || _bindingNode == null;
+        return _expanded || _changed || _insertDepend || _bindingNode == null;
     }
 
     public void setConsidered(boolean considered) {
@@ -629,24 +609,6 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     /**
-     * match two list of nodes greedily
-     *
-     * @param lst1 : first list
-     * @param lst2 : second list
-     */
-    protected void greedyMatchListNode(List<? extends Node> lst1, List<? extends Node> lst2) {
-        Set<Node> set = new HashSet<>();
-        for (Node node : lst1) {
-            for (Node other : lst2) {
-                if (!set.contains(other) && node.postAccurateMatch(other)) {
-                    set.add(other);
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
      * return all modifications bound to the ast node
      *
      * @param modifications : a set of to preserve the modifications
@@ -671,103 +633,7 @@ public abstract class Node implements NodeComparator, Serializable {
     /**
      * based on the matching result, generate modifications
      */
-    public abstract boolean genModidications();
-
-    /**
-     * match two list ast nodes and generate modifications
-     *
-     * @param src  : a list of source nodes
-     * @param tar  : a list of target nodes
-     * @param move : permit move operation
-     */
-    protected void genModificationList(List<? extends Node> src, List<? extends Node> tar, boolean move) {
-        Set<Integer> set = new HashSet<>();
-        List<Deletion> deletions = new LinkedList<>();
-        List<Insertion> insertions = new LinkedList<>();
-        for (int i = 0; i < src.size(); i++) {
-            boolean notmatch = true;
-            for (int j = 0; j < tar.size(); j++) {
-                if (set.contains(j)) continue;
-                if (src.get(i).getBindingNode() == tar.get(j)) {
-                    set.add(j);
-                    src.get(i).genModidications();
-//                    if (i != j && move) {
-//                        Movement movement = new Movement(this, i, j, src.get(i));
-//                        _modifications.add(movement);
-//                    }
-                    notmatch = false;
-                    break;
-                }
-            }
-            if (notmatch) {
-                Deletion deletion = new Deletion(this, src.get(i), i);
-                deletions.add(deletion);
-            }
-        }
-        for (int i = 0; i < tar.size(); i++) {
-            if (set.contains(i)) continue;
-            Insertion insertion = new Insertion(this, i, tar.get(i));
-            insertions.add(insertion);
-        }
-
-        Set<Integer> matched = new HashSet<>();
-        Insertion insertion;
-        Update update;
-        for (Deletion d : deletions) {
-            Node binding = d.getDelNode().getBindingNode();
-            update = null;
-            if (binding != null) {
-                for (int i = 0; i < insertions.size(); i++) {
-                    if (matched.contains(i)) {
-                        continue;
-                    }
-                    insertion = insertions.get(i);
-                    if (d.getIndex() == insertion.getIndex() || binding.isParentOf(insertion.getInsertedNode())
-                            || insertion.getInsertedNode().isParentOf(binding)) {
-                        matched.add(i);
-                        update = new Update(d.getParent(), d.getDelNode(), insertion.getInsertedNode());
-                    }
-                }
-            }
-            if (update == null) {
-                _modifications.add(d);
-            } else {
-                _modifications.add(update);
-            }
-        }
-        for (int i = 0; i < insertions.size(); i++) {
-            if (matched.contains(i)) {
-                continue;
-            }
-            Insertion ins = insertions.get(i);
-            Set<Node> nodes = ins.getInsertedNode().recursivelyGetDataDependency(new HashSet<>());
-            if (nodes.isEmpty()) {
-                Node insertNode = ins.getInsertedNode();
-                Node parent = insertNode.getParent();
-                List<Node> children = parent.getAllChildren();
-                for (int index = 0; index < children.size(); index ++) {
-                    if (insertNode == children.get(index)) {
-                        if (index > 0) {
-                            children.get(index - 1).setInsertDepend(true);
-                            ins.setPrenode(children.get(index - 1));
-                        }
-                        if (index < children.size() - 1) {
-                            children.get(index + 1).setInsertDepend(true);
-                            ins.setNextnode(children.get(index + 1));
-                        }
-                    }
-                }
-            } else {
-                for (Node node : nodes) {
-                    if (node.getBindingNode() != null) {
-                        node.getBindingNode().setInsertDepend(true);
-                    }
-                }
-            }
-            _modifications.add(ins);
-        }
-
-    }
+    public abstract boolean genModifications();
 
 
     /*********************************************************/
@@ -790,6 +656,9 @@ public abstract class Node implements NodeComparator, Serializable {
     /**************** pattern abstraction ********************/
     /*********************************************************/
     protected boolean _abstract = true;
+    // to avoid duplicate object;
+    private final static StringBuffer BUFFER = new StringBuffer();
+    private transient StringBuffer _formalFormCache = BUFFER;
 
     public boolean isAbstract() {
         return _abstract;
@@ -801,6 +670,31 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    public void doAbstractionNew(CodeAbstraction abstraction) {
+        if (this instanceof Operator) {
+            _abstract = true;
+        } else {
+            if (NodeUtils.isSimpleExpr(this)) {
+                _abstract = abstraction.shouldAbstract(this);
+            } else {
+                _abstract = true;
+                for (Node node : getAllChildren()) {
+                    node.doAbstractionNew(abstraction);
+                    _abstract = _abstract && node.isAbstract();
+                }
+            }
+        }
+    }
+
+    public StringBuffer formalForm(NameMapping nameMapping, boolean parentConsidered) {
+        if (_formalFormCache != null && _formalFormCache.length() == 0) {
+            _formalFormCache = toFormalForm0(nameMapping, parentConsidered);
+        }
+        return _formalFormCache;
+    }
+
+    protected abstract StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered);
+
     public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
         Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
         for (MethodInv m : mSet) {
@@ -809,10 +703,12 @@ public abstract class Node implements NodeComparator, Serializable {
         return set;
     }
 
-    public Set<Pair<Pair<String, Integer>, String>> getUniversalAPIsWithType(boolean isPattern, Set<Pair<Pair<String, Integer>, String>> set) {
+    public Set<Pair<Pair<String, Integer>, String>> getUniversalAPIsWithType(boolean isPattern,
+                                                                             Set<Pair<Pair<String, Integer>, String>> set) {
         Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
         for (MethodInv m : mSet) {
-            set.add(new Pair<>(new Pair<> (m.getName().getName(), m.getArguments().getExpr().size()), m.getExpression().getTypeString()));
+            set.add(new Pair<>(new Pair<>(m.getName().getName(), m.getArguments().getExpr().size()),
+                    m.getExpression().getTypeString()));
         }
         return set;
     }
@@ -830,6 +726,48 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     /*********************************************************/
+    /***************** pattern clustering ********************/
+    /*********************************************************/
+
+    private Vector _patternVec;
+    protected int _fIndex = -1;
+    private int _frequency = 1;
+
+    public Vector getPatternVector() {
+        if (_patternVec == null) {
+            computePatternVector();
+        }
+        return _patternVec;
+    }
+
+    public int getFrequency() {
+        return _frequency;
+    }
+
+    public void incFrequency(int frequency) {
+        _frequency += frequency;
+    }
+
+    // TODO : need to rewrite
+    private void computePatternVector() {
+        _patternVec = new Vector();
+        for (Node node : getAllChildren()) {
+            _patternVec.or(node.getPatternVector());
+        }
+        if (!_abstract && _fIndex >= 0) {
+            _patternVec.set(_fIndex);
+        }
+        if (!_modifications.isEmpty()) {
+            for (Modification modification : _modifications) {
+                _patternVec.set(modification.getFeatureIndex());
+            }
+        }
+    }
+
+//    public boolean abSame(Node node) { }
+
+
+    /*********************************************************/
     /**************** matching buggy code ********************/
     /*********************************************************/
 
@@ -837,7 +775,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public void setBuggyBindingNode(Node node) {
         _buggyBinding = node;
-        if(node != null) {
+        if (node != null) {
             node._buggyBinding = this;
         }
     }
@@ -850,42 +788,18 @@ public abstract class Node implements NodeComparator, Serializable {
         return _buggyBinding;
     }
 
-    public boolean isBoundBuggy(){
+    public boolean isBoundBuggy() {
         return _buggyBinding != null;
     }
 
     public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings);
 
-    protected boolean checkDependency(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if(getDataDependency() != null && node.getDataDependency() != null) {
-            if(getDataDependency().ifMatch(node.getDataDependency(), matchedNode, matchedStrings)) {
-                return true;
-            }
-            return false;
-        }
-        return true;
-    }
-
-    protected boolean matchSameNodeType(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if(Utils.checkCompatiblePut(toString(), node.toString(), matchedStrings)) {
-            matchedNode.put(this, node);
-            return true;
-        }
-        return false;
-    }
 
     public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
         if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
             return getBindingNode().getBuggyBindingNode().toSrcString();
         } else if (exprMap.containsKey(toSrcString().toString())) {
             return new StringBuffer(exprMap.get(toSrcString().toString()));
-        }
-        return null;
-    }
-
-    public Node checkModification() {
-        if (getBuggyBindingNode() != null && !getBuggyBindingNode().getModifications().isEmpty()) {
-            return getBuggyBindingNode();
         }
         return null;
     }

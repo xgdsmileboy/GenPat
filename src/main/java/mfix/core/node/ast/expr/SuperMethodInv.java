@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -40,6 +43,7 @@ public class SuperMethodInv extends Expr {
 	public SuperMethodInv(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SMINVOCATION;
+		_fIndex = VIndex.EXP_SUPER_METHOD_INV;
 	}
 
 	public void setLabel(Label label) {
@@ -75,6 +79,27 @@ public class SuperMethodInv extends Expr {
 		stringBuffer.append(_arguments.toSrcString());
 		stringBuffer.append(")");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer label = null;
+		if (_label != null) {
+			label = _label.formalForm(nameMapping, consider);
+		}
+		StringBuffer name = _name.formalForm(nameMapping, consider);
+		StringBuffer arg = _arguments.formalForm(nameMapping, consider);
+		if (label == null && name == null && arg == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		if (_label != null) {
+			buffer.append(label == null ? nameMapping.getExprID(_label) : label).append('.');
+		}
+		buffer.append("super.").append(name == null ? nameMapping.getExprID(_name) : name)
+				.append('(').append(arg == null ? "" : arg).append(')');
+		return buffer;
 	}
 
 	@Override
@@ -164,8 +189,8 @@ public class SuperMethodInv extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			SuperMethodInv methodInv = (SuperMethodInv) getBindingNode();
 			if (_label == null) {
 				if (methodInv._label != null) {
@@ -185,7 +210,7 @@ public class SuperMethodInv extends Expr {
 				Update update = new Update(this, _arguments, methodInv.getArguments());
 				_modifications.add(update);
 			} else {
-				_arguments.genModidications();
+				_arguments.genModifications();
 			}
 		}
 		return true;
@@ -219,7 +244,7 @@ public class SuperMethodInv extends Expr {
 		StringBuffer label = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			SuperMethodInv superMethodInv = (SuperMethodInv) node;
 			for (Modification modification : superMethodInv.getModifications()) {

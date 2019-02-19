@@ -7,8 +7,11 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -42,6 +45,7 @@ public class IfStmt extends Stmt {
 	public IfStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.IF;
+		_fIndex = VIndex.STMT_IF;
 	}
 	
 	public void setCondition(Expr condition){
@@ -80,7 +84,25 @@ public class IfStmt extends Stmt {
 		}
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer cond = _condition.formalForm(nameMapping, isConsidered());
+		StringBuffer then = _then.formalForm(nameMapping, false);
+		StringBuffer els = _else == null ? null : _else.formalForm(nameMapping, false);
+		if (isConsidered() || cond != null || then != null || els != null) {
+			StringBuffer buffer = new StringBuffer("if(");
+			buffer.append(cond == null ? nameMapping.getExprID(_condition) : cond).append(')');
+			buffer.append(then == null ? "{}" : then);
+			if (_else != null) {
+				buffer.append("\nelse").append(els == null ? "{}" : els);
+			}
+			return buffer;
+		}
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -175,20 +197,20 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			IfStmt ifStmt = (IfStmt) getBindingNode();
 			if(_condition.getBindingNode() != ifStmt.getCondition()) {
 				Update update = new Update(this, _condition, ifStmt.getCondition());
 				_modifications.add(update);
 			} else {
-				_condition.genModidications();
+				_condition.genModifications();
 			}
 			if(_then.getBindingNode() != ifStmt.getThen()) {
 				Update update = new Update(this, _then, ifStmt.getThen());
 				_modifications.add(update);
 			} else {
-				_then.genModidications();
+				_then.genModifications();
 			}
 			if(_else == null) {
 				if (ifStmt.getElse() != null) {
@@ -199,7 +221,7 @@ public class IfStmt extends Stmt {
 				Update update = new Update(this, _else, ifStmt.getElse());
 				_modifications.add(update);
 			} else {
-				_else.genModidications();
+				_else.genModifications();
 			}
 			return true;
 		}
@@ -248,7 +270,7 @@ public class IfStmt extends Stmt {
 		StringBuffer condition = null;
 		StringBuffer then = null;
 		StringBuffer els = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			IfStmt ifStmt = (IfStmt) pnode;
 			for(Modification modification : ifStmt.getModifications()) {

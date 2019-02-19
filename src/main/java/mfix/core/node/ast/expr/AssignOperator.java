@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
 
@@ -26,6 +27,7 @@ public class AssignOperator extends Operator {
     public AssignOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
         super(fileName, startLine, endLine, oriNode);
         _nodeType = TYPE.ASSIGNOPERATOR;
+        _fIndex = VIndex.EXP_ASSIGN_OP;
     }
 
     public void setOperator(Assignment.Operator operator) {

@@ -7,8 +7,11 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Svd;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -41,6 +44,7 @@ public class CatClause extends Node {
 	public CatClause(String fileName, int startLine, int endLine, ASTNode oriNode, Node parent) {
 		super(fileName, startLine, endLine, oriNode, parent);
 		_nodeType = TYPE.CATCHCLAUSE;
+		_fIndex = VIndex.STMT_CATCH;
 	}
 	
 	public void setException(Svd svd) {
@@ -68,7 +72,22 @@ public class CatClause extends Node {
 		stringBuffer.append(_blk.toSrcString());
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer excep = _exception.formalForm(nameMapping, isConsidered());
+		StringBuffer blk = _blk.formalForm(nameMapping, isConsidered());
+		if (excep == null && blk == null) {
+			return isConsidered() ? new StringBuffer("catch(").append(nameMapping.getExprID(_exception))
+					.append(')').append("{}") : null;
+		}
+		StringBuffer buffer = new StringBuffer("catch(");
+		buffer.append(excep == null ? nameMapping.getExprID(_exception) : excep)
+				.append(')').append(blk == null ? "{}" : blk);
+		return buffer;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -138,16 +157,16 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		if (getBindingNode() != null) {
 			CatClause catClause = (CatClause) getBindingNode();
 			if(_exception.getBindingNode() != catClause.getException()) {
 				Update update = new Update(this, _exception, catClause.getException());
 				_modifications.add(update);
 			} else {
-				_exception.genModidications();
+				_exception.genModifications();
 			}
-			_blk.genModidications();
+			_blk.genModifications();
 			return true;
 		}
 		return false;
@@ -159,8 +178,8 @@ public class CatClause extends Node {
 			CatClause catClause = (CatClause) node;
 			return _exception.ifMatch(catClause.getException(), matchedNode, matchedStrings)
 					&& _blk.ifMatch(catClause.getBody(), matchedNode, matchedStrings)
-					&& checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings);
+					&& NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		}
 		return false;
 	}
@@ -186,7 +205,7 @@ public class CatClause extends Node {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer exception = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			CatClause catClause = (CatClause) pnode;
 			for (Modification modification : catClause.getModifications()) {

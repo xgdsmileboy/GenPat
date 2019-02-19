@@ -7,8 +7,11 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.Constant;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -47,6 +50,7 @@ public class SwitchStmt extends Stmt {
 	public SwitchStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.SWSTMT;
+		_fIndex = VIndex.STMT_SWTICH;
 	}
 
 	public void setExpression(Expr expression){
@@ -63,7 +67,7 @@ public class SwitchStmt extends Stmt {
 	
 	@Override
 	public StringBuffer toSrcString() {
-		StringBuffer stringBuffer = new StringBuffer("swtich (");
+		StringBuffer stringBuffer = new StringBuffer("switch (");
 		stringBuffer.append(_expression.toSrcString());
 		stringBuffer.append("){" + Constant.NEW_LINE);
 		for (Stmt stmt : _statements) {
@@ -73,7 +77,35 @@ public class SwitchStmt extends Stmt {
 		stringBuffer.append("}");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		List<StringBuffer> strings = new ArrayList<>(_statements.size());
+		StringBuffer b;
+		for (int i = 0; i < _statements.size(); i++) {
+			b = _statements.get(i).formalForm(nameMapping, false);
+			if (b != null) {
+				strings.add(b);
+			}
+		}
+		if (isConsidered() || exp != null || !strings.isEmpty()) {
+			StringBuffer buffer = new StringBuffer("switch (");
+			buffer.append(nameMapping.getExprID(_expression)).append("){");
+			if (!strings.isEmpty()) {
+				for (int i = 0; i < strings.size(); i++) {
+					buffer.append('\n').append(strings.get(i));
+				}
+				buffer.append("\n}");
+			} else {
+				buffer.append('}');
+			}
+			return buffer;
+		}
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -141,22 +173,22 @@ public class SwitchStmt extends Stmt {
 			continueTopDownMatchNull();
 		} else {
 			_expression.postAccurateMatch(switchStmt.getExpression());
-			greedyMatchListNode(_statements, switchStmt.getStatements());
+			NodeUtils.greedyMatchListNode(_statements, switchStmt.getStatements());
 		}
 		return match;
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			SwitchStmt switchStmt = (SwitchStmt) getBindingNode();
 			if(_expression.getBindingNode() != switchStmt.getExpression()) {
 				Update update = new Update(this, _expression, switchStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
-			genModificationList(_statements, switchStmt.getStatements(), true);
+			_modifications.addAll(NodeUtils.genModificationList(this, _statements, switchStmt.getStatements()));
 			return true;
 		}
 		return false;
@@ -194,7 +226,7 @@ public class SwitchStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			SwitchStmt switchStmt = (SwitchStmt) pnode;
 			StringBuffer expression = null;
@@ -220,7 +252,7 @@ public class SwitchStmt extends Stmt {
 					map, vars, exprMap)) {
 				return null;
 			}
-			StringBuffer stringBuffer = new StringBuffer("swtich (");
+			StringBuffer stringBuffer = new StringBuffer("switch (");
 			StringBuffer tmp;
 			if (expression == null) {
 				tmp = _expression.adaptModifications(vars, exprMap);

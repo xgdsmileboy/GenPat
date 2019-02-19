@@ -7,8 +7,11 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -36,12 +39,13 @@ public class Vdf extends Node {
      *	Identifier { Dimension } [ = Expression ]
 	 */
 	public Vdf(String fileName, int startLine, int endLine, ASTNode node) {
-		super(fileName, startLine, endLine, node);
+		this(fileName, startLine, endLine, node, null);
 	}
 
 	public Vdf(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.VARDECLFRAG;
+		_fIndex = VIndex.EXP_VAR_FRAG;
 	}
 
 	public void setName(SName identifier) {
@@ -80,6 +84,29 @@ public class Vdf extends Node {
 			stringBuffer.append(_expression.toSrcString());
 		}
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer identifier = _identifier.formalForm(nameMapping, consider);
+		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, consider);
+		if (identifier == null && exp == null) {
+			if (isConsidered()) {
+				return new StringBuffer(nameMapping.getExprID(this));
+			} else {
+				return null;
+			}
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(identifier == null ? nameMapping.getExprID(_identifier) : identifier);
+		for (int i = 0; i < _dimensions; i++) {
+			buffer.append("[]");
+		}
+		if (_expression != null) {
+			buffer.append('=').append(exp == null ? nameMapping.getExprID(_expression) : exp);
+		}
+		return buffer;
 	}
 
 	@Override
@@ -168,7 +195,7 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		if (getBindingNode() != null) {
 			Vdf vdf = (Vdf) getBindingNode();
 			if (_identifier.compare(vdf._identifier)) {
@@ -181,7 +208,7 @@ public class Vdf extends Node {
 					Update update = new Update(this, _expression, vdf.getExpression());
 					_modifications.add(update);
 				} else {
-					_expression.genModidications();
+					_expression.genModifications();
 				}
 			}
 		}
@@ -192,8 +219,8 @@ public class Vdf extends Node {
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if(node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;
-			if(checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings)) {
+			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				matchedNode.put(_identifier, vdf._identifier);
 				matchedStrings.put(_identifier.getName(), vdf.getName());
 				return true;
@@ -205,7 +232,7 @@ public class Vdf extends Node {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			Vdf vdf = (Vdf) node;
 			for (Modification modification : vdf.getModifications()) {

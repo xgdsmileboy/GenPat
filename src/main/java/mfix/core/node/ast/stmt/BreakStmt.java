@@ -7,8 +7,11 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.SName;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -40,6 +43,7 @@ public class BreakStmt extends Stmt {
 	public BreakStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.BREACK;
+		_fIndex = VIndex.STMT_BREAK;
 	}
 	
 	public void setIdentifier(SName identifier){
@@ -56,7 +60,21 @@ public class BreakStmt extends Stmt {
 		stringBuffer.append(";");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer identifier = _identifier == null ? null : _identifier.formalForm(nameMapping, isConsidered());
+		if (identifier == null) {
+			if (isConsidered()) {
+				return new StringBuffer("break ")
+						.append(_identifier == null ? "" : nameMapping.getExprID(_identifier)).append(';');
+			}
+			return null;
+		}
+		return new StringBuffer("break ").append(identifier).append(';');
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -118,8 +136,8 @@ public class BreakStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			BreakStmt breakStmt = (BreakStmt) getBindingNode();
 			if (_identifier == null) {
 				if (breakStmt._identifier != null) {
@@ -130,7 +148,7 @@ public class BreakStmt extends Stmt {
 				Update update = new Update(this, _identifier, breakStmt._identifier);
 				_modifications.add(update);
 			} else {
-				_identifier.genModidications();
+				_identifier.genModifications();
 			}
 			return true;
 		}
@@ -171,7 +189,7 @@ public class BreakStmt extends Stmt {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer identifier = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			BreakStmt breakStmt = (BreakStmt) pnode;
 			for (Modification modification : breakStmt.getModifications()) {

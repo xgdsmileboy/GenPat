@@ -7,9 +7,12 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ClassInstCreation;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -40,6 +43,7 @@ public class ThrowStmt extends Stmt {
 	public ThrowStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.THROW;
+		_fIndex = VIndex.STMT_THROW;
 	}
 	
 	public void setExpression(Expr expression){
@@ -64,7 +68,19 @@ public class ThrowStmt extends Stmt {
 		stringBuffer.append(";");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		if (isConsidered() || exp != null) {
+			StringBuffer buffer = new StringBuffer("throw ");
+			buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp).append(';');
+			return buffer;
+		}
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -124,14 +140,14 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			ThrowStmt throwStmt = (ThrowStmt) getBindingNode();
 			if(_expression.getBindingNode() != throwStmt.getExpression()) {
 				Update update = new Update(this, _expression, throwStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			return true;
 		}
@@ -165,7 +181,7 @@ public class ThrowStmt extends Stmt {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			ThrowStmt throwStmt = (ThrowStmt) pnode;
 			for (Modification modification : throwStmt.getModifications()) {

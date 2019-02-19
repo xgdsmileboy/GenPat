@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -37,6 +40,7 @@ public class Assign extends Expr {
     public Assign(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.ASSIGN;
+        _fIndex = VIndex.EXP_ASSIGN;
     }
 
     public void setLeftHandSide(Expr lhs) {
@@ -79,6 +83,21 @@ public class Assign extends Expr {
         stringBuffer.append(_operator.toSrcString());
         stringBuffer.append(_rhs.toSrcString());
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        StringBuffer lhs = _lhs.formalForm(nameMapping, consider);
+        StringBuffer rhs = _rhs.formalForm(nameMapping, consider);
+        if (lhs == null && rhs == null) {
+            return super.toFormalForm0(nameMapping, parentConsidered);
+        }
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(lhs == null ? nameMapping.getExprID(_lhs) : lhs)
+                .append(_operator.getOperatorStr())
+                .append(rhs == null ? nameMapping.getExprID(_rhs) : rhs);
+        return buffer;
     }
 
     @Override
@@ -136,14 +155,14 @@ public class Assign extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             Assign assign = (Assign) getBindingNode();
             if (_lhs.getBindingNode() != assign.getLhs()) {
                 Update update = new Update(this, _lhs, assign.getLhs());
                 _modifications.add(update);
             } else {
-                _lhs.genModidications();
+                _lhs.genModifications();
             }
             if (!_operator.compare(assign.getOperator())) {
                 Update update = new Update(this, _operator, assign.getOperator());
@@ -153,7 +172,7 @@ public class Assign extends Expr {
                 Update update = new Update(this, _rhs, assign.getRhs());
                 _modifications.add(update);
             } else {
-                _rhs.genModidications();
+                _rhs.genModifications();
             }
         }
         return true;
@@ -191,7 +210,7 @@ public class Assign extends Expr {
         StringBuffer operator = null;
         StringBuffer lhs = null;
         StringBuffer rhs = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             Assign assign = (Assign) node;
             for (Modification modification : assign.getModifications()) {

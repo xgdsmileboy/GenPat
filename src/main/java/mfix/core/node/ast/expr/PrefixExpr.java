@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -36,6 +39,7 @@ public class PrefixExpr extends Expr {
 	public PrefixExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.PREEXPR;
+		_fIndex = VIndex.EXP_PREFIX;
 	}
 
 	public void setExpression(Expr expression) {
@@ -60,6 +64,16 @@ public class PrefixExpr extends Expr {
 		stringBuffer.append(_operator.toSrcString());
 		stringBuffer.append(_expression.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		StringBuffer buffer = _expression.formalForm(nameMapping, isConsidered() || parentConsidered);
+		if (buffer == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer b = new StringBuffer(_operator.toSrcString()).append(buffer);
+		return b;
 	}
 
 	@Override
@@ -120,14 +134,14 @@ public class PrefixExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			PrefixExpr prefixExpr = (PrefixExpr) getBindingNode();
 			if (_expression.getBindingNode() != prefixExpr.getExpression()) {
 				Update update = new Update(this, _expression, prefixExpr.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (!_operator.compare(prefixExpr.getOperator())) {
 				Update update = new Update(this, _operator, prefixExpr.getOperator());
@@ -156,7 +170,7 @@ public class PrefixExpr extends Expr {
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer operator = null;
 		StringBuffer expression = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			PrefixExpr prefixExpr = (PrefixExpr) node;
 			for (Modification modification : prefixExpr.getModifications()) {

@@ -6,9 +6,12 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.Vdf;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -44,6 +47,7 @@ public class VarDeclarationStmt extends Stmt {
 	public VarDeclarationStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.VARDECLSTMT;
+		_fIndex = VIndex.STMT_VAR_DECL;
 	}
 
 	/**
@@ -78,17 +82,49 @@ public class VarDeclarationStmt extends Stmt {
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
 		if (_modifier != null) {
-			stringBuffer.append(_modifier + " ");
+			stringBuffer.append(_modifier).append(' ');
 		}
 		stringBuffer.append(_declType.toSrcString());
-		stringBuffer.append(" ");
+		stringBuffer.append(' ');
 		stringBuffer.append(_fragments.get(0).toSrcString());
 		for (int i = 1; i < _fragments.size(); i++) {
-			stringBuffer.append(",");
+			stringBuffer.append(',');
 			stringBuffer.append(_fragments.get(i).toSrcString());
 		}
-		stringBuffer.append(";");
+		stringBuffer.append(';');
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer dec = _declType.formalForm(nameMapping, isConsidered());
+		StringBuffer frag = new StringBuffer();
+		StringBuffer b = _fragments.get(0).formalForm(nameMapping, isConsidered());
+		boolean contain = false;
+		if (b == null) {
+			frag.append(nameMapping.getExprID(_fragments.get(0)));
+		} else {
+			contain = true;
+			frag.append(b);
+		}
+		for (int i = 1; i < _fragments.size(); i++) {
+			b = _fragments.get(i).formalForm(nameMapping, isConsidered());
+			if (b == null) {
+				frag.append(',').append(nameMapping.getExprID(_fragments.get(i)));
+			} else {
+				contain = true;
+				frag.append(',').append(b);
+			}
+
+		}
+		if (isConsidered() || dec != null || contain) {
+			StringBuffer buffer = new StringBuffer();
+			buffer.append(dec == null ? nameMapping.getTypeID(_declType) : dec)
+					.append(' ').append(frag).append(';');
+			return buffer;
+		}
+		return null;
 	}
 
 	@Override
@@ -167,20 +203,20 @@ public class VarDeclarationStmt extends Stmt {
 			continueTopDownMatchNull();
 		} else {
 			_declType.postAccurateMatch(vds.getDeclType());
-			greedyMatchListNode(_fragments, vds.getFragments());
+			NodeUtils.greedyMatchListNode(_fragments, vds.getFragments());
 		}
 		return match;
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) getBindingNode();
 			if (!_declType.compare(varDeclarationStmt.getDeclType())) {
 				Update update = new Update(this, _declType, varDeclarationStmt.getDeclType());
 				_modifications.add(update);
 			}
-			genModificationList(_fragments, varDeclarationStmt.getFragments(), false);
+			_modifications.addAll(NodeUtils.genModificationList(this, _fragments, varDeclarationStmt.getFragments()));
 			return true;
 		}
 		return false;
@@ -222,7 +258,7 @@ public class VarDeclarationStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) pnode;
 			StringBuffer declType = null;

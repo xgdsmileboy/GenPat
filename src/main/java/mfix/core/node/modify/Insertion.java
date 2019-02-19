@@ -1,6 +1,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.VIndex;
 
 import java.util.Map;
 import java.util.Set;
@@ -12,12 +13,12 @@ public class Insertion extends Modification {
     private Node _nexNode;
     private Node _insert;
 
-    protected Insertion(Node parent) {
-        super(parent);
+    protected Insertion(Node parent, int fIndex) {
+        super(parent, fIndex);
     }
 
     public Insertion(Node parent, int index, Node insert) {
-        super(parent);
+        super(parent, VIndex.MOD_INSERT);
         _index = index;
         _insert = insert;
     }

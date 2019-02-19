@@ -678,7 +678,8 @@ public class NodeParser {
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         CharLiteral charLiteral = new CharLiteral(_fileName, startLine, endLine, node);
 
-        charLiteral.setValue(node.charValue());
+        charLiteral.setValue(node);
+//        charLiteral.setValue(node.charValue());
 
         AST ast = AST.newAST(AST.JLS8);
         Type type = ast.newPrimitiveType(PrimitiveType.CHAR);
@@ -1066,7 +1067,8 @@ public class NodeParser {
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         StrLiteral literal = new StrLiteral(_fileName, startLine, endLine, node);
 
-        literal.setValue(node.getLiteralValue());
+        literal.setValue(node);
+//        literal.setValue(node.getLiteralValue());
 
         AST ast = AST.newAST(AST.JLS8);
         Type type = ast.newSimpleType(ast.newSimpleName("String"));

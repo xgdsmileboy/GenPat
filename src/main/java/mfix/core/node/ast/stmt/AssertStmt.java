@@ -7,6 +7,8 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -36,12 +38,18 @@ public class AssertStmt extends Stmt {
 	public AssertStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.ASSERT;
+		_fIndex = VIndex.STMT_ASSERT;
 		_codeStr = node.toString();
 	}
 
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_codeStr);
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return null;
 	}
 
 	@Override
@@ -85,7 +93,7 @@ public class AssertStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 

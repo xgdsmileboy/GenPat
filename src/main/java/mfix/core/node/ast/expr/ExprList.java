@@ -6,8 +6,11 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -30,6 +33,7 @@ public class ExprList extends Node {
     public ExprList(String fileName, int startLine, int endLine, ASTNode oriNode) {
         super(fileName, startLine, endLine, oriNode);
         _nodeType = TYPE.EXPRLST;
+        _fIndex = VIndex.EXP_LIST;
     }
 
     public void setExprs(List<Expr> exprs) {
@@ -69,6 +73,34 @@ public class ExprList extends Node {
             }
         }
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        if (_exprs.size() > 0) {
+            List<StringBuffer> strings = new ArrayList<>(_exprs.size());
+            for (Expr expr : _exprs) {
+                if (expr.formalForm(nameMapping, consider) != null) {
+                    strings.add(expr.formalForm(nameMapping, consider));
+                } else if (isConsidered()) {
+                    strings.add(new StringBuffer(nameMapping.getExprID(expr)));
+                }
+            }
+            StringBuffer buffer = null;
+            if (!strings.isEmpty()) {
+                buffer = new StringBuffer(strings.get(0));
+                for (int i = 1; i < strings.size(); i++) {
+                    buffer.append(',');
+                    buffer.append(strings.get(i));
+                }
+            }
+            return buffer;
+        } else if (isConsidered()) {
+            return new StringBuffer();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -124,16 +156,16 @@ public class ExprList extends Node {
         if (exprList == null) {
             continueTopDownMatchNull();
         } else {
-            greedyMatchListNode(_exprs, exprList.getExpr());
+            NodeUtils.greedyMatchListNode(_exprs, exprList.getExpr());
         }
         return match;
     }
 
     @Override
-    public boolean genModidications() {
+    public boolean genModifications() {
         if (getBindingNode() != null) {
             ExprList exprList = (ExprList) getBindingNode();
-            genModificationList(_exprs, exprList.getExpr(), true);
+            _modifications = NodeUtils.genModificationList(this, _exprs, exprList.getExpr());
             if (!_modifications.isEmpty()) {
                 _modifications.clear();
                 _modifications.add(new Update(this, this, exprList));
@@ -145,8 +177,8 @@ public class ExprList extends Node {
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if(node instanceof ExprList) {
-            return checkDependency(node, matchedNode, matchedStrings)
-                    && matchSameNodeType(node, matchedNode, matchedStrings);
+            return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
         }
         return false;
     }
@@ -176,7 +208,7 @@ public class ExprList extends Node {
     public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
         }

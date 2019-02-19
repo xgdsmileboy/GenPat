@@ -6,10 +6,14 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,8 +36,14 @@ public class StrLiteral extends Expr {
 	public StrLiteral(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SLITERAL;
+		_fIndex = VIndex.EXP_STR_LIT;
 	}
 
+	public void setValue(StringLiteral literal) {
+		_value = literal.getEscapedValue();
+	}
+
+	@Deprecated
 	public void setValue(String value) {
 		_value = value.replace("\\", "\\\\")
 				.replace("\'", "\\'")
@@ -53,16 +63,22 @@ public class StrLiteral extends Expr {
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append("\"");
+//		stringBuffer.append("\"");
 		stringBuffer.append(_value);
-		stringBuffer.append("\"");
+//		stringBuffer.append("\"");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return leafFormalForm(parentConsidered);
 	}
 
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
-		_tokens.add("\"" + _value + "\"");
+//		_tokens.add("\"" + _value + "\"");
+		_tokens.add(_value);
 	}
 
 	@Override
@@ -97,8 +113,8 @@ public class StrLiteral extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			StrLiteral literal = (StrLiteral) getBindingNode();
 			if (!getValue().equals(literal.getValue())) {
 				Update update = new Update(this, this, literal);
@@ -119,7 +135,7 @@ public class StrLiteral extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
 		}

@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -37,6 +40,7 @@ public class InfixExpr extends Expr {
 	public InfixExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.INFIXEXPR;
+		_fIndex = VIndex.EXP_INFIX;
 	}
 
 	public void setLeftHandSide(Expr lhs) {
@@ -70,6 +74,21 @@ public class InfixExpr extends Expr {
 		stringBuffer.append(_operator.toSrcString());
 		stringBuffer.append(_rhs.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer lhs = _lhs.formalForm(nameMapping, consider);
+		StringBuffer rhs = _rhs.formalForm(nameMapping, consider);
+		if (lhs == null && rhs == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(lhs == null ? nameMapping.getExprID(_lhs) : lhs)
+				.append(_operator.toSrcString().toString())
+				.append(rhs == null ? nameMapping.getExprID(_rhs) : rhs);
+		return buffer;
 	}
 
 	@Override
@@ -135,20 +154,20 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			InfixExpr infixExpr = (InfixExpr) getBindingNode();
 			if (_lhs.getBindingNode() != infixExpr.getLhs()) {
 				Update update = new Update(this, _lhs, infixExpr.getLhs());
 				_modifications.add(update);
 			} else {
-				_lhs.genModidications();
+				_lhs.genModifications();
 			}
 			if (_rhs.getBindingNode() != infixExpr.getRhs()) {
 				Update update = new Update(this, _rhs, infixExpr.getRhs());
 				_modifications.add(update);
 			} else {
-				_rhs.genModidications();
+				_rhs.genModifications();
 			}
 			if (!_operator.compare(infixExpr.getOperator())) {
 				Update update = new Update(this, _operator, infixExpr.getOperator());
@@ -182,7 +201,7 @@ public class InfixExpr extends Expr {
 		StringBuffer lhs = null;
 		StringBuffer operator = null;
 		StringBuffer rhs = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			InfixExpr infixExpr = (InfixExpr) node;
 			for (Modification modification : infixExpr.getModifications()) {

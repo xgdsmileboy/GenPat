@@ -8,11 +8,13 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
-import mfix.core.pattern.Pattern;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
@@ -46,6 +48,7 @@ public class MethodInv extends Expr {
 	public MethodInv(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.MINVOCATION;
+		_fIndex = VIndex.EXP_METHOD_INV;
 	}
 
 	public void setExpression(Expr expression) {
@@ -86,6 +89,27 @@ public class MethodInv extends Expr {
 		}
 		stringBuffer.append(")");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer exp = null;
+		if (_expression != null) {
+			exp = _expression.formalForm(nameMapping, consider);
+		}
+		StringBuffer name = _name.formalForm(nameMapping, consider);
+		StringBuffer arg = _arguments.formalForm(nameMapping, consider);
+		if (exp == null && name == null && arg == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		if (_expression != null) {
+			buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp).append('.');
+		}
+		buffer.append(name == null ? nameMapping.getMethodID(_name) : name)
+				.append('(').append(arg == null ? "" : arg).append(')');
+		return buffer;
 	}
 
 	@Override
@@ -197,8 +221,8 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			MethodInv methodInv = (MethodInv) getBindingNode();
 			if (_expression == null) {
 				if (methodInv.getExpression() != null) {
@@ -209,7 +233,7 @@ public class MethodInv extends Expr {
 				Update update = new Update(this, _expression, methodInv.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (_name.getBindingNode() != methodInv.getName() || !_name.getName().equals(methodInv.getName().getName())) {
 				Update update = new Update(this, _name, methodInv.getName());
@@ -219,7 +243,7 @@ public class MethodInv extends Expr {
 				Update update = new Update(this, _arguments, methodInv.getArguments());
 				_modifications.add(update);
 			} else {
-				_arguments.genModidications();
+				_arguments.genModifications();
 			}
 		}
 		return true;
@@ -229,8 +253,8 @@ public class MethodInv extends Expr {
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if(node instanceof Expr) {
 			if(isAbstract()) {
-				return checkDependency(node, matchedNode, matchedStrings)
-						&& matchSameNodeType(node, matchedNode, matchedStrings);
+				return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+						&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 			} else if (node instanceof MethodInv){
 				MethodInv methodInv = (MethodInv) node;
 				List<Expr> exprs = _arguments.getExpr();
@@ -286,7 +310,7 @@ public class MethodInv extends Expr {
 		StringBuffer expression = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			MethodInv methodInv = (MethodInv) node;
 			for (Modification modification : methodInv.getModifications()) {

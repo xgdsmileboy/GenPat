@@ -6,7 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -33,6 +36,7 @@ public class SName extends Label {
 	public SName(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SNAME;
+		_fIndex = VIndex.EXP_SNAME;
 	}
 
 	public void setName(String name) {
@@ -46,6 +50,11 @@ public class SName extends Label {
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_name);
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return leafFormalForm(parentConsidered);
 	}
 
 	@Override
@@ -85,8 +94,8 @@ public class SName extends Label {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			SName sName = (SName) getBindingNode();
 			if (!_name.equals(sName.getName())) {
 				Update update = new Update(this, this, sName);
@@ -149,7 +158,7 @@ public class SName extends Label {
 
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
 		}

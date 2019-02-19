@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -40,6 +43,7 @@ public class AryCreation extends Expr {
     public AryCreation(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.ARRCREAT;
+        _fIndex = VIndex.EXP_ARRAY_CRT;
     }
 
     public void setArrayType(MType type) {
@@ -87,6 +91,51 @@ public class AryCreation extends Expr {
             stringBuffer.append(_initializer.toSrcString());
         }
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = parentConsidered || isConsidered();
+        StringBuffer typeStr = _type.formalForm(nameMapping, consider);
+        StringBuffer dimension = new StringBuffer();
+        boolean contain = false;
+        for (Expr expr : _dimension) {
+            dimension.append("[");
+            if(expr.formalForm(nameMapping, consider) != null) {
+                dimension.append(expr.formalForm(nameMapping, consider));
+                contain = true;
+            } else {
+                dimension.append(nameMapping.getExprID(expr));
+            }
+            dimension.append("]");
+        }
+        StringBuffer initializer = null;
+        if (_initializer != null) {
+            initializer = _initializer.formalForm(nameMapping, consider);
+        }
+
+        if (typeStr == null && !contain && initializer == null) {
+            return super.toFormalForm0(nameMapping, parentConsidered);
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("new ");
+        if (typeStr == null) {
+            buffer.append(nameMapping.getTypeID(_type));
+        } else {
+            buffer.append(typeStr);
+        }
+        buffer.append(dimension);
+        if (_initializer != null) {
+            buffer.append("=");
+            if (initializer == null) {
+                buffer.append(nameMapping.getExprID(_initializer));
+            } else {
+                buffer.append(initializer);
+            }
+        }
+
+        return buffer;
     }
 
     @Override
@@ -161,7 +210,7 @@ public class AryCreation extends Expr {
         if (aryCreation == null) {
             continueTopDownMatchNull();
         } else {
-            greedyMatchListNode(_dimension, aryCreation.getDimention());
+            NodeUtils.greedyMatchListNode(_dimension, aryCreation.getDimention());
             if (_initializer != null && aryCreation._initializer != null) {
                 _initializer.postAccurateMatch(aryCreation._initializer);
             }
@@ -171,8 +220,8 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             AryCreation aryCreation = (AryCreation) getBindingNode();
             List<Expr> exprs = aryCreation.getDimention();
             if (exprs.size() == _dimension.size()) {
@@ -181,7 +230,7 @@ public class AryCreation extends Expr {
                         Update update = new Update(this, _dimension.get(i), exprs.get(i));
                         _modifications.add(update);
                     } else {
-                        _dimension.get(i).genModidications();
+                        _dimension.get(i).genModifications();
                     }
                 }
             }
@@ -195,7 +244,7 @@ public class AryCreation extends Expr {
                     Update update = new Update(this, _initializer, aryCreation._initializer);
                     _modifications.add(update);
                 } else {
-                    _initializer.genModidications();
+                    _initializer.genModifications();
                 }
             }
         }
@@ -232,7 +281,7 @@ public class AryCreation extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         Map<Integer, StringBuffer> dimensionMap = new HashMap<>();
         StringBuffer initializer = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             AryCreation aryCreation = (AryCreation) node;
             for (Modification modification : aryCreation.getModifications()) {

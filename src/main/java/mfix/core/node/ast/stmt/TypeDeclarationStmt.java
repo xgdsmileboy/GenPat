@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -43,7 +44,12 @@ public class TypeDeclarationStmt extends Stmt {
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_codeStr);
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return null;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -85,8 +91,8 @@ public class TypeDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			return true;
 		}
 		return false;

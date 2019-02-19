@@ -6,8 +6,11 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -33,6 +36,7 @@ public class MType extends Node {
 	public MType(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.TYPE;
+		_fIndex = VIndex.EXP_TYPE;
 		_typeStr = oriNode.toString();
 	}
 
@@ -77,6 +81,15 @@ public class MType extends Node {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(_typeStr);
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (!isAbstract() && (parentConsidered || isConsidered())) {
+			return toSrcString();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -126,15 +139,15 @@ public class MType extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if(node instanceof MType) {
-			return checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings);
+			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		} else {
 			return false;
 		}

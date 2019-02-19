@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -37,6 +40,7 @@ public class FieldAcc extends Expr {
 	public FieldAcc(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.FIELDACC;
+		_fIndex = VIndex.EXP_FIELD_ACC;
 	}
 
 	public void setExpression(Expr expression){
@@ -63,7 +67,22 @@ public class FieldAcc extends Expr {
 		stringBuffer.append(_identifier.toSrcString());
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer exp = _expression.formalForm(nameMapping, consider);
+		StringBuffer identifier = _identifier.formalForm(nameMapping, consider);
+		if (exp == null && identifier == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp)
+				.append('.')
+				.append(identifier == null ? nameMapping.getExprID(_identifier) : identifier);
+		return buffer;
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -122,14 +141,14 @@ public class FieldAcc extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			FieldAcc fieldAcc = (FieldAcc) getBindingNode();
 			if (_expression.getBindingNode() != fieldAcc.getExpression()) {
 				Update update = new Update(this, _expression, fieldAcc.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (_identifier.getBindingNode() != fieldAcc.getIdentifier()
 					|| !_identifier.compare(fieldAcc.getIdentifier())) {
@@ -161,7 +180,7 @@ public class FieldAcc extends Expr {
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		StringBuffer identifier = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			FieldAcc fieldAcc = (FieldAcc) node;
 			for (Modification modification : fieldAcc.getModifications()) {

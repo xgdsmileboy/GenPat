@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 
@@ -37,6 +38,7 @@ public class PrefixOperator extends Operator {
 	public PrefixOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.PREFIXOPERATOR;
+		_fIndex = VIndex.EXP_PREFIX_OP;
 	}
 
 	public void setOperator(PrefixExpression.Operator operator) {

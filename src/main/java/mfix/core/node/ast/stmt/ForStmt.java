@@ -7,9 +7,12 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.ExprList;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -51,6 +54,7 @@ public class ForStmt extends Stmt {
     public ForStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
         super(fileName, startLine, endLine, node, parent);
         _nodeType = TYPE.FOR;
+        _fIndex = VIndex.STMT_FOR;
     }
 
     public void setCondition(Expr condition) {
@@ -98,6 +102,38 @@ public class ForStmt extends Stmt {
         stringBuffer.append(")");
         stringBuffer.append(_body.toSrcString());
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        if (isAbstract()) return null;
+        StringBuffer init = _initializers.formalForm(nameMapping, isConsidered());
+        StringBuffer cond = _condition != null ? _condition.formalForm(nameMapping, isConsidered()) : null;
+        StringBuffer update = _updaters.formalForm(nameMapping, isConsidered());
+        StringBuffer body = _body.formalForm(nameMapping, false);
+        if (init != null || cond != null || update != null || body != null || isConsidered()) {
+            StringBuffer buffer = new StringBuffer("for(");
+            if (init != null) {
+                buffer.append(init);
+            } else if (!_initializers.getExpr().isEmpty()) {
+                buffer.append(nameMapping.getExprID(_initializers));
+            }
+            buffer.append(';');
+            if (cond != null) {
+                buffer.append(cond);
+            } else if (_condition != null) {
+                buffer.append(nameMapping.getExprID(_condition));
+            }
+            buffer.append(';');
+            if (update != null) {
+                buffer.append(update);
+            } else if (!_updaters.getExpr().isEmpty()) {
+                buffer.append(nameMapping.getExprID(_updaters));
+            }
+            buffer.append(')').append(body == null ? "{}" : body);
+            return buffer;
+        }
+        return null;
     }
 
     @Override
@@ -168,30 +204,30 @@ public class ForStmt extends Stmt {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         ForStmt forStmt = null;
-        if(getBindingNode() != null) {
+        if (getBindingNode() != null) {
             forStmt = (ForStmt) getBindingNode();
-            if(_condition != null) {
+            if (_condition != null) {
                 _condition.postAccurateMatch(forStmt.getCondition());
             }
             _initializers.postAccurateMatch(forStmt.getInitializer());
             _updaters.postAccurateMatch(forStmt.getUpdaters());
             match = (forStmt == node);
-        } else if(canBinding(node)) {
+        } else if (canBinding(node)) {
             forStmt = (ForStmt) node;
             boolean flag = false;
-            if(_condition != null) {
+            if (_condition != null) {
                 flag = _condition.postAccurateMatch(forStmt.getCondition()) || flag;
             }
             flag = _initializers.postAccurateMatch(forStmt.getInitializer()) || flag;
             flag = _updaters.postAccurateMatch(forStmt.getUpdaters()) || flag;
-            if(flag){
+            if (flag) {
                 setBindingNode(node);
                 match = true;
             } else {
                 forStmt = null;
             }
         }
-        if(forStmt == null) {
+        if (forStmt == null) {
             continueTopDownMatchNull();
         } else {
             _body.postAccurateMatch(forStmt.getBody());
@@ -201,33 +237,33 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             ForStmt forStmt = (ForStmt) getBindingNode();
-            if(_initializers.getBindingNode() != forStmt.getInitializer()) {
+            if (_initializers.getBindingNode() != forStmt.getInitializer()) {
                 Update update = new Update(this, _initializers, forStmt.getInitializer());
                 _modifications.add(update);
             } else {
-                _initializers.genModidications();
+                _initializers.genModifications();
             }
-            if(_condition == null) {
+            if (_condition == null) {
                 if (forStmt.getCondition() != null) {
                     Update update = new Update(this, _condition, forStmt.getCondition());
                     _modifications.add(update);
                 }
-            } else if(_condition.getBindingNode() != forStmt.getCondition()) {
+            } else if (_condition.getBindingNode() != forStmt.getCondition()) {
                 Update update = new Update(this, _condition, forStmt.getCondition());
                 _modifications.add(update);
             } else {
-                _condition.genModidications();
+                _condition.genModifications();
             }
-            if(_updaters.getBindingNode() != forStmt.getUpdaters()) {
+            if (_updaters.getBindingNode() != forStmt.getUpdaters()) {
                 Update update = new Update(this, _updaters, forStmt.getUpdaters());
                 _modifications.add(update);
             } else {
-                _updaters.genModidications();
+                _updaters.genModifications();
             }
-            _body.genModidications();
+            _body.genModifications();
             return true;
         }
         return false;
@@ -238,7 +274,7 @@ public class ForStmt extends Stmt {
         if (node instanceof ForStmt) {
             ForStmt forStmt = (ForStmt) node;
             boolean match = _initializers.ifMatch(forStmt.getInitializer(), matchedNode, matchedStrings);
-            if(_condition != null && forStmt.getCondition() != null) {
+            if (_condition != null && forStmt.getCondition() != null) {
                 match = match && _condition.ifMatch(forStmt.getCondition(), matchedNode, matchedStrings);
             }
             match = match && _updaters.ifMatch(forStmt.getUpdaters(), matchedNode, matchedStrings);
@@ -255,21 +291,21 @@ public class ForStmt extends Stmt {
             stringBuffer = new StringBuffer("for(");
             StringBuffer tmp;
             tmp = _initializers.transfer(vars, exprMap);
-            if(tmp == null) return null;
+            if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(";");
             if (_condition != null) {
                 tmp = _condition.transfer(vars, exprMap);
-                if(tmp == null) return null;
+                if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
             stringBuffer.append(";");
             tmp = _updaters.transfer(vars, exprMap);
-            if(tmp == null) return null;
+            if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
             tmp = _body.transfer(vars, exprMap);
-            if(tmp == null) return null;
+            if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
         return stringBuffer;
@@ -280,7 +316,7 @@ public class ForStmt extends Stmt {
         StringBuffer initializer = null;
         StringBuffer condition = null;
         StringBuffer updater = null;
-        Node pnode = checkModification();
+        Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
             ForStmt forStmt = (ForStmt) pnode;
             for (Modification modification : forStmt.getModifications()) {

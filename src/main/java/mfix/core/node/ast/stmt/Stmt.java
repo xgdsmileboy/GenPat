@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -29,7 +30,7 @@ public abstract class Stmt extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		if (getBindingNode() == null) {
 			return false;
 		}
@@ -38,7 +39,8 @@ public abstract class Stmt extends Node {
 
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		return checkDependency(node, matchedNode, matchedStrings)
-				&& matchSameNodeType(node, matchedNode, matchedStrings);
+		return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+				&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 	}
+
 }

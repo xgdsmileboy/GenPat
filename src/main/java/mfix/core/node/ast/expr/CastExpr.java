@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -36,6 +39,7 @@ public class CastExpr extends Expr {
     public CastExpr(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.CAST;
+        _fIndex = VIndex.EXP_CAST;
     }
 
     public void setCastType(MType type) {
@@ -62,6 +66,21 @@ public class CastExpr extends Expr {
         stringBuffer.append(")");
         stringBuffer.append(_expression.toSrcString());
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        StringBuffer type = _castType.formalForm(nameMapping, consider);
+        StringBuffer exp = _expression.formalForm(nameMapping, consider);
+        if (type == null && exp == null) {
+            return super.toFormalForm0(nameMapping, parentConsidered);
+        }
+        StringBuffer buffer = new StringBuffer("(");
+        buffer.append(type == null ? nameMapping.getTypeID(_castType) : type)
+                .append(')')
+                .append(exp == null ? nameMapping.getExprID(_expression) : exp);
+        return buffer;
     }
 
     @Override
@@ -125,8 +144,8 @@ public class CastExpr extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             CastExpr castExpr = (CastExpr) getBindingNode();
             if (_castType.getBindingNode() != castExpr.getCastType()
                     || !_castType.typeStr().equals(castExpr.getCastType().typeStr())) {
@@ -163,7 +182,7 @@ public class CastExpr extends Expr {
     public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
         StringBuffer castType = null;
         StringBuffer expression = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             CastExpr castExpr = (CastExpr) node;
             for (Modification modification : castExpr.getModifications()) {

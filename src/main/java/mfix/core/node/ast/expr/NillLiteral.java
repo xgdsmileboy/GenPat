@@ -7,6 +7,8 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -30,13 +32,19 @@ public class NillLiteral extends Expr {
 	public NillLiteral(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.NULL;
+		_fIndex = VIndex.EXP_NULL_LIT;
 	}
 
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_value);
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return leafFormalForm(parentConsidered);
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -74,7 +82,7 @@ public class NillLiteral extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 

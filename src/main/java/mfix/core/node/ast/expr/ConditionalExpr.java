@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -37,6 +40,7 @@ public class ConditionalExpr extends Expr {
     public ConditionalExpr(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.CONDEXPR;
+        _fIndex = VIndex.EXP_CONDITIONAL;
     }
 
     public void setCondition(Expr condition) {
@@ -72,6 +76,24 @@ public class ConditionalExpr extends Expr {
         stringBuffer.append(":");
         stringBuffer.append(_snd.toSrcString());
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        StringBuffer cond = _condition.formalForm(nameMapping, consider);
+        StringBuffer first = _first.formalForm(nameMapping, consider);
+        StringBuffer snd = _snd.formalForm(nameMapping, consider);
+        if (cond == null && first == null && snd == null) {
+            return super.toFormalForm0(nameMapping, parentConsidered);
+        }
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(cond == null ? nameMapping.getExprID(_condition) : cond)
+                .append('?')
+                .append(first == null ? nameMapping.getExprID(_first) : first)
+                .append(':')
+                .append(snd == null ? nameMapping.getExprID(_snd) : snd);
+        return buffer;
     }
 
     @Override
@@ -140,28 +162,28 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             ConditionalExpr conditionalExpr = (ConditionalExpr) getBindingNode();
             if (_condition.getBindingNode() != conditionalExpr.getCondition()) {
                 Update update = new Update(this, _condition, conditionalExpr.getCondition());
                 _modifications.add(update);
             } else {
-                _condition.genModidications();
+                _condition.genModifications();
             }
 
             if (_first.getBindingNode() != conditionalExpr.getfirst()) {
                 Update update = new Update(this, _first, conditionalExpr.getfirst());
                 _modifications.add(update);
             } else {
-                _first.genModidications();
+                _first.genModifications();
             }
 
             if (_snd.getBindingNode() != conditionalExpr.getSecond()) {
                 Update update = new Update(this, _snd, conditionalExpr.getSecond());
                 _modifications.add(update);
             } else {
-                _snd.genModidications();
+                _snd.genModifications();
             }
         }
         return true;
@@ -193,7 +215,7 @@ public class ConditionalExpr extends Expr {
         StringBuffer condition = null;
         StringBuffer first = null;
         StringBuffer snd = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             ConditionalExpr conditionalExpr = (ConditionalExpr) node;
             for (Modification modification : conditionalExpr.getModifications()) {

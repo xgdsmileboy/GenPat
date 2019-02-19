@@ -7,7 +7,10 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.Constant;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -39,6 +42,7 @@ public class Blk extends Stmt {
     public Blk(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
         super(fileName, startLine, endLine, node, parent);
         _nodeType = TYPE.BLOCK;
+        _fIndex = VIndex.STMT_BLK;
     }
 
     public void setStatement(List<Stmt> statements) {
@@ -59,6 +63,29 @@ public class Blk extends Stmt {
         }
         stringBuffer.append("}");
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        if (isAbstract()) return null;
+        List<StringBuffer> strings = new ArrayList<>(_statements.size());
+        StringBuffer b;
+        for (int i = 0; i < _statements.size(); i++) {
+            b = _statements.get(i).formalForm(nameMapping, false);
+            if (b != null) {
+                strings.add(b);
+            }
+        }
+        if (strings.isEmpty()) {
+            return isConsidered() ? new StringBuffer("{}") : null;
+        } else {
+            StringBuffer buffer = new StringBuffer("{");
+            for (int i = 0; i < strings.size(); i++) {
+                buffer.append('\n').append(strings.get(i));
+            }
+            buffer.append(strings.isEmpty() ? '}' : "\n}");
+            return buffer;
+        }
     }
 
     @Override
@@ -127,16 +154,16 @@ public class Blk extends Stmt {
         if (blk == null) {
             continueTopDownMatchNull();
         } else {
-            greedyMatchListNode(_statements, blk.getStatement());
+            NodeUtils.greedyMatchListNode(_statements, blk.getStatement());
         }
         return match;
     }
 
     @Override
-    public boolean genModidications() {
-        if(super.genModidications()) {
+    public boolean genModifications() {
+        if(super.genModifications()) {
             Blk blk = (Blk) getBindingNode();
-            genModificationList(_statements, blk.getStatement(), true);
+            _modifications = NodeUtils.genModificationList(this, _statements, blk.getStatement());
             return true;
         }
         return false;
@@ -170,7 +197,7 @@ public class Blk extends Stmt {
 
     @Override
     public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-        Node pnode = checkModification();
+        Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
             Blk blk = (Blk) pnode;
             Map<Node, List<StringBuffer>> insertBefore = new HashMap<>();

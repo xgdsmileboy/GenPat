@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -31,11 +34,12 @@ public class AryAcc extends Expr {
 
     /**
      * ArrayAccess:
-     *      Expression [ Expression ]
+     * Expression [ Expression ]
      */
     public AryAcc(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.ARRACC;
+        _fIndex = VIndex.EXP_ARRAY_ACC;
     }
 
     public void setArray(Expr array) {
@@ -70,6 +74,24 @@ public class AryAcc extends Expr {
         stringBuffer.append(_index.toSrcString());
         stringBuffer.append("]");
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        StringBuffer array, index;
+        boolean consider = parentConsidered || isConsidered();
+        array = _array.formalForm(nameMapping, consider);
+        index = _index.formalForm(nameMapping, consider);
+        if (array == null && index == null) {
+            super.toFormalForm0(nameMapping, parentConsidered);
+        }
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(array == null ? nameMapping.getExprID(_array) : array)
+                .append("[")
+                .append(index == null ? nameMapping.getExprID(_index) : index)
+                .append("]");
+
+        return null;
     }
 
     @Override
@@ -128,19 +150,19 @@ public class AryAcc extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
+    public boolean genModifications() {
         AryAcc bind = (AryAcc) getBindingNode();
         if (_index.getBindingNode() != bind.getIndex()) {
             Update update = new Update(this, _index, bind.getIndex());
             _modifications.add(update);
         } else {
-            _index.genModidications();
+            _index.genModifications();
         }
         if (_array.getBindingNode() != bind.getArray()) {
             Update update = new Update(this, _array, bind.getArray());
             _modifications.add(update);
         } else {
-            _array.genModidications();
+            _array.genModifications();
         }
         return true;
     }
@@ -167,7 +189,7 @@ public class AryAcc extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer array = null;
         StringBuffer index = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             AryAcc aryAcc = (AryAcc) node;
             for (Modification modification : aryAcc.getModifications()) {

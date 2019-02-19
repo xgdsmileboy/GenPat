@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.InfixExpression;
 
@@ -26,6 +27,7 @@ public class InfixOperator extends Operator {
 	public InfixOperator(String fileName, int startLine, int endLine, ASTNode oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.INFIXOPERATOR;
+		_fIndex = VIndex.EXP_INFIX_OP;
 	}
 
 	public void setOperator(InfixExpression.Operator operator) {

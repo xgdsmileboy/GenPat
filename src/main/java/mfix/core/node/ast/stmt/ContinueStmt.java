@@ -7,8 +7,11 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.SName;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -40,6 +43,7 @@ public class ContinueStmt extends Stmt {
 	public ContinueStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.CONTINUE;
+		_fIndex = VIndex.STMT_CONTINUE;
 	}
 	
 	public void setIdentifier(SName identifier){
@@ -56,7 +60,22 @@ public class ContinueStmt extends Stmt {
 		stringBuffer.append(";");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer identifier = _identifier == null ? null : _identifier.formalForm(nameMapping, isConsidered());
+		if (identifier == null) {
+			if (isConsidered()) {
+				return new StringBuffer("continue ")
+						.append(_identifier == null ? "" : nameMapping.getExprID(_identifier)).append(';');
+			} else {
+				return null;
+			}
+		}
+		return new StringBuffer("continue ").append(identifier).append(';');
+	}
+
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add("continue");
@@ -119,8 +138,8 @@ public class ContinueStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			ContinueStmt continueStmt = (ContinueStmt) getBindingNode();
 			if(_identifier == null) {
 				if(continueStmt._identifier != null) {
@@ -131,7 +150,7 @@ public class ContinueStmt extends Stmt {
 				Update update = new Update(this, _identifier, continueStmt._identifier);
 				_modifications.add(update);
 			} else {
-				_identifier.genModidications();
+				_identifier.genModifications();
 			}
 			return true;
 		}
@@ -173,7 +192,7 @@ public class ContinueStmt extends Stmt {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer identifier = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			ContinueStmt continueStmt = (ContinueStmt) pnode;
 			for(Modification modification : continueStmt.getModifications()) {

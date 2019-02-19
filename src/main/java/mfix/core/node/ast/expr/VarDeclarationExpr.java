@@ -6,7 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
@@ -41,6 +44,7 @@ public class VarDeclarationExpr extends Expr {
 	public VarDeclarationExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.VARDECLEXPR;
+		_fIndex = VIndex.EXP_VAR_DEC;
 	}
 
 	public void setDeclType(MType declType) {
@@ -70,6 +74,34 @@ public class VarDeclarationExpr extends Expr {
 			stringBuffer.append(_vdfs.get(i).toSrcString());
 		}
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer dec = _declType.formalForm(nameMapping, consider);
+		List<StringBuffer> buffers = new ArrayList<>(_vdfs.size());
+		StringBuffer b;
+		boolean contain = false;
+		for (int i = 0; i < _vdfs.size(); i++) {
+			b = _vdfs.get(i).formalForm(nameMapping, consider);
+			if (b == null) {
+				b = new StringBuffer(nameMapping.getExprID(_vdfs.get(i)));
+			} else {
+				contain = true;
+			}
+			buffers.add(b);
+		}
+		if (dec == null && !contain && !isConsidered()) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(dec == null ? nameMapping.getTypeID(_declType) : dec)
+				.append(' ').append(buffers.get(0));
+		for (int i = 1; i < buffers.size(); i++) {
+			buffer.append(',').append(buffers.get(i));
+		}
+		return buffer;
 	}
 
 	@Override
@@ -134,20 +166,20 @@ public class VarDeclarationExpr extends Expr {
 			continueTopDownMatchNull();
 		} else {
 			_declType.postAccurateMatch(vde.getDeclType());
-			greedyMatchListNode(getFragments(), vde.getFragments());
+			NodeUtils.greedyMatchListNode(getFragments(), vde.getFragments());
 		}
 		return match;
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			VarDeclarationExpr vde = (VarDeclarationExpr) getBindingNode();
 			if (!_declType.compare(vde.getDeclType())) {
 				Update update = new Update(this, _declType, vde.getDeclType());
 				_modifications.add(update);
 			}
-			genModificationList(_vdfs, vde.getFragments(),false);
+			_modifications.addAll(NodeUtils.genModificationList(this, _vdfs, vde.getFragments()));
 		}
 		return true;
 	}
@@ -155,8 +187,8 @@ public class VarDeclarationExpr extends Expr {
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if(node instanceof VarDeclarationExpr) {
-			return checkDependency(node, matchedNode, matchedStrings)
-					&& matchSameNodeType(node, matchedNode, matchedStrings);
+			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		} else {
 			return false;
 		}
@@ -190,7 +222,7 @@ public class VarDeclarationExpr extends Expr {
 		Map<Integer, StringBuffer> insertion = new HashMap<>();
         Set<Node> deletion = new HashSet<>();
         Map<Node, StringBuffer> updates = new HashMap<>();
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             VarDeclarationExpr varDeclarationExpr = (VarDeclarationExpr) node;
             for (Modification modification : varDeclarationExpr.getModifications()) {

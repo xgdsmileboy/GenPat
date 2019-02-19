@@ -7,6 +7,8 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -33,6 +35,7 @@ public class TyLiteral extends Expr {
 	public TyLiteral(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.TLITERAL;
+		_fIndex = VIndex.EXP_TYPE_LIT;
 	}
 
 	public void setValue(MType type) {
@@ -49,6 +52,15 @@ public class TyLiteral extends Expr {
 		stringBuffer.append(_type.toSrcString());
 		stringBuffer.append(".class");
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		StringBuffer type = _type.formalForm(nameMapping, isConsidered() || parentConsidered);
+		if (type == null) {
+			return leafFormalForm(parentConsidered);
+		}
+		return type.append(".class");
 	}
 
 	@Override
@@ -101,8 +113,8 @@ public class TyLiteral extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			TyLiteral tyLiteral = (TyLiteral) getBindingNode();
 			if (!_type.compare(tyLiteral.getDeclType())) {
 				Update update = new Update(this, _type, tyLiteral.getDeclType());

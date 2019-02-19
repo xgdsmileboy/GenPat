@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -36,6 +39,7 @@ public class QName extends Label {
 	public QName(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.QNAME;
+		_fIndex = VIndex.EXP_QNAME;
 	}
 
 	public void setName(Label namee, SName sname) {
@@ -62,6 +66,21 @@ public class QName extends Label {
 		stringBuffer.append(".");
 		stringBuffer.append(_sname.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer name = _name.formalForm(nameMapping, consider);
+		StringBuffer sname = _sname.formalForm(nameMapping, consider);
+		if (name == null && sname == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(name == null ? nameMapping.getExprID(_name) : name)
+				.append('.')
+				.append(sname == null ? nameMapping.getExprID(_sname) : sname);
+		return buffer;
 	}
 
 	public Set<SName> getAllVars() {
@@ -129,14 +148,14 @@ public class QName extends Label {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			QName qName = (QName) getBindingNode();
 			if (_name.getBindingNode() != qName._name) {
 				Update update = new Update(this, _name, qName._name);
 				_modifications.add(update);
 			} else {
-				_name.genModidications();
+				_name.genModifications();
 			}
 			if (!_sname.compare(qName.getSName())) {
 				Update update = new Update(this, _sname, qName.getSName());
@@ -165,7 +184,7 @@ public class QName extends Label {
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer name = null;
 		StringBuffer sname = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			QName qName = (QName) node;
 			for (Modification modification : qName.getModifications()) {

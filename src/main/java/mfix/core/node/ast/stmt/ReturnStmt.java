@@ -7,8 +7,11 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -40,6 +43,7 @@ public class ReturnStmt extends Stmt {
 	public ReturnStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
 		super(fileName, startLine, endLine, node, parent);
 		_nodeType = TYPE.RETURN;
+		_fIndex = VIndex.STMT_RETURN;
 	}
 	
 	public void setExpression(Expr expression){
@@ -59,7 +63,22 @@ public class ReturnStmt extends Stmt {
 		stringBuffer.append(";");
 		return stringBuffer;
 	}
-	
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		if (isAbstract()) return null;
+		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, isConsidered());
+		if (exp == null) {
+			if (isConsidered()) {
+				return new StringBuffer("return ")
+						.append(_expression == null ? "" : nameMapping.getExprID(_expression)).append(';');
+			} else {
+				return null;
+			}
+		}
+		return new StringBuffer("return ").append(exp).append(';');
+	}
+
 	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
@@ -128,8 +147,8 @@ public class ReturnStmt extends Stmt {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if(super.genModidications()) {
+	public boolean genModifications() {
+		if(super.genModifications()) {
 			ReturnStmt returnStmt = (ReturnStmt) getBindingNode();
 			if(_expression == null) {
 				if(returnStmt.getExpression() != null) {
@@ -140,7 +159,7 @@ public class ReturnStmt extends Stmt {
 				Update update = new Update(this, _expression, returnStmt.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			return true;
 		}
@@ -180,7 +199,7 @@ public class ReturnStmt extends Stmt {
 	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
-		Node pnode = checkModification();
+		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			ReturnStmt returnStmt = (ReturnStmt) pnode;
 			for(Modification modification : returnStmt.getModifications()) {

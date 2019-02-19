@@ -7,8 +7,11 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.AnonymousClassDecl;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -39,6 +42,7 @@ public class ClassInstCreation extends Expr {
     public ClassInstCreation(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.CLASSCREATION;
+        _fIndex = VIndex.EXP_CLASSINS_CRT;
     }
 
     public void setExpression(Expr expression) {
@@ -89,6 +93,37 @@ public class ClassInstCreation extends Expr {
             stringBuffer.append(_decl.toSrcString());
         }
         return stringBuffer;
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        boolean consider = isConsidered() || parentConsidered;
+        StringBuffer exp = null;
+        if (_expression != null) {
+            exp = _expression.formalForm(nameMapping, consider);
+        }
+        StringBuffer type = _classType.formalForm(nameMapping, consider);
+        StringBuffer arg = _arguments.formalForm(nameMapping, consider);
+        StringBuffer dec = null;
+        if (_decl != null) {
+            dec = _decl.formalForm(nameMapping, consider);
+        }
+        if (exp == null && type == null && arg == null && dec == null) {
+            return super.toFormalForm0(nameMapping, parentConsidered);
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        if (_expression != null) {
+            buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp);
+            buffer.append('.');
+        }
+        buffer.append("new ")
+                .append(type == null ? nameMapping.getTypeID(_classType) : type)
+                .append('(').append(arg == null ? "" : arg).append(')');
+        if (_decl != null) {
+            buffer.append(dec == null ? "{}" : dec);
+        }
+        return buffer;
     }
 
     @Override
@@ -185,8 +220,8 @@ public class ClassInstCreation extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             ClassInstCreation classInstCreation = (ClassInstCreation) getBindingNode();
             if (_expression == null) {
                 if (classInstCreation.getExpression() != null) {
@@ -197,7 +232,7 @@ public class ClassInstCreation extends Expr {
                 Update update = new Update(this, _expression, classInstCreation.getExpression());
                 _modifications.add(update);
             } else {
-                _expression.genModidications();
+                _expression.genModifications();
             }
             if (_classType.getBindingNode() != classInstCreation.getClassType()
                     || !_classType.typeStr().equals(classInstCreation.getClassType().typeStr())) {
@@ -208,7 +243,7 @@ public class ClassInstCreation extends Expr {
                 Update update = new Update(this, _arguments, classInstCreation.getArguments());
                 _modifications.add(update);
             } else {
-                _arguments.genModidications();
+                _arguments.genModifications();
             }
         }
 
@@ -219,8 +254,8 @@ public class ClassInstCreation extends Expr {
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if(node instanceof Expr) {
             if(isAbstract()) {
-                return checkDependency(node, matchedNode, matchedStrings)
-                        && matchSameNodeType(node, matchedNode, matchedStrings);
+                return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
             } else if (node instanceof ClassInstCreation){
                 ClassInstCreation classInstCreation = (ClassInstCreation) node;
                 List<Expr> exprs = _arguments.getExpr();
@@ -280,7 +315,7 @@ public class ClassInstCreation extends Expr {
         StringBuffer expression = null;
         StringBuffer classType = null;
         StringBuffer arguments = null;
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             ClassInstCreation classInstCreation = (ClassInstCreation) node;
             for (Modification modification : classInstCreation.getModifications()) {

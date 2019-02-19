@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -35,6 +36,11 @@ public class AnonymousClassDecl extends Node {
 	@Override
 	public StringBuffer toSrcString() {
 		return new StringBuffer(_codeStr);
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		return null;
 	}
 
 	@Override
@@ -84,7 +90,7 @@ public class AnonymousClassDecl extends Node {
 	}
 
 	@Override
-	public boolean genModidications() {
+	public boolean genModifications() {
 		return true;
 	}
 

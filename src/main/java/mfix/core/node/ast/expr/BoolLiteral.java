@@ -6,7 +6,10 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -33,6 +36,7 @@ public class BoolLiteral extends Expr {
     public BoolLiteral(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.BLITERAL;
+        _fIndex = VIndex.EXP_BOOL_LIT;
     }
 
     public void setValue(boolean value) {
@@ -46,6 +50,11 @@ public class BoolLiteral extends Expr {
     @Override
     public StringBuffer toSrcString() {
         return new StringBuffer(String.valueOf(_value));
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        return leafFormalForm(parentConsidered);
     }
 
     @Override
@@ -84,8 +93,8 @@ public class BoolLiteral extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             BoolLiteral literal = (BoolLiteral) getBindingNode();
             if (_value != literal.getValue()) {
                 Update update = new Update(this, this, literal);
@@ -106,7 +115,7 @@ public class BoolLiteral extends Expr {
 
     @Override
     public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             Update update = (Update) node.getModifications().get(0);
             return update.apply(vars, exprMap);

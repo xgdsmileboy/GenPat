@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -36,6 +39,7 @@ public class PostfixExpr extends Expr {
 	public PostfixExpr(String fileName, int startLine, int endLine, ASTNode node) {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.POSTEXPR;
+		_fIndex = VIndex.EXP_POSTFIX;
 	}
 
 	public void setExpression(Expr expression) {
@@ -60,6 +64,16 @@ public class PostfixExpr extends Expr {
 		stringBuffer.append(_expression.toSrcString());
 		stringBuffer.append(_operator.toSrcString());
 		return stringBuffer;
+	}
+
+	@Override
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+		StringBuffer buffer = _expression.formalForm(nameMapping, isConsidered() || parentConsidered);
+		if (buffer == null) {
+			return super.toFormalForm0(nameMapping, parentConsidered);
+		}
+		buffer.append(_operator.toSrcString());
+		return buffer;
 	}
 
 	@Override
@@ -121,14 +135,14 @@ public class PostfixExpr extends Expr {
 	}
 
 	@Override
-	public boolean genModidications() {
-		if (super.genModidications()) {
+	public boolean genModifications() {
+		if (super.genModifications()) {
 			PostfixExpr postfixExpr = (PostfixExpr) getBindingNode();
 			if (_expression.getBindingNode() != postfixExpr.getExpression()) {
 				Update update = new Update(this, _expression, postfixExpr.getExpression());
 				_modifications.add(update);
 			} else {
-				_expression.genModidications();
+				_expression.genModifications();
 			}
 			if (!_operator.compare(postfixExpr.getOperator())) {
 				Update update = new Update(this, _operator, postfixExpr.getOperator());
@@ -157,7 +171,7 @@ public class PostfixExpr extends Expr {
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		StringBuffer operator = null;
-		Node node = checkModification();
+		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			PostfixExpr postfixExpr = (PostfixExpr) node;
 			for (Modification modification : postfixExpr.getModifications()) {

@@ -52,7 +52,7 @@ public class Filter {
     private int _maxChangeLine = 50;
     private int _maxChangeAction = 20;
 
-    private List<String> _cacheList;
+    private volatile List<String> _cacheList;
     private int _currItemCount = 0;
     private int _cacheSize = 10000;
 
@@ -122,6 +122,7 @@ public class Filter {
                         Future<Boolean> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
                                 _maxChangeLine, _maxChangeAction, this));
                         _threadResultList.add(future);
+                        _currThreadCount ++;
 
                     } catch (Exception e) {
                         LevelLogger.error("Parse node failed : " + e.getMessage());

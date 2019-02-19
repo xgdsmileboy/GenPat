@@ -48,7 +48,7 @@ public class Cleaner {
         return options;
     }
 
-    private static void delete(Map<Pair<String, Integer>, Set<String>> method2PatternFiles, String mName,
+    private void delete(Map<Pair<String, Integer>, Set<String>> method2PatternFiles, String mName,
                               int argNumber) {
         Set<String> patternFileList = method2PatternFiles.getOrDefault(new Pair<>(mName,
                 argNumber), new HashSet<>());

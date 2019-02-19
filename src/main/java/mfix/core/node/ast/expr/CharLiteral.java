@@ -6,10 +6,14 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.cluster.NameMapping;
+import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.CharacterLiteral;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,8 +37,15 @@ public class CharLiteral extends Expr {
     public CharLiteral(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node);
         _nodeType = TYPE.CLITERAL;
+        _fIndex = VIndex.EXP_CHAR_LIT;
     }
 
+    public void setValue(CharacterLiteral literal) {
+        _value = literal.charValue();
+        _valStr = literal.getEscapedValue();
+    }
+
+    @Deprecated
     public void setValue(char value) {
         _value = value;
         _valStr = "" + _value;
@@ -44,7 +55,7 @@ public class CharLiteral extends Expr {
     }
 
     public String getStringValue() {
-        return toString().toString();
+        return toSrcString().toString();
     }
 
     public char getValue() {
@@ -53,13 +64,20 @@ public class CharLiteral extends Expr {
 
     @Override
     public StringBuffer toSrcString() {
-        return new StringBuffer("\'" + _valStr + "\'");
+//        return new StringBuffer("\'" + _valStr + "\'");
+        return new StringBuffer(_valStr);
+    }
+
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+        return leafFormalForm(parentConsidered);
     }
 
     @Override
     protected void tokenize() {
         _tokens = new LinkedList<>();
-        _tokens.add("\'" + _valStr + "\'");
+//        _tokens.add("\'" + _valStr + "\'");
+        _tokens.add(_valStr);
     }
 
     @Override
@@ -94,8 +112,8 @@ public class CharLiteral extends Expr {
     }
 
     @Override
-    public boolean genModidications() {
-        if (super.genModidications()) {
+    public boolean genModifications() {
+        if (super.genModifications()) {
             CharLiteral charLiteral = (CharLiteral) getBindingNode();
             if (getValue() != charLiteral.getValue()) {
                 Update update = new Update(getParent(), this, charLiteral);
@@ -116,7 +134,7 @@ public class CharLiteral extends Expr {
 
     @Override
     public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-        Node node = checkModification();
+        Node node = NodeUtils.checkModification(this);
         if (node != null) {
             return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
         }
