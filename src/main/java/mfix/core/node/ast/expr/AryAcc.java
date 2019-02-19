@@ -83,7 +83,7 @@ public class AryAcc extends Expr {
         array = _array.formalForm(nameMapping, consider);
         index = _index.formalForm(nameMapping, consider);
         if (array == null && index == null) {
-            super.toFormalForm0(nameMapping, parentConsidered);
+            return super.toFormalForm0(nameMapping, parentConsidered);
         }
         StringBuffer buffer = new StringBuffer();
         buffer.append(array == null ? nameMapping.getExprID(_array) : array)
