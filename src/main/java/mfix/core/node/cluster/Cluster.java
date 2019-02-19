@@ -31,6 +31,10 @@ public class Cluster {
     private String _path;
     private volatile Set<Set<Node>> _returnedNodes;
 
+    public Cluster() {
+        _returnedNodes = new HashSet<>();
+    }
+
     public void cluster(String path) {
         _path = path;
         _returnedNodes = new HashSet<>();
@@ -55,7 +59,7 @@ public class Cluster {
         return result;
     }
 
-    private Set<Node> cluster(Set<Node> patterns) {
+    protected Set<Node> cluster(Set<Node> patterns) {
         Set<Node> results = new HashSet<>();
         Set<Pair<Set<Node>, Set<Node>>> compareClusters = initClusterPair(patterns);
         int currTaskCount = 0;

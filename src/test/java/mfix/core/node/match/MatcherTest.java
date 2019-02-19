@@ -260,7 +260,7 @@ public class MatcherTest extends TestCase {
         }
     }
 
-    @Test
+//    @Test
     public void temp() {
 //        String srcFile = testbase + Constant.SEP + "src_Project.java";
 //        String tarFile = testbase + Constant.SEP + "tar_Project.java";
