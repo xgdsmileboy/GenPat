@@ -11,13 +11,14 @@ import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
-import mfix.core.pattern.PatternExtractor;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.modify.Modification;
+import mfix.core.pattern.Pattern;
+import mfix.core.pattern.PatternExtractor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -240,20 +241,21 @@ class ParseNode implements Callable<Boolean> {
             return false;
         }
         PatternExtractor patternExtractor = new PatternExtractor();
-        Set<Node> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile);
+        Set<Pattern> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile);
         if (patternCandidates.isEmpty()) {
             LevelLogger.info("No pattern node ... SKIP.");
             return false;
         }
         Set<String> result = new HashSet<>();
         // the following is the filter process
-        for (Node node : patternCandidates) {
-            Set<Modification> modifications = node.getAllModifications(new HashSet<>());
+        for (Pattern pattern : patternCandidates) {
+            Set<Modification> modifications = pattern.getAllModifications();
             // filter by modifications
             if (modifications.size() > _maxChangeAction) {
                 LevelLogger.info("Too many modifications : " + modifications.size() + " ... SKIP.");
                 continue;
             }
+            Node node = pattern.getPatternNode();
             // filter by changed lines
             if (node.getBindingNode() != null) {
                 Node other = node.getBindingNode();

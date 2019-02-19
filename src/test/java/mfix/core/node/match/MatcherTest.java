@@ -13,16 +13,16 @@ import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.TestCase;
 import mfix.core.node.NodeUtils;
-import mfix.core.pattern.PatternExtractor;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.ReturnStmt;
 import mfix.core.node.ast.stmt.SwCase;
 import mfix.core.node.ast.stmt.SwitchStmt;
-import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.node.parser.NodeParser;
+import mfix.core.pattern.Pattern;
+import mfix.core.pattern.PatternExtractor;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -35,8 +35,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
-
 /**
  * @author: Jiajun
  * @date: 2018/9/25
@@ -75,16 +73,16 @@ public class MatcherTest extends TestCase {
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         // there is only one method changed
         Assert.assertTrue(patterns.size() == 1);
 
-        Node node = patterns.iterator().next();
+        Pattern pattern = patterns.iterator().next();
         // there should be only one modification, which surrounds
         // a method invocation with an if statement
-        Assert.assertTrue(node.getAllModifications(new HashSet<>()).size() == 1);
-        Modification modification = node.getAllModifications(new HashSet<>()).iterator().next();
+        Assert.assertTrue(pattern.getAllModifications().size() == 1);
+        Modification modification = pattern.getAllModifications().iterator().next();
         Assert.assertTrue(modification instanceof Update);
     }
 
@@ -94,7 +92,7 @@ public class MatcherTest extends TestCase {
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
         Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
@@ -131,7 +129,7 @@ public class MatcherTest extends TestCase {
                 "}\n" +
                 "}";
 
-        Set<Node> matched = Matcher.filter(node, patterns);
+        Set<Pattern> matched = Matcher.filter(node, patterns);
         Assert.assertTrue(matched.size() == 1);
 
         Set<MatchInstance> set = Matcher.tryMatch(node, matched.iterator().next());
@@ -152,9 +150,9 @@ public class MatcherTest extends TestCase {
         String tarFile = testbase + Constant.SEP + "tar_insert_under_switch.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
-        Node node = patterns.iterator().next();
-        List<Modification> modifications = new ArrayList<>(node.getAllModifications(new HashSet<>()));
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
+        Pattern pattern = patterns.iterator().next();
+        List<Modification> modifications = new ArrayList<>(pattern.getAllModifications());
 
         Assert.assertTrue(modifications.size() == 1);
         Assert.assertTrue(modifications.get(0) instanceof Insertion);
@@ -173,15 +171,17 @@ public class MatcherTest extends TestCase {
         String tarFile = testbase + Constant.SEP + "tar_registrationActivity.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        List<Node> patterns = new ArrayList<>(extractor.extractPattern(srcFile, tarFile));
+        List<Pattern> patterns = new ArrayList<>(extractor.extractPattern(srcFile, tarFile));
         String path = "/tmp/";
         int index = 0;
         for (; index < patterns.size(); index++) {
             Utils.serialize(patterns.get(index), path + index + ".pattern");
         }
         for (int j = 0; j < index; j++) {
-            Node node = (Node) Utils.deserialize(path + j + ".pattern");
-            Assert.assertTrue(patterns.get(j).toSrcString().toString().equals(node.toSrcString().toString()));
+            Pattern pattern = (Pattern) Utils.deserialize(path + j + ".pattern");
+            Node deserialized = pattern.getPatternNode();
+            Node original = patterns.get(j).getPatternNode();
+            Assert.assertTrue(deserialized.toSrcString().toString().equals(original.toSrcString().toString()));
             new File(path + j + ".pattern").delete();
         }
     }
@@ -192,7 +192,7 @@ public class MatcherTest extends TestCase {
         String tarFile = testbase + Constant.SEP + "tar_false_dismiss.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
 
@@ -211,8 +211,8 @@ public class MatcherTest extends TestCase {
         parser.setCompilationUnit(buggy, unit);
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
-            Set<Node> matched = Matcher.filter(node, patterns);
-            for (Node p : matched) {
+            Set<Pattern> matched = Matcher.filter(node, patterns);
+            for (Pattern p : matched) {
                 Set<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
@@ -230,7 +230,7 @@ public class MatcherTest extends TestCase {
         String tarFile = testbase + Constant.SEP + "tar_Project.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         /*  // Pattern form
         METHOD(){
@@ -250,11 +250,11 @@ public class MatcherTest extends TestCase {
                 "\\}\n" +
                 "\\}";
 
-        Pattern p1 = Pattern.compile(p1str);
-        Pattern p2 = Pattern.compile(p2str);
+        java.util.regex.Pattern p1 = java.util.regex.Pattern.compile(p1str);
+        java.util.regex.Pattern p2 = java.util.regex.Pattern.compile(p2str);
 
-        for (Node p : patterns) {
-            String formal = p.formalForm(new NameMapping(), false).toString();
+        for (Pattern p : patterns) {
+            String formal = p.formalForm().toString();
             Assert.assertTrue(p1.matcher(formal).matches() || p2.matcher(formal).matches());
         }
     }
@@ -265,14 +265,14 @@ public class MatcherTest extends TestCase {
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
-        for (Node p : patterns) {
-            Set<Node> nodes = p.getConsideredNodesRec(new HashSet<>(), true);
+        for (Pattern p : patterns) {
+            Set<Node> nodes = p.getConsideredNodes();
             for (Node n : nodes) {
                 System.out.println(n.toSrcString());
             }
-            System.out.println(p.formalForm(new NameMapping(), false));
+            System.out.println(p.formalForm());
         }
     }
 

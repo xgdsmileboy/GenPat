@@ -9,7 +9,7 @@ package mfix.core.pattern.cluster;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
-import mfix.core.node.ast.Node;
+import mfix.core.pattern.Pattern;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,7 +29,7 @@ public class Cluster {
 
     private int _maxThreadCount = 10;
     private String _path;
-    private volatile Set<Set<Node>> _returnedNodes;
+    private volatile Set<Set<Pattern>> _returnedNodes;
 
     public Cluster() {
         _returnedNodes = new HashSet<>();
@@ -40,16 +40,16 @@ public class Cluster {
         _returnedNodes = new HashSet<>();
     }
 
-    public void callback(Set<Node> set) {
+    public void callback(Set<Pattern> set) {
         update(set, true);
     }
 
-    public Set<Set<Node>> clusteredNodeSet() {
+    public Set<Set<Pattern>> clusteredNodeSet() {
         return update(null, false);
     }
 
-    private synchronized Set<Set<Node>> update(Set<Node> set, boolean isSubThread) {
-        Set<Set<Node>> result = null;
+    private synchronized Set<Set<Pattern>> update(Set<Pattern> set, boolean isSubThread) {
+        Set<Set<Pattern>> result = null;
         if (isSubThread) {
             _returnedNodes.add(set);
         } else {
@@ -59,15 +59,15 @@ public class Cluster {
         return result;
     }
 
-    protected Set<Node> cluster(Set<Node> patterns) {
-        Set<Node> results = new HashSet<>();
-        Set<Pair<Set<Node>, Set<Node>>> compareClusters = initClusterPair(patterns);
+    protected Set<Pattern> cluster(Set<Pattern> patterns) {
+        Set<Pattern> results = new HashSet<>();
+        Set<Pair<Set<Pattern>, Set<Pattern>>> compareClusters = initClusterPair(patterns);
         int currTaskCount = 0;
         ExecutorService threadPool = Executors.newFixedThreadPool(_maxThreadCount);
         List<Future<Void>> threadResultList = new LinkedList<>();
         while (true) {
             if (threadResultList.isEmpty() && compareClusters.size() == 1) {
-                Pair<Set<Node>, Set<Node>> pair = compareClusters.iterator().next();
+                Pair<Set<Pattern>, Set<Pattern>> pair = compareClusters.iterator().next();
                 if (pair.getFirst() == null || pair.getSecond() == null) {
                     if (pair.getFirst() != null) {
                         results = pair.getFirst();
@@ -79,33 +79,40 @@ public class Cluster {
                     break;
                 }
             }
-            Iterator<Pair<Set<Node>, Set<Node>>> iter = compareClusters.iterator();
+            Iterator<Pair<Set<Pattern>, Set<Pattern>>> iter = compareClusters.iterator();
             while (iter.hasNext()) {
-                Pair<Set<Node>, Set<Node>> pair = iter.next();
+                Pair<Set<Pattern>, Set<Pattern>> pair = iter.next();
                 Future<Void> future = threadPool.submit(new NodeCluster(pair.getFirst(), pair.getSecond(),
                         this));
                 threadResultList.add(future);
                 currTaskCount++;
             }
             compareClusters.clear();
-            if (currTaskCount >= _maxThreadCount) {
-                try {
-                    for (Future<Void> future : threadResultList) {
-                        future.get();
-                        currTaskCount--;
-                    }
-                    threadResultList.clear();
-                    currTaskCount = 0;
-
-                } catch (Exception e) {
-                    LevelLogger.error("Clustering error !", e);
-                }
+            Set<Set<Pattern>> sets = clusteredNodeSet();
+            if (currTaskCount >= _maxThreadCount || sets.isEmpty()) {
+                currTaskCount -= waitSubThreads(threadResultList);
             }
-            Set<Set<Node>> sets = clusteredNodeSet();
             compareClusters.addAll(buildClusterPair(sets));
         }
 
         return results;
+    }
+
+    private int waitSubThreads(List<Future<Void>> threadResultList) {
+        int size = 0;
+        try {
+            LevelLogger.debug("Clear existing thread ...");
+            for (Future<Void> future : threadResultList) {
+                future.get();
+                size ++;
+            }
+            LevelLogger.debug("Finish clear ....");
+            size = threadResultList.size();
+            threadResultList.clear();
+        } catch (Exception e) {
+            LevelLogger.warn("Clustering error !", e);
+        }
+        return size;
     }
 
 
@@ -114,23 +121,23 @@ public class Cluster {
      * @param patterns : patterns to group
      * @return : a set of pairs for clustering
      */
-    private Set<Pair<Set<Node>, Set<Node>>> initClusterPair(Set<Node> patterns) {
-        Set<Pair<Set<Node>, Set<Node>>> result = new HashSet<>();
-        Node pre = null;
-        for (Node node : patterns) {
+    private Set<Pair<Set<Pattern>, Set<Pattern>>> initClusterPair(Set<Pattern> patterns) {
+        Set<Pair<Set<Pattern>, Set<Pattern>>> result = new HashSet<>();
+        Pattern pre = null;
+        for (Pattern pattern : patterns) {
             if (pre == null) {
-                pre = node;
+                pre = pattern;
             } else {
-                Set<Node> s1 = new HashSet<>();
+                Set<Pattern> s1 = new HashSet<>();
                 s1.add(pre);
-                Set<Node> s2 = new HashSet<>();
-                s2.add(node);
+                Set<Pattern> s2 = new HashSet<>();
+                s2.add(pattern);
                 result.add(new Pair<>(s1, s2));
                 pre = null;
             }
         }
         if (pre != null) {
-            Set<Node> s1 = new HashSet<>();
+            Set<Pattern> s1 = new HashSet<>();
             s1.add(pre);
             result.add(new Pair<>(s1, null));
         }
@@ -142,10 +149,10 @@ public class Cluster {
      * @param patternSets : a set of pattern sets to group
      * @return : a set of pairs for clustering
      */
-    private Set<Pair<Set<Node>, Set<Node>>> buildClusterPair(Set<Set<Node>> patternSets) {
-        Set<Pair<Set<Node>, Set<Node>>> result = new HashSet<>();
-        Set<Node> pre = null;
-        for (Set<Node> nodes : patternSets) {
+    private Set<Pair<Set<Pattern>, Set<Pattern>>> buildClusterPair(Set<Set<Pattern>> patternSets) {
+        Set<Pair<Set<Pattern>, Set<Pattern>>> result = new HashSet<>();
+        Set<Pattern> pre = null;
+        for (Set<Pattern> nodes : patternSets) {
             if (pre == null) {
                 pre = nodes;
             } else {
@@ -174,11 +181,11 @@ public class Cluster {
      */
     private static class NodeCluster implements Callable<Void> {
 
-        private Set<Node> _fstPatterns;
-        private Set<Node> _sndPatterns;
+        private Set<Pattern> _fstPatterns;
+        private Set<Pattern> _sndPatterns;
         private Cluster _callback;
 
-        public NodeCluster(Set<Node> fstPatterns, Set<Node> sndPatterns, Cluster callback) {
+        public NodeCluster(Set<Pattern> fstPatterns, Set<Pattern> sndPatterns, Cluster callback) {
             _fstPatterns = fstPatterns;
             _sndPatterns = sndPatterns;
             _callback = callback;
@@ -186,12 +193,14 @@ public class Cluster {
 
         @Override
         public Void call() {
+            LevelLogger.debug(Thread.currentThread().getName() + " : " );
             if (_fstPatterns != null && _sndPatterns != null) {
-                for (Node fstNode : _fstPatterns) {
-                    for (Iterator<Node> iter = _sndPatterns.iterator(); iter.hasNext(); ) {
-                        Node sndNode = iter.next();
-                        Vector fstVec = fstNode.getPatternVector();
-                        Vector sndVec = sndNode.getPatternVector();
+                LevelLogger.debug(" >>>> " + (_fstPatterns.size() + _sndPatterns.size()));
+                for (Pattern fstPattern : _fstPatterns) {
+                    for (Iterator<Pattern> iter = _sndPatterns.iterator(); iter.hasNext(); ) {
+                        Pattern sndPattern = iter.next();
+                        Vector fstVec = fstPattern.getPatternVector();
+                        Vector sndVec = sndPattern.getPatternVector();
                         boolean same = false;
                         if (fstVec.equals(sndVec)) {
                             // TODO: here the abstracted node should be used,
@@ -199,12 +208,12 @@ public class Cluster {
 
                         }
                         if (same) {
-                            fstNode.incFrequency(sndNode.getFrequency());
+                            fstPattern.incFrequency(sndPattern.getFrequency());
                             iter.remove();
                         }
                     }
                 }
-                Set<Node> result = new HashSet<>();
+                Set<Pattern> result = new HashSet<>();
                 result.addAll(_fstPatterns);
                 result.addAll(_sndPatterns);
                 _callback.callback(result);

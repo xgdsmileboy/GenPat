@@ -15,11 +15,11 @@ import mfix.core.node.ast.expr.Operator;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.ast.visitor.NodeVisitor;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.Vector;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.Vector;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -715,21 +715,12 @@ public abstract class Node implements NodeComparator, Serializable {
 
     private Vector _patternVec;
     protected int _fIndex = -1;
-    private int _frequency = 1;
 
     public Vector getPatternVector() {
         if (_patternVec == null) {
             computePatternVector();
         }
         return _patternVec;
-    }
-
-    public int getFrequency() {
-        return _frequency;
-    }
-
-    public void incFrequency(int frequency) {
-        _frequency += frequency;
     }
 
     // TODO : need to rewrite

@@ -9,6 +9,7 @@ package mfix.core.pattern.cluster;
 
 import mfix.core.node.ast.Node;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -17,8 +18,9 @@ import java.util.regex.Pattern;
  * @author: Jiajun
  * @date: 2019-02-17
  */
-public class NameMapping {
+public class NameMapping implements Serializable {
 
+    private static final long serialVersionUID = 7322982291608702980L;
     private int _EXPR_ID;
     private int _METHOD_ID;
     private int _TYPE_ID;

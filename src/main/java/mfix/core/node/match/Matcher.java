@@ -17,6 +17,7 @@ import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.Pattern;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -152,16 +153,16 @@ public class Matcher {
 	 * that can be applied to the buggy node {@code buggy}
 	 * @param buggy : buggy node to check
 	 * @param pattern : pattern nodes to filter
-	 * @return : a subset of pattern nodes in {@code pattern}
+	 * @return : a subset of patterns in {@code pattern}
 	 */
-	public static Set<Node> filter(Node buggy, Set<Node> pattern) {
+	public static Set<Pattern> filter(Node buggy, Set<Pattern> pattern) {
 		Set<MethodInv> inBuggy = buggy.getUniversalAPIs(new HashSet<>(), false);
-		Set<Node> nodes = new HashSet<>();
+		Set<Pattern> nodes = new HashSet<>();
 		Set<MethodInv> inPattern;
-		for(Node node : pattern) {
-			inPattern = node.getUniversalAPIs(new HashSet<>(), true);
+		for(Pattern p : pattern) {
+			inPattern = p.getUniversalAPIs();
 			if(contains(inPattern, inBuggy)) {
-				nodes.add(node);
+				nodes.add(p);
 			}
 		}
 		return nodes;
@@ -174,9 +175,9 @@ public class Matcher {
 	 * @param pattern : pattern node
 	 * @return : a set of possible solutions
 	 */
-	public static Set<MatchInstance> tryMatch(Node buggy, Node pattern) {
+	public static Set<MatchInstance> tryMatch(Node buggy, Pattern pattern) {
 		List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
-		List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodesRec(new HashSet<>(), true));
+		List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
 
 		int bSize = bNodes.size();
 		int pSize = pNodes.size();

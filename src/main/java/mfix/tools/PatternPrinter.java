@@ -12,8 +12,8 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.node.ast.Node;
 import mfix.core.node.modify.Modification;
+import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -74,16 +74,16 @@ public class PatternPrinter {
                 stringBuffer = new StringBuffer();
                 continue;
             }
-            Node fixPattern;
+            Pattern fixPattern;
             try {
-                fixPattern = (Node) Utils.deserialize(patternSerializePath);
+                fixPattern = (Pattern) Utils.deserialize(patternSerializePath);
             } catch (IOException | ClassNotFoundException e) {
                 LevelLogger.error("Deserialize pattern failed!", e);
                 stringBuffer = new StringBuffer();
                 continue;
             }
 
-            Set<Modification> modifications = fixPattern.getAllModifications(new HashSet<>());
+            Set<Modification> modifications = fixPattern.getAllModifications();
             if (modifications.size() > 0) {
                 stringBuffer.append("FILE: " + patternSerializePath + "\n");
                 stringBuffer.append("\n>>>>>>\n");

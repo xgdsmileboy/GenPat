@@ -15,13 +15,14 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.node.match.MatchInstance;
 import mfix.core.node.NodeUtils;
-import mfix.core.pattern.PatternExtractor;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.diff.TextDiff;
+import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.Matcher;
+import mfix.core.pattern.Pattern;
+import mfix.core.pattern.PatternExtractor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -85,17 +86,17 @@ public class Repair {
             @Override
             public Boolean call() throws Exception {
                 PatternExtractor extractor = new PatternExtractor();
-                Set<Node> patternCandidates = extractor.extractPattern(
+                Set<Pattern> patternCandidates = extractor.extractPattern(
                         filePath + "/buggy-version/" + file,
                         filePath + "/fixed-version/" + file);
                 boolean sucess = false;
-                for (Node fixPattern : patternCandidates) {
-                    if (fixPattern.getAllModifications(new HashSet<>()).isEmpty()
-                            || fixPattern.getUniversalAPIs(new HashSet<>(), true).isEmpty()) {
+                for (Pattern fixPattern : patternCandidates) {
+                    if (fixPattern.getAllModifications().isEmpty()
+                            || fixPattern.getUniversalAPIs().isEmpty()) {
                         continue;
                     }
                     sucess = true;
-                    MethDecl methDecl = (MethDecl) fixPattern;
+                    MethDecl methDecl = (MethDecl) fixPattern.getPatternNode();
                     String patternFuncName = methDecl.getName().getName();
 
                     String savePatternPath = Utils.join(Constant.SEP, filePath,
@@ -109,7 +110,7 @@ public class Repair {
         return Utils.futureTaskWithin(timeout, futureTask);
     }
 
-    private Node readPattern(String patternFile) {
+    private Pattern readPattern(String patternFile) {
 
         // TODO(jiang) : The following hard encode should be optimized finally
         int ind = patternFile.indexOf("pattern-ver4-serial");
@@ -137,11 +138,11 @@ public class Repair {
             LevelLogger.info("Existing pattern : " + patternSerializePath);
         }
 
-        Node fixPattern = null;
+        Pattern fixPattern = null;
         if (success) {
             LevelLogger.info("Try match and fix!");
             try {
-                fixPattern = (Node) Utils.deserialize(patternSerializePath);
+                fixPattern = (Pattern) Utils.deserialize(patternSerializePath);
             } catch (IOException | ClassNotFoundException e) {
                 LevelLogger.error("Deserialize pattern failed!", e);
                 return null;
@@ -191,7 +192,7 @@ public class Repair {
                 if (successRepair > Constant.FIX_NUMBER) {
                     return successRepair;
                 }
-                Node pattern = readPattern(f);
+                Pattern pattern = readPattern(f);
                 if (pattern == null) continue;
                 String patterFileName = pattern.getFileName();
 

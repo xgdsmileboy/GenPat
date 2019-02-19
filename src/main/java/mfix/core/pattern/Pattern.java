@@ -7,11 +7,17 @@
 
 package mfix.core.pattern;
 
-import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.modify.Modification;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.Vector;
 import mfix.core.pattern.match.PatternMatcher;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -21,14 +27,50 @@ public class Pattern implements PatternMatcher, Serializable {
 
     private static final long serialVersionUID = -1487307746482756299L;
 
+    private int _frequency = 0;
     private Node _patternNode;
-    private CodeAbstraction _abstraction;
+    private NameMapping _nameMapping;
 
-    public Pattern(Node pNode, CodeAbstraction abstraction) {
+    public Pattern(Node pNode) {
         _patternNode = pNode;
-        _abstraction = abstraction;
+        _nameMapping = new NameMapping();
     }
 
+    public String getFileName() {
+        return _patternNode.getFileName();
+    }
+
+    public Node getPatternNode() {
+        return _patternNode;
+    }
+
+    public int getFrequency() {
+        return _frequency;
+    }
+
+    public void incFrequency(int frequency) {
+        _frequency += frequency;
+    }
+
+    public Set<Modification> getAllModifications() {
+        return _patternNode.getAllModifications(new LinkedHashSet<>());
+    }
+
+    public Set<MethodInv> getUniversalAPIs() {
+        return _patternNode.getUniversalAPIs(new HashSet<>(), true);
+    }
+
+    public Vector getPatternVector(){
+        return _patternNode.getPatternVector();
+    }
+
+    public StringBuffer formalForm() {
+        return _patternNode.formalForm(_nameMapping, false);
+    }
+
+    public Set<Node> getConsideredNodes() {
+        return _patternNode.getConsideredNodesRec(new HashSet<>(), true);
+    }
 
     @Override
     public boolean matches(Pattern p) {
