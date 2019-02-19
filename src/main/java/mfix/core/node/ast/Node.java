@@ -19,10 +19,10 @@ import mfix.core.node.cluster.Vector;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
-import mfix.core.pattern.relation.Relation;
 import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import javax.management.relation.Relation;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -635,22 +635,6 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     public abstract boolean genModifications();
 
-
-    /*********************************************************/
-    /*********** interaction with relation model *************/
-    /*********************************************************/
-    // TODO: this part can be removed if use greedy matching
-    // process rather than the MaxSolver
-
-    private Relation _RelationBinding;
-
-    public void setBindingRelation(Relation r) {
-        _RelationBinding = r;
-    }
-
-    public Relation getBindingRelation() {
-        return _RelationBinding;
-    }
 
     /*********************************************************/
     /**************** pattern abstraction ********************/
