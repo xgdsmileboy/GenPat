@@ -252,7 +252,7 @@ public class SwitchStmt extends Stmt {
 					map, vars, exprMap)) {
 				return null;
 			}
-			StringBuffer stringBuffer = new StringBuffer("swtich (");
+			StringBuffer stringBuffer = new StringBuffer("switch (");
 			StringBuffer tmp;
 			if (expression == null) {
 				tmp = _expression.adaptModifications(vars, exprMap);

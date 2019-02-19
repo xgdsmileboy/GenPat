@@ -79,7 +79,7 @@ public class Blk extends Stmt {
         if (strings.isEmpty()) {
             return isConsidered() ? new StringBuffer("{}") : null;
         } else {
-            StringBuffer buffer = new StringBuffer('{');
+            StringBuffer buffer = new StringBuffer("{");
             for (int i = 0; i < strings.size(); i++) {
                 buffer.append('\n').append(strings.get(i));
             }

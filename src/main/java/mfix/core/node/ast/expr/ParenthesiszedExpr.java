@@ -64,7 +64,7 @@ public class ParenthesiszedExpr extends Expr {
 			if (nameMapping.isPlaceHolder(buffer.toString())) {
 				return buffer;
 			}
-			return new StringBuffer('(').append(buffer).append(')');
+			return new StringBuffer("(").append(buffer).append(')');
 		}
 		return super.toFormalForm0(nameMapping, parentConsidered);
 	}

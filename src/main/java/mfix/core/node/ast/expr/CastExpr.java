@@ -76,7 +76,7 @@ public class CastExpr extends Expr {
         if (type == null && exp == null) {
             return super.toFormalForm0(nameMapping, parentConsidered);
         }
-        StringBuffer buffer = new StringBuffer('(');
+        StringBuffer buffer = new StringBuffer("(");
         buffer.append(type == null ? nameMapping.getTypeID(_castType) : type)
                 .append(')')
                 .append(exp == null ? nameMapping.getExprID(_expression) : exp);
