@@ -91,7 +91,7 @@ public class AryAcc extends Expr {
                 .append(index == null ? nameMapping.getExprID(_index) : index)
                 .append("]");
 
-        return null;
+        return buffer;
     }
 
     @Override
