@@ -35,7 +35,6 @@ public class Pattern implements PatternMatcher, Serializable {
     public Pattern(Node pNode) {
         _patternNode = pNode;
         _nameMapping = new NameMapping();
-        _keywords = new LinkedHashSet<>();
     }
 
     public String getFileName() {
