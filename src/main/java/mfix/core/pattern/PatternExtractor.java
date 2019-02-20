@@ -75,6 +75,7 @@ public class PatternExtractor {
                 }
 //                srcNode.doAbstraction(counter);
                 srcNode.doAbstractionNew(abstraction.lazyInit());
+                tarNode.doAbstractionNew(abstraction);
                 patterns.add(new Pattern(srcNode));
             }
         }
