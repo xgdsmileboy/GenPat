@@ -87,10 +87,10 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
-		StringBuffer identifier = _identifier.formalForm(nameMapping, consider);
-		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, consider);
+		StringBuffer identifier = _identifier.formalForm(nameMapping, consider, keywords);
+		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, consider, keywords);
 		if (identifier == null && exp == null) {
 			if (isConsidered()) {
 				return new StringBuffer(nameMapping.getExprID(this));

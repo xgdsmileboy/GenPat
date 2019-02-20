@@ -57,16 +57,16 @@ public class ParenthesiszedExpr extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
-		StringBuffer buffer = _expression.formalForm(nameMapping, consider);
+		StringBuffer buffer = _expression.formalForm(nameMapping, consider, keywords);
 		if (buffer != null) {
 			if (nameMapping.isPlaceHolder(buffer.toString())) {
 				return buffer;
 			}
 			return new StringBuffer("(").append(buffer).append(')');
 		}
-		return super.toFormalForm0(nameMapping, parentConsidered);
+		return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 	}
 
 	@Override

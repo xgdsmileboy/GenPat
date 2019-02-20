@@ -105,12 +105,12 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (isAbstract()) return null;
-        StringBuffer init = _initializers.formalForm(nameMapping, isConsidered());
-        StringBuffer cond = _condition != null ? _condition.formalForm(nameMapping, isConsidered()) : null;
-        StringBuffer update = _updaters.formalForm(nameMapping, isConsidered());
-        StringBuffer body = _body.formalForm(nameMapping, false);
+        StringBuffer init = _initializers.formalForm(nameMapping, isConsidered(), keywords);
+        StringBuffer cond = _condition != null ? _condition.formalForm(nameMapping, isConsidered(), keywords) : null;
+        StringBuffer update = _updaters.formalForm(nameMapping, isConsidered(), keywords);
+        StringBuffer body = _body.formalForm(nameMapping, false, keywords);
         if (init != null || cond != null || update != null || body != null || isConsidered()) {
             StringBuffer buffer = new StringBuffer("for(");
             if (init != null) {

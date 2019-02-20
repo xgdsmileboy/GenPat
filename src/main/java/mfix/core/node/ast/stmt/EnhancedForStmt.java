@@ -88,11 +88,11 @@ public class EnhancedForStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer var = _varDecl.formalForm(nameMapping, isConsidered());
-		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
-		StringBuffer body = _statement.formalForm(nameMapping, false);
+		StringBuffer var = _varDecl.formalForm(nameMapping, isConsidered(), keywords);
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
+		StringBuffer body = _statement.formalForm(nameMapping, false, keywords);
 		if (var == null && exp == null && body == null) {
 			if (isConsidered()) {
 				return new StringBuffer("for(")

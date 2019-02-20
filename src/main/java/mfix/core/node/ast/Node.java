@@ -670,14 +670,14 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
-    public StringBuffer formalForm(NameMapping nameMapping, boolean parentConsidered) {
+    public StringBuffer formalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (_formalFormCache != null && _formalFormCache.length() == 0) {
-            _formalFormCache = toFormalForm0(nameMapping, parentConsidered);
+            _formalFormCache = toFormalForm0(nameMapping, parentConsidered, keywords);
         }
         return _formalFormCache;
     }
 
-    protected abstract StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered);
+    protected abstract StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords);
 
     public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
         Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);

@@ -96,11 +96,11 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer dec = _declType.formalForm(nameMapping, isConsidered());
+		StringBuffer dec = _declType.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer frag = new StringBuffer();
-		StringBuffer b = _fragments.get(0).formalForm(nameMapping, isConsidered());
+		StringBuffer b = _fragments.get(0).formalForm(nameMapping, isConsidered(), keywords);
 		boolean contain = false;
 		if (b == null) {
 			frag.append(nameMapping.getExprID(_fragments.get(0)));
@@ -109,7 +109,7 @@ public class VarDeclarationStmt extends Stmt {
 			frag.append(b);
 		}
 		for (int i = 1; i < _fragments.size(); i++) {
-			b = _fragments.get(i).formalForm(nameMapping, isConsidered());
+			b = _fragments.get(i).formalForm(nameMapping, isConsidered(), keywords);
 			if (b == null) {
 				frag.append(',').append(nameMapping.getExprID(_fragments.get(i)));
 			} else {

@@ -94,15 +94,15 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         boolean consider = parentConsidered || isConsidered();
-        StringBuffer typeStr = _type.formalForm(nameMapping, consider);
+        StringBuffer typeStr = _type.formalForm(nameMapping, consider, keywords);
         StringBuffer dimension = new StringBuffer();
         boolean contain = false;
         for (Expr expr : _dimension) {
             dimension.append("[");
-            if(expr.formalForm(nameMapping, consider) != null) {
-                dimension.append(expr.formalForm(nameMapping, consider));
+            if(expr.formalForm(nameMapping, consider, keywords) != null) {
+                dimension.append(expr.formalForm(nameMapping, consider, keywords));
                 contain = true;
             } else {
                 dimension.append(nameMapping.getExprID(expr));
@@ -111,11 +111,11 @@ public class AryCreation extends Expr {
         }
         StringBuffer initializer = null;
         if (_initializer != null) {
-            initializer = _initializer.formalForm(nameMapping, consider);
+            initializer = _initializer.formalForm(nameMapping, consider, keywords);
         }
 
         if (typeStr == null && !contain && initializer == null) {
-            return super.toFormalForm0(nameMapping, parentConsidered);
+            return super.toFormalForm0(nameMapping, parentConsidered, keywords);
         }
 
         StringBuffer buffer = new StringBuffer();

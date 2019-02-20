@@ -69,12 +69,12 @@ public class CastExpr extends Expr {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         boolean consider = isConsidered() || parentConsidered;
-        StringBuffer type = _castType.formalForm(nameMapping, consider);
-        StringBuffer exp = _expression.formalForm(nameMapping, consider);
+        StringBuffer type = _castType.formalForm(nameMapping, consider, keywords);
+        StringBuffer exp = _expression.formalForm(nameMapping, consider, keywords);
         if (type == null && exp == null) {
-            return super.toFormalForm0(nameMapping, parentConsidered);
+            return super.toFormalForm0(nameMapping, parentConsidered, keywords);
         }
         StringBuffer buffer = new StringBuffer("(");
         buffer.append(type == null ? nameMapping.getTypeID(_castType) : type)

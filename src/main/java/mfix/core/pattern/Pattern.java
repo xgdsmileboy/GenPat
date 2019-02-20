@@ -30,10 +30,12 @@ public class Pattern implements PatternMatcher, Serializable {
     private int _frequency = 0;
     private Node _patternNode;
     private NameMapping _nameMapping;
+    private Set<String> _keywords;
 
     public Pattern(Node pNode) {
         _patternNode = pNode;
         _nameMapping = new NameMapping();
+        _keywords = new LinkedHashSet<>();
     }
 
     public String getFileName() {
@@ -52,6 +54,10 @@ public class Pattern implements PatternMatcher, Serializable {
         _frequency += frequency;
     }
 
+    public Set<String> getKeywords() {
+        return _keywords;
+    }
+
     public Set<Modification> getAllModifications() {
         return _patternNode.getAllModifications(new LinkedHashSet<>());
     }
@@ -65,7 +71,7 @@ public class Pattern implements PatternMatcher, Serializable {
     }
 
     public StringBuffer formalForm() {
-        return _patternNode.formalForm(_nameMapping, false);
+        return _patternNode.formalForm(_nameMapping, false, _keywords);
     }
 
     public Set<Node> getConsideredNodes() {

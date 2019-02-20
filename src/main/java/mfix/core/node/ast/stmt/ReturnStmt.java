@@ -65,9 +65,9 @@ public class ReturnStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, isConsidered(), keywords);
 		if (exp == null) {
 			if (isConsidered()) {
 				return new StringBuffer("return ")

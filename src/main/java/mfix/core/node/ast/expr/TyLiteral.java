@@ -7,10 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -55,12 +55,14 @@ public class TyLiteral extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
-		StringBuffer type = _type.formalForm(nameMapping, isConsidered() || parentConsidered);
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
+		StringBuffer type = _type.formalForm(nameMapping, isConsidered() || parentConsidered, keywords);
 		if (type == null) {
-			return leafFormalForm(parentConsidered);
+			return leafFormalForm(parentConsidered, keywords);
 		}
-		return type.append(".class");
+		type.append(".class");
+        keywords.add(type.toString());
+		return type;
 	}
 
 	@Override

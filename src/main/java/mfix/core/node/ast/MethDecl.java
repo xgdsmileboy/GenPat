@@ -125,7 +125,7 @@ public class MethDecl extends Node {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("METHOD");
         stringBuffer.append("(");
@@ -133,8 +133,8 @@ public class MethDecl extends Node {
         if (_arguments != null && _arguments.size() > 0) {
             List<StringBuffer> strings = new ArrayList<>(_arguments.size());
             for (int i = 0; i < _arguments.size(); i++) {
-                if (_arguments.get(i).formalForm(nameMapping, false) != null) {
-                    strings.add(_arguments.get(i).formalForm(nameMapping, false));
+                if (_arguments.get(i).formalForm(nameMapping, false, keywords) != null) {
+                    strings.add(_arguments.get(i).formalForm(nameMapping, false, keywords));
                 }
             }
             if (strings.size() > 0) {
@@ -148,7 +148,7 @@ public class MethDecl extends Node {
         if (_body == null) {
             stringBuffer.append(";");
         } else {
-            stringBuffer.append(_body.formalForm(nameMapping, false));
+            stringBuffer.append(_body.formalForm(nameMapping, false, keywords));
         }
         return stringBuffer;
     }

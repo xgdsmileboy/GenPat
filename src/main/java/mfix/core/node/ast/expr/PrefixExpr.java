@@ -67,10 +67,10 @@ public class PrefixExpr extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
-		StringBuffer buffer = _expression.formalForm(nameMapping, isConsidered() || parentConsidered);
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
+		StringBuffer buffer = _expression.formalForm(nameMapping, isConsidered() || parentConsidered, keywords);
 		if (buffer == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered);
+			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer b = new StringBuffer(_operator.toSrcString()).append(buffer);
 		return b;

@@ -69,12 +69,12 @@ public class QName extends Label {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
-		StringBuffer name = _name.formalForm(nameMapping, consider);
-		StringBuffer sname = _sname.formalForm(nameMapping, consider);
+		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
+		StringBuffer sname = _sname.formalForm(nameMapping, consider, keywords);
 		if (name == null && sname == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered);
+			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(name == null ? nameMapping.getExprID(_name) : name)

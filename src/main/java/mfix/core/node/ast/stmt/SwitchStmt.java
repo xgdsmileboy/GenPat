@@ -79,13 +79,13 @@ public class SwitchStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		List<StringBuffer> strings = new ArrayList<>(_statements.size());
 		StringBuffer b;
 		for (int i = 0; i < _statements.size(); i++) {
-			b = _statements.get(i).formalForm(nameMapping, false);
+			b = _statements.get(i).formalForm(nameMapping, false, keywords);
 			if (b != null) {
 				strings.add(b);
 			}

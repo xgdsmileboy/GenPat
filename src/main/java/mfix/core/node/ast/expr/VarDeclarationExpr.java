@@ -77,14 +77,14 @@ public class VarDeclarationExpr extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
-		StringBuffer dec = _declType.formalForm(nameMapping, consider);
+		StringBuffer dec = _declType.formalForm(nameMapping, consider, keywords);
 		List<StringBuffer> buffers = new ArrayList<>(_vdfs.size());
 		StringBuffer b;
 		boolean contain = false;
 		for (int i = 0; i < _vdfs.size(); i++) {
-			b = _vdfs.get(i).formalForm(nameMapping, consider);
+			b = _vdfs.get(i).formalForm(nameMapping, consider, keywords);
 			if (b == null) {
 				b = new StringBuffer(nameMapping.getExprID(_vdfs.get(i)));
 			} else {
@@ -93,7 +93,7 @@ public class VarDeclarationExpr extends Expr {
 			buffers.add(b);
 		}
 		if (dec == null && !contain && !isConsidered()) {
-			return super.toFormalForm0(nameMapping, parentConsidered);
+			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(dec == null ? nameMapping.getTypeID(_declType) : dec)

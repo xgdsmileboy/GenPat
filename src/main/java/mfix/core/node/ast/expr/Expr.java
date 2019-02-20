@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.dom.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -83,7 +84,7 @@ public abstract class Expr extends Node {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (isConsidered()) {
             return new StringBuffer(nameMapping.getExprID(this));
         } else {
@@ -91,9 +92,11 @@ public abstract class Expr extends Node {
         }
     }
 
-    protected StringBuffer leafFormalForm(boolean parentConsidered) {
+    protected StringBuffer leafFormalForm(boolean parentConsidered, Set<String> keywords) {
         if (!isAbstract() && (parentConsidered || isConsidered())) {
-            return toSrcString();
+            StringBuffer buffer = toSrcString();
+            keywords.add(buffer.toString());
+            return buffer;
         } else {
             return null;
         }

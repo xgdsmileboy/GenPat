@@ -53,8 +53,8 @@ public class BoolLiteral extends Expr {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
-        return leafFormalForm(parentConsidered);
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
+        return leafFormalForm(parentConsidered, keywords);
     }
 
     @Override

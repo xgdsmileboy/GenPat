@@ -112,13 +112,13 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
 		StringBuffer res = null;
 		boolean hasRes = false;
 		if (_resource != null && _resource.size() > 0) {
 			res = new StringBuffer('(');
-			StringBuffer b = _resource.get(0).formalForm(nameMapping, isConsidered());
+			StringBuffer b = _resource.get(0).formalForm(nameMapping, isConsidered(), keywords);
 			if (b == null) {
 				res.append(nameMapping.getExprID(_resource.get(0)));
 			} else {
@@ -127,7 +127,7 @@ public class TryStmt extends Stmt {
 			}
 			for (int i = 1; i < _resource.size(); i++) {
 				res.append(';');
-				b = _resource.get(i).formalForm(nameMapping, isConsidered());
+				b = _resource.get(i).formalForm(nameMapping, isConsidered(), keywords);
 				if (b != null) {
 					hasRes = true;
 					res.append(b);
@@ -137,7 +137,7 @@ public class TryStmt extends Stmt {
 			}
 			res.append(')');
 		}
-		StringBuffer blk = _blk.formalForm(nameMapping, false);
+		StringBuffer blk = _blk.formalForm(nameMapping, false, keywords);
 		StringBuffer catches = null;
 		boolean hasCatch = false;
 		if (_catches != null && _catches.size() > 0) {
@@ -145,7 +145,7 @@ public class TryStmt extends Stmt {
 			CatClause cc;
 			StringBuffer b;
 			for (int i = 0; i < _catches.size(); i++) {
-				b = _catches.get(i).formalForm(nameMapping, false);
+				b = _catches.get(i).formalForm(nameMapping, false, keywords);
 				if (b != null) {
 					hasCatch = true;
 					catches.append('\n').append(b);
@@ -159,7 +159,7 @@ public class TryStmt extends Stmt {
 				}
 			}
 		}
-		StringBuffer finalblk = _finallyBlk == null ? null : _finallyBlk.formalForm(nameMapping, false);
+		StringBuffer finalblk = _finallyBlk == null ? null : _finallyBlk.formalForm(nameMapping, false, keywords);
 		if (isConsidered() || hasRes || blk != null || hasCatch || finalblk != null) {
 			StringBuffer buffer = new StringBuffer("try");
 			buffer.append(res == null ? "" : res)

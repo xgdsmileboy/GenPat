@@ -77,12 +77,12 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
-		StringBuffer lhs = _lhs.formalForm(nameMapping, consider);
-		StringBuffer rhs = _rhs.formalForm(nameMapping, consider);
+		StringBuffer lhs = _lhs.formalForm(nameMapping, consider, keywords);
+		StringBuffer rhs = _rhs.formalForm(nameMapping, consider, keywords);
 		if (lhs == null && rhs == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered);
+			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(lhs == null ? nameMapping.getExprID(_lhs) : lhs)

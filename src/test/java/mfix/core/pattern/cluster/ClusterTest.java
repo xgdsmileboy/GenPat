@@ -35,6 +35,10 @@ public class ClusterTest extends TestCase {
         for (Pattern p : clustered) {
             String formal = p.formalForm().toString();
             System.out.println(formal);
+            Set<String> keys = p.getKeywords();
+            for (String s : keys) {
+                System.out.println(s);
+            }
         }
     }
 

@@ -75,10 +75,10 @@ public class DoStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer body = _stmt.formalForm(nameMapping, false);
-		StringBuffer cond = _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer body = _stmt.formalForm(nameMapping, false, keywords);
+		StringBuffer cond = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		if (body == null && cond == null) {
 			if (isConsidered()) {
 				return new StringBuffer("do {} while(").append(nameMapping.getExprID(_expression)).append(')');

@@ -69,10 +69,10 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
-		StringBuffer blk = _blk.formalForm(nameMapping, false);
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
+		StringBuffer blk = _blk.formalForm(nameMapping, false, keywords);
 		if (isConsidered() || exp != null || blk != null) {
 			StringBuffer buffer = new StringBuffer("synchronized(");
 			buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp).append(')');
