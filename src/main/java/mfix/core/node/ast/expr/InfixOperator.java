@@ -67,7 +67,7 @@ public class InfixOperator extends Operator {
 
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		if(node instanceof InfixOperator) {
+		if(node instanceof InfixOperator && _operatorStr.equals(node.toSrcString().toString())) {
 			matchedNode.put(this, node);
 			return true;
 		}

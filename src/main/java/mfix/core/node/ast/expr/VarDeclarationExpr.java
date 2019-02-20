@@ -279,6 +279,7 @@ public class VarDeclarationExpr extends Expr {
 				tmp = _vdfs.get(start).adaptModifications(vars, exprMap);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
+				start ++;
 				break;
 			}
 		}

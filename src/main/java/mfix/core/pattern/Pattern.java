@@ -27,7 +27,7 @@ public class Pattern implements PatternMatcher, Serializable {
 
     private static final long serialVersionUID = -1487307746482756299L;
 
-    private int _frequency = 0;
+    private int _frequency = 1;
     private Node _patternNode;
     private NameMapping _nameMapping;
     private Set<String> _keywords;
@@ -55,6 +55,9 @@ public class Pattern implements PatternMatcher, Serializable {
     }
 
     public Set<String> getKeywords() {
+        if (_keywords == null) {
+            formalForm();
+        }
         return _keywords;
     }
 
@@ -71,6 +74,7 @@ public class Pattern implements PatternMatcher, Serializable {
     }
 
     public StringBuffer formalForm() {
+        _keywords = new LinkedHashSet<>();
         return _patternNode.formalForm(_nameMapping, false, _keywords);
     }
 

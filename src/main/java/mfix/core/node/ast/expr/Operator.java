@@ -52,7 +52,8 @@ public abstract class Operator extends Node {
 	@Override
 	public boolean postAccurateMatch(Node node) {
 		if (getBindingNode() == node) return true;
-		if (getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == null && canBinding(node)
+				&& toSrcString().toString().equals(node.toSrcString().toString())) {
 			setBindingNode(node);
 			return true;
 		}

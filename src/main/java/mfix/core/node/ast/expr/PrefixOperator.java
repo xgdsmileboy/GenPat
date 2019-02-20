@@ -77,7 +77,7 @@ public class PrefixOperator extends Operator {
 
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		if (node instanceof PrefixOperator) {
+		if (node instanceof PrefixOperator && _operatorStr.equals(node.toSrcString().toString())) {
 			matchedNode.put(this, node);
 			return true;
 		}

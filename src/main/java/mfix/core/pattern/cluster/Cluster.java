@@ -104,7 +104,7 @@ public class Cluster {
             LevelLogger.debug("Clear existing thread ...");
             for (Future<Void> future : threadResultList) {
                 future.get();
-                size ++;
+                size++;
             }
             LevelLogger.debug("Finish clear ....");
             size = threadResultList.size();
@@ -118,6 +118,7 @@ public class Cluster {
 
     /**
      * group patterns as pairs for clustering
+     *
      * @param patterns : patterns to group
      * @return : a set of pairs for clustering
      */
@@ -146,6 +147,7 @@ public class Cluster {
 
     /**
      * group pattern sets as pairs for clustering
+     *
      * @param patternSets : a set of pattern sets to group
      * @return : a set of pairs for clustering
      */
@@ -168,14 +170,14 @@ public class Cluster {
 
     /**
      * Class takes the responsibility for node comparision.
-     *
+     * <p>
      * Given two sets of pattern nodes, this class assumes that
      * the pattern node is distinct within each set. Then,
      * it compares each node in the first set with the nodes in the
      * second set. In each comparison, if two nodes are the same
      * pattern, one will be removed and the other one will be survived
      * with the pattern frequency increased.
-     *
+     * <p>
      * Finally, after comparing, the class combine two sets of
      * pattern nodes to one set with merging the same pattern nodes.
      */
@@ -194,20 +196,14 @@ public class Cluster {
         @Override
         public Void call() {
             if (_fstPatterns != null && _sndPatterns != null) {
-                LevelLogger.debug(Thread.currentThread().getName() + " : "  + (_fstPatterns.size() + _sndPatterns.size()));
+                LevelLogger.debug(Thread.currentThread().getName() + " : "
+                        + (_fstPatterns.size() + _sndPatterns.size()));
+                Pattern next;
                 for (Pattern fstPattern : _fstPatterns) {
                     for (Iterator<Pattern> iter = _sndPatterns.iterator(); iter.hasNext(); ) {
-                        Pattern sndPattern = iter.next();
-                        Vector fstVec = fstPattern.getPatternVector();
-                        Vector sndVec = sndPattern.getPatternVector();
-                        boolean same = false;
-                        if (fstVec.equals(sndVec)) {
-                            // TODO: here the abstracted node should be used,
-                            //  can use String comparison directly?
-
-                        }
-                        if (same) {
-                            fstPattern.incFrequency(sndPattern.getFrequency());
+                        next = iter.next();
+                        if (fstPattern.matches(next)) {
+                            fstPattern.incFrequency(next.getFrequency());
                             iter.remove();
                         }
                     }

@@ -76,7 +76,7 @@ public class AssignOperator extends Operator {
 
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if (node instanceof AssignOperator) {
+        if (node instanceof AssignOperator && _operatorStr.equals(node.toSrcString().toString())) {
             matchedNode.put(this, node);
             return true;
         } else {

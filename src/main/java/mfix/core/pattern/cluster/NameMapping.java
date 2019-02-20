@@ -7,6 +7,9 @@
 
 package mfix.core.pattern.cluster;
 
+import mfix.core.node.abs.id.AbsExpr;
+import mfix.core.node.abs.id.AbsMethod;
+import mfix.core.node.abs.id.AbsType;
 import mfix.core.node.ast.Node;
 
 import java.io.Serializable;
@@ -24,11 +27,12 @@ public class NameMapping implements Serializable {
     private int _EXPR_ID;
     private int _METHOD_ID;
     private int _TYPE_ID;
-    private Map<String, String> _expr2Id;
-    private Map<String, String> _methodName2Id;
-    private Map<String, String> _type2Id;
+    private Map<String, AbsExpr> _expr2Id;
+    private Map<String, AbsMethod> _methodName2Id;
+    private Map<String, AbsType> _type2Id;
 
-    private final static Pattern REGEX = Pattern.compile("(EXPR|METH|TYPE)_\\d+");
+    private final static boolean debug = false;
+    private final static Pattern REGEX = Pattern.compile(debug ? "(EXPR|METH|TYPE)_\\d+" : "EXPR|METH|TYPE");
 
     public NameMapping() {
         _EXPR_ID = 0;
@@ -44,13 +48,13 @@ public class NameMapping implements Serializable {
     }
 
     private String getExprID(String str) {
-        String id = _expr2Id.get(str);
-        if (id == null) {
-            id = "EXPR_" + _EXPR_ID;
+        AbsExpr expr = _expr2Id.get(str);
+        if (expr == null) {
+            expr = new AbsExpr(_EXPR_ID);
             _EXPR_ID ++;
-            _expr2Id.put(str, id);
+            _expr2Id.put(str, expr);
         }
-        return id;
+        return expr.toString();
     }
 
     public String getMethodID(Node node) {
@@ -58,13 +62,13 @@ public class NameMapping implements Serializable {
     }
 
     private String getMethodID(String name) {
-        String id = _methodName2Id.get(name);
-        if (id == null) {
-            id = "METH_" + _METHOD_ID;
+        AbsMethod meth = _methodName2Id.get(name);
+        if (meth == null) {
+            meth = new AbsMethod(_METHOD_ID);
             _METHOD_ID ++;
-            _methodName2Id.put(name, id);
+            _methodName2Id.put(name, meth);
         }
-        return id;
+        return meth.toString();
     }
 
     public String getTypeID(Node node) {
@@ -72,24 +76,28 @@ public class NameMapping implements Serializable {
     }
 
     private String getTypeID(String type) {
-        String id = _type2Id.get(type);
-        if (id == null) {
-            id = "TYPE_" + _TYPE_ID;
+        AbsType absType = _type2Id.get(type);
+        if (absType == null) {
+            absType = new AbsType(_TYPE_ID);
             _TYPE_ID ++;
-            _type2Id.put(type, id);
+            _type2Id.put(type, absType);
         }
-        return id;
+        return absType.toString();
     }
 
     public boolean isPlaceHolder(String string) {
         return REGEX.matcher(string).matches();
     }
 
-    public Map<String, String> getExprIds() {
+    public Map<String, AbsExpr> getExprIds() {
         return _expr2Id;
     }
 
-    public Map<String, String> getMethodIds() {
+    public Map<String, AbsMethod> getMethodIds() {
         return _methodName2Id;
+    }
+
+    public Map<String, AbsType> getType2Id() {
+        return _type2Id;
     }
 }
