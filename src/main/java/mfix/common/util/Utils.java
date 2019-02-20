@@ -42,6 +42,12 @@ import java.util.concurrent.TimeoutException;
  */
 public class Utils {
 
+    public static boolean safeBufferEqual(StringBuffer s1, StringBuffer s2) {
+        if (s1 == s2) return true;
+        if (s1 == null || s2 == null) return false;
+        return s1.toString().equals(s2.toString());
+    }
+
     public static boolean safeStringEqual(String s1, String s2) {
         if(s1 == s2) return true;
         if(s1 == null) return false;
