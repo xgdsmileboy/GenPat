@@ -639,25 +639,50 @@ public abstract class Node implements NodeComparator, Serializable {
     /*********************************************************/
     /**************** pattern abstraction ********************/
     /*********************************************************/
+    /**
+     * denoting the node is on the path from the root node
+     * to the concrete node if it is false. If it is true,
+     * all the nodes in the subtree rooted this node is abstract
+     * i.e., when it is true, the node can be abstract node as well
+     */
     protected boolean _abstract = true;
     // to avoid duplicate object;
     private final static StringBuffer BUFFER = new StringBuffer();
+    /**
+     * to record the formal form of the pattern
+     */
     private transient StringBuffer _formalFormCache = BUFFER;
 
     public boolean isAbstract() {
         return _abstract;
     }
 
+    /**
+     * abstract node with the given {@code counter}
+     * NOTE : this method is designed for API abstraction
+     * and will not be used later
+     *
+     * @param counter : ElementCounter for node abstraction
+     */
     public void doAbstraction(ElementCounter counter) {
         for (Node node : getAllChildren()) {
             node.doAbstraction(counter);
         }
     }
 
+    /**
+     * abstract node with the given {@code abstraction} object
+     * this method performs token level abstraction
+     *
+     * @param abstraction : the object to abstract node
+     */
     public void doAbstractionNew(CodeAbstraction abstraction) {
         if (this instanceof Operator) {
             _abstract = true;
         } else {
+            // is the node is simple/leaf node, we perform node abstraction
+            // otherwise, whether the node is abstract or not depends on the
+            // nodes in the subtree
             if (NodeUtils.isSimpleExpr(this)) {
                 _abstract = abstraction.shouldAbstract(this);
             } else {
@@ -670,6 +695,17 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    /**
+     * this method if used to build the formal form of the pattern node
+     * NOTE: this method should be invoked later than the method
+     * {@code Node.doAbstractionNew(CodeAbstraction)}, since it depends
+     * on the field of {@code _abstract}
+     *
+     * @param nameMapping      : record the name mapping relation from the concrete expression to its abstract name
+     * @param parentConsidered : denotes whether any parent node is considered for pattern matching
+     * @param keywords         : a set of keywords that are not abstracted in the formal form
+     * @return : the formal form of the pattern with {@code StringBuffer} form
+     */
     public StringBuffer formalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (_formalFormCache != null && _formalFormCache.length() == 0) {
             _formalFormCache = toFormalForm0(nameMapping, parentConsidered, keywords);
@@ -677,7 +713,16 @@ public abstract class Node implements NodeComparator, Serializable {
         return _formalFormCache;
     }
 
-    protected abstract StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords);
+    /**
+     * the real method that builds pattern formal form
+     *
+     * @param nameMapping      : record name mapping relation
+     * @param parentConsidered : if any parent node is considered for pattern matching
+     * @param keywords         : a set of keywords that are not abstracted
+     * @return : formal form
+     */
+    protected abstract StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered,
+                                                  Set<String> keywords);
 
     public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
         Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
