@@ -43,7 +43,7 @@ public class Matcher {
 		List<MethodDeclaration> tarMethods = methodDeclCollector.getAllMethDecl();
 		
 		if(srcMethods.size() != tarMethods.size()) {
-			LevelLogger.warn("Different numbers of method declarations for two source files.");
+			LevelLogger.info("Different numbers of method declarations for two source files.");
 			return matchPair;
 		}
 		
@@ -63,7 +63,7 @@ public class Matcher {
 				}
 			}
 			if(noMatch) {
-				LevelLogger.warn("No match for method declaration : \n" + sm.toString());
+				LevelLogger.warn("No match for method declaration !!! \n");
 				return new LinkedList<>();
 			}
 		}
