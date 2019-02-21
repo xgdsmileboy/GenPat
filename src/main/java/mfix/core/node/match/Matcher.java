@@ -63,7 +63,7 @@ public class Matcher {
 				}
 			}
 			if(noMatch) {
-				LevelLogger.warn("No match for method declaration !!! \n");
+				LevelLogger.warn("No match for method declaration !!!");
 				return new LinkedList<>();
 			}
 		}
