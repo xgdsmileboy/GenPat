@@ -42,6 +42,21 @@ import java.util.concurrent.TimeoutException;
  */
 public class Utils {
 
+    public static boolean safeCollectionEqual(Set<String> c1, Set<String> c2) {
+        if (c1 == c2) return true;
+        if (c1 == null || c2 == null) {
+            return false;
+        }
+        if (c1.size() != c2.size()) {
+            for (String s : c1) {
+                if (!c2.contains(s)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public static boolean safeBufferEqual(StringBuffer s1, StringBuffer s2) {
         if (s1 == s2) return true;
         if (s1 == null || s2 == null) return false;

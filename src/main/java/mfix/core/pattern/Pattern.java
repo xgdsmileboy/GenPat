@@ -7,6 +7,7 @@
 
 package mfix.core.pattern;
 
+import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.modify.Modification;
@@ -30,13 +31,12 @@ public class Pattern implements PatternMatcher, Serializable {
 
     private int _frequency = 1;
     private Node _patternNode;
-    private NameMapping _nameMapping;
-    private Set<String> _keywords;
-    private Set<String> _targetKeywords;
+    private transient NameMapping _nameMapping;
+    private transient Set<String> _keywords;
+    private transient Set<String> _targetKeywords;
 
     public Pattern(Node pNode) {
         _patternNode = pNode;
-        _nameMapping = new NameMapping();
     }
 
     public String getFileName() {
@@ -86,6 +86,9 @@ public class Pattern implements PatternMatcher, Serializable {
         if (_keywords == null) {
             _keywords = new LinkedHashSet<>();
         }
+        if (_nameMapping == null) {
+            _nameMapping = new NameMapping();
+        }
         return _patternNode.formalForm(_nameMapping, false, _keywords);
     }
 
@@ -97,24 +100,16 @@ public class Pattern implements PatternMatcher, Serializable {
     public boolean matches(Pattern p) {
         Set<String> srcKey = getKeywords();
         Set<String> psKey = p.getKeywords();
-        if (srcKey.size() != psKey.size()) {
+
+        if (!Utils.safeCollectionEqual(srcKey, psKey)) {
             return false;
-        }
-        for (String s : srcKey) {
-            if (!psKey.contains(s)) {
-                return false;
-            }
         }
 
         srcKey = getTargetKeywords();
         psKey = p.getTargetKeywords();
-        if (srcKey.size() != psKey.size()) {
+
+        if (!Utils.safeCollectionEqual(srcKey, psKey)) {
             return false;
-        }
-        for (String s : srcKey) {
-            if (!psKey.contains(s)) {
-                return false;
-            }
         }
 
         if (getAllModifications().size() != p.getAllModifications().size()) {
@@ -128,7 +123,7 @@ public class Pattern implements PatternMatcher, Serializable {
             return false;
         }
 
-        boolean match = false;
+        boolean match;
         for (Node node : nodes) {
             match = false;
             for (Iterator<Node> iter = others.iterator(); iter.hasNext();) {

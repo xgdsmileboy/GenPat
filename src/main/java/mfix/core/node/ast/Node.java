@@ -653,6 +653,7 @@ public abstract class Node implements NodeComparator, Serializable {
      * to record the formal form of the pattern
      */
     private transient StringBuffer _formalFormCache = BUFFER;
+    private transient boolean _deserialize_tag = false;
 
     public boolean isAbstract() {
         return _abstract;
@@ -715,7 +716,8 @@ public abstract class Node implements NodeComparator, Serializable {
      * @return : the formal form of the pattern with {@code StringBuffer} form
      */
     public StringBuffer formalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        if (_formalFormCache != null && _formalFormCache.length() == 0) {
+        if (!_deserialize_tag || (_formalFormCache != null && _formalFormCache.length() == 0)) {
+            _deserialize_tag = true;
             _formalFormCache = toFormalForm0(nameMapping, parentConsidered, keywords);
         }
         return _formalFormCache;

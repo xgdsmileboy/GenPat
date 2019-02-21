@@ -33,7 +33,7 @@ public class ClusterTest extends TestCase {
         Cluster cluster = new Cluster();
         Set<Pattern> clustered = cluster.cluster(patterns);
 
-        Assert.assertTrue(clustered.size() == 7);
+        Assert.assertTrue(clustered.size() == 1);
         Assert.assertTrue(clustered.iterator().next().getFrequency() == 7);
     }
 
