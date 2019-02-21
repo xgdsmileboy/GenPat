@@ -102,4 +102,17 @@ public abstract class Expr extends Node {
         }
     }
 
+    @Override
+    public boolean patternMatch(Node node) {
+        if (node == null || isConsidered() != node.isConsidered()) {
+            return false;
+        }
+        if (isConsidered()) {
+            if (node instanceof Expr) {
+                return NodeUtils.patternMatch(this, node, false);
+            }
+            return false;
+        }
+        return true;
+    }
 }

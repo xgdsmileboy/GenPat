@@ -33,6 +33,20 @@ public class Update extends Modification {
     }
 
     @Override
+    public boolean patternMatch(Modification m) {
+        if (m instanceof Update) {
+            Update update = (Update) m;
+            if (getSrcNode().patternMatch(update.getSrcNode())) {
+                if (getTarNode() == null) {
+                    return update.getTarNode() == null;
+                }
+                return  getTarNode().patternMatch(update.getTarNode());
+            }
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "[UPD]" + _srcNode + " TO " + _tarNode;
     }

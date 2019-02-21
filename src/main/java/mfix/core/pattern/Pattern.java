@@ -16,6 +16,7 @@ import mfix.core.pattern.match.PatternMatcher;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ public class Pattern implements PatternMatcher, Serializable {
     private Node _patternNode;
     private NameMapping _nameMapping;
     private Set<String> _keywords;
+    private Set<String> _targetKeywords;
 
     public Pattern(Node pNode) {
         _patternNode = pNode;
@@ -60,6 +62,14 @@ public class Pattern implements PatternMatcher, Serializable {
         return _keywords;
     }
 
+    public Set<String> getTargetKeywords() {
+        if (_targetKeywords == null) {
+            _targetKeywords = new LinkedHashSet<>();
+            _patternNode.getBindingNode().formalForm(_nameMapping, false, _targetKeywords);
+        }
+        return _targetKeywords;
+    }
+
     public Set<Modification> getAllModifications() {
         return _patternNode.getAllModifications(new LinkedHashSet<>());
     }
@@ -73,7 +83,9 @@ public class Pattern implements PatternMatcher, Serializable {
     }
 
     public StringBuffer formalForm() {
-        _keywords = new LinkedHashSet<>();
+        if (_keywords == null) {
+            _keywords = new LinkedHashSet<>();
+        }
         return _patternNode.formalForm(_nameMapping, false, _keywords);
     }
 
@@ -83,6 +95,52 @@ public class Pattern implements PatternMatcher, Serializable {
 
     @Override
     public boolean matches(Pattern p) {
-        return false;
+        Set<String> srcKey = getKeywords();
+        Set<String> psKey = p.getKeywords();
+        if (srcKey.size() != psKey.size()) {
+            return false;
+        }
+        for (String s : srcKey) {
+            if (!psKey.contains(s)) {
+                return false;
+            }
+        }
+
+        srcKey = getTargetKeywords();
+        psKey = p.getTargetKeywords();
+        if (srcKey.size() != psKey.size()) {
+            return false;
+        }
+        for (String s : srcKey) {
+            if (!psKey.contains(s)) {
+                return false;
+            }
+        }
+
+        if (getAllModifications().size() != p.getAllModifications().size()) {
+            return false;
+        }
+
+        Set<Node> nodes = getConsideredNodes();
+        Set<Node> others = p.getConsideredNodes();
+
+        if (nodes.size() != others.size()) {
+            return false;
+        }
+
+        boolean match = false;
+        for (Node node : nodes) {
+            match = false;
+            for (Iterator<Node> iter = others.iterator(); iter.hasNext();) {
+                if (node.patternMatch(iter.next())) {
+                    match = true;
+                    iter.remove();
+                }
+            }
+            if (!match) {
+                return false;
+            }
+        }
+        return true;
     }
 }

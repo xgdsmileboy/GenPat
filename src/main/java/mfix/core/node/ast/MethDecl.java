@@ -11,8 +11,8 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Blk;
 import mfix.core.node.ast.stmt.Stmt;
-import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
@@ -151,6 +151,11 @@ public class MethDecl extends Node {
             stringBuffer.append(_body.formalForm(nameMapping, false, keywords));
         }
         return stringBuffer;
+    }
+
+    @Override
+    public boolean patternMatch(Node node) {
+        return (node instanceof MethDecl);
     }
 
     @Override

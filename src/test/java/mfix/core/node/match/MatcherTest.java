@@ -240,13 +240,13 @@ public class MatcherTest extends TestCase {
         */
 
         String p1str = "METHOD\\(\\)\\{\n" +
-                "TYPE_\\d+\\s{1}listeners=EXPR_\\d+;\n" +
-                "for\\(EXPR_\\d+;i<listeners.size\\(\\);EXPR_\\d+\\)\\{\\}\n" +
+                "TYPE(_\\d+)?\\s{1}listeners=EXPR(_\\d+)?;\n" +
+                "for\\(EXPR(_\\d+)?;i<listeners.size\\(\\);EXPR(_\\d+)?\\)\\{\\}\n" +
                 "\\}";
         String p2str = "METHOD\\(\\)\\{\n" +
-                "TYPE_\\d+\\s{1}listeners=EXPR_\\d+;\n" +
-                "synchronized\\(EXPR_\\d+\\)\\{\n" +
-                "for\\(EXPR_\\d+;i<listeners.size\\(\\);EXPR_\\d+\\)\\{\\}\n" +
+                "TYPE(_\\d+)?\\s{1}listeners=EXPR(_\\d+)?;\n" +
+                "synchronized\\(EXPR(_\\d+)?\\)\\{\n" +
+                "for\\(EXPR(_\\d+)?;i<listeners.size\\(\\);EXPR(_\\d+)?\\)\\{\\}\n" +
                 "\\}\n" +
                 "\\}";
 

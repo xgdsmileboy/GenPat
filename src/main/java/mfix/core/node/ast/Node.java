@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast;
 
+import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
@@ -695,6 +696,13 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
+    public StringBuffer getFormalForm() {
+        if (_formalFormCache != null && _formalFormCache.length() == 0) {
+            LevelLogger.fatal(new IllegalAccessException("Please compute the formal form a head of time!"));
+        }
+        return _formalFormCache;
+    }
+
     /**
      * this method if used to build the formal form of the pattern node
      * NOTE: this method should be invoked later than the method
@@ -784,7 +792,7 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
-//    public boolean abSame(Node node) { }
+    public abstract boolean patternMatch(Node node);
 
 
     /*********************************************************/

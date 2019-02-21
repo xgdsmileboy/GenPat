@@ -43,4 +43,8 @@ public abstract class Stmt extends Node {
 				&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 	}
 
+	@Override
+	public boolean patternMatch(Node node) {
+		return node != null && isConsidered() == node.isConsidered() && (node instanceof Stmt);
+	}
 }

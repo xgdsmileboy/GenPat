@@ -10,11 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.SName;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -74,6 +74,15 @@ public class ContinueStmt extends Stmt {
 			}
 		}
 		return new StringBuffer("continue ").append(identifier).append(';');
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (!super.patternMatch(node)) return false;
+		if (isConsidered()) {
+			return NodeUtils.patternMatch(this, node, false);
+		}
+		return true;
 	}
 
 	protected void tokenize() {

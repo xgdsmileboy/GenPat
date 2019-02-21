@@ -23,6 +23,15 @@ public class Deletion extends Modification {
     }
 
     @Override
+    public boolean patternMatch(Modification m) {
+        if (m instanceof Deletion) {
+            Deletion deletion = (Deletion) m;
+            return getDelNode().patternMatch(deletion.getDelNode());
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "[DEL]" + _node2Del.toSrcString().toString();
     }

@@ -10,11 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -90,6 +90,18 @@ public class DoStmt extends Stmt {
 		buffer.append(body == null ? "{}" : body).append(" while(")
 				.append(cond == null ? nameMapping.getExprID(_expression) : cond).append(')');
 		return buffer;
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (!super.patternMatch(node)) return false;
+		if (isConsidered()) {
+			if (getModifications().isEmpty() || node.getNodeType() == TYPE.DO) {
+				return NodeUtils.patternMatch(this, node, true);
+			}
+			return false;
+		}
+		return true;
 	}
 
 	@Override

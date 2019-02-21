@@ -9,10 +9,10 @@ package mfix.core.node.ast.stmt;
 import mfix.common.util.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -86,6 +86,17 @@ public class Blk extends Stmt {
             buffer.append(strings.isEmpty() ? '}' : "\n}");
             return buffer;
         }
+    }
+
+    @Override
+    public boolean patternMatch(Node node) {
+        if (!super.patternMatch(node)) {
+            return false;
+        }
+        if (isConsidered()) {
+            return node.getNodeType() == TYPE.BLOCK;
+        }
+        return true;
     }
 
     @Override

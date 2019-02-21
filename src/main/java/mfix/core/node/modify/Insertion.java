@@ -62,6 +62,16 @@ public class Insertion extends Modification {
     }
 
     @Override
+    public boolean patternMatch(Modification m) {
+        if (m instanceof Insertion) {
+            Insertion insertion = (Insertion) m;
+            return getParent().patternMatch(insertion.getParent())
+                    && getInsertedNode().patternMatch(insertion.getInsertedNode());
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return String.format("[INS]INSERT %s UNDER %s AS {%d} CHILD", _insert, getParent(), _index);
     }

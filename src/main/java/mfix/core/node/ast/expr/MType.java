@@ -95,6 +95,17 @@ public class MType extends Node {
 	}
 
 	@Override
+	public boolean patternMatch(Node node) {
+		if (node == null || isConsidered() != node.isConsidered()){
+			return false;
+		}
+		if (isConsidered()) {
+			return NodeUtils.patternMatch(this, node, false);
+		}
+		return true;
+	}
+
+	@Override
 	public Stmt getParentStmt() {
 		return getParent().getParentStmt();
 	}
