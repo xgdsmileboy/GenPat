@@ -124,7 +124,7 @@ public class Filter {
                         _currThreadCount ++;
 
                     } catch (Exception e) {
-                        LevelLogger.error("Parse node failed : " + e.getMessage());
+                        LevelLogger.error("Parse node failed : ", e);
                     }
                 }
             } else {
