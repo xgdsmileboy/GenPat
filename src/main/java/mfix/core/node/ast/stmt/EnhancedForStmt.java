@@ -113,7 +113,7 @@ public class EnhancedForStmt extends Stmt {
 			buffer.append(var);
 		}
 		buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp);
-		body.append(')');
+		buffer.append(')');
 		buffer.append(body == null ? "{}" : body);
 		return buffer;
 	}
