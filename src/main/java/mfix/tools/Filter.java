@@ -13,8 +13,6 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
-import mfix.core.node.ast.expr.Expr;
-import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.Pattern;
@@ -35,7 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -138,7 +136,7 @@ public class Filter {
         }
     }
 
-    public synchronized void writeFile(Set<String> values) throws IOException {
+    public synchronized void writeFile(List<String> values) throws IOException {
         if (values != null) {
             _cacheList.addAll(values);
             _currItemCount += values.size();
@@ -246,7 +244,7 @@ class ParseNode implements Callable<Boolean> {
             LevelLogger.info("No pattern node ... SKIP.");
             return false;
         }
-        Set<String> result = new HashSet<>();
+        List<String> result = new LinkedList<>();
         // the following is the filter process
         for (Pattern pattern : patternCandidates) {
             Set<Modification> modifications = pattern.getAllModifications();
@@ -276,31 +274,37 @@ class ParseNode implements Callable<Boolean> {
             }
             try {
                 file.createNewFile();
-                Utils.serialize(node, savePatternPath);
+                Utils.serialize(pattern, savePatternPath);
             } catch (IOException e) {
                 LevelLogger.warn("Serialization failed : " + savePatternPath);
                 continue;
             }
-            Set<MethodInv> methods = node.getUniversalAPIs(new HashSet<>(), true);
-            if (!methods.isEmpty()) {
-                for (MethodInv methodInv : methods) {
-                    String rType = methodInv.getTypeString();
-                    String name = methodInv.getName().getName();
-                    Expr expr = methodInv.getExpression();
-                    String oType = expr == null ? "?" : expr.getTypeString();
-                    List<Expr> exprList = methodInv.getArguments().getExpr();
-                    int argNum = exprList.size();
-                    // the first "?" is the placeholder for argument
-                    StringBuffer argType = new StringBuffer("?");
-                    for (Expr e : exprList) {
-                        argType.append("," + e.getTypeString());
-                    }
+            Set<String> keywords = pattern.getKeywords();
 
-                    result.add(String.format("%s\t%d\t%s\t%s\t%s\t%s", name, argNum, rType, oType, argType, savePatternPath));
-                }
-            } else {
-                LevelLogger.info("No API info .... SKIP.");
+            for (String s : keywords) {
+                result.add(s);
             }
+            result.add(savePatternPath);
+//            Set<MethodInv> methods = node.getUniversalAPIs(new HashSet<>(), true);
+//            if (!methods.isEmpty()) {
+//                for (MethodInv methodInv : methods) {
+//                    String rType = methodInv.getTypeString();
+//                    String name = methodInv.getName().getName();
+//                    Expr expr = methodInv.getExpression();
+//                    String oType = expr == null ? "?" : expr.getTypeString();
+//                    List<Expr> exprList = methodInv.getArguments().getExpr();
+//                    int argNum = exprList.size();
+//                    // the first "?" is the placeholder for argument
+//                    StringBuffer argType = new StringBuffer("?");
+//                    for (Expr e : exprList) {
+//                        argType.append("," + e.getTypeString());
+//                    }
+//
+//                    result.add(String.format("%s\t%d\t%s\t%s\t%s\t%s", name, argNum, rType, oType, argType, savePatternPath));
+//                }
+//            } else {
+//                LevelLogger.info("No API info .... SKIP.");
+//            }
         }
         try {
             _filter.writeFile(result);
