@@ -11,6 +11,7 @@ import mfix.common.util.Constant;
 import mfix.core.TestCase;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.PatternExtractor;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Set;
@@ -32,14 +33,8 @@ public class ClusterTest extends TestCase {
         Cluster cluster = new Cluster();
         Set<Pattern> clustered = cluster.cluster(patterns);
 
-        for (Pattern p : clustered) {
-            String formal = p.formalForm().toString();
-            System.out.println(formal);
-            Set<String> keys = p.getKeywords();
-            for (String s : keys) {
-                System.out.println(s);
-            }
-        }
+        Assert.assertTrue(clustered.size() == 7);
+        Assert.assertTrue(clustered.iterator().next().getFrequency() == 7);
     }
 
 }
