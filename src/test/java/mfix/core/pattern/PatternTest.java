@@ -42,7 +42,7 @@ public class PatternTest extends TestCase {
 
         Utils.serialize(p, "/tmp/test.pattern");
         p = (Pattern) Utils.deserialize("/tmp/test.pattern");
-        FileUtils.forceDelete(new File("/tmt/test.pattern"));
+        FileUtils.forceDelete(new File("/tmp/test.pattern"));
 
         Set<String> keywords2 = p.getKeywords();
         Set<String> tarKeys2 = p.getTargetKeywords();
