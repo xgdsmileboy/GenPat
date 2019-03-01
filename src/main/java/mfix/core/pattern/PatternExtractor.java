@@ -9,7 +9,6 @@ package mfix.core.pattern;
 
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
-import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.abs.TermFrequency;
@@ -41,15 +40,13 @@ public class PatternExtractor {
     public Set<Pattern> extractPattern(String srcFile, String tarFile) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = null;
         Set<Pattern> patterns = new HashSet<>();
-        try {
-            matchMap = new Matcher().match(srcUnit, tarUnit);
-        } catch (Exception e) {
-            LevelLogger.error("Extract pattern error : <" + srcFile + ", " + tarFile + '>', e);
+        if (srcUnit == null || tarUnit == null) {
             return patterns;
         }
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
         NodeParser nodeParser = new NodeParser();
+
 //        CodeAbstraction abstraction = new TF_IDF(srcFile, Constant.TF_IDF_FREQUENCY);
         CodeAbstraction abstraction = new TermFrequency(Constant.TOKEN_FREQENCY);
 //        ElementCounter counter = new ElementCounter();

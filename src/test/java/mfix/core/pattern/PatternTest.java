@@ -7,9 +7,11 @@
 
 package mfix.core.pattern;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import mfix.common.util.Constant;
 import mfix.common.util.Utils;
 import mfix.core.TestCase;
+import mfix.core.node.modify.Modification;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -51,6 +53,22 @@ public class PatternTest extends TestCase {
         Assert.assertTrue(Utils.safeCollectionEqual(keywords, keywords2));
         Assert.assertTrue(Utils.safeCollectionEqual(tarKeys, tarKeys2));
         Assert.assertTrue(Utils.safeBufferEqual(buffer, buffer2));
+
+    }
+
+    @Test
+    public void test_pattern_delete_expr() {
+        String srcFile = testbase + Constant.SEP  + "buggy_del_initializer.java";
+        String tarFile = testbase + Constant.SEP + "fixed_del_initializer.java";
+
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
+
+        for (Pattern pattern : patterns) {
+            for (Modification m : pattern.getAllModifications()) {
+                System.out.println(m);
+            }
+        }
 
     }
 
