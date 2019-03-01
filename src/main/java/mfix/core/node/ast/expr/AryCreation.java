@@ -240,7 +240,8 @@ public class AryCreation extends Expr {
                     _modifications.add(update);
                 }
             } else {
-                if (_initializer.getBindingNode() != aryCreation._initializer) {
+                if (aryCreation._initializer == null
+                        || _initializer.getBindingNode() != aryCreation._initializer) {
                     Update update = new Update(this, _initializer, aryCreation._initializer);
                     _modifications.add(update);
                 } else {
@@ -324,7 +325,7 @@ public class AryCreation extends Expr {
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }
-        } else {
+        } else if (!initializer.toString().isEmpty()){
             stringBuffer.append("=");
             stringBuffer.append(initializer);
         }

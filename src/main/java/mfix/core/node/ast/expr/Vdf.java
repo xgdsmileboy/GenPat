@@ -221,6 +221,9 @@ public class Vdf extends Node {
 				} else if(_expression.getBindingNode() != vdf.getExpression()) {
 					Update update = new Update(this, _expression, vdf.getExpression());
 					_modifications.add(update);
+				} else if (vdf.getExpression() == null) {
+					Update update = new Update(this, _expression, null);
+					_modifications.add(update);
 				} else {
 					_expression.genModifications();
 				}
@@ -276,7 +279,7 @@ public class Vdf extends Node {
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
-		} else {
+		} else if (!expression.toString().isEmpty()){
 			stringBuffer.append("=");
 			stringBuffer.append(expression);
 		}

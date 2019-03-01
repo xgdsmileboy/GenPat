@@ -196,7 +196,8 @@ public class Svd extends Expr {
 					Update update = new Update(this, _initializer, svd.getInitializer());
 					_modifications.add(update);
 				}
-			} else if (_initializer.getBindingNode() != svd.getInitializer()) {
+			} else if (svd.getModifications() == null ||
+					_initializer.getBindingNode() != svd.getInitializer()) {
 				Update update = new Update(this, _initializer, svd.getInitializer());
 				_modifications.add(update);
 			} else {
@@ -267,7 +268,8 @@ public class Svd extends Expr {
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
-		} else {
+		} else if (!initializer.toString().isEmpty()){
+			stringBuffer.append("=");
 			stringBuffer.append(initializer);
 		}
 		return stringBuffer;
