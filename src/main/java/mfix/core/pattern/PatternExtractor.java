@@ -40,7 +40,7 @@ public class PatternExtractor {
     public Set<Pattern> extractPattern(String srcFile, String tarFile) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
         NodeParser nodeParser = new NodeParser();
         Set<Pattern> patterns = new HashSet<>();
 //        CodeAbstraction abstraction = new TF_IDF(srcFile, Constant.TF_IDF_FREQUENCY);
@@ -59,7 +59,7 @@ public class PatternExtractor {
                 continue;
             }
 
-            if(Matcher.greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
+            if(new Matcher().greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
                 Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
                 Set<Node> temp;
                 for(Node node : nodes) {

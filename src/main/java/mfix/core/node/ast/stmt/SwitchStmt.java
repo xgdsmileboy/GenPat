@@ -260,7 +260,7 @@ public class SwitchStmt extends Stmt {
 			Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
 			Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
 			Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
-			if (!Matcher.applyNodeListModifications(modifications, _statements, insertionBefore, insertionAfter,
+			if (!new Matcher().applyNodeListModifications(modifications, _statements, insertionBefore, insertionAfter,
 					map, vars, exprMap)) {
 				return null;
 			}

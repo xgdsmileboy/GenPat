@@ -40,7 +40,8 @@ public class AstDiff extends Diff<Tree> {
 			}
 			List<Stmt> srcNodes = srcMethod.getBody().getChildren();
 			List<Stmt> tarNodes = tarMethod.getBody().getChildren();
-			Map<Integer, Integer> map = Matcher.match(srcNodes, tarNodes);
+			Matcher matcher = new Matcher();
+			Map<Integer, Integer> map = matcher.match(srcNodes, tarNodes);
 			int rightCursor = 0;
 			int srcLen = srcNodes.size();
 			int tarLen = tarNodes.size();

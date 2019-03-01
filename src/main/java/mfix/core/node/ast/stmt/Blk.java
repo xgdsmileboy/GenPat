@@ -214,7 +214,7 @@ public class Blk extends Stmt {
             Map<Node, List<StringBuffer>> insertBefore = new HashMap<>();
             Map<Node, List<StringBuffer>> insertAfter = new HashMap<>();
             Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
-            if (!Matcher.applyNodeListModifications(blk.getModifications(), _statements,
+            if (!new Matcher().applyNodeListModifications(blk.getModifications(), _statements,
                     insertBefore, insertAfter, map, vars, exprMap)) {
                 return null;
             }

@@ -47,7 +47,7 @@ public class MatcherTest extends TestCase {
         String tarFile_change_retType = testbase + Constant.SEP + "tar_Intersect.java";
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile_change_retType);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile_change_retType);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
 
         // The method signature cannot match
         // TODO: should permit some methods failing to match
@@ -61,7 +61,7 @@ public class MatcherTest extends TestCase {
 
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
 
         // all methods are well matched
         Assert.assertTrue(matchMap.size() == 108);
@@ -129,10 +129,11 @@ public class MatcherTest extends TestCase {
                 "}\n" +
                 "}";
 
-        Set<Pattern> matched = Matcher.filter(node, patterns);
+        Matcher matcher = new Matcher();
+        Set<Pattern> matched = matcher.filter(node, patterns);
         Assert.assertTrue(matched.size() == 1);
 
-        Set<MatchInstance> set = Matcher.tryMatch(node, matched.iterator().next());
+        Set<MatchInstance> set = matcher.tryMatch(node, matched.iterator().next());
         Assert.assertTrue(set.size() == 1);
 
         MatchInstance instance = set.iterator().next();
@@ -209,11 +210,12 @@ public class MatcherTest extends TestCase {
 
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
+        Matcher matcher = new Matcher();
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
-            Set<Pattern> matched = Matcher.filter(node, patterns);
+            Set<Pattern> matched = matcher.filter(node, patterns);
             for (Pattern p : matched) {
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                Set<MatchInstance> set = matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     Assert.assertTrue(node.adaptModifications(varMaps.get(node.getStartLine()),

@@ -447,7 +447,7 @@ public class TryStmt extends Stmt {
 					Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
 					Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
 					Map<Node, StringBuffer> map = new HashMap<>(_catches.size());
-					if (!Matcher.applyNodeListModifications(catchModifications, _catches, insertionBefore,
+					if (!new Matcher().applyNodeListModifications(catchModifications, _catches, insertionBefore,
 							insertionAfter, map, vars, exprMap)) {
 						return null;
 					}

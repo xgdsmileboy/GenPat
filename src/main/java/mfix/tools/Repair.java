@@ -196,7 +196,7 @@ public class Repair {
                 if (pattern == null) continue;
                 String patterFileName = pattern.getFileName();
 
-                Set<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern);
+                Set<MatchInstance> fixPositions = new Matcher().tryMatch(bNode, pattern);
 
                 for (MatchInstance matchInstance : fixPositions) {
                     if (successRepair > Constant.FIX_NUMBER) {
