@@ -42,14 +42,14 @@ public class PatternExtractor {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = null;
+        Set<Pattern> patterns = new HashSet<>();
         try {
             matchMap = new Matcher().match(srcUnit, tarUnit);
         } catch (Exception e) {
-            LevelLogger.fatal("Extract pattern error : <" + srcFile + ", " + tarFile + '>', e);
-            System.exit(1);
+            LevelLogger.error("Extract pattern error : <" + srcFile + ", " + tarFile + '>', e);
+            return patterns;
         }
         NodeParser nodeParser = new NodeParser();
-        Set<Pattern> patterns = new HashSet<>();
 //        CodeAbstraction abstraction = new TF_IDF(srcFile, Constant.TF_IDF_FREQUENCY);
         CodeAbstraction abstraction = new TermFrequency(Constant.TOKEN_FREQENCY);
 //        ElementCounter counter = new ElementCounter();
