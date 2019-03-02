@@ -229,7 +229,8 @@ public class MethodInv extends Expr {
 					Update update = new Update(this, _expression, methodInv.getExpression());
 					_modifications.add(update);
 				}
-			} else if (_expression.getBindingNode() != methodInv.getExpression()) {
+			} else if (methodInv.getExpression() == null
+					|| _expression.getBindingNode() != methodInv.getExpression()) {
 				Update update = new Update(this, _expression, methodInv.getExpression());
 				_modifications.add(update);
 			} else {
@@ -341,7 +342,7 @@ public class MethodInv extends Expr {
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
 			}
-		} else {
+		} else if (!expression.toString().isEmpty()){
 			stringBuffer.append(expression + ".");
 		}
 		if (name == null) {
