@@ -430,13 +430,7 @@ public class Matcher {
 			Object[] addTokens;
 			for (int j = 0; j < tar.size(); j++) {
 				addTokens = tar.get(j).tokens().toArray();
-				Map<Integer, Integer> tmpMap = null;
-				try {
-					tmpMap = match(delTokens, addTokens);
-				} catch (Exception e) {
-					LevelLogger.error("GreedySimMatch error : ", e);
-					tmpMap = new HashMap<>();
-				}
+				Map<Integer, Integer> tmpMap = match(delTokens, addTokens);
 				double value = ((double) tmpMap.size()) / ((double) delTokens.length);
 				if (value > similar) {
 					valueMat[i][j] = value;
@@ -564,7 +558,13 @@ public class Matcher {
 		int[][] score = new int[srcLen + 1][tarLen + 1];
 
 		// LCS matching with path retrieval
-		Direction[][] path = new Direction[srcLen + 1][tarLen + 1];
+		Direction[][] path = null;
+		try {
+			path = new Direction[srcLen + 1][tarLen + 1];
+		} catch (OutOfMemoryError e) {
+			LevelLogger.error("OutOfMemoryError when matching!");
+			return map;
+		}
 		for(int i = 0; i < srcLen; i++){
 			for(int j = 0; j < tarLen; j++){
 				if(comparator.compare(src.get(i), tar.get(j)) > 0){
