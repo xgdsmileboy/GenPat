@@ -92,11 +92,13 @@ public abstract class Expr extends Node {
         }
     }
 
-    protected StringBuffer leafFormalForm(boolean parentConsidered, Set<String> keywords) {
+    protected StringBuffer leafFormalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (!isAbstract() && (parentConsidered || isConsidered())) {
             StringBuffer buffer = toSrcString();
             keywords.add(buffer.toString());
             return buffer;
+        } else if (isConsidered()) {
+            return new StringBuffer(nameMapping.getExprID(this));
         } else {
             return null;
         }
