@@ -430,7 +430,13 @@ public class Matcher {
 			Object[] addTokens;
 			for (int j = 0; j < tar.size(); j++) {
 				addTokens = tar.get(j).tokens().toArray();
-				Map<Integer, Integer> tmpMap = match(delTokens, addTokens);
+				Map<Integer, Integer> tmpMap = null;
+				try {
+					tmpMap = match(delTokens, addTokens);
+				} catch (Exception e) {
+					LevelLogger.error("GreedySimMatch error : ", e);
+					tmpMap = new HashMap<>();
+				}
 				double value = ((double) tmpMap.size()) / ((double) delTokens.length);
 				if (value > similar) {
 					valueMat[i][j] = value;
