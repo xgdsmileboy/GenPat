@@ -228,7 +228,8 @@ public class ClassInstCreation extends Expr {
                     Update update = new Update(this, _expression, classInstCreation.getExpression());
                     _modifications.add(update);
                 }
-            } else if (_expression.getBindingNode() != classInstCreation.getExpression()) {
+            } else if (classInstCreation.getExpression() == null ||
+                    _expression.getBindingNode() != classInstCreation.getExpression()) {
                 Update update = new Update(this, _expression, classInstCreation.getExpression());
                 _modifications.add(update);
             } else {
@@ -346,8 +347,8 @@ public class ClassInstCreation extends Expr {
                 stringBuffer.append(tmp);
                 stringBuffer.append(".");
             }
-        } else {
-            stringBuffer.append(expression);
+        } else if (!expression.toString().isEmpty()){
+            stringBuffer.append(expression).append('.');
         }
         stringBuffer.append("new ");
         if(classType == null) {

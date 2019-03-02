@@ -275,7 +275,7 @@ public class SuperMethodInv extends Expr {
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
 			}
-		} else {
+		} else if (!label.toString().isEmpty()){
 			stringBuffer.append(label + ".");
 		}
 		stringBuffer.append("super.");

@@ -184,7 +184,8 @@ public class SwCase extends Stmt {
 					Update update = new Update(this, _expression, swCase.getExpression());
 					_modifications.add(update);
 				}
-			} else if(_expression.getBindingNode() != swCase.getExpression()) {
+			} else if(swCase.getExpression() == null
+					|| _expression.getBindingNode() != swCase.getExpression()) {
 				Update update = new Update(this, _expression, swCase.getExpression());
 				_modifications.add(update);
 			} else {
@@ -260,7 +261,7 @@ public class SwCase extends Stmt {
 			}
 		} else {
 			if (expression.toString().isEmpty()) {
-				if (_expression != null) return null;
+//				if (_expression != null) return null;
 				stringBuffer.append("default :\n");
 			} else {
 				stringBuffer.append("case ");
