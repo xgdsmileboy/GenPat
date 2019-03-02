@@ -54,7 +54,7 @@ public class SName extends Label {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		return leafFormalForm(parentConsidered, keywords);
+		return leafFormalForm(nameMapping, parentConsidered, keywords);
 	}
 
 	@Override
