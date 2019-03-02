@@ -100,28 +100,12 @@ public class MethodInv extends Expr {
 		}
 		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
 		StringBuffer arg = _arguments.formalForm(nameMapping, consider, keywords);
-		if (exp == null && name == null && arg == null) {
-
-		}
 
 		if (exp == null && name == null) {
 			if (arg == null) {
 				return super.toFormalForm0(nameMapping, parentConsidered, keywords);
-			} else {
-				String[] strings = arg.toString().split(",");
-				String key = null;
-				for (String s : strings) {
-					if (!nameMapping.isPlaceHolder(strings[0])) {
-						if (key == null) key = s;
-						else {
-							key = null;
-							break;
-						}
-					}
-				}
-				if (key != null) {
-					return new StringBuffer(key);
-				}
+			} else if (nameMapping.isFoldedMethod(arg.toString())){
+				return new StringBuffer(arg);
 			}
 		}
 
