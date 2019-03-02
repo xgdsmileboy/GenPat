@@ -9,6 +9,7 @@ package mfix;
 import mfix.tools.Cleaner;
 import mfix.tools.Filter;
 import mfix.tools.PatternPrinter;
+import mfix.tools.Repair;
 
 public class Main {
 

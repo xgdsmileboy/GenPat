@@ -7,7 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.InfixExpression;
 
@@ -67,7 +67,7 @@ public class InfixOperator extends Operator {
 
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		if(node instanceof InfixOperator) {
+		if(node instanceof InfixOperator && _operatorStr.equals(node.toSrcString().toString())) {
 			matchedNode.put(this, node);
 			return true;
 		}

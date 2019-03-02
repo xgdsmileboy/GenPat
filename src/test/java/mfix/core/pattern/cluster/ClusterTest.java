@@ -5,12 +5,13 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node.cluster;
+package mfix.core.pattern.cluster;
 
 import mfix.common.util.Constant;
 import mfix.core.TestCase;
-import mfix.core.node.PatternExtractor;
-import mfix.core.node.ast.Node;
+import mfix.core.pattern.Pattern;
+import mfix.core.pattern.PatternExtractor;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Set;
@@ -27,15 +28,13 @@ public class ClusterTest extends TestCase {
         String tarFile = testbase + Constant.SEP + "tar_Project.java";
 
         PatternExtractor extractor = new PatternExtractor();
-        Set<Node> patterns = extractor.extractPattern(srcFile, tarFile);
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         Cluster cluster = new Cluster();
-        Set<Node> clustered = cluster.cluster(patterns);
+        Set<Pattern> clustered = cluster.cluster(patterns);
 
-        for (Node p : clustered) {
-            String formal = p.formalForm(new NameMapping(), false).toString();
-            System.out.println(formal);
-        }
+        Assert.assertTrue(clustered.size() == 1);
+        Assert.assertTrue(clustered.iterator().next().getFrequency() == 7);
     }
 
 }

@@ -10,10 +10,10 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
-import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -62,9 +62,9 @@ public class ExpressionStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		if (exp == null) {
 			if (isConsidered()) {
 				return new StringBuffer(nameMapping.getExprID(_expression)).append(';');
@@ -74,6 +74,20 @@ public class ExpressionStmt extends Stmt {
 		}
 		StringBuffer buffer = new StringBuffer(exp).append(';');
 		return buffer;
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (!super.patternMatch(node)) {
+			return false;
+		}
+		if (isConsidered()) {
+			if (getModifications().isEmpty() || node.getNodeType() == TYPE.EXPRSTMT) {
+				return NodeUtils.patternMatch(this, node, true);
+			}
+			return false;
+		}
+		return true;
 	}
 
 	@Override

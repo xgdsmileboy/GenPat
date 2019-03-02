@@ -11,11 +11,11 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.ast.expr.MType;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -79,9 +79,9 @@ public class ConstructorInv  extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer arg = _arguments.formalForm(nameMapping, isConsidered());
+		StringBuffer arg = _arguments.formalForm(nameMapping, isConsidered(), keywords);
 		if (arg == null) {
 			if (isConsidered()) {
 				StringBuffer buffer = new StringBuffer("this();");
@@ -91,6 +91,20 @@ public class ConstructorInv  extends Stmt {
 		}
 		return new StringBuffer("this(").append(arg).append(')');
 
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (!super.patternMatch(node)) {
+			return false;
+		}
+		if (isConsidered()) {
+			if (getModifications().isEmpty() || node.getNodeType() == TYPE.CONSTRUCTORINV) {
+				return NodeUtils.patternMatch(this, node, true);
+			}
+			return false;
+		}
+		return true;
 	}
 
 	@Override

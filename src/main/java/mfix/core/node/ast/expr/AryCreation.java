@@ -9,8 +9,8 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -94,15 +94,15 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         boolean consider = parentConsidered || isConsidered();
-        StringBuffer typeStr = _type.formalForm(nameMapping, consider);
+        StringBuffer typeStr = _type.formalForm(nameMapping, consider, keywords);
         StringBuffer dimension = new StringBuffer();
         boolean contain = false;
         for (Expr expr : _dimension) {
             dimension.append("[");
-            if(expr.formalForm(nameMapping, consider) != null) {
-                dimension.append(expr.formalForm(nameMapping, consider));
+            if(expr.formalForm(nameMapping, consider, keywords) != null) {
+                dimension.append(expr.formalForm(nameMapping, consider, keywords));
                 contain = true;
             } else {
                 dimension.append(nameMapping.getExprID(expr));
@@ -111,11 +111,11 @@ public class AryCreation extends Expr {
         }
         StringBuffer initializer = null;
         if (_initializer != null) {
-            initializer = _initializer.formalForm(nameMapping, consider);
+            initializer = _initializer.formalForm(nameMapping, consider, keywords);
         }
 
         if (typeStr == null && !contain && initializer == null) {
-            return super.toFormalForm0(nameMapping, parentConsidered);
+            return super.toFormalForm0(nameMapping, parentConsidered, keywords);
         }
 
         StringBuffer buffer = new StringBuffer();
@@ -240,7 +240,8 @@ public class AryCreation extends Expr {
                     _modifications.add(update);
                 }
             } else {
-                if (_initializer.getBindingNode() != aryCreation._initializer) {
+                if (aryCreation._initializer == null
+                        || _initializer.getBindingNode() != aryCreation._initializer) {
                     Update update = new Update(this, _initializer, aryCreation._initializer);
                     _modifications.add(update);
                 } else {
@@ -324,7 +325,7 @@ public class AryCreation extends Expr {
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }
-        } else {
+        } else if (!initializer.toString().isEmpty()){
             stringBuffer.append("=");
             stringBuffer.append(initializer);
         }

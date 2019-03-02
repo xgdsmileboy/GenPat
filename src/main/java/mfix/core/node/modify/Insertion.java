@@ -1,7 +1,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.VIndex;
 
 import java.util.Map;
 import java.util.Set;
@@ -59,6 +59,16 @@ public class Insertion extends Modification {
         } else {
             return _insert.transfer(vars, exprMap);
         }
+    }
+
+    @Override
+    public boolean patternMatch(Modification m) {
+        if (m instanceof Insertion) {
+            Insertion insertion = (Insertion) m;
+            return getParent().patternMatch(insertion.getParent())
+                    && getInsertedNode().patternMatch(insertion.getInsertedNode());
+        }
+        return false;
     }
 
     @Override

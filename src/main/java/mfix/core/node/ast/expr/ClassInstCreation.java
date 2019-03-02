@@ -10,8 +10,8 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.AnonymousClassDecl;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -96,20 +96,20 @@ public class ClassInstCreation extends Expr {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         boolean consider = isConsidered() || parentConsidered;
         StringBuffer exp = null;
         if (_expression != null) {
-            exp = _expression.formalForm(nameMapping, consider);
+            exp = _expression.formalForm(nameMapping, consider, keywords);
         }
-        StringBuffer type = _classType.formalForm(nameMapping, consider);
-        StringBuffer arg = _arguments.formalForm(nameMapping, consider);
+        StringBuffer type = _classType.formalForm(nameMapping, consider, keywords);
+        StringBuffer arg = _arguments.formalForm(nameMapping, consider, keywords);
         StringBuffer dec = null;
         if (_decl != null) {
-            dec = _decl.formalForm(nameMapping, consider);
+            dec = _decl.formalForm(nameMapping, consider, keywords);
         }
         if (exp == null && type == null && arg == null && dec == null) {
-            return super.toFormalForm0(nameMapping, parentConsidered);
+            return super.toFormalForm0(nameMapping, parentConsidered, keywords);
         }
 
         StringBuffer buffer = new StringBuffer();
@@ -228,7 +228,8 @@ public class ClassInstCreation extends Expr {
                     Update update = new Update(this, _expression, classInstCreation.getExpression());
                     _modifications.add(update);
                 }
-            } else if (_expression.getBindingNode() != classInstCreation.getExpression()) {
+            } else if (classInstCreation.getExpression() == null ||
+                    _expression.getBindingNode() != classInstCreation.getExpression()) {
                 Update update = new Update(this, _expression, classInstCreation.getExpression());
                 _modifications.add(update);
             } else {
@@ -346,8 +347,8 @@ public class ClassInstCreation extends Expr {
                 stringBuffer.append(tmp);
                 stringBuffer.append(".");
             }
-        } else {
-            stringBuffer.append(expression);
+        } else if (!expression.toString().isEmpty()){
+            stringBuffer.append(expression).append('.');
         }
         stringBuffer.append("new ");
         if(classType == null) {

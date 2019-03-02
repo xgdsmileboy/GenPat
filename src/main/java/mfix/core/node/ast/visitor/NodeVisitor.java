@@ -5,8 +5,10 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node.ast;
+package mfix.core.node.ast.visitor;
 
+import mfix.core.node.ast.MethDecl;
+import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.*;
 import mfix.core.node.ast.stmt.*;
 

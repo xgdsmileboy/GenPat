@@ -1,7 +1,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.VIndex;
 
 public class Deletion extends Modification {
 
@@ -20,6 +20,15 @@ public class Deletion extends Modification {
 
     public Node getDelNode() {
         return _node2Del;
+    }
+
+    @Override
+    public boolean patternMatch(Modification m) {
+        if (m instanceof Deletion) {
+            Deletion deletion = (Deletion) m;
+            return getDelNode().patternMatch(deletion.getDelNode());
+        }
+        return false;
     }
 
     @Override

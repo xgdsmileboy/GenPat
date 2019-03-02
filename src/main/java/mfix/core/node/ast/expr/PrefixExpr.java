@@ -9,8 +9,8 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -67,10 +67,10 @@ public class PrefixExpr extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
-		StringBuffer buffer = _expression.formalForm(nameMapping, isConsidered() || parentConsidered);
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
+		StringBuffer buffer = _expression.formalForm(nameMapping, isConsidered() || parentConsidered, keywords);
 		if (buffer == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered);
+			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer b = new StringBuffer(_operator.toSrcString()).append(buffer);
 		return b;

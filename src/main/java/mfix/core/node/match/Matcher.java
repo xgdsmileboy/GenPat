@@ -8,9 +8,6 @@ package mfix.core.node.match;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
-import mfix.core.node.MatchInstance;
-import mfix.core.node.MatchList;
-import mfix.core.node.MatchNode;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
@@ -35,7 +32,7 @@ import java.util.*;
  */
 public class Matcher {
 
-	public static List<Pair<MethodDeclaration, MethodDeclaration>> match(CompilationUnit src, CompilationUnit tar) {
+	public List<Pair<MethodDeclaration, MethodDeclaration>> match(CompilationUnit src, CompilationUnit tar) {
 		List<Pair<MethodDeclaration, MethodDeclaration>> matchPair = new LinkedList<>();
 		MethodDeclCollector methodDeclCollector = new MethodDeclCollector();
 		methodDeclCollector.init();
@@ -46,7 +43,7 @@ public class Matcher {
 		List<MethodDeclaration> tarMethods = methodDeclCollector.getAllMethDecl();
 		
 		if(srcMethods.size() != tarMethods.size()) {
-			LevelLogger.warn("Different numbers of method declarations for two source files.");
+			LevelLogger.info("Different numbers of method declarations for two source files.");
 			return matchPair;
 		}
 		
@@ -66,7 +63,7 @@ public class Matcher {
 				}
 			}
 			if(noMatch) {
-				LevelLogger.warn("No match for method declaration : \n" + sm.toString());
+				LevelLogger.warn("No match for method declaration !!!");
 				return new LinkedList<>();
 			}
 		}
@@ -90,7 +87,7 @@ public class Matcher {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static DiffType sameSignature(MethodDeclaration sm, MethodDeclaration tm) {
+	private DiffType sameSignature(MethodDeclaration sm, MethodDeclaration tm) {
 		int smdf = sm.getModifiers();
 		int tmdf = tm.getModifiers();
 		if((smdf & tmdf) != smdf) return DiffType.DIFF_MODIFIER;
@@ -138,7 +135,7 @@ public class Matcher {
 	 * @param inBuggy : {@code MethodInv}s in buggy code
 	 * @return : {@code true} if they have intersection, otherwise {@code false}
 	 */
-	private static boolean contains(Set<MethodInv> inPattern, Set<MethodInv> inBuggy) {
+	private boolean contains(Set<MethodInv> inPattern, Set<MethodInv> inBuggy) {
 		// only consider method name and arguments?
 		for(MethodInv methodInv : inPattern) {
 			for(MethodInv b : inBuggy) {
@@ -156,16 +153,16 @@ public class Matcher {
 	 * that can be applied to the buggy node {@code buggy}
 	 * @param buggy : buggy node to check
 	 * @param pattern : pattern nodes to filter
-	 * @return : a subset of pattern nodes in {@code pattern}
+	 * @return : a subset of patterns in {@code pattern}
 	 */
-	public static Set<Node> filter(Node buggy, Set<Node> pattern) {
+	public Set<Pattern> filter(Node buggy, Set<Pattern> pattern) {
 		Set<MethodInv> inBuggy = buggy.getUniversalAPIs(new HashSet<>(), false);
-		Set<Node> nodes = new HashSet<>();
+		Set<Pattern> nodes = new HashSet<>();
 		Set<MethodInv> inPattern;
-		for(Node node : pattern) {
-			inPattern = node.getUniversalAPIs(new HashSet<>(), true);
+		for(Pattern p : pattern) {
+			inPattern = p.getUniversalAPIs();
 			if(contains(inPattern, inBuggy)) {
-				nodes.add(node);
+				nodes.add(p);
 			}
 		}
 		return nodes;
@@ -178,9 +175,9 @@ public class Matcher {
 	 * @param pattern : pattern node
 	 * @return : a set of possible solutions
 	 */
-	public static Set<MatchInstance> tryMatch(Node buggy, Node pattern) {
+	public Set<MatchInstance> tryMatch(Node buggy, Pattern pattern) {
 		List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
-		List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodesRec(new HashSet<>(), true));
+		List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
 
 		int bSize = bNodes.size();
 		int pSize = pNodes.size();
@@ -220,7 +217,7 @@ public class Matcher {
 	 * @param matchLists : node matching result
 	 * @return : all possible matching solutions
 	 */
-	private static Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists) {
+	private Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists) {
 		Set<MatchInstance> results = new HashSet<>();
 		matchNext(new HashMap<>(), matchLists, 0, new HashSet<>(), results);
 		return results;
@@ -236,7 +233,7 @@ public class Matcher {
 	 *                       to avoid duplicate matching.
 	 * @param instances      : contains possible matching solutions
 	 */
-	private static void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
+	private void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
 						   Set<Node> alreadyMatched, Set<MatchInstance> instances) {
 		if (i == list.size()) {
 			Map<Node, Node> nodeMap = new HashMap<>();
@@ -279,7 +276,7 @@ public class Matcher {
 	 * @return : {@code true} if node {@code curNode} can match {@code curMatchNode},
 	 * otherwise {@code false}
 	 */
-	private static boolean checkCompatibility(Map<Node, MatchNode> matchedNodeMap, Node curNode,
+	private boolean checkCompatibility(Map<Node, MatchNode> matchedNodeMap, Node curNode,
 									   MatchNode curMatchNode) {
 		Node node, previous;
 		MatchNode matchNode;
@@ -311,7 +308,7 @@ public class Matcher {
 		return true;
 	}
 
-	private static Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {
+	private Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {
 		Map<Relation, Integer> map = new HashMap<>();
 		if (relations != null) {
 			for (int i = 0; i < relations.size(); i++) {
@@ -321,7 +318,7 @@ public class Matcher {
 		return map;
 	}
 
-	public static boolean greedyMatch(MethDecl src, MethDecl tar) {
+	public boolean greedyMatch(MethDecl src, MethDecl tar) {
 		List<Stmt> srcStmt = src.getAllChildStmt(new ArrayList<>());
 		List<Stmt> tarStmt = tar.getAllChildStmt(new ArrayList<>());
 
@@ -425,7 +422,7 @@ public class Matcher {
 //		return true;
 //	}
 
-	public static <T extends Node> Map<Integer, Integer> greedySimMatch(List<T> src, List<T> tar, double similar) {
+	public <T extends Node> Map<Integer, Integer> greedySimMatch(List<T> src, List<T> tar, double similar) {
 		if (src.isEmpty() || tar.isEmpty()) return new HashMap<>();
 		double[][] valueMat = new double[src.size()][tar.size()];
 		for (int i = 0; i < src.size(); i++) {
@@ -433,7 +430,13 @@ public class Matcher {
 			Object[] addTokens;
 			for (int j = 0; j < tar.size(); j++) {
 				addTokens = tar.get(j).tokens().toArray();
-				Map<Integer, Integer> tmpMap = Matcher.match(delTokens, addTokens);
+				Map<Integer, Integer> tmpMap = null;
+				try {
+					tmpMap = match(delTokens, addTokens);
+				} catch (Exception e) {
+					LevelLogger.error("GreedySimMatch error : ", e);
+					tmpMap = new HashMap<>();
+				}
 				double value = ((double) tmpMap.size()) / ((double) delTokens.length);
 				if (value > similar) {
 					valueMat[i][j] = value;
@@ -469,7 +472,7 @@ public class Matcher {
 		return finalRlst;
 	}
 
-	public static Map<Integer, Integer> simMatch(List<Node> src, List<Node> tar, double similar) {
+	public Map<Integer, Integer> simMatch(List<Node> src, List<Node> tar, double similar) {
 		Map<Integer, Integer> map = match(src, tar, new Comparator<Node>() {
 			@Override
 			public int compare(Node o1, Node o2) {
@@ -484,7 +487,7 @@ public class Matcher {
 		return simMatch(map, src, tar, similar);
 	}
 	
-	public static <T extends Node> Map<Integer, Integer> simMatch(Map<Integer, Integer> exactMatchMap, List<T> src, List<T> tar, double similar) {
+	public <T extends Node> Map<Integer, Integer> simMatch(Map<Integer, Integer> exactMatchMap, List<T> src, List<T> tar, double similar) {
 		
 		Map<Integer, Integer> result = new HashMap<>();
 		List<Integer> left = new ArrayList<>(src.size());
@@ -506,7 +509,7 @@ public class Matcher {
 			Object[] addTokens = null;
 			for(int j = last; j < right.size(); j ++) {
 				 addTokens = tar.get(right.get(j)).tokens().toArray();
-				 Map<Integer, Integer> tmpMap = Matcher.match(delTokens, addTokens);
+				 Map<Integer, Integer> tmpMap = match(delTokens, addTokens);
 				 double value = ((double) tmpMap.size()) / ((double) delTokens.length);
 				 if(value > similar) {
 					 result.put(left.get(i), right.get(j));
@@ -519,7 +522,7 @@ public class Matcher {
 		return result;
 	}
 
-	public static Map<Integer, Integer> match(Object[] src, Object[] tar) {
+	public Map<Integer, Integer> match(Object[] src, Object[] tar) {
 		return match(Arrays.asList(src), Arrays.asList(tar), new Comparator<Object>() {
 			@Override
 			public int compare(Object o1, Object o2) {
@@ -532,7 +535,7 @@ public class Matcher {
 		});
 	}
 	
-	public static Map<Integer, Integer> match(List<Stmt> src, List<Stmt> tar) {
+	public Map<Integer, Integer> match(List<Stmt> src, List<Stmt> tar) {
 		return match(src, tar, new Comparator<Stmt>() {
 			@Override
 			public int compare(Stmt o1, Stmt o2) {
@@ -551,7 +554,7 @@ public class Matcher {
 		ANDGLE
 	}
 	
-	public static <T> Map<Integer, Integer> match(List<T> src, List<T> tar, Comparator<T> comparator) {
+	public <T> Map<Integer, Integer> match(List<T> src, List<T> tar, Comparator<T> comparator) {
 		Map<Integer, Integer> map = new HashMap<>();
 		int srcLen = src.size();
 		int tarLen = tar.size();
@@ -604,7 +607,7 @@ public class Matcher {
 		return map;
 	}
 
-	public static boolean applyNodeListModifications(List<Modification> modifications,
+	public boolean applyNodeListModifications(List<Modification> modifications,
 													 List<? extends Node> statements,
 													 Map<Node, List<StringBuffer>> insertionBefore,
 													 Map<Node, List<StringBuffer>> insertionAfter,

@@ -9,8 +9,8 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -81,16 +81,16 @@ public class Svd extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
-		StringBuffer type = _decType.formalForm(nameMapping, consider);
-		StringBuffer name = _name.formalForm(nameMapping, consider);
+		StringBuffer type = _decType.formalForm(nameMapping, consider, keywords);
+		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
 		StringBuffer init = null;
 		if (_initializer != null) {
-			init = _initializer.formalForm(nameMapping, consider);
+			init = _initializer.formalForm(nameMapping, consider, keywords);
 		}
 		if (type == null && name == null && init == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered);
+			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(type == null ? nameMapping.getTypeID(_decType) : type).append(' ')
@@ -196,7 +196,8 @@ public class Svd extends Expr {
 					Update update = new Update(this, _initializer, svd.getInitializer());
 					_modifications.add(update);
 				}
-			} else if (_initializer.getBindingNode() != svd.getInitializer()) {
+			} else if (svd.getModifications() == null ||
+					_initializer.getBindingNode() != svd.getInitializer()) {
 				Update update = new Update(this, _initializer, svd.getInitializer());
 				_modifications.add(update);
 			} else {
@@ -267,7 +268,8 @@ public class Svd extends Expr {
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
-		} else {
+		} else if (!initializer.toString().isEmpty()){
+			stringBuffer.append("=");
 			stringBuffer.append(initializer);
 		}
 		return stringBuffer;

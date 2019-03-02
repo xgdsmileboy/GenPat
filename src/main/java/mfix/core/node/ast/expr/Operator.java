@@ -6,10 +6,11 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
-import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -52,7 +53,8 @@ public abstract class Operator extends Node {
 	@Override
 	public boolean postAccurateMatch(Node node) {
 		if (getBindingNode() == node) return true;
-		if (getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == null && canBinding(node)
+				&& toSrcString().toString().equals(node.toSrcString().toString())) {
 			setBindingNode(node);
 			return true;
 		}
@@ -79,7 +81,15 @@ public abstract class Operator extends Node {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		return null;
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (node == null || isConsidered() != node.isConsidered()) {
+			return false;
+		}
+		return NodeUtils.patternMatch(this, node, false);
 	}
 }

@@ -7,8 +7,8 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class AnonymousClassDecl extends Node {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		return null;
 	}
 
@@ -102,6 +102,12 @@ public class AnonymousClassDecl extends Node {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		return node != null && isConsidered() == node.isConsidered()
+				&& node.getNodeType() == TYPE.ANONYMOUSCDECL;
 	}
 
 	@Override

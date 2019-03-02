@@ -10,8 +10,8 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -71,9 +71,9 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, isConsidered(), keywords);
 		if (exp != null || isConsidered()) {
 			StringBuffer buffer = new StringBuffer();
 			if (_expression != null) {
@@ -84,6 +84,18 @@ public class SwCase extends Stmt {
 			return buffer;
 		}
 		return null;
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (super.patternMatch(node)) return false;
+		if (isConsidered()) {
+			if (getModifications().isEmpty() || node.getNodeType() == TYPE.SWCASE) {
+				return NodeUtils.patternMatch(this, node, true);
+			}
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -172,7 +184,8 @@ public class SwCase extends Stmt {
 					Update update = new Update(this, _expression, swCase.getExpression());
 					_modifications.add(update);
 				}
-			} else if(_expression.getBindingNode() != swCase.getExpression()) {
+			} else if(swCase.getExpression() == null
+					|| _expression.getBindingNode() != swCase.getExpression()) {
 				Update update = new Update(this, _expression, swCase.getExpression());
 				_modifications.add(update);
 			} else {
@@ -248,7 +261,7 @@ public class SwCase extends Stmt {
 			}
 		} else {
 			if (expression.toString().isEmpty()) {
-				if (_expression != null) return null;
+//				if (_expression != null) return null;
 				stringBuffer.append("default :\n");
 			} else {
 				stringBuffer.append("case ");

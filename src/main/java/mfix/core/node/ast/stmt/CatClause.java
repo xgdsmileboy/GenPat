@@ -10,11 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Svd;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -74,10 +74,10 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer excep = _exception.formalForm(nameMapping, isConsidered());
-		StringBuffer blk = _blk.formalForm(nameMapping, isConsidered());
+		StringBuffer excep = _exception.formalForm(nameMapping, isConsidered(), keywords);
+		StringBuffer blk = _blk.formalForm(nameMapping, isConsidered(), keywords);
 		if (excep == null && blk == null) {
 			return isConsidered() ? new StringBuffer("catch(").append(nameMapping.getExprID(_exception))
 					.append(')').append("{}") : null;
@@ -86,6 +86,20 @@ public class CatClause extends Node {
 		buffer.append(excep == null ? nameMapping.getExprID(_exception) : excep)
 				.append(')').append(blk == null ? "{}" : blk);
 		return buffer;
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (node == null || isConsidered() != node.isConsidered()) {
+			return false;
+		}
+		if (isConsidered()) {
+			if (getModifications().isEmpty() || node.getNodeType() == TYPE.CATCHCLAUSE) {
+				return NodeUtils.patternMatch(this, node, true);
+			}
+			return false;
+		}
+		return node instanceof Stmt;
 	}
 
 	@Override

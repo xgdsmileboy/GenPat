@@ -9,9 +9,9 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
@@ -84,12 +84,25 @@ public class MType extends Node {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (!isAbstract() && (parentConsidered || isConsidered())) {
-			return toSrcString();
+			StringBuffer buffer = toSrcString();
+			keywords.add(buffer.toString());
+			return buffer;
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (node == null || isConsidered() != node.isConsidered()){
+			return false;
+		}
+		if (isConsidered()) {
+			return NodeUtils.patternMatch(this, node, false);
+		}
+		return true;
 	}
 
 	@Override

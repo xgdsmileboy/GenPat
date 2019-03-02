@@ -9,11 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -77,13 +77,13 @@ public class AryAcc extends Expr {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         StringBuffer array, index;
         boolean consider = parentConsidered || isConsidered();
-        array = _array.formalForm(nameMapping, consider);
-        index = _index.formalForm(nameMapping, consider);
+        array = _array.formalForm(nameMapping, consider, keywords);
+        index = _index.formalForm(nameMapping, consider, keywords);
         if (array == null && index == null) {
-            super.toFormalForm0(nameMapping, parentConsidered);
+            return super.toFormalForm0(nameMapping, parentConsidered, keywords);
         }
         StringBuffer buffer = new StringBuffer();
         buffer.append(array == null ? nameMapping.getExprID(_array) : array)
@@ -91,7 +91,7 @@ public class AryAcc extends Expr {
                 .append(index == null ? nameMapping.getExprID(_index) : index)
                 .append("]");
 
-        return null;
+        return buffer;
     }
 
     @Override

@@ -10,11 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -87,10 +87,10 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
-		StringBuffer identifier = _identifier.formalForm(nameMapping, consider);
-		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, consider);
+		StringBuffer identifier = _identifier.formalForm(nameMapping, consider, keywords);
+		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, consider, keywords);
 		if (identifier == null && exp == null) {
 			if (isConsidered()) {
 				return new StringBuffer(nameMapping.getExprID(this));
@@ -107,6 +107,20 @@ public class Vdf extends Node {
 			buffer.append('=').append(exp == null ? nameMapping.getExprID(_expression) : exp);
 		}
 		return buffer;
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (node == null || isConsidered() != node.isConsidered()) {
+			return false;
+		}
+		if (isConsidered()) {
+			if (getModifications().isEmpty() || node.getNodeType() == TYPE.VARDECLFRAG) {
+				return NodeUtils.patternMatch(this, node, false);
+			}
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -207,6 +221,9 @@ public class Vdf extends Node {
 				} else if(_expression.getBindingNode() != vdf.getExpression()) {
 					Update update = new Update(this, _expression, vdf.getExpression());
 					_modifications.add(update);
+				} else if (vdf.getExpression() == null) {
+					Update update = new Update(this, _expression, null);
+					_modifications.add(update);
 				} else {
 					_expression.genModifications();
 				}
@@ -262,7 +279,7 @@ public class Vdf extends Node {
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
-		} else {
+		} else if (!expression.toString().isEmpty()){
 			stringBuffer.append("=");
 			stringBuffer.append(expression);
 		}

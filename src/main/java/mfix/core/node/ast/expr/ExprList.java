@@ -9,10 +9,10 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -76,13 +76,13 @@ public class ExprList extends Node {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         boolean consider = isConsidered() || parentConsidered;
         if (_exprs.size() > 0) {
             List<StringBuffer> strings = new ArrayList<>(_exprs.size());
             for (Expr expr : _exprs) {
-                if (expr.formalForm(nameMapping, consider) != null) {
-                    strings.add(expr.formalForm(nameMapping, consider));
+                if (expr.formalForm(nameMapping, consider, keywords) != null) {
+                    strings.add(expr.formalForm(nameMapping, consider, keywords));
                 } else if (isConsidered()) {
                     strings.add(new StringBuffer(nameMapping.getExprID(expr)));
                 }
@@ -101,6 +101,20 @@ public class ExprList extends Node {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean patternMatch(Node node) {
+        if (node == null || isConsidered() != node.isConsidered()){
+            return false;
+        }
+        if (isConsidered()) {
+            if (getModifications().isEmpty() || node.getNodeType() == TYPE.EXPRLST) {
+                return NodeUtils.patternMatch(this, node, false);
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override

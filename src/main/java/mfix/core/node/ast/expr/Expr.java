@@ -10,13 +10,14 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
-import mfix.core.node.cluster.NameMapping;
+import mfix.core.pattern.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -63,7 +64,7 @@ public abstract class Expr extends Node {
     @Override
     public boolean genModifications() {
         if (getBindingNode() == null) {
-            LevelLogger.error("Should not be null since we cannot delete an expression");
+            LevelLogger.error("Should not be null since we cannot delete an expression : " + getFileName());
             return false;
         }
         return true;
@@ -83,7 +84,7 @@ public abstract class Expr extends Node {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (isConsidered()) {
             return new StringBuffer(nameMapping.getExprID(this));
         } else {
@@ -91,12 +92,27 @@ public abstract class Expr extends Node {
         }
     }
 
-    protected StringBuffer leafFormalForm(boolean parentConsidered) {
+    protected StringBuffer leafFormalForm(boolean parentConsidered, Set<String> keywords) {
         if (!isAbstract() && (parentConsidered || isConsidered())) {
-            return toSrcString();
+            StringBuffer buffer = toSrcString();
+            keywords.add(buffer.toString());
+            return buffer;
         } else {
             return null;
         }
     }
 
+    @Override
+    public boolean patternMatch(Node node) {
+        if (node == null || isConsidered() != node.isConsidered()) {
+            return false;
+        }
+        if (isConsidered()) {
+            if (node instanceof Expr) {
+                return NodeUtils.patternMatch(this, node, false);
+            }
+            return false;
+        }
+        return true;
+    }
 }

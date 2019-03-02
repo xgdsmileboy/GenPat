@@ -9,8 +9,8 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -69,12 +69,12 @@ public class InstanceofExpr extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
-		StringBuffer exp = _expression.formalForm(nameMapping, consider);
-		StringBuffer type = _instanceType.formalForm(nameMapping, consider);
+		StringBuffer exp = _expression.formalForm(nameMapping, consider, keywords);
+		StringBuffer type = _instanceType.formalForm(nameMapping, consider, keywords);
 		if (exp == null && type == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered);
+			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp)

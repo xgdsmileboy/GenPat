@@ -24,4 +24,6 @@ public abstract class Modification implements Serializable {
         return _fIndex;
     }
 
+    public abstract boolean patternMatch(Modification m);
+
 }

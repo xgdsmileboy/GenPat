@@ -10,8 +10,8 @@ import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -92,16 +92,16 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
 		StringBuffer exp = null;
 		if (_expression != null) {
-			exp = _expression.formalForm(nameMapping, consider);
+			exp = _expression.formalForm(nameMapping, consider, keywords);
 		}
-		StringBuffer name = _name.formalForm(nameMapping, consider);
-		StringBuffer arg = _arguments.formalForm(nameMapping, consider);
+		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
+		StringBuffer arg = _arguments.formalForm(nameMapping, consider, keywords);
 		if (exp == null && name == null && arg == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered);
+			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer buffer = new StringBuffer();
 		if (_expression != null) {
@@ -229,7 +229,8 @@ public class MethodInv extends Expr {
 					Update update = new Update(this, _expression, methodInv.getExpression());
 					_modifications.add(update);
 				}
-			} else if (_expression.getBindingNode() != methodInv.getExpression()) {
+			} else if (methodInv.getExpression() == null
+					|| _expression.getBindingNode() != methodInv.getExpression()) {
 				Update update = new Update(this, _expression, methodInv.getExpression());
 				_modifications.add(update);
 			} else {
@@ -341,7 +342,7 @@ public class MethodInv extends Expr {
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
 			}
-		} else {
+		} else if (!expression.toString().isEmpty()){
 			stringBuffer.append(expression + ".");
 		}
 		if (name == null) {

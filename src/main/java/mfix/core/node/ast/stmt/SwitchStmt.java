@@ -10,8 +10,8 @@ import mfix.common.util.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -79,13 +79,13 @@ public class SwitchStmt extends Stmt {
 	}
 
 	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (isAbstract()) return null;
-		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered());
+		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		List<StringBuffer> strings = new ArrayList<>(_statements.size());
 		StringBuffer b;
 		for (int i = 0; i < _statements.size(); i++) {
-			b = _statements.get(i).formalForm(nameMapping, false);
+			b = _statements.get(i).formalForm(nameMapping, false, keywords);
 			if (b != null) {
 				strings.add(b);
 			}
@@ -104,6 +104,18 @@ public class SwitchStmt extends Stmt {
 			return buffer;
 		}
 		return null;
+	}
+
+	@Override
+	public boolean patternMatch(Node node) {
+		if (super.patternMatch(node)) return false;
+		if (isConsidered()) {
+			if (getModifications().isEmpty() || node.getNodeType() == TYPE.SWSTMT) {
+				return NodeUtils.patternMatch(this, node, true);
+			}
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -248,7 +260,7 @@ public class SwitchStmt extends Stmt {
 			Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
 			Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
 			Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
-			if (!Matcher.applyNodeListModifications(modifications, _statements, insertionBefore, insertionAfter,
+			if (!new Matcher().applyNodeListModifications(modifications, _statements, insertionBefore, insertionAfter,
 					map, vars, exprMap)) {
 				return null;
 			}

@@ -5,10 +5,9 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node;
+package mfix.core.node.match;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.ast.stmt.Stmt;
 
 import java.util.Map;
 

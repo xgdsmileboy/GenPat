@@ -9,10 +9,10 @@ package mfix.core.node.ast.stmt;
 import mfix.common.util.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.NameMapping;
-import mfix.core.node.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -66,12 +66,12 @@ public class Blk extends Stmt {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (isAbstract()) return null;
         List<StringBuffer> strings = new ArrayList<>(_statements.size());
         StringBuffer b;
         for (int i = 0; i < _statements.size(); i++) {
-            b = _statements.get(i).formalForm(nameMapping, false);
+            b = _statements.get(i).formalForm(nameMapping, false, keywords);
             if (b != null) {
                 strings.add(b);
             }
@@ -86,6 +86,17 @@ public class Blk extends Stmt {
             buffer.append(strings.isEmpty() ? '}' : "\n}");
             return buffer;
         }
+    }
+
+    @Override
+    public boolean patternMatch(Node node) {
+        if (!super.patternMatch(node)) {
+            return false;
+        }
+        if (isConsidered()) {
+            return node.getNodeType() == TYPE.BLOCK;
+        }
+        return true;
     }
 
     @Override
@@ -203,7 +214,7 @@ public class Blk extends Stmt {
             Map<Node, List<StringBuffer>> insertBefore = new HashMap<>();
             Map<Node, List<StringBuffer>> insertAfter = new HashMap<>();
             Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
-            if (!Matcher.applyNodeListModifications(blk.getModifications(), _statements,
+            if (!new Matcher().applyNodeListModifications(blk.getModifications(), _statements,
                     insertBefore, insertAfter, map, vars, exprMap)) {
                 return null;
             }

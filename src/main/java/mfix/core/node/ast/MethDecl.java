@@ -11,8 +11,8 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Blk;
 import mfix.core.node.ast.stmt.Stmt;
-import mfix.core.node.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
@@ -125,7 +125,7 @@ public class MethDecl extends Node {
     }
 
     @Override
-    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered) {
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("METHOD");
         stringBuffer.append("(");
@@ -133,8 +133,8 @@ public class MethDecl extends Node {
         if (_arguments != null && _arguments.size() > 0) {
             List<StringBuffer> strings = new ArrayList<>(_arguments.size());
             for (int i = 0; i < _arguments.size(); i++) {
-                if (_arguments.get(i).formalForm(nameMapping, false) != null) {
-                    strings.add(_arguments.get(i).formalForm(nameMapping, false));
+                if (_arguments.get(i).formalForm(nameMapping, false, keywords) != null) {
+                    strings.add(_arguments.get(i).formalForm(nameMapping, false, keywords));
                 }
             }
             if (strings.size() > 0) {
@@ -148,9 +148,14 @@ public class MethDecl extends Node {
         if (_body == null) {
             stringBuffer.append(";");
         } else {
-            stringBuffer.append(_body.formalForm(nameMapping, false));
+            stringBuffer.append(_body.formalForm(nameMapping, false, keywords));
         }
         return stringBuffer;
+    }
+
+    @Override
+    public boolean patternMatch(Node node) {
+        return (node instanceof MethDecl);
     }
 
     @Override
@@ -251,7 +256,9 @@ public class MethDecl extends Node {
             for(int i = 0; i < _arguments.size() && i < arguments.size(); i++) {
                 _arguments.get(i).postAccurateMatch(arguments.get(i));
             }
-            _body.postAccurateMatch(methDecl.getBody());
+            if (_body != null) {
+                _body.postAccurateMatch(methDecl.getBody());
+            }
         }
         return true;
     }

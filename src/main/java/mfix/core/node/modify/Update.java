@@ -1,7 +1,7 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.VIndex;
 
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +30,20 @@ public class Update extends Modification {
             return new StringBuffer();
         }
         return _tarNode.transfer(vars, exprMap);
+    }
+
+    @Override
+    public boolean patternMatch(Modification m) {
+        if (m instanceof Update) {
+            Update update = (Update) m;
+            if (getSrcNode().patternMatch(update.getSrcNode())) {
+                if (getTarNode() == null) {
+                    return update.getTarNode() == null;
+                }
+                return  getTarNode().patternMatch(update.getTarNode());
+            }
+        }
+        return false;
     }
 
     @Override

@@ -5,13 +5,12 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node;
+package mfix.core.pattern;
 
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.node.abs.CodeAbstraction;
-import mfix.core.node.abs.TF_IDF;
 import mfix.core.node.abs.TermFrequency;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
@@ -30,20 +29,24 @@ import java.util.Set;
  */
 public class PatternExtractor {
 
-    public Set<Node> extractPattern(Set<Pair<String, String>> fixPairs) {
-        Set<Node> nodes = new HashSet<>();
+    public Set<Pattern> extractPattern(Set<Pair<String, String>> fixPairs) {
+        Set<Pattern> nodes = new HashSet<>();
         for(Pair<String, String> pair : fixPairs) {
             nodes.addAll(extractPattern(pair.getFirst(), pair.getSecond()));
         }
         return nodes;
     }
 
-    public Set<Node> extractPattern(String srcFile, String tarFile) {
+    public Set<Pattern> extractPattern(String srcFile, String tarFile) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        Set<Pattern> patterns = new HashSet<>();
+        if (srcUnit == null || tarUnit == null) {
+            return patterns;
+        }
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
         NodeParser nodeParser = new NodeParser();
-        Set<Node> patterns = new HashSet<>();
+
 //        CodeAbstraction abstraction = new TF_IDF(srcFile, Constant.TF_IDF_FREQUENCY);
         CodeAbstraction abstraction = new TermFrequency(Constant.TOKEN_FREQENCY);
 //        ElementCounter counter = new ElementCounter();
@@ -60,7 +63,7 @@ public class PatternExtractor {
                 continue;
             }
 
-            if(Matcher.greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
+            if(new Matcher().greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
                 Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
                 Set<Node> temp;
                 for(Node node : nodes) {
@@ -76,7 +79,8 @@ public class PatternExtractor {
                 }
 //                srcNode.doAbstraction(counter);
                 srcNode.doAbstractionNew(abstraction.lazyInit());
-                patterns.add(srcNode);
+                tarNode.doAbstractionNew(abstraction);
+                patterns.add(new Pattern(srcNode));
             }
         }
 

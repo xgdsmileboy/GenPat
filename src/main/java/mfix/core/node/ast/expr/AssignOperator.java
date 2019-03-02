@@ -7,7 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
-import mfix.core.node.cluster.VIndex;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
 
@@ -76,7 +76,7 @@ public class AssignOperator extends Operator {
 
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if (node instanceof AssignOperator) {
+        if (node instanceof AssignOperator && _operatorStr.equals(node.toSrcString().toString())) {
             matchedNode.put(this, node);
             return true;
         } else {
