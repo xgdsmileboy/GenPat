@@ -256,7 +256,9 @@ public class MethDecl extends Node {
             for(int i = 0; i < _arguments.size() && i < arguments.size(); i++) {
                 _arguments.get(i).postAccurateMatch(arguments.get(i));
             }
-            _body.postAccurateMatch(methDecl.getBody());
+            if (_body != null) {
+                _body.postAccurateMatch(methDecl.getBody());
+            }
         }
         return true;
     }

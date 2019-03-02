@@ -195,7 +195,7 @@ public class ForStmt extends Stmt {
                 match = match && (forStmt._condition == null);
             }
             match = match && _updaters.compare(forStmt._updaters);
-            match = match && (forStmt._body == null);
+            match = match && _body.compare(forStmt._body);
         }
         return match;
     }
