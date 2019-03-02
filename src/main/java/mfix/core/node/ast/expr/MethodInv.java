@@ -10,11 +10,11 @@ import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import mfix.core.stats.element.ElementCounter;
 import mfix.core.stats.element.ElementException;
 import mfix.core.stats.element.ElementQueryType;
@@ -101,8 +101,30 @@ public class MethodInv extends Expr {
 		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
 		StringBuffer arg = _arguments.formalForm(nameMapping, consider, keywords);
 		if (exp == null && name == null && arg == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
+
 		}
+
+		if (exp == null && name == null) {
+			if (arg == null) {
+				return super.toFormalForm0(nameMapping, parentConsidered, keywords);
+			} else {
+				String[] strings = arg.toString().split(",");
+				String key = null;
+				for (String s : strings) {
+					if (!nameMapping.isPlaceHolder(strings[0])) {
+						if (key == null) key = s;
+						else {
+							key = null;
+							break;
+						}
+					}
+				}
+				if (key != null) {
+					return new StringBuffer(key);
+				}
+			}
+		}
+
 		StringBuffer buffer = new StringBuffer();
 		if (_expression != null) {
 			buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp).append('.');
