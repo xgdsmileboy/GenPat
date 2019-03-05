@@ -40,6 +40,7 @@ public class Constant {
     public final static int API_FREQUENCY = 100;
     public final static double TF_IDF_FREQUENCY = 0.5;
     public final static double TOKEN_FREQENCY = 0.01;
+    public final static double MAX_CHANGE_LINE_PER_METHOD = 20;
 
     public static String API_MAPPING_FILE;
     public static String PATTERN_VERSION;

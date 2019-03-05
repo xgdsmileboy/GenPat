@@ -427,9 +427,15 @@ public class Matcher {
 		double[][] valueMat = new double[src.size()][tar.size()];
 		for (int i = 0; i < src.size(); i++) {
 			Object[] delTokens = src.get(i).tokens().toArray();
+			if (delTokens.length > 1000) {
+				continue;
+			}
 			Object[] addTokens;
 			for (int j = 0; j < tar.size(); j++) {
 				addTokens = tar.get(j).tokens().toArray();
+				if (addTokens.length > 1000) {
+					continue;
+				}
 				Map<Integer, Integer> tmpMap = match(delTokens, addTokens);
 				double value = ((double) tmpMap.size()) / ((double) delTokens.length);
 				if (value > similar) {

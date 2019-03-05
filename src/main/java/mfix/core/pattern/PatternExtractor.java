@@ -14,6 +14,7 @@ import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.abs.TermFrequency;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.parser.NodeParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -60,6 +61,11 @@ public class PatternExtractor {
             Node tarNode = nodeParser.process(pair.getSecond());
 
             if(srcNode.toSrcString().toString().equals(tarNode.toSrcString().toString())) {
+                continue;
+            }
+
+            TextDiff diff = new TextDiff(srcNode, tarNode);
+            if (diff.getMiniDiff().size() > Constant.MAX_CHANGE_LINE_PER_METHOD) {
                 continue;
             }
 
