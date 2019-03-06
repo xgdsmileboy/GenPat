@@ -41,6 +41,17 @@ public class PatternExtractor {
     public Set<Pattern> extractPattern(String srcFile, String tarFile) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
+        Set<String> imports = new HashSet<>();
+        Set<String> srcImports = new HashSet<>();
+        for (Object o : srcUnit.imports()) {
+            srcImports.add(o.toString());
+        }
+        for (Object o : tarUnit.imports()) {
+            String s = o.toString();
+            if (!srcImports.contains(s)) {
+                imports.add(s);
+            }
+        }
         Set<Pattern> patterns = new HashSet<>();
         if (srcUnit == null || tarUnit == null) {
             return patterns;
@@ -86,7 +97,7 @@ public class PatternExtractor {
 //                srcNode.doAbstraction(counter);
                 srcNode.doAbstractionNew(abstraction.lazyInit());
                 tarNode.doAbstractionNew(abstraction);
-                patterns.add(new Pattern(srcNode));
+                patterns.add(new Pattern(srcNode, imports));
             }
         }
 

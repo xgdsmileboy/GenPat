@@ -31,12 +31,18 @@ public class Pattern implements PatternMatcher, Serializable {
 
     private int _frequency = 1;
     private Node _patternNode;
+    private Set<String> _imports;
     private transient NameMapping _nameMapping;
     private transient Set<String> _keywords;
     private transient Set<String> _targetKeywords;
 
     public Pattern(Node pNode) {
+        this(pNode, new HashSet<>());
+    }
+
+    public Pattern(Node pNode, Set<String> imports) {
         _patternNode = pNode;
+        _imports = imports;
     }
 
     public String getFileName() {
@@ -45,6 +51,10 @@ public class Pattern implements PatternMatcher, Serializable {
 
     public Node getPatternNode() {
         return _patternNode;
+    }
+
+    public Set<String> getImports() {
+        return _imports;
     }
 
     public int getFrequency() {

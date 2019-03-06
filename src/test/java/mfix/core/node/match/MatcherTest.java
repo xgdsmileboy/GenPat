@@ -17,6 +17,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.ReturnStmt;
 import mfix.core.node.ast.stmt.SwCase;
 import mfix.core.node.ast.stmt.SwitchStmt;
+import mfix.core.node.diff.TextDiff;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -31,6 +32,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -261,21 +263,98 @@ public class MatcherTest extends TestCase {
         }
     }
 
-//    @Test
-    public void temp() {
-        String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
-        String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
+    @Test
+    public void test_secure_add_import() {
+        String srcFile = testbase + Constant.SEP + "src_security_insert_depend_add_import.java";
+        String tarFile = testbase + Constant.SEP + "tar_security_insert_depend_add_import.java";
 
         PatternExtractor extractor = new PatternExtractor();
         Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
-        for (Pattern p : patterns) {
-            Set<Node> nodes = p.getConsideredNodes();
-            for (Node n : nodes) {
-                System.out.println(n.toSrcString());
+        String buggy = testbase + Constant.SEP + "test_security_insert_depend_add_import.java";
+        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                methods.add(node);
+                return true;
             }
-            System.out.println(p.formalForm());
+        });
+
+        NodeParser parser = new NodeParser();
+        parser.setCompilationUnit(buggy, unit);
+        Matcher matcher = new Matcher();
+        for (MethodDeclaration m : methods) {
+            Node node = parser.process(m);
+            for (Pattern p : patterns) {
+                StringBuffer b = new StringBuffer();
+                for (String ip : p.getImports()) {
+                    b.append(ip).append(Constant.NEW_LINE);
+                }
+                Set<MatchInstance> set = matcher.tryMatch(node, p);
+                for (MatchInstance matchInstance : set) {
+                    matchInstance.apply();
+                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap());
+                    if (buffer != null) {
+                        TextDiff diff = new TextDiff(node.toSrcString().toString(),
+                                new StringBuffer(b).append(buffer).toString());
+                        System.out.println(diff.toString());
+                    }
+                    matchInstance.reset();
+                }
+            }
         }
     }
 
+//    @Test
+    public void temp() {
+        String srcFile = "resources/d4j-info/buggy_fix/buggy/chart/chart_1_buggy" +
+                "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
+        String tarFile = "resources/d4j-info/buggy_fix/fixed/chart/chart_1_buggy" +
+                "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
+
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
+
+        String buggy = srcFile;
+        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                if ("getLegendItems".equals(node.getName().getIdentifier())) {
+                    methods.add(node);
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        for (Pattern pattern : patterns) {
+            System.out.println(pattern.formalForm());
+        }
+
+        NodeParser parser = new NodeParser();
+        parser.setCompilationUnit(buggy, unit);
+        Matcher matcher = new Matcher();
+        for (MethodDeclaration m : methods) {
+            Node node = parser.process(m);
+            for (Pattern p : patterns) {
+                Set<MatchInstance> set = matcher.tryMatch(node, p);
+                for (MatchInstance matchInstance : set) {
+                    matchInstance.apply();
+                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>());
+                    if (buffer != null) {
+                        TextDiff diff = new TextDiff(node.toSrcString().toString(), buffer.toString());
+                        System.out.println(diff.toString());
+                    }
+                    matchInstance.reset();
+                }
+            }
+        }
+
+    }
 }

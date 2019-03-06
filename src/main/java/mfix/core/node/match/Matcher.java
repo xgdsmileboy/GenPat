@@ -664,9 +664,11 @@ public class Matcher {
 
 				if (!after.isEmpty()) {
 					int tag = 0;
-					for (int i = 0; i < statements.size(); i++) {
-						if (after.contains(statements.get(i))) {
+					for (int i = statements.size() - 1; i >= 0; i--) {
+						final Node node = statements.get(i);
+						if (after.stream().anyMatch(n -> n == node || node.isParentOf(n))) {
 							tag = i;
+							break;
 						}
 					}
 					List<StringBuffer> list = insertionAfter.get(statements.get(tag));
