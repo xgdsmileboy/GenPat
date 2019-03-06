@@ -15,9 +15,11 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -64,7 +66,7 @@ public abstract class Expr extends Node {
     @Override
     public boolean genModifications() {
         if (getBindingNode() == null) {
-            LevelLogger.error("Should not be null since we cannot delete an expression : " + getFileName());
+            LevelLogger.warn("Should not be null since we cannot delete an expression : " + getFileName());
             return false;
         }
         return true;
@@ -76,11 +78,28 @@ public abstract class Expr extends Node {
                 || (_modifications.isEmpty() && node instanceof Expr)) {
             if ((!"boolean".equals(getTypeString()) || "boolean".equals(((Expr) node).getTypeString()))
                     && !(node instanceof Operator)) {
-                return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
+                return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
                         && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
             }
         }
         return false;
+    }
+
+    // this method should be abstract and reimplemented in all the sub expression classes
+    // currently, I did not consider the structure of the expression but only the keywords
+    public boolean ifMatch0(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        Set<String> keys = flattenTreeNode(new LinkedList<>()).stream()
+                .filter(n -> NodeUtils.isSimpleExpr(n) && !n.isAbstract())
+                .map(n -> n.toSrcString().toString())
+                .collect(Collectors.toSet());
+        String content = node.toSrcString().toString();
+        for (String key : keys) {
+            if (!content.contains(key)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
