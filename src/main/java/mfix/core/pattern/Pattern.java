@@ -32,6 +32,7 @@ public class Pattern implements PatternMatcher, Serializable {
     private int _frequency = 1;
     private Node _patternNode;
     private Set<String> _imports;
+    private transient String _patternName;
     private transient NameMapping _nameMapping;
     private transient Set<String> _keywords;
     private transient Set<String> _targetKeywords;
@@ -51,6 +52,14 @@ public class Pattern implements PatternMatcher, Serializable {
 
     public Node getPatternNode() {
         return _patternNode;
+    }
+
+    public String getPatternName() {
+        return _patternName;
+    }
+
+    public void setPatternName(String name) {
+        _patternName = name;
     }
 
     public Set<String> getImports() {

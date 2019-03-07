@@ -25,31 +25,25 @@ import java.util.concurrent.Future;
  * @author: Jiajun
  * @date: 2019-02-14
  */
-public class Cluster {
+public class ClusterImpl {
 
     private int _maxThreadCount = 10;
-    private String _path;
-    private volatile Set<Set<Pattern>> _returnedNodes;
+    private volatile Set<Set<Group>> _returnedNodes;
 
-    public Cluster() {
+    public ClusterImpl() {
         _returnedNodes = new HashSet<>();
     }
 
-    public void cluster(String path) {
-        _path = path;
-        _returnedNodes = new HashSet<>();
-    }
-
-    public void callback(Set<Pattern> set) {
+    public void callback(Set<Group> set) {
         update(set, true);
     }
 
-    public Set<Set<Pattern>> clusteredNodeSet() {
+    public Set<Set<Group>> clusteredNodeSet() {
         return update(null, false);
     }
 
-    private synchronized Set<Set<Pattern>> update(Set<Pattern> set, boolean isSubThread) {
-        Set<Set<Pattern>> result = null;
+    private synchronized Set<Set<Group>> update(Set<Group> set, boolean isSubThread) {
+        Set<Set<Group>> result = null;
         if (isSubThread) {
             _returnedNodes.add(set);
         } else {
@@ -59,15 +53,15 @@ public class Cluster {
         return result;
     }
 
-    protected Set<Pattern> cluster(Set<Pattern> patterns) {
-        Set<Pattern> results = new HashSet<>();
-        Set<Pair<Set<Pattern>, Set<Pattern>>> compareClusters = initClusterPair(patterns);
+    public Set<Group> cluster(Set<Pattern> patterns) {
+        Set<Group> results = new HashSet<>();
+        Set<Pair<Set<Group>, Set<Group>>> compareClusters = initClusterPair(patterns);
         int currTaskCount = 0;
         ExecutorService threadPool = Executors.newFixedThreadPool(_maxThreadCount);
         List<Future<Void>> threadResultList = new LinkedList<>();
         while (true) {
             if (threadResultList.isEmpty() && compareClusters.size() == 1) {
-                Pair<Set<Pattern>, Set<Pattern>> pair = compareClusters.iterator().next();
+                Pair<Set<Group>, Set<Group>> pair = compareClusters.iterator().next();
                 if (pair.getFirst() == null || pair.getSecond() == null) {
                     if (pair.getFirst() != null) {
                         results = pair.getFirst();
@@ -79,16 +73,16 @@ public class Cluster {
                     break;
                 }
             }
-            Iterator<Pair<Set<Pattern>, Set<Pattern>>> iter = compareClusters.iterator();
+            Iterator<Pair<Set<Group>, Set<Group>>> iter = compareClusters.iterator();
             while (iter.hasNext()) {
-                Pair<Set<Pattern>, Set<Pattern>> pair = iter.next();
+                Pair<Set<Group>, Set<Group>> pair = iter.next();
                 Future<Void> future = threadPool.submit(new NodeCluster(pair.getFirst(), pair.getSecond(),
                         this));
                 threadResultList.add(future);
                 currTaskCount++;
             }
             compareClusters.clear();
-            Set<Set<Pattern>> sets = clusteredNodeSet();
+            Set<Set<Group>> sets = clusteredNodeSet();
             if (currTaskCount >= _maxThreadCount || sets.isEmpty()) {
                 currTaskCount -= waitSubThreads(threadResultList);
             }
@@ -122,23 +116,23 @@ public class Cluster {
      * @param patterns : patterns to group
      * @return : a set of pairs for clustering
      */
-    private Set<Pair<Set<Pattern>, Set<Pattern>>> initClusterPair(Set<Pattern> patterns) {
-        Set<Pair<Set<Pattern>, Set<Pattern>>> result = new HashSet<>();
-        Pattern pre = null;
+    private Set<Pair<Set<Group>, Set<Group>>> initClusterPair(Set<Pattern> patterns) {
+        Set<Pair<Set<Group>, Set<Group>>> result = new HashSet<>();
+        Group pre = null;
         for (Pattern pattern : patterns) {
             if (pre == null) {
-                pre = pattern;
+                pre = new Group(pattern);
             } else {
-                Set<Pattern> s1 = new HashSet<>();
+                Set<Group> s1 = new HashSet<>();
                 s1.add(pre);
-                Set<Pattern> s2 = new HashSet<>();
-                s2.add(pattern);
+                Set<Group> s2 = new HashSet<>();
+                s2.add(new Group(pattern));
                 result.add(new Pair<>(s1, s2));
                 pre = null;
             }
         }
         if (pre != null) {
-            Set<Pattern> s1 = new HashSet<>();
+            Set<Group> s1 = new HashSet<>();
             s1.add(pre);
             result.add(new Pair<>(s1, null));
         }
@@ -148,13 +142,13 @@ public class Cluster {
     /**
      * group pattern sets as pairs for clustering
      *
-     * @param patternSets : a set of pattern sets to group
+     * @param groupSets : a set of pattern sets to group
      * @return : a set of pairs for clustering
      */
-    private Set<Pair<Set<Pattern>, Set<Pattern>>> buildClusterPair(Set<Set<Pattern>> patternSets) {
-        Set<Pair<Set<Pattern>, Set<Pattern>>> result = new HashSet<>();
-        Set<Pattern> pre = null;
-        for (Set<Pattern> nodes : patternSets) {
+    private Set<Pair<Set<Group>, Set<Group>>> buildClusterPair(Set<Set<Group>> groupSets) {
+        Set<Pair<Set<Group>, Set<Group>>> result = new HashSet<>();
+        Set<Group> pre = null;
+        for (Set<Group> nodes : groupSets) {
             if (pre == null) {
                 pre = nodes;
             } else {
@@ -183,39 +177,40 @@ public class Cluster {
      */
     private static class NodeCluster implements Callable<Void> {
 
-        private Set<Pattern> _fstPatterns;
-        private Set<Pattern> _sndPatterns;
-        private Cluster _callback;
+        private Set<Group> _fstGroups;
+        private Set<Group> _sndGroups;
+        private ClusterImpl _callback;
 
-        public NodeCluster(Set<Pattern> fstPatterns, Set<Pattern> sndPatterns, Cluster callback) {
-            _fstPatterns = fstPatterns;
-            _sndPatterns = sndPatterns;
+        public NodeCluster(Set<Group> fstGroups, Set<Group> sndGroups, ClusterImpl callback) {
+            _fstGroups = fstGroups;
+            _sndGroups = sndGroups;
             _callback = callback;
         }
 
         @Override
         public Void call() {
-            if (_fstPatterns != null && _sndPatterns != null) {
+            if (_fstGroups != null && _sndGroups != null) {
                 LevelLogger.debug(Thread.currentThread().getName() + " : "
-                        + (_fstPatterns.size() + _sndPatterns.size()));
-                Pattern next;
-                for (Pattern fstPattern : _fstPatterns) {
-                    for (Iterator<Pattern> iter = _sndPatterns.iterator(); iter.hasNext(); ) {
+                        + (_fstGroups.size() + _sndGroups.size()));
+                Group next;
+                for (Group fstGroup : _fstGroups) {
+                    for (Iterator<Group> iter = _sndGroups.iterator(); iter.hasNext(); ) {
                         next = iter.next();
-                        if (fstPattern.matches(next)) {
-                            fstPattern.incFrequency(next.getFrequency());
+                        if (fstGroup.matches(next)) {
+                            fstGroup.addIsomorphicPatternPath(next.getRepresentPatternFile());
+                            fstGroup.addIsomorphicPatternPaths(next.getIsomorphicPatternPath());
                             iter.remove();
                         }
                     }
                 }
-                Set<Pattern> result = new HashSet<>();
-                result.addAll(_fstPatterns);
-                result.addAll(_sndPatterns);
+                Set<Group> result = new HashSet<>();
+                result.addAll(_fstGroups);
+                result.addAll(_sndGroups);
                 _callback.callback(result);
-            } else if (_fstPatterns != null) {
-                _callback.callback(new HashSet<>(_fstPatterns));
-            } else if (_sndPatterns != null) {
-                _callback.callback(new HashSet<>(_sndPatterns));
+            } else if (_fstGroups != null) {
+                _callback.callback(new HashSet<>(_fstGroups));
+            } else if (_sndGroups != null) {
+                _callback.callback(new HashSet<>(_sndGroups));
             }
             return null;
         }
