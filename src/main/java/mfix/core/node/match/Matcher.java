@@ -662,8 +662,8 @@ public class Matcher {
 					return false;
 				}
 
+				int tag = -1;
 				if (!after.isEmpty()) {
-					int tag = 0;
 					for (int i = statements.size() - 1; i >= 0; i--) {
 						final Node node = statements.get(i);
 						if (after.stream().anyMatch(n -> n == node || node.isParentOf(n))) {
@@ -671,16 +671,19 @@ public class Matcher {
 							break;
 						}
 					}
-					List<StringBuffer> list = insertionAfter.get(statements.get(tag));
-					if(list == null) {
-						list = new LinkedList<>();
-						insertionAfter.put(statements.get(tag), list);
+					if (tag != -1) {
+						List<StringBuffer> list = insertionAfter.get(statements.get(tag));
+						if (list == null) {
+							list = new LinkedList<>();
+							insertionAfter.put(statements.get(tag), list);
+						}
+						tmp = insertion.apply(vars, exprMap);
+						if (tmp == null) return false;
+						list.add(tmp);
 					}
-					tmp = insertion.apply(vars, exprMap);
-					if(tmp == null) return false;;
-					list.add(tmp);
-				} else {
-					int tag = 0;
+				}
+				if (tag == -1) {
+					tag = 0;
 					for (int i = 0; i < statements.size(); i++) {
 						if (after.contains(statements.get(i))) {
 							tag = i;
