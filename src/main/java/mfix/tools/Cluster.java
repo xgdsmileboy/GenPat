@@ -55,6 +55,7 @@ public class Cluster {
     }
 
     private Set<Pattern> readPatterns(String file) throws IOException {
+        LevelLogger.debug("Start to load patterns from file : " + file);
         Set<Pattern> patterns = new HashSet<>();
         BufferedReader br;
         br = new BufferedReader(new FileReader(new File(file)));
@@ -64,6 +65,7 @@ public class Cluster {
             // TODO: here is the hard encode, improve later
             if (line.startsWith("/home/jiajun/GithubData")) {
                 try {
+                    LevelLogger.debug("Deserialize : " + line);
                     p = (Pattern) Utils.deserialize(line);
                     p.setPatternName(line);
                     patterns.add(p);
@@ -76,11 +78,13 @@ public class Cluster {
                 }
             }
         }
+        LevelLogger.debug("Finish deserialization!!");
         return patterns;
     }
 
     private void dump2File(Set<Group> groups, String outFile) throws IOException {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false), "UTF-8"));
+        LevelLogger.debug("Start dumping result to file : " + outFile);
         for (Group g : groups) {
             for (String s : g.getRepresentPattern().getKeywords()) {
                 bw.write(s);
@@ -94,6 +98,7 @@ public class Cluster {
                 bw.newLine();
             }
         }
+        LevelLogger.debug("Finish dumping result to file : " + outFile);
     }
 
     public void cluster(String[] args){
@@ -106,7 +111,7 @@ public class Cluster {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             LevelLogger.error(e.getMessage());
-            formatter.printHelp("<command> -m <arg> -n <arg>", options);
+            formatter.printHelp("<command> -if <arg> -op <arg>", options);
             System.exit(1);
         }
         String apiMappingFile = cmd.getOptionValue("if");
