@@ -149,8 +149,10 @@ public class SName extends Label {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
-			if (!vars.contains(stringBuffer.toString())) {
-				return null;
+			if (!Character.isUpperCase(stringBuffer.charAt(0))) {
+				if (!vars.contains(stringBuffer.toString())) {
+					return null;
+				}
 			}
 		}
 		return stringBuffer;

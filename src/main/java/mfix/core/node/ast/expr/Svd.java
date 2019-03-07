@@ -9,11 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -210,8 +210,12 @@ public class Svd extends Expr {
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if (node instanceof Svd) {
-			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+			Svd svd = (Svd) node;
+			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+				return NodeUtils.matchSameNodeType(_name, svd.getName(), matchedNode, matchedStrings);
+			}
+			return false;
 		} else {
 			return false;
 		}
