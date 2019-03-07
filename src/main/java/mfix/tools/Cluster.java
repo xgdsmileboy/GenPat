@@ -78,6 +78,7 @@ public class Cluster {
                 }
             }
         }
+        br.close();
         LevelLogger.debug("Finish deserialization!!");
         return patterns;
     }
@@ -98,6 +99,7 @@ public class Cluster {
                 bw.newLine();
             }
         }
+        bw.close();
         LevelLogger.debug("Finish dumping result to file : " + outFile);
     }
 
