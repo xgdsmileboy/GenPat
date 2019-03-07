@@ -7,6 +7,7 @@
 package mfix;
 
 import mfix.tools.Cleaner;
+import mfix.tools.Cluster;
 import mfix.tools.Filter;
 import mfix.tools.PatternPrinter;
 import mfix.tools.Repair;
@@ -36,6 +37,10 @@ public class Main {
             case "filter":
                 Filter filter = new Filter();
                 filter.filter(args);
+                break;
+            case "cluster":
+                Cluster cluster = new Cluster();
+                cluster.cluster(args);
                 break;
             default:
                 Repair repair = new Repair();

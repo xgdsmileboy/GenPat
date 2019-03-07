@@ -96,7 +96,7 @@ public class Cluster {
         }
     }
 
-    private void cluster(String[] args){
+    public void cluster(String[] args){
         Options options = options();
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
