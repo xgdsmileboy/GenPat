@@ -33,6 +33,7 @@ public class AryCreation extends Expr {
     private MType _type = null;
     private List<Expr> _dimension = null;
     private AryInitializer _initializer = null;
+    private int _dim = 0;
 
     /**
      * ArrayCreation: new PrimitiveType [ Expression ] { [ Expression ] } { [ ]
@@ -48,6 +49,11 @@ public class AryCreation extends Expr {
 
     public void setArrayType(MType type) {
         _type = type;
+        setDimension(type.getDimension());
+    }
+
+    public void setDimension(int dimension) {
+        _dim = dimension;
     }
 
     public void setDimension(List<Expr> dimension) {
@@ -86,8 +92,10 @@ public class AryCreation extends Expr {
             stringBuffer.append(expr.toSrcString());
             stringBuffer.append("]");
         }
+        for (int i = _dim - _dimension.size(); i > 0; i--) {
+            stringBuffer.append("[]");
+        }
         if (_initializer != null) {
-            stringBuffer.append("=");
             stringBuffer.append(_initializer.toSrcString());
         }
         return stringBuffer;
@@ -127,9 +135,8 @@ public class AryCreation extends Expr {
         }
         buffer.append(dimension);
         if (_initializer != null) {
-            buffer.append("=");
             if (initializer == null) {
-                buffer.append(nameMapping.getExprID(_initializer));
+                buffer.append("{}");
             } else {
                 buffer.append(initializer);
             }

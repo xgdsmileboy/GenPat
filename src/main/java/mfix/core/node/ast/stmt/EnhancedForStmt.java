@@ -99,6 +99,7 @@ public class EnhancedForStmt extends Stmt {
 						.append(nameMapping.getTypeID(_varDecl.getDeclType()))
 						.append(' ')
 						.append(nameMapping.getExprID(_varDecl.getName()))
+						.append(" : ")
 						.append(nameMapping.getExprID(_expression))
 						.append("){}");
 			} else {
@@ -112,6 +113,7 @@ public class EnhancedForStmt extends Stmt {
 		} else {
 			buffer.append(var);
 		}
+		buffer.append(" : ");
 		buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp);
 		buffer.append(')');
 		buffer.append(body == null ? "{}" : body);

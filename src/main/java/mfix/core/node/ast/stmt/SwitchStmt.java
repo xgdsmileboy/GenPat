@@ -10,12 +10,12 @@ import mfix.common.util.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -84,15 +84,24 @@ public class SwitchStmt extends Stmt {
 		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		List<StringBuffer> strings = new ArrayList<>(_statements.size());
 		StringBuffer b;
+		Stmt stmt;
+		StringBuffer lastCase = null;
 		for (int i = 0; i < _statements.size(); i++) {
-			b = _statements.get(i).formalForm(nameMapping, false, keywords);
+			stmt = _statements.get(i);
+			b = stmt.formalForm(nameMapping, false, keywords);
 			if (b != null) {
+				if (lastCase != null) {
+					strings.add(lastCase);
+					lastCase = null;
+				}
 				strings.add(b);
+			} else if (stmt instanceof SwCase) {
+				lastCase = stmt.toSrcString();
 			}
 		}
 		if (isConsidered() || exp != null || !strings.isEmpty()) {
 			StringBuffer buffer = new StringBuffer("switch (");
-			buffer.append(nameMapping.getExprID(_expression)).append("){");
+			buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp).append("){");
 			if (!strings.isEmpty()) {
 				for (int i = 0; i < strings.size(); i++) {
 					buffer.append('\n').append(strings.get(i));

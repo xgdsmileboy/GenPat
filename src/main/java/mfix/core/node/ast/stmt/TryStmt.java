@@ -117,7 +117,7 @@ public class TryStmt extends Stmt {
 		StringBuffer res = null;
 		boolean hasRes = false;
 		if (_resource != null && _resource.size() > 0) {
-			res = new StringBuffer('(');
+			res = new StringBuffer("(");
 			StringBuffer b = _resource.get(0).formalForm(nameMapping, isConsidered(), keywords);
 			if (b == null) {
 				res.append(nameMapping.getExprID(_resource.get(0)));

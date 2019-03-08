@@ -21,6 +21,7 @@ public class Insertion extends Modification {
         super(parent, VIndex.MOD_INSERT);
         _index = index;
         _insert = insert;
+        _insert.setChanged();
     }
 
     public void setPrenode(Node node) {

@@ -191,7 +191,7 @@ public class ClusterImpl {
         public Void call() {
             if (_fstGroups != null && _sndGroups != null) {
                 LevelLogger.debug(Thread.currentThread().getName() + " : "
-                        + (_fstGroups.size() + _sndGroups.size()));
+                        + (_fstGroups.size() + " | " + _sndGroups.size()));
                 Group next;
                 for (Group fstGroup : _fstGroups) {
                     for (Iterator<Group> iter = _sndGroups.iterator(); iter.hasNext(); ) {

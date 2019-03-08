@@ -68,6 +68,14 @@ public class MType extends Node {
 		}
 	}
 
+	public int getDimension() {
+		if (isArrayType()) {
+			return ((ArrayType) _type).getDimensions();
+		} else {
+			return 0;
+		}
+	}
+
 	@Override
 	public boolean compare(Node other) {
 		if (other instanceof MType) {
@@ -89,6 +97,8 @@ public class MType extends Node {
 			StringBuffer buffer = toSrcString();
 			keywords.add(buffer.toString());
 			return buffer;
+		} else if (isConsidered()) {
+			return new StringBuffer(nameMapping.getTypeID(this));
 		} else {
 			return null;
 		}

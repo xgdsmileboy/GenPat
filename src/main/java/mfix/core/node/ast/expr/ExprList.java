@@ -94,6 +94,8 @@ public class ExprList extends Node {
                     buffer.append(',');
                     buffer.append(strings.get(i));
                 }
+            } else if (isConsidered()){
+                return new StringBuffer();
             }
             return buffer;
         } else if (isConsidered()) {

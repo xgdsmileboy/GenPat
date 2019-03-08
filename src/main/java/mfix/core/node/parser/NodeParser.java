@@ -588,7 +588,6 @@ public class NodeParser {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AryInitializer aryInitializer = new AryInitializer(_fileName, startLine, endLine, node);
-
         List<Expr> expressions = new ArrayList<>();
         for (Object object : node.expressions()) {
             Expr expr = (Expr) process((ASTNode) object, scope, strcture);

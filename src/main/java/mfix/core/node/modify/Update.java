@@ -15,6 +15,12 @@ public class Update extends Modification {
         super(parent, VIndex.MOD_UPDATE);
         _srcNode = srcNode;
         _tarNode= tarNode;
+        if (_srcNode != null) {
+            _srcNode.setChanged();
+        }
+        if (_tarNode != null) {
+            _tarNode.setChanged();
+        }
     }
 
     public Node getSrcNode() {
@@ -36,12 +42,17 @@ public class Update extends Modification {
     public boolean patternMatch(Modification m) {
         if (m instanceof Update) {
             Update update = (Update) m;
-            if (getSrcNode().patternMatch(update.getSrcNode())) {
-                if (getTarNode() == null) {
-                    return update.getTarNode() == null;
+            if (getSrcNode() == null) {
+                if (update.getSrcNode() != null) {
+                    return false;
                 }
-                return  getTarNode().patternMatch(update.getTarNode());
+            } else if (!getSrcNode().patternMatch(update.getSrcNode())) {
+                return false;
             }
+            if (getTarNode() == null) {
+                return update.getTarNode() == null;
+            }
+            return getTarNode().patternMatch(update.getTarNode());
         }
         return false;
     }
