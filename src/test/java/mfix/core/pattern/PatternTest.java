@@ -7,7 +7,6 @@
 
 package mfix.core.pattern;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import mfix.common.util.Constant;
 import mfix.common.util.Utils;
 import mfix.core.TestCase;
@@ -71,5 +70,37 @@ public class PatternTest extends TestCase {
         }
 
     }
+
+//    @Test
+//    public void test() throws Exception {
+//        Set<Integer> ids = new HashSet<>(Arrays.asList(16, 75, 18, 72, 54, 14, 6));
+//        Set<Pattern> patterns = new HashSet<>();
+//        Pattern p;
+//        String file;
+//        String base = System.getProperty("user.dir") + "/tmp/";
+////        for (int i = 1; i < 100; i++) {
+//        for (Integer i : ids) {
+//            file = base + i + ".pattern";
+//            p = (Pattern) Utils.deserialize(file);
+//            p.setPatternName(file);
+//            patterns.add(p);
+//        }
+//        for (Pattern pt : patterns) {
+//            for (Modification m : pt.getAllModifications()) {
+//                System.out.println(m);
+//            }
+//            System.out.println(pt.formalForm());
+//        }
+//        ClusterImpl cluster = new ClusterImpl();
+//        Set<Group> groups = cluster.cluster(patterns);
+//
+//        int count = 0;
+//        for (Group g : groups) {
+//            System.out.println(g.getRepresentPattern().formalForm());
+//            int size = g.getIsomorphicPatternPath().size() + 1;
+//            count += size;
+//        }
+//        System.out.println(groups.size() + " | " + count);
+//    }
 
 }
