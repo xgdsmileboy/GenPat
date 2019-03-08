@@ -40,7 +40,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -62,7 +61,7 @@ public class Filter {
     private int _currThreadCount = 0;
     private int _maxThreadCount = 9;
     private ExecutorService _threadPool;
-    private List<Future<Boolean>> _threadResultList = new ArrayList<>();
+    private List<Future<List<String>>> _threadResultList = new ArrayList<>();
 
     private Options options() {
         Options options = new Options();
@@ -131,16 +130,17 @@ public class Filter {
         try {
             if (_currThreadCount >= _maxThreadCount) {
                 LevelLogger.info("Thread pool is full ....");
-                for (Future<Boolean> fs : _threadResultList) {
-                    Boolean result = fs.get();
+                for (Future<List<String>> fs : _threadResultList) {
+                    List<String> result = fs.get();
+                    writeFile(result);
                     _currThreadCount--;
                 }
                 _threadResultList.clear();
                 _currThreadCount = _threadResultList.size();
                 LevelLogger.info("Cleared thread pool : " + _currThreadCount);
             }
-            Future<Boolean> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
-                    _maxChangeLine, _maxChangeAction, this));
+            Future<List<String>> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
+                    _maxChangeLine, _maxChangeAction));
             _threadResultList.add(future);
             _currThreadCount ++;
 
@@ -174,7 +174,7 @@ public class Filter {
         }
     }
 
-    public synchronized void writeFile(List<String> values) throws IOException {
+    public void writeFile(List<String> values) throws IOException {
         if (values != null) {
             _cacheList.addAll(values);
             _currItemCount += values.size();
@@ -185,7 +185,7 @@ public class Filter {
         }
     }
 
-    private synchronized void flush() throws IOException {
+    private void flush() throws IOException {
         LevelLogger.info("........FLUSHING.......");
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_outFile, true), "UTF-8"));
         for (String s : _cacheList) {
@@ -240,9 +240,10 @@ public class Filter {
             filter(new File(inPath));
         }
 
-        for (Future<Boolean> fs : _threadResultList) {
+        for (Future<List<String>> fs : _threadResultList) {
             try {
-                Boolean result = fs.get();
+                List<String> result = fs.get();
+                writeFile(result);
             } catch (Exception e) { }
         }
         try {
@@ -262,36 +263,34 @@ public class Filter {
 
 }
 
-class ParseNode implements Callable<Boolean> {
+class ParseNode implements Callable<List<String>> {
 
     private String _srcFile;
     private String _tarFile;
     private int _maxChangeLine;
     private int _maxChangeAction;
-    private Filter _filter;
 
-    public ParseNode(String srcFile, String tarFile, int maxChangeLine, int maxChangeAction, Filter filter) {
+    public ParseNode(String srcFile, String tarFile, int maxChangeLine, int maxChangeAction) {
         _srcFile = srcFile;
         _tarFile = tarFile;
         _maxChangeLine = maxChangeLine;
         _maxChangeAction = maxChangeAction;
-        _filter = filter;
     }
 
     @Override
-    public Boolean call() {
+    public List<String> call() {
         LevelLogger.info("PARSE > " + _srcFile);
+        List<String> result = new LinkedList<>();
         if (!(new File(_srcFile).exists()) || !(new File(_tarFile).exists())) {
             LevelLogger.info("Following file may not exist ... SKIP.\n" + _srcFile + "\n" + _tarFile);
-            return false;
+            return result;
         }
         PatternExtractor patternExtractor = new PatternExtractor();
         Set<Pattern> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile);
         if (patternCandidates.isEmpty()) {
             LevelLogger.info("No pattern node ... SKIP.");
-            return false;
+            return result;
         }
-        List<String> result = new LinkedList<>();
         // the following is the filter process
         for (Pattern pattern : patternCandidates) {
             Set<Modification> modifications = pattern.getAllModifications();
@@ -332,33 +331,8 @@ class ParseNode implements Callable<Boolean> {
                 result.add(s);
             }
             result.add(savePatternPath);
-//            Set<MethodInv> methods = node.getUniversalAPIs(new HashSet<>(), true);
-//            if (!methods.isEmpty()) {
-//                for (MethodInv methodInv : methods) {
-//                    String rType = methodInv.getTypeString();
-//                    String name = methodInv.getName().getName();
-//                    Expr expr = methodInv.getExpression();
-//                    String oType = expr == null ? "?" : expr.getTypeString();
-//                    List<Expr> exprList = methodInv.getArguments().getExpr();
-//                    int argNum = exprList.size();
-//                    // the first "?" is the placeholder for argument
-//                    StringBuffer argType = new StringBuffer("?");
-//                    for (Expr e : exprList) {
-//                        argType.append("," + e.getTypeString());
-//                    }
-//
-//                    result.add(String.format("%s\t%d\t%s\t%s\t%s\t%s", name, argNum, rType, oType, argType, savePatternPath));
-//                }
-//            } else {
-//                LevelLogger.info("No API info .... SKIP.");
-//            }
         }
-        try {
-            _filter.writeFile(result);
-        } catch (IOException e) {
-            LevelLogger.error("Write to file failed in parse thread!");
-        }
-        return true;
+        return result;
     }
 
 }
