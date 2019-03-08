@@ -119,7 +119,8 @@ public class Filter {
         while((line = br.readLine()) != null) {
             // TODO: here is the hard encode, improve later
             if (line.startsWith("/home/jiajun/GithubData")) {
-                patterns.add(line.substring(0, line.lastIndexOf('-')));
+                patterns.add(line.substring(0, line.lastIndexOf('-'))
+                        .replace("pattern-ver1-serial", "buggy-version"));
             }
         }
         br.close();
