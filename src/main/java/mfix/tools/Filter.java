@@ -27,16 +27,20 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -63,9 +67,16 @@ public class Filter {
     private Options options() {
         Options options = new Options();
 
+        OptionGroup optionGroup = new OptionGroup();
+        optionGroup.setRequired(true);
+
         Option option = new Option("ip", "inpath", true, "input path.");
-        option.setRequired(true);
-        options.addOption(option);
+        optionGroup.addOption(option);
+
+        option = new Option("filter", "filterFile", true, "existing record for filter");
+        optionGroup.addOption(option);
+
+        options.addOptionGroup(optionGroup);
 
         option = new Option("line", "maxLine", true, "max number of changed lines within one pattern.");
         option.setRequired(false);
@@ -75,7 +86,7 @@ public class Filter {
         option.setRequired(false);
         options.addOption(option);
 
-        OptionGroup optionGroup = new OptionGroup();
+        optionGroup = new OptionGroup();
         optionGroup.setRequired(false);
         optionGroup.addOption(new Option("op", "outpath", true, "output path."));
         optionGroup.addOption(new Option("of", "outfile", true, "output file."));
@@ -100,6 +111,50 @@ public class Filter {
         JavaFile.writeStringToFile(fileName, "");
     }
 
+    private Set<String> readPatterns(String file) throws IOException {
+        Set<String> patterns = new HashSet<>();
+        BufferedReader br;
+        br = new BufferedReader(new FileReader(new File(file)));
+        String line;
+        while((line = br.readLine()) != null) {
+            // TODO: here is the hard encode, improve later
+            if (line.startsWith("/home/jiajun/GithubData")) {
+                patterns.add(line.substring(0, line.lastIndexOf('-')));
+            }
+        }
+        br.close();
+        return patterns;
+    }
+
+    private void filter(String srcFileName, String tarFileName) {
+        try {
+            if (_currThreadCount >= _maxThreadCount) {
+                LevelLogger.info("Thread pool is full ....");
+                for (Future<Boolean> fs : _threadResultList) {
+                    Boolean result = fs.get();
+                    _currThreadCount--;
+                }
+                _threadResultList.clear();
+                _currThreadCount = _threadResultList.size();
+                LevelLogger.info("Cleared thread pool : " + _currThreadCount);
+            }
+            Future<Boolean> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
+                    _maxChangeLine, _maxChangeAction, this));
+            _threadResultList.add(future);
+            _currThreadCount ++;
+
+        } catch (Exception e) {
+            LevelLogger.error("Parse node failed : ", e);
+        }
+    }
+
+    private void filterWithExistingRecord(String file) throws IOException {
+        Set<String> files = readPatterns(file);
+        for (String f : files) {
+            filter(f, f.replace("buggy-version", "fixed-version"));
+        }
+    }
+
     private void filter(File file) {
         if (file.isDirectory()) {
             if (file.getName().endsWith("buggy-version")) {
@@ -107,25 +162,7 @@ public class Filter {
                 for (File f : files) {
                     String srcFileName = f.getAbsolutePath();
                     String tarFileName = srcFileName.replace("buggy-version", "fixed-version");
-                    try {
-                        if (_currThreadCount >= _maxThreadCount) {
-                            LevelLogger.info("Thread pool is full ....");
-                            for (Future<Boolean> fs : _threadResultList) {
-                                Boolean result = fs.get();
-                                _currThreadCount--;
-                            }
-                            _threadResultList.clear();
-                            _currThreadCount = _threadResultList.size();
-                            LevelLogger.info("Cleared thread pool : " + _currThreadCount);
-                        }
-                        Future<Boolean> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
-                                _maxChangeLine, _maxChangeAction, this));
-                        _threadResultList.add(future);
-                        _currThreadCount ++;
-
-                    } catch (Exception e) {
-                        LevelLogger.error("Parse node failed : ", e);
-                    }
+                    filter(srcFileName, tarFileName);
                 }
             } else {
                 File[] files = file.listFiles();
@@ -172,7 +209,6 @@ public class Filter {
             System.exit(1);
         }
 
-        final String inPath = cmd.getOptionValue("ip");
         if (cmd.hasOption("line")) {
             _maxChangeLine = Integer.parseInt(cmd.getOptionValue("line"));
         }
@@ -191,7 +227,17 @@ public class Filter {
         init(_outFile);
         _threadPool = Executors.newFixedThreadPool(_maxThreadCount);
 
-        filter(new File(inPath));
+        if (cmd.hasOption("filter")) {
+            String inPath = cmd.getOptionValue("filter");
+            try {
+                filterWithExistingRecord(inPath);
+            } catch (IOException e) {
+                LevelLogger.error("Failed to filter!", e);
+            }
+        } else {
+            String inPath = cmd.getOptionValue("ip");
+            filter(new File(inPath));
+        }
 
         for (Future<Boolean> fs : _threadResultList) {
             try {
@@ -208,7 +254,7 @@ public class Filter {
         System.out.println("Finish filtering !");
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Filter filter = new Filter();
         filter.filter(args);
     }
