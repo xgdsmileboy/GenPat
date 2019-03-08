@@ -52,8 +52,9 @@ public class Cleaner {
                               int argNumber) {
         Set<String> patternFileList = method2PatternFiles.getOrDefault(new Pair<>(mName,
                 argNumber), new HashSet<>());
+        String versionStr = "pattern-" + Constant.PATTERN_VERSION + "-serial";
         for (String patternFile : patternFileList) {
-            int ind = patternFile.indexOf("pattern-ver4-serial");
+            int ind = patternFile.indexOf(versionStr);
             String filePath = Constant.DATASET_PATH + patternFile.substring(0, ind - 1);
 
             String patternSerializePath = Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION);

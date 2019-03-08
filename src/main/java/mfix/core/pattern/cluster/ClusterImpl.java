@@ -34,31 +34,12 @@ public class ClusterImpl {
         _returnedNodes = new HashSet<>();
     }
 
-    public void callback(Set<Group> set) {
-        update(set, true);
-    }
-
-    public Set<Set<Group>> clusteredNodeSet() {
-        return update(null, false);
-    }
-
-    private synchronized Set<Set<Group>> update(Set<Group> set, boolean isSubThread) {
-        Set<Set<Group>> result = null;
-        if (isSubThread) {
-            _returnedNodes.add(set);
-        } else {
-            result = _returnedNodes;
-            _returnedNodes = new HashSet<>();
-        }
-        return result;
-    }
-
     public Set<Group> cluster(Set<Pattern> patterns) {
         Set<Group> results = new HashSet<>();
         Set<Pair<Set<Group>, Set<Group>>> compareClusters = initClusterPair(patterns);
         int currTaskCount = 0;
         ExecutorService threadPool = Executors.newFixedThreadPool(_maxThreadCount);
-        List<Future<Void>> threadResultList = new LinkedList<>();
+        List<Future<Set<Group>>> threadResultList = new LinkedList<>();
         while (true) {
             if (threadResultList.isEmpty() && compareClusters.size() == 1) {
                 Pair<Set<Group>, Set<Group>> pair = compareClusters.iterator().next();
@@ -74,30 +55,30 @@ public class ClusterImpl {
                 }
             }
             Iterator<Pair<Set<Group>, Set<Group>>> iter = compareClusters.iterator();
-            while (iter.hasNext()) {
+            while (iter.hasNext() && currTaskCount < _maxThreadCount) {
                 Pair<Set<Group>, Set<Group>> pair = iter.next();
-                Future<Void> future = threadPool.submit(new NodeCluster(pair.getFirst(), pair.getSecond(),
-                        this));
+                Future<Set<Group>> future = threadPool.submit(new NodeCluster(pair.getFirst(), pair.getSecond()));
                 threadResultList.add(future);
                 currTaskCount++;
+                iter.remove();
             }
-            compareClusters.clear();
-            Set<Set<Group>> sets = clusteredNodeSet();
-            if (currTaskCount >= _maxThreadCount || sets.isEmpty()) {
+            compareClusters.addAll(buildClusterPair(_returnedNodes));
+            _returnedNodes = new HashSet<>();
+            if (currTaskCount >= _maxThreadCount || compareClusters.isEmpty()) {
                 currTaskCount -= waitSubThreads(threadResultList);
             }
-            compareClusters.addAll(buildClusterPair(sets));
         }
 
         return results;
     }
 
-    private int waitSubThreads(List<Future<Void>> threadResultList) {
+    private int waitSubThreads(List<Future<Set<Group>>> threadResultList) {
         int size = 0;
         try {
             LevelLogger.debug("Clear existing thread ...");
-            for (Future<Void> future : threadResultList) {
-                future.get();
+            for (Future<Set<Group>> future : threadResultList) {
+                Set<Group> result = future.get();
+                _returnedNodes.add(result);
                 size++;
             }
             LevelLogger.debug("Finish clear ....");
@@ -175,20 +156,18 @@ public class ClusterImpl {
      * Finally, after comparing, the class combine two sets of
      * pattern nodes to one set with merging the same pattern nodes.
      */
-    private static class NodeCluster implements Callable<Void> {
+    private static class NodeCluster implements Callable<Set<Group>> {
 
         private Set<Group> _fstGroups;
         private Set<Group> _sndGroups;
-        private ClusterImpl _callback;
 
-        public NodeCluster(Set<Group> fstGroups, Set<Group> sndGroups, ClusterImpl callback) {
+        public NodeCluster(Set<Group> fstGroups, Set<Group> sndGroups) {
             _fstGroups = fstGroups;
             _sndGroups = sndGroups;
-            _callback = callback;
         }
 
         @Override
-        public Void call() {
+        public Set<Group> call() {
             if (_fstGroups != null && _sndGroups != null) {
                 LevelLogger.debug(Thread.currentThread().getName() + " : "
                         + (_fstGroups.size() + " | " + _sndGroups.size()));
@@ -200,19 +179,21 @@ public class ClusterImpl {
                             fstGroup.addIsomorphicPatternPath(next.getRepresentPatternFile());
                             fstGroup.addIsomorphicPatternPaths(next.getIsomorphicPatternPath());
                             iter.remove();
+                            break;
                         }
                     }
                 }
                 Set<Group> result = new HashSet<>();
                 result.addAll(_fstGroups);
                 result.addAll(_sndGroups);
-                _callback.callback(result);
+                return result;
             } else if (_fstGroups != null) {
-                _callback.callback(new HashSet<>(_fstGroups));
+                return new HashSet<>(_fstGroups);
             } else if (_sndGroups != null) {
-                _callback.callback(new HashSet<>(_sndGroups));
+                return new HashSet<>(_sndGroups);
+            } else {
+                return new HashSet<>();
             }
-            return null;
         }
     }
 

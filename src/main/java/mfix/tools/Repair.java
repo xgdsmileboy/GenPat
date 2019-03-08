@@ -113,8 +113,9 @@ public class Repair {
     private Pattern readPattern(String patternFile) {
 
         // TODO(jiang) : The following hard encode should be optimized finally
-        int ind = patternFile.indexOf("pattern-ver4-serial");
-        int indLen = "pattern-ver4-serial".length();
+        String versionStr = "pattern-" + Constant.PATTERN_VERSION + "-serial";
+        int ind = patternFile.indexOf(versionStr);
+        int indLen = versionStr.length();
         String filePath = Constant.DATASET_PATH + patternFile.substring(0, ind - 1);
         String fileAndMethod = patternFile.substring(ind + indLen + 1);
 

@@ -61,9 +61,10 @@ public class PatternPrinter {
         outFile = outFile + "/" + mName + "_" + argNumber + ".txt";
         StringBuffer stringBuffer = new StringBuffer(">>>>>>> " + mName + " | " + argNumber + "<<<<<<<<");
         stringBuffer.append("\n-------------------\n");
+        String versionStr = "pattern-" + Constant.PATTERN_VERSION + "-serial";
+        int indLen = versionStr.length();
         for (String patternFile : patternFileList) {
-            int ind = patternFile.indexOf("pattern-ver4-serial");
-            int indLen = "pattern-ver4-serial".length();
+            int ind = patternFile.indexOf(versionStr);
             String filePath = Constant.DATASET_PATH +  patternFile.substring(0, ind - 1);
             String fileAndMethod = patternFile.substring(ind + indLen + 1);
 

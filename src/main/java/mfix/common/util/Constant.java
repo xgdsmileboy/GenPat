@@ -74,7 +74,7 @@ public class Constant {
 
             // System commands
             Constant.API_MAPPING_FILE = prop.getProperty("PATH.API_MAPPING_FILE");
-            Constant.PATTERN_VERSION = "ver" + prop.getProperty("PATTERN.VERSION", "0");
+            Constant.PATTERN_VERSION = "ver" + prop.getProperty("PATTERN.VERSION", "1");
             String number = prop.getProperty("PATTERN.NUMBER", "All");
             Constant.PATTERN_NUMBER = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
             Constant.RESULT_PATH = prop.getProperty("PATH.RESULT", HOME);
