@@ -127,6 +127,7 @@ public class Filter {
     }
 
     private void filter(String srcFileName, String tarFileName) {
+        LevelLogger.debug("FILTER : " + srcFileName);
         try {
             if (_currThreadCount >= _maxThreadCount) {
                 LevelLogger.info("Thread pool is full ....");
