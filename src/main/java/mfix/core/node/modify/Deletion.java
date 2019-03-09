@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Deletion extends Modification {
 
+    private static final long serialVersionUID = 4063889250515342335L;
     private Node _node2Del;
     private int _index;
 

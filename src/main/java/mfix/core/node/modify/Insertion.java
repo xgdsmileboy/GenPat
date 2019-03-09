@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Insertion extends Modification {
 
+    private static final long serialVersionUID = -3606760167363150327L;
     private int _index;
     private Node _preNode;
     private Node _nexNode;

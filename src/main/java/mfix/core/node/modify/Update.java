@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Update extends Modification {
 
+    private static final long serialVersionUID = -4006265328894276618L;
     private Node _srcNode;
     private Node _tarNode;
 
