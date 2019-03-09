@@ -97,7 +97,7 @@ public class VarDeclarationStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer dec = _declType.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer frag = new StringBuffer();
 		StringBuffer b = _fragments.get(0).formalForm(nameMapping, isConsidered(), keywords);

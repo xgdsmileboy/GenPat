@@ -71,7 +71,7 @@ public class ThrowStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		if (isConsidered() || exp != null) {
 			StringBuffer buffer = new StringBuffer("throw ");

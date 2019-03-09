@@ -80,7 +80,7 @@ public class ConstructorInv  extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer arg = _arguments.formalForm(nameMapping, isConsidered(), keywords);
 		if (arg == null) {
 			if (isConsidered()) {

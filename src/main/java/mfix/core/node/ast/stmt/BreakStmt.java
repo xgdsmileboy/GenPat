@@ -63,7 +63,7 @@ public class BreakStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer identifier = _identifier == null ? null : _identifier.formalForm(nameMapping, isConsidered(), keywords);
 		if (identifier == null) {
 			if (isConsidered()) {

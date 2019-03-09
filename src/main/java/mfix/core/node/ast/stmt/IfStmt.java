@@ -87,7 +87,7 @@ public class IfStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer cond = _condition.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer then = _then.formalForm(nameMapping, false, keywords);
 		StringBuffer els = _else == null ? null : _else.formalForm(nameMapping, false, keywords);

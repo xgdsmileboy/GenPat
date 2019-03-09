@@ -80,7 +80,7 @@ public class SwitchStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		List<StringBuffer> strings = new ArrayList<>(_statements.size());
 		StringBuffer b;

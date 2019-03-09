@@ -113,7 +113,7 @@ public class TryStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer res = null;
 		boolean hasRes = false;
 		if (_resource != null && _resource.size() > 0) {

@@ -75,7 +75,7 @@ public class CatClause extends Node {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer excep = _exception.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer blk = _blk.formalForm(nameMapping, isConsidered(), keywords);
 		if (excep == null && blk == null) {

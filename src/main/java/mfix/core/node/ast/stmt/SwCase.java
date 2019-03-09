@@ -72,7 +72,7 @@ public class SwCase extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, isConsidered(), keywords);
 		if (exp != null || isConsidered()) {
 			StringBuffer buffer = new StringBuffer();
