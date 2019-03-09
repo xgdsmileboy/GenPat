@@ -63,11 +63,12 @@ public class Insertion extends Modification {
     }
 
     @Override
-    public boolean patternMatch(Modification m) {
+    public boolean patternMatch(Modification m, Map<Node, Node> matchedNode) {
         if (m instanceof Insertion) {
             Insertion insertion = (Insertion) m;
-            return getParent().patternMatch(insertion.getParent())
-                    && getInsertedNode().patternMatch(insertion.getInsertedNode());
+            return (matchedNode.get(getParent()) == insertion.getParent()
+                    || getParent().patternMatch(insertion.getParent(), matchedNode))
+                    && getInsertedNode().patternMatch(insertion.getInsertedNode(), matchedNode);
         }
         return false;
     }

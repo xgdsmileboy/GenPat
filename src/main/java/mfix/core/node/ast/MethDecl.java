@@ -154,7 +154,7 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public boolean patternMatch(Node node) {
+    public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
         return (node instanceof MethDecl);
     }
 

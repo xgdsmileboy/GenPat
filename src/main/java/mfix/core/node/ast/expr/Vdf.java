@@ -110,13 +110,13 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public boolean patternMatch(Node node) {
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
 		if (node == null || isConsidered() != node.isConsidered()) {
 			return false;
 		}
 		if (isConsidered()) {
 			if (getModifications().isEmpty() || node.getNodeType() == TYPE.VARDECLFRAG) {
-				return NodeUtils.patternMatch(this, node, false);
+				return NodeUtils.patternMatch(this, node, matchedNode, false);
 			}
 			return false;
 		}

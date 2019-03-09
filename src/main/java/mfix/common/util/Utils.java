@@ -96,6 +96,20 @@ public class Utils {
         return true;
     }
 
+    public static boolean checkCompatibleBidirectionalPut(Node obj1, Node obj2, Map<Node, Node> map) {
+        Node n1 = map.get(obj1);
+        Node n2 = map.get(obj2);
+        if (n1 == null && n2 == null) {
+            map.put(obj1, obj2);
+            map.put(obj2, obj1);
+            return true;
+        }
+        if (n1 == obj2 && n2 == obj1) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Select project {@code whichProject} with bug ids{@code whichBugs}.
      * @param base

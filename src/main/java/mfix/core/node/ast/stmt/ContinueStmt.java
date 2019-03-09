@@ -76,15 +76,6 @@ public class ContinueStmt extends Stmt {
 		return new StringBuffer("continue ").append(identifier).append(';');
 	}
 
-	@Override
-	public boolean patternMatch(Node node) {
-		if (!super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			return NodeUtils.patternMatch(this, node, false);
-		}
-		return true;
-	}
-
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add("continue");

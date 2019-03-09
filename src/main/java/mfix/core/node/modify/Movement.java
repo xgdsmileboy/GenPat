@@ -9,6 +9,8 @@ package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
 
+import java.util.Map;
+
 /**
  * @author: Jiajun
  * @date: 2019-01-14
@@ -27,7 +29,7 @@ public class Movement extends Modification {
     }
 
     @Override
-    public boolean patternMatch(Modification m) {
+    public boolean patternMatch(Modification m, Map<Node, Node> matchedNode) {
         return false;
     }
 

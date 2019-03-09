@@ -89,17 +89,6 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public boolean patternMatch(Node node) {
-        if (!super.patternMatch(node)) {
-            return false;
-        }
-        if (isConsidered()) {
-            return node.getNodeType() == TYPE.BLOCK;
-        }
-        return true;
-    }
-
-    @Override
     protected void tokenize() {
         _tokens = new LinkedList<>();
         _tokens.add("{");

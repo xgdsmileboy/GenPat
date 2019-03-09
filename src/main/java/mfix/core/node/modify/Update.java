@@ -39,20 +39,20 @@ public class Update extends Modification {
     }
 
     @Override
-    public boolean patternMatch(Modification m) {
+    public boolean patternMatch(Modification m, Map<Node, Node> matchedNode) {
         if (m instanceof Update) {
             Update update = (Update) m;
             if (getSrcNode() == null) {
                 if (update.getSrcNode() != null) {
                     return false;
                 }
-            } else if (!getSrcNode().patternMatch(update.getSrcNode())) {
+            } else if (!getSrcNode().patternMatch(update.getSrcNode(), matchedNode)) {
                 return false;
             }
             if (getTarNode() == null) {
                 return update.getTarNode() == null;
             }
-            return getTarNode().patternMatch(update.getTarNode());
+            return getTarNode().patternMatch(update.getTarNode(), matchedNode);
         }
         return false;
     }

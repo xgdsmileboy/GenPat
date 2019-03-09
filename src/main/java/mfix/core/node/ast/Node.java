@@ -794,7 +794,7 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
-    public abstract boolean patternMatch(Node node);
+    public abstract boolean patternMatch(Node node, Map<Node, Node> matchedNode);
 
 
     /*********************************************************/

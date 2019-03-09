@@ -121,18 +121,6 @@ public class EnhancedForStmt extends Stmt {
 	}
 
 	@Override
-	public boolean patternMatch(Node node) {
-		if (!super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.EFOR) {
-				return NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.add("for");

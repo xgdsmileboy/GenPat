@@ -124,13 +124,13 @@ public abstract class Expr extends Node {
     }
 
     @Override
-    public boolean patternMatch(Node node) {
+    public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
         if (node == null || isConsidered() != node.isConsidered()) {
             return false;
         }
         if (isConsidered()) {
             if (node instanceof Expr) {
-                return NodeUtils.patternMatch(this, node, false);
+                return NodeUtils.patternMatch(this, node, matchedNode, false);
             }
             return false;
         }

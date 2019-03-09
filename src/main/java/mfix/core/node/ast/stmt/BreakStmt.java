@@ -76,18 +76,6 @@ public class BreakStmt extends Stmt {
 	}
 
 	@Override
-	public boolean patternMatch(Node node) {
-		if (!super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.BREACK) {
-				NodeUtils.patternMatch(this, node, false);
-			}
-			return false;
-		}
-		return true;
-	}
-
-	@Override
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		if(_identifier != null) {

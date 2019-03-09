@@ -2,7 +2,8 @@ package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
 import mfix.core.pattern.cluster.VIndex;
-import sun.util.resources.cldr.pa.CurrencyNames_pa;
+
+import java.util.Map;
 
 public class Deletion extends Modification {
 
@@ -27,13 +28,13 @@ public class Deletion extends Modification {
     }
 
     @Override
-    public boolean patternMatch(Modification m) {
+    public boolean patternMatch(Modification m, Map<Node, Node> matchedNode) {
         if (m instanceof Deletion) {
             Deletion deletion = (Deletion) m;
             if (getDelNode() == null) {
                 return deletion.getDelNode() == null;
             }
-            return getDelNode().patternMatch(deletion.getDelNode());
+            return getDelNode().patternMatch(deletion.getDelNode(), matchedNode);
         }
         return false;
     }

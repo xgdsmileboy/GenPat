@@ -16,9 +16,12 @@ import mfix.core.pattern.cluster.Vector;
 import mfix.core.pattern.match.PatternMatcher;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -143,10 +146,12 @@ public class Pattern implements PatternMatcher, Serializable {
         }
 
         boolean match;
+        Map<Node, Node> map = new Hashtable<>();
         for (Node node : nodes) {
             match = false;
             for (Iterator<Node> iter = others.iterator(); iter.hasNext();) {
-                if (node.patternMatch(iter.next())) {
+                map.clear();
+                if (node.patternMatch(iter.next(), map)) {
                     match = true;
                     iter.remove();
                 }
