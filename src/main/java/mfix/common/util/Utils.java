@@ -47,7 +47,7 @@ public class Utils {
         if (c1 == null || c2 == null) {
             return false;
         }
-        if (c1.size() != c2.size()) {
+        if (c1.size() == c2.size()) {
             for (String s : c1) {
                 if (!c2.contains(s)) {
                     return false;
