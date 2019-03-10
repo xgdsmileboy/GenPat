@@ -10,8 +10,10 @@ package mfix.core.pattern.cluster;
 import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
+import mfix.common.util.Triple;
 import mfix.core.pattern.Pattern;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -37,13 +39,13 @@ public class ClusterImpl {
 
     public Set<Group> cluster(Set<Pattern> patterns) {
         Set<Group> results = new HashSet<>();
-        Set<Pair<Set<Group>, Set<Group>>> compareClusters = initClusterPair(patterns);
+        List<Triple<Set<Group>, Set<Group>, Integer>> compareClusters = initClusterPair(patterns);
         int currTaskCount = 0;
         ExecutorService threadPool = Executors.newFixedThreadPool(_maxThreadCount);
         List<Future<Set<Group>>> threadResultList = new LinkedList<>();
         while (true) {
             if (threadResultList.isEmpty() && compareClusters.size() == 1) {
-                Pair<Set<Group>, Set<Group>> pair = compareClusters.iterator().next();
+                Triple<Set<Group>, Set<Group>, Integer> pair = compareClusters.iterator().next();
                 if (pair.getFirst() == null || pair.getSecond() == null) {
                     if (pair.getFirst() != null) {
                         results = pair.getFirst();
@@ -55,15 +57,17 @@ public class ClusterImpl {
                     break;
                 }
             }
-            Iterator<Pair<Set<Group>, Set<Group>>> iter = compareClusters.iterator();
+            Iterator<Triple<Set<Group>, Set<Group>, Integer>> iter = compareClusters.iterator();
             while (iter.hasNext() && currTaskCount < _maxThreadCount) {
-                Pair<Set<Group>, Set<Group>> pair = iter.next();
+                Triple<Set<Group>, Set<Group>, Integer> pair = iter.next();
                 Future<Set<Group>> future = threadPool.submit(new NodeCluster(pair.getFirst(), pair.getSecond()));
                 threadResultList.add(future);
                 currTaskCount++;
                 iter.remove();
             }
             compareClusters.addAll(buildClusterPair(_returnedNodes));
+            // Haffman-encoding-like merge, merge small sets first
+            compareClusters.sort(Comparator.comparingInt(Triple::getTag));
             _returnedNodes = new HashSet<>();
             if (currTaskCount >= _maxThreadCount || compareClusters.isEmpty()) {
                 currTaskCount -= waitSubThreads(threadResultList);
@@ -98,8 +102,8 @@ public class ClusterImpl {
      * @param patterns : patterns to group
      * @return : a set of pairs for clustering
      */
-    private Set<Pair<Set<Group>, Set<Group>>> initClusterPair(Set<Pattern> patterns) {
-        Set<Pair<Set<Group>, Set<Group>>> result = new HashSet<>();
+    private List<Triple<Set<Group>, Set<Group>, Integer>> initClusterPair(Set<Pattern> patterns) {
+        List<Triple<Set<Group>, Set<Group>, Integer>> result = new LinkedList<>();
         Group pre = null;
         for (Pattern pattern : patterns) {
             if (pre == null) {
@@ -109,14 +113,14 @@ public class ClusterImpl {
                 s1.add(pre);
                 Set<Group> s2 = new HashSet<>();
                 s2.add(new Group(pattern));
-                result.add(new Pair<>(s1, s2));
+                result.add(new Triple<>(s1, s2, s1.size() + s2.size()));
                 pre = null;
             }
         }
         if (pre != null) {
             Set<Group> s1 = new HashSet<>();
             s1.add(pre);
-            result.add(new Pair<>(s1, null));
+            result.add(new Triple<>(s1, null, s1.size()));
         }
         return result;
     }
@@ -127,19 +131,19 @@ public class ClusterImpl {
      * @param groupSets : a set of pattern sets to group
      * @return : a set of pairs for clustering
      */
-    private Set<Pair<Set<Group>, Set<Group>>> buildClusterPair(Set<Set<Group>> groupSets) {
-        Set<Pair<Set<Group>, Set<Group>>> result = new HashSet<>();
+    private Set<Triple<Set<Group>, Set<Group>, Integer>> buildClusterPair(Set<Set<Group>> groupSets) {
+        Set<Triple<Set<Group>, Set<Group>, Integer>> result = new HashSet<>();
         Set<Group> pre = null;
         for (Set<Group> nodes : groupSets) {
             if (pre == null) {
                 pre = nodes;
             } else {
-                result.add(new Pair<>(pre, nodes));
+                result.add(new Triple<>(pre, nodes, pre.size() + nodes.size()));
                 pre = null;
             }
         }
         if (pre != null) {
-            result.add(new Pair<>(pre, null));
+            result.add(new Triple<>(pre, null, pre.size()));
         }
         return result;
     }
