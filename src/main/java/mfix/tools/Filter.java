@@ -59,7 +59,7 @@ public class Filter {
     private int _cacheSize = 10000;
 
     private int _currThreadCount = 0;
-    private int _maxThreadCount = 9;
+    private int _maxThreadCount = Constant.MAX_FILTER_THREAD_NUM;
     private ExecutorService _threadPool;
     private List<Future<List<String>>> _threadResultList = new ArrayList<>();
 

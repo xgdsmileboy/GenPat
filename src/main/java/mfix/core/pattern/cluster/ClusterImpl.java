@@ -7,6 +7,7 @@
 
 package mfix.core.pattern.cluster;
 
+import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.pattern.Pattern;
@@ -27,7 +28,7 @@ import java.util.concurrent.Future;
  */
 public class ClusterImpl {
 
-    private int _maxThreadCount = 10;
+    private int _maxThreadCount = Constant.MAX_CLUSTUR_THREAD_NUM;
     private volatile Set<Set<Group>> _returnedNodes;
 
     public ClusterImpl() {

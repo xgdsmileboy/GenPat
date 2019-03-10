@@ -42,6 +42,9 @@ public class Constant {
     public final static double TOKEN_FREQENCY = 0.01;
     public final static double MAX_CHANGE_LINE_PER_METHOD = 20;
 
+    public static int MAX_CLUSTUR_THREAD_NUM;
+    public static int MAX_FILTER_THREAD_NUM;
+
     public static String API_MAPPING_FILE;
     public static String PATTERN_VERSION;
     public static int PATTERN_NUMBER;
@@ -82,7 +85,8 @@ public class Constant {
             Constant.PATTERN_EXTRACT_TIMEOUT = Integer.parseInt(prop.getProperty("PEXTRACTION.TIMEOUT", "30"));
             Constant.PATTERN_EXTRACT_FORCE = Boolean.parseBoolean(prop.getProperty("EXTRACT.FORCE", "false"));
             Constant.FIX_NUMBER = Integer.parseInt(prop.getProperty("FIX.MAX", "100"));
-
+            Constant.MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER_MAX_THREAD", "10"));
+            Constant.MAX_CLUSTUR_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER_MAX_THREAD", "10"));
         } catch (IOException e) {
             LevelLogger.error("#Constant get properties failed!" + e.getMessage());
         }
