@@ -150,10 +150,10 @@ public class Pattern implements PatternMatcher, Serializable {
         for (Node node : nodes) {
             match = false;
             for (Iterator<Node> iter = others.iterator(); iter.hasNext();) {
-                map.clear();
                 if (node.patternMatch(iter.next(), map)) {
                     match = true;
                     iter.remove();
+                    break;
                 }
             }
             if (!match) {

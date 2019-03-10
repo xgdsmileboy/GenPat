@@ -51,6 +51,7 @@ public class NodeUtils {
             }
 
             boolean exist = matchedNode.containsKey(fst);
+            if (exist && matchedNode.get(fst) == snd) return true;
             if (Utils.checkCompatibleBidirectionalPut(fst, snd, matchedNode)) {
                 Set<Modification> matched = new HashSet<>();
                 for (Modification m : fst.getModifications()) {
