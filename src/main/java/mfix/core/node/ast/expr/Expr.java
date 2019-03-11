@@ -129,7 +129,8 @@ public abstract class Expr extends Node {
             return false;
         }
         if (isConsidered()) {
-            if (node instanceof Expr) {
+            int size = getModifications().size() + node.getModifications().size();
+            if ((size == 0 && node instanceof Expr) || getNodeType() == node.getNodeType()) {
                 return NodeUtils.patternMatch(this, node, matchedNode, false);
             }
             return false;
