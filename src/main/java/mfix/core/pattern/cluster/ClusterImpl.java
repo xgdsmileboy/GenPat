@@ -73,6 +73,7 @@ public class ClusterImpl {
                 currTaskCount -= waitSubThreads(threadResultList);
             }
         }
+        threadPool.shutdown();
 
         return results;
     }
