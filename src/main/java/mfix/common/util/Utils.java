@@ -53,8 +53,10 @@ public class Utils {
                     return false;
                 }
             }
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
     public static boolean safeBufferEqual(StringBuffer s1, StringBuffer s2) {
