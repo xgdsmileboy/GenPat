@@ -206,7 +206,7 @@ public class Cluster {
             Set<Group> result = cluster.reset().cluster(patterns);
             try {
                 dump2File(result, outFile, append);
-                append = false;
+                append = true;
             } catch (IOException e) {
                 LevelLogger.error(String.format("Dump result to <%s> failed!", outFile));
             }
