@@ -87,6 +87,7 @@ public class Cluster {
         Set<String> set = new HashSet<>();
         while ((line = br.readLine()) != null) {
             if (line.startsWith("/home/jiajun/GithubData")) {
+                LevelLogger.debug(line);
                 keys = new Keys(set);
                 Set<String> paths = map.get(keys);
                 if (paths == null) {
