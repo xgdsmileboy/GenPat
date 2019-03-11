@@ -30,8 +30,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -39,6 +41,27 @@ import java.util.Set;
  * @date: 2019-02-11
  */
 public class Cluster {
+
+    private static class Keys{
+        private Set<String> _keys;
+        public Keys(Set<String> keys) {
+            _keys = keys;
+        }
+
+        @Override
+        public int hashCode() {
+            return _keys.size();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Keys) {
+                Keys key = (Keys) obj;
+                return Utils.safeCollectionEqual(_keys, key._keys);
+            }
+            return false;
+        }
+    }
 
     private Options options() {
         Options options = new Options();
@@ -52,6 +75,51 @@ public class Cluster {
         options.addOption(option);
 
         return options;
+    }
+
+    private Map<Keys, Set<String>> preClusterByKeys(String file) throws IOException {
+        LevelLogger.debug("Start to perform pre pattern clustering : " + file);
+        BufferedReader br;
+        br = new BufferedReader(new FileReader(new File(file)));
+        String line;
+        Keys keys;
+        Map<Keys, Set<String>> map = new HashMap<>();
+        Set<String> set = new HashSet<>();
+        while ((line = br.readLine()) != null) {
+            if (line.startsWith("/home/jiajun/GithubData")) {
+                keys = new Keys(set);
+                Set<String> paths = map.get(keys);
+                if (paths == null) {
+                    paths = new HashSet<>();
+                    map.put(keys, paths);
+                }
+                paths.add(line);
+                set = new HashSet<>();
+            } else {
+                set.add(line);
+            }
+        }
+        return map;
+    }
+
+    private Set<Pattern> readPatterns(Set<String> files) {
+        LevelLogger.debug("Start to load patterns from files!");
+        Set<Pattern> patterns = new HashSet<>();
+        Pattern p;
+        for (String f : files) {
+            try {
+                LevelLogger.debug("Deserialize : " + f);
+                p = (Pattern) Utils.deserialize(f);
+                p.setPatternName(f);
+                patterns.add(p);
+            } catch (Exception e) {
+                LevelLogger.error(e);
+                continue;
+            }
+        }
+
+        LevelLogger.debug("Finish deserialization!!");
+        return patterns;
     }
 
     private Set<Pattern> readPatterns(String file) throws IOException {
@@ -83,8 +151,8 @@ public class Cluster {
         return patterns;
     }
 
-    private void dump2File(Set<Group> groups, String outFile) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false), "UTF-8"));
+    private void dump2File(Set<Group> groups, String outFile, boolean append) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, append), "UTF-8"));
         LevelLogger.debug("Start dumping result to file : " + outFile);
         for (Group g : groups) {
             for (String s : g.getRepresentPattern().getKeywords()) {
@@ -118,20 +186,32 @@ public class Cluster {
         }
         String apiMappingFile = cmd.getOptionValue("if");
         String outFile = Utils.join(Constant.SEP, cmd.getOptionValue("op"), "clustered.txt");
-        Set<Pattern> patterns = null;
+        Map<Keys, Set<String>> key2Paths = null;
         try {
-            patterns = readPatterns(apiMappingFile);
-        } catch (IOException e) {
-            LevelLogger.error("Failed to read patterns to cluster.", e);
+            key2Paths = preClusterByKeys(apiMappingFile);
+        } catch (Exception e) {
+            LevelLogger.error("Failed to cluster by keys.", e);
             return;
         }
+
+        Set<Pattern> patterns;
+        boolean append = false;
+        int loop = key2Paths.size();
         ClusterImpl cluster = new ClusterImpl();
-        Set<Group> result = cluster.cluster(patterns);
-        try {
-            dump2File(result, outFile);
-        } catch (IOException e) {
-            LevelLogger.error(String.format("Dump result to <%s> failed!", outFile));
+        LevelLogger.info("====================== Total clusters : [ " + loop + " ] ===================");
+        for (Map.Entry<Keys, Set<String>> entry : key2Paths.entrySet()) {
+            LevelLogger.debug(">>>>>>>>>> LOOP LEFT [ " + (loop --) + " ] <<<<<<<<<<<");
+            patterns = readPatterns(entry.getValue());
+            Set<Group> result = cluster.reset().cluster(patterns);
+            try {
+                dump2File(result, outFile, append);
+                append = false;
+            } catch (IOException e) {
+                LevelLogger.error(String.format("Dump result to <%s> failed!", outFile));
+            }
         }
+
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
         System.out.println("Finish : result in " + outFile + " | " + simpleDateFormat.format(new Date()));
     }

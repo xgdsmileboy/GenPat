@@ -9,7 +9,6 @@ package mfix.core.pattern.cluster;
 
 import mfix.common.util.Constant;
 import mfix.common.util.LevelLogger;
-import mfix.common.util.Pair;
 import mfix.common.util.Triple;
 import mfix.core.pattern.Pattern;
 
@@ -35,6 +34,11 @@ public class ClusterImpl {
 
     public ClusterImpl() {
         _returnedNodes = new HashSet<>();
+    }
+
+    public ClusterImpl reset() {
+        _returnedNodes = new HashSet<>();
+        return this;
     }
 
     public Set<Group> cluster(Set<Pattern> patterns) {
