@@ -161,7 +161,7 @@ public class Cluster {
         for (Map.Entry<Keys, Set<String>> entry : key2Paths.entrySet()) {
             LevelLogger.debug(">>>>>>>>>> LOOP LEFT [ " + (loop --) + " ] <<<<<<<<<<<");
             patterns = readPatterns(entry.getValue());
-            Set<Group> result = cluster.reset().clusterPatterns(patterns);
+            Set<Group> result = cluster.reset().cluster(patterns);
             try {
                 dump2File(result, outFile, append);
                 append = true;
