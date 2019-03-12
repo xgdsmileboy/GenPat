@@ -10,8 +10,8 @@ package mfix.tools;
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
-import mfix.common.util.Pair;
 import mfix.common.util.Utils;
+import mfix.core.node.diff.TextDiff;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
@@ -22,12 +22,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,65 +33,84 @@ import java.util.Set;
  */
 public class PatternPrinter {
 
+    private final static String COMMAND = "<command> -f <arg> [-of <arg>]";
     private Options options() {
         Options options = new Options();
 
-        Option option = new Option("m", "APIName", true, "the name of API to focus on.");
+        Option option = new Option("if", "PatternFile", true, "Path of pattern file.");
         option.setRequired(true);
         options.addOption(option);
 
-        option = new Option("n", "argNumber", true, "number of argument number.");
-        option.setRequired(true);
-        options.addOption(option);
-
-        option = new Option("o", "outpath", true, "output path.");
-        option.setRequired(true);
+        option = new Option("of", "ResultFile", true, "Result file for output.");
+        option.setRequired(false);
         options.addOption(option);
 
         return options;
     }
 
-    public static void print(Map<Pair<String, Integer>, Set<String>> method2PatternFiles, String mName, int argNumber
-            , String outFile) {
-        Set<String> patternFileList = method2PatternFiles.getOrDefault(new Pair<>(mName,
-                argNumber), new HashSet<>());
-        outFile = outFile + "/" + mName + "_" + argNumber + ".txt";
-        StringBuffer stringBuffer = new StringBuffer(">>>>>>> " + mName + " | " + argNumber + "<<<<<<<<");
-        stringBuffer.append("\n-------------------\n");
-        String versionStr = "pattern-" + Constant.PATTERN_VERSION + "-serial";
-        int indLen = versionStr.length();
-        for (String patternFile : patternFileList) {
-            int ind = patternFile.indexOf(versionStr);
-            String filePath = Constant.DATASET_PATH +  patternFile.substring(0, ind - 1);
-            String fileAndMethod = patternFile.substring(ind + indLen + 1);
+    public static void print(String patternFile, String outFile) {
+        Pattern fixPattern;
+        try {
+            fixPattern = (Pattern) Utils.deserialize(patternFile);
+        } catch (IOException | ClassNotFoundException e) {
+            LevelLogger.error("Deserialize pattern failed!", e);
+            return;
+        }
 
-            String patternSerializePath = Utils.join(Constant.SEP, filePath, Constant.PATTERN_VERSION,
-                    fileAndMethod);
-            File file = new File(patternSerializePath);
-            if (!file.exists()) {
-                stringBuffer = new StringBuffer();
-                continue;
-            }
-            Pattern fixPattern;
-            try {
-                fixPattern = (Pattern) Utils.deserialize(patternSerializePath);
-            } catch (IOException | ClassNotFoundException e) {
-                LevelLogger.error("Deserialize pattern failed!", e);
-                stringBuffer = new StringBuffer();
-                continue;
-            }
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("FILE | ").append(fixPattern.getPatternName())
+                .append(Constant.NEW_LINE)
+                .append("SRC >> ").append(fixPattern.getFileName())
+                .append(Constant.NEW_LINE)
+                .append("TAR >> ").append(fixPattern.getPatternNode().getBindingNode().getFileName())
+                .append("-----------------------")
+                .append(Constant.NEW_LINE);
+        StringBuffer b = new StringBuffer();
+        for (String ip : fixPattern.getImports()) {
+            b.append(ip).append(Constant.NEW_LINE);
+        }
+        b.append(fixPattern.getPatternNode().getBindingNode().toSrcString());
+        TextDiff diff = new TextDiff(fixPattern.getPatternNode().toSrcString().toString(), b.toString());
+        Set<Modification> modifications = fixPattern.getAllModifications();
+        stringBuffer.append("DIFF >> [").append(diff.getMiniDiff().size()).append("]>>>")
+                .append(Constant.NEW_LINE)
+                .append(diff.getFullDiff())
+                .append(Constant.NEW_LINE).append(Constant.NEW_LINE)
+                .append("Modification >> [")
+                .append(modifications.size()).append("]>>>")
+                .append(Constant.NEW_LINE);
 
-            Set<Modification> modifications = fixPattern.getAllModifications();
-            if (modifications.size() > 0) {
-                stringBuffer.append("FILE: " + patternSerializePath + "\n");
-                stringBuffer.append("\n>>>>>>\n");
-                for (Modification m : modifications) {
-                    stringBuffer.append(m.toString() + "\n");
-                }
-                stringBuffer.append("-------------------\n");
-                JavaFile.writeStringToFile(outFile, stringBuffer.toString(), true);
+        if (modifications.size() > 0) {
+            for (Modification m : modifications) {
+                stringBuffer.append(m.toString()).append(Constant.NEW_LINE);
             }
-            stringBuffer = new StringBuffer();
+        }
+
+        Set<String> keys = fixPattern.getKeywords();
+        stringBuffer.append(Constant.NEW_LINE).append(Constant.NEW_LINE)
+                .append("SRC KEYS : [")
+                .append(keys.size()).append("]>>>")
+                .append(Constant.NEW_LINE);
+        for (String s : keys) {
+            stringBuffer.append(s).append(',');
+        }
+
+        keys = fixPattern.getTargetKeywords();
+        stringBuffer.append(Constant.NEW_LINE).append(Constant.NEW_LINE)
+                .append("TAR KEYS : [")
+                .append(keys.size()).append("]>>>")
+                .append(Constant.NEW_LINE);
+        for (String s : keys) {
+            stringBuffer.append(s).append(',');
+        }
+
+        stringBuffer.append(Constant.NEW_LINE).append(Constant.NEW_LINE)
+                .append("FORMAL FORM : ").append(Constant.NEW_LINE)
+                .append(fixPattern.formalForm());
+
+        System.out.println(stringBuffer);
+        if (outFile != null) {
+            JavaFile.writeStringToFile(outFile, stringBuffer.toString());
         }
     }
 
@@ -108,16 +124,17 @@ public class PatternPrinter {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             LevelLogger.error(e.getMessage());
-            formatter.printHelp("<command> -m <arg> -n <arg> -o <arg>", options);
+            formatter.printHelp(COMMAND, options);
             System.exit(1);
         }
-        String mName = cmd.getOptionValue("m");
-        int argNumber = Integer.parseInt(cmd.getOptionValue("n"));
-        String outPath = cmd.getOptionValue("o");
-        print(Utils.loadAPI(Constant.API_MAPPING_FILE, Constant.PATTERN_NUMBER, new HashSet<>()), mName, argNumber,
-                outPath);
+        String patternFile = cmd.getOptionValue("if");
+        String outFile = null;
+        if (cmd.hasOption("of")) {
+            outFile = cmd.getOptionValue("of");
+        }
+        print(patternFile, outFile);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
-        System.out.println("Finish : " + mName + " | " + argNumber + " > " + simpleDateFormat.format(new Date()));
+        System.out.println("Finish : " + patternFile + " > " + simpleDateFormat.format(new Date()));
     }
 
     public static void main(String[] args) {

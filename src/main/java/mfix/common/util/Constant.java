@@ -54,6 +54,8 @@ public class Constant {
     public static boolean PATTERN_EXTRACT_FORCE;
     public static int FIX_NUMBER;
 
+    public final static String DEFAULT_PATTERN_HOME = "/home/jiajun/GithubData";
+
     /*
      * markers
      */

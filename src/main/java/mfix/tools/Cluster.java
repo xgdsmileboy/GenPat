@@ -66,18 +66,25 @@ public class Cluster {
     private Options options() {
         Options options = new Options();
 
-        Option option = new Option("if", "APIFile", true, "The file contains the path information of patterns.");
+        Option option = new Option("if", "PatternFile", true,
+                "The file contains the path information of patterns.");
         option.setRequired(true);
         options.addOption(option);
 
-        option = new Option("op", "OutPath", true, "The output path of result");
+        option = new Option("dir", "BaseDir", true,
+                "The home directory of pattern files.");
+        option.setRequired(false);
+        options.addOption(option);
+
+        option = new Option("op", "ResultPath", true,
+                "The output path of result");
         option.setRequired(false);
         options.addOption(option);
 
         return options;
     }
 
-    private Map<Keys, Set<String>> preClusterByKeys(String file, Map<Keys, Set<String>> map) throws IOException {
+    private Map<Keys, Set<String>> preClusterByKeys(String baseDir, String file, Map<Keys, Set<String>> map) throws IOException {
         LevelLogger.debug("Start to perform pre pattern clustering : " + file);
         BufferedReader br;
         br = new BufferedReader(new FileReader(new File(file)));
@@ -85,7 +92,7 @@ public class Cluster {
         Keys keys;
         Set<String> set = new HashSet<>();
         while ((line = br.readLine()) != null) {
-            if (line.startsWith("/home/jiajun/GithubData")) {
+            if (line.startsWith(baseDir)) {
                 LevelLogger.debug(line);
                 keys = new Keys(set);
                 Set<String> paths = map.get(keys);
@@ -142,11 +149,11 @@ public class Cluster {
         LevelLogger.debug("Finish dumping result to file : " + outFile);
     }
 
-    private void clusterPatterns(String outFile, String... apiMappingFiles) {
+    private void clusterPatterns(String baseDir, String outFile, String... recordFiles) {
         Map<Keys, Set<String>> key2Paths = new HashMap<>();
         try {
-            for (String apiMappingFile : apiMappingFiles) {
-                key2Paths = preClusterByKeys(apiMappingFile, key2Paths);
+            for (String record : recordFiles) {
+                key2Paths = preClusterByKeys(baseDir, record, key2Paths);
             }
         } catch (Exception e) {
             LevelLogger.error("Failed to cluster by keys.", e);
@@ -171,7 +178,6 @@ public class Cluster {
         }
     }
 
-
     public void cluster(String[] args){
         Options options = options();
         CommandLineParser parser = new DefaultParser();
@@ -182,17 +188,21 @@ public class Cluster {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             LevelLogger.error(e.getMessage());
-            formatter.printHelp("<command> -if <arg> -op <arg>", options);
+            formatter.printHelp("<command> -if <arg> [-dir <arg>] [-op <arg>]", options);
             System.exit(1);
         }
-        String apiMappingFile = cmd.getOptionValue("if");
+        String recordFiles = cmd.getOptionValue("if");
         String outFile;
         if (cmd.hasOption("op")) {
             outFile = Utils.join(Constant.SEP, cmd.getOptionValue("op"), "clustered.txt");
         } else {
-            outFile = Utils.join(Constant.SEP, Constant.HOME, "cluster.txt");
+            outFile = Utils.join(Constant.SEP, Constant.HOME, "clustered.txt");
         }
-        clusterPatterns(outFile, apiMappingFile.split(","));
+        String baseDir = Constant.DEFAULT_PATTERN_HOME;
+        if (cmd.hasOption("dir")) {
+            baseDir = cmd.getOptionValue("dir");
+        }
+        clusterPatterns(baseDir, outFile, recordFiles.split(","));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
         System.out.println("Finish : result in " + outFile + " | " + simpleDateFormat.format(new Date()));
