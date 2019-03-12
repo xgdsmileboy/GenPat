@@ -74,6 +74,9 @@ public class ClusterImpl {
             compareClusters.sort(Comparator.comparingInt(Triple::getTag));
             _returnedNodes = new HashSet<>();
             if (currTaskCount >= _maxThreadCount || compareClusters.isEmpty()) {
+                try {
+                    Thread.sleep(5000); // enable more time for concurrent execution
+                } catch (Exception e) {}
                 currTaskCount -= waitSubThreads(threadResultList);
             }
         }
