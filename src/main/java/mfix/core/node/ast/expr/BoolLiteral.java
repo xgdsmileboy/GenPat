@@ -8,10 +8,10 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -54,7 +54,12 @@ public class BoolLiteral extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        return leafFormalForm(nameMapping, parentConsidered, keywords);
+//        return leafFormalForm(nameMapping, parentConsidered, keywords);
+        if (isConsidered()) {
+            return new StringBuffer(nameMapping.getExprID(this));
+        } else {
+            return null;
+        }
     }
 
     @Override
