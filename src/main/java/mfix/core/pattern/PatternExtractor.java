@@ -30,15 +30,11 @@ import java.util.Set;
  */
 public class PatternExtractor {
 
-    public Set<Pattern> extractPattern(Set<Pair<String, String>> fixPairs) {
-        Set<Pattern> nodes = new HashSet<>();
-        for(Pair<String, String> pair : fixPairs) {
-            nodes.addAll(extractPattern(pair.getFirst(), pair.getSecond()));
-        }
-        return nodes;
+    public Set<Pattern> extractPattern(String srcFile, String tarFile) {
+        return extractPattern(srcFile, tarFile, 20);
     }
 
-    public Set<Pattern> extractPattern(String srcFile, String tarFile) {
+    public Set<Pattern> extractPattern(String srcFile, String tarFile, int maxChangeLine) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         Set<String> imports = new HashSet<>();
@@ -76,7 +72,7 @@ public class PatternExtractor {
             }
 
             TextDiff diff = new TextDiff(srcNode, tarNode);
-            if (diff.getMiniDiff().size() > Constant.MAX_CHANGE_LINE_PER_METHOD) {
+            if (diff.getMiniDiff().size() > maxChangeLine) {
                 continue;
             }
 

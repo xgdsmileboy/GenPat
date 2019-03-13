@@ -29,7 +29,7 @@ import java.util.concurrent.Future;
  */
 public class ClusterImpl {
 
-    private int _maxThreadCount = Constant.MAX_CLUSTUR_THREAD_NUM;
+    private int _maxThreadCount = Constant.MAX_CLUSTER_THREAD_NUM;
     private volatile Set<Set<Group>> _returnedNodes;
 
     public ClusterImpl() {

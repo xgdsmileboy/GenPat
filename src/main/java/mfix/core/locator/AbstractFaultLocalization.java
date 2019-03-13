@@ -17,12 +17,12 @@ import java.util.List;
  * @date: 2018/9/25
  */
 public abstract class AbstractFaultLocalization {
-    protected final int DEFAULT_THRETHOD = 0;
-    protected Subject _subject = null;
-    protected List<String> _failedTests = null;
-    protected List<String> _passedTests = null;
-    protected List<Location> _faultyLocations = null;
 
+    protected final int DEFAULT_THRETHOD = 0;
+    protected Subject _subject;
+    protected List<String> _failedTests;
+    protected List<String> _passedTests;
+    protected List<Location> _faultyLocations;
 
     public AbstractFaultLocalization(Subject subject) {
         _subject = subject;

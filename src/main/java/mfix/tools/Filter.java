@@ -335,7 +335,7 @@ class ParseNode implements Callable<List<String>> {
             return result;
         }
         PatternExtractor patternExtractor = new PatternExtractor();
-        Set<Pattern> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile);
+        Set<Pattern> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile, _maxChangeLine);
         if (patternCandidates.isEmpty()) {
             LevelLogger.debug("No pattern node ... SKIP.");
             return result;
