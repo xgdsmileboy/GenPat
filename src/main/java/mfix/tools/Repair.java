@@ -37,10 +37,14 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: Jiajun
@@ -97,8 +101,40 @@ public class Repair {
         return null;
     }
 
-    private List<String> filterPatterns(String patternRecords, Set<String> keys, int topK) {
-        return null;
+    private List<String> filterPatterns(String patternRecords, Set<String> keys, int topK) throws IOException {
+        List<Pair<String, Integer>> patterns = new LinkedList<>();
+        Set<String> set = new HashSet<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(patternRecords), "UTF-8"));
+        String line;
+        while((line = br.readLine()) != null) {
+            if (line.startsWith(Constant.DEFAULT_PATTERN_HOME)) {
+                if (line.contains("#")) {
+                    boolean match = true;
+                    for (String s : set) {
+                        if (!keys.contains(s)) {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match) {
+                        String[] info = line.split("#");
+                        if (info.length != 2) {
+                            LevelLogger.error("Record file format error : " + line);
+                        } else {
+                            patterns.add(new Pair<>(info[0], Integer.parseInt(info[1])));
+                            set.clear();
+                        }
+                    }
+                }
+            } else {
+                set.add(line);
+            }
+        }
+        topK = topK > patterns.size() ? patterns.size() : topK;
+        List<String> result = patterns.stream()
+                .sorted(Comparator.comparingInt(Pair<String, Integer>::getSecond).reversed())
+                .limit(topK).map(pair -> pair.getFirst()).collect(Collectors.toList());
+        return result;
     }
 
     private Set<String> getKeys(Node node) {
@@ -168,20 +204,20 @@ public class Repair {
                 break;
             }
             matchInstance.apply();
-            StringBuffer fixedProg;
+            StringBuffer fixedCode;
             try{
-                fixedProg = bNode.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
+                fixedCode = bNode.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
             } catch (Exception e) {
                 matchInstance.reset();
                 LevelLogger.error("AdaptModification causes exception ....", e);
                 continue;
             }
-            if (fixedProg == null) {
+            if (fixedCode == null) {
                 matchInstance.reset();
                 continue;
             }
 
-            String fixed = fixedProg.toString();
+            String fixed = fixedCode.toString();
             if (origin.equals(fixed) || alreadyGenerated.contains(fixed)) {
                 matchInstance.reset();
                 continue;
@@ -230,14 +266,14 @@ public class Repair {
     private void tryFix(String patternRecords, Subject subject) {
         Timer timer = new Timer(Constant.MAX_REPAIR_TIME);
         String start = timer.start();
-        LevelLogger.info("Repair : " + subject.getHome() + "\nSTART : " + start);
+        LevelLogger.info("Repair : " + subject.getHome() + "\n" + start);
         final Set<String> emptySet = new HashSet<>();
         AbstractFaultLocalization locator = FaultLocalizationFactory.dispatch(subject);
-        List<Location> locations = locator.getLocations(100); // top-100 faulty locations
+        List<Location> locations = locator.getLocations(Constant.MAX_REPIAR_LOCARION);
         Map<String, Map<Integer, Set<String>>> buggyFileVarMap = new HashMap<>();
         int totalFix = 0;
         for (Location location : locations) {
-            if (timer.timeout()) {
+            if (timer.timeout() || totalFix > Constant.MAX_PATCH_NUMBER) {
                 break;
             }
             LevelLogger.info("Location : " + location.getRelClazzFile() + "#" + location.getLine());
@@ -250,7 +286,13 @@ public class Repair {
             }
             Node node = getBuggyNode(file, location.getLine());
 
-            List<String> patterns = filterPatterns(patternRecords, getKeys(node), Constant.TOP_K_PATTERN_EACH_LOCATION);
+            List<String> patterns;
+            try {
+                patterns = filterPatterns(patternRecords, getKeys(node), Constant.TOP_K_PATTERN_EACH_LOCATION);
+            } catch (IOException e) {
+                LevelLogger.error("Filter patterns failed!", e);
+                continue;
+            }
             for (String s : patterns) {
                 Pattern p = readPattern(s);
                 Set<String> vars = varMaps.getOrDefault(node.getStartLine(), emptySet);
@@ -258,9 +300,6 @@ public class Repair {
                 if (totalFix > Constant.MAX_PATCH_NUMBER) {
                     break;
                 }
-            }
-            if (totalFix > Constant.MAX_PATCH_NUMBER) {
-                break;
             }
         }
 
