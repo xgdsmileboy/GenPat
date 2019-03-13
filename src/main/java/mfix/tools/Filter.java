@@ -66,7 +66,7 @@ public class Filter {
     private ExecutorService _threadPool;
     private List<Future<List<String>>> _threadResultList = new ArrayList<>();
 
-    private final static String COMMAND = "<command> -ip <arg> " +
+    private final static String COMMAND = "<command> -ip <arg> | -filter <arg> " +
                                                     "[-dir <arg>] " +
                                                     "[-line <arg>] " +
                                                     "[-change <arg>] " +
@@ -266,7 +266,7 @@ public class Filter {
         optionMap.put("of", outFile);
 
         if (cmd.hasOption("filter")) {
-            optionMap.put("filter", "true");
+            optionMap.put("filter", cmd.getOptionValue("filter"));
         } else {
             optionMap.put("ip", cmd.getOptionValue("ip"));
         }
