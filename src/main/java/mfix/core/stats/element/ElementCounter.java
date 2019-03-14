@@ -1,6 +1,6 @@
 package mfix.core.stats.element;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 

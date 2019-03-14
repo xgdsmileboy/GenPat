@@ -7,6 +7,7 @@
 
 package mfix.common.util;
 
+import mfix.common.conf.Constant;
 import mfix.common.java.D4jSubject;
 import mfix.common.java.JCompiler;
 import mfix.common.java.Subject;

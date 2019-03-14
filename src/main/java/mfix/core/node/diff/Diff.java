@@ -7,7 +7,7 @@
 
 package mfix.core.node.diff;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.node.match.Matcher;

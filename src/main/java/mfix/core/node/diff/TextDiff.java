@@ -7,7 +7,7 @@
 
 package mfix.core.node.diff;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.core.node.ast.Node;
 import mfix.core.node.diff.text.AddLine;
 import mfix.core.node.diff.text.DelLine;

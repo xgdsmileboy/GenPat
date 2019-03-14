@@ -7,7 +7,7 @@
 
 package mfix.core.pattern;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.Utils;
 import mfix.core.TestCase;
 import mfix.core.node.modify.Modification;

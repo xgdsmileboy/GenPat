@@ -7,7 +7,7 @@
 
 package mfix.tools;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

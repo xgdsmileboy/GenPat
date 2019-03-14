@@ -8,7 +8,7 @@
 package mfix.core.search;
 
 import mfix.common.java.D4jSubject;
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;

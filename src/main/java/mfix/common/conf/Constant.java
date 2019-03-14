@@ -5,7 +5,10 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.common.util;
+package mfix.common.conf;
+
+import mfix.common.util.LevelLogger;
+import mfix.common.util.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;

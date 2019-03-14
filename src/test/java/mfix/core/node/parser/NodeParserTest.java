@@ -7,11 +7,10 @@
 
 package mfix.core.node.parser;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.TestCase;
-import mfix.core.node.parser.NodeParser;
 import mfix.core.node.match.Matcher;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;

@@ -1,6 +1,6 @@
 package mfix.core.stats;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.core.TestCase;
 import mfix.core.stats.element.*;
 

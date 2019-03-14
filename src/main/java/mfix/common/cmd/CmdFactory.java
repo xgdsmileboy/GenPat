@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.common.util;
+package mfix.common.cmd;
 
 import mfix.common.java.Subject;
 

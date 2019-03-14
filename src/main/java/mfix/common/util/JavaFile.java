@@ -7,6 +7,7 @@
 
 package mfix.common.util;
 
+import mfix.common.conf.Constant;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;

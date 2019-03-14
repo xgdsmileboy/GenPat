@@ -7,7 +7,7 @@
 
 package mfix.core.locator;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 
 /**
  * @author: Jiajun

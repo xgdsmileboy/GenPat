@@ -10,7 +10,7 @@ package mfix.tools;
 import mfix.common.java.FakeSubject;
 import mfix.common.java.JCompiler;
 import mfix.common.java.Subject;
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;

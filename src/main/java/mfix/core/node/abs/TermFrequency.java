@@ -7,7 +7,7 @@
 
 package mfix.core.node.abs;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.ast.Node;
 

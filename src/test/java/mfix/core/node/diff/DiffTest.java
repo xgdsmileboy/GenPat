@@ -7,11 +7,8 @@
 
 package mfix.core.node.diff;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.core.TestCase;
-import mfix.core.node.diff.AstDiff;
-import mfix.core.node.diff.Diff;
-import mfix.core.node.diff.TextDiff;
 import org.junit.Assert;
 import org.junit.Test;
 

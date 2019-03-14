@@ -7,7 +7,7 @@
 
 package mfix.core.pattern;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.node.abs.CodeAbstraction;
