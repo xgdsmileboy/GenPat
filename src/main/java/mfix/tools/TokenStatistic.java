@@ -232,8 +232,8 @@ public class TokenStatistic {
     }
 
     public static void main(String[] args) {
-        Filter filter = new Filter();
-        filter.filter(args);
+        TokenStatistic tokenStatistic = new TokenStatistic();
+        tokenStatistic.statistic(args);
     }
 
 }
