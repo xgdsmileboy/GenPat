@@ -201,7 +201,7 @@ public class TokenStatistic {
         if (cmd.hasOption("of")) {
             outFile = cmd.getOptionValue("of");
         } else {
-            outFile = Utils.join(Constant.SEP, Constant.HOME, "PatternRecord.txt");
+            outFile = Utils.join(Constant.SEP, Constant.HOME, "AllTokens.txt");
         }
         optionMap.put("of", outFile);
 
