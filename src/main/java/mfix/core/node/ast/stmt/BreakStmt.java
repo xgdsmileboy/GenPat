@@ -63,7 +63,7 @@ public class BreakStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer identifier = _identifier == null ? null : _identifier.formalForm(nameMapping, isConsidered(), keywords);
 		if (identifier == null) {
 			if (isConsidered()) {
@@ -73,18 +73,6 @@ public class BreakStmt extends Stmt {
 			return null;
 		}
 		return new StringBuffer("break ").append(identifier).append(';');
-	}
-
-	@Override
-	public boolean patternMatch(Node node) {
-		if (!super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.BREACK) {
-				NodeUtils.patternMatch(this, node, false);
-			}
-			return false;
-		}
-		return true;
 	}
 
 	@Override

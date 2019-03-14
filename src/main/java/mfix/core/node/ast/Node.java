@@ -6,7 +6,6 @@
  */
 package mfix.core.node.ast;
 
-import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
@@ -459,6 +458,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return _changed;
     }
 
+    public void setChanged() {
+        _changed = true;
+    }
+
     public boolean isConsidered() {
         return _expanded || _changed || _insertDepend || _bindingNode == null;
     }
@@ -698,9 +701,6 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     public StringBuffer getFormalForm() {
-        if (_formalFormCache != null && _formalFormCache.length() == 0) {
-            LevelLogger.fatal(new IllegalAccessException("Please compute the formal form a head of time!"));
-        }
         return _formalFormCache;
     }
 
@@ -716,7 +716,7 @@ public abstract class Node implements NodeComparator, Serializable {
      * @return : the formal form of the pattern with {@code StringBuffer} form
      */
     public StringBuffer formalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        if (!_deserialize_tag || (_formalFormCache != null && _formalFormCache.length() == 0)) {
+        if (!_deserialize_tag) {
             _deserialize_tag = true;
             _formalFormCache = toFormalForm0(nameMapping, parentConsidered, keywords);
         }
@@ -794,7 +794,7 @@ public abstract class Node implements NodeComparator, Serializable {
         }
     }
 
-    public abstract boolean patternMatch(Node node);
+    public abstract boolean patternMatch(Node node, Map<Node, Node> matchedNode);
 
 
     /*********************************************************/

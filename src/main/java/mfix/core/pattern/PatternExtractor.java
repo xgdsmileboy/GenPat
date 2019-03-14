@@ -14,6 +14,7 @@ import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.abs.TermFrequency;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.parser.NodeParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -29,17 +30,24 @@ import java.util.Set;
  */
 public class PatternExtractor {
 
-    public Set<Pattern> extractPattern(Set<Pair<String, String>> fixPairs) {
-        Set<Pattern> nodes = new HashSet<>();
-        for(Pair<String, String> pair : fixPairs) {
-            nodes.addAll(extractPattern(pair.getFirst(), pair.getSecond()));
-        }
-        return nodes;
+    public Set<Pattern> extractPattern(String srcFile, String tarFile) {
+        return extractPattern(srcFile, tarFile, 20);
     }
 
-    public Set<Pattern> extractPattern(String srcFile, String tarFile) {
+    public Set<Pattern> extractPattern(String srcFile, String tarFile, int maxChangeLine) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
+        Set<String> imports = new HashSet<>();
+        Set<String> srcImports = new HashSet<>();
+        for (Object o : srcUnit.imports()) {
+            srcImports.add(o.toString());
+        }
+        for (Object o : tarUnit.imports()) {
+            String s = o.toString();
+            if (!srcImports.contains(s)) {
+                imports.add(s);
+            }
+        }
         Set<Pattern> patterns = new HashSet<>();
         if (srcUnit == null || tarUnit == null) {
             return patterns;
@@ -63,6 +71,11 @@ public class PatternExtractor {
                 continue;
             }
 
+            TextDiff diff = new TextDiff(srcNode, tarNode);
+            if (diff.getMiniDiff().size() > maxChangeLine) {
+                continue;
+            }
+
             if(new Matcher().greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
                 Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
                 Set<Node> temp;
@@ -80,7 +93,7 @@ public class PatternExtractor {
 //                srcNode.doAbstraction(counter);
                 srcNode.doAbstractionNew(abstraction.lazyInit());
                 tarNode.doAbstractionNew(abstraction);
-                patterns.add(new Pattern(srcNode));
+                patterns.add(new Pattern(srcNode, imports));
             }
         }
 

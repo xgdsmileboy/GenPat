@@ -21,16 +21,17 @@ import java.util.List;
  */
 public class D4jSubject extends Subject {
 
-    private final String __name__ = "@Subject ";
-    private int _id = 0;
+    public final static String NAME = "D4jSubject";
+    private int _id;
 
-    public D4jSubject(String d4Jbase, String projName, int id) {
-        super(Utils.join(Constant.SEP, d4Jbase, projName, projName + "_" + id + "_buggy"), projName);
-        setPath(projName, id);
+    public D4jSubject(String base, String name, int id) {
+        super(Utils.join(Constant.SEP, base, name, name + "_" + id + "_buggy"), name);
+        _type = NAME;
+        setPath(name, id);
         _id = id;
-        _classpath = obtainClasspath(projName);
+        _classpath = obtainClasspath(name);
         // Special case
-        if(projName.equals("chart")) {
+        if(name.equals("chart")) {
             _src_level = SOURCE_LEVEL.L_1_4;
         } else {
             _src_level = SOURCE_LEVEL.L_1_6;
@@ -45,7 +46,7 @@ public class D4jSubject extends Subject {
         String file = Utils.join(Constant.SEP, Constant.D4J_SRC_INFO, projName, id + ".txt");
         List<String> paths = JavaFile.readFileToStringList(file);
         if(paths == null || paths.size() < 4) {
-            LevelLogger.error(String.format(__name__ + "#setPath : path info error : <{0}>", file));
+            LevelLogger.error(String.format("D4jSubject#setPath : path info error : <{0}>", file));
             return;
         }
         _ssrc = paths.get(0);
@@ -97,5 +98,15 @@ public class D4jSubject extends Subject {
                 System.err.println("UNKNOWN project name : " + projName);
         }
         return classpath;
+    }
+
+    @Override
+    public boolean compile() {
+        return true;
+    }
+
+    @Override
+    public boolean test() {
+        return true;
     }
 }

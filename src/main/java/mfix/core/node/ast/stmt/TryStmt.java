@@ -113,11 +113,11 @@ public class TryStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer res = null;
 		boolean hasRes = false;
 		if (_resource != null && _resource.size() > 0) {
-			res = new StringBuffer('(');
+			res = new StringBuffer("(");
 			StringBuffer b = _resource.get(0).formalForm(nameMapping, isConsidered(), keywords);
 			if (b == null) {
 				res.append(nameMapping.getExprID(_resource.get(0)));
@@ -171,18 +171,6 @@ public class TryStmt extends Stmt {
 			return buffer;
 		}
 		return null;
-	}
-
-	@Override
-	public boolean patternMatch(Node node) {
-		if (super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.TRY) {
-				return NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
-		}
-		return true;
 	}
 
 	@Override

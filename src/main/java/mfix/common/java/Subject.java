@@ -15,8 +15,9 @@ import java.util.List;
  * @author: Jiajun
  * @date: 9/21/18
  */
-public class Subject {
+public class Subject implements IExecute {
 
+    protected String _type;
     protected String _base;
     protected String _name;
     protected String _ssrc;
@@ -62,6 +63,10 @@ public class Subject {
         _classpath = classpath;
     }
 
+    public String getType() {
+        return _type;
+    }
+
     public String getHome() {
         return _base;
     }
@@ -90,7 +95,7 @@ public class Subject {
         _compile_file = compileFile;
     }
 
-    public boolean comileFile() {
+    public boolean compileFile() {
         return _compile_file;
     }
 
@@ -152,6 +157,16 @@ public class Subject {
         if (!file.exists()) {
             file.mkdirs();
         }
+        return true;
+    }
+
+    @Override
+    public boolean compile() {
+        return true;
+    }
+
+    @Override
+    public boolean test() {
         return true;
     }
 

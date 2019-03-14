@@ -80,13 +80,14 @@ public class InfixExpr extends Expr {
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
 		StringBuffer lhs = _lhs.formalForm(nameMapping, consider, keywords);
+		StringBuffer op = _operator.formalForm(nameMapping, consider, keywords);
 		StringBuffer rhs = _rhs.formalForm(nameMapping, consider, keywords);
-		if (lhs == null && rhs == null) {
+		if (op == null && lhs == null && rhs == null) {
 			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
 		}
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(lhs == null ? nameMapping.getExprID(_lhs) : lhs)
-				.append(_operator.toSrcString().toString())
+				.append(op == null ? _operator.toSrcString().toString() : op)
 				.append(rhs == null ? nameMapping.getExprID(_rhs) : rhs);
 		return buffer;
 	}

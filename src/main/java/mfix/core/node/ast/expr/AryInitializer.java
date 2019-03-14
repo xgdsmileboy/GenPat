@@ -85,8 +85,9 @@ public class AryInitializer extends Expr {
             } else {
                 return super.toFormalForm0(nameMapping, parentConsidered, keywords);
             }
+        } else {
+            return super.toFormalForm0(nameMapping, parentConsidered, keywords);
         }
-        return null;
     }
 
     @Override

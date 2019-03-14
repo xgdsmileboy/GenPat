@@ -7,9 +7,9 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.FVector;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
-import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -43,7 +43,12 @@ public class ThisExpr extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		return leafFormalForm(parentConsidered, keywords);
+//		return leafFormalForm(nameMapping, parentConsidered, keywords);
+		if (isConsidered()) {
+			return new StringBuffer(nameMapping.getExprID(this));
+		} else {
+			return null;
+		}
 	}
 
 	@Override

@@ -651,40 +651,53 @@ public class JavaFile {
      * @param replace : replace string
      * @throws IOException
      */
-    public static void sourceReplace(String fileName, List<String> source, int startLine, int endLine, String replace) throws IOException{
-        File file = new File(fileName);
-        if(!file.exists()){
-            LevelLogger.error("File : " + fileName + " does not exist!");
-            return;
-        }
+    public static String sourceReplace(String fileName, Set<String> imports, List<String> source,
+                                     int startLine, int endLine, String replace) {
+        StringBuffer replacedSource = new StringBuffer();
         boolean flag = false;
         StringBuffer stringBuffer = new StringBuffer();
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
+        boolean insertImport = true;
         for(int i = 1; i < source.size(); i++){
             if(i == startLine){
                 String origin = source.get(i).replace(" ", "");
                 if(origin.startsWith("}else")){
-                    bw.write("} else ");
+                    replacedSource.append("} else ");
                 }
-                bw.write("// start of generated patch" + Constant.NEW_LINE);
-                bw.write(replace);
-                bw.write("// end of generated patch" + Constant.NEW_LINE);
-                stringBuffer.append("// start of original code" + Constant.NEW_LINE);
-                stringBuffer.append("//" + source.get(i) + Constant.NEW_LINE);
+                replacedSource.append("// start of generated patch")
+                        .append(Constant.NEW_LINE)
+                        .append(replace)
+                        .append("// end of generated patch")
+                        .append(Constant.NEW_LINE);
+
+                stringBuffer.append("/* start of original code")
+                        .append(Constant.NEW_LINE)
+                        .append(source.get(i))
+                        .append(Constant.NEW_LINE);
                 flag = true;
             } else if(startLine < i && i <= endLine){
-                stringBuffer.append("//" + source.get(i) + Constant.NEW_LINE);
+                stringBuffer.append(source.get(i))
+                        .append(Constant.NEW_LINE);
                 continue;
             } else {
                 if(flag){
-                    bw.write(stringBuffer.toString());
-                    bw.write("// end of original code" + Constant.NEW_LINE);
+                    replacedSource.append(stringBuffer)
+                            .append("end of original code */")
+                            .append(Constant.NEW_LINE);
                     stringBuffer = null;
                     flag = false;
                 }
-                bw.write(source.get(i) + Constant.NEW_LINE);
+                replacedSource.append(source.get(i)).append(Constant.NEW_LINE);
+                if (insertImport && (source.get(i).startsWith("package ")
+                        || source.get(i).startsWith("import "))) {
+                    for (String s : imports) {
+                        replacedSource.append(s).append(Constant.NEW_LINE);
+                    }
+                    insertImport = false;
+                }
             }
         }
-        bw.close();
+        String srcCode = replacedSource.toString();
+        JavaFile.writeStringToFile(fileName, srcCode);
+        return srcCode;
     }
 }

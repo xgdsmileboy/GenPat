@@ -67,7 +67,7 @@ public class Blk extends Stmt {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        if (isAbstract()) return null;
+        if (isAbstract() && !isConsidered()) return null;
         List<StringBuffer> strings = new ArrayList<>(_statements.size());
         StringBuffer b;
         for (int i = 0; i < _statements.size(); i++) {
@@ -86,17 +86,6 @@ public class Blk extends Stmt {
             buffer.append(strings.isEmpty() ? '}' : "\n}");
             return buffer;
         }
-    }
-
-    @Override
-    public boolean patternMatch(Node node) {
-        if (!super.patternMatch(node)) {
-            return false;
-        }
-        if (isConsidered()) {
-            return node.getNodeType() == TYPE.BLOCK;
-        }
-        return true;
     }
 
     @Override

@@ -154,7 +154,7 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public boolean patternMatch(Node node) {
+    public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
         return (node instanceof MethDecl);
     }
 
@@ -200,10 +200,10 @@ public class MethDecl extends Node {
 
     @Override
     public List<Node> getAllChildren() {
+        List<Node> children = new ArrayList<>(_arguments);
         if (_body == null) {
-            return new ArrayList<>(0);
+            return children;
         } else {
-            List<Node> children = new ArrayList<>(1);
             children.add(_body);
             return children;
         }
@@ -294,7 +294,7 @@ public class MethDecl extends Node {
         for(Object modifier : _modifiers) {
             stringBuffer.append(modifier.toString() + " ");
         }
-        if(_retTypeStr != null) {
+        if(!_retTypeStr.equals("?")) {
             stringBuffer.append(_retTypeStr + " ");
         }
         stringBuffer.append(_name.toSrcString());

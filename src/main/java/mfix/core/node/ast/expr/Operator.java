@@ -82,14 +82,18 @@ public abstract class Operator extends Node {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		return null;
+		if (isConsidered()) {
+			return this.toSrcString();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
-	public boolean patternMatch(Node node) {
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
 		if (node == null || isConsidered() != node.isConsidered()) {
 			return false;
 		}
-		return NodeUtils.patternMatch(this, node, false);
+		return NodeUtils.patternMatch(this, node, matchedNode, false);
 	}
 }

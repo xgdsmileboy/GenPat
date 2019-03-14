@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Insertion extends Modification {
 
+    private static final long serialVersionUID = -3606760167363150327L;
     private int _index;
     private Node _preNode;
     private Node _nexNode;
@@ -21,6 +22,7 @@ public class Insertion extends Modification {
         super(parent, VIndex.MOD_INSERT);
         _index = index;
         _insert = insert;
+        _insert.setChanged();
     }
 
     public void setPrenode(Node node) {
@@ -62,11 +64,12 @@ public class Insertion extends Modification {
     }
 
     @Override
-    public boolean patternMatch(Modification m) {
+    public boolean patternMatch(Modification m, Map<Node, Node> matchedNode) {
         if (m instanceof Insertion) {
             Insertion insertion = (Insertion) m;
-            return getParent().patternMatch(insertion.getParent())
-                    && getInsertedNode().patternMatch(insertion.getInsertedNode());
+            return (matchedNode.get(getParent()) == insertion.getParent()
+                    || getParent().patternMatch(insertion.getParent(), matchedNode))
+                    && getInsertedNode().patternMatch(insertion.getInsertedNode(), matchedNode);
         }
         return false;
     }

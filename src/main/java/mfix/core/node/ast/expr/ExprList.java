@@ -94,6 +94,8 @@ public class ExprList extends Node {
                     buffer.append(',');
                     buffer.append(strings.get(i));
                 }
+            } else if (isConsidered()){
+                return new StringBuffer();
             }
             return buffer;
         } else if (isConsidered()) {
@@ -104,13 +106,13 @@ public class ExprList extends Node {
     }
 
     @Override
-    public boolean patternMatch(Node node) {
+    public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
         if (node == null || isConsidered() != node.isConsidered()){
             return false;
         }
         if (isConsidered()) {
             if (getModifications().isEmpty() || node.getNodeType() == TYPE.EXPRLST) {
-                return NodeUtils.patternMatch(this, node, false);
+                return NodeUtils.patternMatch(this, node, matchedNode, false);
             }
             return false;
         }

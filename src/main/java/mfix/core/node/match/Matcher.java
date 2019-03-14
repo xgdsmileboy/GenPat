@@ -427,16 +427,16 @@ public class Matcher {
 		double[][] valueMat = new double[src.size()][tar.size()];
 		for (int i = 0; i < src.size(); i++) {
 			Object[] delTokens = src.get(i).tokens().toArray();
+			if (delTokens.length > 1000) {
+				continue;
+			}
 			Object[] addTokens;
 			for (int j = 0; j < tar.size(); j++) {
 				addTokens = tar.get(j).tokens().toArray();
-				Map<Integer, Integer> tmpMap = null;
-				try {
-					tmpMap = match(delTokens, addTokens);
-				} catch (Exception e) {
-					LevelLogger.error("GreedySimMatch error : ", e);
-					tmpMap = new HashMap<>();
+				if (addTokens.length > 1000) {
+					continue;
 				}
+				Map<Integer, Integer> tmpMap = match(delTokens, addTokens);
 				double value = ((double) tmpMap.size()) / ((double) delTokens.length);
 				if (value > similar) {
 					valueMat[i][j] = value;
@@ -564,7 +564,13 @@ public class Matcher {
 		int[][] score = new int[srcLen + 1][tarLen + 1];
 
 		// LCS matching with path retrieval
-		Direction[][] path = new Direction[srcLen + 1][tarLen + 1];
+		Direction[][] path = null;
+		try {
+			path = new Direction[srcLen + 1][tarLen + 1];
+		} catch (OutOfMemoryError e) {
+			LevelLogger.error("OutOfMemoryError when matching!");
+			return map;
+		}
 		for(int i = 0; i < srcLen; i++){
 			for(int j = 0; j < tarLen; j++){
 				if(comparator.compare(src.get(i), tar.get(j)) > 0){
@@ -656,23 +662,28 @@ public class Matcher {
 					return false;
 				}
 
+				int tag = -1;
 				if (!after.isEmpty()) {
-					int tag = 0;
-					for (int i = 0; i < statements.size(); i++) {
-						if (after.contains(statements.get(i))) {
+					for (int i = statements.size() - 1; i >= 0; i--) {
+						final Node node = statements.get(i);
+						if (after.stream().anyMatch(n -> n == node || node.isParentOf(n))) {
 							tag = i;
+							break;
 						}
 					}
-					List<StringBuffer> list = insertionAfter.get(statements.get(tag));
-					if(list == null) {
-						list = new LinkedList<>();
-						insertionAfter.put(statements.get(tag), list);
+					if (tag != -1) {
+						List<StringBuffer> list = insertionAfter.get(statements.get(tag));
+						if (list == null) {
+							list = new LinkedList<>();
+							insertionAfter.put(statements.get(tag), list);
+						}
+						tmp = insertion.apply(vars, exprMap);
+						if (tmp == null) return false;
+						list.add(tmp);
 					}
-					tmp = insertion.apply(vars, exprMap);
-					if(tmp == null) return false;;
-					list.add(tmp);
-				} else {
-					int tag = 0;
+				}
+				if (tag == -1) {
+					tag = 0;
 					for (int i = 0; i < statements.size(); i++) {
 						if (after.contains(statements.get(i))) {
 							tag = i;

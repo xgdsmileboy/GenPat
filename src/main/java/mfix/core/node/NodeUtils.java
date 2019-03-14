@@ -38,33 +38,41 @@ public class NodeUtils {
     public static Set<String> IGNORE_METHOD_INVOKE = new HashSet<String>(Arrays.asList("toString", "equals",
             "hashCode"));
 
-    public static boolean patternMatch(Node fst, Node snd, boolean skipFormalCmp) {
+    public static boolean patternMatch(Node fst, Node snd, Map<Node, Node> matchedNode, boolean skipFormalCmp) {
         if (fst.isConsidered() != snd.isConsidered()) return false;
         if ((skipFormalCmp || Utils.safeBufferEqual(fst.getFormalForm(), snd.getFormalForm()))
                 && fst.getModifications().size() == snd.getModifications().size()) {
             Node dp1 = fst.getDataDependency();
             Node dp2 = snd.getDataDependency();
             if (dp1 != null && dp1.isConsidered()) {
-                if (dp2 == null || !dp1.patternMatch(dp2)) {
+                if (dp2 == null || !dp1.patternMatch(dp2, matchedNode)) {
                     return false;
                 }
             }
 
-            Set<Modification> matched = new HashSet<>();
-            for (Modification m : fst.getModifications()) {
-                boolean match = false;
-                for (Modification o : snd.getModifications()) {
-                    if (!matched.contains(o) && m.patternMatch(o)) {
-                        matched.add(o);
-                        match = true;
-                        break;
+            boolean exist = matchedNode.containsKey(fst);
+            if (exist && matchedNode.get(fst) == snd) return true;
+            if (Utils.checkCompatibleBidirectionalPut(fst, snd, matchedNode)) {
+                Set<Modification> matched = new HashSet<>();
+                for (Modification m : fst.getModifications()) {
+                    boolean match = false;
+                    for (Modification o : snd.getModifications()) {
+                        if (!matched.contains(o) && m.patternMatch(o, matchedNode)) {
+                            matched.add(o);
+                            match = true;
+                            break;
+                        }
+                    }
+                    if (!match) {
+                        if (!exist) {
+                            matchedNode.remove(fst);
+                            matchedNode.remove(snd);
+                        }
+                        return false;
                     }
                 }
-                if (!match) {
-                    return false;
-                }
+                return true;
             }
-            return true;
         }
         return false;
     }

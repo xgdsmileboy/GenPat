@@ -3,8 +3,11 @@ package mfix.core.node.modify;
 import mfix.core.node.ast.Node;
 import mfix.core.pattern.cluster.VIndex;
 
+import java.util.Map;
+
 public class Deletion extends Modification {
 
+    private static final long serialVersionUID = 4063889250515342335L;
     private Node _node2Del;
     private int _index;
 
@@ -12,6 +15,9 @@ public class Deletion extends Modification {
         super(parent, VIndex.MOD_DELETE);
         _node2Del = node;
         _index = index;
+        if (_node2Del != null) {
+            _node2Del.setChanged();
+        }
     }
 
     public int getIndex() {
@@ -23,16 +29,19 @@ public class Deletion extends Modification {
     }
 
     @Override
-    public boolean patternMatch(Modification m) {
+    public boolean patternMatch(Modification m, Map<Node, Node> matchedNode) {
         if (m instanceof Deletion) {
             Deletion deletion = (Deletion) m;
-            return getDelNode().patternMatch(deletion.getDelNode());
+            if (getDelNode() == null) {
+                return deletion.getDelNode() == null;
+            }
+            return getDelNode().patternMatch(deletion.getDelNode(), matchedNode);
         }
         return false;
     }
 
     @Override
     public String toString() {
-        return "[DEL]" + _node2Del.toSrcString().toString();
+        return "[DEL]" + _node2Del + " FROM " + getParent();
     }
 }

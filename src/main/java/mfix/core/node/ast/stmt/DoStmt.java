@@ -76,7 +76,7 @@ public class DoStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer body = _stmt.formalForm(nameMapping, false, keywords);
 		StringBuffer cond = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		if (body == null && cond == null) {
@@ -90,18 +90,6 @@ public class DoStmt extends Stmt {
 		buffer.append(body == null ? "{}" : body).append(" while(")
 				.append(cond == null ? nameMapping.getExprID(_expression) : cond).append(')');
 		return buffer;
-	}
-
-	@Override
-	public boolean patternMatch(Node node) {
-		if (!super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.DO) {
-				return NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
-		}
-		return true;
 	}
 
 	@Override

@@ -10,6 +10,7 @@ package mfix.tools;
 import mfix.common.util.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
+import mfix.common.util.MiningUtils;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
@@ -27,14 +28,19 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -48,37 +54,60 @@ import java.util.concurrent.Future;
 public class Filter {
 
     private String _outFile;
-    private int _maxChangeLine = 50;
-    private int _maxChangeAction = 20;
+    private int _maxChangeLine;
+    private int _maxChangeAction;
 
     private volatile List<String> _cacheList;
     private int _currItemCount = 0;
     private int _cacheSize = 10000;
 
     private int _currThreadCount = 0;
-    private int _maxThreadCount = 9;
+    private int _maxThreadCount = Constant.MAX_FILTER_THREAD_NUM;
     private ExecutorService _threadPool;
-    private List<Future<Boolean>> _threadResultList = new ArrayList<>();
+    private List<Future<List<String>>> _threadResultList = new ArrayList<>();
 
+    private final static String COMMAND = "<command> -ip <arg> | -filter <arg> " +
+                                                    "[-dir <arg>] " +
+                                                    "[-line <arg>] " +
+                                                    "[-change <arg>] " +
+                                                    "[-of | -op <arg>]";
     private Options options() {
         Options options = new Options();
 
-        Option option = new Option("ip", "inpath", true, "input path.");
-        option.setRequired(true);
-        options.addOption(option);
-
-        option = new Option("line", "maxLine", true, "max number of changed lines within one pattern.");
-        option.setRequired(false);
-        options.addOption(option);
-
-        option = new Option("change", "maxAction", true, "max number of modifications within one pattern.");
-        option.setRequired(false);
-        options.addOption(option);
-
         OptionGroup optionGroup = new OptionGroup();
+        optionGroup.setRequired(true);
+
+        Option option = new Option("ip", "inPath", true,
+                "Base directory of buggy/fixed files.");
+        optionGroup.addOption(option);
+
+        option = new Option("filter", "filterFile", true,
+                "Existing record file that contains the paths of patterns to be filtered.");
+        optionGroup.addOption(option);
+
+        options.addOptionGroup(optionGroup);
+
+        option = new Option("dir", "BaseDir", true,
+                "The home directory of pattern files.");
+        option.setRequired(false);
+        options.addOption(option);
+
+        option = new Option("line", "maxLine", true,
+                "Max number of changed lines within one pattern for filtering.");
+        option.setRequired(false);
+        options.addOption(option);
+
+        option = new Option("change", "maxAction", true,
+                "Max number of modifications within one pattern for filtering.");
+        option.setRequired(false);
+        options.addOption(option);
+
+        optionGroup = new OptionGroup();
         optionGroup.setRequired(false);
-        optionGroup.addOption(new Option("op", "outpath", true, "output path."));
-        optionGroup.addOption(new Option("of", "outfile", true, "output file."));
+        optionGroup.addOption(new Option("op", "resultPath", true,
+                "Output directory for result file that contains the paths of patterns."));
+        optionGroup.addOption(new Option("of", "outFile", true,
+                "Output file that contains the paths of patterns."));
         options.addOptionGroup(optionGroup);
 
         return options;
@@ -100,54 +129,89 @@ public class Filter {
         JavaFile.writeStringToFile(fileName, "");
     }
 
+    private Set<String> readPatternRecordsFromFile(String baseDir, String file) throws IOException {
+        Set<String> patterns = new HashSet<>();
+        BufferedReader br;
+        br = new BufferedReader(new FileReader(new File(file)));
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (line.startsWith(baseDir)) {
+                patterns.add(line.substring(0, line.lastIndexOf('-'))
+                        .replace(MiningUtils.patternSubDirName(), MiningUtils.buggyFileSubDirName()));
+            }
+        }
+        br.close();
+        return patterns;
+    }
+
+    private void filter(String srcFileName, String tarFileName) {
+        LevelLogger.info("FILTER : " + srcFileName);
+        try {
+            if (_currThreadCount >= _maxThreadCount) {
+                LevelLogger.debug("Thread pool is full ....");
+                for (Future<List<String>> fs : _threadResultList) {
+                    List<String> result = fs.get();
+                    writeFile(result);
+                    _currThreadCount--;
+                }
+                _threadResultList.clear();
+                _currThreadCount = _threadResultList.size();
+                LevelLogger.debug("Cleared thread pool : " + _currThreadCount);
+            }
+            Future<List<String>> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
+                    _maxChangeLine, _maxChangeAction));
+            _threadResultList.add(future);
+            _currThreadCount++;
+
+        } catch (Exception e) {
+            LevelLogger.error("Parse node failed : ", e);
+        }
+    }
+
+    private void filterWithExistingRecord(String baseDir, String file) {
+        Set<String> files;
+        try {
+            files = readPatternRecordsFromFile(baseDir, file);
+        } catch (IOException e) {
+            LevelLogger.error("Failed to read existing pattern paths", e);
+            return;
+        }
+        for (String f : files) {
+            filter(f, f.replace(MiningUtils.buggyFileSubDirName(), MiningUtils.fixedFileSubDirName()));
+        }
+    }
+
     private void filter(File file) {
         if (file.isDirectory()) {
-            if (file.getName().endsWith("buggy-version")) {
+            if (file.getName().endsWith(MiningUtils.buggyFileSubDirName())) {
                 File[] files = file.listFiles();
                 for (File f : files) {
                     String srcFileName = f.getAbsolutePath();
-                    String tarFileName = srcFileName.replace("buggy-version", "fixed-version");
-                    try {
-                        if (_currThreadCount >= _maxThreadCount) {
-                            LevelLogger.info("Thread pool is full ....");
-                            for (Future<Boolean> fs : _threadResultList) {
-                                Boolean result = fs.get();
-                                _currThreadCount--;
-                            }
-                            _threadResultList.clear();
-                            _currThreadCount = _threadResultList.size();
-                            LevelLogger.info("Cleared thread pool : " + _currThreadCount);
-                        }
-                        Future<Boolean> future = _threadPool.submit(new ParseNode(srcFileName, tarFileName,
-                                _maxChangeLine, _maxChangeAction, this));
-                        _threadResultList.add(future);
-                        _currThreadCount ++;
-
-                    } catch (Exception e) {
-                        LevelLogger.error("Parse node failed : ", e);
-                    }
+                    String tarFileName = srcFileName.replace(MiningUtils.buggyFileSubDirName(),
+                            MiningUtils.fixedFileSubDirName());
+                    filter(srcFileName, tarFileName);
                 }
             } else {
                 File[] files = file.listFiles();
-                for (File f : files)  {
+                for (File f : files) {
                     filter(f);
                 }
             }
         }
     }
 
-    public synchronized void writeFile(List<String> values) throws IOException {
+    public void writeFile(List<String> values) throws IOException {
         if (values != null) {
             _cacheList.addAll(values);
             _currItemCount += values.size();
-            LevelLogger.info("Current cache size : " + _currItemCount);
+            LevelLogger.debug("Current cache size : " + _currItemCount);
             if (_currItemCount >= _cacheSize) {
                 flush();
             }
         }
     }
 
-    private synchronized void flush() throws IOException {
+    private void flush() throws IOException {
         LevelLogger.info("........FLUSHING.......");
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_outFile, true), "UTF-8"));
         for (String s : _cacheList) {
@@ -158,7 +222,8 @@ public class Filter {
         bw.close();
     }
 
-    public void filter(String[] args) {
+    private Map<String, String> parseOption(String[] args) {
+        Map<String, String> optionMap = new HashMap<>();
         Options options = options();
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -168,35 +233,67 @@ public class Filter {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             LevelLogger.error(e.getMessage());
-            formatter.printHelp("<command> -ip <arg> [-line <arg>] [-change <arg>] [-of | -op <arg>]", options);
+            formatter.printHelp(COMMAND, options);
             System.exit(1);
         }
 
-        final String inPath = cmd.getOptionValue("ip");
-        if (cmd.hasOption("line")) {
-            _maxChangeLine = Integer.parseInt(cmd.getOptionValue("line"));
+        String baseDir = Constant.DEFAULT_PATTERN_HOME;
+        if (cmd.hasOption("dir")) {
+            baseDir = cmd.getOptionValue("dir");
         }
-        if (cmd.hasOption("change")) {
-            _maxChangeAction = Integer.parseInt(cmd.getOptionValue("change"));
-        }
+        optionMap.put("dir", baseDir);
 
-        if (cmd.hasOption("of")) {
-            _outFile = cmd.getOptionValue("of");
-        } else if (cmd.hasOption("op")) {
-            _outFile = Utils.join(Constant.SEP, cmd.getOptionValue("op"), "API_Mapping.txt");
-        } else {
-            _outFile = Utils.join(Constant.SEP, System.getProperty("user.dir"), "API_Mapping.txt");
+        String maxChangedLine = "50";
+        if (cmd.hasOption("line")) {
+            maxChangedLine = cmd.getOptionValue("line");
         }
+        optionMap.put("line", maxChangedLine);
+
+        String maxChangedAction = "20";
+        if (cmd.hasOption("change")) {
+            maxChangedAction = cmd.getOptionValue("change");
+        }
+        optionMap.put("change", maxChangedAction);
+
+        String outFile;
+        if (cmd.hasOption("of")) {
+            outFile = cmd.getOptionValue("of");
+        } else if (cmd.hasOption("op")) {
+            outFile = Utils.join(Constant.SEP, cmd.getOptionValue("op"), "PatternRecord.txt");
+        } else {
+            outFile = Utils.join(Constant.SEP, Constant.HOME, "PatternRecord.txt");
+        }
+        optionMap.put("of", outFile);
+
+        if (cmd.hasOption("filter")) {
+            optionMap.put("filter", cmd.getOptionValue("filter"));
+        } else {
+            optionMap.put("ip", cmd.getOptionValue("ip"));
+        }
+        return optionMap;
+    }
+
+    public void filter(String[] args) {
+        Map<String, String> optionMap = parseOption(args);
+        _maxChangeLine = Integer.parseInt(optionMap.get("line"));
+        _maxChangeAction = Integer.parseInt(optionMap.get("change"));
+        _outFile = optionMap.get("of");
 
         init(_outFile);
         _threadPool = Executors.newFixedThreadPool(_maxThreadCount);
 
-        filter(new File(inPath));
+        if (optionMap.containsKey("filter")) {
+            filterWithExistingRecord(optionMap.get("dir"), optionMap.get("filter"));
+        } else {
+            filter(new File(optionMap.get("ip")));
+        }
 
-        for (Future<Boolean> fs : _threadResultList) {
+        for (Future<List<String>> fs : _threadResultList) {
             try {
-                Boolean result = fs.get();
-            } catch (Exception e) { }
+                List<String> result = fs.get();
+                writeFile(result);
+            } catch (Exception e) {
+            }
         }
         try {
             flush();
@@ -208,49 +305,47 @@ public class Filter {
         System.out.println("Finish filtering !");
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Filter filter = new Filter();
         filter.filter(args);
     }
 
 }
 
-class ParseNode implements Callable<Boolean> {
+class ParseNode implements Callable<List<String>> {
 
     private String _srcFile;
     private String _tarFile;
     private int _maxChangeLine;
     private int _maxChangeAction;
-    private Filter _filter;
 
-    public ParseNode(String srcFile, String tarFile, int maxChangeLine, int maxChangeAction, Filter filter) {
+    public ParseNode(String srcFile, String tarFile, int maxChangeLine, int maxChangeAction) {
         _srcFile = srcFile;
         _tarFile = tarFile;
         _maxChangeLine = maxChangeLine;
         _maxChangeAction = maxChangeAction;
-        _filter = filter;
     }
 
     @Override
-    public Boolean call() {
+    public List<String> call() {
         LevelLogger.info("PARSE > " + _srcFile);
+        List<String> result = new LinkedList<>();
         if (!(new File(_srcFile).exists()) || !(new File(_tarFile).exists())) {
-            LevelLogger.info("Following file may not exist ... SKIP.\n" + _srcFile + "\n" + _tarFile);
-            return false;
+            LevelLogger.debug("Following file may not exist ... SKIP.\n" + _srcFile + "\n" + _tarFile);
+            return result;
         }
         PatternExtractor patternExtractor = new PatternExtractor();
-        Set<Pattern> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile);
+        Set<Pattern> patternCandidates = patternExtractor.extractPattern(_srcFile, _tarFile, _maxChangeLine);
         if (patternCandidates.isEmpty()) {
-            LevelLogger.info("No pattern node ... SKIP.");
-            return false;
+            LevelLogger.debug("No pattern node ... SKIP.");
+            return result;
         }
-        List<String> result = new LinkedList<>();
         // the following is the filter process
         for (Pattern pattern : patternCandidates) {
             Set<Modification> modifications = pattern.getAllModifications();
             // filter by modifications
             if (modifications.size() > _maxChangeAction) {
-                LevelLogger.info("Too many modifications : " + modifications.size() + " ... SKIP.");
+                LevelLogger.debug("Too many modifications : " + modifications.size() + " ... SKIP.");
                 continue;
             }
             Node node = pattern.getPatternNode();
@@ -260,14 +355,14 @@ class ParseNode implements Callable<Boolean> {
                 TextDiff diff = new TextDiff(node, other);
                 int size = diff.getMiniDiff().size();
                 if (size > _maxChangeLine) {
-                    LevelLogger.info("Too many changed lines : " + size + " ... SKIP.");
+                    LevelLogger.debug("Too many changed lines : " + size + " ... SKIP.");
                     continue;
                 }
             }
             MethDecl methDecl = (MethDecl) node;
 
-            String savePatternPath = _srcFile.replace("buggy-version", "pattern-" + Constant.PATTERN_VERSION + "-serial");
-            savePatternPath = savePatternPath + "-" + methDecl.getName().getName() +".pattern";
+            String savePatternPath = _srcFile.replace(MiningUtils.buggyFileSubDirName(), MiningUtils.patternSubDirName());
+            savePatternPath = savePatternPath + "-" + methDecl.getName().getName() + ".pattern";
             File file = new File(savePatternPath);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
@@ -285,33 +380,8 @@ class ParseNode implements Callable<Boolean> {
                 result.add(s);
             }
             result.add(savePatternPath);
-//            Set<MethodInv> methods = node.getUniversalAPIs(new HashSet<>(), true);
-//            if (!methods.isEmpty()) {
-//                for (MethodInv methodInv : methods) {
-//                    String rType = methodInv.getTypeString();
-//                    String name = methodInv.getName().getName();
-//                    Expr expr = methodInv.getExpression();
-//                    String oType = expr == null ? "?" : expr.getTypeString();
-//                    List<Expr> exprList = methodInv.getArguments().getExpr();
-//                    int argNum = exprList.size();
-//                    // the first "?" is the placeholder for argument
-//                    StringBuffer argType = new StringBuffer("?");
-//                    for (Expr e : exprList) {
-//                        argType.append("," + e.getTypeString());
-//                    }
-//
-//                    result.add(String.format("%s\t%d\t%s\t%s\t%s\t%s", name, argNum, rType, oType, argType, savePatternPath));
-//                }
-//            } else {
-//                LevelLogger.info("No API info .... SKIP.");
-//            }
         }
-        try {
-            _filter.writeFile(result);
-        } catch (IOException e) {
-            LevelLogger.error("Write to file failed in parse thread!");
-        }
-        return true;
+        return result;
     }
 
 }

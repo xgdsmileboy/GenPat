@@ -9,6 +9,7 @@ package mfix.core.pattern.cluster;
 
 import mfix.common.util.Constant;
 import mfix.core.TestCase;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.PatternExtractor;
 import org.junit.Assert;
@@ -29,12 +30,15 @@ public class ClusterTest extends TestCase {
 
         PatternExtractor extractor = new PatternExtractor();
         Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
+        for (Pattern p : patterns) {
+            p.setPatternName(p.getFileName() + '-' + ((MethDecl) p.getPatternNode()).getName().getName() + ".pattern");
+        }
 
-        Cluster cluster = new Cluster();
-        Set<Pattern> clustered = cluster.cluster(patterns);
+        ClusterImpl clusterImpel = new ClusterImpl();
+        Set<Group> clustered = clusterImpel.cluster(patterns);
 
         Assert.assertTrue(clustered.size() == 1);
-        Assert.assertTrue(clustered.iterator().next().getFrequency() == 7);
+        Assert.assertTrue(clustered.iterator().next().getIsomorphicPatternPath().size() == 6);
     }
 
 }

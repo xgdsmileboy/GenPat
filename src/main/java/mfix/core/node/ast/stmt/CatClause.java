@@ -75,7 +75,7 @@ public class CatClause extends Node {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer excep = _exception.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer blk = _blk.formalForm(nameMapping, isConsidered(), keywords);
 		if (excep == null && blk == null) {
@@ -89,15 +89,13 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public boolean patternMatch(Node node) {
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
 		if (node == null || isConsidered() != node.isConsidered()) {
 			return false;
 		}
 		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.CATCHCLAUSE) {
-				return NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
+			return node.getNodeType() == TYPE.CATCHCLAUSE
+					&& NodeUtils.patternMatch(this, node, matchedNode, true);
 		}
 		return node instanceof Stmt;
 	}

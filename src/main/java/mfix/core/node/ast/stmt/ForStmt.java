@@ -106,7 +106,7 @@ public class ForStmt extends Stmt {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        if (isAbstract()) return null;
+        if (isAbstract() && !isConsidered()) return null;
         StringBuffer init = _initializers.formalForm(nameMapping, isConsidered(), keywords);
         StringBuffer cond = _condition != null ? _condition.formalForm(nameMapping, isConsidered(), keywords) : null;
         StringBuffer update = _updaters.formalForm(nameMapping, isConsidered(), keywords);
@@ -134,18 +134,6 @@ public class ForStmt extends Stmt {
             return buffer;
         }
         return null;
-    }
-
-    @Override
-    public boolean patternMatch(Node node) {
-        if (!super.patternMatch(node)) return false;
-        if (isConsidered()) {
-            if (getModifications().isEmpty() || node.getNodeType() == TYPE.FOR) {
-                return NodeUtils.patternMatch(this, node, true);
-            }
-            return false;
-        }
-        return true;
     }
 
     @Override

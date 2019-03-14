@@ -66,7 +66,7 @@ public class ReturnStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, isConsidered(), keywords);
 		if (exp == null) {
 			if (isConsidered()) {
@@ -77,18 +77,6 @@ public class ReturnStmt extends Stmt {
 			}
 		}
 		return new StringBuffer("return ").append(exp).append(';');
-	}
-
-	@Override
-	public boolean patternMatch(Node node) {
-		if (super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.RETURN) {
-				return NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
-		}
-		return true;
 	}
 
 	@Override

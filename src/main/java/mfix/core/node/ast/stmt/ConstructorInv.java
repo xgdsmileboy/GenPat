@@ -80,7 +80,7 @@ public class ConstructorInv  extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer arg = _arguments.formalForm(nameMapping, isConsidered(), keywords);
 		if (arg == null) {
 			if (isConsidered()) {
@@ -91,20 +91,6 @@ public class ConstructorInv  extends Stmt {
 		}
 		return new StringBuffer("this(").append(arg).append(')');
 
-	}
-
-	@Override
-	public boolean patternMatch(Node node) {
-		if (!super.patternMatch(node)) {
-			return false;
-		}
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.CONSTRUCTORINV) {
-				return NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
-		}
-		return true;
 	}
 
 	@Override

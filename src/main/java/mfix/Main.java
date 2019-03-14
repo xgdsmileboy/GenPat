@@ -7,9 +7,11 @@
 package mfix;
 
 import mfix.tools.Cleaner;
+import mfix.tools.Cluster;
 import mfix.tools.Filter;
 import mfix.tools.PatternPrinter;
 import mfix.tools.Repair;
+import mfix.tools.TokenStatistic;
 
 public class Main {
 
@@ -18,9 +20,11 @@ public class Main {
         if (args.length == 0) {
             System.err.println("Please given the arguments");
             System.err.println("\tclean : delete serialized pattern files.");
-            System.err.println("\tprint : print serialized patterns.");
+            System.err.println("\tprint : print detail information of given pattern.");
             System.err.println("\trepair : repair bugs.");
-            System.err.println("\tfilter : serialize and filter patterns and output API mapping info.");
+            System.err.println("\tfilter : serialize and filter patterns and output pattern records.");
+            System.err.println("\tcluster : cluster serialized patterns.");
+            System.err.println("\tstatistic : keyword statistics.");
             System.exit(1);
         }
 
@@ -36,6 +40,14 @@ public class Main {
             case "filter":
                 Filter filter = new Filter();
                 filter.filter(args);
+                break;
+            case "cluster":
+                Cluster cluster = new Cluster();
+                cluster.cluster(args);
+                break;
+            case "statistic":
+                TokenStatistic tokenStatistic = new TokenStatistic();
+                tokenStatistic.statistic(args);
                 break;
             default:
                 Repair repair = new Repair();

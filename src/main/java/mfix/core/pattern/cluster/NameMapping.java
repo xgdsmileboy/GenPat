@@ -31,6 +31,7 @@ public class NameMapping {
 
     private final static boolean debug = false;
     private final static Pattern REGEX = Pattern.compile(debug ? "(EXPR|METH|TYPE)_\\d+" : "EXPR|METH|TYPE");
+    private final static Pattern USELESSM = Pattern.compile(debug ? "(EXPR_\\d\\.)?METH_\\d\\(.*\\)" : "(EXPR\\.)?METH\\(.*\\)");
 
     public NameMapping() {
         _EXPR_ID = 0;
@@ -85,6 +86,10 @@ public class NameMapping {
 
     public boolean isPlaceHolder(String string) {
         return REGEX.matcher(string).matches();
+    }
+
+    public boolean isFoldedMethod(String string) {
+        return USELESSM.matcher(string).matches();
     }
 
     public Map<String, AbsExpr> getExprIds() {

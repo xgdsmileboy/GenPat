@@ -16,9 +16,12 @@ import mfix.core.pattern.cluster.Vector;
 import mfix.core.pattern.match.PatternMatcher;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -31,12 +34,19 @@ public class Pattern implements PatternMatcher, Serializable {
 
     private int _frequency = 1;
     private Node _patternNode;
+    private Set<String> _imports;
+    private transient String _patternName;
     private transient NameMapping _nameMapping;
     private transient Set<String> _keywords;
     private transient Set<String> _targetKeywords;
 
     public Pattern(Node pNode) {
+        this(pNode, new HashSet<>());
+    }
+
+    public Pattern(Node pNode, Set<String> imports) {
         _patternNode = pNode;
+        _imports = imports;
     }
 
     public String getFileName() {
@@ -45,6 +55,18 @@ public class Pattern implements PatternMatcher, Serializable {
 
     public Node getPatternNode() {
         return _patternNode;
+    }
+
+    public String getPatternName() {
+        return _patternName;
+    }
+
+    public void setPatternName(String name) {
+        _patternName = name;
+    }
+
+    public Set<String> getImports() {
+        return _imports;
     }
 
     public int getFrequency() {
@@ -124,12 +146,14 @@ public class Pattern implements PatternMatcher, Serializable {
         }
 
         boolean match;
+        Map<Node, Node> map = new Hashtable<>();
         for (Node node : nodes) {
             match = false;
             for (Iterator<Node> iter = others.iterator(); iter.hasNext();) {
-                if (node.patternMatch(iter.next())) {
+                if (node.patternMatch(iter.next(), map)) {
                     match = true;
                     iter.remove();
+                    break;
                 }
             }
             if (!match) {

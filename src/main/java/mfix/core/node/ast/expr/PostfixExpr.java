@@ -9,11 +9,11 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -68,12 +68,19 @@ public class PostfixExpr extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		StringBuffer buffer = _expression.formalForm(nameMapping, isConsidered() || parentConsidered, keywords);
-		if (buffer == null) {
-			return super.toFormalForm0(nameMapping, parentConsidered, keywords);
+		boolean consider = isConsidered() || parentConsidered;
+		StringBuffer buffer = _expression.formalForm(nameMapping, consider, keywords);
+		StringBuffer op = _operator.formalForm(nameMapping, consider, keywords);
+		if (op == null) {
+			if (buffer == null) {
+				return super.toFormalForm0(nameMapping, parentConsidered, keywords);
+			} else {
+				return buffer.append(_operator.toSrcString());
+			}
+		} else {
+			buffer = buffer == null ? new StringBuffer(nameMapping.getExprID(_expression)) : buffer;
+			return buffer.append(op);
 		}
-		buffer.append(_operator.toSrcString());
-		return buffer;
 	}
 
 	@Override

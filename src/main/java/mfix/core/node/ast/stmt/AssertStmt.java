@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.pattern.cluster.NameMapping;
@@ -53,9 +54,10 @@ public class AssertStmt extends Stmt {
 	}
 
 	@Override
-	public boolean patternMatch(Node node) {
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
 		return node != null && isConsidered() == node.isConsidered()
-				&& node.getNodeType() == TYPE.ASSERT;
+				&& node.getNodeType() == TYPE.ASSERT
+				&& NodeUtils.patternMatch(this, node, matchedNode, false);
 	}
 
 	@Override

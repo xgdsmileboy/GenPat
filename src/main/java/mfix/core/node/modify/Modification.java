@@ -3,6 +3,7 @@ package mfix.core.node.modify;
 import mfix.core.node.ast.Node;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public abstract class Modification implements Serializable {
 
@@ -24,6 +25,6 @@ public abstract class Modification implements Serializable {
         return _fIndex;
     }
 
-    public abstract boolean patternMatch(Modification m);
+    public abstract boolean patternMatch(Modification m, Map<Node, Node> matchedNode);
 
 }

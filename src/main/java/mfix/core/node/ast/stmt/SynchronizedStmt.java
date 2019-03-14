@@ -70,7 +70,7 @@ public class SynchronizedStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer blk = _blk.formalForm(nameMapping, false, keywords);
 		if (isConsidered() || exp != null || blk != null) {
@@ -80,18 +80,6 @@ public class SynchronizedStmt extends Stmt {
 			return buffer;
 		}
 		return null;
-	}
-
-	@Override
-	public boolean patternMatch(Node node) {
-		if (super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.SYNC) {
-				return NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
-		}
-		return true;
 	}
 
 	@Override

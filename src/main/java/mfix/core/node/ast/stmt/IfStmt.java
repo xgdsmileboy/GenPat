@@ -87,7 +87,7 @@ public class IfStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer cond = _condition.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer then = _then.formalForm(nameMapping, false, keywords);
 		StringBuffer els = _else == null ? null : _else.formalForm(nameMapping, false, keywords);
@@ -101,18 +101,6 @@ public class IfStmt extends Stmt {
 			return buffer;
 		}
 		return null;
-	}
-
-	@Override
-	public boolean patternMatch(Node node) {
-		if (!super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.IF) {
-				NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
-		}
-		return true;
 	}
 
 	@Override

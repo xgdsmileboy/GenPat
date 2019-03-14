@@ -48,7 +48,7 @@ public class ExecuteCommand {
                     String line;
                     try {
                         while((line = reader.readLine()) != null) {
-                            results.add(line + "\n");
+                            results.add(line);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

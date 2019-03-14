@@ -54,7 +54,7 @@ public class SName extends Label {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		return leafFormalForm(parentConsidered, keywords);
+		return leafFormalForm(nameMapping, parentConsidered, keywords);
 	}
 
 	@Override
@@ -149,8 +149,10 @@ public class SName extends Label {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
-			if (!vars.contains(stringBuffer.toString())) {
-				return null;
+			if (!Character.isUpperCase(stringBuffer.charAt(0))) {
+				if (!vars.contains(stringBuffer.toString())) {
+					return null;
+				}
 			}
 		}
 		return stringBuffer;

@@ -44,7 +44,14 @@ public abstract class Stmt extends Node {
 	}
 
 	@Override
-	public boolean patternMatch(Node node) {
-		return node != null && isConsidered() == node.isConsidered() && (node instanceof Stmt);
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
+		if (node != null && isConsidered() == node.isConsidered() && (node instanceof Stmt)) {
+			if (isConsidered()) {
+				return node.getNodeType() == getNodeType()
+						&& NodeUtils.patternMatch(this, node, matchedNode, true);
+			}
+			return true;
+		}
+		return false;
 	}
 }

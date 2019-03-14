@@ -89,7 +89,7 @@ public class EnhancedForStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract()) return null;
+		if (isAbstract() && !isConsidered()) return null;
 		StringBuffer var = _varDecl.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
 		StringBuffer body = _statement.formalForm(nameMapping, false, keywords);
@@ -99,6 +99,7 @@ public class EnhancedForStmt extends Stmt {
 						.append(nameMapping.getTypeID(_varDecl.getDeclType()))
 						.append(' ')
 						.append(nameMapping.getExprID(_varDecl.getName()))
+						.append(" : ")
 						.append(nameMapping.getExprID(_expression))
 						.append("){}");
 			} else {
@@ -112,22 +113,11 @@ public class EnhancedForStmt extends Stmt {
 		} else {
 			buffer.append(var);
 		}
+		buffer.append(" : ");
 		buffer.append(exp == null ? nameMapping.getExprID(_expression) : exp);
 		buffer.append(')');
 		buffer.append(body == null ? "{}" : body);
 		return buffer;
-	}
-
-	@Override
-	public boolean patternMatch(Node node) {
-		if (!super.patternMatch(node)) return false;
-		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.EFOR) {
-				return NodeUtils.patternMatch(this, node, true);
-			}
-			return false;
-		}
-		return true;
 	}
 
 	@Override
