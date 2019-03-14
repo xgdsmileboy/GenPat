@@ -52,6 +52,7 @@ public class PatternPrinter {
         Pattern fixPattern;
         try {
             fixPattern = (Pattern) Utils.deserialize(patternFile);
+            fixPattern.setPatternName(patternFile);
         } catch (IOException | ClassNotFoundException e) {
             LevelLogger.error("Deserialize pattern failed!", e);
             return;

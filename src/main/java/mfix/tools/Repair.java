@@ -94,6 +94,7 @@ public class Repair {
         LevelLogger.debug("Deserialize pattern from file : " + patternFile);
         try {
             Pattern fixPattern = (Pattern) Utils.deserialize(patternFile);
+            fixPattern.setPatternName(patternFile);
             return fixPattern;
         } catch (IOException | ClassNotFoundException e) {
             LevelLogger.error("Deserialize pattern failed!", e);
