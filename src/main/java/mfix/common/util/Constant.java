@@ -56,6 +56,9 @@ public class Constant {
     /* max number of concurrent threads for pattern filter process */
     public static int MAX_FILTER_THREAD_NUM;
 
+    /* max number of concurrent threads for keyword statistics */
+    public static int MAX_KEYWORD_STATISTIC_THREAD_NUM;
+
     /* max number of candidate patches for each subject */
     public static int MAX_PATCH_NUMBER;
 
@@ -101,8 +104,9 @@ public class Constant {
             Constant.MAX_REPAIR_TIME = Integer.parseInt(prop.getProperty("REPAIR.TIME", "120"));
             Constant.MAX_PATCH_NUMBER = Integer.parseInt(prop.getProperty("REPAIR.PATCH", "100"));
             Constant.MAX_REPIAR_LOCARION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
-            Constant.MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER_MAX_THREAD", "10"));
-            Constant.MAX_CLUSTER_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER_MAX_THREAD", "10"));
+            Constant.MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
+            Constant.MAX_CLUSTER_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER.THREAD", "10"));
+            Constant.MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
         } catch (IOException e) {
             LevelLogger.error("#Constant get properties failed!" + e.getMessage());
         }
