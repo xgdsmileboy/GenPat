@@ -33,7 +33,7 @@ import java.util.Set;
  */
 public class PatternPrinter {
 
-    private final static String COMMAND = "<command> -f <arg> [-of <arg>]";
+    private final static String COMMAND = "<command> -if <arg> [-of <arg>]";
     private Options options() {
         Options options = new Options();
 
@@ -63,6 +63,7 @@ public class PatternPrinter {
                 .append("SRC >> ").append(fixPattern.getFileName())
                 .append(Constant.NEW_LINE)
                 .append("TAR >> ").append(fixPattern.getPatternNode().getBindingNode().getFileName())
+                .append(Constant.NEW_LINE)
                 .append("-----------------------")
                 .append(Constant.NEW_LINE);
         StringBuffer b = new StringBuffer();
@@ -72,11 +73,11 @@ public class PatternPrinter {
         b.append(fixPattern.getPatternNode().getBindingNode().toSrcString());
         TextDiff diff = new TextDiff(fixPattern.getPatternNode().toSrcString().toString(), b.toString());
         Set<Modification> modifications = fixPattern.getAllModifications();
-        stringBuffer.append("DIFF >> [").append(diff.getMiniDiff().size()).append("]>>>")
+        stringBuffer.append("DIFF : [").append(diff.getMiniDiff().size()).append("]>>>")
                 .append(Constant.NEW_LINE)
-                .append(diff.getFullDiff())
+                .append(diff.toString())
                 .append(Constant.NEW_LINE).append(Constant.NEW_LINE)
-                .append("Modification >> [")
+                .append("Modification : [")
                 .append(modifications.size()).append("]>>>")
                 .append(Constant.NEW_LINE);
 
