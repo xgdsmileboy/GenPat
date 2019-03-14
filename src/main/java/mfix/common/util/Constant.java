@@ -66,7 +66,7 @@ public class Constant {
     public static int MAX_REPAIR_TIME;
 
     /* max number of locations to repair */
-    public static int MAX_REPIAR_LOCARION;
+    public static int MAX_REPAIR_LOCATION;
 
     /* max number of patterns used to repair one location */
     public static int TOP_K_PATTERN_EACH_LOCATION;
@@ -103,7 +103,7 @@ public class Constant {
             Constant.TOP_K_PATTERN_EACH_LOCATION = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
             Constant.MAX_REPAIR_TIME = Integer.parseInt(prop.getProperty("REPAIR.TIME", "120"));
             Constant.MAX_PATCH_NUMBER = Integer.parseInt(prop.getProperty("REPAIR.PATCH", "100"));
-            Constant.MAX_REPIAR_LOCARION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
+            Constant.MAX_REPAIR_LOCATION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
             Constant.MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
             Constant.MAX_CLUSTER_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER.THREAD", "10"));
             Constant.MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));

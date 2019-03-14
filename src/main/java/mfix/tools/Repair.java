@@ -270,7 +270,7 @@ public class Repair {
         LevelLogger.info("Repair : " + subject.getHome() + "\n" + start);
         final Set<String> emptySet = new HashSet<>();
         AbstractFaultLocalization locator = FaultLocalizationFactory.dispatch(subject);
-        List<Location> locations = locator.getLocations(Constant.MAX_REPIAR_LOCARION);
+        List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
         Map<String, Map<Integer, Set<String>>> buggyFileVarMap = new HashMap<>();
         int totalFix = 0;
         for (Location location : locations) {
