@@ -14,6 +14,7 @@ import mfix.common.util.MiningUtils;
 import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.expr.MType;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -38,6 +39,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * @author: Jiajun
@@ -167,7 +169,9 @@ public class TokenStatistic {
         }
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false), "UTF-8"));
         List<Map.Entry<String, Integer>> entryList = new LinkedList<>(_cacheMap.entrySet());
-        entryList.stream().sorted(Comparator.comparingInt(Map.Entry<String, Integer>::getValue).reversed());
+        entryList = entryList.stream()
+                .sorted(Comparator.comparingInt(Map.Entry<String, Integer>::getValue).reversed())
+                .collect(Collectors.toList());
         for (Map.Entry<String, Integer> entry : entryList) {
             bw.write(entry.getKey());
             bw.newLine();
@@ -292,6 +296,9 @@ class ParseKey implements Callable<Set<String>> {
                             if (s.length() < 10 && s.length() > 1) {
                                 strings.add(s.toString());
                             }
+                            break;
+                        case TYPE:
+                            strings.add(NodeUtils.distilBasicType((MType) node));
                             break;
                         default:
                             strings.add(node.toSrcString().toString());

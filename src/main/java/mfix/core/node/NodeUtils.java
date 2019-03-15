@@ -12,6 +12,7 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.ast.expr.MType;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.match.metric.FVector.ALGO;
 import mfix.core.node.modify.Deletion;
@@ -95,6 +96,12 @@ public class NodeUtils {
             }
         }
         return stringBuffer;
+    }
+
+    public static String distilBasicType(MType type) {
+        String s = type.toSrcString().toString();
+        int index = s.indexOf('<');
+        return index > 0 ? s.substring(0, index) : s;
     }
 
     public static boolean patternMatch(Node fst, Node snd, Map<Node, Node> matchedNode, boolean skipFormalCmp) {
