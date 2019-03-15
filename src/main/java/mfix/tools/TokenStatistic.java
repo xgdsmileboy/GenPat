@@ -26,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -165,7 +166,9 @@ public class TokenStatistic {
             file.createNewFile();
         }
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false), "UTF-8"));
-        for (Map.Entry<String, Integer> entry : _cacheMap.entrySet()) {
+        List<Map.Entry<String, Integer>> entryList = new LinkedList<>(_cacheMap.entrySet());
+        entryList.stream().sorted(Comparator.comparingInt(Map.Entry<String, Integer>::getValue).reversed());
+        for (Map.Entry<String, Integer> entry : entryList) {
             bw.write(entry.getKey());
             bw.newLine();
             bw.write(entry.getValue());
