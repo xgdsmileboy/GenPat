@@ -26,6 +26,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ public class TokenStatistic {
     private List<Future<Set<String>>> _threadResultList = new ArrayList<>();
 
     private final static String COMMAND = "<command> -if <arg> [-of <arg>] [-dir <arg>]";
+
     private Options options() {
         Options options = new Options();
 
@@ -167,7 +169,8 @@ public class TokenStatistic {
             }
             file.createNewFile();
         }
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false), "UTF-8"));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false),
+                StandardCharsets.UTF_8));
         List<Map.Entry<String, Integer>> entryList = new LinkedList<>(_cacheMap.entrySet());
         entryList = entryList.stream()
                 .sorted(Comparator.comparingInt(Map.Entry<String, Integer>::getValue).reversed())
@@ -277,32 +280,23 @@ class ParseKey implements Callable<Set<String>> {
             Node node = p.getPatternNode();
             Queue<Node> nodes = new LinkedList<>();
             nodes.add(node);
-            while(!nodes.isEmpty()) {
+            while (!nodes.isEmpty()) {
                 node = nodes.poll();
-                if (NodeUtils.isSimpleExpr(node)) {
-                    switch (node.getNodeType()) {
-                        case NUMBER:
-                        case INTLITERAL:
-                        case FLITERAL:
-                        case DLITERAL:
-                        case CLITERAL:
-                        case BLITERAL:
-                        case NULL:
-                        case THIS:
-                        case QNAME:
-                            break;
-                        case SLITERAL:
-                            StringBuffer s = node.toSrcString();
-                            if (s.length() < 10 && s.length() > 1) {
-                                strings.add(s.toString());
-                            }
-                            break;
-                        case TYPE:
-                            strings.add(NodeUtils.distilBasicType((MType) node));
-                            break;
-                        default:
-                            strings.add(node.toSrcString().toString());
-                    }
+                switch (node.getNodeType()) {
+                    case SLITERAL:
+                        StringBuffer s = node.toSrcString();
+                        if (s.length() < 10 && s.length() > 1) {
+                            strings.add(s.toString());
+                        }
+                        break;
+                    case TYPE:
+                        strings.add(NodeUtils.distilBasicType((MType) node));
+                        break;
+                    case SNAME:
+                    case TLITERAL:
+                        strings.add(node.toSrcString().toString());
+                    default:
+
                 }
                 nodes.addAll(node.getAllChildren());
             }
