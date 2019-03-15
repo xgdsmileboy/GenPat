@@ -14,6 +14,8 @@ import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.abs.TermFrequency;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.expr.Svd;
+import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.parser.NodeParser;
@@ -21,7 +23,9 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -78,6 +82,7 @@ public class PatternExtractor {
 
             if(new Matcher().greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
                 Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
+                Set<String> newVars = getVars(nodes);
                 Set<Node> temp;
                 for(Node node : nodes) {
                     if (node.getBindingNode() != null) {
@@ -93,11 +98,32 @@ public class PatternExtractor {
 //                srcNode.doAbstraction(counter);
                 srcNode.doAbstractionNew(abstraction.lazyInit());
                 tarNode.doAbstractionNew(abstraction);
-                patterns.add(new Pattern(srcNode, imports));
+                Pattern pattern = new Pattern(srcNode, imports);
+                pattern.addNewVars(newVars);
+                patterns.add(pattern);
             }
         }
-
 //        counter.close();
         return patterns;
+    }
+
+    private Set<String> getVars(Set<Node> nodes) {
+        Set<String> vars = new HashSet<>();
+        Queue<Node> queue = new LinkedList<>(nodes);
+        while (!queue.isEmpty()) {
+            Node node = queue.poll();
+            switch (node.getNodeType()) {
+                case VARDECLFRAG:
+                    Vdf vdf = (Vdf) node;
+                    vars.add(vdf.getName());
+                    break;
+                case SINGLEVARDECL:
+                    Svd svd = (Svd) node;
+                    vars.add(svd.getName().getName());
+                default:
+            }
+            queue.addAll(node.getAllChildren());
+        }
+        return vars;
     }
 }

@@ -247,6 +247,26 @@ public class Vdf extends Node {
 	}
 
 	@Override
+	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp = _identifier.transfer(vars, exprMap);
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			for (int i = 0; i < _dimensions; i++) {
+				stringBuffer.append("[]");
+			}
+			if (_expression != null) {
+				tmp = _expression.transfer(vars, exprMap);
+				if (tmp == null) return null;
+				stringBuffer.append('=').append(tmp);
+			}
+		}
+		return stringBuffer;
+	}
+
+	@Override
 	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node node = NodeUtils.checkModification(this);

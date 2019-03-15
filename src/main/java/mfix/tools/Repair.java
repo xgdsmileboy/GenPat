@@ -7,10 +7,10 @@
 
 package mfix.tools;
 
+import mfix.common.conf.Constant;
 import mfix.common.java.FakeSubject;
 import mfix.common.java.JCompiler;
 import mfix.common.java.Subject;
-import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
@@ -294,9 +294,12 @@ public class Repair {
                 LevelLogger.error("Filter patterns failed!", e);
                 continue;
             }
+            Set<String> vars = new HashSet<>();
             for (String s : patterns) {
                 Pattern p = readPattern(s);
-                Set<String> vars = varMaps.getOrDefault(node.getStartLine(), emptySet);
+                varMaps.clear();
+                vars.addAll(p.getNewVars());
+                vars.addAll(varMaps.getOrDefault(node.getStartLine(), emptySet));
                 totalFix += tryFix(subject, node, p, vars, totalFix, timer, logFile);
                 if (totalFix > Constant.MAX_PATCH_NUMBER) {
                     break;

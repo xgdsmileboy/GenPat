@@ -50,6 +50,16 @@ public class D4JRepairTest extends TestCase {
         test("math", 1);
     }
 
+    @Test
+    public void test_chart_4() {
+        test("chart", 4);
+    }
+
+    @Test
+    public void test_chart_6() {
+        test("chart", 6);
+    }
+
 
     private List<Pair<String, String>> buildFilePairs(String d4jproj, int id) {
         List<Pair<String, String>> list = new LinkedList<>();
@@ -100,10 +110,15 @@ public class D4JRepairTest extends TestCase {
                 Set<String> already = new HashSet<>();
                 int count = 0;
                 for (Pattern p : patterns) {
+                    Set<String> newVars = p.getNewVars();
                     Set<MatchInstance> set = matcher.tryMatch(node, p);
+                    Set<String> iterVars = new HashSet<>();
                     for (MatchInstance matchInstance : set) {
                         matchInstance.apply();
-                        StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>());
+                        iterVars.clear();
+                        iterVars.addAll(newVars);
+                        iterVars.addAll(varMaps.get(node.getStartLine()));
+                        StringBuffer buffer = node.adaptModifications(iterVars, new HashMap<>());
                         if (buffer != null) {
                             String tmp = buffer.toString();
                             if (!already.contains(tmp)) {

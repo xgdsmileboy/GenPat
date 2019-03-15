@@ -617,6 +617,7 @@ public class Matcher {
 													 List<? extends Node> statements,
 													 Map<Node, List<StringBuffer>> insertionBefore,
 													 Map<Node, List<StringBuffer>> insertionAfter,
+													 Map<Integer, List<StringBuffer>> insertAt,
 													 Map<Node, StringBuffer> changeNodeMap,
 													 Set<String> vars, Map<String, String> exprMap) {
 		StringBuffer tmp;
@@ -638,28 +639,25 @@ public class Matcher {
 				changeNodeMap.put(node, null);
 			} else if(modification instanceof Insertion){
 				Insertion insertion = (Insertion) modification;
+				tmp = insertion.apply(vars, exprMap);
+				if (tmp == null) return false;
+
 				Node insNode = insertion.getInsertedNode();
 				Set<Node> before = new HashSet<>();
 				Set<Node> after = new HashSet<>();
 				Set<Node> depends = insNode.recursivelyGetDataDependency(new HashSet<>());
 				if (!depends.isEmpty()) {
 					for (Node n : depends) {
-						if (n.getBindingNode() == null || n.getBindingNode().getBuggyBindingNode() == null) {
-							return false;
+						if (n.getBindingNode() != null && n.getBindingNode().getBuggyBindingNode() != null) {
+							after.add(n.getBindingNode().getBuggyBindingNode());
 						}
-						after.add(n.getBindingNode().getBuggyBindingNode());
 					}
-
 				} else if (insertion.getPrenode() != null && insertion.getPrenode().getBindingNode() != null
 						&& insertion.getPrenode().getBindingNode().getBuggyBindingNode() != null) {
 					after.add(insertion.getPrenode().getBindingNode().getBuggyBindingNode());
 				} else if (insertion.getNextnode() != null && insertion.getNextnode().getBindingNode() != null
 						&&insertion.getNextnode().getBindingNode().getBuggyBindingNode() != null) {
 					before.add(insertion.getNextnode().getBindingNode().getBuggyBindingNode());
-				}
-
-				if (after.isEmpty() && before.isEmpty()) {
-					return false;
 				}
 
 				int tag = -1;
@@ -677,26 +675,33 @@ public class Matcher {
 							list = new LinkedList<>();
 							insertionAfter.put(statements.get(tag), list);
 						}
-						tmp = insertion.apply(vars, exprMap);
-						if (tmp == null) return false;
 						list.add(tmp);
 					}
 				}
 				if (tag == -1) {
-					tag = 0;
-					for (int i = 0; i < statements.size(); i++) {
-						if (after.contains(statements.get(i))) {
-							tag = i;
+					if (!before.isEmpty()) {
+						for (int i = 0; i < statements.size(); i++) {
+							final Node node = statements.get(i);
+							if (before.stream().anyMatch(n -> n == node || node.isParentOf(n))) {
+								tag = i;
+							}
 						}
 					}
-					List<StringBuffer> list = insertionBefore.get(statements.get(tag));
-					if(list == null) {
-						list = new LinkedList<>();
-						insertionBefore.put(statements.get(tag), list);
+					if (tag != -1) {
+						List<StringBuffer> list = insertionBefore.get(statements.get(tag));
+						if (list == null) {
+							list = new LinkedList<>();
+							insertionBefore.put(statements.get(tag), list);
+						}
+						list.add(tmp);
+					} else {
+						List<StringBuffer> list = insertAt.get(insertion.getIndex());
+						if (list == null) {
+							list = new LinkedList<>();
+							insertAt.put(insertion.getIndex(), list);
+						}
+						list.add(tmp);
 					}
-					tmp = insertion.apply(vars, exprMap);
-					if(tmp == null) return false;;
-					list.add(tmp);
 				}
 			}
 		}

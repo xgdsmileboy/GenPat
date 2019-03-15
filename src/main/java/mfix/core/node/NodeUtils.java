@@ -6,6 +6,7 @@
  */
 package mfix.core.node;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
@@ -19,7 +20,9 @@ import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -37,6 +40,62 @@ public class NodeUtils {
 
     public static Set<String> IGNORE_METHOD_INVOKE = new HashSet<String>(Arrays.asList("toString", "equals",
             "hashCode"));
+
+    public static StringBuffer assemble(List<? extends Node> _statements,
+                                        Map<Node, List<StringBuffer>> insertionBefore,
+                                        Map<Node, List<StringBuffer>> insertionAfter,
+                                        Map<Node, StringBuffer> map,
+                                        Map<Integer, List<StringBuffer>> insertionAt,
+                                        Set<String> vars, Map<String, String> exprMap) {
+
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer tmp;
+        for (int index = 0; index < _statements.size(); index ++) {
+            Node node = _statements.get(index);
+            List<StringBuffer> list = insertionBefore.get(node);
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    stringBuffer.append(list.get(i)).append(Constant.NEW_LINE);
+                }
+            }
+            int start = index;
+            list = insertionAt.get(start);
+            while ( list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    stringBuffer.append(list.get(i)).append(Constant.NEW_LINE);
+                }
+                insertionAt.remove(start);
+                start ++;
+                list = insertionAt.get(start);
+            }
+            if (map.containsKey(node)) {
+                StringBuffer update = map.get(node);
+                if (update != null) {
+                    stringBuffer.append(update).append(Constant.NEW_LINE);
+                }
+            } else {
+                tmp = node.adaptModifications(vars, exprMap);
+                if (tmp == null) return null;
+                stringBuffer.append(tmp).append(Constant.NEW_LINE);
+            }
+            list = insertionAfter.get(node);
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    stringBuffer.append(list.get(i)).append(Constant.NEW_LINE);
+                }
+            }
+        }
+        if (!insertionAt.isEmpty()) {
+            List<Map.Entry<Integer, List<StringBuffer>>> list = new ArrayList<>(insertionAt.entrySet());
+            list.stream().sorted(Comparator.comparingInt(Map.Entry::getKey));
+            for (Map.Entry<Integer, List<StringBuffer>> entry : list) {
+                for (StringBuffer s : entry.getValue()) {
+                    stringBuffer.append(s).append(Constant.NEW_LINE);
+                }
+            }
+        }
+        return stringBuffer;
+    }
 
     public static boolean patternMatch(Node fst, Node snd, Map<Node, Node> matchedNode, boolean skipFormalCmp) {
         if (fst.isConsidered() != snd.isConsidered()) return false;

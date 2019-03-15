@@ -202,42 +202,18 @@ public class Blk extends Stmt {
             Blk blk = (Blk) pnode;
             Map<Node, List<StringBuffer>> insertBefore = new HashMap<>();
             Map<Node, List<StringBuffer>> insertAfter = new HashMap<>();
+            Map<Integer, List<StringBuffer>> insertAt = new HashMap<>();
             Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
             if (!new Matcher().applyNodeListModifications(blk.getModifications(), _statements,
-                    insertBefore, insertAfter, map, vars, exprMap)) {
+                    insertBefore, insertAfter, insertAt, map, vars, exprMap)) {
                 return null;
             }
             StringBuffer stringBuffer = new StringBuffer();
-            StringBuffer tmp;
             stringBuffer.append("{" + Constant.NEW_LINE);
-            for (Node node : _statements) {
-                List<StringBuffer> list = insertBefore.get(node);
-                if (list != null) {
-                    for (int i = 0; i < list.size(); i++) {
-                        stringBuffer.append(list.get(i));
-                        stringBuffer.append(Constant.NEW_LINE);
-                    }
-                }
-                if (map.containsKey(node)) {
-                    StringBuffer update = map.get(node);
-                    if (update != null) {
-                        stringBuffer.append(update);
-                        stringBuffer.append(Constant.NEW_LINE);
-                    }
-                } else {
-                    tmp = node.adaptModifications(vars, exprMap);
-                    if(tmp == null) return null;
-                    stringBuffer.append(tmp);
-                    stringBuffer.append(Constant.NEW_LINE);
-                }
-                list = insertAfter.get(node);
-                if (list != null) {
-                    for (int i = 0; i < list.size(); i++) {
-                        stringBuffer.append(list.get(i));
-                        stringBuffer.append(Constant.NEW_LINE);
-                    }
-                }
-            }
+            StringBuffer tmp = NodeUtils.assemble(_statements, insertBefore, insertAfter, map, insertAt,
+                    vars, exprMap);
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
             stringBuffer.append("}");
             return stringBuffer;
 
