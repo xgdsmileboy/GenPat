@@ -56,7 +56,7 @@ public class PatternExtractor {
         if (srcUnit == null || tarUnit == null) {
             return patterns;
         }
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = new NodeParser();
 
 //        CodeAbstraction abstraction = new TF_IDF(srcFile, Constant.TF_IDF_FREQUENCY);
@@ -80,7 +80,7 @@ public class PatternExtractor {
                 continue;
             }
 
-            if(new Matcher().greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
+            if(Matcher.greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
                 Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
                 Set<String> newVars = getVars(nodes);
                 Set<Node> temp;

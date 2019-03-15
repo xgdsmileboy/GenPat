@@ -49,7 +49,7 @@ public class MatcherTest extends TestCase {
         String tarFile_change_retType = testbase + Constant.SEP + "tar_Intersect.java";
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile_change_retType);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile_change_retType);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
 
         // The method signature cannot match
         // TODO: should permit some methods failing to match
@@ -63,7 +63,7 @@ public class MatcherTest extends TestCase {
 
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
 
         // all methods are well matched
         Assert.assertTrue(matchMap.size() == 108);
@@ -131,11 +131,10 @@ public class MatcherTest extends TestCase {
                 "}\n" +
                 "}";
 
-        Matcher matcher = new Matcher();
-        Set<Pattern> matched = matcher.filter(node, patterns);
+        Set<Pattern> matched = Matcher.filter(node, patterns);
         Assert.assertTrue(matched.size() == 1);
 
-        Set<MatchInstance> set = matcher.tryMatch(node, matched.iterator().next());
+        Set<MatchInstance> set = Matcher.tryMatch(node, matched.iterator().next());
         Assert.assertTrue(set.size() == 1);
 
         MatchInstance instance = set.iterator().next();
@@ -212,12 +211,11 @@ public class MatcherTest extends TestCase {
 
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
-        Matcher matcher = new Matcher();
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
-            Set<Pattern> matched = matcher.filter(node, patterns);
+            Set<Pattern> matched = Matcher.filter(node, patterns);
             for (Pattern p : matched) {
-                Set<MatchInstance> set = matcher.tryMatch(node, p);
+                Set<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     Assert.assertTrue(node.adaptModifications(varMaps.get(node.getStartLine()),
@@ -285,7 +283,6 @@ public class MatcherTest extends TestCase {
 
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
-        Matcher matcher = new Matcher();
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
             for (Pattern p : patterns) {
@@ -293,7 +290,7 @@ public class MatcherTest extends TestCase {
                 for (String ip : p.getImports()) {
                     b.append(ip).append(Constant.NEW_LINE);
                 }
-                Set<MatchInstance> set = matcher.tryMatch(node, p);
+                Set<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap());
@@ -339,11 +336,10 @@ public class MatcherTest extends TestCase {
 
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
-        Matcher matcher = new Matcher();
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
             for (Pattern p : patterns) {
-                Set<MatchInstance> set = matcher.tryMatch(node, p);
+                Set<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>());

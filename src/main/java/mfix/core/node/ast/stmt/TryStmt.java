@@ -436,7 +436,7 @@ public class TryStmt extends Stmt {
 					Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
 					Map<Node, StringBuffer> map = new HashMap<>(_catches.size());
 
-					if (!new Matcher().applyNodeListModifications(catchModifications, _catches, insertionBefore,
+					if (!Matcher.applyNodeListModifications(catchModifications, _catches, insertionBefore,
 							insertionAfter, insertionAt, map, vars, exprMap)) {
 						return null;
 					}

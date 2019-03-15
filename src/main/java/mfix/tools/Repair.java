@@ -197,7 +197,7 @@ public class Repair {
         int startLine = bNode.getStartLine();
         int endLine = bNode.getEndLine();
 
-        Set<MatchInstance> fixPositions = new Matcher().tryMatch(bNode, pattern);
+        Set<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern);
         Set<String> alreadyGenerated = new HashSet<>();
 
         for (MatchInstance matchInstance : fixPositions) {

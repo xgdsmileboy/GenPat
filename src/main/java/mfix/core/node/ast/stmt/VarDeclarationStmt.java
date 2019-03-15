@@ -282,7 +282,7 @@ public class VarDeclarationStmt extends Stmt {
 			Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
 			Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
 			Map<Node, StringBuffer> map = new HashMap<>(_fragments.size());
-			if (!new Matcher().applyNodeListModifications(modifications, _fragments, insertionBefore, insertionAfter,
+			if (!Matcher.applyNodeListModifications(modifications, _fragments, insertionBefore, insertionAfter,
 				insertionAt, map, vars, exprMap)) {
 				return null;
 			}

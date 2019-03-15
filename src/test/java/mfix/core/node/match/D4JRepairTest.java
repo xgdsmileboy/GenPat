@@ -104,14 +104,13 @@ public class D4JRepairTest extends TestCase {
 
             NodeParser parser = new NodeParser();
             parser.setCompilationUnit(buggy, unit);
-            Matcher matcher = new Matcher();
             for (MethodDeclaration m : methods) {
                 Node node = parser.process(m);
                 Set<String> already = new HashSet<>();
                 int count = 0;
                 for (Pattern p : patterns) {
                     Set<String> newVars = p.getNewVars();
-                    Set<MatchInstance> set = matcher.tryMatch(node, p);
+                    Set<MatchInstance> set = Matcher.tryMatch(node, p);
                     Set<String> iterVars = new HashSet<>();
                     for (MatchInstance matchInstance : set) {
                         matchInstance.apply();
