@@ -171,7 +171,7 @@ public class TokenStatistic {
         for (Map.Entry<String, Integer> entry : entryList) {
             bw.write(entry.getKey());
             bw.newLine();
-            bw.write(entry.getValue().intValue());
+            bw.write(entry.getValue().toString());
             bw.newLine();
         }
         bw.close();
