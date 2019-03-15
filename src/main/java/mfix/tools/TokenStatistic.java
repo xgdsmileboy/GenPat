@@ -48,7 +48,8 @@ import java.util.stream.Collectors;
  */
 public class TokenStatistic {
 
-    private volatile Map<String, Integer> _cacheMap;
+    private Map<String, Integer> _cacheMap;
+    private Set<String> _files;
 
     private int _currThreadCount = 0;
     private int _maxThreadCount = Constant.MAX_FILTER_THREAD_NUM;
@@ -80,6 +81,7 @@ public class TokenStatistic {
 
     public TokenStatistic() {
         _cacheMap = new HashMap<>();
+        _files = new HashSet<>();
     }
 
     private void init(String fileName) {
@@ -118,6 +120,7 @@ public class TokenStatistic {
 
     private void statistic(String buggyFileName, Set<String> patternFiles) {
         LevelLogger.info("Statistic : " + buggyFileName);
+        _files.add(buggyFileName);
         try {
             if (_currThreadCount >= _maxThreadCount) {
                 LevelLogger.debug("Thread pool is full ....");
@@ -184,6 +187,24 @@ public class TokenStatistic {
         bw.close();
     }
 
+    private void writeBuggyFiles(String outFile) throws IOException {
+        LevelLogger.info("....FLUSHING FILES.......");
+        File file = new File(outFile);
+        if (!file.exists()) {
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            file.createNewFile();
+        }
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false),
+                StandardCharsets.UTF_8));
+        for (String s: _files) {
+            bw.write(s);
+            bw.newLine();
+        }
+        bw.close();
+    }
+
     private Map<String, String> parseOption(String[] args) {
         Map<String, String> optionMap = new HashMap<>();
         Options options = options();
@@ -230,6 +251,7 @@ public class TokenStatistic {
         if (!_cacheMap.isEmpty()) {
             try {
                 writeFile(outFile);
+                writeBuggyFiles(Utils.join(Constant.SEP, Constant.HOME, "BuggyFiles.txt"));
             } catch (IOException e) {
                 LevelLogger.error("Dump to result to file failed!", e);
             }
