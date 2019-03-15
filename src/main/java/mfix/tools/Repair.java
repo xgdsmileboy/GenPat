@@ -297,7 +297,7 @@ public class Repair {
             Set<String> vars = new HashSet<>();
             for (String s : patterns) {
                 Pattern p = readPattern(s);
-                varMaps.clear();
+                vars.clear();
                 vars.addAll(p.getNewVars());
                 vars.addAll(varMaps.getOrDefault(node.getStartLine(), emptySet));
                 totalFix += tryFix(subject, node, p, vars, totalFix, timer, logFile);
