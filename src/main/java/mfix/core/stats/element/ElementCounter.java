@@ -85,7 +85,6 @@ public class ElementCounter {
             allNumber = _connector.query(element.toQueryRowWithoutLimit(queryType));
         }
 
-
         if (queryType.getWithPercent()) {
             return allNumber == 0 ? 0 : ((float)countNumber) / allNumber;
         } else {
@@ -93,7 +92,7 @@ public class ElementCounter {
         }
     }
 
-    public synchronized void loadCacheWithoutType(String cacheFile) throws Exception {
+    public void loadCacheWithoutType(String cacheFile) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(cacheFile));
         String line;
         cacheMapForAPI = new Hashtable<>();
