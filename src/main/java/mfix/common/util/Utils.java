@@ -234,7 +234,7 @@ public class Utils {
         objectOutputStream.close();
     }
 
-    public static Serializable deserialize(String fileName) throws IOException, ClassNotFoundException {
+    public synchronized static Serializable deserialize(String fileName) throws IOException, ClassNotFoundException {
         File file = new File(fileName);
         ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
         return (Serializable) objectInputStream.readObject();
