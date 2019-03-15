@@ -168,7 +168,7 @@ public class TokenStatistic {
         for (Map.Entry<String, Integer> entry : _cacheMap.entrySet()) {
             bw.write(entry.getKey());
             bw.newLine();
-            bw.write(entry.getKey());
+            bw.write(entry.getValue());
             bw.newLine();
         }
         bw.close();
@@ -274,13 +274,19 @@ class ParseKey implements Callable<Set<String>> {
                 node = nodes.poll();
                 if (NodeUtils.isSimpleExpr(node)) {
                     switch (node.getNodeType()) {
+                        case NUMBER:
+                        case INTLITERAL:
+                        case FLITERAL:
+                        case DLITERAL:
+                        case CLITERAL:
                         case BLITERAL:
                         case NULL:
                         case THIS:
+                        case QNAME:
                             break;
                         case SLITERAL:
                             StringBuffer s = node.toSrcString();
-                            if (s.length() < 10) {
+                            if (s.length() < 10 && s.length() > 1) {
                                 strings.add(s.toString());
                             }
                             break;
