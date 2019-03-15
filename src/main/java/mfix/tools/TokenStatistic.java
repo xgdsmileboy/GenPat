@@ -25,7 +25,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -280,12 +286,6 @@ class ParseKey implements Callable<Set<String>> {
         _patternFiles = patterns;
     }
 
-    private Serializable deserialize(String fileName) throws IOException, ClassNotFoundException {
-        File file = new File(fileName);
-        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
-        return (Serializable) objectInputStream.readObject();
-    }
-
     @Override
     public Set<String> call() {
         if (_patternFiles == null || _patternFiles.isEmpty()) {
@@ -295,7 +295,7 @@ class ParseKey implements Callable<Set<String>> {
         for (String f : _patternFiles) {
             Pattern p;
             try {
-                p = (Pattern) deserialize(f);
+                p = (Pattern) Utils.deserialize(f);
             } catch (Exception e) {
                 continue;
             }
