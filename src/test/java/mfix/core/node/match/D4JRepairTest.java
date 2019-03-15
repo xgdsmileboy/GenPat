@@ -11,7 +11,7 @@ import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.TestCase;
+import mfix.TestCase;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.diff.TextDiff;

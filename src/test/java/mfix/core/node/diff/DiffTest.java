@@ -8,7 +8,7 @@
 package mfix.core.node.diff;
 
 import mfix.common.conf.Constant;
-import mfix.core.TestCase;
+import mfix.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 

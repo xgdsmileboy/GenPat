@@ -8,7 +8,7 @@
 package mfix.core.pattern.cluster;
 
 import mfix.common.conf.Constant;
-import mfix.core.TestCase;
+import mfix.TestCase;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.PatternExtractor;

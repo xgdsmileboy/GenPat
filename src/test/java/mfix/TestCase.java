@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core;
+package mfix;
 
 import mfix.common.conf.Constant;
 

@@ -10,7 +10,7 @@ package mfix.core.search;
 import mfix.common.java.D4jSubject;
 import mfix.common.conf.Constant;
 import mfix.common.util.Utils;
-import mfix.core.TestCase;
+import mfix.TestCase;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import org.eclipse.jdt.core.dom.ASTNode;
