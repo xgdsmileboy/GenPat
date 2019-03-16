@@ -203,10 +203,14 @@ public class Repair {
                 .append(']')
                 .append(Constant.NEW_LINE)
                 .append("------------ Solution ---------------")
+                .append(Constant.NEW_LINE)
                 .append(diff.toString())
                 .append(Constant.NEW_LINE)
                 .append("PATTERN : ")
-                .append(patternName);
+                .append(patternName)
+                .append(Constant.NEW_LINE)
+                .append("--------------- END -----------------")
+                .append(Constant.NEW_LINE);
 
         JavaFile.writeStringToFile(_logfile, buffer.toString(), true);
     }
@@ -218,6 +222,7 @@ public class Repair {
         String origin = bNode.toSrcString().toString();
         String buggyFile = bNode.getFileName();
         List<String> sources = JavaFile.readFileToStringList(buggyFile);
+        sources.add(0, "");
         int startLine = bNode.getStartLine();
         int endLine = bNode.getEndLine();
 

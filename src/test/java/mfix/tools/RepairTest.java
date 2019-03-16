@@ -61,7 +61,7 @@ public class RepairTest extends TestCase {
             LevelLogger.error("Backup source file failed!", e);
         }
         D4JManualLocator locator = new D4JManualLocator(subject);
-        List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
+        List<Location> locations = locator.getLocations(3);
         Repair repair = new Repair(subject, null);
         Timer timer = new Timer(Constant.MAX_REPAIR_TIME);
         repair.setTimer(timer);
