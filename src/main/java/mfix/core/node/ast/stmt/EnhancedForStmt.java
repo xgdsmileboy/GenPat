@@ -172,7 +172,7 @@ public class EnhancedForStmt extends Stmt {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         EnhancedForStmt enhancedForStmt = null;
-        if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+        if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
             enhancedForStmt = (EnhancedForStmt) getBindingNode();
             _expression.postAccurateMatch(enhancedForStmt.getExpression());
             match = (enhancedForStmt == node);

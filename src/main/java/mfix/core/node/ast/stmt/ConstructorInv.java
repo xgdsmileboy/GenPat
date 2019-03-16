@@ -135,7 +135,7 @@ public class ConstructorInv extends Stmt {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         ConstructorInv constructorInv = null;
-        if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+        if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
             constructorInv = (ConstructorInv) getBindingNode();
             match = false;
         } else if (canBinding(node)) {

@@ -35,7 +35,7 @@ import java.util.Set;
 public class PatternExtractor {
 
     public Set<Pattern> extractPattern(String srcFile, String tarFile) {
-        return extractPattern(srcFile, tarFile, 20);
+        return extractPattern(srcFile, tarFile, Constant.FILTER_MAX_CHANGE_LINE);
     }
 
     public Set<Pattern> extractPattern(String srcFile, String tarFile, int maxChangeLine) {

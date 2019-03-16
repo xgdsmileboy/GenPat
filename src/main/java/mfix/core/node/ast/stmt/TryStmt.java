@@ -290,7 +290,7 @@ public class TryStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		TryStmt tryStmt = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			tryStmt = (TryStmt) getBindingNode();
 			match = (tryStmt == node);
 		} else if(canBinding(node)) {

@@ -124,7 +124,7 @@ public class ContinueStmt extends Stmt {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         ContinueStmt continueStmt = null;
-        if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+        if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
             continueStmt = (ContinueStmt) getBindingNode();
             match = false;
         } else if (canBinding(node)) {

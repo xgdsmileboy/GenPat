@@ -141,7 +141,7 @@ public class SwCase extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		SwCase swCase = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			swCase = (SwCase) getBindingNode();
 			if (_expression  != null && swCase.getExpression() != null) {
 				_expression.postAccurateMatch(swCase.getExpression());

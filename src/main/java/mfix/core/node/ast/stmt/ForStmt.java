@@ -204,7 +204,7 @@ public class ForStmt extends Stmt {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         ForStmt forStmt = null;
-        if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+        if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
             forStmt = (ForStmt) getBindingNode();
             if (_condition != null) {
                 _condition.postAccurateMatch(forStmt.getCondition());

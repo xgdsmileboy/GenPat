@@ -114,7 +114,7 @@ public class ExpressionStmt extends Stmt {
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         ExpressionStmt expressionStmt = null;
-        if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+        if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
             expressionStmt = (ExpressionStmt) getBindingNode();
             _expression.postAccurateMatch(expressionStmt.getExpression());
             match = false;

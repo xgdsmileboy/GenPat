@@ -44,7 +44,7 @@ public class Constant {
     public final static String BANNED_API_FILE = Utils.join(SEP, RES_DIR, "conf", "whiteList.txt");
 
     /* values for pattern abstraction */
-    public final static int TOTAL_BUGGY_FILE_NUMBER = 723457; // used to compute TF-IDF
+    public final static int TOTAL_BUGGY_FILE_NUMBER = 1217392; // used to compute TF-IDF
     public final static int API_FREQUENCY = 100;
     public final static double TF_IDF_FREQUENCY = 0.5;
     public final static double TOKEN_FREQENCY = 0.01;
@@ -73,6 +73,12 @@ public class Constant {
 
     /* max number of patterns used to repair one location */
     public static int TOP_K_PATTERN_EACH_LOCATION;
+
+    /* max number of changed lines for pattern filtering */
+    public static int FILTER_MAX_CHANGE_LINE;
+
+    /* max number of modifications for pattern filtering */
+    public static int FILTER_MAX_CHANGE_ACTION;
 
     /* default directory to same patch log info */
     public final static String PATCH_PATH = Utils.join(SEP, HOME, "patch");
@@ -110,6 +116,8 @@ public class Constant {
             Constant.MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
             Constant.MAX_CLUSTER_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER.THREAD", "10"));
             Constant.MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
+            Constant.FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
+            Constant.FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));
         } catch (IOException e) {
             LevelLogger.error("#Constant get properties failed!" + e.getMessage());
         }

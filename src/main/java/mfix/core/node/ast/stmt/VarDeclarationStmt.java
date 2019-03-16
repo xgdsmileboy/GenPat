@@ -192,7 +192,7 @@ public class VarDeclarationStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		VarDeclarationStmt vds = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			vds = (VarDeclarationStmt) getBindingNode();
 			match = (vds == node);
 		} else if(canBinding(node)) {

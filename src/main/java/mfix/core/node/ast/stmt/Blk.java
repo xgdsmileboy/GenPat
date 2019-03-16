@@ -143,7 +143,7 @@ public class Blk extends Stmt {
     public boolean postAccurateMatch(Node node) {
         Blk blk = null;
         boolean match = false;
-        if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+        if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
             blk = (Blk) getBindingNode();
             match = blk == node;
         } else if (canBinding(node)) {

@@ -130,7 +130,7 @@ public class ReturnStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		ReturnStmt returnStmt = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			returnStmt = (ReturnStmt) getBindingNode();
 			match = (returnStmt == node);
 		} else if(canBinding(node)){

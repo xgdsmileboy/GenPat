@@ -166,7 +166,7 @@ public class SuperConstructorInv extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		SuperConstructorInv superConstructorInv = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			superConstructorInv = (SuperConstructorInv) getBindingNode();
 			match = (superConstructorInv == node);
 		} else if(canBinding(node)) {

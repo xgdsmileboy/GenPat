@@ -142,7 +142,7 @@ public class DoStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		DoStmt doStmt = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			doStmt = (DoStmt) getBindingNode();
 			_expression.postAccurateMatch(doStmt.getExpression());
 			_stmt.postAccurateMatch(doStmt.getBody());

@@ -122,7 +122,7 @@ public class ThrowStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		ThrowStmt throwStmt = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			throwStmt = (ThrowStmt) getBindingNode();
 			match = (throwStmt == node);
 		} else if(canBinding(node)) {

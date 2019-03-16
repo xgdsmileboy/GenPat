@@ -170,7 +170,7 @@ public class IfStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		IfStmt ifStmt = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			ifStmt = (IfStmt) getBindingNode();
 			_condition.postAccurateMatch(ifStmt.getCondition());
 			_then.postAccurateMatch(ifStmt.getThen());

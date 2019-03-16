@@ -129,7 +129,7 @@ public class SynchronizedStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		SynchronizedStmt synchronizedStmt = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			synchronizedStmt = (SynchronizedStmt) getBindingNode();
 			match = (synchronizedStmt == node);
 		} else if(canBinding(node)) {

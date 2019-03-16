@@ -13,8 +13,6 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.MiningUtils;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.MethDecl;
-import mfix.core.node.ast.Node;
-import mfix.core.node.diff.TextDiff;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.PatternExtractor;
@@ -243,13 +241,13 @@ public class Filter {
         }
         optionMap.put("dir", baseDir);
 
-        String maxChangedLine = "50";
+        String maxChangedLine = String.valueOf(Constant.FILTER_MAX_CHANGE_LINE);
         if (cmd.hasOption("line")) {
             maxChangedLine = cmd.getOptionValue("line");
         }
         optionMap.put("line", maxChangedLine);
 
-        String maxChangedAction = "20";
+        String maxChangedAction = String.valueOf(Constant.FILTER_MAX_CHANGE_ACTION);
         if (cmd.hasOption("change")) {
             maxChangedAction = cmd.getOptionValue("change");
         }
@@ -348,18 +346,7 @@ class ParseNode implements Callable<List<String>> {
                 LevelLogger.debug("Too many modifications : " + modifications.size() + " ... SKIP.");
                 continue;
             }
-            Node node = pattern.getPatternNode();
-            // filter by changed lines
-            if (node.getBindingNode() != null) {
-                Node other = node.getBindingNode();
-                TextDiff diff = new TextDiff(node, other);
-                int size = diff.getMiniDiff().size();
-                if (size > _maxChangeLine) {
-                    LevelLogger.debug("Too many changed lines : " + size + " ... SKIP.");
-                    continue;
-                }
-            }
-            MethDecl methDecl = (MethDecl) node;
+            MethDecl methDecl = (MethDecl) pattern.getPatternNode();
 
             String savePatternPath = _srcFile.replace(MiningUtils.buggyFileSubDirName(), MiningUtils.patternSubDirName());
             savePatternPath = savePatternPath + "-" + methDecl.getName().getName() + ".pattern";

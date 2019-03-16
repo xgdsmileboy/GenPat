@@ -121,7 +121,7 @@ public class BreakStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		BreakStmt breakStmt = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			breakStmt = (BreakStmt) getBindingNode();
 			match = (breakStmt == node);
 		} else if (canBinding(node)) {

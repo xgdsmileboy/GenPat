@@ -170,7 +170,7 @@ public class SwitchStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		SwitchStmt switchStmt = null;
-		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			switchStmt = (SwitchStmt) getBindingNode();
 			match = (switchStmt == node);
 		} else if(canBinding(node)) {
