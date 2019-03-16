@@ -10,11 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.Expr;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -141,7 +141,7 @@ public class SwCase extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		SwCase swCase = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
 			swCase = (SwCase) getBindingNode();
 			if (_expression  != null && swCase.getExpression() != null) {
 				_expression.postAccurateMatch(swCase.getExpression());

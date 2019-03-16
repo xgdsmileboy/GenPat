@@ -318,6 +318,16 @@ public class Matcher {
 		return map;
 	}
 
+	private static boolean anyAncestorMatch(Node node) {
+		while(node.getParent() != null) {
+			node = node.getParent();
+			if (node.getBindingNode() != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static boolean greedyMatch(MethDecl src, MethDecl tar) {
 		List<Stmt> srcStmt = src.getAllChildStmt(new ArrayList<>());
 		List<Stmt> tarStmt = tar.getAllChildStmt(new ArrayList<>());
@@ -327,13 +337,17 @@ public class Matcher {
 		Set<Integer> tarMatched = new HashSet<>();
 		for(int i = 0; i < srcStmt.size(); i++) {
 			boolean notmatched = true;
-			for (int j = 0; j < tarStmt.size(); j++) {
-				if(!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
-					srcStmt.get(i).setBindingNode(tarStmt.get(j));
-					srcStmt.get(i).postAccurateMatch(tarStmt.get(j));
-					tarMatched.add(j);
-					notmatched = false;
-					break;
+			if (anyAncestorMatch(srcStmt.get(i))) {
+				notmatched = false;
+			} else {
+				for (int j = 0; j < tarStmt.size(); j++) {
+					if (!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
+						srcStmt.get(i).setBindingNode(tarStmt.get(j));
+						srcStmt.get(i).postAccurateMatch(tarStmt.get(j));
+						tarMatched.add(j);
+						notmatched = false;
+						break;
+					}
 				}
 			}
 			if(notmatched) {
@@ -341,7 +355,7 @@ public class Matcher {
 			}
 		}
 		for(int i = 0; i < tarStmt.size(); i++) {
-			if(!tarMatched.contains(i)) {
+			if(tarStmt.get(i).getBindingNode() == null) {
 				tarNotMatched.add(tarStmt.get(i));
 			}
 		}

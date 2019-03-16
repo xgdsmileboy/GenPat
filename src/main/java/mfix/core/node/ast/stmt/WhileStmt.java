@@ -135,7 +135,7 @@ public class WhileStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		WhileStmt whileStmt = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
 			whileStmt = (WhileStmt) getBindingNode();
 			match = (whileStmt == node);
 		} else if(canBinding(node)) {

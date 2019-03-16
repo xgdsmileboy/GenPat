@@ -29,185 +29,185 @@ import java.util.Set;
  */
 public class ExpressionStmt extends Stmt {
 
-	private static final long serialVersionUID = 3654727206887515381L;
-	private Expr _expression = null;
-	
-	/**
-	 * ExpressionStatement:
-     *	StatementExpression ;
-	 */
-	public ExpressionStmt(String fileName, int startLine, int endLine, ASTNode node) {
-		this(fileName, startLine, endLine, node, null);
-	}
-	
-	public ExpressionStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
-		super(fileName, startLine, endLine, node, parent);
-		_nodeType = TYPE.EXPRSTMT;
-	}
+    private static final long serialVersionUID = 3654727206887515381L;
+    private Expr _expression = null;
 
-	public void setExpression(Expr expression){
-		_expression = expression;
-	}
-	
-	public Expr getExpression() {
-		return _expression;
-	}
+    /**
+     * ExpressionStatement:
+     * StatementExpression ;
+     */
+    public ExpressionStmt(String fileName, int startLine, int endLine, ASTNode node) {
+        this(fileName, startLine, endLine, node, null);
+    }
 
-	@Override
-	public StringBuffer toSrcString() {
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(_expression.toSrcString());
-		stringBuffer.append(";");
-		return stringBuffer;
-	}
+    public ExpressionStmt(String fileName, int startLine, int endLine, ASTNode node, Node parent) {
+        super(fileName, startLine, endLine, node, parent);
+        _nodeType = TYPE.EXPRSTMT;
+    }
 
-	@Override
-	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isAbstract() && !isConsidered()) return null;
-		StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
-		if (exp == null) {
-			if (isConsidered()) {
-				return new StringBuffer(nameMapping.getExprID(_expression)).append(';');
-			} else {
-				return null;
-			}
-		}
-		StringBuffer buffer = new StringBuffer(exp).append(';');
-		return buffer;
-	}
+    public void setExpression(Expr expression) {
+        _expression = expression;
+    }
 
-	@Override
-	protected void tokenize() {
-		_tokens = new LinkedList<>();
-		_tokens.addAll(_expression.tokens());
-		_tokens.add(";");
-	}
-	
-	@Override
-	public List<Node> getAllChildren() {
-		List<Node> children = new ArrayList<>(1);
-		children.add(_expression);
-		return children;
-	}
-	
-	@Override
-	public List<Stmt> getChildren() {
-		return new ArrayList<>(0);
-	}
-	
-	@Override
-	public boolean compare(Node other) {
-		if(other instanceof ExpressionStmt) {
-			ExpressionStmt expressionStmt = (ExpressionStmt) other;
-			return _expression.compare(expressionStmt._expression);
-		}
-		return false;
-	}
-	
-	@Override
-	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.combineFeature(_expression.getFeatureVector());
-	}
+    public Expr getExpression() {
+        return _expression;
+    }
 
-	@Override
-	public boolean postAccurateMatch(Node node) {
-		boolean match = false;
-		ExpressionStmt expressionStmt = null;
-		if(getBindingNode() != null) {
-			expressionStmt = (ExpressionStmt) getBindingNode();
-			_expression.postAccurateMatch(expressionStmt.getExpression());
-			match = (expressionStmt == node);
-		} else if(canBinding(node)) {
-			expressionStmt = (ExpressionStmt) node;
-			if(_expression.postAccurateMatch(expressionStmt.getExpression())) {
-				setBindingNode(node);
-				match = true;
-			} else {
-				expressionStmt = null;
-			}
-		} else if(_expression.getBindingNode() != null ) {
-			Node parent = _expression.getBindingNode().getParent();
-			if(canBinding(parent)) {
-				setBindingNode(parent);
-			}
-		}
-		if(expressionStmt == null) {
-			continueTopDownMatchNull();
-		}
+    @Override
+    public StringBuffer toSrcString() {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(_expression.toSrcString());
+        stringBuffer.append(";");
+        return stringBuffer;
+    }
 
-		return match;
-	}
+    @Override
+    protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
+        if (isAbstract() && !isConsidered()) return null;
+        StringBuffer exp = _expression.formalForm(nameMapping, isConsidered(), keywords);
+        if (exp == null) {
+            if (isConsidered()) {
+                return new StringBuffer(nameMapping.getExprID(_expression)).append(';');
+            } else {
+                return null;
+            }
+        }
+        StringBuffer buffer = new StringBuffer(exp).append(';');
+        return buffer;
+    }
 
-	@Override
-	public boolean genModifications() {
-		if(super.genModifications()) {
-			ExpressionStmt expressionStmt = (ExpressionStmt) getBindingNode();
-			if(_expression.getBindingNode() != expressionStmt.getExpression()) {
-				Update update = new Update(this, _expression, expressionStmt.getExpression());
-				_modifications.add(update);
-			} else {
-				_expression.genModifications();
-			}
-			return true;
-		}
-		return false;
-	}
+    @Override
+    protected void tokenize() {
+        _tokens = new LinkedList<>();
+        _tokens.addAll(_expression.tokens());
+        _tokens.add(";");
+    }
 
-	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		if (node instanceof ExpressionStmt) {
-			ExpressionStmt expressionStmt = (ExpressionStmt) node;
-			if (_expression.ifMatch(expressionStmt.getExpression(), matchedNode, matchedStrings)) {
-				matchedNode.put(this, node);
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    public List<Node> getAllChildren() {
+        List<Node> children = new ArrayList<>(1);
+        children.add(_expression);
+        return children;
+    }
 
-	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
-		if (stringBuffer == null) {
-			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _expression.transfer(vars, exprMap);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
-			stringBuffer.append(";");
-		}
-		return stringBuffer;
-	}
+    @Override
+    public List<Stmt> getChildren() {
+        return new ArrayList<>(0);
+    }
 
-	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
-		StringBuffer expression = null;
-		Node pnode = NodeUtils.checkModification(this);
-		if (pnode != null) {
-			ExpressionStmt expressionStmt = (ExpressionStmt) pnode;
-			for(Modification modification : expressionStmt.getModifications()) {
-				if(modification instanceof Update) {
-					Update update = (Update) modification;
-					if(update.getSrcNode() == expressionStmt._expression) {
-						expression = update.apply(vars, exprMap);
-						if(expression == null) return null;
-					} else {
-						LevelLogger.error("@ExpressionStmt ERROR");
-					}
-				} else {
-					LevelLogger.error("@ExpressionStmt Should not be this kind of modification : " + modification);
-				}
-			}
-		}
-		StringBuffer stringBuffer = new StringBuffer();
-		if(expression == null) {
-			StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
-		} else {
-			stringBuffer.append(expression);
-		}
-		stringBuffer.append(";");
-		return stringBuffer;
-	}
+    @Override
+    public boolean compare(Node other) {
+        if (other instanceof ExpressionStmt) {
+            ExpressionStmt expressionStmt = (ExpressionStmt) other;
+            return _expression.compare(expressionStmt._expression);
+        }
+        return false;
+    }
+
+    @Override
+    public void computeFeatureVector() {
+        _fVector = new FVector();
+        _fVector.combineFeature(_expression.getFeatureVector());
+    }
+
+    @Override
+    public boolean postAccurateMatch(Node node) {
+        boolean match = false;
+        ExpressionStmt expressionStmt = null;
+        if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
+            expressionStmt = (ExpressionStmt) getBindingNode();
+            _expression.postAccurateMatch(expressionStmt.getExpression());
+            match = false;
+        } else if (canBinding(node)) {
+            expressionStmt = (ExpressionStmt) node;
+            if (_expression.postAccurateMatch(expressionStmt.getExpression())) {
+                setBindingNode(node);
+                match = true;
+            } else {
+                expressionStmt = null;
+            }
+        } else if (_expression.getBindingNode() != null) {
+            Node parent = _expression.getBindingNode().getParent();
+            if (canBinding(parent)) {
+                setBindingNode(parent);
+            }
+        }
+        if (expressionStmt == null) {
+            continueTopDownMatchNull();
+        }
+
+        return match;
+    }
+
+    @Override
+    public boolean genModifications() {
+        if (super.genModifications()) {
+            ExpressionStmt expressionStmt = (ExpressionStmt) getBindingNode();
+            if (_expression.getBindingNode() != expressionStmt.getExpression()) {
+                Update update = new Update(this, _expression, expressionStmt.getExpression());
+                _modifications.add(update);
+            } else {
+                _expression.genModifications();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof ExpressionStmt) {
+            ExpressionStmt expressionStmt = (ExpressionStmt) node;
+            if (_expression.ifMatch(expressionStmt.getExpression(), matchedNode, matchedStrings)) {
+                matchedNode.put(this, node);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+        if (stringBuffer == null) {
+            stringBuffer = new StringBuffer();
+            StringBuffer tmp = _expression.transfer(vars, exprMap);
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+            stringBuffer.append(";");
+        }
+        return stringBuffer;
+    }
+
+    @Override
+    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+        StringBuffer expression = null;
+        Node pnode = NodeUtils.checkModification(this);
+        if (pnode != null) {
+            ExpressionStmt expressionStmt = (ExpressionStmt) pnode;
+            for (Modification modification : expressionStmt.getModifications()) {
+                if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    if (update.getSrcNode() == expressionStmt._expression) {
+                        expression = update.apply(vars, exprMap);
+                        if (expression == null) return null;
+                    } else {
+                        LevelLogger.error("@ExpressionStmt ERROR");
+                    }
+                } else {
+                    LevelLogger.error("@ExpressionStmt Should not be this kind of modification : " + modification);
+                }
+            }
+        }
+        StringBuffer stringBuffer = new StringBuffer();
+        if (expression == null) {
+            StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
+        } else {
+            stringBuffer.append(expression);
+        }
+        stringBuffer.append(";");
+        return stringBuffer;
+    }
 }

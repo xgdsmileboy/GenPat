@@ -142,14 +142,14 @@ public class DoStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		DoStmt doStmt = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
 			doStmt = (DoStmt) getBindingNode();
 			_expression.postAccurateMatch(doStmt.getExpression());
 			_stmt.postAccurateMatch(doStmt.getBody());
-			return (doStmt == node);
-		} else if(canBinding(node)) {
+			return doStmt == node;
+		} else if (canBinding(node)) {
 			doStmt = (DoStmt) node;
-			if(_expression.postAccurateMatch(doStmt.getExpression())) {
+			if (_expression.postAccurateMatch(doStmt.getExpression())) {
 				_stmt.postAccurateMatch(doStmt.getBody());
 				setBindingNode(node);
 				match = true;

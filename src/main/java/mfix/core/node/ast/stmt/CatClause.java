@@ -151,10 +151,10 @@ public class CatClause extends Node {
 	public boolean postAccurateMatch(Node node) {
 		CatClause catClause = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() == node || (getBindingNode() != null && !compare(node))) {
 			catClause = (CatClause) getBindingNode();
-			match = (catClause == node);
-		} else if(canBinding(node)) {
+			match = false;
+		} else if (canBinding(node)) {
 			catClause = (CatClause) node;
 			setBindingNode(node);
 			match = true;

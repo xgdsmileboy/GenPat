@@ -55,6 +55,11 @@ public class D4jSubject extends Subject {
         _tbin = paths.get(3);
     }
 
+    @Override
+    public String getLogFilePath() {
+        return _name + '/' + _id;
+    }
+
     private List<String> obtainClasspath(final String projName) {
         List<String> classpath = new LinkedList<String>();
         switch (projName) {

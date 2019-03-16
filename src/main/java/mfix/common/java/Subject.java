@@ -7,7 +7,11 @@
 
 package mfix.common.java;
 
+import mfix.common.util.LevelLogger;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -137,6 +141,32 @@ public class Subject implements IExecute {
 
     public  String getJDKHome() {
         return _jdk_home;
+    }
+
+    public String getLogFilePath() {
+        return _name;
+    }
+
+    public void backup() throws IOException {
+        String file = getHome() + getSsrc();
+        String tar = file + "_bak";
+        File tarFile = new File(tar);
+        if (tarFile.exists()) {
+            FileUtils.copyDirectory(tarFile, new File(file));
+        } else {
+            FileUtils.copyDirectory(new File(file), tarFile);
+        }
+    }
+
+    public void restore() throws IOException {
+        String file = getHome() + getSsrc();
+        String tar = file + "_bak";
+        File tarFile = new File(tar);
+        if (tarFile.exists()) {
+            FileUtils.copyDirectory(tarFile, new File(file));
+        } else {
+            LevelLogger.error("Restore source file failed!");
+        }
     }
 
     public boolean compileSuccess(List<String> compileMessage) {
