@@ -202,7 +202,7 @@ public class Subject implements IExecute {
         }
     }
 
-    private boolean checkSuccess(List<String> compileMessage, String key) {
+    protected boolean checkSuccess(List<String> compileMessage, String key) {
         for (String string : compileMessage) {
             if (string.contains(key)) {
                 return true;

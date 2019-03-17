@@ -33,6 +33,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -84,18 +85,31 @@ public class Repair {
     private ValidateResult validate(String clazzName, String source) {
         ValidateResult result = ValidateResult.PASS;
         if (_subject.compileFile()) {
+            LevelLogger.debug("Compile single file : " + clazzName);
             boolean compile = new JCompiler().compile(_subject, clazzName, source);
             if (!compile) {
+                LevelLogger.debug("Compiling single file failed!");
                 return ValidateResult.COMPILE_FAILED;
             }
+            LevelLogger.debug("Compiling single file success!");
         }
         if (_subject.compileProject()){
+            LevelLogger.debug("Compile subject : " + _subject.getName());
             boolean compile = _subject.compile();
-            if (!compile) return ValidateResult.COMPILE_FAILED;
+            if (!compile){
+                LevelLogger.debug("Compiling subject failed!");
+                return ValidateResult.COMPILE_FAILED;
+            }
+            LevelLogger.debug("Compiling subject success!");
         }
         if (_subject.testProject()) {
+            LevelLogger.debug("Test project : " + _subject.getName());
             boolean test = _subject.test();
-            if (!test) return ValidateResult.TEST_FAILED;
+            if (!test) {
+                LevelLogger.debug("Testing project failed!");
+                return ValidateResult.TEST_FAILED;
+            }
+            LevelLogger.debug("Testing project success!");
         }
         return result;
     }
@@ -222,7 +236,7 @@ public class Repair {
         JavaFile.writeStringToFile(_logfile, buffer.toString(), true);
     }
 
-    protected void tryFix(Node bNode, Pattern pattern, Set<String> buggyMethodVar) {
+    protected void tryFix(Node bNode, Pattern pattern, Set<String> buggyMethodVar, String clazzFile) {
         if (bNode == null || pattern == null || shouldStop()) {
             return;
         }
@@ -259,14 +273,12 @@ public class Repair {
                 continue;
             }
 
-            LevelLogger.debug("Fixed-----------------------------------");
-            LevelLogger.debug(fixed);
-            LevelLogger.debug("----------------------------------------");
-
             alreadyGenerated.add(fixed);
             String code = JavaFile.sourceReplace(buggyFile, pattern.getImports(),
                     sources, startLine, endLine, fixed);
-
+            try {
+                FileUtils.forceDeleteOnExit(new File(clazzFile));
+            } catch (IOException e) {}
             switch (validate(buggyFile, code)) {
                 case PASS:
                     writeLog(pattern.getPatternName(), buggyFile, origin,
@@ -297,6 +309,7 @@ public class Repair {
         List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
         Map<String, Map<Integer, Set<String>>> buggyFileVarMap = new HashMap<>();
         String srcBase = _subject.getHome() + _subject.getSsrc();
+        String tarBase = _subject.getHome() + _subject.getSbin();
 
         String start = _timer.start();
         LevelLogger.info(start);
@@ -305,6 +318,7 @@ public class Repair {
             LevelLogger.info("Location : " + location.getRelClazzFile() + "#" + location.getLine());
 
             final String file = srcBase + Constant.SEP + location.getRelClazzFile();
+            final String clazzFile = tarBase + Constant.SEP + location.getRelClazzFile().replace(".java", ".class");
             Map<Integer, Set<String>> varMaps = buggyFileVarMap.get(file);
             if (varMaps == null) {
                 varMaps = NodeUtils.getUsableVarTypes(file);
@@ -327,7 +341,7 @@ public class Repair {
                 vars.clear();
                 vars.addAll(p.getNewVars());
                 vars.addAll(varMaps.getOrDefault(node.getStartLine(), emptySet));
-                tryFix(node, p, vars);
+                tryFix(node, p, vars, clazzFile);
             }
         }
 

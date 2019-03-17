@@ -24,6 +24,10 @@ import java.util.Map;
  */
 public class ExecuteCommand {
 
+    public static List<String> execute(String[] cmd, String javaHome) {
+        return execute(getProcessBuilder(cmd, javaHome));
+    }
+
     public static List<String> executeTest(Subject subject) {
         return execute(getProcessBuilder(CmdFactory.createTestCommand(subject), subject.getJDKHome()));
     }

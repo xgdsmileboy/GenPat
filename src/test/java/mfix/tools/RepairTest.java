@@ -65,6 +65,7 @@ public class RepairTest extends TestCase {
         PatternExtractor extractor = new PatternExtractor();
         Set<Pattern> patterns = extractor.extractPattern(buggyFile, fixedFile);
         D4jSubject subject = new D4jSubject(d4jHome, proj, id);
+        subject.configFailedTestCases();
         try {
             subject.backup();
         } catch (IOException e) {
@@ -78,6 +79,8 @@ public class RepairTest extends TestCase {
         timer.start();
         for (Location location : locations) {
             final String file = subject.getHome() + subject.getSsrc() + Constant.SEP + location.getRelClazzFile();
+            final String clazzFile = subject.getHome() + subject.getSbin() + Constant.SEP +
+                    location.getRelClazzFile().replace(".java", ".class");
             Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(file);
             Node node = getBuggyNode(file, location.getLine());
             List<Pattern> list = new LinkedList<>(patterns);//filter(node, patterns);
@@ -86,7 +89,7 @@ public class RepairTest extends TestCase {
                 vars.clear();
                 vars.addAll(p.getNewVars());
                 vars.addAll(varMaps.getOrDefault(node.getStartLine(), new HashSet<>()));
-                repair.tryFix(node, p, vars);
+                repair.tryFix(node, p, vars, clazzFile);
             }
         }
         try {

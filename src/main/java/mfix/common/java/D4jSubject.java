@@ -7,6 +7,8 @@
 
 package mfix.common.java;
 
+import mfix.common.cmd.CmdFactory;
+import mfix.common.cmd.ExecuteCommand;
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
@@ -23,6 +25,7 @@ public class D4jSubject extends Subject {
 
     public final static String NAME = "D4jSubject";
     private int _id;
+    private List<String> _failedTestCases;
 
     public D4jSubject(String base, String name, int id) {
         super(Utils.join(Constant.SEP, base, name, name + "_" + id + "_buggy"), name);
@@ -43,6 +46,11 @@ public class D4jSubject extends Subject {
 
     public int getId() {
         return _id;
+    }
+
+    public void configFailedTestCases() {
+        String file = Utils.join(Constant.SEP, Constant.D4J_FAILING_TEST, getName(), _id + ".txt");
+        _failedTestCases = JavaFile.readFileToStringList(file);
     }
 
     private void setPath(String projName, int id) {
@@ -106,6 +114,26 @@ public class D4jSubject extends Subject {
                 System.err.println("UNKNOWN project name : " + projName);
         }
         return classpath;
+    }
+
+    @Override
+    public boolean test() {
+        if (_failedTestCases != null) {
+            String home = getHome();
+            String jdk = getJDKHome();
+            for (String test : _failedTestCases) {
+                LevelLogger.debug("TESTING : " + test);
+                if (!checkSuccess(ExecuteCommand.execute(
+                        CmdFactory.createCommand(home, Constant.CMD_DEFECTS4J + " test -t " + test),
+                        jdk), _key_test_suc)) {
+                    LevelLogger.debug("FAILED : " + test);
+                    return false;
+                } else {
+                    LevelLogger.debug("PASS : " + test);
+                }
+            }
+        }
+        return super.test();
     }
 
 }
