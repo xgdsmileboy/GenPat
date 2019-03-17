@@ -15,6 +15,14 @@ import mfix.common.java.Subject;
  */
 public class CmdFactory {
 
+    public static String[] createTestCommand(Subject subject) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("cd " + subject.getHome());
+        stringBuffer.append(" && " + subject.getTestCommand());
+        String[] cmd = new String[] { "/bin/bash", "-c", stringBuffer.toString() };
+        return cmd;
+    }
+
     public static String[] createComipleCommand(Subject subject) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("cd " + subject.getHome());

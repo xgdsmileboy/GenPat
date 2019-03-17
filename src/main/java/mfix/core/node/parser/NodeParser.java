@@ -1404,7 +1404,7 @@ public class NodeParser {
 //        }
 
         // simple or raw type
-        String qualName = typeBinding.getQualifiedName();
+        String qualName = typeBinding.getName();
         if ("".equals(qualName)) {
             return ast.newWildcardType();
         }

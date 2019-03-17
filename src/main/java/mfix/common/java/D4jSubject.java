@@ -27,15 +27,18 @@ public class D4jSubject extends Subject {
     public D4jSubject(String base, String name, int id) {
         super(Utils.join(Constant.SEP, base, name, name + "_" + id + "_buggy"), name);
         _type = NAME;
-        setPath(name, id);
         _id = id;
-        _classpath = obtainClasspath(name);
-        // Special case
-        if(name.equals("chart")) {
-            _src_level = SOURCE_LEVEL.L_1_4;
-        } else {
-            _src_level = SOURCE_LEVEL.L_1_6;
-        }
+        setClasspath(obtainClasspath(name));
+        setSourceLevel(name.equals("chart") ? SOURCE_LEVEL.L_1_4 : SOURCE_LEVEL.L_1_7);
+        setCompileFile(false);
+        setCompileProject(true);
+        setTestProject(true);
+        setCompileCommand(Constant.CMD_DEFECTS4J + " compile");
+        setTestCommand(Constant.CMD_DEFECTS4J + " test");
+        setPath(name, id);
+        setJDKHome(Constant.JAVA_7_HOME);
+        setCompileSuccessMessage("BUILD SUCCESSFUL");
+        setTestSuccessMessage("Failing tests: 0");
     }
 
     public int getId() {
@@ -105,13 +108,4 @@ public class D4jSubject extends Subject {
         return classpath;
     }
 
-    @Override
-    public boolean compile() {
-        return true;
-    }
-
-    @Override
-    public boolean test() {
-        return true;
-    }
 }

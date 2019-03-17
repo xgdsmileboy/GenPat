@@ -82,15 +82,22 @@ public class Repair {
     }
 
     private ValidateResult validate(String clazzName, String source) {
+        ValidateResult result = ValidateResult.PASS;
         if (_subject.compileFile()) {
             boolean compile = new JCompiler().compile(_subject, clazzName, source);
-            return compile ? ValidateResult.PASS : ValidateResult.COMPILE_FAILED;
-        } else if (_subject.compile()){
-            boolean test = _subject.test();
-            return test ? ValidateResult.PASS : ValidateResult.TEST_FAILED;
-        } else {
-            return ValidateResult.COMPILE_FAILED;
+            if (!compile) {
+                return ValidateResult.COMPILE_FAILED;
+            }
         }
+        if (_subject.compileProject()){
+            boolean compile = _subject.compile();
+            if (!compile) return ValidateResult.COMPILE_FAILED;
+        }
+        if (_subject.testProject()) {
+            boolean test = _subject.test();
+            if (!test) return ValidateResult.TEST_FAILED;
+        }
+        return result;
     }
 
     private Pattern readPattern(String patternFile) {
@@ -251,6 +258,10 @@ public class Repair {
                 matchInstance.reset();
                 continue;
             }
+
+            LevelLogger.debug("Fixed-----------------------------------");
+            LevelLogger.debug(fixed);
+            LevelLogger.debug("----------------------------------------");
 
             alreadyGenerated.add(fixed);
             String code = JavaFile.sourceReplace(buggyFile, pattern.getImports(),

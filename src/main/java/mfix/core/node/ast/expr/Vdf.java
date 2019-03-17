@@ -236,11 +236,20 @@ public class Vdf extends Node {
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if(node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;
-			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			if (_expression == null || vdf.getExpression() != null) {
+				if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+						&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+					matchedNode.put(_identifier, vdf._identifier);
+					matchedStrings.put(_identifier.getName(), vdf.getName());
+					return true;
+				}
+			}
+		} else if (_expression != null && node instanceof Assign) {
+			Assign assign = (Assign) node;
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
-				matchedNode.put(_identifier, vdf._identifier);
-				matchedStrings.put(_identifier.getName(), vdf.getName());
-				return true;
+				matchedNode.put(_identifier, assign.getLhs());
+				matchedStrings.put(_identifier.getName(), assign.getLhs().toString());
 			}
 		}
 		return false;

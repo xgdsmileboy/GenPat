@@ -86,6 +86,10 @@ public class Constant {
     /* default home directory of pattern files */
     public final static String DEFAULT_PATTERN_HOME = "/home/jiajun/GithubData";
 
+    /* system configuration for running external command (defects4j)*/
+    public static String CMD_DEFECTS4J;
+    public static String JAVA_7_HOME;
+
     /*
      * markers
      */
@@ -107,17 +111,21 @@ public class Constant {
             prop.load(in);
 
             // System commands
-            Constant.PATTERN_VERSION = "ver" + prop.getProperty("PATTERN.VERSION", "1");
+            JAVA_7_HOME = prop.getProperty("JAVA_7_HOME", "/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home");
+            CMD_DEFECTS4J = prop.getProperty("DEFECTS4J_HOME", "/Users/Jiajun/Code/Defects4J/defects4j");
+            CMD_DEFECTS4J = Utils.join(SEP, CMD_DEFECTS4J, "framework", "bin", "defects4j");
+
+            PATTERN_VERSION = "ver" + prop.getProperty("PATTERN.VERSION", "1");
             String number = prop.getProperty("PATTERN.NUMBER", "All");
-            Constant.TOP_K_PATTERN_EACH_LOCATION = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
-            Constant.MAX_REPAIR_TIME = Integer.parseInt(prop.getProperty("REPAIR.TIME", "120"));
-            Constant.MAX_PATCH_NUMBER = Integer.parseInt(prop.getProperty("REPAIR.PATCH", "100"));
-            Constant.MAX_REPAIR_LOCATION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
-            Constant.MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
-            Constant.MAX_CLUSTER_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER.THREAD", "10"));
-            Constant.MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
-            Constant.FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
-            Constant.FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));
+            TOP_K_PATTERN_EACH_LOCATION = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
+            MAX_REPAIR_TIME = Integer.parseInt(prop.getProperty("REPAIR.TIME", "120"));
+            MAX_PATCH_NUMBER = Integer.parseInt(prop.getProperty("REPAIR.PATCH", "100"));
+            MAX_REPAIR_LOCATION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
+            MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
+            MAX_CLUSTER_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER.THREAD", "10"));
+            MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
+            FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
+            FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));
         } catch (IOException e) {
             LevelLogger.error("#Constant get properties failed!" + e.getMessage());
         }

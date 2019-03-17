@@ -48,6 +48,16 @@ public class RepairTest extends TestCase {
         test("chart", 14);
     }
 
+    @Test
+    public void test_chart_25() {
+        test("chart", 25);
+    }
+
+    @Test
+    public void test_closure_2() {
+        test("closure", 2);
+    }
+
 
     private void test(String proj, int id) {
         String buggyFile = Utils.join(Constant.SEP, base, proj + "_" + id, "buggy.java");

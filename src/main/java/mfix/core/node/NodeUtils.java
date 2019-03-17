@@ -294,8 +294,10 @@ public class NodeUtils {
         }
         for (int i = 0; i < tar.size(); i++) {
             if (set.contains(i)) continue;
-            Insertion insertion = new Insertion(pNode, i, tar.get(i));
+            Node n = tar.get(i);
+            Insertion insertion = new Insertion(pNode, i, n);
             insertions.add(insertion);
+
         }
 
         List<Modification> modifications = new LinkedList<>();
