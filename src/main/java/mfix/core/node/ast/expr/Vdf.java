@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -30,6 +31,7 @@ import java.util.Set;
 public class Vdf extends Node {
 
 	private static final long serialVersionUID = -1445761649599489420L;
+	private MType _type = null;
 	private SName _identifier = null;
 	private int _dimensions = 0; 
 	private Expr _expression = null;
@@ -54,6 +56,14 @@ public class Vdf extends Node {
 
 	public String getName() {
 		return _identifier.getName();
+	}
+
+	public void setType(MType type) {
+		_type = type;
+	}
+
+	public MType getType() {
+		return _type;
 	}
 
 	public void setDimensions(int dimensions) {
@@ -256,7 +266,7 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
@@ -276,7 +286,7 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {

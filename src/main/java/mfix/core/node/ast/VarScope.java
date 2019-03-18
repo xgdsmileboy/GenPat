@@ -21,10 +21,15 @@ public class VarScope {
 
     private Set<Variable> _globalVars;
     private Map<Variable, Set<LineRange>> _localVars;
+    private transient Set<Variable> _newVars;
 
     public VarScope() {
         _globalVars = new HashSet<>();
         _localVars = new HashMap<>();
+    }
+
+    public void reset(Set<Variable> newVars) {
+        _newVars = newVars;
     }
 
     public void setGlobalVars(final Set<Variable> globalVar) {
@@ -59,9 +64,14 @@ public class VarScope {
         Set<LineRange> ranges = _localVars.get(variable);
         if (ranges != null) {
             for (LineRange r : ranges) {
-                if (ranges.contains(line)) {
+                if (r.contains(line)) {
                     return true;
                 }
+            }
+        }
+        if (_newVars != null) {
+            if (_newVars.contains(variable)) {
+                return true;
             }
         }
         return _globalVars.contains(variable);

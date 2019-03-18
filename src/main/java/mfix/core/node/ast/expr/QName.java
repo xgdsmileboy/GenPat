@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -166,7 +167,7 @@ public class QName extends Label {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
@@ -188,7 +189,7 @@ public class QName extends Label {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer name = null;
 		StringBuffer sname = null;
 		Node node = NodeUtils.checkModification(this);

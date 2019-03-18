@@ -14,6 +14,7 @@ import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.abs.TermFrequency;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.diff.TextDiff;
@@ -82,7 +83,7 @@ public class PatternExtractor {
 
             if(Matcher.greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
                 Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
-                Set<String> newVars = getVars(nodes);
+                Set<Variable> newVars = getVars(nodes);
                 Set<Node> temp;
                 for(Node node : nodes) {
                     if (node.getBindingNode() != null) {
@@ -107,19 +108,20 @@ public class PatternExtractor {
         return patterns;
     }
 
-    private Set<String> getVars(Set<Node> nodes) {
-        Set<String> vars = new HashSet<>();
+    private Set<Variable> getVars(Set<Node> nodes) {
+        Set<Variable> vars = new HashSet<>();
         Queue<Node> queue = new LinkedList<>(nodes);
         while (!queue.isEmpty()) {
             Node node = queue.poll();
             switch (node.getNodeType()) {
                 case VARDECLFRAG:
                     Vdf vdf = (Vdf) node;
-                    vars.add(vdf.getName());
+                    String type = vdf.getType() == null ? "?" : vdf.getType().typeStr();
+                    vars.add(new Variable(vdf.getName(), type));
                     break;
                 case SINGLEVARDECL:
                     Svd svd = (Svd) node;
-                    vars.add(svd.getName().getName());
+                    vars.add(new Variable(svd.getName().getName(), svd.getDeclType().typeStr()));
                 default:
             }
             queue.addAll(node.getAllChildren());

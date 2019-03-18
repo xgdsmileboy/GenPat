@@ -7,13 +7,14 @@
 
 package mfix.core.node.match;
 
+import mfix.TestCase;
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.TestCase;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
@@ -87,7 +88,7 @@ public class D4JRepairTest extends TestCase {
             Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
             String buggy = srcFile;
-            Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+            Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
             CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
             final Set<MethodDeclaration> methods = new HashSet<>();
@@ -106,18 +107,15 @@ public class D4JRepairTest extends TestCase {
             parser.setCompilationUnit(buggy, unit);
             for (MethodDeclaration m : methods) {
                 Node node = parser.process(m);
+                VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
                 Set<String> already = new HashSet<>();
                 int count = 0;
                 for (Pattern p : patterns) {
-                    Set<String> newVars = p.getNewVars();
+                    scope.reset(p.getNewVars());
                     Set<MatchInstance> set = Matcher.tryMatch(node, p);
-                    Set<String> iterVars = new HashSet<>();
                     for (MatchInstance matchInstance : set) {
                         matchInstance.apply();
-                        iterVars.clear();
-                        iterVars.addAll(newVars);
-                        iterVars.addAll(varMaps.get(node.getStartLine()));
-                        StringBuffer buffer = node.adaptModifications(iterVars, new HashMap<>());
+                        StringBuffer buffer = node.adaptModifications(scope, new HashMap<>());
                         if (buffer != null) {
                             String tmp = buffer.toString();
                             if (!already.contains(tmp)) {

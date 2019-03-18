@@ -50,7 +50,7 @@ public class NodeUtils {
                                         Map<Node, List<StringBuffer>> insertionAfter,
                                         Map<Node, StringBuffer> map,
                                         Map<Integer, List<StringBuffer>> insertionAt,
-                                        Set<String> vars, Map<String, String> exprMap) {
+                                        VarScope vars, Map<String, String> exprMap) {
 
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
@@ -494,6 +494,7 @@ public class NodeUtils {
         }
     }
 
+    @Deprecated
     public static Map<Integer, Set<String>> getUsableVarTypes(String file) {
         CompilationUnit unit = JavaFile.genAST(file);
         VariableVisitor variableVisitor = new VariableVisitor(unit);

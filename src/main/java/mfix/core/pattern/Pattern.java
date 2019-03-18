@@ -9,6 +9,7 @@ package mfix.core.pattern;
 
 import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.cluster.NameMapping;
@@ -33,7 +34,7 @@ public class Pattern implements PatternMatcher, Serializable {
 
     private int _frequency = 1;
     private Node _patternNode;
-    private Set<String> _newVars;
+    private Set<Variable> _newVars;
     private Set<String> _imports;
     private transient String _patternName;
     private transient NameMapping _nameMapping;
@@ -85,11 +86,11 @@ public class Pattern implements PatternMatcher, Serializable {
         return _keywords;
     }
 
-    public void addNewVars(Set<String> vars) {
+    public void addNewVars(Set<Variable> vars) {
         _newVars.addAll(vars);
     }
 
-    public Set<String> getNewVars() {
+    public Set<Variable> getNewVars() {
         return _newVars;
     }
 

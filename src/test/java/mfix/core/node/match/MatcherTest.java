@@ -7,13 +7,14 @@
 
 package mfix.core.node.match;
 
+import mfix.TestCase;
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.TestCase;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.ReturnStmt;
 import mfix.core.node.ast.stmt.SwCase;
 import mfix.core.node.ast.stmt.SwitchStmt;
@@ -97,7 +98,7 @@ public class MatcherTest extends TestCase {
         Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
-        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+        Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
@@ -198,7 +199,7 @@ public class MatcherTest extends TestCase {
 
         String buggy = testbase + Constant.SEP + "buggy_SimpleSecureBrowser.java";
 
-        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+        Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
@@ -270,7 +271,7 @@ public class MatcherTest extends TestCase {
         Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         String buggy = testbase + Constant.SEP + "test_security_insert_depend_add_import.java";
-        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+        Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
@@ -316,7 +317,7 @@ public class MatcherTest extends TestCase {
         Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         String buggy = srcFile;
-        Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+        Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();

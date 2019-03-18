@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.common.conf.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.pattern.cluster.NameMapping;
@@ -178,7 +179,7 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
@@ -196,7 +197,7 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
             Blk blk = (Blk) pnode;

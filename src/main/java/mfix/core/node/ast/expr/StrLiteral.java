@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -132,7 +133,7 @@ public class StrLiteral extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
@@ -141,7 +142,7 @@ public class StrLiteral extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
 			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);

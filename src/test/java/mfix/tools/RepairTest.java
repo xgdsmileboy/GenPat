@@ -17,6 +17,7 @@ import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.PatternExtractor;
@@ -81,15 +82,13 @@ public class RepairTest extends TestCase {
             final String file = subject.getHome() + subject.getSsrc() + Constant.SEP + location.getRelClazzFile();
             final String clazzFile = subject.getHome() + subject.getSbin() + Constant.SEP +
                     location.getRelClazzFile().replace(".java", ".class");
-            Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(file);
+            Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(file);
             Node node = getBuggyNode(file, location.getLine());
             List<Pattern> list = new LinkedList<>(patterns);//filter(node, patterns);
-            Set<String> vars = new HashSet<>();
+            VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             for (Pattern p : list) {
-                vars.clear();
-                vars.addAll(p.getNewVars());
-                vars.addAll(varMaps.getOrDefault(node.getStartLine(), new HashSet<>()));
-                repair.tryFix(node, p, vars, clazzFile);
+                scope.reset(p.getNewVars());
+                repair.tryFix(node, p, scope, clazzFile);
             }
         }
         try {

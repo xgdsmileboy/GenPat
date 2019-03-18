@@ -9,11 +9,15 @@ package mfix.core.node.ast;
 
 import mfix.common.util.Utils;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2019-03-18
  */
-public class Variable {
+public class Variable implements Serializable {
+
+    private static final long serialVersionUID = 6612954937479653066L;
     private String _name;
     private String _type;
 

@@ -10,6 +10,7 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.stmt.Stmt;
@@ -634,7 +635,7 @@ public class Matcher {
 													 Map<Node, List<StringBuffer>> insertionAfter,
 													 Map<Integer, List<StringBuffer>> insertAt,
 													 Map<Node, StringBuffer> changeNodeMap,
-													 Set<String> vars, Map<String, String> exprMap) {
+													 VarScope vars, Map<String, String> exprMap) {
 		StringBuffer tmp;
 		for (Modification modification : modifications) {
 			if (modification instanceof Update) {

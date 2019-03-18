@@ -21,6 +21,7 @@ import mfix.core.locator.FaultLocalizationFactory;
 import mfix.core.locator.Location;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.Matcher;
@@ -238,7 +239,7 @@ public class Repair {
         JavaFile.writeStringToFile(_logfile, buffer.toString(), true);
     }
 
-    protected void tryFix(Node bNode, Pattern pattern, Set<String> buggyMethodVar, String clazzFile) {
+    protected void tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile) {
         if (bNode == null || pattern == null || shouldStop()) {
             return;
         }
@@ -257,7 +258,7 @@ public class Repair {
             matchInstance.apply();
             StringBuffer fixedCode;
             try{
-                fixedCode = bNode.adaptModifications(buggyMethodVar, matchInstance.getStrMap());
+                fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap());
             } catch (Exception e) {
                 matchInstance.reset();
                 LevelLogger.error("AdaptModification causes exception ....", e);
@@ -311,7 +312,7 @@ public class Repair {
         final Set<String> emptySet = new HashSet<>();
         AbstractFaultLocalization locator = FaultLocalizationFactory.dispatch(_subject);
         List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
-        Map<String, Map<Integer, Set<String>>> buggyFileVarMap = new HashMap<>();
+        Map<String, Map<Integer, VarScope>> buggyFileVarMap = new HashMap<>();
         String srcBase = _subject.getHome() + _subject.getSsrc();
         String tarBase = _subject.getHome() + _subject.getSbin();
 
@@ -324,9 +325,9 @@ public class Repair {
 
             final String file = srcBase + Constant.SEP + location.getRelClazzFile();
             final String clazzFile = tarBase + Constant.SEP + location.getRelClazzFile().replace(".java", ".class");
-            Map<Integer, Set<String>> varMaps = buggyFileVarMap.get(file);
+            Map<Integer, VarScope> varMaps = buggyFileVarMap.get(file);
             if (varMaps == null) {
-                varMaps = NodeUtils.getUsableVarTypes(file);
+                varMaps = NodeUtils.getUsableVariables(file);
                 buggyFileVarMap.put(file, varMaps);
             }
             Node node = getBuggyNode(file, location.getLine());
@@ -338,15 +339,12 @@ public class Repair {
                 LevelLogger.error("Filter patterns failed!", e);
                 continue;
             }
-            Set<String> vars = new HashSet<>();
+            VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             for (String s : patterns) {
                 if (shouldStop()) { break; }
-
                 Pattern p = readPattern(s);
-                vars.clear();
-                vars.addAll(p.getNewVars());
-                vars.addAll(varMaps.getOrDefault(node.getStartLine(), emptySet));
-                tryFix(node, p, vars, clazzFile);
+                scope.reset(p.getNewVars());
+                tryFix(node, p, scope, clazzFile);
             }
         }
 
