@@ -10,7 +10,10 @@ import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
+import mfix.core.node.ast.LineRange;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
+import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.match.metric.FVector;
@@ -498,6 +501,13 @@ public class NodeUtils {
         return variableVisitor.getVars();
     }
 
+    public static Map<Integer, VarScope> getUsableVariables(String file) {
+        CompilationUnit unit = JavaFile.genAST(file);
+        NewVariableVisitor variableVisitor = new NewVariableVisitor(unit);
+        unit.accept(variableVisitor);
+        return variableVisitor.getVars();
+    }
+
 }
 
 /**
@@ -578,6 +588,99 @@ class VariableVisitor extends ASTVisitor {
         public boolean visit(SingleVariableDeclaration node) {
             vars.add(node.getName().getFullyQualifiedName());
             return true;
+        }
+
+    }
+
+}
+
+class NewVariableVisitor extends ASTVisitor {
+    private MethodVisitor _methodVisitor = new MethodVisitor();
+    private Map<Integer, VarScope> _vars = new HashMap<>();
+    private Set<Variable> _fields = new HashSet<>();
+    private CompilationUnit _unit;
+
+    public NewVariableVisitor(CompilationUnit unit) {
+        _unit = unit;
+    }
+
+    public boolean visit(FieldDeclaration node) {
+        String type = node.getType().toString();
+        for (Object object : node.fragments()) {
+            VariableDeclarationFragment vdf = (VariableDeclarationFragment) object;
+            _fields.add(new Variable(vdf.getName().getIdentifier(), type));
+        }
+        return true;
+    }
+
+    public Map<Integer, VarScope> getVars() {
+        for (Entry<Integer, VarScope> entry : _vars.entrySet()) {
+            entry.getValue().setGlobalVars(_fields);
+        }
+        return _vars;
+    }
+
+    @Override
+    public boolean visit(MethodDeclaration node) {
+        int start = _unit.getLineNumber(node.getStartPosition());
+        int end = _unit.getLineNumber(node.getStartPosition() + node.getLength());
+        VarScope scope = new VarScope();
+        _methodVisitor.reset(scope, start, end);
+        node.accept(_methodVisitor);
+        _vars.put(start, scope);
+        return true;
+    }
+
+    class MethodVisitor extends ASTVisitor {
+
+        private VarScope _scope;
+        private int _end;
+        public void reset(VarScope scope, int start, int end) {
+            _scope = scope;
+            _end = end;
+        }
+
+        public boolean visit(VariableDeclarationStatement node) {
+            String type = node.getType().toString();
+            int start = _unit.getLineNumber(node.getStartPosition());
+            int end = getParentEnd(node);
+            for (Object o : node.fragments()) {
+                VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+                _scope.addLocalVar(new Variable(vdf.getName().getIdentifier(), type), new LineRange(start, end));
+            }
+            return true;
+        }
+
+        public boolean visit(VariableDeclarationExpression node) {
+            String type = node.getType().toString();
+            int start = _unit.getLineNumber(node.getStartPosition());
+            int end = getParentEnd(node);
+            for (Object o : node.fragments()) {
+                VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+                _scope.addLocalVar(new Variable(vdf.getName().getIdentifier(), type), new LineRange(start, end));
+            }
+            return true;
+        }
+
+        public boolean visit(SingleVariableDeclaration node) {
+            int start = _unit.getLineNumber(node.getStartPosition());
+            int end = getParentEnd(node);
+            String type = node.getType().toString();
+            _scope.addLocalVar(new Variable(node.getName().getIdentifier(), type), new LineRange(start, end));
+            return true;
+        }
+
+        private int getParentEnd(ASTNode node) {
+            while(node != null) {
+                if (node instanceof MethodDeclaration || node instanceof Block
+                        || node instanceof IfStatement || node instanceof WhileStatement
+                        || node instanceof ForStatement || node instanceof EnhancedForStatement
+                        || node instanceof DoStatement) {
+                    return _unit.getLineNumber(node.getStartPosition() + node.getLength());
+                }
+                node = node.getParent();
+            }
+            return _end;
         }
 
     }
