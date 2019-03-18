@@ -321,8 +321,8 @@ class ParseKey implements Callable<Pair<Set<String>, Set<String>>> {
             while (!nodes.isEmpty()) {
                 node = nodes.poll();
                 if (node instanceof Expr) {
-                    String type = ((Expr) node).getTypeString();
-                    if (type != null) {
+                    String type = NodeUtils.distilBasicType(((Expr) node).getTypeString());
+                    if (type != null && !"?".equals(type)) {
                         types.add(type);
                     }
                 }

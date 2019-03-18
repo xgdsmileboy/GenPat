@@ -103,6 +103,10 @@ public class NodeUtils {
 
     public static String distilBasicType(MType type) {
         String s = type.toSrcString().toString();
+        return distilBasicType(s);
+    }
+
+    public static String distilBasicType(String s) {
         int index = s.indexOf('<');
         return index > 0 ? s.substring(0, index) : s;
     }
