@@ -60,6 +60,7 @@ public class Repair {
     private int _patchNum;
     private String _patternRecords;
     private Timer _timer;
+    private Set<String> _alreadyGenerated = new HashSet<>();
 
     public Repair(Subject subject, String patternRecords) {
         _subject = subject;
@@ -249,7 +250,6 @@ public class Repair {
         int endLine = bNode.getEndLine();
 
         Set<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern);
-        Set<String> alreadyGenerated = new HashSet<>();
 
         for (MatchInstance matchInstance : fixPositions) {
             if (shouldStop()) { break; }
@@ -269,14 +269,17 @@ public class Repair {
             }
 
             String fixed = fixedCode.toString();
-            if (origin.equals(fixed) || alreadyGenerated.contains(fixed)) {
+            if (origin.equals(fixed) || _alreadyGenerated.contains(fixed)) {
                 matchInstance.reset();
                 continue;
             }
 
-            alreadyGenerated.add(fixed);
+            _alreadyGenerated.add(fixed);
             String code = JavaFile.sourceReplace(buggyFile, pattern.getImports(),
                     sources, startLine, endLine, fixed);
+
+            TextDiff diff = new TextDiff(origin, fixed);
+            LevelLogger.debug("Repair code :\n" + diff.toString());
             try {
                 FileUtils.forceDeleteOnExit(new File(clazzFile));
             } catch (IOException e) {}
@@ -316,6 +319,7 @@ public class Repair {
         LevelLogger.info(start);
         for (Location location : locations) {
             if (shouldStop()) { break; }
+            _alreadyGenerated.clear();
             LevelLogger.info("Location : " + location.getRelClazzFile() + "#" + location.getLine());
 
             final String file = srcBase + Constant.SEP + location.getRelClazzFile();
