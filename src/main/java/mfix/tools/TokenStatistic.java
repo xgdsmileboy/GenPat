@@ -61,6 +61,7 @@ public class TokenStatistic {
     private Map<String, Integer> _cacheApiMap;
     private Map<String, Integer> _cacheTypeMap;
     private Set<String> _files;
+    private int totalFile;
 
     private int _currThreadCount = 0;
     private int _maxThreadCount = Constant.MAX_FILTER_THREAD_NUM;
@@ -140,6 +141,8 @@ public class TokenStatistic {
                 LevelLogger.debug("Thread pool is full ....");
                 for (Future<Pair<Set<String>, Set<String>>> fs : _threadResultList) {
                     Pair<Set<String>, Set<String>> result = fs.get();
+                    totalFile ++;
+                    LevelLogger.debug("Parse file : ----- < " + totalFile + " > -----");
                     if (result != null) {
                         Integer count;
                         for (String s : result.getFirst()) {
@@ -268,6 +271,7 @@ public class TokenStatistic {
         String typeOutFile = optionMap.get("type");
         init(apiOutFile, typeOutFile);
 
+        totalFile = 0;
         _threadPool = Executors.newFixedThreadPool(_maxThreadCount);
 
         statisticWithExistingRecord(optionMap.get("dir"), optionMap.get("if"));
