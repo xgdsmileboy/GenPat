@@ -136,4 +136,10 @@ public class D4jSubject extends Subject {
         return super.test();
     }
 
+    @Override
+    public String toString() {
+        return "[_name=" + _name + ", " + ", _id=" + _id + ", _ssrc=" + _ssrc
+                + ", _tsrc=" + _tsrc + ", _sbin=" + _sbin
+                + ", _tbin=" + _tbin + "]";
+    }
 }

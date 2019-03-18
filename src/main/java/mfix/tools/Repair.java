@@ -8,6 +8,7 @@
 package mfix.tools;
 
 import mfix.common.conf.Constant;
+import mfix.common.java.D4jSubject;
 import mfix.common.java.FakeSubject;
 import mfix.common.java.JCompiler;
 import mfix.common.java.Subject;
@@ -358,7 +359,8 @@ public class Repair {
         LevelLogger.info(message);
     }
 
-    private final static String COMMAND = "<command> (-bf <arg> | -bp <arg> | -xml) -pf <arg>";
+    private final static String COMMAND = "<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) " +
+            "-pf <arg> [-d4jhome <arg>]";
     private static Options options() {
         Options options = new Options();
 
@@ -366,12 +368,17 @@ public class Repair {
         optionGroup.setRequired(true);
         optionGroup.addOption(new Option("bp", "path", true, "Directory of source code for repair."));
         optionGroup.addOption(new Option("bf", "file", true, "Single file of source code for repair."));
+        optionGroup.addOption(new Option("d4j", "d4jBug", true, "Bug id in defects4j, e.g., chart_1"));
         optionGroup.addOption(new Option("xml", "useXml", false, "Read subject from project.xml."));
         options.addOptionGroup(optionGroup);
 
         Option option = new Option("pf", "PatternFile", true,
                 "Pattern record file which record all pattern paths.");
         option.setRequired(true);
+        options.addOption(option);
+
+        option = new Option("d4jhome", "defects4jHome", true, "Home directory of defects4j buggy code.");
+        option.setRequired(false);
         options.addOption(option);
 
         return options;
@@ -395,17 +402,26 @@ public class Repair {
         List<Subject> subjects = new LinkedList<>();
         if (cmd.hasOption("xml")) {
             subjects = Utils.getSubjectFromXML(Constant.DEFAULT_SUBJECT_XML);
-        } else if (cmd.hasOption("f")) {
-            String file = cmd.getOptionValue("f");
+        } else if (cmd.hasOption("bf")) {
+            String file = cmd.getOptionValue("bf");
             String base = new File(file).getParentFile().getAbsolutePath();
             List<String> files = new LinkedList<>(Arrays.asList(file));
             FakeSubject fakeSubject = new FakeSubject(base, files);
             subjects.add(fakeSubject);
-        } else if (cmd.hasOption("p")) {
-            String base = cmd.getOptionValue("p");
+        } else if (cmd.hasOption("bp")) {
+            String base = cmd.getOptionValue("bp");
             List<String> files = JavaFile.ergodic(base, new LinkedList<>());
             FakeSubject fakeSubject = new FakeSubject(base, files);
             subjects.add(fakeSubject);
+        } else if (cmd.hasOption("d4j")) {
+            String[] ids = cmd.getOptionValue("d4j").split(",");
+            String base = cmd.hasOption("d4jhome") ? cmd.getOptionValue("d4jhome") : Constant.D4J_PROJ_DEFAULT_HOME;
+            for (String id : ids) {
+                String name = id.split("_")[0];
+                int number = Integer.parseInt(id.split("_")[1]);
+                D4jSubject subject = new D4jSubject(base, name, number);
+                subjects.add(subject);
+            }
         } else {
             return null;
         }
@@ -422,6 +438,7 @@ public class Repair {
         String patternRecords = pair.getFirst();
         List<Subject> subjects = pair.getSecond();
         for (Subject subject : subjects) {
+            LevelLogger.info(subject.getHome() + ", " + subject.toString());
             Repair repair = new Repair(subject, patternRecords);
             repair.repair();
         }
