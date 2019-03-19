@@ -54,6 +54,10 @@ public class Vdf extends Node {
 		_identifier = identifier;
 	}
 
+	public SName getNameNode() {
+		return _identifier;
+	}
+
 	public String getName() {
 		return _identifier.getName();
 	}

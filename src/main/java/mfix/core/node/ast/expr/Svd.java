@@ -222,9 +222,14 @@ public class Svd extends Expr {
 				return NodeUtils.matchSameNodeType(_name, svd.getName(), matchedNode, matchedStrings);
 			}
 			return false;
-		} else {
-			return false;
+		} else if (node instanceof Vdf) {
+			Vdf vdf = (Vdf) node;
+			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+				return NodeUtils.matchSameNodeType(_name, vdf.getNameNode(), matchedNode, matchedStrings);
+			}
 		}
+		return false;
 	}
 
 	@Override
