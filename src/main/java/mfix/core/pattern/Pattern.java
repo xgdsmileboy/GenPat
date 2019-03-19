@@ -63,7 +63,7 @@ public class Pattern implements PatternMatcher, Serializable {
 
     public FVector getFeatureVector() {
         if (_fVector == null) {
-
+            computeFeatureVector();
         }
         return _fVector;
     }
@@ -141,7 +141,7 @@ public class Pattern implements PatternMatcher, Serializable {
         _patternNode.getFeatureVector();
         _fVector = new FVector();
         for (Node node : getConsideredNodes()) {
-
+            _fVector.combineFeature(node.getSingleFeatureVector());
         }
     }
 

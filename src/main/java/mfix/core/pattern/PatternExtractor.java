@@ -103,6 +103,7 @@ public class PatternExtractor {
                 srcNode.getFeatureVector();
                 tarNode.getFeatureVector();
                 Pattern pattern = new Pattern(srcNode, imports);
+                pattern.getFeatureVector();
                 pattern.addNewVars(newVars);
                 patterns.add(pattern);
             }
