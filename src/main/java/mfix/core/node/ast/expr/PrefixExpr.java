@@ -110,10 +110,13 @@ public class PrefixExpr extends Expr {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.E_PREFIX);
-		_fVector.inc(_operator.toSrcString().toString());
-		_fVector.combineFeature(_expression.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.E_PREFIX);
+		_selfFVector.inc(_operator.toSrcString().toString());
+
+		_completeFVector = new FVector();
+		_completeFVector.combineFeature(_selfFVector);
+		_completeFVector.combineFeature(_expression.getFeatureVector());
 	}
 
 	@Override

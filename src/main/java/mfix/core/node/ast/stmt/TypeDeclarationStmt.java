@@ -8,8 +8,8 @@ package mfix.core.node.ast.stmt;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
-import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.pattern.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -78,7 +78,8 @@ public class TypeDeclarationStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
+		_selfFVector = new FVector();
+		_completeFVector = new FVector();
 	}
 
 	@Override

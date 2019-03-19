@@ -134,9 +134,11 @@ public class Blk extends Stmt {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
+        _selfFVector = new FVector();
+
+        _completeFVector = new FVector();
         for (Stmt stmt : _statements) {
-            _fVector.combineFeature(stmt.getFeatureVector());
+            _completeFVector.combineFeature(stmt.getFeatureVector());
         }
     }
 

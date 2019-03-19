@@ -115,12 +115,15 @@ public class AryAcc extends Expr {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.E_AACC);
-        _fVector.inc(FVector.BRAKET_SQL);
-        _fVector.inc(FVector.BRAKET_SQR);
-        _fVector.combineFeature(_array.getFeatureVector());
-        _fVector.combineFeature(_index.getFeatureVector());
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.E_AACC);
+        _selfFVector.inc(FVector.BRAKET_SQL);
+        _selfFVector.inc(FVector.BRAKET_SQR);
+
+        _completeFVector = new FVector();
+        _completeFVector.combineFeature(_selfFVector);
+        _completeFVector.combineFeature(_array.getFeatureVector());
+        _completeFVector.combineFeature(_index.getFeatureVector());
     }
 
     @Override

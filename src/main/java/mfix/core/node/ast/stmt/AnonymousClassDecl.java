@@ -78,8 +78,11 @@ public class AnonymousClassDecl extends Node {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.E_ANONY);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.E_ANONY);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.E_ANONY);
 	}
 
 	@Override

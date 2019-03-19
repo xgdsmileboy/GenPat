@@ -162,11 +162,14 @@ public class EnhancedForStmt extends Stmt {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.KEY_ENFOR);
-        _fVector.combineFeature(_varDecl.getFeatureVector());
-        _fVector.combineFeature(_expression.getFeatureVector());
-        _fVector.combineFeature(_statement.getFeatureVector());
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.KEY_ENFOR);
+
+        _completeFVector = new FVector();
+        _completeFVector.inc(FVector.KEY_ENFOR);
+        _completeFVector.combineFeature(_varDecl.getFeatureVector());
+        _completeFVector.combineFeature(_expression.getFeatureVector());
+        _completeFVector.combineFeature(_statement.getFeatureVector());
     }
 
     @Override

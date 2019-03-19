@@ -11,6 +11,7 @@ import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.Vector;
@@ -34,6 +35,7 @@ public class Pattern implements PatternMatcher, Serializable {
 
     private int _frequency = 1;
     private Node _patternNode;
+    private FVector _fVector;
     private Set<Variable> _newVars;
     private Set<String> _imports;
     private transient String _patternName;
@@ -57,6 +59,13 @@ public class Pattern implements PatternMatcher, Serializable {
 
     public Node getPatternNode() {
         return _patternNode;
+    }
+
+    public FVector getFeatureVector() {
+        if (_fVector == null) {
+
+        }
+        return _fVector;
     }
 
     public String getPatternName() {
@@ -126,6 +135,14 @@ public class Pattern implements PatternMatcher, Serializable {
 
     public Set<Node> getConsideredNodes() {
         return _patternNode.getConsideredNodesRec(new HashSet<>(), true);
+    }
+
+    private void computeFeatureVector() {
+        _patternNode.getFeatureVector();
+        _fVector = new FVector();
+        for (Node node : getConsideredNodes()) {
+
+        }
     }
 
     @Override

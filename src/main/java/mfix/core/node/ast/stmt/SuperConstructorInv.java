@@ -152,15 +152,18 @@ public class SuperConstructorInv extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_SUPER);
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.KEY_SUPER);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_SUPER);
 		if(_expression != null) {
-			_fVector.combineFeature(_expression.getFeatureVector());
+			_completeFVector.combineFeature(_expression.getFeatureVector());
 		}
 		if(_superType != null) {
-			_fVector.combineFeature(_superType.getFeatureVector());
+			_completeFVector.combineFeature(_superType.getFeatureVector());
 		}
-		_fVector.combineFeature(_arguments.getFeatureVector());
+		_completeFVector.combineFeature(_arguments.getFeatureVector());
 	}
 
 	@Override

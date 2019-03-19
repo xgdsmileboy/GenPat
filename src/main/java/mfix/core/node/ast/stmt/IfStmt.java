@@ -158,12 +158,15 @@ public class IfStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_IF);
-		_fVector.combineFeature(_then.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_IF);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_IF);
+		_completeFVector.combineFeature(_then.getFeatureVector());
 		if(_else != null) {
-			_fVector.inc(FVector.KEY_ELSE);
-			_fVector.combineFeature(_else.getFeatureVector());
+			_completeFVector.inc(FVector.KEY_ELSE);
+			_completeFVector.combineFeature(_else.getFeatureVector());
 		}
 	}
 

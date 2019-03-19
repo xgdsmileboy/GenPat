@@ -111,10 +111,13 @@ public class BreakStmt extends Stmt {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_BREAK);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_BREAK);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_BREAK);
 		if(_identifier != null) {
-            _fVector.combineFeature(_identifier.getFeatureVector());
+            _completeFVector.combineFeature(_identifier.getFeatureVector());
         }
 	}
 

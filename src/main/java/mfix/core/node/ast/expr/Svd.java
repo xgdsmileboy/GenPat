@@ -143,12 +143,17 @@ public class Svd extends Expr {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.combineFeature(_decType.getFeatureVector());
-		_fVector.combineFeature(_name.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.E_VARDEF);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.E_VARDEF);
+		_completeFVector.combineFeature(_decType.getFeatureVector());
+		_completeFVector.combineFeature(_name.getFeatureVector());
 		if (_initializer != null) {
-			_fVector.inc(FVector.ARITH_ASSIGN);
-			_fVector.combineFeature(_initializer.getFeatureVector());
+			_selfFVector.inc(FVector.ARITH_ASSIGN);
+			_completeFVector.inc(FVector.ARITH_ASSIGN);
+			_completeFVector.combineFeature(_initializer.getFeatureVector());
 		}
 	}
 

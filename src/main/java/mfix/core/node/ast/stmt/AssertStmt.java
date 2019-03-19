@@ -87,8 +87,11 @@ public class AssertStmt extends Stmt {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_ASSERT);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_ASSERT);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_ASSERT);
 	}
 
 	@Override

@@ -133,10 +133,13 @@ public class DoStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_DO);
-		_fVector.combineFeature(_expression.getFeatureVector());
-		_fVector.combineFeature(_stmt.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_DO);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_DO);
+		_completeFVector.combineFeature(_expression.getFeatureVector());
+		_completeFVector.combineFeature(_stmt.getFeatureVector());
 	}
 
 	@Override

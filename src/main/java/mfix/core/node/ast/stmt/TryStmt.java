@@ -269,21 +269,24 @@ public class TryStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_TRY);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_TRY);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_TRY);
 		if(_resource != null) {
 			for(VarDeclarationExpr vdExpr : _resource) {
-				_fVector.combineFeature(vdExpr.getFeatureVector());
+				_completeFVector.combineFeature(vdExpr.getFeatureVector());
 			}
 		}
-		_fVector.combineFeature(_blk.getFeatureVector());
+		_completeFVector.combineFeature(_blk.getFeatureVector());
 		if(_catches != null) {
 			for(CatClause catClause : _catches) {
-				_fVector.combineFeature(catClause.getFeatureVector());
+				_completeFVector.combineFeature(catClause.getFeatureVector());
 			}
 		}
 		if(_finallyBlk != null) {
-			_fVector.combineFeature(_finallyBlk.getFeatureVector());
+			_completeFVector.combineFeature(_finallyBlk.getFeatureVector());
 		}
 	}
 

@@ -31,6 +31,8 @@ public abstract class Expr extends Node {
     private static final long serialVersionUID = 1325289211050496258L;
     protected String _exprTypeStr = "?";
     protected transient Type _exprType = null;
+
+    protected boolean _abstractNode = true;
     protected boolean _abstractType = true;
 
     protected Expr(String fileName, int startLine, int endLine, ASTNode node) {

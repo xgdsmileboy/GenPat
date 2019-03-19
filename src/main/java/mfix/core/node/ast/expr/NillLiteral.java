@@ -73,8 +73,11 @@ public class NillLiteral extends Expr {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.E_NULL);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.E_NULL);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.E_NULL);
 	}
 
 	@Override

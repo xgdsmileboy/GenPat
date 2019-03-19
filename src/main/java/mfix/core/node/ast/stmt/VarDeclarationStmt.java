@@ -182,10 +182,13 @@ public class VarDeclarationStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.combineFeature(_declType.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.E_VARDEF);
+
+		_completeFVector = new FVector();
+		_completeFVector.combineFeature(_declType.getFeatureVector());
 		for(Vdf vdf : _fragments) {
-			_fVector.combineFeature(vdf.getFeatureVector());
+			_completeFVector.combineFeature(vdf.getFeatureVector());
 		}
 	}
 

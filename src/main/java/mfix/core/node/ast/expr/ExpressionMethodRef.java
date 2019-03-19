@@ -71,7 +71,8 @@ public class ExpressionMethodRef extends Expr {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
+	    _selfFVector = new FVector();
+		_completeFVector = new FVector();
 	}
 
 	@Override

@@ -122,10 +122,13 @@ public class Assign extends Expr {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.E_ASSIGN);
-        _fVector.combineFeature(_lhs.getFeatureVector());
-        _fVector.combineFeature(_rhs.getFeatureVector());
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.E_ASSIGN);
+
+        _completeFVector = new FVector();
+        _completeFVector.combineFeature(_selfFVector);
+        _completeFVector.combineFeature(_lhs.getFeatureVector());
+        _completeFVector.combineFeature(_rhs.getFeatureVector());
     }
 
     @Override

@@ -10,11 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -152,13 +152,17 @@ public class SuperMethodInv extends Expr {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_SUPER);
-		_fVector.inc(FVector.E_MINV);
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.KEY_SUPER);
+        _selfFVector.inc(FVector.E_MINV);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_SUPER);
+		_completeFVector.inc(FVector.E_MINV);
 		if (_label != null) {
-			_fVector.combineFeature(_label.getFeatureVector());
+			_completeFVector.combineFeature(_label.getFeatureVector());
 		}
-		_fVector.combineFeature(_arguments.getFeatureVector());
+		_completeFVector.combineFeature(_arguments.getFeatureVector());
 	}
 
 	@Override

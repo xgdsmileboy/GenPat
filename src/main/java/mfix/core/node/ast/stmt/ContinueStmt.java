@@ -114,10 +114,13 @@ public class ContinueStmt extends Stmt {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.KEY_CONTINUE);
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.KEY_CONTINUE);
+
+        _completeFVector = new FVector();
+        _completeFVector.inc(FVector.KEY_CONTINUE);
         if (_identifier != null) {
-            _fVector.combineFeature(_identifier.getFeatureVector());
+            _completeFVector.combineFeature(_identifier.getFeatureVector());
         }
     }
 

@@ -126,10 +126,13 @@ public class WhileStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_WHILE);
-		_fVector.combineFeature(_expression.getFeatureVector());
-		_fVector.combineFeature(_body.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_WHILE);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_WHILE);
+		_completeFVector.combineFeature(_expression.getFeatureVector());
+		_completeFVector.combineFeature(_body.getFeatureVector());
 	}
 
 	@Override

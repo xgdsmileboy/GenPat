@@ -58,9 +58,14 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     protected TYPE _nodeType = TYPE.UNKNOWN;
     /**
-     * feature vector to represent current node
+     * feature vector to represent the subtree rooted current node
      */
-    protected FVector _fVector = null;
+    protected FVector _completeFVector = null;
+    /**
+     * feature vector of this single node
+     */
+    protected FVector _selfFVector = null;
+
     /**
      * data dependency
      */
@@ -282,10 +287,17 @@ public abstract class Node implements NodeComparator, Serializable {
      * @return : feature vector representation
      */
     public FVector getFeatureVector() {
-        if (_fVector == null) {
+        if (_completeFVector == null) {
             computeFeatureVector();
         }
-        return _fVector;
+        return _completeFVector;
+    }
+
+    public FVector getSingleFeatureVector() {
+        if (_selfFVector == null) {
+            computeFeatureVector();
+        }
+        return _selfFVector;
     }
 
     /**

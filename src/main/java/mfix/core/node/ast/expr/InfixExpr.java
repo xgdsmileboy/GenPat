@@ -10,11 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -123,10 +123,13 @@ public class InfixExpr extends Expr {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(_operator.toSrcString().toString());
-		_fVector.combineFeature(_lhs.getFeatureVector());
-		_fVector.combineFeature(_rhs.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(_operator.toSrcString().toString());
+
+		_completeFVector = new FVector();
+		_completeFVector.combineFeature(_selfFVector);
+		_completeFVector.combineFeature(_lhs.getFeatureVector());
+		_completeFVector.combineFeature(_rhs.getFeatureVector());
 	}
 
 	@Override

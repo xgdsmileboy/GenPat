@@ -120,10 +120,13 @@ public class ReturnStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_RET);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_RET);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_RET);
 		if(_expression != null) {
-			_fVector.combineFeature(_expression.getFeatureVector());
+			_completeFVector.combineFeature(_expression.getFeatureVector());
 		}
 	}
 
