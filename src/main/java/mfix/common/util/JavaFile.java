@@ -7,6 +7,7 @@
 
 package mfix.common.util;
 
+import mfix.common.conf.Constant;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -659,29 +660,31 @@ public class JavaFile {
         boolean insertImport = true;
         for(int i = 1; i < source.size(); i++){
             if(i == startLine){
-                String origin = source.get(i).replace(" ", "");
-                if(origin.startsWith("}else")){
-                    replacedSource.append("} else ");
-                }
+//                String origin = source.get(i).replace(" ", "");
+//                if(origin.startsWith("}else")){
+//                    replacedSource.append("} else ");
+//                }
                 replacedSource.append("// start of generated patch")
                         .append(Constant.NEW_LINE)
                         .append(replace)
+                        .append(Constant.NEW_LINE)
                         .append("// end of generated patch")
                         .append(Constant.NEW_LINE);
 
-                stringBuffer.append("/* start of original code")
+                stringBuffer.append("// start of original code")
                         .append(Constant.NEW_LINE)
+                        .append("// ")
                         .append(source.get(i))
                         .append(Constant.NEW_LINE);
                 flag = true;
             } else if(startLine < i && i <= endLine){
-                stringBuffer.append(source.get(i))
+                stringBuffer.append("// ").append(source.get(i))
                         .append(Constant.NEW_LINE);
                 continue;
             } else {
                 if(flag){
                     replacedSource.append(stringBuffer)
-                            .append("end of original code */")
+                            .append("// end of original code")
                             .append(Constant.NEW_LINE);
                     stringBuffer = null;
                     flag = false;

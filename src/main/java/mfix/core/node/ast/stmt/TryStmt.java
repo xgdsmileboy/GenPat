@@ -6,16 +6,16 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.common.util.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.VarDeclarationExpr;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -291,7 +291,7 @@ public class TryStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		TryStmt tryStmt = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			tryStmt = (TryStmt) getBindingNode();
 			match = (tryStmt == node);
 		} else if(canBinding(node)) {
@@ -353,7 +353,7 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("try");
@@ -392,7 +392,7 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			TryStmt tryStmt = (TryStmt) pnode;
@@ -434,39 +434,18 @@ public class TryStmt extends Stmt {
 				if (catchModifications.size() > 0) {
 					Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
 					Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
+					Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
 					Map<Node, StringBuffer> map = new HashMap<>(_catches.size());
-					if (!new Matcher().applyNodeListModifications(catchModifications, _catches, insertionBefore,
-							insertionAfter, map, vars, exprMap)) {
+
+					if (!Matcher.applyNodeListModifications(catchModifications, _catches, insertionBefore,
+							insertionAfter, insertionAt, map, vars, exprMap)) {
 						return null;
 					}
-					for (Node node : _catches) {
-						List<StringBuffer> list = insertionBefore.get(node);
-						if (list != null) {
-							for (int i = 0; i < list.size(); i++) {
-								stringBuffer.append(list.get(i));
-								stringBuffer.append(Constant.NEW_LINE);
-							}
-						}
-						if (map.containsKey(node)) {
-							StringBuffer update = map.get(node);
-							if (update != null) {
-								stringBuffer.append(update);
-								stringBuffer.append(Constant.NEW_LINE);
-							}
-						} else {
-							tmp = node.adaptModifications(vars, exprMap);
-							if (tmp == null) return null;
-							stringBuffer.append(tmp);
-							stringBuffer.append(Constant.NEW_LINE);
-						}
-						list = insertionAfter.get(node);
-						if (list != null) {
-							for (int i = 0; i < list.size(); i++) {
-								stringBuffer.append(list.get(i));
-								stringBuffer.append(Constant.NEW_LINE);
-							}
-						}
-					}
+
+					tmp = NodeUtils.assemble(_catches, insertionBefore, insertionAfter, map, insertionAt
+							, vars, exprMap);
+					if (tmp == null) return null;
+					stringBuffer.append(tmp);
 				} else {
 					for (CatClause catClause : _catches) {
 						tmp = catClause.adaptModifications(vars, exprMap);

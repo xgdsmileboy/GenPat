@@ -7,7 +7,7 @@
 
 package mfix.core.node.diff.tree;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.core.node.ast.Node;
 
 /**

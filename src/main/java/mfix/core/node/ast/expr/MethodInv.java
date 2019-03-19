@@ -6,10 +6,11 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
@@ -289,7 +290,7 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
@@ -313,7 +314,7 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;

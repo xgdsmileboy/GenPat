@@ -6,9 +6,10 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
@@ -170,7 +171,7 @@ public class SwitchStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		SwitchStmt switchStmt = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			switchStmt = (SwitchStmt) getBindingNode();
 			match = (switchStmt == node);
 		} else if(canBinding(node)) {
@@ -214,7 +215,7 @@ public class SwitchStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("switch (");
@@ -234,7 +235,7 @@ public class SwitchStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			SwitchStmt switchStmt = (SwitchStmt) pnode;
@@ -253,12 +254,12 @@ public class SwitchStmt extends Stmt {
 					modifications.add(modification);
 				}
 			}
-
 			Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
 			Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
+			Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
 			Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
-			if (!new Matcher().applyNodeListModifications(modifications, _statements, insertionBefore, insertionAfter,
-					map, vars, exprMap)) {
+			if (!Matcher.applyNodeListModifications(modifications, _statements,
+					insertionBefore, insertionAfter, insertionAt, map, vars, exprMap)) {
 				return null;
 			}
 			StringBuffer stringBuffer = new StringBuffer("switch (");
@@ -271,34 +272,11 @@ public class SwitchStmt extends Stmt {
 				stringBuffer.append(expression);
 			}
 			stringBuffer.append("){" + Constant.NEW_LINE);
-			for (Node node : _statements) {
-				List<StringBuffer> list = insertionBefore.get(node);
-				if (list != null) {
-					for (int i = 0; i < list.size(); i++) {
-						stringBuffer.append(list.get(i));
-						stringBuffer.append(Constant.NEW_LINE);
-					}
-				}
-				if (map.containsKey(node)) {
-					StringBuffer update = map.get(node);
-					if (update != null) {
-						stringBuffer.append(update);
-						stringBuffer.append(Constant.NEW_LINE);
-					}
-				} else {
-					tmp = node.adaptModifications(vars, exprMap);
-					if (tmp == null) return null;
-					stringBuffer.append(tmp);
-					stringBuffer.append(Constant.NEW_LINE);
-				}
-				list = insertionAfter.get(node);
-				if (list != null) {
-					for (int i = 0; i < list.size(); i++) {
-						stringBuffer.append(list.get(i));
-						stringBuffer.append(Constant.NEW_LINE);
-					}
-				}
-			}
+
+			tmp = NodeUtils.assemble(_statements, insertionBefore, insertionAfter, map, insertionAt,
+					vars, exprMap);
+			if (tmp == null) return null;
+			stringBuffer.append(tmp);
 			stringBuffer.append("}");
 			return stringBuffer;
 

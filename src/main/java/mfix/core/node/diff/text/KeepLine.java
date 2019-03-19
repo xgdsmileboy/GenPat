@@ -7,7 +7,7 @@
 
 package mfix.core.node.diff.text;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 
 import java.io.Serializable;
 

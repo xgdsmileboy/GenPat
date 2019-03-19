@@ -7,11 +7,10 @@
 
 package mfix.core.node.parser;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
-import mfix.core.TestCase;
-import mfix.core.node.parser.NodeParser;
+import mfix.TestCase;
 import mfix.core.node.match.Matcher;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -33,7 +32,7 @@ public class NodeParserTest extends TestCase {
 
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodePaser = new NodeParser();
         int modifyLocs = 0;
         for(Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {

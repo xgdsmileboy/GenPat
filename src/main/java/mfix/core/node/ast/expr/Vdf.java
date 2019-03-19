@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -30,6 +31,7 @@ import java.util.Set;
 public class Vdf extends Node {
 
 	private static final long serialVersionUID = -1445761649599489420L;
+	private MType _type = null;
 	private SName _identifier = null;
 	private int _dimensions = 0; 
 	private Expr _expression = null;
@@ -54,6 +56,14 @@ public class Vdf extends Node {
 
 	public String getName() {
 		return _identifier.getName();
+	}
+
+	public void setType(MType type) {
+		_type = type;
+	}
+
+	public MType getType() {
+		return _type;
 	}
 
 	public void setDimensions(int dimensions) {
@@ -236,18 +246,47 @@ public class Vdf extends Node {
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if(node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;
-			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			if (_expression == null || vdf.getExpression() != null) {
+				if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+						&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+					matchedNode.put(_identifier, vdf._identifier);
+					matchedStrings.put(_identifier.getName(), vdf.getName());
+					return true;
+				}
+			}
+		} else if (_expression != null && node instanceof Assign) {
+			Assign assign = (Assign) node;
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
-				matchedNode.put(_identifier, vdf._identifier);
-				matchedStrings.put(_identifier.getName(), vdf.getName());
-				return true;
+				matchedNode.put(_identifier, assign.getLhs());
+				matchedStrings.put(_identifier.getName(), assign.getLhs().toString());
 			}
 		}
 		return false;
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+		if (stringBuffer == null) {
+			stringBuffer = new StringBuffer();
+			StringBuffer tmp = _identifier.transfer(vars, exprMap);
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+			for (int i = 0; i < _dimensions; i++) {
+				stringBuffer.append("[]");
+			}
+			if (_expression != null) {
+				tmp = _expression.transfer(vars, exprMap);
+				if (tmp == null) return null;
+				stringBuffer.append('=').append(tmp);
+			}
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {

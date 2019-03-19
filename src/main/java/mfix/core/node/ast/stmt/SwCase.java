@@ -9,12 +9,13 @@ package mfix.core.node.ast.stmt;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -141,7 +142,7 @@ public class SwCase extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		SwCase swCase = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			swCase = (SwCase) getBindingNode();
 			if (_expression  != null && swCase.getExpression() != null) {
 				_expression.postAccurateMatch(swCase.getExpression());
@@ -200,7 +201,7 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
@@ -218,7 +219,7 @@ public class SwCase extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer expression = null;
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {

@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -151,10 +152,10 @@ public class CatClause extends Node {
 	public boolean postAccurateMatch(Node node) {
 		CatClause catClause = null;
 		boolean match = false;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			catClause = (CatClause) getBindingNode();
-			match = (catClause == node);
-		} else if(canBinding(node)) {
+			match = false;
+		} else if (canBinding(node)) {
 			catClause = (CatClause) node;
 			setBindingNode(node);
 			match = true;
@@ -197,7 +198,7 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
@@ -215,7 +216,7 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer exception = null;
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {

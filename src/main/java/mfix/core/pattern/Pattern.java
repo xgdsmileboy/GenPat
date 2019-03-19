@@ -9,6 +9,7 @@ package mfix.core.pattern;
 
 import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.cluster.NameMapping;
@@ -16,7 +17,6 @@ import mfix.core.pattern.cluster.Vector;
 import mfix.core.pattern.match.PatternMatcher;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -34,6 +34,7 @@ public class Pattern implements PatternMatcher, Serializable {
 
     private int _frequency = 1;
     private Node _patternNode;
+    private Set<Variable> _newVars;
     private Set<String> _imports;
     private transient String _patternName;
     private transient NameMapping _nameMapping;
@@ -47,6 +48,7 @@ public class Pattern implements PatternMatcher, Serializable {
     public Pattern(Node pNode, Set<String> imports) {
         _patternNode = pNode;
         _imports = imports;
+        _newVars = new HashSet<>();
     }
 
     public String getFileName() {
@@ -82,6 +84,14 @@ public class Pattern implements PatternMatcher, Serializable {
             formalForm();
         }
         return _keywords;
+    }
+
+    public void addNewVars(Set<Variable> vars) {
+        _newVars.addAll(vars);
+    }
+
+    public Set<Variable> getNewVars() {
+        return _newVars;
     }
 
     public Set<String> getTargetKeywords() {

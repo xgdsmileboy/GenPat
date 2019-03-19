@@ -7,7 +7,7 @@
 
 package mfix.core.search;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
@@ -96,9 +96,7 @@ public class SimMethodSearch {
         CompilationUnit buggyUnit = JavaFile.genASTFromFileWithType(buggyFile);
         CompilationUnit fixedUnit = JavaFile.genASTFromFileWithType(fixedFile);
         if(buggyUnit == null || fixedUnit == null) return map;
-        Set<Pair<Node, TextDiff>> set = new HashSet<>();
-        Matcher matcher = new Matcher();
-        List<Pair<MethodDeclaration, MethodDeclaration>> pairs = matcher.match(buggyUnit, fixedUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> pairs = Matcher.match(buggyUnit, fixedUnit);
         NodeParser parser = new NodeParser();
         File file = new File(buggyFile);
         String name = file.getName();

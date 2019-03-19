@@ -50,8 +50,7 @@ public class Main {
                 tokenStatistic.statistic(args);
                 break;
             default:
-                Repair repair = new Repair();
-                repair.repair(args);
+                Repair.repairAPI(args);
         }
     }
 }

@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.match.Matcher;
@@ -19,6 +20,7 @@ import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -191,7 +193,7 @@ public class VarDeclarationStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		VarDeclarationStmt vds = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			vds = (VarDeclarationStmt) getBindingNode();
 			match = (vds == node);
 		} else if(canBinding(node)) {
@@ -231,7 +233,7 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
@@ -257,7 +259,7 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) pnode;
@@ -279,9 +281,10 @@ public class VarDeclarationStmt extends Stmt {
 
 			Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
 			Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
+			Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
 			Map<Node, StringBuffer> map = new HashMap<>(_fragments.size());
-			if (!new Matcher().applyNodeListModifications(modifications, _fragments, insertionBefore, insertionAfter, map,
-					vars, exprMap)) {
+			if (!Matcher.applyNodeListModifications(modifications, _fragments, insertionBefore, insertionAfter,
+				insertionAt, map, vars, exprMap)) {
 				return null;
 			}
 
@@ -312,6 +315,18 @@ public class VarDeclarationStmt extends Stmt {
 						stringBuffer.append(list.get(i));
 					}
 				}
+				list = insertionAt.get(index);
+				if (list != null) {
+					for (int i = 0; i < list.size(); i++) {
+						if (!first) {
+							stringBuffer.append(',');
+						}
+						first = false;
+						stringBuffer.append(list.get(i));
+					}
+					insertionAt.remove(index);
+				}
+
 				if (map.containsKey(node)) {
 					StringBuffer update = map.get(node);
 					if (update != null) {
@@ -338,6 +353,15 @@ public class VarDeclarationStmt extends Stmt {
 						}
 						first = false;
 						stringBuffer.append(list.get(i));
+					}
+				}
+			}
+			if (!insertionAt.isEmpty()) {
+				List<Map.Entry<Integer, List<StringBuffer>>> list = new ArrayList<>(insertionAt.entrySet());
+				list.stream().sorted(Comparator.comparingInt(Map.Entry::getKey));
+				for (Map.Entry<Integer, List<StringBuffer>> entry : list) {
+					for (StringBuffer s : entry.getValue()) {
+						stringBuffer.append(',').append(s);
 					}
 				}
 			}

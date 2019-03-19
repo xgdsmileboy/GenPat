@@ -1,7 +1,7 @@
 package mfix.core.stats;
 
-import mfix.common.util.Constant;
-import mfix.core.TestCase;
+import mfix.common.conf.Constant;
+import mfix.TestCase;
 import mfix.core.stats.element.*;
 
 import org.junit.Assert;

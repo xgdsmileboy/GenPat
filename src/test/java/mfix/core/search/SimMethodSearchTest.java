@@ -8,11 +8,11 @@
 package mfix.core.search;
 
 import mfix.common.java.D4jSubject;
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.TestCase;
+import mfix.TestCase;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import mfix.core.node.parser.NodeParser;

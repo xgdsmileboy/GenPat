@@ -20,7 +20,7 @@ public class FaultLocalizationFactory {
 
     public static AbstractFaultLocalization dispatch(Subject subject) {
         AbstractFaultLocalization locator = null;
-        switch(subject.getName()) {
+        switch(subject.getType()) {
             case FakeSubject.NAME:
                 locator = new FakeLocator((FakeSubject) subject);
                 break;

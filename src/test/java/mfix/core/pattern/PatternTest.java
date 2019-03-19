@@ -7,9 +7,9 @@
 
 package mfix.core.pattern;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.Utils;
-import mfix.core.TestCase;
+import mfix.TestCase;
 import mfix.core.node.modify.Modification;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;

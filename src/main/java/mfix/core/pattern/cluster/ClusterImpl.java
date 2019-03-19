@@ -7,7 +7,7 @@
 
 package mfix.core.pattern.cluster;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Triple;
 import mfix.core.pattern.Pattern;

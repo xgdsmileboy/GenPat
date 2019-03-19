@@ -5,9 +5,9 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core;
+package mfix;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 
 /**
  * @author: Jiajun

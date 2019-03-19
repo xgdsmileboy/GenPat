@@ -284,12 +284,12 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
         return null;
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = new StringBuffer();
         for(Object modifier : _modifiers) {
             stringBuffer.append(modifier.toString() + " ");

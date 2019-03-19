@@ -8,7 +8,7 @@
 package mfix.core.locator;
 
 import mfix.common.java.D4jSubject;
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;

@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
@@ -170,7 +171,7 @@ public class IfStmt extends Stmt {
 	public boolean postAccurateMatch(Node node) {
 		boolean match = false;
 		IfStmt ifStmt = null;
-		if(getBindingNode() != null) {
+		if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
 			ifStmt = (IfStmt) getBindingNode();
 			_condition.postAccurateMatch(ifStmt.getCondition());
 			_then.postAccurateMatch(ifStmt.getThen());
@@ -243,7 +244,7 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("if(");
@@ -266,7 +267,7 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer condition = null;
 		StringBuffer then = null;
 		StringBuffer els = null;

@@ -504,6 +504,7 @@ public class NodeParser {
         for (Object object : node.fragments()) {
             Vdf vdf = (Vdf) process((ASTNode) object, scope, structure);
             vdf.setParent(varDeclarationStmt);
+            vdf.setType(mType);
             fragments.add(vdf);
         }
         varDeclarationStmt.setFragments(fragments);
@@ -1165,6 +1166,7 @@ public class NodeParser {
         List<Vdf> vdfs = new ArrayList<>();
         for (Object object : node.fragments()) {
             Vdf vdf = (Vdf) process((ASTNode) object, scope, strcture);
+            vdf.setType(mType);
             vdf.setParent(varDeclarationExpr);
             vdfs.add(vdf);
         }
@@ -1404,7 +1406,7 @@ public class NodeParser {
 //        }
 
         // simple or raw type
-        String qualName = typeBinding.getQualifiedName();
+        String qualName = typeBinding.getName();
         if ("".equals(qualName)) {
             return ast.newWildcardType();
         }

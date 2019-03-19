@@ -29,6 +29,10 @@ public class Timer {
     }
 
     public boolean timeout(){
-        return (System.currentTimeMillis() - _start) > _timeout;
+        if((System.currentTimeMillis() - _start) > _timeout) {
+            System.out.println("Timeout !");
+            return true;
+        }
+        return false;
     }
 }

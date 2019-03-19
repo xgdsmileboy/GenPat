@@ -6,9 +6,10 @@
  */
 package mfix.core.node.ast.stmt;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.pattern.cluster.NameMapping;
@@ -143,9 +144,9 @@ public class Blk extends Stmt {
     public boolean postAccurateMatch(Node node) {
         Blk blk = null;
         boolean match = false;
-        if (getBindingNode() != null) {
+        if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
             blk = (Blk) getBindingNode();
-            match = (getBindingNode() == node);
+            match = blk == node;
         } else if (canBinding(node)) {
             blk = (Blk) node;
             setBindingNode(node);
@@ -178,7 +179,7 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
         StringBuffer stringBuffer = super.transfer(vars, exprMap);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
@@ -196,48 +197,24 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
             Blk blk = (Blk) pnode;
             Map<Node, List<StringBuffer>> insertBefore = new HashMap<>();
             Map<Node, List<StringBuffer>> insertAfter = new HashMap<>();
+            Map<Integer, List<StringBuffer>> insertAt = new HashMap<>();
             Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
-            if (!new Matcher().applyNodeListModifications(blk.getModifications(), _statements,
-                    insertBefore, insertAfter, map, vars, exprMap)) {
+            if (!Matcher.applyNodeListModifications(blk.getModifications(), _statements,
+                    insertBefore, insertAfter, insertAt, map, vars, exprMap)) {
                 return null;
             }
             StringBuffer stringBuffer = new StringBuffer();
-            StringBuffer tmp;
             stringBuffer.append("{" + Constant.NEW_LINE);
-            for (Node node : _statements) {
-                List<StringBuffer> list = insertBefore.get(node);
-                if (list != null) {
-                    for (int i = 0; i < list.size(); i++) {
-                        stringBuffer.append(list.get(i));
-                        stringBuffer.append(Constant.NEW_LINE);
-                    }
-                }
-                if (map.containsKey(node)) {
-                    StringBuffer update = map.get(node);
-                    if (update != null) {
-                        stringBuffer.append(update);
-                        stringBuffer.append(Constant.NEW_LINE);
-                    }
-                } else {
-                    tmp = node.adaptModifications(vars, exprMap);
-                    if(tmp == null) return null;
-                    stringBuffer.append(tmp);
-                    stringBuffer.append(Constant.NEW_LINE);
-                }
-                list = insertAfter.get(node);
-                if (list != null) {
-                    for (int i = 0; i < list.size(); i++) {
-                        stringBuffer.append(list.get(i));
-                        stringBuffer.append(Constant.NEW_LINE);
-                    }
-                }
-            }
+            StringBuffer tmp = NodeUtils.assemble(_statements, insertBefore, insertAfter, map, insertAt,
+                    vars, exprMap);
+            if (tmp == null) return null;
+            stringBuffer.append(tmp);
             stringBuffer.append("}");
             return stringBuffer;
 

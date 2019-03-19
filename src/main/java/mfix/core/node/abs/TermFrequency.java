@@ -7,15 +7,18 @@
 
 package mfix.core.node.abs;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.expr.MType;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -52,7 +55,7 @@ public class TermFrequency implements CodeAbstraction {
             throw new IOException("Token mapping file does not exist : " + file.getAbsolutePath());
         }
         _tokenMap = new Hashtable<>();
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
         String token = br.readLine();
         String number = br.readLine();
         Integer num;
@@ -70,7 +73,12 @@ public class TermFrequency implements CodeAbstraction {
 
     @Override
     public boolean shouldAbstract(Node node) {
-        String token = node.toSrcString().toString();
+        String token;
+        if (node.getNodeType() == Node.TYPE.TYPE) {
+            token = NodeUtils.distilBasicType((MType) node);
+        } else {
+            token = node.toSrcString().toString();
+        }
         double numInDoc = _tokenMap.getOrDefault(token, 1) + 1;
         double frequency = numInDoc / TOTAL_FILE_NUM;
         return frequency < _threshold;

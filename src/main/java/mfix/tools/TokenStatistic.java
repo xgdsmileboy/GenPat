@@ -7,13 +7,14 @@
 
 package mfix.tools;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.MiningUtils;
 import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.expr.MType;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -24,8 +25,16 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -37,6 +46,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * @author: Jiajun
@@ -44,7 +54,8 @@ import java.util.concurrent.Future;
  */
 public class TokenStatistic {
 
-    private volatile Map<String, Integer> _cacheMap;
+    private Map<String, Integer> _cacheMap;
+    private Set<String> _files;
 
     private int _currThreadCount = 0;
     private int _maxThreadCount = Constant.MAX_FILTER_THREAD_NUM;
@@ -52,6 +63,7 @@ public class TokenStatistic {
     private List<Future<Set<String>>> _threadResultList = new ArrayList<>();
 
     private final static String COMMAND = "<command> -if <arg> [-of <arg>] [-dir <arg>]";
+
     private Options options() {
         Options options = new Options();
 
@@ -75,6 +87,7 @@ public class TokenStatistic {
 
     public TokenStatistic() {
         _cacheMap = new HashMap<>();
+        _files = new HashSet<>();
     }
 
     private void init(String fileName) {
@@ -113,6 +126,7 @@ public class TokenStatistic {
 
     private void statistic(String buggyFileName, Set<String> patternFiles) {
         LevelLogger.info("Statistic : " + buggyFileName);
+        _files.add(buggyFileName);
         try {
             if (_currThreadCount >= _maxThreadCount) {
                 LevelLogger.debug("Thread pool is full ....");
@@ -164,11 +178,34 @@ public class TokenStatistic {
             }
             file.createNewFile();
         }
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false), "UTF-8"));
-        for (Map.Entry<String, Integer> entry : _cacheMap.entrySet()) {
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false),
+                StandardCharsets.UTF_8));
+        List<Map.Entry<String, Integer>> entryList = new LinkedList<>(_cacheMap.entrySet());
+        entryList = entryList.stream()
+                .sorted(Comparator.comparingInt(Map.Entry<String, Integer>::getValue).reversed())
+                .collect(Collectors.toList());
+        for (Map.Entry<String, Integer> entry : entryList) {
             bw.write(entry.getKey());
             bw.newLine();
-            bw.write(entry.getKey());
+            bw.write(entry.getValue().toString());
+            bw.newLine();
+        }
+        bw.close();
+    }
+
+    private void writeBuggyFiles(String outFile) throws IOException {
+        LevelLogger.info("....FLUSHING FILES.......");
+        File file = new File(outFile);
+        if (!file.exists()) {
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            file.createNewFile();
+        }
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false),
+                StandardCharsets.UTF_8));
+        for (String s: _files) {
+            bw.write(s);
             bw.newLine();
         }
         bw.close();
@@ -220,6 +257,7 @@ public class TokenStatistic {
         if (!_cacheMap.isEmpty()) {
             try {
                 writeFile(outFile);
+                writeBuggyFiles(Utils.join(Constant.SEP, Constant.HOME, "BuggyFiles.txt"));
             } catch (IOException e) {
                 LevelLogger.error("Dump to result to file failed!", e);
             }
@@ -248,12 +286,6 @@ class ParseKey implements Callable<Set<String>> {
         _patternFiles = patterns;
     }
 
-    private Serializable deserialize(String fileName) throws IOException, ClassNotFoundException {
-        File file = new File(fileName);
-        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
-        return (Serializable) objectInputStream.readObject();
-    }
-
     @Override
     public Set<String> call() {
         if (_patternFiles == null || _patternFiles.isEmpty()) {
@@ -263,30 +295,30 @@ class ParseKey implements Callable<Set<String>> {
         for (String f : _patternFiles) {
             Pattern p;
             try {
-                p = (Pattern) deserialize(f);
+                p = (Pattern) Utils.deserialize(f);
             } catch (Exception e) {
                 continue;
             }
             Node node = p.getPatternNode();
             Queue<Node> nodes = new LinkedList<>();
             nodes.add(node);
-            while(!nodes.isEmpty()) {
+            while (!nodes.isEmpty()) {
                 node = nodes.poll();
-                if (NodeUtils.isSimpleExpr(node)) {
-                    switch (node.getNodeType()) {
-                        case BLITERAL:
-                        case NULL:
-                        case THIS:
-                            break;
-                        case SLITERAL:
-                            StringBuffer s = node.toSrcString();
-                            if (s.length() < 10) {
-                                strings.add(s.toString());
-                            }
-                            break;
-                        default:
-                            strings.add(node.toSrcString().toString());
-                    }
+                switch (node.getNodeType()) {
+                    case SLITERAL:
+                        StringBuffer s = node.toSrcString();
+                        if (s.length() < 10 && s.length() > 1) {
+                            strings.add(s.toString());
+                        }
+                        break;
+                    case TYPE:
+                        strings.add(NodeUtils.distilBasicType((MType) node));
+                        break;
+                    case SNAME:
+                    case TLITERAL:
+                        strings.add(node.toSrcString().toString());
+                    default:
+
                 }
                 nodes.addAll(node.getAllChildren());
             }

@@ -7,13 +7,16 @@
 
 package mfix.core.pattern;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.abs.TermFrequency;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.Variable;
+import mfix.core.node.ast.expr.Svd;
+import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.parser.NodeParser;
@@ -21,7 +24,9 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -31,7 +36,7 @@ import java.util.Set;
 public class PatternExtractor {
 
     public Set<Pattern> extractPattern(String srcFile, String tarFile) {
-        return extractPattern(srcFile, tarFile, 20);
+        return extractPattern(srcFile, tarFile, Constant.FILTER_MAX_CHANGE_LINE);
     }
 
     public Set<Pattern> extractPattern(String srcFile, String tarFile, int maxChangeLine) {
@@ -52,7 +57,7 @@ public class PatternExtractor {
         if (srcUnit == null || tarUnit == null) {
             return patterns;
         }
-        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new Matcher().match(srcUnit, tarUnit);
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = new NodeParser();
 
 //        CodeAbstraction abstraction = new TF_IDF(srcFile, Constant.TF_IDF_FREQUENCY);
@@ -76,8 +81,9 @@ public class PatternExtractor {
                 continue;
             }
 
-            if(new Matcher().greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
+            if(Matcher.greedyMatch((MethDecl) srcNode, (MethDecl) tarNode)) {
                 Set<Node> nodes = tarNode.getConsideredNodesRec(new HashSet<>(), false);
+                Set<Variable> newVars = getVars(nodes);
                 Set<Node> temp;
                 for(Node node : nodes) {
                     if (node.getBindingNode() != null) {
@@ -93,11 +99,33 @@ public class PatternExtractor {
 //                srcNode.doAbstraction(counter);
                 srcNode.doAbstractionNew(abstraction.lazyInit());
                 tarNode.doAbstractionNew(abstraction);
-                patterns.add(new Pattern(srcNode, imports));
+                Pattern pattern = new Pattern(srcNode, imports);
+                pattern.addNewVars(newVars);
+                patterns.add(pattern);
             }
         }
-
 //        counter.close();
         return patterns;
+    }
+
+    private Set<Variable> getVars(Set<Node> nodes) {
+        Set<Variable> vars = new HashSet<>();
+        Queue<Node> queue = new LinkedList<>(nodes);
+        while (!queue.isEmpty()) {
+            Node node = queue.poll();
+            switch (node.getNodeType()) {
+                case VARDECLFRAG:
+                    Vdf vdf = (Vdf) node;
+                    String type = vdf.getType() == null ? "?" : vdf.getType().typeStr();
+                    vars.add(new Variable(vdf.getName(), type));
+                    break;
+                case SINGLEVARDECL:
+                    Svd svd = (Svd) node;
+                    vars.add(new Variable(svd.getName().getName(), svd.getDeclType().typeStr()));
+                default:
+            }
+            queue.addAll(node.getAllChildren());
+        }
+        return vars;
     }
 }

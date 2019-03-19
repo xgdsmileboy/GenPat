@@ -10,6 +10,7 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.stmt.Stmt;
@@ -32,7 +33,7 @@ import java.util.*;
  */
 public class Matcher {
 
-	public List<Pair<MethodDeclaration, MethodDeclaration>> match(CompilationUnit src, CompilationUnit tar) {
+	public static List<Pair<MethodDeclaration, MethodDeclaration>> match(CompilationUnit src, CompilationUnit tar) {
 		List<Pair<MethodDeclaration, MethodDeclaration>> matchPair = new LinkedList<>();
 		MethodDeclCollector methodDeclCollector = new MethodDeclCollector();
 		methodDeclCollector.init();
@@ -87,7 +88,7 @@ public class Matcher {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private DiffType sameSignature(MethodDeclaration sm, MethodDeclaration tm) {
+	private static DiffType sameSignature(MethodDeclaration sm, MethodDeclaration tm) {
 		int smdf = sm.getModifiers();
 		int tmdf = tm.getModifiers();
 		if((smdf & tmdf) != smdf) return DiffType.DIFF_MODIFIER;
@@ -135,7 +136,7 @@ public class Matcher {
 	 * @param inBuggy : {@code MethodInv}s in buggy code
 	 * @return : {@code true} if they have intersection, otherwise {@code false}
 	 */
-	private boolean contains(Set<MethodInv> inPattern, Set<MethodInv> inBuggy) {
+	private static boolean contains(Set<MethodInv> inPattern, Set<MethodInv> inBuggy) {
 		// only consider method name and arguments?
 		for(MethodInv methodInv : inPattern) {
 			for(MethodInv b : inBuggy) {
@@ -155,7 +156,7 @@ public class Matcher {
 	 * @param pattern : pattern nodes to filter
 	 * @return : a subset of patterns in {@code pattern}
 	 */
-	public Set<Pattern> filter(Node buggy, Set<Pattern> pattern) {
+	public static Set<Pattern> filter(Node buggy, Set<Pattern> pattern) {
 		Set<MethodInv> inBuggy = buggy.getUniversalAPIs(new HashSet<>(), false);
 		Set<Pattern> nodes = new HashSet<>();
 		Set<MethodInv> inPattern;
@@ -175,7 +176,7 @@ public class Matcher {
 	 * @param pattern : pattern node
 	 * @return : a set of possible solutions
 	 */
-	public Set<MatchInstance> tryMatch(Node buggy, Pattern pattern) {
+	public static Set<MatchInstance> tryMatch(Node buggy, Pattern pattern) {
 		List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
 		List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
 
@@ -217,7 +218,7 @@ public class Matcher {
 	 * @param matchLists : node matching result
 	 * @return : all possible matching solutions
 	 */
-	private Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists) {
+	private static Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists) {
 		Set<MatchInstance> results = new HashSet<>();
 		matchNext(new HashMap<>(), matchLists, 0, new HashSet<>(), results);
 		return results;
@@ -233,7 +234,7 @@ public class Matcher {
 	 *                       to avoid duplicate matching.
 	 * @param instances      : contains possible matching solutions
 	 */
-	private void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
+	private static void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
 						   Set<Node> alreadyMatched, Set<MatchInstance> instances) {
 		if (i == list.size()) {
 			Map<Node, Node> nodeMap = new HashMap<>();
@@ -276,7 +277,7 @@ public class Matcher {
 	 * @return : {@code true} if node {@code curNode} can match {@code curMatchNode},
 	 * otherwise {@code false}
 	 */
-	private boolean checkCompatibility(Map<Node, MatchNode> matchedNodeMap, Node curNode,
+	private static boolean checkCompatibility(Map<Node, MatchNode> matchedNodeMap, Node curNode,
 									   MatchNode curMatchNode) {
 		Node node, previous;
 		MatchNode matchNode;
@@ -308,7 +309,7 @@ public class Matcher {
 		return true;
 	}
 
-	private Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {
+	private static Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {
 		Map<Relation, Integer> map = new HashMap<>();
 		if (relations != null) {
 			for (int i = 0; i < relations.size(); i++) {
@@ -318,7 +319,17 @@ public class Matcher {
 		return map;
 	}
 
-	public boolean greedyMatch(MethDecl src, MethDecl tar) {
+	private static boolean anyAncestorMatch(Node node) {
+		while(node.getParent() != null) {
+			node = node.getParent();
+			if (node.getBindingNode() != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean greedyMatch(MethDecl src, MethDecl tar) {
 		List<Stmt> srcStmt = src.getAllChildStmt(new ArrayList<>());
 		List<Stmt> tarStmt = tar.getAllChildStmt(new ArrayList<>());
 
@@ -327,13 +338,17 @@ public class Matcher {
 		Set<Integer> tarMatched = new HashSet<>();
 		for(int i = 0; i < srcStmt.size(); i++) {
 			boolean notmatched = true;
-			for (int j = 0; j < tarStmt.size(); j++) {
-				if(!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
-					srcStmt.get(i).setBindingNode(tarStmt.get(j));
-					srcStmt.get(i).postAccurateMatch(tarStmt.get(j));
-					tarMatched.add(j);
-					notmatched = false;
-					break;
+			if (anyAncestorMatch(srcStmt.get(i))) {
+				notmatched = false;
+			} else {
+				for (int j = 0; j < tarStmt.size(); j++) {
+					if (!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
+						srcStmt.get(i).setBindingNode(tarStmt.get(j));
+						srcStmt.get(i).postAccurateMatch(tarStmt.get(j));
+						tarMatched.add(j);
+						notmatched = false;
+						break;
+					}
 				}
 			}
 			if(notmatched) {
@@ -341,7 +356,7 @@ public class Matcher {
 			}
 		}
 		for(int i = 0; i < tarStmt.size(); i++) {
-			if(!tarMatched.contains(i)) {
+			if(tarStmt.get(i).getBindingNode() == null) {
 				tarNotMatched.add(tarStmt.get(i));
 			}
 		}
@@ -422,7 +437,7 @@ public class Matcher {
 //		return true;
 //	}
 
-	public <T extends Node> Map<Integer, Integer> greedySimMatch(List<T> src, List<T> tar, double similar) {
+	public static <T extends Node> Map<Integer, Integer> greedySimMatch(List<T> src, List<T> tar, double similar) {
 		if (src.isEmpty() || tar.isEmpty()) return new HashMap<>();
 		double[][] valueMat = new double[src.size()][tar.size()];
 		for (int i = 0; i < src.size(); i++) {
@@ -472,7 +487,7 @@ public class Matcher {
 		return finalRlst;
 	}
 
-	public Map<Integer, Integer> simMatch(List<Node> src, List<Node> tar, double similar) {
+	public static Map<Integer, Integer> simMatch(List<Node> src, List<Node> tar, double similar) {
 		Map<Integer, Integer> map = match(src, tar, new Comparator<Node>() {
 			@Override
 			public int compare(Node o1, Node o2) {
@@ -487,7 +502,8 @@ public class Matcher {
 		return simMatch(map, src, tar, similar);
 	}
 	
-	public <T extends Node> Map<Integer, Integer> simMatch(Map<Integer, Integer> exactMatchMap, List<T> src, List<T> tar, double similar) {
+	public static <T extends Node> Map<Integer, Integer> simMatch(Map<Integer, Integer> exactMatchMap, List<T> src,
+															List<T> tar, double similar) {
 		
 		Map<Integer, Integer> result = new HashMap<>();
 		List<Integer> left = new ArrayList<>(src.size());
@@ -522,7 +538,7 @@ public class Matcher {
 		return result;
 	}
 
-	public Map<Integer, Integer> match(Object[] src, Object[] tar) {
+	public static Map<Integer, Integer> match(Object[] src, Object[] tar) {
 		return match(Arrays.asList(src), Arrays.asList(tar), new Comparator<Object>() {
 			@Override
 			public int compare(Object o1, Object o2) {
@@ -535,7 +551,7 @@ public class Matcher {
 		});
 	}
 	
-	public Map<Integer, Integer> match(List<Stmt> src, List<Stmt> tar) {
+	public static Map<Integer, Integer> match(List<Stmt> src, List<Stmt> tar) {
 		return match(src, tar, new Comparator<Stmt>() {
 			@Override
 			public int compare(Stmt o1, Stmt o2) {
@@ -554,7 +570,7 @@ public class Matcher {
 		ANDGLE
 	}
 	
-	public <T> Map<Integer, Integer> match(List<T> src, List<T> tar, Comparator<T> comparator) {
+	public static <T> Map<Integer, Integer> match(List<T> src, List<T> tar, Comparator<T> comparator) {
 		Map<Integer, Integer> map = new HashMap<>();
 		int srcLen = src.size();
 		int tarLen = tar.size();
@@ -613,12 +629,13 @@ public class Matcher {
 		return map;
 	}
 
-	public boolean applyNodeListModifications(List<Modification> modifications,
+	public static boolean applyNodeListModifications(List<Modification> modifications,
 													 List<? extends Node> statements,
 													 Map<Node, List<StringBuffer>> insertionBefore,
 													 Map<Node, List<StringBuffer>> insertionAfter,
+													 Map<Integer, List<StringBuffer>> insertAt,
 													 Map<Node, StringBuffer> changeNodeMap,
-													 Set<String> vars, Map<String, String> exprMap) {
+													 VarScope vars, Map<String, String> exprMap) {
 		StringBuffer tmp;
 		for (Modification modification : modifications) {
 			if (modification instanceof Update) {
@@ -638,28 +655,25 @@ public class Matcher {
 				changeNodeMap.put(node, null);
 			} else if(modification instanceof Insertion){
 				Insertion insertion = (Insertion) modification;
+				tmp = insertion.apply(vars, exprMap);
+				if (tmp == null) return false;
+
 				Node insNode = insertion.getInsertedNode();
 				Set<Node> before = new HashSet<>();
 				Set<Node> after = new HashSet<>();
 				Set<Node> depends = insNode.recursivelyGetDataDependency(new HashSet<>());
 				if (!depends.isEmpty()) {
 					for (Node n : depends) {
-						if (n.getBindingNode() == null || n.getBindingNode().getBuggyBindingNode() == null) {
-							return false;
+						if (n.getBindingNode() != null && n.getBindingNode().getBuggyBindingNode() != null) {
+							after.add(n.getBindingNode().getBuggyBindingNode());
 						}
-						after.add(n.getBindingNode().getBuggyBindingNode());
 					}
-
 				} else if (insertion.getPrenode() != null && insertion.getPrenode().getBindingNode() != null
 						&& insertion.getPrenode().getBindingNode().getBuggyBindingNode() != null) {
 					after.add(insertion.getPrenode().getBindingNode().getBuggyBindingNode());
 				} else if (insertion.getNextnode() != null && insertion.getNextnode().getBindingNode() != null
 						&&insertion.getNextnode().getBindingNode().getBuggyBindingNode() != null) {
 					before.add(insertion.getNextnode().getBindingNode().getBuggyBindingNode());
-				}
-
-				if (after.isEmpty() && before.isEmpty()) {
-					return false;
 				}
 
 				int tag = -1;
@@ -677,26 +691,33 @@ public class Matcher {
 							list = new LinkedList<>();
 							insertionAfter.put(statements.get(tag), list);
 						}
-						tmp = insertion.apply(vars, exprMap);
-						if (tmp == null) return false;
 						list.add(tmp);
 					}
 				}
 				if (tag == -1) {
-					tag = 0;
-					for (int i = 0; i < statements.size(); i++) {
-						if (after.contains(statements.get(i))) {
-							tag = i;
+					if (!before.isEmpty()) {
+						for (int i = 0; i < statements.size(); i++) {
+							final Node node = statements.get(i);
+							if (before.stream().anyMatch(n -> n == node || node.isParentOf(n))) {
+								tag = i;
+							}
 						}
 					}
-					List<StringBuffer> list = insertionBefore.get(statements.get(tag));
-					if(list == null) {
-						list = new LinkedList<>();
-						insertionBefore.put(statements.get(tag), list);
+					if (tag != -1) {
+						List<StringBuffer> list = insertionBefore.get(statements.get(tag));
+						if (list == null) {
+							list = new LinkedList<>();
+							insertionBefore.put(statements.get(tag), list);
+						}
+						list.add(tmp);
+					} else {
+						List<StringBuffer> list = insertAt.get(insertion.getIndex());
+						if (list == null) {
+							list = new LinkedList<>();
+							insertAt.put(insertion.getIndex(), list);
+						}
+						list.add(tmp);
 					}
-					tmp = insertion.apply(vars, exprMap);
-					if(tmp == null) return false;;
-					list.add(tmp);
 				}
 			}
 		}

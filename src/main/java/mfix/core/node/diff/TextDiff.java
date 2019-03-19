@@ -7,7 +7,7 @@
 
 package mfix.core.node.diff;
 
-import mfix.common.util.Constant;
+import mfix.common.conf.Constant;
 import mfix.core.node.ast.Node;
 import mfix.core.node.diff.text.AddLine;
 import mfix.core.node.diff.text.DelLine;
@@ -44,7 +44,7 @@ public class TextDiff extends Diff<Line> {
 		int tarLen = tarText.length;
 		_source = new ArrayList<>(srcLen + tarLen);
 		int rightCursor = 0;
-		Map<Integer, Integer> lineMap = new Matcher().match(srcText, tarText);
+		Map<Integer, Integer> lineMap = Matcher.match(srcText, tarText);
 		for(int i = 0; i < srcLen; i++) {
 			Integer cursor = lineMap.get(i);
 			if(cursor == null) {

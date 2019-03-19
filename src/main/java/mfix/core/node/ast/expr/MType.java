@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.pattern.cluster.NameMapping;
@@ -95,7 +96,7 @@ public class MType extends Node {
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (!isAbstract() && (parentConsidered || isConsidered())) {
 			StringBuffer buffer = toSrcString();
-			keywords.add(buffer.toString());
+			keywords.add(NodeUtils.distilBasicType(this));
 			return buffer;
 		} else if (isConsidered()) {
 			return new StringBuffer(nameMapping.getTypeID(this));
@@ -177,7 +178,7 @@ public class MType extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
@@ -186,7 +187,7 @@ public class MType extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(Set<String> vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
 		return toSrcString();
 	}
 }

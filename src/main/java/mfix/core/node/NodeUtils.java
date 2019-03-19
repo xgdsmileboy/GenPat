@@ -6,11 +6,16 @@
  */
 package mfix.core.node;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
+import mfix.core.node.ast.LineRange;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
+import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.Expr;
+import mfix.core.node.ast.expr.MType;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.match.metric.FVector.ALGO;
 import mfix.core.node.modify.Deletion;
@@ -19,7 +24,9 @@ import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import org.eclipse.jdt.core.dom.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -37,6 +44,68 @@ public class NodeUtils {
 
     public static Set<String> IGNORE_METHOD_INVOKE = new HashSet<String>(Arrays.asList("toString", "equals",
             "hashCode"));
+
+    public static StringBuffer assemble(List<? extends Node> _statements,
+                                        Map<Node, List<StringBuffer>> insertionBefore,
+                                        Map<Node, List<StringBuffer>> insertionAfter,
+                                        Map<Node, StringBuffer> map,
+                                        Map<Integer, List<StringBuffer>> insertionAt,
+                                        VarScope vars, Map<String, String> exprMap) {
+
+        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer tmp;
+        for (int index = 0; index < _statements.size(); index ++) {
+            Node node = _statements.get(index);
+            List<StringBuffer> list = insertionBefore.get(node);
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    stringBuffer.append(list.get(i)).append(Constant.NEW_LINE);
+                }
+            }
+            int start = index;
+            list = insertionAt.get(start);
+            while ( list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    stringBuffer.append(list.get(i)).append(Constant.NEW_LINE);
+                }
+                insertionAt.remove(start);
+                start ++;
+                list = insertionAt.get(start);
+            }
+            if (map.containsKey(node)) {
+                StringBuffer update = map.get(node);
+                if (update != null) {
+                    stringBuffer.append(update).append(Constant.NEW_LINE);
+                }
+            } else {
+                tmp = node.adaptModifications(vars, exprMap);
+                if (tmp == null) return null;
+                stringBuffer.append(tmp).append(Constant.NEW_LINE);
+            }
+            list = insertionAfter.get(node);
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    stringBuffer.append(list.get(i)).append(Constant.NEW_LINE);
+                }
+            }
+        }
+        if (!insertionAt.isEmpty()) {
+            List<Map.Entry<Integer, List<StringBuffer>>> list = new ArrayList<>(insertionAt.entrySet());
+            list.stream().sorted(Comparator.comparingInt(Map.Entry::getKey));
+            for (Map.Entry<Integer, List<StringBuffer>> entry : list) {
+                for (StringBuffer s : entry.getValue()) {
+                    stringBuffer.append(s).append(Constant.NEW_LINE);
+                }
+            }
+        }
+        return stringBuffer;
+    }
+
+    public static String distilBasicType(MType type) {
+        String s = type.toSrcString().toString();
+        int index = s.indexOf('<');
+        return index > 0 ? s.substring(0, index) : s;
+    }
 
     public static boolean patternMatch(Node fst, Node snd, Map<Node, Node> matchedNode, boolean skipFormalCmp) {
         if (fst.isConsidered() != snd.isConsidered()) return false;
@@ -228,8 +297,10 @@ public class NodeUtils {
         }
         for (int i = 0; i < tar.size(); i++) {
             if (set.contains(i)) continue;
-            Insertion insertion = new Insertion(pNode, i, tar.get(i));
+            Node n = tar.get(i);
+            Insertion insertion = new Insertion(pNode, i, n);
             insertions.add(insertion);
+
         }
 
         List<Modification> modifications = new LinkedList<>();
@@ -423,9 +494,17 @@ public class NodeUtils {
         }
     }
 
+    @Deprecated
     public static Map<Integer, Set<String>> getUsableVarTypes(String file) {
         CompilationUnit unit = JavaFile.genAST(file);
         VariableVisitor variableVisitor = new VariableVisitor(unit);
+        unit.accept(variableVisitor);
+        return variableVisitor.getVars();
+    }
+
+    public static Map<Integer, VarScope> getUsableVariables(String file) {
+        CompilationUnit unit = JavaFile.genAST(file);
+        NewVariableVisitor variableVisitor = new NewVariableVisitor(unit);
         unit.accept(variableVisitor);
         return variableVisitor.getVars();
     }
@@ -510,6 +589,99 @@ class VariableVisitor extends ASTVisitor {
         public boolean visit(SingleVariableDeclaration node) {
             vars.add(node.getName().getFullyQualifiedName());
             return true;
+        }
+
+    }
+
+}
+
+class NewVariableVisitor extends ASTVisitor {
+    private MethodVisitor _methodVisitor = new MethodVisitor();
+    private Map<Integer, VarScope> _vars = new HashMap<>();
+    private Set<Variable> _fields = new HashSet<>();
+    private CompilationUnit _unit;
+
+    public NewVariableVisitor(CompilationUnit unit) {
+        _unit = unit;
+    }
+
+    public boolean visit(FieldDeclaration node) {
+        String type = node.getType().toString();
+        for (Object object : node.fragments()) {
+            VariableDeclarationFragment vdf = (VariableDeclarationFragment) object;
+            _fields.add(new Variable(vdf.getName().getIdentifier(), type));
+        }
+        return true;
+    }
+
+    public Map<Integer, VarScope> getVars() {
+        for (Entry<Integer, VarScope> entry : _vars.entrySet()) {
+            entry.getValue().setGlobalVars(_fields);
+        }
+        return _vars;
+    }
+
+    @Override
+    public boolean visit(MethodDeclaration node) {
+        int start = _unit.getLineNumber(node.getStartPosition());
+        int end = _unit.getLineNumber(node.getStartPosition() + node.getLength());
+        VarScope scope = new VarScope();
+        _methodVisitor.reset(scope, start, end);
+        node.accept(_methodVisitor);
+        _vars.put(start, scope);
+        return true;
+    }
+
+    class MethodVisitor extends ASTVisitor {
+
+        private VarScope _scope;
+        private int _end;
+        public void reset(VarScope scope, int start, int end) {
+            _scope = scope;
+            _end = end;
+        }
+
+        public boolean visit(VariableDeclarationStatement node) {
+            String type = node.getType().toString();
+            int start = _unit.getLineNumber(node.getStartPosition());
+            int end = getParentEnd(node);
+            for (Object o : node.fragments()) {
+                VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+                _scope.addLocalVar(new Variable(vdf.getName().getIdentifier(), type), new LineRange(start, end));
+            }
+            return true;
+        }
+
+        public boolean visit(VariableDeclarationExpression node) {
+            String type = node.getType().toString();
+            int start = _unit.getLineNumber(node.getStartPosition());
+            int end = getParentEnd(node);
+            for (Object o : node.fragments()) {
+                VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+                _scope.addLocalVar(new Variable(vdf.getName().getIdentifier(), type), new LineRange(start, end));
+            }
+            return true;
+        }
+
+        public boolean visit(SingleVariableDeclaration node) {
+            int start = _unit.getLineNumber(node.getStartPosition());
+            int end = getParentEnd(node);
+            String type = node.getType().toString();
+            _scope.addLocalVar(new Variable(node.getName().getIdentifier(), type), new LineRange(start, end));
+            return true;
+        }
+
+        private int getParentEnd(ASTNode node) {
+            while(node != null) {
+                if (node instanceof MethodDeclaration || node instanceof Block
+                        || node instanceof IfStatement || node instanceof WhileStatement
+                        || node instanceof ForStatement || node instanceof EnhancedForStatement
+                        || node instanceof DoStatement) {
+                    return _unit.getLineNumber(node.getStartPosition() + node.getLength());
+                }
+                node = node.getParent();
+            }
+            return _end;
         }
 
     }

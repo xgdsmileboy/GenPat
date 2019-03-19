@@ -7,7 +7,12 @@
 
 package mfix.common.java;
 
+import mfix.common.cmd.ExecuteCommand;
+import mfix.common.util.LevelLogger;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,13 +30,17 @@ public class Subject implements IExecute {
     protected String _sbin;
     protected String _tbin;
 
-    protected boolean _compile_file;
+    protected boolean _compile_file = false;
+    protected boolean _compileProject = false;
+    protected boolean _test_subject = false;
     // for compile
     protected SOURCE_LEVEL _src_level;
     protected List<String> _classpath;
     // for compile the complete subject
     protected String _compile_command;
+    protected String _test_command;
     protected String _key_compile_suc;
+    protected String _key_test_suc;
     protected String _jdk_home;
 
     protected Subject(String base, String name) {
@@ -99,6 +108,22 @@ public class Subject implements IExecute {
         return _compile_file;
     }
 
+    public void setCompileProject(boolean compileProject) {
+        _compileProject = compileProject;
+    }
+
+    public boolean compileProject() {
+        return _compileProject;
+    }
+
+    public void setTestProject(boolean testProject) {
+        _test_subject = testProject;
+    }
+
+    public boolean testProject() {
+        return _test_subject;
+    }
+
     public void setSourceLevel(String sourceLeve) {
         setSourceLevel(SOURCE_LEVEL.toSourceLevel(sourceLeve));
     }
@@ -127,8 +152,20 @@ public class Subject implements IExecute {
         return _compile_command;
     }
 
+    public void setTestCommand(String command) {
+        _test_command = command;
+    }
+
+    public String getTestCommand() {
+        return _test_command;
+    }
+
     public void setCompileSuccessMessage(String string) {
         _key_compile_suc = string;
+    }
+
+    public void setTestSuccessMessage(String string) {
+        _key_test_suc = string;
     }
 
     public void setJDKHome(String jdkHome) {
@@ -139,9 +176,35 @@ public class Subject implements IExecute {
         return _jdk_home;
     }
 
-    public boolean compileSuccess(List<String> compileMessage) {
+    public String getLogFilePath() {
+        return _name;
+    }
+
+    public void backup() throws IOException {
+        String file = getHome() + getSsrc();
+        String tar = file + "_bak";
+        File tarFile = new File(tar);
+        if (tarFile.exists()) {
+            FileUtils.copyDirectory(tarFile, new File(file));
+        } else {
+            FileUtils.copyDirectory(new File(file), tarFile);
+        }
+    }
+
+    public void restore() throws IOException {
+        String file = getHome() + getSsrc();
+        String tar = file + "_bak";
+        File tarFile = new File(tar);
+        if (tarFile.exists()) {
+            FileUtils.copyDirectory(tarFile, new File(file));
+        } else {
+            LevelLogger.error("Restore source file failed!");
+        }
+    }
+
+    protected boolean checkSuccess(List<String> compileMessage, String key) {
         for (String string : compileMessage) {
-            if (string.contains(_key_compile_suc)) {
+            if (string.contains(key)) {
                 return true;
             }
         }
@@ -162,12 +225,12 @@ public class Subject implements IExecute {
 
     @Override
     public boolean compile() {
-        return true;
+        return checkSuccess(ExecuteCommand.executeCompiling(this), _key_compile_suc);
     }
 
     @Override
     public boolean test() {
-        return true;
+        return checkSuccess(ExecuteCommand.executeTest(this), _key_test_suc);
     }
 
     @Override

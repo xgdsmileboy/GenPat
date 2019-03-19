@@ -7,6 +7,8 @@
 
 package mfix.common.util;
 
+import mfix.common.conf.Constant;
+
 /**
  * @author: Jiajun
  * @date: 2019-03-11

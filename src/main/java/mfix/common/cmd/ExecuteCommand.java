@@ -5,9 +5,10 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.common.util;
+package mfix.common.cmd;
 
 import mfix.common.java.Subject;
+import mfix.common.util.LevelLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +23,14 @@ import java.util.Map;
  * @date: 2019-02-05
  */
 public class ExecuteCommand {
+
+    public static List<String> execute(String[] cmd, String javaHome) {
+        return execute(getProcessBuilder(cmd, javaHome));
+    }
+
+    public static List<String> executeTest(Subject subject) {
+        return execute(getProcessBuilder(CmdFactory.createTestCommand(subject), subject.getJDKHome()));
+    }
 
     public static List<String> executeCompiling(Subject subject) {
         return execute(getProcessBuilder(CmdFactory.createComipleCommand(subject), subject.getJDKHome()));

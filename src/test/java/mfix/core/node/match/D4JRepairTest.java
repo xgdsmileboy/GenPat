@@ -7,13 +7,14 @@
 
 package mfix.core.node.match;
 
-import mfix.common.util.Constant;
+import mfix.TestCase;
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.TestCase;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
@@ -50,6 +51,16 @@ public class D4JRepairTest extends TestCase {
         test("math", 1);
     }
 
+    @Test
+    public void test_chart_4() {
+        test("chart", 4);
+    }
+
+    @Test
+    public void test_chart_6() {
+        test("chart", 6);
+    }
+
 
     private List<Pair<String, String>> buildFilePairs(String d4jproj, int id) {
         List<Pair<String, String>> list = new LinkedList<>();
@@ -77,7 +88,7 @@ public class D4JRepairTest extends TestCase {
             Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
             String buggy = srcFile;
-            Map<Integer, Set<String>> varMaps = NodeUtils.getUsableVarTypes(buggy);
+            Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
             CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
             final Set<MethodDeclaration> methods = new HashSet<>();
@@ -94,16 +105,17 @@ public class D4JRepairTest extends TestCase {
 
             NodeParser parser = new NodeParser();
             parser.setCompilationUnit(buggy, unit);
-            Matcher matcher = new Matcher();
             for (MethodDeclaration m : methods) {
                 Node node = parser.process(m);
+                VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
                 Set<String> already = new HashSet<>();
                 int count = 0;
                 for (Pattern p : patterns) {
-                    Set<MatchInstance> set = matcher.tryMatch(node, p);
+                    scope.reset(p.getNewVars());
+                    Set<MatchInstance> set = Matcher.tryMatch(node, p);
                     for (MatchInstance matchInstance : set) {
                         matchInstance.apply();
-                        StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>());
+                        StringBuffer buffer = node.adaptModifications(scope, new HashMap<>());
                         if (buffer != null) {
                             String tmp = buffer.toString();
                             if (!already.contains(tmp)) {
