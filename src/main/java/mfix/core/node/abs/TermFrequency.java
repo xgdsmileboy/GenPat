@@ -36,9 +36,9 @@ public class TermFrequency implements CodeAbstraction {
 
     static {
         try {
-//            _tokenMap = loadTokenMap(Constant.TF_IDF_TOKENS);
-            _apiMap = loadTokenMap(Constant.API_TOKENS);
-            _typeMap = loadTokenMap(Constant.TYPE_TOKENS);
+            _tokenMap = loadTokenMap(Constant.TF_IDF_TOKENS);
+//            _apiMap = loadTokenMap(Constant.API_TOKENS);
+//            _typeMap = loadTokenMap(Constant.TYPE_TOKENS);
         } catch (IOException e) {
             LevelLogger.fatal("Load token mapping ");
         }
