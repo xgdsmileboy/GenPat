@@ -100,6 +100,11 @@ public class TF_IDF implements CodeAbstraction {
         return tfidf > _threshold;
     }
 
+    @Override
+    public boolean shouldAbstract(Node node, Category category) {
+        return false;
+    }
+
     private class TokenCollector extends ASTVisitor {
 
         private String _file;

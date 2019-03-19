@@ -38,6 +38,9 @@ public class Constant {
     public static String PATTERN_VERSION;
 
     /* files used for pattern abstraction */
+    public final static String API_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_api.txt");
+    public final static String TYPE_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_type.txt");
+
     public final static String TF_IDF_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens.txt");
     public final static String DB_CACHE_FILE = Utils.join(SEP, RES_DIR, "db", "MethodTableElements.txt");
     public final static String DB_CACHE_FILE_WITH_TYPE = Utils.join(SEP, RES_DIR, "db", "MethodTableElementsWithType.txt");
