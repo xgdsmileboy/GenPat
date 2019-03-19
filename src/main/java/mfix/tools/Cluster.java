@@ -93,6 +93,10 @@ public class Cluster {
         Set<String> set = new HashSet<>();
         while ((line = br.readLine()) != null) {
             if (line.startsWith(baseDir)) {
+                int index = line.indexOf(">");
+                if (index > 0) {
+                    line = line.substring(0, index);
+                }
                 LevelLogger.debug(line);
                 keys = new Keys(set);
                 Set<String> paths = map.get(keys);
