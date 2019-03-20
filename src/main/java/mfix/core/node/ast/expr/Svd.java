@@ -222,7 +222,7 @@ public class Svd extends Expr {
 				return NodeUtils.matchSameNodeType(_name, svd.getName(), matchedNode, matchedStrings);
 			}
 			return false;
-		} else if (node instanceof Vdf) {
+		} else if ((node instanceof Vdf) && _modifications.isEmpty()) {
 			Vdf vdf = (Vdf) node;
 			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
