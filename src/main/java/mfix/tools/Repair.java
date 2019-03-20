@@ -342,9 +342,9 @@ public class Repair {
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             for (String s : patterns) {
                 if (shouldStop()) { break; }
-                Pattern p = readPattern(s);
-                scope.reset(p.getNewVars());
-                tryFix(node, p, scope, clazzFile);
+//                Pattern p = readPattern(s);
+//                scope.reset(p.getNewVars());
+//                tryFix(node, p, scope, clazzFile);
             }
         }
     }

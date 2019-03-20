@@ -1,5 +1,7 @@
 /.idea
 /logs
+/log
+/patch
 /tmp
 /target
 /patch
