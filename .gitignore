@@ -3,6 +3,7 @@
 /log
 /patch
 /tmp
+/sbfl/data
 /target
 /patch
 /projects
@@ -14,3 +15,4 @@
 /resources/**/target
 resources/db/AllTokens.txt
 *.log
+
