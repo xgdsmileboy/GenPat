@@ -24,6 +24,10 @@ import java.util.Map;
  */
 public class ExecuteCommand {
 
+    public static List<String> execute(String[] cmd, String javaHome, String d4jhome) {
+        return execute(getProcessBuilder(cmd, javaHome, d4jhome));
+    }
+
     public static List<String> execute(String[] cmd, String javaHome) {
         return execute(getProcessBuilder(cmd, javaHome));
     }
@@ -98,6 +102,15 @@ public class ExecuteCommand {
         ProcessBuilder builder = new ProcessBuilder(command);
         Map<String, String> evn = builder.environment();
         evn.put("JAVA_HOME", jhome);
+        evn.put("PATH", jhome + "/bin:" + evn.get("PATH"));
+        return builder;
+    }
+
+    private static ProcessBuilder getProcessBuilder(String[] command, String jhome, String d4jhome) {
+        ProcessBuilder builder = new ProcessBuilder(command);
+        Map<String, String> evn = builder.environment();
+        evn.put("JAVA_HOME", jhome);
+        evn.put("DEFECTS4J_HOME", d4jhome);
         evn.put("PATH", jhome + "/bin:" + evn.get("PATH"));
         return builder;
     }

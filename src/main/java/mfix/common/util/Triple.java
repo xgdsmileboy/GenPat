@@ -15,15 +15,15 @@ public class Triple<T1, T2, T>  {
 
     private T1 first;
     private T2 second;
-    private T tag;
+    private T third;
 
     public Triple() {
     }
 
-    public Triple(T1 fst, T2 snd, T tag){
+    public Triple(T1 fst, T2 snd, T third){
         this.first = fst;
         this.second = snd;
-        this.tag = tag;
+        this.third = third;
     }
 
     public T1 getFirst(){
@@ -34,8 +34,8 @@ public class Triple<T1, T2, T>  {
         return this.second;
     }
 
-    public T getTag() {
-        return this.tag;
+    public T getThird() {
+        return this.third;
     }
 
     public void setFirst(T1 fst){
@@ -46,8 +46,8 @@ public class Triple<T1, T2, T>  {
         this.second = snd;
     }
 
-    public void setTag(T tag) {
-        this.tag = tag;
+    public void setThird(T third) {
+        this.third = third;
     }
 
 }
