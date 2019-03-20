@@ -155,10 +155,10 @@ public class Repair {
                             LevelLogger.error("Record file format error : " + line);
                         } else {
                             patterns.add(new Pair<>(info[0], Integer.parseInt(info[1])));
-                            set.clear();
                         }
                     }
                 }
+                set.clear();
             } else {
                 set.add(line);
             }
