@@ -43,9 +43,10 @@ public class D4jSubject extends Subject {
         setTestSuccessMessage("Failing tests: 0");
     }
 
-    public void configFailedTestCases() {
+    public List<String> configFailedTestCases() {
         String file = Utils.join(Constant.SEP, Constant.D4J_FAILING_TEST, getName(), _id + ".txt");
         _failedTestCases = JavaFile.readFileToStringList(file);
+        return _failedTestCases;
     }
 
     private void setPath(String projName, int id) {

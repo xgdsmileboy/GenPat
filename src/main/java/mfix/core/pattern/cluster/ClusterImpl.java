@@ -71,7 +71,7 @@ public class ClusterImpl {
             }
             compareClusters.addAll(buildClusterPair(_returnedNodes));
             // Haffman-encoding-like merge, merge small sets first
-            compareClusters.sort(Comparator.comparingInt(Triple::getTag));
+            compareClusters.sort(Comparator.comparingInt(Triple::getThird));
             LevelLogger.debug("Pair size : " + compareClusters.size());
             _returnedNodes = new HashSet<>();
             if (currTaskCount >= _maxThreadCount || compareClusters.isEmpty()) {

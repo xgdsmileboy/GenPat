@@ -16,8 +16,8 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
-import mfix.core.locator.AbstractFaultLocalization;
-import mfix.core.locator.FaultLocalizationFactory;
+import mfix.core.locator.AbstractFaultLocator;
+import mfix.core.locator.FaultLocatorFactory;
 import mfix.core.locator.Location;
 import mfix.core.locator.purify.CommentTestCase;
 import mfix.core.locator.purify.Purification;
@@ -254,6 +254,7 @@ public class Repair {
         }
         String origin = bNode.toSrcString().toString();
         String buggyFile = bNode.getFileName();
+        String oriSrcCode = JavaFile.readFileToString(buggyFile);
         List<String> sources = JavaFile.readFileToStringList(buggyFile);
         sources.add(0, "");
         int startLine = bNode.getStartLine();
@@ -298,9 +299,6 @@ public class Repair {
                     writeLog(pattern.getPatternName(), buggyFile, origin,
                             pattern.getImports(), fixed, startLine, endLine, true);
                     _patchNum ++;
-                    if (shouldStop()) {
-                        return;
-                    }
                     break;
                 case TEST_FAILED:
                     writeLog(pattern.getPatternName(), buggyFile, origin,
@@ -310,6 +308,7 @@ public class Repair {
             }
             matchInstance.reset();
         }
+        JavaFile.writeStringToFile(buggyFile, oriSrcCode);
     }
 
     private void repair0(List<Location> locations, Map<String, Map<Integer, VarScope>> buggyFileVarMap) {
@@ -331,6 +330,10 @@ public class Repair {
                 buggyFileVarMap.put(file, varMaps);
             }
             Node node = getBuggyNode(file, location.getLine());
+            if (node == null) {
+                LevelLogger.error("Get faulty node failed ! " + file + "#" + location.getLine());
+                continue;
+            }
 
             List<String> patterns;
             try {
@@ -415,7 +418,7 @@ public class Repair {
                 currentFailedTests.addAll(purifiedFailedTestCases);
             }
 
-            AbstractFaultLocalization locator = FaultLocalizationFactory.dispatch(_subject);
+            AbstractFaultLocator locator = FaultLocatorFactory.dispatch(_subject);
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
 
             repair0(locations, buggyFileVarMap);

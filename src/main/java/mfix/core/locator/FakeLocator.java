@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2019-03-12
  */
-public class FakeLocator extends AbstractFaultLocalization {
+public class FakeLocator extends AbstractFaultLocator {
 
     public FakeLocator(FakeSubject subject) {
         super(subject);

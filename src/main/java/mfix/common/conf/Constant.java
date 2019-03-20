@@ -93,8 +93,10 @@ public class Constant {
     public final static String DEFAULT_PATTERN_HOME = "/home/jiajun/GithubData";
 
     /* system configuration for running external command (defects4j)*/
+    public static String D4J_HOME;
     public static String CMD_DEFECTS4J;
     public static String JAVA_7_HOME;
+    public static String CMD_TIMEOUT;
 
     /*
      * markers
@@ -113,6 +115,15 @@ public class Constant {
     public final static String D4J_PROJ_DEFAULT_HOME = Utils.join(SEP, HOME, "projects");
     public final static String D4J_PROJ_JSON_FILE = Utils.join(SEP, D4J_INFO_DIR, "project.json");
 
+    /* configurations for sbfl */
+    public final static int SBFL_TIMEOUT = 3600; //in seconds
+    public final static String LOCATOR_HOME = Utils.join(SEP, HOME, "sbfl");
+    public final static String COMMAND_LOCATOR = Utils.join(SEP, LOCATOR_HOME, "sbfl.sh ");
+    public final static String LOCATOR_SUSP_FILE_BASE = Utils.join(SEP, LOCATOR_HOME, "ochiai");
+    public final static String OCHIAI_RESULT = Utils.join(SEP, D4J_INFO_DIR, "location", "ochiai");
+    public final static String PROJ_REALTIME_LOC_BASE = Utils.join(SEP,D4J_INFO_DIR + "realtime", "location");
+
+
     static {
         Properties prop = new Properties();
         try {
@@ -121,8 +132,8 @@ public class Constant {
 
             // System commands
             JAVA_7_HOME = prop.getProperty("JAVA_7_HOME", "/Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home");
-            CMD_DEFECTS4J = prop.getProperty("DEFECTS4J_HOME", "/Users/Jiajun/Code/Defects4J/defects4j");
-            CMD_DEFECTS4J = Utils.join(SEP, CMD_DEFECTS4J, "framework", "bin", "defects4j");
+            D4J_HOME = prop.getProperty("DEFECTS4J_HOME", "/Users/Jiajun/Code/Defects4J/defects4j");
+            CMD_DEFECTS4J = Utils.join(SEP, D4J_HOME, "framework", "bin", "defects4j");
 
             PATTERN_VERSION = "ver" + prop.getProperty("PATTERN.VERSION", "1");
             String number = prop.getProperty("PATTERN.NUMBER", "All");
@@ -135,6 +146,9 @@ public class Constant {
             MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
             FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
             FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));
+
+            /* fault localization */
+            CMD_TIMEOUT = prop.getProperty("CMD.TIMEOUT", "/usr/bin/timeout");
         } catch (IOException e) {
             LevelLogger.error("#Constant get properties failed!" + e.getMessage());
         }

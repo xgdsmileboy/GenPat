@@ -7,6 +7,8 @@
 
 package mfix.common.cmd;
 
+import mfix.common.conf.Constant;
+import mfix.common.java.D4jSubject;
 import mfix.common.java.Subject;
 
 /**
@@ -14,6 +16,23 @@ import mfix.common.java.Subject;
  * @date: 2019-02-05
  */
 public class CmdFactory {
+
+    public static String[] createSbflCmd(D4jSubject subject, int timeout){
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("cd ").append(Constant.LOCATOR_HOME)
+                .append(" && ")
+                .append(Constant.CMD_TIMEOUT).append(" ")
+                .append(timeout)
+                .append(" ")
+                .append(Constant.COMMAND_LOCATOR)
+                .append(subject.getName())
+                .append(" ")
+                .append(subject.getId())
+                .append(" ")
+                .append(subject.getHome());
+        String[] cmd = new String[] { "/bin/bash", "-c", stringBuffer.toString() };
+        return cmd;
+    }
 
     public static String[] createCommand(String dir, String command) {
         StringBuffer stringBuffer = new StringBuffer();

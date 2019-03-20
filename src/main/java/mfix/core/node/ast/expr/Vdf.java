@@ -263,7 +263,7 @@ public class Vdf extends Node {
 					return true;
 				}
 			}
-		} else if (_expression != null && node instanceof Assign) {
+		} else if ((_expression != null) && (node instanceof Assign) && _modifications.isEmpty()) {
 			Assign assign = (Assign) node;
 			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
