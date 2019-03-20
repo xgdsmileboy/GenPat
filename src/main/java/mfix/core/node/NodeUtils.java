@@ -394,7 +394,7 @@ public class NodeUtils {
             Node parent = insertNode.getParent();
             List<Node> children = parent.getAllChildren();
             boolean tag = false;
-            for (int index = children.size(); index >= 0; index--) {
+            for (int index = children.size() - 1; index >= 0; index--) {
                 if (insertNode == children.get(index)) {
                     tag = true;
                 } else if (tag) {
