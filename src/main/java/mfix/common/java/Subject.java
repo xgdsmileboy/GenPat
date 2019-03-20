@@ -8,6 +8,7 @@
 package mfix.common.java;
 
 import mfix.common.cmd.ExecuteCommand;
+import mfix.common.conf.Configure;
 import mfix.common.util.LevelLogger;
 import org.apache.commons.io.FileUtils;
 

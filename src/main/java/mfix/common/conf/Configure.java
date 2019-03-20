@@ -5,9 +5,10 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.common.java;
+package mfix.common.conf;
 
 import mfix.common.conf.Constant;
+import mfix.common.java.Subject;
 import mfix.common.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
