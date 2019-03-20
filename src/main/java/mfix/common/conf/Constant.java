@@ -108,6 +108,7 @@ public class Constant {
     public final static String D4J_SRC_INFO = Utils.join(SEP, D4J_INFO_DIR, "src_path");
     public final static String D4J_FAILING_TEST = Utils.join(SEP, D4J_INFO_DIR, "failed_tests");
     public final static String D4J_PROJ_DEFAULT_HOME = Utils.join(SEP, HOME, "projects");
+    public final static String D4J_PROJ_JSON_FILE = Utils.join(SEP, "project.json");
 
     static {
         Properties prop = new Properties();

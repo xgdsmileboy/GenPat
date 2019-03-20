@@ -208,6 +208,10 @@ public class Subject implements IExecute {
         restore(testDir, testDir + "_bak");
     }
 
+    public void restore(String file) throws IOException {
+        restore(file, file + "_bak");
+    }
+
     private void restore(String file, String tar) throws IOException {
         File tarFile = new File(tar);
         if (tarFile.exists()) {
@@ -236,6 +240,10 @@ public class Subject implements IExecute {
             file.mkdirs();
         }
         return true;
+    }
+
+    public boolean purify() {
+        return Configure.shouldPurify(this);
     }
 
     @Override
