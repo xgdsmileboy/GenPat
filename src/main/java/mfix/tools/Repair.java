@@ -60,6 +60,7 @@ public class Repair {
 
     private Subject _subject;
     private String _logfile;
+    private String _patchFile;
     private int _patchNum;
     private String _patternRecords;
     private Timer _timer;
@@ -69,7 +70,8 @@ public class Repair {
         _subject = subject;
         _patchNum = 0;
         _patternRecords = patternRecords;
-        _logfile = Utils.join(Constant.SEP, Constant.PATCH_PATH, subject.getLogFilePath(), "log.txt");
+        _patchFile = _subject.getPatchFile();
+        _logfile = _subject.getLogFile();
         _timer = new Timer(Constant.MAX_REPAIR_TIME);
     }
 
@@ -204,7 +206,7 @@ public class Repair {
 
 
     private void writeLog(String patternName, String buggyFile, String original, Set<String> imports,
-                          String fixed, int startLine, int endLine) {
+                          String fixed, int startLine, int endLine, boolean patch) {
         LevelLogger.debug(patternName);
         LevelLogger.debug("------------ Origin ---------------");
         LevelLogger.debug(original);
@@ -228,7 +230,9 @@ public class Repair {
                 .append(endLine)
                 .append(']')
                 .append(Constant.NEW_LINE)
-                .append("------------ Solution ---------------")
+                .append("------------")
+                .append(patch ? "Solution" : "Candidate")
+                .append("---------------")
                 .append(Constant.NEW_LINE)
                 .append(diff.toString())
                 .append(Constant.NEW_LINE)
@@ -239,6 +243,9 @@ public class Repair {
                 .append(Constant.NEW_LINE);
 
         JavaFile.writeStringToFile(_logfile, buffer.toString(), true);
+        if (patch) {
+            JavaFile.writeStringToFile(_patchFile, buffer.toString(), true);
+        }
     }
 
     protected void tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile) {
@@ -289,13 +296,15 @@ public class Repair {
             switch (validate(buggyFile, code)) {
                 case PASS:
                     writeLog(pattern.getPatternName(), buggyFile, origin,
-                            pattern.getImports(), fixed, startLine, endLine);
+                            pattern.getImports(), fixed, startLine, endLine, true);
                     _patchNum ++;
                     if (shouldStop()) {
                         return;
                     }
                     break;
                 case TEST_FAILED:
+                    writeLog(pattern.getPatternName(), buggyFile, origin,
+                            pattern.getImports(), fixed, startLine, endLine, false);
                 case COMPILE_FAILED:
                 default:
             }

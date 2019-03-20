@@ -83,8 +83,11 @@ public class Constant {
     /* max number of modifications for pattern filtering */
     public static int FILTER_MAX_CHANGE_ACTION;
 
-    /* default directory to same patch log info */
+    /* default directory to patch log info */
     public final static String PATCH_PATH = Utils.join(SEP, HOME, "patch");
+
+    /* default directory to log info */
+    public final static String REPAIR_LOG_PATH = Utils.join(SEP, HOME, "log");
 
     /* default home directory of pattern files */
     public final static String DEFAULT_PATTERN_HOME = "/home/jiajun/GithubData";

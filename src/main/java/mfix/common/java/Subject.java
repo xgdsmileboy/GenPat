@@ -9,7 +9,9 @@ package mfix.common.java;
 
 import mfix.common.cmd.ExecuteCommand;
 import mfix.common.conf.Configure;
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
+import mfix.common.util.Utils;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -182,8 +184,12 @@ public class Subject implements IExecute {
         return _jdk_home;
     }
 
-    public String getLogFilePath() {
-        return _name;
+    public String getPatchFile() {
+        return Utils.join(Constant.SEP, Constant.PATCH_PATH, _name, _id + ".txt");
+    }
+
+    public String getLogFile() {
+        return Utils.join(Constant.SEP, Constant.REPAIR_LOG_PATH, _name, _id + ".txt");
     }
 
     public void backup() throws IOException {
