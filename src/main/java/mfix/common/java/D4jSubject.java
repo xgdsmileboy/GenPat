@@ -24,7 +24,6 @@ import java.util.List;
 public class D4jSubject extends Subject {
 
     public final static String NAME = "D4jSubject";
-    private int _id;
     private List<String> _failedTestCases;
 
     public D4jSubject(String base, String name, int id) {
@@ -42,10 +41,6 @@ public class D4jSubject extends Subject {
         setJDKHome(Constant.JAVA_7_HOME);
         setCompileSuccessMessage("BUILD SUCCESSFUL");
         setTestSuccessMessage("Failing tests: 0");
-    }
-
-    public int getId() {
-        return _id;
     }
 
     public void configFailedTestCases() {
@@ -67,11 +62,40 @@ public class D4jSubject extends Subject {
     }
 
     @Override
-    public String getLogFilePath() {
-        return _name + '/' + _id;
+    public boolean test() {
+        if (_failedTestCases != null) {
+            for (String testcase : _failedTestCases) {
+                LevelLogger.debug("TESTING : " + testcase);
+                if (!test(testcase)) {
+                    LevelLogger.debug("FAILED : " + testcase);
+                    return false;
+                } else {
+                    LevelLogger.debug("PASS : " + testcase);
+                }
+            }
+        }
+        return super.test();
     }
 
-    private List<String> obtainClasspath(final String projName) {
+    @Override
+    public boolean test(String testcase) {
+        LevelLogger.info("SINGLE TEST : " + testcase);
+        return checkSuccess(ExecuteCommand.execute(CmdFactory.createCommand(getHome(),
+                Constant.CMD_DEFECTS4J + " test -t " + testcase), getJDKHome()), _key_test_suc);
+    }
+
+    public boolean test(String clazz, String method) {
+        return test(clazz + "::" + method);
+    }
+
+    @Override
+    public String toString() {
+        return "[_name=" + _name + ", " + ", _id=" + _id + ", _ssrc=" + _ssrc
+                + ", _tsrc=" + _tsrc + ", _sbin=" + _sbin
+                + ", _tbin=" + _tbin + "]";
+    }
+
+    private static List<String> obtainClasspath(final String projName) {
         List<String> classpath = new LinkedList<String>();
         switch (projName) {
             case "math":
@@ -114,32 +138,5 @@ public class D4jSubject extends Subject {
                 System.err.println("UNKNOWN project name : " + projName);
         }
         return classpath;
-    }
-
-    @Override
-    public boolean test() {
-        if (_failedTestCases != null) {
-            String home = getHome();
-            String jdk = getJDKHome();
-            for (String test : _failedTestCases) {
-                LevelLogger.debug("TESTING : " + test);
-                if (!checkSuccess(ExecuteCommand.execute(
-                        CmdFactory.createCommand(home, Constant.CMD_DEFECTS4J + " test -t " + test),
-                        jdk), _key_test_suc)) {
-                    LevelLogger.debug("FAILED : " + test);
-                    return false;
-                } else {
-                    LevelLogger.debug("PASS : " + test);
-                }
-            }
-        }
-        return super.test();
-    }
-
-    @Override
-    public String toString() {
-        return "[_name=" + _name + ", " + ", _id=" + _id + ", _ssrc=" + _ssrc
-                + ", _tsrc=" + _tsrc + ", _sbin=" + _sbin
-                + ", _tbin=" + _tbin + "]";
     }
 }

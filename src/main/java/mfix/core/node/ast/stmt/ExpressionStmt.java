@@ -107,8 +107,9 @@ public class ExpressionStmt extends Stmt {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.combineFeature(_expression.getFeatureVector());
+        _selfFVector = new FVector();
+        _completeFVector = new FVector();
+        _completeFVector.combineFeature(_expression.getFeatureVector());
     }
 
     @Override

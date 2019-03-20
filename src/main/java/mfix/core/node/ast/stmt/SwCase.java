@@ -131,10 +131,13 @@ public class SwCase extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_CASE);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_CASE);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_CASE);
 		if(_expression != null) {
-			_fVector.combineFeature(_expression.getFeatureVector());
+			_completeFVector.combineFeature(_expression.getFeatureVector());
 		}
 	}
 

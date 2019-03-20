@@ -73,8 +73,11 @@ public class ThisExpr extends Expr {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_THIS);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_THIS);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_THIS);
 	}
 
 	@Override

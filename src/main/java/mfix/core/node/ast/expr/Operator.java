@@ -48,7 +48,10 @@ public abstract class Operator extends Node {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
+		_selfFVector = new FVector();
+		_selfFVector.inc(toSrcString().toString());
+		_completeFVector = new FVector();
+		_completeFVector.inc(toSrcString().toString());
 	}
 
 	@Override

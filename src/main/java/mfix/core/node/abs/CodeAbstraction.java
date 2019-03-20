@@ -15,7 +15,14 @@ import mfix.core.node.ast.Node;
  */
 public interface CodeAbstraction {
 
+    enum Category{
+        API,
+        TYPE
+    }
+
     boolean shouldAbstract(Node node);
+
+    boolean shouldAbstract(Node node, Category category);
 
     CodeAbstraction lazyInit();
 

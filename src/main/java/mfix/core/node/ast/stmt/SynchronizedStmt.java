@@ -120,10 +120,13 @@ public class SynchronizedStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_SYNC);
-		_fVector.combineFeature(_expression.getFeatureVector());
-		_fVector.combineFeature(_blk.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_SYNC);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_SYNC);
+		_completeFVector.combineFeature(_expression.getFeatureVector());
+		_completeFVector.combineFeature(_blk.getFeatureVector());
 	}
 
 	@Override

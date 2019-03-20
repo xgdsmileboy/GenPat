@@ -11,11 +11,11 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.AnonymousClassDecl;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -178,13 +178,16 @@ public class ClassInstCreation extends Expr {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.KEY_NEW);
-        _fVector.inc(FVector.E_CLASS);
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.KEY_NEW);
+        _selfFVector.inc(FVector.E_CLASS);
+
+        _completeFVector = new FVector();
+        _completeFVector.combineFeature(_selfFVector);
         if (_expression != null) {
-            _fVector.combineFeature(_expression.getFeatureVector());
+            _completeFVector.combineFeature(_expression.getFeatureVector());
         }
-        _fVector.combineFeature(_arguments.getFeatureVector());
+        _completeFVector.combineFeature(_arguments.getFeatureVector());
     }
 
     @Override

@@ -116,14 +116,17 @@ public class QName extends Label {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
+		_selfFVector = new FVector();
+
+		_completeFVector = new FVector();
 		String name = _name.toString();
 		String sname = _sname.toString();
 		if (_name instanceof SName && Character.isUpperCase(name.charAt(0)) && sname.toUpperCase().equals(sname)) {
-			_fVector.inc(FVector.OTHER);
+			_selfFVector.inc(FVector.OTHER);
+			_completeFVector.inc(FVector.OTHER);
 		} else {
-			_fVector.combineFeature(_name.getFeatureVector());
-			_fVector.combineFeature(_sname.getFeatureVector());
+			_completeFVector.combineFeature(_name.getFeatureVector());
+			_completeFVector.combineFeature(_sname.getFeatureVector());
 		}
 	}
 

@@ -191,14 +191,17 @@ public class ForStmt extends Stmt {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.KEY_FOR);
-        _fVector.combineFeature(_initializers.getFeatureVector());
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.KEY_FOR);
+
+        _completeFVector = new FVector();
+        _completeFVector.inc(FVector.KEY_FOR);
+        _completeFVector.combineFeature(_initializers.getFeatureVector());
         if (_condition != null) {
-            _fVector.combineFeature(_condition.getFeatureVector());
+            _completeFVector.combineFeature(_condition.getFeatureVector());
         }
-        _fVector.combineFeature(_updaters.getFeatureVector());
-        _fVector.combineFeature(_body.getFeatureVector());
+        _completeFVector.combineFeature(_updaters.getFeatureVector());
+        _completeFVector.combineFeature(_body.getFeatureVector());
     }
 
     @Override

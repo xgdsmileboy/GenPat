@@ -38,6 +38,9 @@ public class Constant {
     public static String PATTERN_VERSION;
 
     /* files used for pattern abstraction */
+    public final static String API_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_api.txt");
+    public final static String TYPE_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_type.txt");
+
     public final static String TF_IDF_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens.txt");
     public final static String DB_CACHE_FILE = Utils.join(SEP, RES_DIR, "db", "MethodTableElements.txt");
     public final static String DB_CACHE_FILE_WITH_TYPE = Utils.join(SEP, RES_DIR, "db", "MethodTableElementsWithType.txt");
@@ -80,8 +83,11 @@ public class Constant {
     /* max number of modifications for pattern filtering */
     public static int FILTER_MAX_CHANGE_ACTION;
 
-    /* default directory to same patch log info */
+    /* default directory to patch log info */
     public final static String PATCH_PATH = Utils.join(SEP, HOME, "patch");
+
+    /* default directory to log info */
+    public final static String REPAIR_LOG_PATH = Utils.join(SEP, HOME, "log");
 
     /* default home directory of pattern files */
     public final static String DEFAULT_PATTERN_HOME = "/home/jiajun/GithubData";
@@ -105,6 +111,7 @@ public class Constant {
     public final static String D4J_SRC_INFO = Utils.join(SEP, D4J_INFO_DIR, "src_path");
     public final static String D4J_FAILING_TEST = Utils.join(SEP, D4J_INFO_DIR, "failed_tests");
     public final static String D4J_PROJ_DEFAULT_HOME = Utils.join(SEP, HOME, "projects");
+    public final static String D4J_PROJ_JSON_FILE = Utils.join(SEP, D4J_INFO_DIR, "project.json");
 
     static {
         Properties prop = new Properties();

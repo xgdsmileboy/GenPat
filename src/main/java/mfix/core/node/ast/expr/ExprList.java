@@ -139,9 +139,13 @@ public class ExprList extends Node {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.E_EXPLIST);
+
+        _completeFVector = new FVector();
+        _completeFVector.inc(FVector.E_EXPLIST);
         for (Expr expr : _exprs) {
-            _fVector.combineFeature(expr.getFeatureVector());
+            _completeFVector.combineFeature(expr.getFeatureVector());
         }
     }
 

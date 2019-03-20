@@ -159,11 +159,14 @@ public class SwitchStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_SWITCH);
-		_fVector.combineFeature(_expression.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_SWITCH);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_SWITCH);
+		_completeFVector.combineFeature(_expression.getFeatureVector());
 		for(Stmt stmt : _statements) {
-			_fVector.combineFeature(stmt.getFeatureVector());
+			_completeFVector.combineFeature(stmt.getFeatureVector());
 		}
 	}
 

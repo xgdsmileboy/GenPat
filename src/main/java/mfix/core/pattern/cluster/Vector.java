@@ -7,12 +7,15 @@
 
 package mfix.core.pattern.cluster;
 
+import java.io.Serializable;
+
 /**
  * @author: Jiajun
  * @date: 2019-02-11
  */
-public class Vector {
+public class Vector implements Serializable {
 
+    private static final long serialVersionUID = -1743374775134657851L;
     private long _vec;
     private final int size = VIndex.LENGTH;
 

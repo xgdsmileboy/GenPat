@@ -80,8 +80,11 @@ public class SName extends Label {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.E_VAR);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.E_VAR);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.E_VAR);
 	}
 
 	@Override

@@ -227,12 +227,13 @@ public class MethDecl extends Node {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
+        _selfFVector = new FVector();
+        _completeFVector = new FVector();
         for (Expr expr : _arguments) {
-            _fVector.combineFeature(expr.getFeatureVector());
+            _completeFVector.combineFeature(expr.getFeatureVector());
         }
         if (_body != null) {
-            _fVector.combineFeature(_body.getFeatureVector());
+            _completeFVector.combineFeature(_body.getFeatureVector());
         }
     }
 

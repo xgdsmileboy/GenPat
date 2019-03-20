@@ -32,6 +32,9 @@ public abstract class Expr extends Node {
     protected String _exprTypeStr = "?";
     protected transient Type _exprType = null;
 
+    protected boolean _abstractNode = true;
+    protected boolean _abstractType = true;
+
     protected Expr(String fileName, int startLine, int endLine, ASTNode node) {
         super(fileName, startLine, endLine, node, null);
     }

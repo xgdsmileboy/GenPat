@@ -127,9 +127,12 @@ public class ConstructorInv extends Stmt {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.KEY_THIS);
-        _fVector.combineFeature(_arguments.getFeatureVector());
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.KEY_THIS);
+
+        _completeFVector = new FVector();
+        _completeFVector.inc(FVector.KEY_THIS);
+        _completeFVector.combineFeature(_arguments.getFeatureVector());
     }
 
     @Override

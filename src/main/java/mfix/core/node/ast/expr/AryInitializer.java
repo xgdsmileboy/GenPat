@@ -9,9 +9,9 @@ package mfix.core.node.ast.expr;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
+import mfix.core.node.match.metric.FVector;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
-import mfix.core.node.match.metric.FVector;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -120,11 +120,14 @@ public class AryInitializer extends Expr {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.E_AINIT);
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.E_AINIT);
+
+        _completeFVector = new FVector();
+        _completeFVector.combineFeature(_selfFVector);
         if (_expressions != null) {
             for (Expr expr : _expressions) {
-                _fVector.combineFeature(expr.getFeatureVector());
+                _completeFVector.combineFeature(expr.getFeatureVector());
             }
         }
     }

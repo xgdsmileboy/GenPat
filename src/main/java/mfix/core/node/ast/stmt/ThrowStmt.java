@@ -114,9 +114,12 @@ public class ThrowStmt extends Stmt {
 	
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.KEY_THROW);
-		_fVector.combineFeature(_expression.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.KEY_THROW);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.KEY_THROW);
+		_completeFVector.combineFeature(_expression.getFeatureVector());
 	}
 
 	@Override

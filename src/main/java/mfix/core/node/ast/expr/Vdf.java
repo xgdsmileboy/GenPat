@@ -54,6 +54,10 @@ public class Vdf extends Node {
 		_identifier = identifier;
 	}
 
+	public SName getNameNode() {
+		return _identifier;
+	}
+
 	public String getName() {
 		return _identifier.getName();
 	}
@@ -183,11 +187,16 @@ public class Vdf extends Node {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.combineFeature(_identifier.getFeatureVector());
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.E_VARDEF);
+
+		_completeFVector = new FVector();
+		_completeFVector.inc(FVector.E_VARDEF);
+		_completeFVector.combineFeature(_identifier.getFeatureVector());
 		if (_expression != null) {
-			_fVector.inc(FVector.ARITH_ASSIGN);
-			_fVector.combineFeature(_expression.getFeatureVector());
+			_selfFVector.inc(FVector.ARITH_ASSIGN);
+			_completeFVector.inc(FVector.ARITH_ASSIGN);
+			_completeFVector.combineFeature(_expression.getFeatureVector());
 		}
 	}
 

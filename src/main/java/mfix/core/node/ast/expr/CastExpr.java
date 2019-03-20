@@ -10,11 +10,11 @@ import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
-import mfix.core.pattern.cluster.NameMapping;
-import mfix.core.pattern.cluster.VIndex;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.pattern.cluster.NameMapping;
+import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -114,9 +114,12 @@ public class CastExpr extends Expr {
 
     @Override
     public void computeFeatureVector() {
-        _fVector = new FVector();
-        _fVector.inc(FVector.KEY_CAST);
-        _fVector.combineFeature(_expression.getFeatureVector());
+        _selfFVector = new FVector();
+        _selfFVector.inc(FVector.KEY_CAST);
+
+        _completeFVector = new FVector();
+        _completeFVector.combineFeature(_selfFVector);
+        _completeFVector.combineFeature(_expression.getFeatureVector());
     }
 
     @Override

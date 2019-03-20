@@ -59,6 +59,15 @@ public class RepairTest extends TestCase {
         test("closure", 2);
     }
 
+    @Test
+    public void test_lang_33() {
+        test("lang", 33);
+    }
+
+    @Test
+    public void test_chart_4() {
+        test("chart", 4);
+    }
 
     private void test(String proj, int id) {
         String buggyFile = Utils.join(Constant.SEP, base, proj + "_" + id, "buggy.java");
@@ -84,6 +93,7 @@ public class RepairTest extends TestCase {
                     location.getRelClazzFile().replace(".java", ".class");
             Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(file);
             Node node = getBuggyNode(file, location.getLine());
+            if (node == null) continue;
             List<Pattern> list = new LinkedList<>(patterns);//filter(node, patterns);
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             for (Pattern p : list) {

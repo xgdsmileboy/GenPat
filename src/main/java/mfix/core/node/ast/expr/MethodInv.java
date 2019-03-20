@@ -173,12 +173,15 @@ public class MethodInv extends Expr {
 
 	@Override
 	public void computeFeatureVector() {
-		_fVector = new FVector();
-		_fVector.inc(FVector.E_MINV);
+		_selfFVector = new FVector();
+		_selfFVector.inc(FVector.E_MINV);
+
+		_completeFVector = new FVector();
+		_completeFVector.combineFeature(_selfFVector);
 		if (_expression != null) {
-			_fVector.combineFeature(_expression.getFeatureVector());
+			_completeFVector.combineFeature(_expression.getFeatureVector());
 		}
-		_fVector.combineFeature(_arguments.getFeatureVector());
+		_completeFVector.combineFeature(_arguments.getFeatureVector());
 	}
 
 	@Override

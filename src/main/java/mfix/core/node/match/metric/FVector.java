@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 public class FVector implements Serializable {
 
+
     //Arithmetic
     public static final int ARITH_PLUS = 0;
     public static final int ARITH_MINUS = 1;
@@ -85,8 +86,10 @@ public class FVector implements Serializable {
     public static final int E_PREFIX = 62;
     public static final int E_VAR = 63;
     public static final int E_ANONY = 64;
-    public static final int OTHER = 65;
-	public static final int VECTOR_LEN = 66;
+    public static final int E_EXPLIST = 65;
+    public static final int E_VARDEF = 66;
+    public static final int OTHER = 67;
+	public static final int VECTOR_LEN = 68;
 	private static final long serialVersionUID = -2160573999272597201L;
 
 	private int[] _vector = new int[VECTOR_LEN];
@@ -239,13 +242,30 @@ public class FVector implements Serializable {
 		delta = Math.sqrt(delta / biggest);
 		return delta;
 	}
-	
+
+
+	public static FVector from(String string) {
+		FVector fVector = new FVector();
+		if (string == null) return fVector;
+		if (string.startsWith("[") && string.endsWith("]")) {
+			String[] src = string.split(",");
+			if (src.length == VECTOR_LEN) {
+				try {
+					for (int i = 0; i < src.length; i++) {
+						fVector._vector[i] = Integer.parseInt(src[i]);
+					}
+				} catch (Exception e) {}
+			}
+		}
+		return fVector;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer stringBuffer = new StringBuffer("[");
 		stringBuffer.append(_vector[0]);
 		for(int i = 1; i < VECTOR_LEN; i++){
-			stringBuffer.append(", " + _vector[i]);
+			stringBuffer.append("," + _vector[i]);
 		}
 		stringBuffer.append("]");
 		return stringBuffer.toString();
