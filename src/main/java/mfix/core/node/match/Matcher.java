@@ -399,6 +399,17 @@ public class Matcher {
 
         src.postAccurateMatch(tar);
         src.genModifications();
+        Set<Modification> modifications = src.getAllModifications(new HashSet<>());
+        // System.exit(0);
+        java.util.regex.Pattern avoid = java.util.regex.Pattern.compile("System\\.exit\\(\\d+\\);");
+        for (Modification m : modifications) {
+            if(m instanceof Insertion) {
+                Insertion insertion = (Insertion) m;
+                if (avoid.matcher(insertion.getInsertedNode().toSrcString().toString()).matches()) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
