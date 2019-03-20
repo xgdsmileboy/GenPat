@@ -16,7 +16,7 @@ import mfix.common.util.LevelLogger;
  * @author: Jiajun
  * @date: 2019-03-12
  */
-public class FaultLocalizationFactory {
+public class FaultLocatorFactory {
 
     public static AbstractFaultLocator dispatch(Subject subject) {
         AbstractFaultLocator locator = null;

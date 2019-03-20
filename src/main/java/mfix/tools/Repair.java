@@ -17,7 +17,7 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.locator.AbstractFaultLocator;
-import mfix.core.locator.FaultLocalizationFactory;
+import mfix.core.locator.FaultLocatorFactory;
 import mfix.core.locator.Location;
 import mfix.core.locator.purify.CommentTestCase;
 import mfix.core.locator.purify.Purification;
@@ -418,7 +418,7 @@ public class Repair {
                 currentFailedTests.addAll(purifiedFailedTestCases);
             }
 
-            AbstractFaultLocator locator = FaultLocalizationFactory.dispatch(_subject);
+            AbstractFaultLocator locator = FaultLocatorFactory.dispatch(_subject);
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
 
             repair0(locations, buggyFileVarMap);
