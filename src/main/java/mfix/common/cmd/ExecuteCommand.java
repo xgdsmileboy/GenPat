@@ -44,6 +44,12 @@ public class ExecuteCommand {
      * @return output information when running given command
      */
     private static List<String> execute(ProcessBuilder builder) {
+//        LevelLogger.info("Execute : " + builder.command());
+//        StringBuffer buffer = new StringBuffer();
+//        for (Map.Entry<String, String> entry : builder.environment().entrySet()) {
+//            buffer.append(entry.getKey()).append('=').append(entry.getValue()).append(Constant.NEW_LINE);
+//        }
+//        LevelLogger.debug("Environment : " + builder.environment());
         Process process = null;
         final List<String> results = new ArrayList<String>();
         try {

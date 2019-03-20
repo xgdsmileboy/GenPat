@@ -29,6 +29,7 @@ public class Subject implements IExecute {
     protected String _tsrc;
     protected String _sbin;
     protected String _tbin;
+    protected int _id = 1;
 
     protected boolean _compile_file = false;
     protected boolean _compileProject = false;
@@ -82,6 +83,10 @@ public class Subject implements IExecute {
 
     public String getName() {
         return _name;
+    }
+
+    public int getId() {
+        return _id;
     }
 
     public String getSsrc() {
@@ -181,8 +186,13 @@ public class Subject implements IExecute {
     }
 
     public void backup() throws IOException {
-        String file = getHome() + getSsrc();
-        String tar = file + "_bak";
+        String srcDir = getHome() + getSsrc();
+        backup(srcDir, srcDir + "_bak");
+        String testDir = getHome() + getTsrc();
+        backup(testDir, testDir + "_bak");
+    }
+
+    private void backup(String file, String tar) throws IOException {
         File tarFile = new File(tar);
         if (tarFile.exists()) {
             FileUtils.copyDirectory(tarFile, new File(file));
@@ -192,8 +202,13 @@ public class Subject implements IExecute {
     }
 
     public void restore() throws IOException {
-        String file = getHome() + getSsrc();
-        String tar = file + "_bak";
+        String srcDir = getHome() + getSsrc();
+        restore(srcDir, srcDir + "_bak");
+        String testDir = getHome() + getTsrc();
+        restore(testDir, testDir + "_bak");
+    }
+
+    private void restore(String file, String tar) throws IOException {
         File tarFile = new File(tar);
         if (tarFile.exists()) {
             FileUtils.copyDirectory(tarFile, new File(file));
@@ -231,6 +246,16 @@ public class Subject implements IExecute {
     @Override
     public boolean test() {
         return checkSuccess(ExecuteCommand.executeTest(this), _key_test_suc);
+    }
+
+    @Override
+    public boolean test(String testcase) {
+        return true;
+    }
+
+    @Override
+    public boolean test(String clazz, String method) {
+        return true;
     }
 
     @Override
