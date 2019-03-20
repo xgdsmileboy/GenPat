@@ -16,6 +16,7 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MType;
+import mfix.core.node.ast.stmt.IfStmt;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.match.metric.FVector.ALGO;
 import mfix.core.node.modify.Deletion;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -339,33 +341,93 @@ public class NodeUtils {
             }
             Insertion ins = insertions.get(i);
             Set<Node> nodes = ins.getInsertedNode().recursivelyGetDataDependency(new HashSet<>());
-            if (nodes.isEmpty()) {
-                Node insertNode = ins.getInsertedNode();
-                Node parent = insertNode.getParent();
-                List<Node> children = parent.getAllChildren();
-                for (int index = 0; index < children.size(); index++) {
-                    if (insertNode == children.get(index)) {
-                        if (index > 0) {
-                            children.get(index - 1).setInsertDepend(true);
-                            ins.setPrenode(children.get(index - 1));
-                        }
-                        if (index < children.size() - 1) {
-                            children.get(index + 1).setInsertDepend(true);
-                            ins.setNextnode(children.get(index + 1));
-                        }
-                    }
-                }
-            } else {
+            if (!nodes.isEmpty()) {
                 for (Node node : nodes) {
                     if (node.getBindingNode() != null) {
                         node.getBindingNode().setInsertDepend(true);
                     }
                 }
             }
+            if (ins.getInsertedNode().getNodeType() == Node.TYPE.IF) {
+                IfStmt insertNode = (IfStmt) ins.getInsertedNode();
+                Set<String> vars = insertNode.getCondition()
+                        .flattenTreeNode(new LinkedList<>()).stream()
+                        .filter(n->n.getNodeType()== Node.TYPE.SNAME)
+                        .map(n->n.toSrcString().toString())
+                        .collect(Collectors.toSet());
+                ins.setNextnode(findNextDepend(insertNode, vars));
+                if (nodes.isEmpty()) {
+                    ins.setPrenode(findPreDepend(insertNode, vars));
+                }
+            }
             modifications.add(ins);
         }
         return modifications;
+    }
 
+    private static Node findNextDepend(IfStmt insertNode, Set<String> vars) {
+        if (!vars.isEmpty()) {
+            Node parent = insertNode.getParent();
+            List<Node> children = parent.getAllChildren();
+            boolean tag = false;
+            for (int index = 0; index < children.size(); index++) {
+                if (insertNode == children.get(index)) {
+                    tag = true;
+                } else if (tag) {
+                    Set<Node> nodes = children.get(index)
+                            .flattenTreeNode(new LinkedList<>()).stream()
+                            .filter(n -> n.getNodeType() == Node.TYPE.SNAME
+                                    && vars.contains(n.toSrcString().toString()))
+                            .collect(Collectors.toSet());
+                    Node dep = getBoundedCommonParent(children.get(index), nodes);
+                    if (dep != null && dep.getBindingNode() != null) {
+                        return dep.getBindingNode();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Node findPreDepend(Node insertNode, Set<String> vars) {
+        if (!vars.isEmpty()) {
+            Node parent = insertNode.getParent();
+            List<Node> children = parent.getAllChildren();
+            boolean tag = false;
+            for (int index = children.size(); index >= 0; index--) {
+                if (insertNode == children.get(index)) {
+                    tag = true;
+                } else if (tag) {
+                    Set<Node> nodes = children.get(index)
+                            .flattenTreeNode(new LinkedList<>()).stream()
+                            .filter(n -> n.getNodeType() == Node.TYPE.SNAME
+                                    && vars.contains(n.toSrcString().toString()))
+                            .collect(Collectors.toSet());
+                    Node dep = getBoundedCommonParent(children.get(index), nodes);
+                    if (dep != null && dep.getBindingNode() != null) {
+                        return dep.getBindingNode();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Node getBoundedCommonParent(Node parent, Set<Node> nodes) {
+        if (nodes == null || nodes.isEmpty()) return null;
+        for (Node child : parent.getAllChildren()) {
+            boolean isCommonParent = true;
+            for (Node n : nodes) {
+                if (!child.isParentOf(n)) {
+                    isCommonParent = false;
+                    break;
+                }
+            }
+            if (isCommonParent && child.getBindingNode() != null) {
+                return child;
+            }
+        }
+        return parent;
     }
 
 
