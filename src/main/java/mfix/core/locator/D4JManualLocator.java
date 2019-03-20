@@ -20,7 +20,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/25
  */
-public class D4JManualLocator extends AbstractFaultLocalization {
+public class D4JManualLocator extends AbstractFaultLocator {
 
 
     public D4JManualLocator(D4jSubject subject) {

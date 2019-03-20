@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * @author: Jiajun
  * @date: 2019-03-20
  */
-public class SBFLocator extends AbstractFaultLocalization {
+public class SBFLocator extends AbstractFaultLocator {
 
     public SBFLocator(D4jSubject subject) {
         super(subject);

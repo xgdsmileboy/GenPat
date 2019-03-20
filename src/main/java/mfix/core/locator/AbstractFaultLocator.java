@@ -16,7 +16,7 @@ import java.util.List;
  * @author: Jiajun
  * @date: 2018/9/25
  */
-public abstract class AbstractFaultLocalization {
+public abstract class AbstractFaultLocator {
 
     protected final int DEFAULT_THRETHOD = 0;
     protected Subject _subject;
@@ -24,7 +24,7 @@ public abstract class AbstractFaultLocalization {
     protected List<String> _passedTests;
     protected List<Location> _faultyLocations;
 
-    public AbstractFaultLocalization(Subject subject) {
+    public AbstractFaultLocator(Subject subject) {
         _subject = subject;
         _failedTests = new ArrayList<>();
         _passedTests = new ArrayList<>();
