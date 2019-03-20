@@ -254,6 +254,7 @@ public class Repair {
         }
         String origin = bNode.toSrcString().toString();
         String buggyFile = bNode.getFileName();
+        String oriSrcCode = JavaFile.readFileToString(buggyFile);
         List<String> sources = JavaFile.readFileToStringList(buggyFile);
         sources.add(0, "");
         int startLine = bNode.getStartLine();
@@ -298,9 +299,6 @@ public class Repair {
                     writeLog(pattern.getPatternName(), buggyFile, origin,
                             pattern.getImports(), fixed, startLine, endLine, true);
                     _patchNum ++;
-                    if (shouldStop()) {
-                        return;
-                    }
                     break;
                 case TEST_FAILED:
                     writeLog(pattern.getPatternName(), buggyFile, origin,
@@ -310,6 +308,7 @@ public class Repair {
             }
             matchInstance.reset();
         }
+        JavaFile.writeStringToFile(buggyFile, oriSrcCode);
     }
 
     private void repair0(List<Location> locations, Map<String, Map<Integer, VarScope>> buggyFileVarMap) {
@@ -331,6 +330,10 @@ public class Repair {
                 buggyFileVarMap.put(file, varMaps);
             }
             Node node = getBuggyNode(file, location.getLine());
+            if (node == null) {
+                LevelLogger.error("Get faulty node failed ! " + file + "#" + location.getLine());
+                continue;
+            }
 
             List<String> patterns;
             try {
