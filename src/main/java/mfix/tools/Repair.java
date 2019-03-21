@@ -83,6 +83,10 @@ public class Repair {
         _timer = new Timer(Constant.MAX_REPAIR_TIME);
     }
 
+    public int patch() {
+        return _patchNum;
+    }
+
     private boolean shouldStop() {
         return _patchNum > Constant.MAX_PATCH_NUMBER || _timer.timeout();
     }
@@ -509,11 +513,30 @@ public class Repair {
         } else if (cmd.hasOption("d4j")) {
             String[] ids = cmd.getOptionValue("d4j").split(",");
             String base = cmd.hasOption("d4jhome") ? cmd.getOptionValue("d4jhome") : Constant.D4J_PROJ_DEFAULT_HOME;
+            // math_1,lang_1-10,
             for (String id : ids) {
-                String name = id.split("_")[0];
-                int number = Integer.parseInt(id.split("_")[1]);
-                D4jSubject subject = new D4jSubject(base, name, number);
-                subjects.add(subject);
+                String[] info = id.split("_");
+                if (info.length != 2) {
+                    LevelLogger.error("Input format error : " + id);
+                    continue;
+                }
+                String name = info[0];
+                String[] seqs = info[1].split("-");
+                D4jSubject subject;
+                if (seqs.length == 1) {
+                    int number = Integer.parseInt(seqs[0]);
+                    subject = new D4jSubject(base, name, number);
+                    subjects.add(subject);
+                } else if (seqs.length == 2) {
+                    int start = Integer.parseInt(seqs[0]);
+                    int end = Integer.parseInt(seqs[1]);
+                    for (; start <= end; start ++) {
+                        subject = new D4jSubject(base, name, start);
+                        subjects.add(subject);
+                    }
+                } else {
+                    LevelLogger.error("Input format error : " + id);
+                }
             }
         } else {
             return null;
@@ -530,12 +553,15 @@ public class Repair {
 
         Set<String> patternRecords = pair.getFirst();
         List<Subject> subjects = pair.getSecond();
+        String file = Utils.join(Constant.SEP, Constant.HOME, "repair.rec");
         for (Subject subject : subjects) {
+            JavaFile.writeStringToFile(file, subject.getName() + "_" + subject.getId() + " > PATCH : ", true);
             LevelLogger.info(subject.getHome() + ", " + subject.toString());
             Repair repair = new Repair(subject, patternRecords);
             try {
                 repair.repair();
             } catch (IOException e) {}
+            JavaFile.writeStringToFile(file, repair.patch() + "\n", true);
         }
     }
 
