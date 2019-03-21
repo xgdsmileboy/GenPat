@@ -150,9 +150,10 @@ public class Filter {
                 LevelLogger.debug("Thread pool is full ....");
                 for (Future<List<String>> fs : _threadResultList) {
                     try {
-                        List<String> result = fs.get(1, TimeUnit.MINUTES);
+                        List<String> result = fs.get(10, TimeUnit.SECONDS);
                         writeFile(result);
                     } catch (Exception e) {
+                        LevelLogger.warn("Parse pattern timeout !");
                         fs.cancel(true);
                     }
                     _currThreadCount--;
