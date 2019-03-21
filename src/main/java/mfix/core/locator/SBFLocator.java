@@ -7,8 +7,6 @@
 
 package mfix.core.locator;
 
-import mfix.common.cmd.CmdFactory;
-import mfix.common.cmd.ExecuteCommand;
 import mfix.common.conf.Constant;
 import mfix.common.java.D4jSubject;
 import mfix.common.util.JavaFile;
@@ -44,12 +42,12 @@ public class SBFLocator extends AbstractFaultLocator {
 
     @Override
     protected void locateFault(double threshold) {
-        try {
-            ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
-                    _subject.getJDKHome(), Constant.D4J_HOME);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
+//                    _subject.getJDKHome(), Constant.D4J_HOME);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -74,10 +72,10 @@ public class SBFLocator extends AbstractFaultLocator {
 
     @Override
     public List<Location> getLocations(int topK) {
-        List<Location> lines = getSortedSuspStmt(getBuggyLineSuspFile(), topK);
-        if (lines == null || lines.isEmpty()) {
+        List<Location> lines ;//= getSortedSuspStmt(getBuggyLineSuspFile(), topK);
+//        if (lines == null || lines.isEmpty()) {
             lines = ochiaiResult(getOchiaiFile(), topK);
-        }
+//        }
         return lines;
     }
 
