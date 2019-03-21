@@ -343,8 +343,8 @@ public class Matcher {
     }
 
     public static boolean greedyMatch(MethDecl src, MethDecl tar) {
-        List<Stmt> srcStmt = src.getAllChildStmt(new ArrayList<>());
-        List<Stmt> tarStmt = tar.getAllChildStmt(new ArrayList<>());
+        List<Stmt> srcStmt = new ArrayList<>(src.getAllChildStmt(new LinkedList<>()));
+        List<Stmt> tarStmt = new ArrayList<>(tar.getAllChildStmt(new LinkedList<>()));
 
         List<Stmt> srcNotMatched = new ArrayList<>(srcStmt.size());
         List<Stmt> tarNotMatched = new ArrayList<>(tarStmt.size());

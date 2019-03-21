@@ -192,7 +192,6 @@ public class IfStmt extends Stmt {
 		if(ifStmt == null) {
 			continueTopDownMatchNull();
 		} else {
-			_then.postAccurateMatch(ifStmt.getThen());
 			if(_else != null) {
 				_else.postAccurateMatch(ifStmt.getElse());
 			}

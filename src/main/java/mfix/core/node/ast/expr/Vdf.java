@@ -269,6 +269,7 @@ public class Vdf extends Node {
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				matchedNode.put(_identifier, assign.getLhs());
 				matchedStrings.put(_identifier.getName(), assign.getLhs().toString());
+				return true;
 			}
 		}
 		return false;

@@ -115,7 +115,7 @@ public abstract class Expr extends Node {
     }
 
     protected StringBuffer leafFormalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        if (!isAbstract() && (parentConsidered || isConsidered())) {
+        if (!isAbstract() && (isChanged() || isExpanded())) {
             StringBuffer buffer = toSrcString();
             keywords.add(buffer.toString());
             return buffer;

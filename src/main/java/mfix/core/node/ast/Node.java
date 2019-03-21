@@ -312,6 +312,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return _tokens;
     }
 
+    public int length() {
+        return tokens().size();
+    }
+
     /**
      * obtain all defined variables in the sub-tree
      *
@@ -472,6 +476,10 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public void setChanged() {
         _changed = true;
+    }
+
+    protected boolean isExpanded() {
+        return _expanded;
     }
 
     public boolean isConsidered() {
