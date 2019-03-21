@@ -836,8 +836,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings);
 
-
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
             return getBindingNode().getBuggyBindingNode().toSrcString();
         } else if (exprMap.containsKey(toSrcString().toString())) {
@@ -846,7 +845,8 @@ public abstract class Node implements NodeComparator, Serializable {
         return null;
     }
 
-    public abstract StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap);
+    public abstract StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                                    Set<String> exceptions);
 
 
     /******************************************************************************************/

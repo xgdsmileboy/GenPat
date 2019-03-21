@@ -293,13 +293,13 @@ public class MethodInv extends Expr {
 //	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if (_expression != null) {
-				tmp = _expression.transfer(vars, exprMap);
+				tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -307,7 +307,7 @@ public class MethodInv extends Expr {
 			stringBuffer.append(_name.getName());
 			stringBuffer.append("(");
 			if (_arguments != null) {
-				tmp = _arguments.transfer(vars, exprMap);
+				tmp = _arguments.transfer(vars, exprMap,retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -317,7 +317,8 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer expression = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
@@ -329,13 +330,13 @@ public class MethodInv extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == methodInv._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					} else if (changedNode == methodInv._name) {
-						name = update.apply(vars, exprMap);
+						name = update.apply(vars, exprMap, retType, exceptions);
 						if (name == null) return null;
 					} else {
-						arguments = update.apply(vars, exprMap);
+						arguments = update.apply(vars, exprMap, retType, exceptions);
 						if (arguments == null) return null;
 					}
 				} else {
@@ -347,7 +348,7 @@ public class MethodInv extends Expr {
 		StringBuffer tmp;
 		if(expression == null) {
 			if (_expression != null) {
-				tmp = _expression.adaptModifications(vars, exprMap);
+				tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -363,7 +364,7 @@ public class MethodInv extends Expr {
 		stringBuffer.append("(");
 		if(arguments == null) {
 			if (_arguments != null) {
-				tmp = _arguments.adaptModifications(vars, exprMap);
+				tmp = _arguments.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

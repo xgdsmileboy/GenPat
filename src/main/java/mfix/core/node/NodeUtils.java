@@ -52,7 +52,8 @@ public class NodeUtils {
                                         Map<Node, List<StringBuffer>> insertionAfter,
                                         Map<Node, StringBuffer> map,
                                         Map<Integer, List<StringBuffer>> insertionAt,
-                                        VarScope vars, Map<String, String> exprMap) {
+                                        VarScope vars, Map<String, String> exprMap,
+                                        String retType, Set<String> exceptions) {
 
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
@@ -80,7 +81,7 @@ public class NodeUtils {
                     stringBuffer.append(update).append(Constant.NEW_LINE);
                 }
             } else {
-                tmp = node.adaptModifications(vars, exprMap);
+                tmp = node.adaptModifications(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp).append(Constant.NEW_LINE);
             }

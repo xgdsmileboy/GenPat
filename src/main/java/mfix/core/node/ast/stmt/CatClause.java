@@ -201,17 +201,17 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			stringBuffer.append("catch(");
-			tmp = _exception.transfer(vars, exprMap);
+			tmp = _exception.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _blk.transfer(vars, exprMap);
+			tmp = _blk.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -219,7 +219,8 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer exception = null;
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
@@ -228,7 +229,7 @@ public class CatClause extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == catClause._exception) {
-						exception = update.apply(vars, exprMap);
+						exception = update.apply(vars, exprMap, retType, exceptions);
 						if (exception == null) return null;
 					}
 				} else {
@@ -240,14 +241,14 @@ public class CatClause extends Node {
 		StringBuffer tmp;
 		stringBuffer.append("catch(");
 		if(exception == null) {
-			tmp = _exception.adaptModifications(vars, exprMap);
+			tmp = _exception.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(exception);
 		}
 		stringBuffer.append(")");
-		tmp = _blk.adaptModifications(vars, exprMap);
+		tmp = _blk.adaptModifications(vars, exprMap, retType, exceptions);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		return stringBuffer;

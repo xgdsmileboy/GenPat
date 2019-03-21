@@ -167,16 +167,16 @@ public class InstanceofExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _expression.transfer(vars, exprMap);
+			tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" instanceof ");
-			tmp = _instanceType.transfer(vars, exprMap);
+			tmp = _instanceType.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -184,7 +184,8 @@ public class InstanceofExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer expression = null;
 		StringBuffer instanceType = null;
 		Node node = NodeUtils.checkModification(this);
@@ -194,10 +195,10 @@ public class InstanceofExpr extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == instanceofExpr._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					} else {
-						instanceType = update.apply(vars, exprMap);
+						instanceType = update.apply(vars, exprMap, retType, exceptions);
 						if (instanceofExpr == null) return null;
 					}
 				} else {
@@ -208,7 +209,7 @@ public class InstanceofExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expression.adaptModifications(vars, exprMap);
+			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -216,7 +217,7 @@ public class InstanceofExpr extends Expr {
 		}
 		stringBuffer.append(" instanceof ");
 		if(instanceType == null) {
-			tmp = _instanceType.adaptModifications(vars, exprMap);
+			tmp = _instanceType.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

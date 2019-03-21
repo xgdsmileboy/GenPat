@@ -179,15 +179,15 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("synchronized(");
-			StringBuffer tmp = _expression.transfer(vars, exprMap);
+			StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _blk.transfer(vars, exprMap);
+			tmp = _blk.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -195,7 +195,8 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer expression = null;
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
@@ -204,7 +205,7 @@ public class SynchronizedStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == synchronizedStmt._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					}
 				} else {
@@ -215,14 +216,14 @@ public class SynchronizedStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("synchronized(");
 		StringBuffer tmp;
 		if (expression == null) {
-			tmp = _expression.adaptModifications(vars, exprMap);
+			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(expression);
 		}
 		stringBuffer.append(")");
-		tmp = _blk.adaptModifications(vars, exprMap);
+		tmp = _blk.adaptModifications(vars, exprMap, retType, exceptions);
 		if(tmp == null) return null;
 		stringBuffer.append(tmp);
 		return stringBuffer;

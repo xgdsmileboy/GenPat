@@ -205,18 +205,18 @@ public class ExprList extends Node {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             if (!_exprs.isEmpty()) {
-                tmp = _exprs.get(0).transfer(vars, exprMap);
+                tmp = _exprs.get(0).transfer(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _exprs.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _exprs.get(i).transfer(vars, exprMap);
+                    tmp = _exprs.get(i).transfer(vars, exprMap, retType, exceptions);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }
@@ -226,21 +226,22 @@ public class ExprList extends Node {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         Node node = NodeUtils.checkModification(this);
         if (node != null) {
-            return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
+            return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions);
         }
 
         if(!_exprs.isEmpty()) {
-            tmp = _exprs.get(0).adaptModifications(vars, exprMap);
+            tmp = _exprs.get(0).adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
             for(int i = 1; i < _exprs.size(); i++) {
                 stringBuffer.append(",");
-                tmp = _exprs.get(i).adaptModifications(vars, exprMap);
+                tmp = _exprs.get(i).adaptModifications(vars, exprMap, retType, exceptions);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }

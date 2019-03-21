@@ -57,6 +57,10 @@ public class MethDecl extends Node {
         _throws = throwTypes;
     }
 
+    public List<String> getThrows() {
+        return _throws;
+    }
+
     public void setRetType(Type type) {
         if (type != null) {
             _retType = type;
@@ -66,6 +70,10 @@ public class MethDecl extends Node {
 
     public Type getRetType() {
         return _retType;
+    }
+
+    public String getRetTypeStr() {
+        return _retTypeStr;
     }
 
     public void setName(SName name) {
@@ -285,12 +293,13 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         return null;
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer stringBuffer = new StringBuffer();
         for(Object modifier : _modifiers) {
             stringBuffer.append(modifier.toString() + " ");
@@ -308,15 +317,15 @@ public class MethDecl extends Node {
         }
         stringBuffer.append(")");
         if(_throws != null && _throws.size() > 0) {
-            stringBuffer.append(" throws " + _throws.get(0).toString());
+            stringBuffer.append(" throws " + _throws.get(0));
             for(int i = 1; i < _throws.size(); i++) {
-                stringBuffer.append("," + _throws.get(i).toString());
+                stringBuffer.append("," + _throws.get(i));
             }
         }
         if(_body == null) {
             stringBuffer.append(";");
         } else {
-            StringBuffer tmp = _body.adaptModifications(vars, exprMap);
+            StringBuffer tmp = _body.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         }

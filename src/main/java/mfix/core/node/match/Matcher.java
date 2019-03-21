@@ -662,7 +662,8 @@ public class Matcher {
                                                      Map<Node, List<StringBuffer>> insertionAfter,
                                                      Map<Integer, List<StringBuffer>> insertAt,
                                                      Map<Node, StringBuffer> changeNodeMap,
-                                                     VarScope vars, Map<String, String> exprMap) {
+                                                     VarScope vars, Map<String, String> exprMap,
+                                                     String retType, Set<String> exceptions) {
         StringBuffer tmp;
         for (Modification modification : modifications) {
             if (modification instanceof Update) {
@@ -670,7 +671,7 @@ public class Matcher {
                 Node node = update.getSrcNode().getBuggyBindingNode();
                 assert node != null;
                 // map current node to the updated node string
-                tmp = update.apply(vars, exprMap);
+                tmp = update.apply(vars, exprMap, retType, exceptions);
                 if (tmp == null) return false;
                 changeNodeMap.put(node, tmp);
             } else if (modification instanceof Deletion) {
@@ -682,7 +683,7 @@ public class Matcher {
                 changeNodeMap.put(node, null);
             } else if (modification instanceof Insertion) {
                 Insertion insertion = (Insertion) modification;
-                tmp = insertion.apply(vars, exprMap);
+                tmp = insertion.apply(vars, exprMap, retType, exceptions);
                 if (tmp == null) return false;
 
                 Node insNode = insertion.getInsertedNode();

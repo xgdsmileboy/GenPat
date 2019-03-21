@@ -235,21 +235,21 @@ public class EnhancedForStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("for(");
-            tmp = _varDecl.transfer(vars, exprMap);
+            tmp = _varDecl.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(" : ");
-            tmp = _expression.transfer(vars, exprMap);
+            tmp = _expression.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
-            tmp = _statement.transfer(vars, exprMap);
+            tmp = _statement.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -257,7 +257,8 @@ public class EnhancedForStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer varDecl = null;
         StringBuffer expression = null;
         Node pnode = NodeUtils.checkModification(this);
@@ -268,10 +269,10 @@ public class EnhancedForStmt extends Stmt {
                     Update update = (Update) modification;
                     Node node = update.getSrcNode();
                     if (node == enhancedForStmt._varDecl) {
-                        varDecl = update.apply(vars, exprMap);
+                        varDecl = update.apply(vars, exprMap, retType, exceptions);
                         if (varDecl == null) return null;
                     } else if (node == enhancedForStmt._expression) {
-                        expression = update.apply(vars, exprMap);
+                        expression = update.apply(vars, exprMap, retType, exceptions);
                         if (expression == null) return null;
                     }
                 } else {
@@ -283,7 +284,7 @@ public class EnhancedForStmt extends Stmt {
         StringBuffer tmp;
         stringBuffer.append("for(");
         if (varDecl == null) {
-            tmp = _varDecl.adaptModifications(vars, exprMap);
+            tmp = _varDecl.adaptModifications(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -291,14 +292,14 @@ public class EnhancedForStmt extends Stmt {
         }
         stringBuffer.append(" : ");
         if (expression == null) {
-            tmp = _expression.adaptModifications(vars, exprMap);
+            tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(expression);
         }
         stringBuffer.append(")");
-        tmp = _statement.adaptModifications(vars, exprMap);
+        tmp = _statement.adaptModifications(vars, exprMap, retType, exceptions);
         if (tmp == null) return null;
         stringBuffer.append(tmp);
         return stringBuffer;

@@ -288,26 +288,26 @@ public class ClassInstCreation extends Expr {
 //    }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             if (_expression != null) {
-                tmp = _expression.transfer(vars, exprMap);
+                tmp = _expression.transfer(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append(".");
             }
             stringBuffer.append("new ");
-            stringBuffer.append(_classType.transfer(vars, exprMap));
+            stringBuffer.append(_classType.transfer(vars, exprMap, retType, exceptions));
             stringBuffer.append("(");
-            tmp = _arguments.transfer(vars, exprMap);
+            tmp = _arguments.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
             if (_decl != null) {
-                tmp = _decl.transfer(vars, exprMap);
+                tmp = _decl.transfer(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -316,7 +316,8 @@ public class ClassInstCreation extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer expression = null;
         StringBuffer classType = null;
         StringBuffer arguments = null;
@@ -328,13 +329,13 @@ public class ClassInstCreation extends Expr {
                     Update update = (Update) modification;
                     Node changedNode = update.getSrcNode();
                     if (changedNode == classInstCreation._expression) {
-                        expression = update.apply(vars, exprMap);
+                        expression = update.apply(vars, exprMap, retType, exceptions);
                         if (expression == null) return null;
                     } else if (changedNode == classInstCreation._classType) {
-                        classType = update.apply(vars, exprMap);
+                        classType = update.apply(vars, exprMap, retType, exceptions);
                         if (classType == null) return null;
                     } else if (changedNode == classInstCreation._arguments) {
-                        arguments = update.apply(vars, exprMap);
+                        arguments = update.apply(vars, exprMap, retType, exceptions);
                         if (arguments == null) return null;
                     }
                 } else {
@@ -346,7 +347,7 @@ public class ClassInstCreation extends Expr {
         StringBuffer tmp;
         if (expression == null) {
             if (_expression != null) {
-                tmp = _expression.adaptModifications(vars, exprMap);
+                tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append(".");
@@ -356,7 +357,7 @@ public class ClassInstCreation extends Expr {
         }
         stringBuffer.append("new ");
         if(classType == null) {
-            tmp = _classType.adaptModifications(vars, exprMap);
+            tmp = _classType.adaptModifications(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -364,7 +365,7 @@ public class ClassInstCreation extends Expr {
         }
         stringBuffer.append("(");
         if(arguments == null) {
-            tmp = _arguments.adaptModifications(vars, exprMap);
+            tmp = _arguments.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -372,7 +373,7 @@ public class ClassInstCreation extends Expr {
         }
         stringBuffer.append(")");
         if (_decl != null) {
-            tmp = _decl.adaptModifications(vars, exprMap);
+            tmp = _decl.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         }

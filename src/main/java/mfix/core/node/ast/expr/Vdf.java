@@ -275,18 +275,18 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _identifier.transfer(vars, exprMap);
+			StringBuffer tmp = _identifier.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			for (int i = 0; i < _dimensions; i++) {
 				stringBuffer.append("[]");
 			}
 			if (_expression != null) {
-				tmp = _expression.transfer(vars, exprMap);
+				tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 				if (tmp == null) return null;
 				stringBuffer.append('=').append(tmp);
 			}
@@ -295,7 +295,8 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer expression = null;
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
@@ -304,7 +305,7 @@ public class Vdf extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == vdf._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					}
 				} else {
@@ -314,7 +315,7 @@ public class Vdf extends Node {
 		}
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
-		tmp = _identifier.adaptModifications(vars, exprMap);
+		tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		for (int i = 0; i < _dimensions; i++){
@@ -323,7 +324,7 @@ public class Vdf extends Node {
 		if(expression == null) {
 			if(_expression != null){
 				stringBuffer.append("=");
-				tmp = _expression.adaptModifications(vars, exprMap);
+				tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

@@ -192,18 +192,18 @@ public class Assign extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
-            tmp = _lhs.transfer(vars, exprMap);
+            tmp = _lhs.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
-            tmp = _operator.transfer(vars, exprMap);
+            tmp = _operator.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
-            tmp = _rhs.transfer(vars, exprMap);
+            tmp = _rhs.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -211,7 +211,8 @@ public class Assign extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer operator = null;
         StringBuffer lhs = null;
         StringBuffer rhs = null;
@@ -222,13 +223,13 @@ public class Assign extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == assign._operator) {
-                        operator = update.apply(vars, exprMap);
+                        operator = update.apply(vars, exprMap, retType, exceptions);
                         if (operator == null) return null;
                     } else if (update.getSrcNode() == assign._lhs) {
-                        lhs = update.apply(vars, exprMap);
+                        lhs = update.apply(vars, exprMap, retType, exceptions);
                         if (lhs == null) return null;
                     } else {
-                        rhs = update.apply(vars, exprMap);
+                        rhs = update.apply(vars, exprMap, retType, exceptions);
                         if (rhs == null) return null;
                     }
                 } else {
@@ -240,21 +241,21 @@ public class Assign extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         if(lhs == null) {
-            tmp = _lhs.adaptModifications(vars, exprMap);
+            tmp = _lhs.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(lhs);
         }
         if(operator == null) {
-            tmp = _operator.adaptModifications(vars, exprMap);
+            tmp = _operator.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(operator);
         }
         if(rhs == null) {
-            tmp = _rhs.adaptModifications(vars, exprMap);
+            tmp = _rhs.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

@@ -247,21 +247,21 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("if(");
 			StringBuffer tmp;
-			tmp = _condition.transfer(vars, exprMap);
+			tmp = _condition.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _then.transfer(vars, exprMap);
+			tmp = _then.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.transfer(vars, exprMap);
+				tmp = _else.transfer(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -270,7 +270,8 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer condition = null;
 		StringBuffer then = null;
 		StringBuffer els = null;
@@ -282,13 +283,13 @@ public class IfStmt extends Stmt {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode();
 					if(node == ifStmt._condition) {
-						condition = update.apply(vars, exprMap);
+						condition = update.apply(vars, exprMap, retType, exceptions);
 						if(condition == null) return null;
 					} else if(node == ifStmt._then) {
-						then = update.apply(vars, exprMap);
+						then = update.apply(vars, exprMap, retType, exceptions);
 						if(then == null) return null;
 					} else {
-						els = update.apply(vars, exprMap);
+						els = update.apply(vars, exprMap, retType, exceptions);
 						if(els == null) return null;
 					}
 				} else {
@@ -299,7 +300,7 @@ public class IfStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("if(");
 		StringBuffer tmp;
 		if(condition == null) {
-			tmp = _condition.adaptModifications(vars, exprMap);
+			tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -307,7 +308,7 @@ public class IfStmt extends Stmt {
 		}
 		stringBuffer.append(")");
 		if(then == null) {
-			tmp = _then.adaptModifications(vars, exprMap);
+			tmp = _then.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -316,7 +317,7 @@ public class IfStmt extends Stmt {
 		if(els == null) {
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.adaptModifications(vars, exprMap);
+				tmp = _else.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

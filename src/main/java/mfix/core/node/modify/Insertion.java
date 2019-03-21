@@ -5,6 +5,7 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.pattern.cluster.VIndex;
 
 import java.util.Map;
+import java.util.Set;
 
 public class Insertion extends Modification {
 
@@ -55,11 +56,11 @@ public class Insertion extends Modification {
         return _insert;
     }
 
-    public StringBuffer apply(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         if(_insert == null) {
             return new StringBuffer("null");
         } else {
-            return _insert.transfer(vars, exprMap);
+            return _insert.transfer(vars, exprMap, retType, exceptions);
         }
     }
 

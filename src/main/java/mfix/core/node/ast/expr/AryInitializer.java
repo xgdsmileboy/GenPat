@@ -168,18 +168,18 @@ public class AryInitializer extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("{");
             StringBuffer tmp;
             if (_expressions.size() > 0) {
-                tmp = _expressions.get(0).transfer(vars, exprMap);
+                tmp = _expressions.get(0).transfer(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _expressions.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _expressions.get(i).transfer(vars, exprMap);
+                    tmp = _expressions.get(i).transfer(vars, exprMap, retType, exceptions);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }
@@ -190,17 +190,18 @@ public class AryInitializer extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer stringBuffer = new StringBuffer("{");
         StringBuffer tmp;
         // not consider modification
         if (_expressions.size() > 0) {
-            tmp = _expressions.get(0).adaptModifications(vars, exprMap);
+            tmp = _expressions.get(0).adaptModifications(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             for (int i = 1; i < _expressions.size(); i++) {
                 stringBuffer.append(",");
-                tmp = _expressions.get(i).adaptModifications(vars, exprMap);
+                tmp = _expressions.get(i).adaptModifications(vars, exprMap, retType, exceptions);
                 stringBuffer.append(tmp);
             }
         }

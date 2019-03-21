@@ -22,6 +22,7 @@ import mfix.core.locator.Location;
 import mfix.core.locator.purify.CommentTestCase;
 import mfix.core.locator.purify.Purification;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
@@ -289,7 +290,8 @@ public class Repair {
         }
     }
 
-    protected void tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile) {
+    protected void tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile, String retType,
+                          Set<String> exceptions) {
         if (bNode == null || pattern == null || shouldStop()) {
             return;
         }
@@ -309,7 +311,7 @@ public class Repair {
             matchInstance.apply();
             StringBuffer fixedCode;
             try{
-                fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap());
+                fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap(), retType, exceptions);
             } catch (Exception e) {
                 matchInstance.reset();
                 LevelLogger.error("AdaptModification causes exception ....", e);
@@ -375,6 +377,13 @@ public class Repair {
                 LevelLogger.error("Get faulty node failed ! " + file + "#" + location.getLine());
                 continue;
             }
+            String retType = "void";
+            Set<String> exceptions = new HashSet<>();
+            if (node instanceof MethDecl) {
+                MethDecl decl = (MethDecl) node;
+                retType = decl.getRetTypeStr();
+                exceptions.addAll(decl.getThrows());
+            }
 
             List<String> patterns;
             try {
@@ -388,7 +397,7 @@ public class Repair {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
                 scope.reset(p.getNewVars());
-                tryFix(node, p, scope, clazzFile);
+                tryFix(node, p, scope, clazzFile, retType, exceptions);
             }
         }
     }
