@@ -54,9 +54,6 @@ public class SBFLocator extends AbstractFaultLocator {
 
     @Override
     public List<String> getFailedTestCases() {
-        if(_failedTests == null || _failedTests.size() == 0){
-            _failedTests = new LinkedList<>(((D4jSubject)_subject).configFailedTestCases());
-        }
         return _failedTests;
     }
 
@@ -115,8 +112,8 @@ public class SBFLocator extends AbstractFaultLocator {
 
         List<Pair<String, Double>> suspStmt = new ArrayList<>(lines.size());
         StringBuffer buffer = new StringBuffer();
-
-        for (int i = 0; i < lines.size(); i++) {
+        int i = lines.get(0).endsWith("Suspiciousness") ? 1 : 0;
+        for (; i < lines.size(); i++) {
             String[] lineAndSusp = lines.get(i).split(",");
             if(lineAndSusp.length != 2){
                 LevelLogger.error("Suspicious line format error : " + lines.get(i));
