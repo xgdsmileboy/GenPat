@@ -25,8 +25,8 @@ public class FaultLocatorFactory {
                 locator = new FakeLocator((FakeSubject) subject);
                 break;
             case D4jSubject.NAME:
-                locator = new SBFLocator((D4jSubject) subject);
-//                locator = new D4JManualLocator((D4jSubject) subject);
+//                locator = new SBFLocator((D4jSubject) subject);
+                locator = new D4JManualLocator((D4jSubject) subject);
                 break;
             default:
                 LevelLogger.error("Cannot parse subject type : " + subject.toString());
