@@ -367,7 +367,7 @@ class ParseNode implements Callable<List<String>> {
                 result.add(s);
             }
             // TODO : output feature vector for filtering
-            result.add(savePatternPath + ">" + pattern.getFeatureVector().toString());
+            result.add(savePatternPath);// + ">" + pattern.getFeatureVector().toString());
         }
         return result;
     }
