@@ -174,9 +174,20 @@ public class ThrowStmt extends Stmt {
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			stringBuffer.append("throw ");
-			StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
+			if (exceptions != null && !exceptions.isEmpty() && _expression.getNodeType() == TYPE.CLASSCREATION) {
+				ClassInstCreation classInstCreation = (ClassInstCreation) _expression;
+				String type = classInstCreation.getClassType().typeStr();
+				if (!exceptions.isEmpty() && !exceptions.contains(type)) {
+					type = exceptions.iterator().next();
+				}
+				StringBuffer tmp = classInstCreation.getArguments().transfer(vars, exprMap, retType, exceptions);
+				if (tmp == null) return null;
+				stringBuffer.append("new ").append(type).append('(').append(tmp).append(')');
+			} else {
+				StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+				if (tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
 			stringBuffer.append(";");
 		}
 		return stringBuffer;

@@ -189,10 +189,14 @@ public class ReturnStmt extends Stmt {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("return ");
-			if(_expression != null){
-				StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
-				if(tmp == null) return null;
-				stringBuffer.append(tmp);
+			if (!"void".equals(retType)) {
+				if(_expression != null){
+					StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+					if(tmp == null) return null;
+					stringBuffer.append(tmp);
+				} else if (retType != null){
+					stringBuffer.append(NodeUtils.getDefaultValue(retType));
+				}
 			}
 			stringBuffer.append(";");
 			return stringBuffer;
