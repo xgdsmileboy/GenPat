@@ -23,10 +23,10 @@ import java.util.Set;
  */
 public class CommentTestCase {
 	
-	public static void comment(String fileBasePath, List<String> testcases, String avoid){
+	public static void comment(String fileBasePath, List<String> testcases, Set<String> avoid){
 		Map<String, Set<String>> clazzAndMethods = new HashMap<>();
 		for(String test : testcases){
-			if(test.equals(avoid)){
+			if(avoid.contains(test)){
 				continue;
 			}
 			String[] testInfo = test.split("::");

@@ -18,7 +18,6 @@ import java.util.List;
  */
 public abstract class AbstractFaultLocator {
 
-    protected final int DEFAULT_THRETHOD = 0;
     protected Subject _subject;
     protected List<String> _failedTests;
     protected List<String> _passedTests;
@@ -32,6 +31,10 @@ public abstract class AbstractFaultLocator {
 
     public int getTotalTestCases(){
         return _passedTests.size() + _failedTests.size();
+    }
+
+    public void setFailedTests(List<String> testcases) {
+        _failedTests = testcases;
     }
 
     public List<String> getPassedTestCases(){

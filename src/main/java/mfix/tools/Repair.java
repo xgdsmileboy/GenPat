@@ -63,8 +63,14 @@ public class Repair {
     private String _patchFile;
     private int _patchNum;
     private String _patternRecords;
+
     private Timer _timer;
+
     private Set<String> _alreadyGenerated = new HashSet<>();
+
+    private Set<String> _allFailedTests = new HashSet<>();
+    private Set<String> _alreadyFixedTests = new HashSet<>();
+    private List<String> _currentFailedTests = new LinkedList<>();
 
     public Repair(Subject subject, String patternRecords) {
         _subject = subject;
@@ -90,7 +96,6 @@ public class Repair {
     }
 
     private ValidateResult validate(String clazzName, String source) {
-        ValidateResult result = ValidateResult.PASS;
         if (_subject.compileFile()) {
             LevelLogger.debug("Compile single file : " + clazzName);
             boolean compile = new JCompiler().compile(_subject, clazzName, source);
@@ -109,6 +114,14 @@ public class Repair {
             }
             LevelLogger.debug("Compiling subject success!");
         }
+
+        for (String string : _currentFailedTests) {
+            LevelLogger.debug("Test : " + string);
+            if (!_subject.test(string)) {
+                return ValidateResult.TEST_FAILED;
+            }
+        }
+
         if (_subject.testProject()) {
             LevelLogger.debug("Test project : " + _subject.getName());
             boolean test = _subject.test();
@@ -118,7 +131,22 @@ public class Repair {
             }
             LevelLogger.debug("Testing project success!");
         }
-        return result;
+
+        _alreadyFixedTests.addAll(_currentFailedTests);
+
+        try {
+            _subject.restorePurifiedTest();
+            for (String s : _allFailedTests) {
+                if (_allFailedTests.contains(s)) {
+                    continue;
+                }
+                if (_subject.test(s)) {
+                    _alreadyFixedTests.add(s);
+                }
+            }
+        } catch(IOException e) {}
+
+        return ValidateResult.PASS;
     }
 
     private Pattern readPattern(String patternFile) {
@@ -355,7 +383,6 @@ public class Repair {
     public void repair() throws IOException {
         LevelLogger.info("Repair : " + _subject.getHome());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
-
         _subject.backup();
 
         String srcSrc = _subject.getHome() + _subject.getSsrc();
@@ -363,23 +390,17 @@ public class Repair {
         String srcBin = _subject.getHome() + _subject.getSbin();
         String testBin = _subject.getHome() + _subject.getTbin();
 
-
         FileUtils.deleteDirectory(new File(srcBin));
         FileUtils.deleteDirectory(new File(testBin));
 
         Purification purification = new Purification(_subject);
-        boolean purify = _subject.purify();
-        List<String> purifiedFailedTestCases = purification.purify(purify);
+        List<String> purifiedFailedTestCases = purification.purify(_subject.purify());
         if(purifiedFailedTestCases == null || purifiedFailedTestCases.size() == 0){
             purifiedFailedTestCases = purification.getFailedTest();
         }
+        _allFailedTests.addAll(purifiedFailedTestCases);
+        _subject.backupPurifiedTest();
 
-        File purifiedTest = new File(testSrc);
-        File purifyBackup = new File(testSrc + "_purify");
-        FileUtils.copyDirectory(purifiedTest, purifyBackup);
-
-        boolean lastRslt = false;
-        Set<String> alreadyFix = new HashSet<>();
         Map<String, Map<Integer, VarScope>> buggyFileVarMap = new HashMap<>();
 
         String start = _timer.start();
@@ -389,36 +410,26 @@ public class Repair {
             String teString = purifiedFailedTestCases.get(currentTry);
             JavaFile.writeStringToFile(_logfile, "Current failed test : " +
                     teString + " | " + simpleDateFormat.format(new Date()) + "\n", true);
-
-            FileUtils.copyDirectory(purifyBackup, purifiedTest);
-            FileUtils.deleteDirectory(new File(testBin));
-
-            if (lastRslt) {
-                for (int i = currentTry; i < purifiedFailedTestCases.size(); i++) {
-                    if (_subject.test(purifiedFailedTestCases.get(i))) {
-                        alreadyFix.add(purifiedFailedTestCases.get(i));
-                    }
-                }
-            }
-            lastRslt = false;
-            if (alreadyFix.contains(teString)) {
+            if (_alreadyFixedTests.contains(teString)) {
                 JavaFile.writeStringToFile(_logfile, "Already fixed : " + teString + "\n", true);
                 continue;
             }
 
             _subject.restore(srcSrc);
+            _subject.restorePurifiedTest();
             FileUtils.deleteDirectory(new File(srcBin));
             FileUtils.deleteDirectory(new File(testBin));
 
-            List<String> currentFailedTests = new ArrayList<>();
-            if (purify) {
-                currentFailedTests.add(teString);
-                CommentTestCase.comment(testSrc, purifiedFailedTestCases, teString);
+            _currentFailedTests.clear();
+            if (_subject.purify()) {
+                _currentFailedTests.add(teString);
             } else {
-                currentFailedTests.addAll(purifiedFailedTestCases);
+                _currentFailedTests.addAll(_allFailedTests);
             }
+            CommentTestCase.comment(testSrc, purifiedFailedTestCases, new HashSet<>(_currentFailedTests));
 
             AbstractFaultLocator locator = FaultLocatorFactory.dispatch(_subject);
+            locator.setFailedTests(_currentFailedTests);
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
 
             repair0(locations, buggyFileVarMap);

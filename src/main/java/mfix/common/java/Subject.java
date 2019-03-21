@@ -228,6 +228,16 @@ public class Subject implements IExecute {
         }
     }
 
+    public void backupPurifiedTest() throws IOException {
+        String testDir = getHome() + getTsrc();
+        FileUtils.copyDirectory(new File(testDir), new File(testDir + "_purify"));
+    }
+
+    public void restorePurifiedTest() throws IOException {
+        String testDir = getHome() + getTsrc();
+        FileUtils.copyDirectory(new File(testDir + "_purify"), new File(testDir));
+    }
+
     protected boolean checkSuccess(List<String> compileMessage, String key) {
         for (String string : compileMessage) {
             if (string.contains(key)) {
