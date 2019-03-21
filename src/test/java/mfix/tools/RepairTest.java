@@ -16,6 +16,7 @@ import mfix.common.util.Utils;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.parser.NodeParser;
@@ -69,13 +70,22 @@ public class RepairTest extends TestCase {
         test("chart", 4);
     }
 
+    @Test
+    public void test_chart_26() {
+        test("chart", 26);
+    }
+
+    @Test
+    public void test_math_4() {
+        test("math", 4);
+    }
+
     private void test(String proj, int id) {
         String buggyFile = Utils.join(Constant.SEP, base, proj + "_" + id, "buggy.java");
         String fixedFile = Utils.join(Constant.SEP, base, proj + "_" + id, "fixed.java");
         PatternExtractor extractor = new PatternExtractor();
         Set<Pattern> patterns = extractor.extractPattern(buggyFile, fixedFile);
         D4jSubject subject = new D4jSubject(d4jHome, proj, id);
-        subject.configFailedTestCases();
         try {
             subject.backup();
         } catch (IOException e) {
@@ -92,13 +102,16 @@ public class RepairTest extends TestCase {
             final String clazzFile = subject.getHome() + subject.getSbin() + Constant.SEP +
                     location.getRelClazzFile().replace(".java", ".class");
             Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(file);
-            Node node = getBuggyNode(file, location.getLine());
+            MethDecl node = (MethDecl)getBuggyNode(file, location.getLine());
+
             if (node == null) continue;
-            List<Pattern> list = new LinkedList<>(patterns);//filter(node, patterns);
+            String retType = node.getRetTypeStr();
+            Set<String> excpetions = new HashSet<>(node.getThrows());
+            List<Pattern> list = filter(node, patterns);
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             for (Pattern p : list) {
                 scope.reset(p.getNewVars());
-                repair.tryFix(node, p, scope, clazzFile);
+                repair.tryFix(node, p, scope, clazzFile, retType, excpetions);
             }
         }
         try {
