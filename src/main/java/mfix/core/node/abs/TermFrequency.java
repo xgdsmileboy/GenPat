@@ -87,7 +87,7 @@ public class TermFrequency implements CodeAbstraction {
     public boolean shouldAbstract(Node node) {
         String token;
         if (node.getNodeType() == Node.TYPE.TYPE) {
-            token = NodeUtils.distilBasicType((MType) node);
+            token = NodeUtils.distillBasicType((MType) node);
         } else {
             token = node.toSrcString().toString();
         }
@@ -102,7 +102,7 @@ public class TermFrequency implements CodeAbstraction {
         if (node != null) {
             String token;
             if (node.getNodeType() == Node.TYPE.TYPE) {
-                token = NodeUtils.distilBasicType((MType) node);
+                token = NodeUtils.distillBasicType((MType) node);
             } else {
                 token = node.toSrcString().toString();
             }

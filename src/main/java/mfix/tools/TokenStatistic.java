@@ -325,7 +325,7 @@ class ParseKey implements Callable<Pair<Set<String>, Set<String>>> {
             while (!nodes.isEmpty()) {
                 node = nodes.poll();
                 if (node instanceof Expr) {
-                    String type = NodeUtils.distilBasicType(((Expr) node).getTypeString());
+                    String type = NodeUtils.distillBasicType(((Expr) node).getTypeString());
                     if (type != null && !"?".equals(type)) {
                         types.add(type);
                     }
@@ -336,7 +336,7 @@ class ParseKey implements Callable<Pair<Set<String>, Set<String>>> {
                         apis.add(methodInv.getName().getName());
                         break;
                     case TYPE:
-                        types.add(NodeUtils.distilBasicType((MType) node));
+                        types.add(NodeUtils.distillBasicType((MType) node));
                         break;
                     case TLITERAL:
                         TyLiteral tyLiteral = (TyLiteral) node;

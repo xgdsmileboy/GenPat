@@ -96,7 +96,7 @@ public class MType extends Node {
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (!isAbstract() && (parentConsidered || isConsidered())) {
 			StringBuffer buffer = toSrcString();
-			keywords.add(NodeUtils.distilBasicType(this));
+			keywords.add(NodeUtils.distillBasicType(this));
 			return buffer;
 		} else if (isConsidered()) {
 			return new StringBuffer(nameMapping.getTypeID(this));

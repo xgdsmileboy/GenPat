@@ -104,12 +104,12 @@ public class NodeUtils {
         return stringBuffer;
     }
 
-    public static String distilBasicType(MType type) {
+    public static String distillBasicType(MType type) {
         String s = type.toSrcString().toString();
-        return distilBasicType(s);
+        return distillBasicType(s);
     }
 
-    public static String distilBasicType(String s) {
+    public static String distillBasicType(String s) {
         int index = s.indexOf('<');
         return index > 0 ? s.substring(0, index) : s;
     }
