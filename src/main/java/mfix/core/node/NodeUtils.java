@@ -431,8 +431,8 @@ public class NodeUtils {
     public static String getDefaultValue(String type){
         if (type == null) return null;
         switch(type){
-            case "void":
-                return null;
+            case "?":
+                return "";
             case "Boolean":
             case "boolean":
                 return "false";
