@@ -8,7 +8,6 @@ package mfix.core.node;
 
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
-import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.LineRange;
 import mfix.core.node.ast.Node;
@@ -17,8 +16,6 @@ import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.stmt.IfStmt;
-import mfix.core.node.match.metric.FVector;
-import mfix.core.node.match.metric.FVector.ALGO;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
@@ -431,25 +428,35 @@ public class NodeUtils {
         return parent;
     }
 
-
-    public static boolean matchNode(Node sketch, Node candidate) {
-//		FVector fVector = sketch.getParentStmt().getFeatureVector();
-//		FVector otherVector = candidate.getParentStmt().getFeatureVector();
-        FVector fVector = sketch.getParent().getFeatureVector();
-        FVector otherVector = candidate.getParent().getFeatureVector();
-        if (fVector.computeSimilarity(otherVector, ALGO.COSINE) > 0.8 && fVector.computeSimilarity(otherVector,
-                ALGO.NORM_2) < 0.5) {
-            return true;
+    public static String getDefaultValue(String type){
+        if (type == null) return null;
+        switch(type){
+            case "void":
+                return null;
+            case "Boolean":
+            case "boolean":
+                return "false";
+            case "Short":
+            case "short":
+            case "Integer":
+            case "int":
+                return "0";
+            case "Float":
+            case "float":
+                return "0f";
+            case "Double":
+            case "double":
+                return "0d";
+            case "Long":
+            case "long":
+                return "0l";
+            case "Character":
+            case "char":
+                return "' '";
+            default:
+                return "null";
         }
-//		Map<String, Set<Node>> map = sketch.getCalledMethods();
-//		Map<String, Set<Node>> thisKeys = candidate.getCalledMethods();
-//		for(Entry<String, Set<Node>> entry : map.entrySet()) {
-//			if(!thisKeys.containsKey(entry.getKey())) {
-//				return false;
-//			}
-//		}
-        LevelLogger.debug("----Similarity filter");
-        return false;
+
     }
 
 
