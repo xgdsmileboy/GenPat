@@ -62,7 +62,7 @@ public class Repair {
     private String _logfile;
     private String _patchFile;
     private int _patchNum;
-    private String _patternRecords;
+    private Set<String> _patternRecords;
 
     private Timer _timer;
 
@@ -72,7 +72,9 @@ public class Repair {
     private Set<String> _alreadyFixedTests = new HashSet<>();
     private List<String> _currentFailedTests = new LinkedList<>();
 
-    public Repair(Subject subject, String patternRecords) {
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+
+    public Repair(Subject subject, Set<String> patternRecords) {
         _subject = subject;
         _patchNum = 0;
         _patternRecords = patternRecords;
@@ -164,32 +166,35 @@ public class Repair {
     private List<String> filterPatterns(Set<String> keys, int topK) throws IOException {
         List<Pair<String, Integer>> patterns = new LinkedList<>();
         Set<String> set = new HashSet<>();
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(_patternRecords),
-                StandardCharsets.UTF_8));
-        String line;
-        while((line = br.readLine()) != null) {
-            if (line.startsWith(Constant.DEFAULT_PATTERN_HOME)) {
-                if (line.contains("#")) {
-                    boolean match = true;
-                    for (String s : set) {
-                        if (!keys.contains(s)) {
-                            match = false;
-                            break;
+        for (String file : _patternRecords) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
+                    StandardCharsets.UTF_8));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith(Constant.DEFAULT_PATTERN_HOME)) {
+                    if (line.contains("#")) {
+                        boolean match = true;
+                        for (String s : set) {
+                            if (!keys.contains(s)) {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match) {
+                            String[] info = line.split("#");
+                            if (info.length != 2) {
+                                LevelLogger.error("Record file format error : " + line);
+                            } else {
+                                patterns.add(new Pair<>(info[0], Integer.parseInt(info[1])));
+                            }
                         }
                     }
-                    if (match) {
-                        String[] info = line.split("#");
-                        if (info.length != 2) {
-                            LevelLogger.error("Record file format error : " + line);
-                        } else {
-                            patterns.add(new Pair<>(info[0], Integer.parseInt(info[1])));
-                        }
-                    }
+                    set.clear();
+                } else {
+                    set.add(line);
                 }
-                set.clear();
-            } else {
-                set.add(line);
             }
+            br.close();
         }
         topK = topK > patterns.size() ? patterns.size() : topK;
         List<String> result = patterns.stream()
@@ -266,6 +271,10 @@ public class Repair {
                 .append(Constant.NEW_LINE)
                 .append("PATTERN : ")
                 .append(patternName)
+                .append(Constant.NEW_LINE)
+                .append("---------")
+                .append("TIME : ")
+                .append(simpleDateFormat.format(new Date()))
                 .append(Constant.NEW_LINE)
                 .append("--------------- END -----------------")
                 .append(Constant.NEW_LINE);
@@ -382,7 +391,6 @@ public class Repair {
 
     public void repair() throws IOException {
         LevelLogger.info("Repair : " + _subject.getHome());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
         _subject.backup();
 
         String srcSrc = _subject.getHome() + _subject.getSsrc();
@@ -469,7 +477,7 @@ public class Repair {
         return options;
     }
 
-    private static Pair<String, List<Subject>> parseCommandLine(String[] args) {
+    private static Pair<Set<String>, List<Subject>> parseCommandLine(String[] args) {
         Options options = options();
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -483,7 +491,7 @@ public class Repair {
             System.exit(1);
         }
 
-        String patternFile = cmd.getOptionValue("pf");
+        Set<String> patternFile = new HashSet<>(Arrays.asList(cmd.getOptionValue("pf").split(",")));
         List<Subject> subjects = new LinkedList<>();
         if (cmd.hasOption("xml")) {
             subjects = Utils.getSubjectFromXML(Constant.DEFAULT_SUBJECT_XML);
@@ -514,13 +522,13 @@ public class Repair {
     }
 
     public static void repairAPI(String[] args) {
-        Pair<String, List<Subject>> pair = parseCommandLine(args);
+        Pair<Set<String>, List<Subject>> pair = parseCommandLine(args);
         if (pair == null) {
             LevelLogger.error("Wrong command line input!");
             return;
         }
 
-        String patternRecords = pair.getFirst();
+        Set<String> patternRecords = pair.getFirst();
         List<Subject> subjects = pair.getSecond();
         for (Subject subject : subjects) {
             LevelLogger.info(subject.getHome() + ", " + subject.toString());
