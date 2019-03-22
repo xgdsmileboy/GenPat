@@ -47,6 +47,7 @@ public class RepairTest extends TestCase {
 
     @Test
     public void test_chart_14() {
+        // can fix but need test purification
         test("chart", 14);
     }
 
@@ -57,16 +58,19 @@ public class RepairTest extends TestCase {
 
     @Test
     public void test_closure_2() {
+        // success repair?
         test("closure", 2);
     }
 
     @Test
     public void test_lang_33() {
+        // success repair
         test("lang", 33);
     }
 
     @Test
     public void test_chart_4() {
+        // success repair
         test("chart", 4);
     }
 
@@ -77,6 +81,7 @@ public class RepairTest extends TestCase {
 
     @Test
     public void test_math_4() {
+        // can fix but need test purification
         test("math", 4);
     }
 
