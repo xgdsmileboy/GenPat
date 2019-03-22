@@ -185,8 +185,13 @@ public class Assign extends Expr {
 
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if (node instanceof Assign) {
-            return super.ifMatch(node, matchedNode, matchedStrings);
+        if (super.ifMatch(node, matchedNode, matchedStrings)) {
+            if (node instanceof Assign) {
+                Assign assign = (Assign) node;
+                return NodeUtils.matchSameNodeType(_lhs, assign.getLhs(), matchedNode, matchedStrings)
+                        && NodeUtils.checkDependency(_rhs, assign.getRhs(), matchedNode, matchedStrings)
+                        && NodeUtils.matchSameNodeType(_rhs, assign.getRhs(), matchedNode, matchedStrings);
+            }
         }
         return false;
     }

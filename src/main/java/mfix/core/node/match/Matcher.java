@@ -8,16 +8,22 @@ package mfix.core.node.match;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
+import mfix.core.node.ast.expr.Assign;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.ast.expr.Vdf;
+import mfix.core.node.ast.stmt.ExpressionStmt;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.ast.stmt.VarDeclarationStmt;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.modify.Wrap;
 import mfix.core.pattern.Pattern;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -656,6 +662,23 @@ public class Matcher {
         return map;
     }
 
+    private static Set<String> getDefVars(Node node) {
+        Set<String> set = new HashSet<>();
+        if (node instanceof VarDeclarationStmt) {
+            VarDeclarationStmt vds = (VarDeclarationStmt) node;
+            for (Vdf vdf : vds.getFragments()) {
+                set.add(vdf.getName());
+            }
+        } else if (node instanceof ExpressionStmt) {
+            ExpressionStmt expressionStmt = (ExpressionStmt) node;
+            if (expressionStmt.getExpression() instanceof Assign) {
+                Assign assign = (Assign) expressionStmt.getExpression();
+                set.add(assign.getLhs().toSrcString().toString());
+            }
+        }
+        return set;
+    }
+
     public static boolean applyNodeListModifications(List<Modification> modifications,
                                                      List<? extends Node> statements,
                                                      Map<Node, List<StringBuffer>> insertionBefore,
@@ -666,7 +689,36 @@ public class Matcher {
                                                      String retType, Set<String> exceptions) {
         StringBuffer tmp;
         for (Modification modification : modifications) {
-            if (modification instanceof Update) {
+            if (modification instanceof Wrap) {
+                Wrap wrap = (Wrap) modification;
+                Node node = wrap.getSrcNode().getBuggyBindingNode();
+                assert node != null;
+                int index = -1;
+                for (int i = 0; i < statements.size(); i++) {
+                    if (statements.get(i) == node
+                            || statements.get(i) == node.getParentStmt()) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index < 0) return false;
+                List<Node> toWrap = new LinkedList<>();
+                Set<String> set = getDefVars(node);
+                for (index ++; index < statements.size(); index ++) {
+                    if (statements.get(index).flattenTreeNode(new LinkedList<>())
+                            .stream().anyMatch(n-> NodeUtils.isSimpleExpr(n)
+                                    && set.contains(n.toSrcString().toString()))) {
+                        toWrap.add(statements.get(index));
+                        set.addAll(getDefVars(statements.get(index)));
+                        changeNodeMap.put(statements.get(index), null);
+                    } else {
+                        break;
+                    }
+                }
+                tmp = wrap.apply(vars, exprMap, retType, exceptions, toWrap);
+                if (tmp == null) return false;
+                changeNodeMap.put(node, tmp);
+            } else if (modification instanceof Update) {
                 Update update = (Update) modification;
                 Node node = update.getSrcNode().getBuggyBindingNode();
                 assert node != null;

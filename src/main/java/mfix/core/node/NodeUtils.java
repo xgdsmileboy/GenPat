@@ -15,11 +15,14 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MType;
+import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.ast.expr.SuperMethodInv;
 import mfix.core.node.ast.stmt.IfStmt;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
+import mfix.core.node.modify.Wrap;
 import org.eclipse.jdt.core.dom.*;
 
 import java.util.ArrayList;
@@ -166,6 +169,18 @@ public class NodeUtils {
                 }
             }
         }
+    }
+
+    public static boolean isMethodName(Node node) {
+        Node parent = node.getParent();
+        if (parent instanceof MethodInv) {
+            MethodInv methodInv = (MethodInv) parent;
+            return methodInv.getName() == node;
+        } else if (parent instanceof SuperMethodInv) {
+            SuperMethodInv methodInv = (SuperMethodInv) parent;
+            return methodInv.getMethodName() == node;
+        }
+        return false;
     }
 
     /**
@@ -320,7 +335,13 @@ public class NodeUtils {
                         continue;
                     }
                     insertion = insertions.get(i);
-                    if (d.getIndex() == insertion.getIndex() || binding.isParentOf(insertion.getInsertedNode())
+                    Node insNode = insertion.getInsertedNode();
+                    List<Node> wrap = insNode.wrappedNodes();
+                    if (wrap != null && wrap.contains(d.getDelNode())) {
+                        matched.add(i);
+                        update = new Wrap(d.getParent(), d.getDelNode(), insNode, wrap);
+                    } else if (d.getIndex() == insertion.getIndex()
+                            || binding.isParentOf(insertion.getInsertedNode())
                             || insertion.getInsertedNode().isParentOf(binding)) {
                         matched.add(i);
                         update = new Update(d.getParent(), d.getDelNode(), insertion.getInsertedNode());

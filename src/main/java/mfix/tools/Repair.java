@@ -309,6 +309,7 @@ public class Repair {
                 LevelLogger.error("AdaptModification causes exception ....", e);
                 continue;
             }
+
             if (fixedCode == null) {
                 matchInstance.reset();
                 continue;
@@ -319,10 +320,10 @@ public class Repair {
                 matchInstance.reset();
                 continue;
             }
-
             _alreadyGenerated.add(fixed);
             String code = JavaFile.sourceReplace(buggyFile, pattern.getImports(),
                     sources, startLine, endLine, fixed);
+
 
             TextDiff diff = new TextDiff(origin, fixed);
             LevelLogger.debug("Repair code :\n" + diff.toString());

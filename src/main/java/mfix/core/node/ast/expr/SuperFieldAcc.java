@@ -122,6 +122,11 @@ public class SuperFieldAcc extends Expr {
 		return children;
 	}
 
+	public List<Node> flattenTreeNode(List<Node> nodes) {
+		nodes.add(this);
+		return nodes;
+	}
+
 	@Override
 	public void computeFeatureVector() {
 		_selfFVector = new FVector();

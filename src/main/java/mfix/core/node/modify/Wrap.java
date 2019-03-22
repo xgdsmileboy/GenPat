@@ -18,26 +18,26 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2019-01-14
  */
-public class Wrap extends Insertion {
+public class Wrap extends Update {
 
     private List<Node> _nodes;
 
-    public Wrap(Node parent, Node wrapper, int index, List<Node> wrapped) {
-        super(parent, index, wrapper);
+    public Wrap(Node parent, Node del, Node wrapper, List<Node> wrapped) {
+        super(parent, del, wrapper);
         _nodes = wrapped;
     }
 
     public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType,
                               Set<String> exceptions, List<Node> nodes) {
-        if(_insert == null) {
+        if(getTarNode() == null) {
             return new StringBuffer("null");
         } else {
-            return _insert.transfer(vars, exprMap, retType, exceptions, nodes);
+            return getTarNode().transfer(vars, exprMap, retType, exceptions, nodes);
         }
     }
 
     @Override
     public String toString() {
-        return String.format("[WRP]INSERT %s UNDER %s AS {%d} CHILD",_insert, getParent(), _index);
+        return "[WRP]" + getSrcNode() + " TO " + getTarNode();
     }
 }

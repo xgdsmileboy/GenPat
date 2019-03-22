@@ -79,11 +79,16 @@ public abstract class Expr extends Node {
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if ((!_modifications.isEmpty() && node.getNodeType() == getNodeType())
                 || (_modifications.isEmpty() && node instanceof Expr)) {
-            if ((!"boolean".equals(getTypeString()) || "boolean".equals(((Expr) node).getTypeString()))
+            String typeStr = ((Expr) node).getTypeString();
+            if ((!"boolean".equals(getTypeString()) && !"boolean".equals(typeStr))
+                    || ("boolean".equals(getTypeString()) && "boolean".equals(typeStr))
                     && !(node instanceof Operator)) {
-                boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
-                return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+                if (NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
+                        && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL) {
+                    boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
+                    return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                            && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+                }
             }
         }
         return false;

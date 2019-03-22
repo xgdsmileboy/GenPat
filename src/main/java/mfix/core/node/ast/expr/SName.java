@@ -109,45 +109,6 @@ public class SName extends Label {
 		return true;
 	}
 
-//	@Override
-//	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-//		Node parent = getParent();
-//		boolean isMethodName = false;
-//		if (parent instanceof MethodInv) {
-//			MethodInv methodInv = (MethodInv) parent;
-//			if (methodInv.getName() == this) {
-//				isMethodName = true;
-//			}
-//		} else if (parent instanceof SuperMethodInv){
-//			SuperMethodInv methodInv = (SuperMethodInv) parent;
-//			if (methodInv.getMethodName() == this) {
-//				isMethodName = true;
-//			}
-//		}
-//		boolean match = true;
-//		if (isMethodName) {
-//			parent = node.getParent();
-//			if (parent instanceof MethodInv) {
-//				MethodInv methodInv = (MethodInv) parent;
-//				if (methodInv.getName() != node) {
-//					match = false;
-//				}
-//			} else if (parent instanceof SuperMethodInv){
-//				SuperMethodInv methodInv = (SuperMethodInv) parent;
-//				if (methodInv.getMethodName() != node) {
-//					match = false;
-//				}
-//			} else {
-//				match = false;
-//			}
-//		}
-//		if (match) {
-//			return super.ifMatch(node, matchedNode, matchedStrings);
-//		} else {
-//			return false;
-//		}
-//	}
-
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);

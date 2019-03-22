@@ -260,37 +260,19 @@ public class MethodInv extends Expr {
 		return true;
 	}
 
-//	@Override
-//	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-//		if(node instanceof Expr) {
-//			if(isAbstract()) {
-//				return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-//						&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
-//			} else if (node instanceof MethodInv){
-//				MethodInv methodInv = (MethodInv) node;
-//				List<Expr> exprs = _arguments.getExpr();
-//				List<Expr> others = methodInv.getArguments().getExpr();
-//				if (_name.compare(methodInv.getName()) && exprs.size() == others.size()) {
-//					matchedNode.put(_name, methodInv.getName());
-//					matchedNode.put(this, node);
-//					matchedStrings.put(toString(), node.toString());
-//					if(_expression != null && methodInv.getExpression() != null) {
-//						matchedNode.put(_expression, methodInv.getExpression());
-//						matchedStrings.put(_expression.toString(), methodInv.getExpression().toString());
-//					}
-//					for(int i = 0; i < exprs.size(); i++) {
-//						matchedNode.put(exprs.get(i), others.get(i));
-//						matchedStrings.put(exprs.get(i).toString(), others.get(i).toString());
-//					}
-//					return true;
-//				}
-//				return false;
-//			} else {
-//				return false;
-//			}
-//		}
-//		return false;
-//	}
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if(super.ifMatch(node, matchedNode, matchedStrings)) {
+			if (node.getNodeType() == TYPE.MINVOCATION) {
+				MethodInv methodInv = (MethodInv) node;
+				if (_expression != null && methodInv._expression != null) {
+					return NodeUtils.matchSameNodeType(_expression, methodInv._expression, matchedNode, matchedStrings);
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {

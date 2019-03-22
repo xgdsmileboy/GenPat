@@ -112,6 +112,12 @@ public class FieldAcc extends Expr {
 	}
 
 	@Override
+	public List<Node> flattenTreeNode(List<Node> nodes) {
+		nodes.add(this);
+		return nodes;
+	}
+
+	@Override
 	public void computeFeatureVector() {
 		_selfFVector = new FVector();
 		_selfFVector.inc(FVector.E_FACC);

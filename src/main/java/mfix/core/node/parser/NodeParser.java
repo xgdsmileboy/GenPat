@@ -600,16 +600,17 @@ public class NodeParser {
         return aryInitializer;
     }
 
-    private Assign visit(Assignment node, VScope scope, Node strcture) {
+    private Assign visit(Assignment node, VScope scope, Node structure) {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Assign assign = new Assign(_fileName, startLine, endLine, node);
 
-        Expr lhs = (Expr) process(node.getLeftHandSide(), scope, strcture);
+        Expr lhs = (Expr) process(node.getLeftHandSide(), scope, structure);
         lhs.setParent(assign);
+        lhs.setDataDependency(null);
         assign.setLeftHandSide(lhs);
 
-        Expr rhs = (Expr) process(node.getRightHandSide(), scope, strcture);
+        Expr rhs = (Expr) process(node.getRightHandSide(), scope, structure);
         rhs.setParent(assign);
         assign.setRightHandSide(rhs);
 
