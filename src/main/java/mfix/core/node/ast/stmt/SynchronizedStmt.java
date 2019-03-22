@@ -109,6 +109,18 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
+	public List<Node> wrappedNodes() {
+		List<Node> result = new LinkedList<>();
+		for (Node node : _blk.getStatement()) {
+			if (node.getBindingNode() == null) {
+				return null;
+			}
+			result.add(node.getBindingNode());
+		}
+		return result;
+	}
+
+	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
 		if (other instanceof SynchronizedStmt) {

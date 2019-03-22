@@ -220,7 +220,19 @@ public class TryStmt extends Stmt {
 		children.add(_blk);
 		return children;
 	}
-	
+
+	@Override
+	public List<Node> wrappedNodes() {
+		List<Node> result = new LinkedList<>();
+		for (Stmt stmt : _blk.getStatement()) {
+			if (stmt.getBindingNode() == null) {
+				return null;
+			}
+			result.add(stmt.getBindingNode());
+		}
+		return result;
+	}
+
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;

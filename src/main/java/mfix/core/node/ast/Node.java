@@ -482,6 +482,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return _expanded;
     }
 
+    public List<Node> wrappedNodes() {
+        return null;
+    }
+
     public boolean isConsidered() {
         return _expanded || _changed || _insertDepend || _bindingNode == null;
     }

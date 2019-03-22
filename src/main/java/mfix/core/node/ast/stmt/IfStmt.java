@@ -19,6 +19,7 @@ import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -139,6 +140,31 @@ public class IfStmt extends Stmt {
 			children.add(_else);
 		}
 		return children;
+	}
+
+	@Override
+	public List<Node> wrappedNodes() {
+		Set<Stmt> stmts = new HashSet<>();
+		if (_then.getNodeType() == TYPE.BLOCK) {
+			stmts.addAll(_then.getChildren());
+		} else {
+			stmts.add(_then);
+		}
+		if (_else != null) {
+			if (_else.getNodeType() == TYPE.BLOCK) {
+				stmts.addAll(_else.getChildren());
+			} else {
+				stmts.add(_else);
+			}
+		}
+		List<Node> result = new LinkedList<>();
+		for (Stmt stmt : stmts) {
+			if (stmt.getBindingNode() == null) {
+				return null;
+			}
+			result.add(stmt.getBindingNode());
+		}
+		return result;
 	}
 
 	@Override
