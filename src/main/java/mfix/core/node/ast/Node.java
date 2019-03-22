@@ -478,7 +478,7 @@ public abstract class Node implements NodeComparator, Serializable {
         _changed = true;
     }
 
-    protected boolean isExpanded() {
+    public boolean isExpanded() {
         return _expanded;
     }
 

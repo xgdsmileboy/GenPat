@@ -245,14 +245,6 @@ public class Repair {
 
     private void writeLog(String patternName, String buggyFile, String original, Set<String> imports,
                           String fixed, int startLine, int endLine, boolean patch) {
-        LevelLogger.debug(patternName);
-        LevelLogger.debug("------------ Origin ---------------");
-        LevelLogger.debug(original);
-        LevelLogger.debug("------------ Solution ---------------");
-        LevelLogger.debug(fixed);
-        LevelLogger.debug("------------ End ---------------");
-        LevelLogger.info("Find a solution!");
-
         StringBuffer b = new StringBuffer();
         for (String s : imports) {
             b.append(s).append(Constant.NEW_LINE);

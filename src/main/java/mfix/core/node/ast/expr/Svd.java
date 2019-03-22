@@ -228,6 +228,12 @@ public class Svd extends Expr {
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_name, vdf.getNameNode(), matchedNode, matchedStrings);
 			}
+		} else if ((_initializer != null) && (node.getNodeType() == TYPE.ASSIGN) && _modifications.isEmpty()) {
+			Assign assign = (Assign) node;
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+				return NodeUtils.matchSameNodeType(_name, assign.getLhs(), matchedNode, matchedStrings);
+			}
 		}
 		return false;
 	}

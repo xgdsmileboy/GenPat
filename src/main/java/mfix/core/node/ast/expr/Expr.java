@@ -93,10 +93,13 @@ public abstract class Expr extends Node {
     // currently, I did not consider the structure of the expression but only the keywords
     public boolean ifMatch0(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         Set<String> keys = flattenTreeNode(new LinkedList<>()).stream()
-                .filter(n -> NodeUtils.isSimpleExpr(n) && !n.isAbstract())
+                .filter(n -> NodeUtils.isSimpleExpr(n) && !(n.isChanged() || n.isExpanded()) && !isAbstract())
                 .map(n -> n.toSrcString().toString())
                 .collect(Collectors.toSet());
-        String content = node.toSrcString().toString();
+        Set<String> content = node.flattenTreeNode(new LinkedList<>()).stream()
+                .filter(n -> NodeUtils.isSimpleExpr(n))
+                .map(n -> n.toSrcString().toString())
+                .collect(Collectors.toSet());
         for (String key : keys) {
             if (!content.contains(key)) {
                 return false;

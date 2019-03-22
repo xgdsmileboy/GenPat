@@ -253,23 +253,23 @@ public class Vdf extends Node {
 
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		if(node instanceof Vdf) {
+		if (node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;
-			if (_expression == null || vdf.getExpression() != null) {
-				if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-						&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
-					matchedNode.put(_identifier, vdf._identifier);
-					matchedStrings.put(_identifier.getName(), vdf.getName());
-					return true;
-				}
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+				return NodeUtils.matchSameNodeType(_identifier, vdf._identifier, matchedNode, matchedStrings);
 			}
-		} else if ((_expression != null) && (node instanceof Assign) && _modifications.isEmpty()) {
+		} else if (node.getNodeType() == TYPE.SINGLEVARDECL && _modifications.isEmpty()) {
+			Svd svd = (Svd) node;
+			if (NodeUtils.checkDependency(this, svd, matchedNode, matchedStrings)
+				&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+				return NodeUtils.matchSameNodeType(_identifier, svd.getName(), matchedNode, matchedStrings);
+			}
+		} else if ((_expression != null) && (node.getNodeType() == TYPE.ASSIGN) && _modifications.isEmpty()) {
 			Assign assign = (Assign) node;
 			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
-				matchedNode.put(_identifier, assign.getLhs());
-				matchedStrings.put(_identifier.getName(), assign.getLhs().toString());
-				return true;
+				return NodeUtils.matchSameNodeType(_identifier, assign.getLhs(), matchedNode, matchedStrings);
 			}
 		}
 		return false;
