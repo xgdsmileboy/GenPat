@@ -178,13 +178,13 @@ public class ContinueStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("continue");
             if (_identifier != null) {
                 stringBuffer.append(" ");
-                StringBuffer tmp = _identifier.transfer(vars, exprMap);
+                StringBuffer tmp = _identifier.transfer(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -195,7 +195,8 @@ public class ContinueStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer identifier = null;
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
@@ -204,7 +205,7 @@ public class ContinueStmt extends Stmt {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == continueStmt._identifier) {
-                        identifier = update.apply(vars, exprMap);
+                        identifier = update.apply(vars, exprMap, retType, exceptions);
                         if (identifier == null) return null;
                     } else {
                         LevelLogger.error("@ContinueStmt ERROR");
@@ -218,7 +219,7 @@ public class ContinueStmt extends Stmt {
         if (identifier == null) {
             if (_identifier != null) {
                 stringBuffer.append(" ");
-                StringBuffer tmp = _identifier.adaptModifications(vars, exprMap);
+                StringBuffer tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }

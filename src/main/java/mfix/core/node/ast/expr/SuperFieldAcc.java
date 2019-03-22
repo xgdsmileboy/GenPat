@@ -122,6 +122,11 @@ public class SuperFieldAcc extends Expr {
 		return children;
 	}
 
+	public List<Node> flattenTreeNode(List<Node> nodes) {
+		nodes.add(this);
+		return nodes;
+	}
+
 	@Override
 	public void computeFeatureVector() {
 		_selfFVector = new FVector();
@@ -187,19 +192,19 @@ public class SuperFieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if(_name != null){
-				tmp = _name.transfer(vars, exprMap);
+				tmp = _name.transfer(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
 			}
 			stringBuffer.append("super.");
-			tmp = _identifier.transfer(vars, exprMap);
+			tmp = _identifier.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -207,7 +212,8 @@ public class SuperFieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer name = null;
 		StringBuffer identifier = null;
 		Node node = NodeUtils.checkModification(this);
@@ -217,10 +223,10 @@ public class SuperFieldAcc extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == superFieldAcc._name) {
-						name = update.apply(vars, exprMap);
+						name = update.apply(vars, exprMap, retType, exceptions);
 						if (name == null) return null;
 					} else {
-						identifier = update.apply(vars, exprMap);
+						identifier = update.apply(vars, exprMap, retType, exceptions);
 						if (identifier == null) return null;
 					}
 				} else {
@@ -232,7 +238,7 @@ public class SuperFieldAcc extends Expr {
 		StringBuffer tmp = null;
 		if (name == null) {
 			if (_name != null){
-				tmp = _name.adaptModifications(vars, exprMap);
+				tmp = _name.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -242,7 +248,7 @@ public class SuperFieldAcc extends Expr {
 		}
 		stringBuffer.append("super.");
 		if(identifier == null) {
-			tmp = _identifier.adaptModifications(vars, exprMap);
+			tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

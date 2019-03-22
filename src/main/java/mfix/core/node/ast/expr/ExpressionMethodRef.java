@@ -91,8 +91,8 @@ public class ExpressionMethodRef extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
 		}
@@ -100,7 +100,8 @@ public class ExpressionMethodRef extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		return toSrcString();
 	}
 }

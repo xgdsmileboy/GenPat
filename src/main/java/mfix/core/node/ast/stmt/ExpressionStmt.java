@@ -169,11 +169,11 @@ public class ExpressionStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
-            StringBuffer tmp = _expression.transfer(vars, exprMap);
+            StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(";");
@@ -182,7 +182,8 @@ public class ExpressionStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer expression = null;
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
@@ -191,7 +192,7 @@ public class ExpressionStmt extends Stmt {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == expressionStmt._expression) {
-                        expression = update.apply(vars, exprMap);
+                        expression = update.apply(vars, exprMap, retType, exceptions);
                         if (expression == null) return null;
                     } else {
                         LevelLogger.error("@ExpressionStmt ERROR");
@@ -203,7 +204,7 @@ public class ExpressionStmt extends Stmt {
         }
         StringBuffer stringBuffer = new StringBuffer();
         if (expression == null) {
-            StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
+            StringBuffer tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

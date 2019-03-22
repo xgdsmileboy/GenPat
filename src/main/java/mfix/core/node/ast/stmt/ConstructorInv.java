@@ -180,12 +180,12 @@ public class ConstructorInv extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             stringBuffer.append("this(");
-            StringBuffer tmp = _arguments.transfer(vars, exprMap);
+            StringBuffer tmp = _arguments.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(");");
@@ -194,7 +194,8 @@ public class ConstructorInv extends Stmt {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer arguments = null;
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
@@ -203,7 +204,7 @@ public class ConstructorInv extends Stmt {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == constructorInv._arguments) {
-                        arguments = update.apply(vars, exprMap);
+                        arguments = update.apply(vars, exprMap, retType, exceptions);
                         if (arguments == null) return null;
                     } else {
                         LevelLogger.error("@ConstructorInv ERROR");
@@ -216,7 +217,7 @@ public class ConstructorInv extends Stmt {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("this(");
         if (arguments == null) {
-            StringBuffer tmp = _arguments.adaptModifications(vars, exprMap);
+            StringBuffer tmp = _arguments.adaptModifications(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

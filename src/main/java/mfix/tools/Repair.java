@@ -22,6 +22,7 @@ import mfix.core.locator.Location;
 import mfix.core.locator.purify.CommentTestCase;
 import mfix.core.locator.purify.Purification;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
@@ -62,17 +63,29 @@ public class Repair {
     private String _logfile;
     private String _patchFile;
     private int _patchNum;
-    private String _patternRecords;
+    private Set<String> _patternRecords;
+
     private Timer _timer;
+
     private Set<String> _alreadyGenerated = new HashSet<>();
 
-    public Repair(Subject subject, String patternRecords) {
+    private Set<String> _allFailedTests = new HashSet<>();
+    private Set<String> _alreadyFixedTests = new HashSet<>();
+    private List<String> _currentFailedTests = new LinkedList<>();
+
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+
+    public Repair(Subject subject, Set<String> patternRecords) {
         _subject = subject;
         _patchNum = 0;
         _patternRecords = patternRecords;
         _patchFile = _subject.getPatchFile();
         _logfile = _subject.getLogFile();
         _timer = new Timer(Constant.MAX_REPAIR_TIME);
+    }
+
+    public int patch() {
+        return _patchNum;
     }
 
     private boolean shouldStop() {
@@ -90,7 +103,6 @@ public class Repair {
     }
 
     private ValidateResult validate(String clazzName, String source) {
-        ValidateResult result = ValidateResult.PASS;
         if (_subject.compileFile()) {
             LevelLogger.debug("Compile single file : " + clazzName);
             boolean compile = new JCompiler().compile(_subject, clazzName, source);
@@ -109,6 +121,14 @@ public class Repair {
             }
             LevelLogger.debug("Compiling subject success!");
         }
+
+        for (String string : _currentFailedTests) {
+            LevelLogger.debug("Test : " + string);
+            if (!_subject.test(string)) {
+                return ValidateResult.TEST_FAILED;
+            }
+        }
+
         if (_subject.testProject()) {
             LevelLogger.debug("Test project : " + _subject.getName());
             boolean test = _subject.test();
@@ -118,7 +138,22 @@ public class Repair {
             }
             LevelLogger.debug("Testing project success!");
         }
-        return result;
+
+        _alreadyFixedTests.addAll(_currentFailedTests);
+
+        try {
+            _subject.restorePurifiedTest();
+            for (String s : _allFailedTests) {
+                if (_allFailedTests.contains(s)) {
+                    continue;
+                }
+                if (_subject.test(s)) {
+                    _alreadyFixedTests.add(s);
+                }
+            }
+        } catch(IOException e) {}
+
+        return ValidateResult.PASS;
     }
 
     private Pattern readPattern(String patternFile) {
@@ -136,32 +171,35 @@ public class Repair {
     private List<String> filterPatterns(Set<String> keys, int topK) throws IOException {
         List<Pair<String, Integer>> patterns = new LinkedList<>();
         Set<String> set = new HashSet<>();
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(_patternRecords),
-                StandardCharsets.UTF_8));
-        String line;
-        while((line = br.readLine()) != null) {
-            if (line.startsWith(Constant.DEFAULT_PATTERN_HOME)) {
-                if (line.contains("#")) {
-                    boolean match = true;
-                    for (String s : set) {
-                        if (!keys.contains(s)) {
-                            match = false;
-                            break;
+        for (String file : _patternRecords) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
+                    StandardCharsets.UTF_8));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith(Constant.DEFAULT_PATTERN_HOME)) {
+                    if (line.contains("#")) {
+                        boolean match = true;
+                        for (String s : set) {
+                            if (!keys.contains(s)) {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match) {
+                            String[] info = line.split("#");
+                            if (info.length != 2) {
+                                LevelLogger.error("Record file format error : " + line);
+                            } else {
+                                patterns.add(new Pair<>(info[0], Integer.parseInt(info[1])));
+                            }
                         }
                     }
-                    if (match) {
-                        String[] info = line.split("#");
-                        if (info.length != 2) {
-                            LevelLogger.error("Record file format error : " + line);
-                        } else {
-                            patterns.add(new Pair<>(info[0], Integer.parseInt(info[1])));
-                        }
-                    }
+                    set.clear();
+                } else {
+                    set.add(line);
                 }
-                set.clear();
-            } else {
-                set.add(line);
             }
+            br.close();
         }
         topK = topK > patterns.size() ? patterns.size() : topK;
         List<String> result = patterns.stream()
@@ -207,14 +245,6 @@ public class Repair {
 
     private void writeLog(String patternName, String buggyFile, String original, Set<String> imports,
                           String fixed, int startLine, int endLine, boolean patch) {
-        LevelLogger.debug(patternName);
-        LevelLogger.debug("------------ Origin ---------------");
-        LevelLogger.debug(original);
-        LevelLogger.debug("------------ Solution ---------------");
-        LevelLogger.debug(fixed);
-        LevelLogger.debug("------------ End ---------------");
-        LevelLogger.info("Find a solution!");
-
         StringBuffer b = new StringBuffer();
         for (String s : imports) {
             b.append(s).append(Constant.NEW_LINE);
@@ -239,6 +269,10 @@ public class Repair {
                 .append("PATTERN : ")
                 .append(patternName)
                 .append(Constant.NEW_LINE)
+                .append("---------")
+                .append("TIME : ")
+                .append(simpleDateFormat.format(new Date()))
+                .append(Constant.NEW_LINE)
                 .append("--------------- END -----------------")
                 .append(Constant.NEW_LINE);
 
@@ -248,7 +282,8 @@ public class Repair {
         }
     }
 
-    protected void tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile) {
+    protected void tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile, String retType,
+                          Set<String> exceptions) {
         if (bNode == null || pattern == null || shouldStop()) {
             return;
         }
@@ -268,12 +303,13 @@ public class Repair {
             matchInstance.apply();
             StringBuffer fixedCode;
             try{
-                fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap());
+                fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap(), retType, exceptions);
             } catch (Exception e) {
                 matchInstance.reset();
                 LevelLogger.error("AdaptModification causes exception ....", e);
                 continue;
             }
+
             if (fixedCode == null) {
                 matchInstance.reset();
                 continue;
@@ -284,10 +320,10 @@ public class Repair {
                 matchInstance.reset();
                 continue;
             }
-
             _alreadyGenerated.add(fixed);
             String code = JavaFile.sourceReplace(buggyFile, pattern.getImports(),
                     sources, startLine, endLine, fixed);
+
 
             TextDiff diff = new TextDiff(origin, fixed);
             LevelLogger.debug("Repair code :\n" + diff.toString());
@@ -334,6 +370,13 @@ public class Repair {
                 LevelLogger.error("Get faulty node failed ! " + file + "#" + location.getLine());
                 continue;
             }
+            String retType = "void";
+            Set<String> exceptions = new HashSet<>();
+            if (node instanceof MethDecl) {
+                MethDecl decl = (MethDecl) node;
+                retType = decl.getRetTypeStr();
+                exceptions.addAll(decl.getThrows());
+            }
 
             List<String> patterns;
             try {
@@ -347,15 +390,13 @@ public class Repair {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
                 scope.reset(p.getNewVars());
-                tryFix(node, p, scope, clazzFile);
+                tryFix(node, p, scope, clazzFile, retType, exceptions);
             }
         }
     }
 
     public void repair() throws IOException {
         LevelLogger.info("Repair : " + _subject.getHome());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
-
         _subject.backup();
 
         String srcSrc = _subject.getHome() + _subject.getSsrc();
@@ -363,23 +404,17 @@ public class Repair {
         String srcBin = _subject.getHome() + _subject.getSbin();
         String testBin = _subject.getHome() + _subject.getTbin();
 
-
         FileUtils.deleteDirectory(new File(srcBin));
         FileUtils.deleteDirectory(new File(testBin));
 
         Purification purification = new Purification(_subject);
-        boolean purify = _subject.purify();
-        List<String> purifiedFailedTestCases = purification.purify(purify);
+        List<String> purifiedFailedTestCases = purification.purify(_subject.purify());
         if(purifiedFailedTestCases == null || purifiedFailedTestCases.size() == 0){
             purifiedFailedTestCases = purification.getFailedTest();
         }
+        _allFailedTests.addAll(purifiedFailedTestCases);
+        _subject.backupPurifiedTest();
 
-        File purifiedTest = new File(testSrc);
-        File purifyBackup = new File(testSrc + "_purify");
-        FileUtils.copyDirectory(purifiedTest, purifyBackup);
-
-        boolean lastRslt = false;
-        Set<String> alreadyFix = new HashSet<>();
         Map<String, Map<Integer, VarScope>> buggyFileVarMap = new HashMap<>();
 
         String start = _timer.start();
@@ -389,36 +424,26 @@ public class Repair {
             String teString = purifiedFailedTestCases.get(currentTry);
             JavaFile.writeStringToFile(_logfile, "Current failed test : " +
                     teString + " | " + simpleDateFormat.format(new Date()) + "\n", true);
-
-            FileUtils.copyDirectory(purifyBackup, purifiedTest);
-            FileUtils.deleteDirectory(new File(testBin));
-
-            if (lastRslt) {
-                for (int i = currentTry; i < purifiedFailedTestCases.size(); i++) {
-                    if (_subject.test(purifiedFailedTestCases.get(i))) {
-                        alreadyFix.add(purifiedFailedTestCases.get(i));
-                    }
-                }
-            }
-            lastRslt = false;
-            if (alreadyFix.contains(teString)) {
+            if (_alreadyFixedTests.contains(teString)) {
                 JavaFile.writeStringToFile(_logfile, "Already fixed : " + teString + "\n", true);
                 continue;
             }
 
             _subject.restore(srcSrc);
+            _subject.restorePurifiedTest();
             FileUtils.deleteDirectory(new File(srcBin));
             FileUtils.deleteDirectory(new File(testBin));
 
-            List<String> currentFailedTests = new ArrayList<>();
-            if (purify) {
-                currentFailedTests.add(teString);
-                CommentTestCase.comment(testSrc, purifiedFailedTestCases, teString);
+            _currentFailedTests.clear();
+            if (_subject.purify()) {
+                _currentFailedTests.add(teString);
             } else {
-                currentFailedTests.addAll(purifiedFailedTestCases);
+                _currentFailedTests.addAll(_allFailedTests);
             }
+            CommentTestCase.comment(testSrc, purifiedFailedTestCases, new HashSet<>(_currentFailedTests));
 
             AbstractFaultLocator locator = FaultLocatorFactory.dispatch(_subject);
+            locator.setFailedTests(_currentFailedTests);
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
 
             repair0(locations, buggyFileVarMap);
@@ -458,7 +483,7 @@ public class Repair {
         return options;
     }
 
-    private static Pair<String, List<Subject>> parseCommandLine(String[] args) {
+    private static Pair<Set<String>, List<Subject>> parseCommandLine(String[] args) {
         Options options = options();
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -472,7 +497,7 @@ public class Repair {
             System.exit(1);
         }
 
-        String patternFile = cmd.getOptionValue("pf");
+        Set<String> patternFile = new HashSet<>(Arrays.asList(cmd.getOptionValue("pf").split(",")));
         List<Subject> subjects = new LinkedList<>();
         if (cmd.hasOption("xml")) {
             subjects = Utils.getSubjectFromXML(Constant.DEFAULT_SUBJECT_XML);
@@ -490,11 +515,30 @@ public class Repair {
         } else if (cmd.hasOption("d4j")) {
             String[] ids = cmd.getOptionValue("d4j").split(",");
             String base = cmd.hasOption("d4jhome") ? cmd.getOptionValue("d4jhome") : Constant.D4J_PROJ_DEFAULT_HOME;
+            // math_1,lang_1-10,
             for (String id : ids) {
-                String name = id.split("_")[0];
-                int number = Integer.parseInt(id.split("_")[1]);
-                D4jSubject subject = new D4jSubject(base, name, number);
-                subjects.add(subject);
+                String[] info = id.split("_");
+                if (info.length != 2) {
+                    LevelLogger.error("Input format error : " + id);
+                    continue;
+                }
+                String name = info[0];
+                String[] seqs = info[1].split("-");
+                D4jSubject subject;
+                if (seqs.length == 1) {
+                    int number = Integer.parseInt(seqs[0]);
+                    subject = new D4jSubject(base, name, number);
+                    subjects.add(subject);
+                } else if (seqs.length == 2) {
+                    int start = Integer.parseInt(seqs[0]);
+                    int end = Integer.parseInt(seqs[1]);
+                    for (; start <= end; start ++) {
+                        subject = new D4jSubject(base, name, start);
+                        subjects.add(subject);
+                    }
+                } else {
+                    LevelLogger.error("Input format error : " + id);
+                }
             }
         } else {
             return null;
@@ -503,20 +547,23 @@ public class Repair {
     }
 
     public static void repairAPI(String[] args) {
-        Pair<String, List<Subject>> pair = parseCommandLine(args);
+        Pair<Set<String>, List<Subject>> pair = parseCommandLine(args);
         if (pair == null) {
             LevelLogger.error("Wrong command line input!");
             return;
         }
 
-        String patternRecords = pair.getFirst();
+        Set<String> patternRecords = pair.getFirst();
         List<Subject> subjects = pair.getSecond();
+        String file = Utils.join(Constant.SEP, Constant.HOME, "repair.rec");
         for (Subject subject : subjects) {
+            JavaFile.writeStringToFile(file, subject.getName() + "_" + subject.getId() + " > PATCH : ", true);
             LevelLogger.info(subject.getHome() + ", " + subject.toString());
             Repair repair = new Repair(subject, patternRecords);
             try {
                 repair.repair();
             } catch (IOException e) {}
+            JavaFile.writeStringToFile(file, repair.patch() + "\n", true);
         }
     }
 

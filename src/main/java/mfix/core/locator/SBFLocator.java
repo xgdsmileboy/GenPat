@@ -7,8 +7,6 @@
 
 package mfix.core.locator;
 
-import mfix.common.cmd.CmdFactory;
-import mfix.common.cmd.ExecuteCommand;
 import mfix.common.conf.Constant;
 import mfix.common.java.D4jSubject;
 import mfix.common.util.JavaFile;
@@ -44,19 +42,16 @@ public class SBFLocator extends AbstractFaultLocator {
 
     @Override
     protected void locateFault(double threshold) {
-        try {
-            ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
-                    _subject.getJDKHome(), Constant.D4J_HOME);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
+//                    _subject.getJDKHome(), Constant.D4J_HOME);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
     public List<String> getFailedTestCases() {
-        if(_failedTests == null || _failedTests.size() == 0){
-            _failedTests = new LinkedList<>(((D4jSubject)_subject).configFailedTestCases());
-        }
         return _failedTests;
     }
 
@@ -77,10 +72,10 @@ public class SBFLocator extends AbstractFaultLocator {
 
     @Override
     public List<Location> getLocations(int topK) {
-        List<Location> lines = getSortedSuspStmt(getBuggyLineSuspFile(), topK);
-        if (lines == null || lines.isEmpty()) {
+        List<Location> lines ;//= getSortedSuspStmt(getBuggyLineSuspFile(), topK);
+//        if (lines == null || lines.isEmpty()) {
             lines = ochiaiResult(getOchiaiFile(), topK);
-        }
+//        }
         return lines;
     }
 
@@ -115,8 +110,8 @@ public class SBFLocator extends AbstractFaultLocator {
 
         List<Pair<String, Double>> suspStmt = new ArrayList<>(lines.size());
         StringBuffer buffer = new StringBuffer();
-
-        for (int i = 0; i < lines.size(); i++) {
+        int i = lines.get(0).endsWith("Suspiciousness") ? 1 : 0;
+        for (; i < lines.size(); i++) {
             String[] lineAndSusp = lines.get(i).split(",");
             if(lineAndSusp.length != 2){
                 LevelLogger.error("Suspicious line format error : " + lines.get(i));

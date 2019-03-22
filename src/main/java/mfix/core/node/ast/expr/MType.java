@@ -96,7 +96,7 @@ public class MType extends Node {
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		if (!isAbstract() && (parentConsidered || isConsidered())) {
 			StringBuffer buffer = toSrcString();
-			keywords.add(NodeUtils.distilBasicType(this));
+			keywords.add(NodeUtils.distillBasicType(this));
 			return buffer;
 		} else if (isConsidered()) {
 			return new StringBuffer(nameMapping.getTypeID(this));
@@ -181,8 +181,8 @@ public class MType extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
 		}
@@ -190,7 +190,8 @@ public class MType extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		return toSrcString();
 	}
 }

@@ -143,12 +143,12 @@ public class ParenthesiszedExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			stringBuffer.append("(");
-			StringBuffer tmp = _expression.transfer(vars, exprMap);
+			StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
@@ -157,15 +157,16 @@ public class ParenthesiszedExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
-			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
+			return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions);
 		}
 
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("(");
-		StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
+		StringBuffer tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		stringBuffer.append(")");

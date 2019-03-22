@@ -312,6 +312,10 @@ public abstract class Node implements NodeComparator, Serializable {
         return _tokens;
     }
 
+    public int length() {
+        return tokens().size();
+    }
+
     /**
      * obtain all defined variables in the sub-tree
      *
@@ -472,6 +476,14 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public void setChanged() {
         _changed = true;
+    }
+
+    public boolean isExpanded() {
+        return _expanded;
+    }
+
+    public List<Node> wrappedNodes() {
+        return null;
     }
 
     public boolean isConsidered() {
@@ -836,8 +848,12 @@ public abstract class Node implements NodeComparator, Serializable {
 
     public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings);
 
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 List<Node> nodes) {
+        return null;
+    }
 
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
             return getBindingNode().getBuggyBindingNode().toSrcString();
         } else if (exprMap.containsKey(toSrcString().toString())) {
@@ -846,7 +862,8 @@ public abstract class Node implements NodeComparator, Serializable {
         return null;
     }
 
-    public abstract StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap);
+    public abstract StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                                    Set<String> exceptions);
 
 
     /******************************************************************************************/

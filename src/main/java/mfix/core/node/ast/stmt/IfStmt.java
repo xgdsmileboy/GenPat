@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
@@ -19,6 +20,7 @@ import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -142,6 +144,27 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
+	public List<Node> wrappedNodes() {
+		Set<Stmt> stmts = new HashSet<>();
+		if (_else != null) {
+			return null;
+		}
+		if (_then.getNodeType() == TYPE.BLOCK) {
+			stmts.addAll(_then.getChildren());
+		} else {
+			stmts.add(_then);
+		}
+		List<Node> result = new LinkedList<>();
+		for (Stmt stmt : stmts) {
+			if (stmt.getBindingNode() == null) {
+				return null;
+			}
+			result.add(stmt.getBindingNode());
+		}
+		return result;
+	}
+
+	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
 		if(other instanceof IfStmt) {
@@ -192,7 +215,6 @@ public class IfStmt extends Stmt {
 		if(ifStmt == null) {
 			continueTopDownMatchNull();
 		} else {
-			_then.postAccurateMatch(ifStmt.getThen());
 			if(_else != null) {
 				_else.postAccurateMatch(ifStmt.getElse());
 			}
@@ -247,21 +269,58 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+								 List<Node> nodes) {
+		StringBuffer stringBuffer = new StringBuffer("if(");
+		StringBuffer tmp;
+		tmp = _condition.transfer(vars, exprMap, retType, exceptions);
+		if(tmp == null) return null;
+		stringBuffer.append(tmp);
+		stringBuffer.append(")");
+		stringBuffer.append("{" + Constant.NEW_LINE);
+		if (_then.getNodeType() == TYPE.BLOCK) {
+			Blk blk = (Blk) _then;
+			List<Stmt> stmts = blk.getStatement();
+			for (int i = 0; i < stmts.size(); i++) {
+				tmp = stmts.get(i).transfer(vars, exprMap, retType, exceptions);
+				if(tmp == null) return null;
+				stringBuffer.append(tmp).append(Constant.NEW_LINE);
+			}
+		} else {
+			tmp = _then.transfer(vars, exprMap, retType, exceptions);
+			if(tmp == null) return null;
+			stringBuffer.append(tmp).append(Constant.NEW_LINE);
+		}
+		for (Node n : nodes) {
+			stringBuffer.append(n.toSrcString().toString())
+					.append(Constant.NEW_LINE);
+		}
+		stringBuffer.append("}");
+		if(_else != null) {
+			stringBuffer.append("else ");
+			tmp = _else.transfer(vars, exprMap, retType, exceptions);
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("if(");
 			StringBuffer tmp;
-			tmp = _condition.transfer(vars, exprMap);
+			tmp = _condition.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _then.transfer(vars, exprMap);
+			tmp = _then.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.transfer(vars, exprMap);
+				tmp = _else.transfer(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -270,7 +329,8 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer condition = null;
 		StringBuffer then = null;
 		StringBuffer els = null;
@@ -282,13 +342,13 @@ public class IfStmt extends Stmt {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode();
 					if(node == ifStmt._condition) {
-						condition = update.apply(vars, exprMap);
+						condition = update.apply(vars, exprMap, retType, exceptions);
 						if(condition == null) return null;
 					} else if(node == ifStmt._then) {
-						then = update.apply(vars, exprMap);
+						then = update.apply(vars, exprMap, retType, exceptions);
 						if(then == null) return null;
 					} else {
-						els = update.apply(vars, exprMap);
+						els = update.apply(vars, exprMap, retType, exceptions);
 						if(els == null) return null;
 					}
 				} else {
@@ -299,7 +359,7 @@ public class IfStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("if(");
 		StringBuffer tmp;
 		if(condition == null) {
-			tmp = _condition.adaptModifications(vars, exprMap);
+			tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -307,7 +367,7 @@ public class IfStmt extends Stmt {
 		}
 		stringBuffer.append(")");
 		if(then == null) {
-			tmp = _then.adaptModifications(vars, exprMap);
+			tmp = _then.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -316,7 +376,7 @@ public class IfStmt extends Stmt {
 		if(els == null) {
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.adaptModifications(vars, exprMap);
+				tmp = _else.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

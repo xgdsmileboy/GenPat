@@ -164,14 +164,14 @@ public class PostfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _expression.transfer(vars, exprMap);
+			StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _operator.transfer(vars, exprMap);
+			tmp = _operator.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -179,7 +179,8 @@ public class PostfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer expression = null;
 		StringBuffer operator = null;
 		Node node = NodeUtils.checkModification(this);
@@ -189,10 +190,10 @@ public class PostfixExpr extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == postfixExpr._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					} else {
-						operator = update.apply(vars, exprMap);
+						operator = update.apply(vars, exprMap, retType, exceptions);
 						if (operator == null) return null;
 					}
 				} else {
@@ -203,14 +204,14 @@ public class PostfixExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expression.adaptModifications(vars, exprMap);
+			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(expression);
 		}
 		if(operator == null) {
-			tmp = _operator.adaptModifications(vars, exprMap);
+			tmp = _operator.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

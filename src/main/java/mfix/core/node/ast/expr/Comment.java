@@ -92,12 +92,13 @@ public class Comment extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         return toSrcString();
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         return toSrcString();
     }
 }

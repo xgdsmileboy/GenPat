@@ -44,6 +44,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: Jiajun
@@ -148,8 +149,13 @@ public class Filter {
             if (_currThreadCount >= _maxThreadCount) {
                 LevelLogger.debug("Thread pool is full ....");
                 for (Future<List<String>> fs : _threadResultList) {
-                    List<String> result = fs.get();
-                    writeFile(result);
+                    try {
+                        List<String> result = fs.get(10, TimeUnit.SECONDS);
+                        writeFile(result);
+                    } catch (Exception e) {
+                        LevelLogger.warn("Parse pattern timeout !");
+                        fs.cancel(true);
+                    }
                     _currThreadCount--;
                 }
                 _threadResultList.clear();
@@ -367,8 +373,9 @@ class ParseNode implements Callable<List<String>> {
                 result.add(s);
             }
             // TODO : output feature vector for filtering
-            result.add(savePatternPath + ">" + pattern.getFeatureVector().toString());
+            result.add(savePatternPath);// + ">" + pattern.getFeatureVector().toString());
         }
+        LevelLogger.info("FINISH PARSE > " + _srcFile);
         return result;
     }
 

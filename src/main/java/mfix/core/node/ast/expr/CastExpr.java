@@ -165,17 +165,17 @@ public class CastExpr extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("(");
-            tmp = _castType.transfer(vars, exprMap);
+            tmp = _castType.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
-            tmp = _expression.transfer(vars, exprMap);
+            tmp = _expression.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -183,7 +183,8 @@ public class CastExpr extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer castType = null;
         StringBuffer expression = null;
         Node node = NodeUtils.checkModification(this);
@@ -193,10 +194,10 @@ public class CastExpr extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == _castType) {
-                        castType = update.apply(vars, exprMap);
+                        castType = update.apply(vars, exprMap, retType, exceptions);
                         if (castType == null) return null;
                     } else {
-                        expression = update.apply(vars, exprMap);
+                        expression = update.apply(vars, exprMap, retType, exceptions);
                         if (expression == null) return null;
                     }
                 } else {
@@ -208,7 +209,7 @@ public class CastExpr extends Expr {
         StringBuffer tmp;
         stringBuffer.append("(");
         if (castType == null) {
-            tmp = _castType.adaptModifications(vars, exprMap);
+            tmp = _castType.adaptModifications(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -216,7 +217,7 @@ public class CastExpr extends Expr {
         }
         stringBuffer.append(")");
         if(expression == null) {
-            tmp = _expression.adaptModifications(vars, exprMap);
+            tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

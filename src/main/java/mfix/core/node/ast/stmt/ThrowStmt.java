@@ -169,21 +169,33 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			stringBuffer.append("throw ");
-			StringBuffer tmp = _expression.transfer(vars, exprMap);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
+			if (exceptions != null && !exceptions.isEmpty() && _expression.getNodeType() == TYPE.CLASSCREATION) {
+				ClassInstCreation classInstCreation = (ClassInstCreation) _expression;
+				String type = classInstCreation.getClassType().typeStr();
+				if (!exceptions.isEmpty() && !exceptions.contains(type)) {
+					type = exceptions.iterator().next();
+				}
+				StringBuffer tmp = classInstCreation.getArguments().transfer(vars, exprMap, retType, exceptions);
+				if (tmp == null) return null;
+				stringBuffer.append("new ").append(type).append('(').append(tmp).append(')');
+			} else {
+				StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+				if (tmp == null) return null;
+				stringBuffer.append(tmp);
+			}
 			stringBuffer.append(";");
 		}
 		return stringBuffer;
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer expression = null;
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
@@ -192,7 +204,7 @@ public class ThrowStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == throwStmt._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					} else {
 						LevelLogger.error("ThrowStmt ERROR");
@@ -205,7 +217,7 @@ public class ThrowStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("throw ");
 		if (expression == null) {
-			StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
+			StringBuffer tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

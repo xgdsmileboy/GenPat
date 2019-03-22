@@ -218,16 +218,16 @@ public class SwitchStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("switch (");
-			StringBuffer tmp = _expression.transfer(vars, exprMap);
+			StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append("){" + Constant.NEW_LINE);
 			for (Stmt stmt : _statements) {
-				tmp = stmt.transfer(vars, exprMap);
+				tmp = stmt.transfer(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(Constant.NEW_LINE);
@@ -238,7 +238,8 @@ public class SwitchStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			SwitchStmt switchStmt = (SwitchStmt) pnode;
@@ -248,7 +249,7 @@ public class SwitchStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == switchStmt._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					} else {
 						modifications.add(update);
@@ -261,14 +262,14 @@ public class SwitchStmt extends Stmt {
 			Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
 			Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
 			Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
-			if (!Matcher.applyNodeListModifications(modifications, _statements,
-					insertionBefore, insertionAfter, insertionAt, map, vars, exprMap)) {
+			if (!Matcher.applyNodeListModifications(modifications, _statements, insertionBefore,
+                    insertionAfter, insertionAt, map, vars, exprMap, retType, exceptions)) {
 				return null;
 			}
 			StringBuffer stringBuffer = new StringBuffer("switch (");
 			StringBuffer tmp;
 			if (expression == null) {
-				tmp = _expression.adaptModifications(vars, exprMap);
+				tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 			} else {
@@ -277,7 +278,7 @@ public class SwitchStmt extends Stmt {
 			stringBuffer.append("){" + Constant.NEW_LINE);
 
 			tmp = NodeUtils.assemble(_statements, insertionBefore, insertionAfter, map, insertionAt,
-					vars, exprMap);
+					vars, exprMap, retType, exceptions);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append("}");
@@ -285,12 +286,12 @@ public class SwitchStmt extends Stmt {
 
 		} else {
 			StringBuffer stringBuffer = new StringBuffer("switch (");
-			StringBuffer tmp = _expression.adaptModifications(vars, exprMap);
+			StringBuffer tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append("){" + Constant.NEW_LINE);
 			for (Stmt stmt : _statements) {
-				tmp = stmt.adaptModifications(vars, exprMap);
+				tmp = stmt.adaptModifications(vars, exprMap, retType, exceptions);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(Constant.NEW_LINE);

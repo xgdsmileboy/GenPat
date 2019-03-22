@@ -264,23 +264,23 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("new ");
-            stringBuffer.append(_type.transfer(vars, exprMap));
+            stringBuffer.append(_type.transfer(vars, exprMap, retType, exceptions));
             for (Expr expr : _dimension) {
                 stringBuffer.append("[");
-                tmp = expr.transfer(vars, exprMap);
+                tmp = expr.transfer(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append("]");
             }
             if (_initializer != null) {
                 stringBuffer.append("=");
-                tmp = _initializer.transfer(vars, exprMap);
+                tmp = _initializer.transfer(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -289,7 +289,8 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer stringBuffer = new StringBuffer();
         Map<Integer, StringBuffer> dimensionMap = new HashMap<>();
         StringBuffer initializer = null;
@@ -300,12 +301,12 @@ public class AryCreation extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == aryCreation._initializer) {
-                        initializer = update.apply(vars, exprMap);
+                        initializer = update.apply(vars, exprMap, retType, exceptions);
                         if (initializer == null) return null;
                     } else {
                         for (int i = 0; i < aryCreation._dimension.size(); i++) {
                             if (update.getSrcNode() == aryCreation._dimension.get(i)) {
-                                StringBuffer buffer = update.apply(vars, exprMap);
+                                StringBuffer buffer = update.apply(vars, exprMap, retType, exceptions);
                                 if (buffer == null) return null;
                                 dimensionMap.put(i, buffer);
                             }
@@ -318,12 +319,12 @@ public class AryCreation extends Expr {
         }
         stringBuffer.append("new ");
         StringBuffer tmp;
-        stringBuffer.append(_type.transfer(vars, exprMap));
+        stringBuffer.append(_type.transfer(vars, exprMap, retType, exceptions));
         for(int i = 0; i < _dimension.size(); i++) {
             stringBuffer.append("[");
             tmp = dimensionMap.get(i);
             if (tmp == null) {
-                tmp = _dimension.get(i).adaptModifications(vars, exprMap);
+                tmp = _dimension.get(i).adaptModifications(vars, exprMap, retType, exceptions);
             }
             if(tmp == null) return null;
             stringBuffer.append(tmp);
@@ -332,7 +333,7 @@ public class AryCreation extends Expr {
         if(initializer == null) {
             if(_initializer != null) {
                 stringBuffer.append("=");
-                tmp = _initializer.adaptModifications(vars, exprMap);
+                tmp = _initializer.adaptModifications(vars, exprMap, retType, exceptions);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }

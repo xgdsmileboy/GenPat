@@ -172,15 +172,15 @@ public class AryAcc extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
-            StringBuffer tmp = _array.transfer(vars, exprMap);
+            StringBuffer tmp = _array.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append("[");
-            tmp = _index.transfer(vars, exprMap);
+            tmp = _index.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append("]");
@@ -189,7 +189,8 @@ public class AryAcc extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer array = null;
         StringBuffer index = null;
@@ -200,10 +201,10 @@ public class AryAcc extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == aryAcc._array) {
-                        array = update.apply(vars, exprMap);
+                        array = update.apply(vars, exprMap, retType, exceptions);
                         if (array == null) return null;
                     } else {
-                        index = update.apply(vars, exprMap);
+                        index = update.apply(vars, exprMap, retType, exceptions);
                         if (index == null) return null;
                     }
                 } else {
@@ -213,7 +214,7 @@ public class AryAcc extends Expr {
         }
         StringBuffer tmp;
         if(array == null) {
-            tmp = _array.adaptModifications(vars, exprMap);
+            tmp = _array.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -221,7 +222,7 @@ public class AryAcc extends Expr {
         }
         stringBuffer.append("[");
         if(index == null) {
-            tmp = _index.adaptModifications(vars, exprMap);
+            tmp = _index.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

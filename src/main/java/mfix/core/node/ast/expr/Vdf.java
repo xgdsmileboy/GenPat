@@ -253,40 +253,41 @@ public class Vdf extends Node {
 
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		if(node instanceof Vdf) {
+		if (node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;
-			if (_expression == null || vdf.getExpression() != null) {
-				if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-						&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
-					matchedNode.put(_identifier, vdf._identifier);
-					matchedStrings.put(_identifier.getName(), vdf.getName());
-					return true;
-				}
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+				return NodeUtils.matchSameNodeType(_identifier, vdf._identifier, matchedNode, matchedStrings);
 			}
-		} else if ((_expression != null) && (node instanceof Assign) && _modifications.isEmpty()) {
+		} else if (node.getNodeType() == TYPE.SINGLEVARDECL && _modifications.isEmpty()) {
+			Svd svd = (Svd) node;
+			if (NodeUtils.checkDependency(this, svd, matchedNode, matchedStrings)
+				&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+				return NodeUtils.matchSameNodeType(_identifier, svd.getName(), matchedNode, matchedStrings);
+			}
+		} else if ((_expression != null) && (node.getNodeType() == TYPE.ASSIGN) && _modifications.isEmpty()) {
 			Assign assign = (Assign) node;
 			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
-				matchedNode.put(_identifier, assign.getLhs());
-				matchedStrings.put(_identifier.getName(), assign.getLhs().toString());
+				return NodeUtils.matchSameNodeType(_identifier, assign.getLhs(), matchedNode, matchedStrings);
 			}
 		}
 		return false;
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _identifier.transfer(vars, exprMap);
+			StringBuffer tmp = _identifier.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			for (int i = 0; i < _dimensions; i++) {
 				stringBuffer.append("[]");
 			}
 			if (_expression != null) {
-				tmp = _expression.transfer(vars, exprMap);
+				tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 				if (tmp == null) return null;
 				stringBuffer.append('=').append(tmp);
 			}
@@ -295,7 +296,8 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer expression = null;
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
@@ -304,7 +306,7 @@ public class Vdf extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == vdf._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					}
 				} else {
@@ -314,7 +316,7 @@ public class Vdf extends Node {
 		}
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
-		tmp = _identifier.adaptModifications(vars, exprMap);
+		tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		for (int i = 0; i < _dimensions; i++){
@@ -323,7 +325,7 @@ public class Vdf extends Node {
 		if(expression == null) {
 			if(_expression != null){
 				stringBuffer.append("=");
-				tmp = _expression.adaptModifications(vars, exprMap);
+				tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

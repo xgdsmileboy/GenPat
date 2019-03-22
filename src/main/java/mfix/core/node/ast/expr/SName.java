@@ -109,48 +109,9 @@ public class SName extends Label {
 		return true;
 	}
 
-//	@Override
-//	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-//		Node parent = getParent();
-//		boolean isMethodName = false;
-//		if (parent instanceof MethodInv) {
-//			MethodInv methodInv = (MethodInv) parent;
-//			if (methodInv.getName() == this) {
-//				isMethodName = true;
-//			}
-//		} else if (parent instanceof SuperMethodInv){
-//			SuperMethodInv methodInv = (SuperMethodInv) parent;
-//			if (methodInv.getMethodName() == this) {
-//				isMethodName = true;
-//			}
-//		}
-//		boolean match = true;
-//		if (isMethodName) {
-//			parent = node.getParent();
-//			if (parent instanceof MethodInv) {
-//				MethodInv methodInv = (MethodInv) parent;
-//				if (methodInv.getName() != node) {
-//					match = false;
-//				}
-//			} else if (parent instanceof SuperMethodInv){
-//				SuperMethodInv methodInv = (SuperMethodInv) parent;
-//				if (methodInv.getMethodName() != node) {
-//					match = false;
-//				}
-//			} else {
-//				match = false;
-//			}
-//		}
-//		if (match) {
-//			return super.ifMatch(node, matchedNode, matchedStrings);
-//		} else {
-//			return false;
-//		}
-//	}
-
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = toSrcString();
 			if (!Character.isUpperCase(stringBuffer.charAt(0))) {
@@ -163,10 +124,11 @@ public class SName extends Label {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
-			return ((Update) node.getModifications().get(0)).apply(vars, exprMap);
+			return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions);
 		}
 		return toSrcString();
 	}

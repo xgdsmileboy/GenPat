@@ -228,12 +228,19 @@ public class Svd extends Expr {
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_name, vdf.getNameNode(), matchedNode, matchedStrings);
 			}
+		} else if ((_initializer != null) && (node.getNodeType() == TYPE.ASSIGN) && _modifications.isEmpty()) {
+			Assign assign = (Assign) node;
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
+				return NodeUtils.matchSameNodeType(_name, assign.getLhs(), matchedNode, matchedStrings);
+			}
 		}
 		return false;
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer declType = null;
 		StringBuffer name = null;
 		StringBuffer initializer = null;
@@ -245,13 +252,13 @@ public class Svd extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == svd._decType) {
-						declType = update.apply(vars, exprMap);
+						declType = update.apply(vars, exprMap, retType, exceptions);
 						if (declType == null) return null;
 					} else if (changedNode == svd._name) {
-						name = update.apply(vars, exprMap);
+						name = update.apply(vars, exprMap, retType, exceptions);
 						if (name == null) return null;
 					} else {
-						initializer = update.apply(vars, exprMap);
+						initializer = update.apply(vars, exprMap, retType, exceptions);
 						if (initializer == null) return null;
 					}
 				} else {
@@ -262,7 +269,7 @@ public class Svd extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if (declType == null) {
-			tmp = _decType.adaptModifications(vars, exprMap);
+			tmp = _decType.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -270,7 +277,7 @@ public class Svd extends Expr {
 		}
 		stringBuffer.append(" ");
 		if(name == null) {
-			tmp = _name.adaptModifications(vars, exprMap);
+			tmp = _name.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -279,7 +286,7 @@ public class Svd extends Expr {
 		if(initializer == null) {
 			if(_initializer != null){
 				stringBuffer.append("=");
-				tmp = _initializer.adaptModifications(vars, exprMap);
+				tmp = _initializer.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

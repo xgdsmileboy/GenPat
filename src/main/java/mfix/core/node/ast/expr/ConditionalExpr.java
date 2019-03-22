@@ -194,20 +194,20 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
-            tmp = _condition.transfer(vars, exprMap);
+            tmp = _condition.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append("?");
-            tmp = _first.transfer(vars, exprMap);
+            tmp = _first.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(":");
-            tmp = _snd.transfer(vars, exprMap);
+            tmp = _snd.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -215,7 +215,8 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
         StringBuffer condition = null;
         StringBuffer first = null;
         StringBuffer snd = null;
@@ -227,13 +228,13 @@ public class ConditionalExpr extends Expr {
                     Update update = (Update) modification;
                     Node changedNode = update.getSrcNode();
                     if (changedNode == conditionalExpr._condition) {
-                        condition = update.apply(vars, exprMap);
+                        condition = update.apply(vars, exprMap, retType, exceptions);
                         if (condition == null) return null;
                     } else if (changedNode == conditionalExpr._first) {
-                        first = update.apply(vars, exprMap);
+                        first = update.apply(vars, exprMap, retType, exceptions);
                         if (first == null) return null;
                     } else if (changedNode == conditionalExpr._snd) {
-                        snd = update.apply(vars, exprMap);
+                        snd = update.apply(vars, exprMap, retType, exceptions);
                         if (snd == null) return null;
                     }
                 } else {
@@ -245,7 +246,7 @@ public class ConditionalExpr extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         if(condition == null) {
-            tmp = _condition.adaptModifications(vars, exprMap);
+            tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -253,7 +254,7 @@ public class ConditionalExpr extends Expr {
         }
         stringBuffer.append("?");
         if(first == null) {
-            tmp = _first.adaptModifications(vars, exprMap);
+            tmp = _first.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -261,7 +262,7 @@ public class ConditionalExpr extends Expr {
         }
         stringBuffer.append(":");
         if(snd == null) {
-            tmp = _snd.adaptModifications(vars, exprMap);
+            tmp = _snd.adaptModifications(vars, exprMap, retType, exceptions);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

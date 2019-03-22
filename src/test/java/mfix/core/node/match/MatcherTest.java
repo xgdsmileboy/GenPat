@@ -140,7 +140,8 @@ public class MatcherTest extends TestCase {
 
         MatchInstance instance = set.iterator().next();
         instance.apply();
-        StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), instance.getStrMap());
+        StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), instance.getStrMap(), "void",
+                new HashSet<>());
 
         Assert.assertTrue(buffer != null);
         Assert.assertTrue(target.equals(buffer.toString()));
@@ -220,7 +221,7 @@ public class MatcherTest extends TestCase {
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     Assert.assertTrue(node.adaptModifications(varMaps.get(node.getStartLine()),
-                            matchInstance.getStrMap()) == null);
+                            matchInstance.getStrMap(), "void", new HashSet<>()) == null);
                     matchInstance.reset();
                 }
             }
@@ -294,7 +295,8 @@ public class MatcherTest extends TestCase {
                 Set<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
-                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap());
+                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()),
+                            matchInstance.getStrMap(), "void", new HashSet<>());
                     if (buffer != null) {
                         TextDiff diff = new TextDiff(node.toSrcString().toString(),
                                 new StringBuffer(b).append(buffer).toString());
@@ -343,7 +345,8 @@ public class MatcherTest extends TestCase {
                 Set<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
-                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>());
+                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>(),
+                            "Object", new HashSet<>());
                     if (buffer != null) {
                         TextDiff diff = new TextDiff(node.toSrcString().toString(), buffer.toString());
                         System.out.println(diff.toString());

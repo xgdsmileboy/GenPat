@@ -16,6 +16,7 @@ import mfix.common.util.Utils;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.parser.NodeParser;
@@ -46,6 +47,7 @@ public class RepairTest extends TestCase {
 
     @Test
     public void test_chart_14() {
+        // can fix but need test purification
         test("chart", 14);
     }
 
@@ -56,17 +58,31 @@ public class RepairTest extends TestCase {
 
     @Test
     public void test_closure_2() {
+        // success repair?
         test("closure", 2);
     }
 
     @Test
     public void test_lang_33() {
+        // success repair
         test("lang", 33);
     }
 
     @Test
     public void test_chart_4() {
+        // success repair
         test("chart", 4);
+    }
+
+    @Test
+    public void test_chart_26() {
+        test("chart", 26);
+    }
+
+    @Test
+    public void test_math_4() {
+        // can fix but need test purification
+        test("math", 4);
     }
 
     private void test(String proj, int id) {
@@ -75,7 +91,6 @@ public class RepairTest extends TestCase {
         PatternExtractor extractor = new PatternExtractor();
         Set<Pattern> patterns = extractor.extractPattern(buggyFile, fixedFile);
         D4jSubject subject = new D4jSubject(d4jHome, proj, id);
-        subject.configFailedTestCases();
         try {
             subject.backup();
         } catch (IOException e) {
@@ -92,13 +107,16 @@ public class RepairTest extends TestCase {
             final String clazzFile = subject.getHome() + subject.getSbin() + Constant.SEP +
                     location.getRelClazzFile().replace(".java", ".class");
             Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(file);
-            Node node = getBuggyNode(file, location.getLine());
+            MethDecl node = (MethDecl)getBuggyNode(file, location.getLine());
+
             if (node == null) continue;
-            List<Pattern> list = new LinkedList<>(patterns);//filter(node, patterns);
+            String retType = node.getRetTypeStr();
+            Set<String> exceptions = new HashSet<>(node.getThrows());
+            List<Pattern> list = filter(node, patterns);
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             for (Pattern p : list) {
                 scope.reset(p.getNewVars());
-                repair.tryFix(node, p, scope, clazzFile);
+                repair.tryFix(node, p, scope, clazzFile, retType, exceptions);
             }
         }
         try {

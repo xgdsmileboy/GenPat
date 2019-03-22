@@ -79,11 +79,16 @@ public abstract class Expr extends Node {
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if ((!_modifications.isEmpty() && node.getNodeType() == getNodeType())
                 || (_modifications.isEmpty() && node instanceof Expr)) {
-            if ((!"boolean".equals(getTypeString()) || "boolean".equals(((Expr) node).getTypeString()))
+            String typeStr = ((Expr) node).getTypeString();
+            if ((!"boolean".equals(getTypeString()) && !"boolean".equals(typeStr))
+                    || ("boolean".equals(getTypeString()) && "boolean".equals(typeStr))
                     && !(node instanceof Operator)) {
-                boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
-                return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+                if (NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
+                        && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL) {
+                    boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
+                    return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                            && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+                }
             }
         }
         return false;
@@ -93,10 +98,13 @@ public abstract class Expr extends Node {
     // currently, I did not consider the structure of the expression but only the keywords
     public boolean ifMatch0(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         Set<String> keys = flattenTreeNode(new LinkedList<>()).stream()
-                .filter(n -> NodeUtils.isSimpleExpr(n) && !n.isAbstract())
+                .filter(n -> NodeUtils.isSimpleExpr(n) && !(n.isChanged() || n.isExpanded()) && !isAbstract())
                 .map(n -> n.toSrcString().toString())
                 .collect(Collectors.toSet());
-        String content = node.toSrcString().toString();
+        Set<String> content = node.flattenTreeNode(new LinkedList<>()).stream()
+                .filter(n -> NodeUtils.isSimpleExpr(n))
+                .map(n -> n.toSrcString().toString())
+                .collect(Collectors.toSet());
         for (String key : keys) {
             if (!content.contains(key)) {
                 return false;
@@ -115,7 +123,7 @@ public abstract class Expr extends Node {
     }
 
     protected StringBuffer leafFormalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        if (!isAbstract() && (parentConsidered || isConsidered())) {
+        if (!isAbstract() && (isChanged() || isExpanded())) {
             StringBuffer buffer = toSrcString();
             keywords.add(buffer.toString());
             return buffer;

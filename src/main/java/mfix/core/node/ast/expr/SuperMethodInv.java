@@ -150,6 +150,12 @@ public class SuperMethodInv extends Expr {
 		return children;
 	}
 
+	public List<Node> flattenTreeNode(List<Node> nodes) {
+		nodes.add(this);
+		_arguments.flattenTreeNode(nodes);
+		return nodes;
+	}
+
 	@Override
 	public void computeFeatureVector() {
         _selfFVector = new FVector();
@@ -222,13 +228,13 @@ public class SuperMethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if(_label != null){
-				tmp = _label.transfer(vars, exprMap);
+				tmp = _label.transfer(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -236,7 +242,7 @@ public class SuperMethodInv extends Expr {
 			stringBuffer.append("super.");
 			stringBuffer.append(_name.getName());
 			stringBuffer.append("(");
-			tmp = _arguments.transfer(vars, exprMap);
+			tmp = _arguments.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
@@ -245,7 +251,8 @@ public class SuperMethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer label = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
@@ -257,13 +264,13 @@ public class SuperMethodInv extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == superMethodInv._label) {
-						label = update.apply(vars, exprMap);
+						label = update.apply(vars, exprMap, retType, exceptions);
 						if (label == null) return null;
 					} else if (changedNode == superMethodInv._name) {
-						name = update.apply(vars, exprMap);
+						name = update.apply(vars, exprMap, retType, exceptions);
 						if (name == null) return null;
 					} else {
-						arguments = update.apply(vars, exprMap);
+						arguments = update.apply(vars, exprMap, retType, exceptions);
 						if (arguments == null) return null;
 					}
 				} else {
@@ -275,7 +282,7 @@ public class SuperMethodInv extends Expr {
 		StringBuffer tmp;
 		if(label == null) {
 			if(_label != null){
-				tmp = _label.adaptModifications(vars, exprMap);
+				tmp = _label.adaptModifications(vars, exprMap, retType, exceptions);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -285,7 +292,7 @@ public class SuperMethodInv extends Expr {
 		}
 		stringBuffer.append("super.");
 		if(name == null) {
-			tmp = _name.adaptModifications(vars, exprMap);
+			tmp = _name.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -293,7 +300,7 @@ public class SuperMethodInv extends Expr {
 		}
 		stringBuffer.append("(");
 		if(arguments == null) {
-			tmp = _arguments.adaptModifications(vars, exprMap);
+			tmp = _arguments.adaptModifications(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

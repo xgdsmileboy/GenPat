@@ -13,7 +13,7 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
-import mfix.core.node.ast.Node;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.parser.NodeParser;
@@ -106,7 +106,9 @@ public class D4JRepairTest extends TestCase {
             NodeParser parser = new NodeParser();
             parser.setCompilationUnit(buggy, unit);
             for (MethodDeclaration m : methods) {
-                Node node = parser.process(m);
+                MethDecl node = (MethDecl)parser.process(m);
+                String retType = node.getRetTypeStr();
+                Set<String> exceptions = new HashSet<>(node.getThrows());
                 VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
                 Set<String> already = new HashSet<>();
                 int count = 0;
@@ -115,7 +117,7 @@ public class D4JRepairTest extends TestCase {
                     Set<MatchInstance> set = Matcher.tryMatch(node, p);
                     for (MatchInstance matchInstance : set) {
                         matchInstance.apply();
-                        StringBuffer buffer = node.adaptModifications(scope, new HashMap<>());
+                        StringBuffer buffer = node.adaptModifications(scope, new HashMap<>(), retType, exceptions);
                         if (buffer != null) {
                             String tmp = buffer.toString();
                             if (!already.contains(tmp)) {

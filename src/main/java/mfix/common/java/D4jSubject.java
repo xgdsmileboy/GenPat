@@ -43,12 +43,6 @@ public class D4jSubject extends Subject {
         setTestSuccessMessage("Failing tests: 0");
     }
 
-    public List<String> configFailedTestCases() {
-        String file = Utils.join(Constant.SEP, Constant.D4J_FAILING_TEST, getName(), _id + ".txt");
-        _failedTestCases = JavaFile.readFileToStringList(file);
-        return _failedTestCases;
-    }
-
     private void setPath(String projName, int id) {
         String file = Utils.join(Constant.SEP, Constant.D4J_SRC_INFO, projName, id + ".txt");
         List<String> paths = JavaFile.readFileToStringList(file);
@@ -60,22 +54,6 @@ public class D4jSubject extends Subject {
         _sbin = paths.get(1);
         _tsrc = paths.get(2);
         _tbin = paths.get(3);
-    }
-
-    @Override
-    public boolean test() {
-        if (_failedTestCases != null) {
-            for (String testcase : _failedTestCases) {
-                LevelLogger.debug("TESTING : " + testcase);
-                if (!test(testcase)) {
-                    LevelLogger.debug("FAILED : " + testcase);
-                    return false;
-                } else {
-                    LevelLogger.debug("PASS : " + testcase);
-                }
-            }
-        }
-        return super.test();
     }
 
     @Override

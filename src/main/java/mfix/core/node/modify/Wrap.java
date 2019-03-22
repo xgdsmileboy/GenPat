@@ -8,30 +8,36 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
  * @date: 2019-01-14
  */
-@Deprecated
-public class Wrap extends Insertion {
+public class Wrap extends Update {
 
-    private Node _wrapper;
     private List<Node> _nodes;
-    public Wrap(Node parent, Node wrapper, List<Node> wrapped) {
-        super(parent, -1);
-        _wrapper = wrapper;
+
+    public Wrap(Node parent, Node del, Node wrapper, List<Node> wrapped) {
+        super(parent, del, wrapper);
         _nodes = wrapped;
+    }
+
+    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType,
+                              Set<String> exceptions, List<Node> nodes) {
+        if(getTarNode() == null) {
+            return new StringBuffer("null");
+        } else {
+            return getTarNode().transfer(vars, exprMap, retType, exceptions, nodes);
+        }
     }
 
     @Override
     public String toString() {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (Node node : _nodes) {
-            stringBuffer.append(node.toString() + "\n");
-        }
-        return String.format("[WRP]USING %s WRAP %s", _wrapper, stringBuffer.toString());
+        return "[WRP]" + getSrcNode() + " TO " + getTarNode();
     }
 }

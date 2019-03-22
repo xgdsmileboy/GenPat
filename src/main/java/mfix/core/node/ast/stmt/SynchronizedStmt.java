@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
@@ -109,6 +110,18 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
+	public List<Node> wrappedNodes() {
+		List<Node> result = new LinkedList<>();
+		for (Node node : _blk.getStatement()) {
+			if (node.getBindingNode() == null) {
+				return null;
+			}
+			result.add(node.getBindingNode());
+		}
+		return result;
+	}
+
+	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
 		if (other instanceof SynchronizedStmt) {
@@ -179,15 +192,35 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+								 List<Node> nodes) {
+		StringBuffer stringBuffer = new StringBuffer("synchronized(");
+		StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+		if(tmp == null) return null;
+		stringBuffer.append(tmp);
+		stringBuffer.append("){").append(Constant.NEW_LINE);
+		for (Stmt stmt : _blk.getStatement()) {
+			tmp = stmt.transfer(vars, exprMap, retType, exceptions);
+			if(tmp == null) return null;
+			stringBuffer.append(tmp).append(Constant.NEW_LINE);
+		}
+		for (Node node : nodes) {
+			stringBuffer.append(node.toSrcString().toString()).append(Constant.NEW_LINE);
+		}
+		stringBuffer.append("}");
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("synchronized(");
-			StringBuffer tmp = _expression.transfer(vars, exprMap);
+			StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _blk.transfer(vars, exprMap);
+			tmp = _blk.transfer(vars, exprMap, retType, exceptions);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -195,7 +228,8 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap) {
+	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                           Set<String> exceptions) {
 		StringBuffer expression = null;
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
@@ -204,7 +238,7 @@ public class SynchronizedStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == synchronizedStmt._expression) {
-						expression = update.apply(vars, exprMap);
+						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					}
 				} else {
@@ -215,14 +249,14 @@ public class SynchronizedStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("synchronized(");
 		StringBuffer tmp;
 		if (expression == null) {
-			tmp = _expression.adaptModifications(vars, exprMap);
+			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(expression);
 		}
 		stringBuffer.append(")");
-		tmp = _blk.adaptModifications(vars, exprMap);
+		tmp = _blk.adaptModifications(vars, exprMap, retType, exceptions);
 		if(tmp == null) return null;
 		stringBuffer.append(tmp);
 		return stringBuffer;
