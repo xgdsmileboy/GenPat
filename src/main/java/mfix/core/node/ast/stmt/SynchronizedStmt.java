@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
@@ -188,6 +189,26 @@ public class SynchronizedStmt extends Stmt {
 					&& super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+								 List<Node> nodes) {
+		StringBuffer stringBuffer = new StringBuffer("synchronized(");
+		StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+		if(tmp == null) return null;
+		stringBuffer.append(tmp);
+		stringBuffer.append("){").append(Constant.NEW_LINE);
+		for (Stmt stmt : _blk.getStatement()) {
+			tmp = stmt.transfer(vars, exprMap, retType, exceptions);
+			if(tmp == null) return null;
+			stringBuffer.append(tmp).append(Constant.NEW_LINE);
+		}
+		for (Node node : nodes) {
+			stringBuffer.append(node.toSrcString().toString()).append(Constant.NEW_LINE);
+		}
+		stringBuffer.append("}");
+		return stringBuffer;
 	}
 
 	@Override

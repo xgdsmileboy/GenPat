@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
@@ -145,17 +146,13 @@ public class IfStmt extends Stmt {
 	@Override
 	public List<Node> wrappedNodes() {
 		Set<Stmt> stmts = new HashSet<>();
+		if (_else != null) {
+			return null;
+		}
 		if (_then.getNodeType() == TYPE.BLOCK) {
 			stmts.addAll(_then.getChildren());
 		} else {
 			stmts.add(_then);
-		}
-		if (_else != null) {
-			if (_else.getNodeType() == TYPE.BLOCK) {
-				stmts.addAll(_else.getChildren());
-			} else {
-				stmts.add(_else);
-			}
 		}
 		List<Node> result = new LinkedList<>();
 		for (Stmt stmt : stmts) {
@@ -269,6 +266,43 @@ public class IfStmt extends Stmt {
 			return match && super.ifMatch(node, matchedNode, matchedStrings);
 		}
 		return false;
+	}
+
+	@Override
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+								 List<Node> nodes) {
+		StringBuffer stringBuffer = new StringBuffer("if(");
+		StringBuffer tmp;
+		tmp = _condition.transfer(vars, exprMap, retType, exceptions);
+		if(tmp == null) return null;
+		stringBuffer.append(tmp);
+		stringBuffer.append(")");
+		stringBuffer.append("{" + Constant.NEW_LINE);
+		if (_then.getNodeType() == TYPE.BLOCK) {
+			Blk blk = (Blk) _then;
+			List<Stmt> stmts = blk.getStatement();
+			for (int i = 0; i < stmts.size(); i++) {
+				tmp = stmts.get(i).transfer(vars, exprMap, retType, exceptions);
+				if(tmp == null) return null;
+				stringBuffer.append(tmp).append(Constant.NEW_LINE);
+			}
+		} else {
+			tmp = _then.transfer(vars, exprMap, retType, exceptions);
+			if(tmp == null) return null;
+			stringBuffer.append(tmp).append(Constant.NEW_LINE);
+		}
+		for (Node n : nodes) {
+			stringBuffer.append(n.toSrcString().toString())
+					.append(Constant.NEW_LINE);
+		}
+		stringBuffer.append("}");
+		if(_else != null) {
+			stringBuffer.append("else ");
+			tmp = _else.transfer(vars, exprMap, retType, exceptions);
+			if(tmp == null) return null;
+			stringBuffer.append(tmp);
+		}
+		return stringBuffer;
 	}
 
 	@Override

@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.conf.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
@@ -368,7 +369,8 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+								 List<Node> nodes) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("try");
@@ -386,9 +388,22 @@ public class TryStmt extends Stmt {
 				}
 				stringBuffer.append(")");
 			}
-			tmp = _blk.transfer(vars, exprMap, retType, exceptions);
-			if (tmp == null) return null;
-			stringBuffer.append(tmp);
+			if (nodes == null) {
+				tmp = _blk.transfer(vars, exprMap, retType, exceptions);
+				if (tmp == null) return null;
+				stringBuffer.append(tmp);
+			} else {
+				stringBuffer.append("{").append(Constant.NEW_LINE);
+				for (Stmt stmt : _blk.getStatement()) {
+					tmp = stmt.transfer(vars, exprMap, retType, exceptions);
+					if (tmp == null) return null;
+					stringBuffer.append(tmp).append(Constant.NEW_LINE);
+				}
+				for (Node node : nodes) {
+					stringBuffer.append(node.toSrcString().toString()).append(Constant.NEW_LINE);
+				}
+				stringBuffer.append("}");
+			}
 			if (_catches != null) {
 				for (CatClause catClause : _catches) {
 					tmp = catClause.transfer(vars, exprMap, retType, exceptions);
@@ -402,6 +417,15 @@ public class TryStmt extends Stmt {
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
+		}
+		return stringBuffer;
+	}
+
+	@Override
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+		if (stringBuffer == null) {
+			return transfer(vars, exprMap, retType, exceptions, null);
 		}
 		return stringBuffer;
 	}

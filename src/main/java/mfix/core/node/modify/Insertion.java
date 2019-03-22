@@ -10,10 +10,10 @@ import java.util.Set;
 public class Insertion extends Modification {
 
     private static final long serialVersionUID = -3606760167363150327L;
-    private int _index;
-    private Node _preNode;
-    private Node _nexNode;
-    private Node _insert;
+    protected int _index;
+    protected Node _preNode;
+    protected Node _nexNode;
+    protected Node _insert;
 
     protected Insertion(Node parent, int fIndex) {
         super(parent, fIndex);

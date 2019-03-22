@@ -8,8 +8,11 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.VarScope;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -17,21 +20,24 @@ import java.util.List;
  */
 public class Wrap extends Insertion {
 
-    private Node _wrapper;
     private List<Node> _nodes;
 
-    public Wrap(Node parent, Node wrapper, List<Node> wrapped) {
-        super(parent, -1);
-        _wrapper = wrapper;
+    public Wrap(Node parent, Node wrapper, int index, List<Node> wrapped) {
+        super(parent, index, wrapper);
         _nodes = wrapped;
+    }
+
+    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType,
+                              Set<String> exceptions, List<Node> nodes) {
+        if(_insert == null) {
+            return new StringBuffer("null");
+        } else {
+            return _insert.transfer(vars, exprMap, retType, exceptions, nodes);
+        }
     }
 
     @Override
     public String toString() {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (Node node : _nodes) {
-            stringBuffer.append(node.toString() + "\n");
-        }
-        return String.format("[WRP]USING %s WRAP %s", _wrapper, stringBuffer.toString());
+        return String.format("[WRP]INSERT %s UNDER %s AS {%d} CHILD",_insert, getParent(), _index);
     }
 }
