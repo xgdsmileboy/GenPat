@@ -111,12 +111,12 @@ public class RepairTest extends TestCase {
 
             if (node == null) continue;
             String retType = node.getRetTypeStr();
-            Set<String> excpetions = new HashSet<>(node.getThrows());
+            Set<String> exceptions = new HashSet<>(node.getThrows());
             List<Pattern> list = filter(node, patterns);
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             for (Pattern p : list) {
                 scope.reset(p.getNewVars());
-                repair.tryFix(node, p, scope, clazzFile, retType, excpetions);
+                repair.tryFix(node, p, scope, clazzFile, retType, exceptions);
             }
         }
         try {
