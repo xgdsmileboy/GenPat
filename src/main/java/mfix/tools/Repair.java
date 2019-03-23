@@ -25,9 +25,12 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
+import mfix.core.node.ast.stmt.EmptyStmt;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.Matcher;
+import mfix.core.node.modify.Insertion;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
@@ -161,11 +164,27 @@ public class Repair {
         try {
             Pattern fixPattern = (Pattern) Utils.deserialize(patternFile);
             fixPattern.setPatternName(patternFile);
-            return fixPattern;
+            return postFilter(fixPattern);
         } catch (IOException | ClassNotFoundException e) {
             LevelLogger.error("Deserialize pattern failed!", e);
         }
         return null;
+    }
+
+    private Pattern postFilter(Pattern p) {
+        Set<Modification> modifications = p.getAllModifications();
+        int size = modifications.size();
+        for (Modification m : modifications) {
+            if (m instanceof Insertion) {
+                Insertion insertion = (Insertion) m;
+                Node node = insertion.getInsertedNode();
+                if (node == null || (size == 1 && node instanceof EmptyStmt)
+                        || node.toSrcString().toString().startsWith("System")) {
+                    return null;
+                }
+            }
+        }
+        return p;
     }
 
     private List<String> filterPatterns(Set<String> keys, int topK) throws IOException {
@@ -389,6 +408,7 @@ public class Repair {
             for (String s : patterns) {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
+                if (p == null) { continue; }
                 scope.reset(p.getNewVars());
                 tryFix(node, p, scope, clazzFile, retType, exceptions);
             }
