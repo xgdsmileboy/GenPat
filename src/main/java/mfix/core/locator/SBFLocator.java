@@ -45,8 +45,10 @@ public class SBFLocator extends AbstractFaultLocator {
     @Override
     protected void locateFault(double threshold) {
         try {
+            LevelLogger.info("Perform SBFL ....");
             ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
                     _subject.getJDKHome(), Constant.D4J_HOME);
+            LevelLogger.info("Finish SBFL ...");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,6 +84,7 @@ public class SBFLocator extends AbstractFaultLocator {
     }
 
     private List<Location> ochiaiResult(String path, int topk) {
+        LevelLogger.info("Read Ochiai result from file : " + path);
         List<String> lines = JavaFile.readFileToStringList(path);
         List<Triple<String, Integer, Double>> suspStmt = new ArrayList<>(lines.size());
         for (int i = 0; i < lines.size(); i++) {
@@ -107,8 +110,12 @@ public class SBFLocator extends AbstractFaultLocator {
 
     private List<Location> getSortedSuspStmt(String fileName, int topK) {
         //org.jfree.chart.renderer.category.LineAndShapeRenderer#201,0.1889822365046136
+        LevelLogger.info("Read SBFL result from : " + fileName);
         List<String> lines = JavaFile.readFileToStringList(fileName);
-        if (lines == null || lines.isEmpty()) return null;
+        if (lines == null || lines.isEmpty()){
+            LevelLogger.error("SBFL result is empty ...");
+            return null;
+        }
 
         List<Pair<String, Double>> suspStmt = new ArrayList<>(lines.size());
         StringBuffer buffer = new StringBuffer();
@@ -126,6 +133,7 @@ public class SBFLocator extends AbstractFaultLocator {
             suspStmt.add(new Pair<>(stmt, susp));
         }
 
+        LevelLogger.info("Write SBFL result into : " + getRealtimeResultFile());
         // write result to file
         JavaFile.writeStringToFile(getRealtimeResultFile(), buffer.toString());
 
@@ -161,6 +169,7 @@ public class SBFLocator extends AbstractFaultLocator {
 
         Map<String, List<Pair<LineRange, String>>> result = new HashMap<>();
         for (String f : relFiles) {
+            LevelLogger.debug("Collect methods in file : " + f);
             String file = Utils.join(Constant.SEP, srcBase, f.replace('.', Constant.SEP) + ".java");
             final List<Pair<LineRange, String>> list = result.getOrDefault(f, new LinkedList<>());
             final CompilationUnit unit = JavaFile.genAST(file);
@@ -184,6 +193,7 @@ public class SBFLocator extends AbstractFaultLocator {
                 break;
             }
             String clazz = triple.getFirst();
+            LevelLogger.debug("Transform location : " + clazz + "#" + triple.getSecond());
             List<Pair<LineRange, String>> list = result.get(clazz);
             if (list != null) {
                 int line = triple.getSecond();
@@ -197,6 +207,8 @@ public class SBFLocator extends AbstractFaultLocator {
                         break;
                     }
                 }
+            } else {
+                LevelLogger.warn("Cannot find clazz : " + clazz);
             }
         }
 
