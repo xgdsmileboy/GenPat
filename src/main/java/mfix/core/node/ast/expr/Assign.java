@@ -188,9 +188,12 @@ public class Assign extends Expr {
         if (super.ifMatch(node, matchedNode, matchedStrings)) {
             if (node instanceof Assign) {
                 Assign assign = (Assign) node;
-                return NodeUtils.matchSameNodeType(_lhs, assign.getLhs(), matchedNode, matchedStrings)
+                if (NodeUtils.matchSameNodeType(_lhs, assign.getLhs(), matchedNode, matchedStrings)
                         && NodeUtils.checkDependency(_rhs, assign.getRhs(), matchedNode, matchedStrings)
-                        && NodeUtils.matchSameNodeType(_rhs, assign.getRhs(), matchedNode, matchedStrings);
+                        && NodeUtils.matchSameNodeType(_rhs, assign.getRhs(), matchedNode, matchedStrings)) {
+                    matchedNode.put(_operator, assign.getOperator());
+                    return true;
+                }
             }
         }
         return false;
@@ -203,7 +206,7 @@ public class Assign extends Expr {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             tmp = _lhs.transfer(vars, exprMap, retType, exceptions);
-            if (tmp == null) return null;
+            if (tmp == null || !NodeUtils.isLegalVar(tmp.toString())) return null;
             stringBuffer.append(tmp);
             tmp = _operator.transfer(vars, exprMap, retType, exceptions);
             if (tmp == null) return null;
@@ -247,7 +250,7 @@ public class Assign extends Expr {
         StringBuffer tmp;
         if(lhs == null) {
             tmp = _lhs.adaptModifications(vars, exprMap, retType, exceptions);
-            if(tmp == null) return null;
+            if(tmp == null || !NodeUtils.isLegalVar(tmp.toString())) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(lhs);

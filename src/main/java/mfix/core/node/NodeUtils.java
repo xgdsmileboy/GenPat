@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -480,6 +481,10 @@ public class NodeUtils {
 
     }
 
+    public static boolean isLegalVar(String var) {
+        Pattern p = Pattern.compile("[\\w|_][\\w|\\d|_]*(\\[.*\\])?");
+        return p.matcher(var).matches();
+    }
 
     public static Type parseExprType(Expr left, String operator, Expr right) {
         if (left == null) {

@@ -178,8 +178,10 @@ public class Repair {
             if (m instanceof Insertion) {
                 Insertion insertion = (Insertion) m;
                 Node node = insertion.getInsertedNode();
-                if (node == null || (size == 1 && node instanceof EmptyStmt)
-                        || node.toSrcString().toString().startsWith("System")) {
+                if (node == null) return null;
+                String str = node.toSrcString().toString();
+                if ((size == 1 && node instanceof EmptyStmt)
+                        || str.startsWith("System.") || str.startsWith("Log.")) {
                     return null;
                 }
             }
