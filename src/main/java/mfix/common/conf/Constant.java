@@ -121,7 +121,7 @@ public class Constant {
     public final static String COMMAND_LOCATOR = Utils.join(SEP, LOCATOR_HOME, "sbfl.sh ");
     public final static String LOCATOR_SUSP_FILE_BASE = Utils.join(SEP, LOCATOR_HOME, "ochiai");
     public final static String OCHIAI_RESULT = Utils.join(SEP, D4J_INFO_DIR, "location", "ochiai");
-    public final static String PROJ_REALTIME_LOC_BASE = Utils.join(SEP,D4J_INFO_DIR + "realtime", "location");
+    public final static String PROJ_REALTIME_LOC_BASE = Utils.join(SEP,D4J_INFO_DIR, "location", "realtime");
 
 
     static {

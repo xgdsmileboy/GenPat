@@ -129,7 +129,7 @@ public class SBFLocator extends AbstractFaultLocator {
                 LevelLogger.error("Suspicious line format error : " + lines.get(i));
                 continue;
             }
-            buffer.append(lineAndSusp).append(Constant.NEW_LINE);
+            buffer.append(lines.get(i)).append(Constant.NEW_LINE);
 
             String stmt = lineAndSusp[0];
             double susp = Double.parseDouble(lineAndSusp[1]);
