@@ -12,6 +12,7 @@ import mfix.common.java.D4jSubject;
 import mfix.common.java.Subject;
 import mfix.core.node.ast.Node;
 import mfix.core.node.parser.NodeParser;
+import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -42,6 +43,95 @@ import java.util.concurrent.TimeoutException;
  * @date: 9/21/18
  */
 public class Utils {
+
+
+    public static boolean moveFile(String src, String tar) {
+        File file = new File(src);
+        if (file.exists()) {
+            try {
+                FileUtils.moveFile(file, new File(tar));
+            } catch (IOException e) {
+                LevelLogger.error("Backup previous out file failed! " + src);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean deleteDirs(File dir) {
+        boolean result = true;
+        if (dir.exists()) {
+            try {
+                FileUtils.deleteDirectory(dir);
+            } catch (IOException e) {
+                LevelLogger.error("Delete directory failed!", e);
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    public static boolean deleteDirs(String... dirs) {
+        boolean result = true;
+        File file;
+        for (String dir : dirs) {
+            file = new File(dir);
+            if (file.exists()) {
+                try {
+                    FileUtils.deleteDirectory(file);
+                } catch (IOException e) {
+                    LevelLogger.error("Delete directory failed!", e);
+                    result = false;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static boolean deleteFiles(File f) {
+        boolean result = true;
+        if (f.exists()) {
+            try {
+                FileUtils.forceDeleteOnExit(f);
+            } catch (IOException e) {
+                LevelLogger.error("Delete file failed!", e);
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    public static boolean deleteFiles(String... files) {
+        boolean result = true;
+        File file;
+        for (String f : files) {
+            file = new File(f);
+            if (file.exists()) {
+                try {
+                    FileUtils.forceDeleteOnExit(file);
+                } catch (IOException e) {
+                    LevelLogger.error("Delete file failed!", e);
+                    result = false;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static boolean copyDir(File srcFile, File tarFile) {
+        try {
+            FileUtils.copyDirectory(srcFile, tarFile);
+        } catch (IOException e) {
+            LevelLogger.error("Copy dir from " + srcFile.getAbsolutePath() +
+                    " to " + tarFile.getAbsolutePath() + " " + "failed", e);
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean copyDir(String src, String tar) {
+        return copyDir(new File(src), new File(tar));
+    }
 
     public static boolean safeCollectionEqual(Set<String> c1, Set<String> c2) {
         if (c1 == c2) return true;

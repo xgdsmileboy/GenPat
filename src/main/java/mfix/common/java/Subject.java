@@ -12,10 +12,8 @@ import mfix.common.conf.Configure;
 import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -192,50 +190,50 @@ public class Subject implements IExecute {
         return Utils.join(Constant.SEP, Constant.REPAIR_LOG_PATH, _name, _id + ".txt");
     }
 
-    public void backup() throws IOException {
+    public void backup() {
         String srcDir = getHome() + getSsrc();
         backup(srcDir, srcDir + "_bak");
         String testDir = getHome() + getTsrc();
         backup(testDir, testDir + "_bak");
     }
 
-    private void backup(String file, String tar) throws IOException {
+    private void backup(String file, String tar) {
         File tarFile = new File(tar);
         if (tarFile.exists()) {
-            FileUtils.copyDirectory(tarFile, new File(file));
+            Utils.copyDir(tarFile, new File(file));
         } else {
-            FileUtils.copyDirectory(new File(file), tarFile);
+            Utils.copyDir(new File(file), tarFile);
         }
     }
 
-    public void restore() throws IOException {
+    public void restore() {
         String srcDir = getHome() + getSsrc();
         restore(srcDir, srcDir + "_bak");
         String testDir = getHome() + getTsrc();
         restore(testDir, testDir + "_bak");
     }
 
-    public void restore(String file) throws IOException {
+    public void restore(String file) {
         restore(file, file + "_bak");
     }
 
-    private void restore(String file, String tar) throws IOException {
+    private void restore(String file, String tar) {
         File tarFile = new File(tar);
         if (tarFile.exists()) {
-            FileUtils.copyDirectory(tarFile, new File(file));
+            Utils.copyDir(tarFile, new File(file));
         } else {
             LevelLogger.error("Restore source file failed!");
         }
     }
 
-    public void backupPurifiedTest() throws IOException {
+    public void backupPurifiedTest() {
         String testDir = getHome() + getTsrc();
-        FileUtils.copyDirectory(new File(testDir), new File(testDir + "_purify"));
+        Utils.copyDir(new File(testDir), new File(testDir + "_purify"));
     }
 
-    public void restorePurifiedTest() throws IOException {
+    public void restorePurifiedTest() {
         String testDir = getHome() + getTsrc();
-        FileUtils.copyDirectory(new File(testDir + "_purify"), new File(testDir));
+        Utils.copyDir(new File(testDir + "_purify"), new File(testDir));
     }
 
     protected boolean checkSuccess(List<String> compileMessage, String key) {

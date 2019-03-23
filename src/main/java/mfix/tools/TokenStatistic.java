@@ -27,7 +27,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -99,14 +98,7 @@ public class TokenStatistic {
 
     private void init(String... names) {
         for (String fileName : names) {
-            File file = new File(fileName);
-            if (file.exists()) {
-                try {
-                    FileUtils.moveFile(file, new File(fileName + ".bak"));
-                } catch (IOException e) {
-                    LevelLogger.error("Backup previous out file failed!" + fileName);
-                }
-            }
+            Utils.moveFile(fileName, fileName + ".bak");
             JavaFile.writeStringToFile(fileName, "");
         }
     }

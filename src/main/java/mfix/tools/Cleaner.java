@@ -9,6 +9,7 @@ package mfix.tools;
 
 import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
+import mfix.common.util.Utils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -16,7 +17,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -67,14 +67,8 @@ public class Cleaner {
 
     private void delete(Set<String> paths) {
         for (String patternFile : paths) {
-            File file = new File(patternFile);
-            File parent = file.getParentFile();
-            try {
-                FileUtils.forceDeleteOnExit(file);
-                FileUtils.deleteDirectory(parent);
-            } catch (IOException e) {
-                LevelLogger.warn("Delete file failed!", e);
-            }
+            File parent = new File(patternFile).getParentFile();
+            Utils.deleteDirs(parent);
         }
     }
 

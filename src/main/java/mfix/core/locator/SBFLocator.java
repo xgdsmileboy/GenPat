@@ -17,12 +17,10 @@ import mfix.common.util.Pair;
 import mfix.common.util.Triple;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.LineRange;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -48,7 +46,7 @@ public class SBFLocator extends AbstractFaultLocator {
     protected void locateFault(double threshold) {
         try {
             LevelLogger.info("Perform SBFL ....");
-            FileUtils.forceDeleteOnExit(new File(getBuggyLineSuspFile()));
+            Utils.deleteFiles(getBuggyLineSuspFile());
             ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
                     _subject.getJDKHome(), Constant.D4J_HOME);
             LevelLogger.info("Finish SBFL ...");
