@@ -25,9 +25,12 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
+import mfix.core.node.ast.stmt.EmptyStmt;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.Matcher;
+import mfix.core.node.modify.Insertion;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
@@ -38,7 +41,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -140,18 +142,15 @@ public class Repair {
         }
 
         _alreadyFixedTests.addAll(_currentFailedTests);
-
-        try {
-            _subject.restorePurifiedTest();
-            for (String s : _allFailedTests) {
-                if (_allFailedTests.contains(s)) {
-                    continue;
-                }
-                if (_subject.test(s)) {
-                    _alreadyFixedTests.add(s);
-                }
+        _subject.restorePurifiedTest();
+        for (String s : _allFailedTests) {
+            if (_allFailedTests.contains(s)) {
+                continue;
             }
-        } catch(IOException e) {}
+            if (_subject.test(s)) {
+                _alreadyFixedTests.add(s);
+            }
+        }
 
         return ValidateResult.PASS;
     }
@@ -161,11 +160,29 @@ public class Repair {
         try {
             Pattern fixPattern = (Pattern) Utils.deserialize(patternFile);
             fixPattern.setPatternName(patternFile);
-            return fixPattern;
+            return postFilter(fixPattern);
         } catch (IOException | ClassNotFoundException e) {
             LevelLogger.error("Deserialize pattern failed!", e);
         }
         return null;
+    }
+
+    private Pattern postFilter(Pattern p) {
+        Set<Modification> modifications = p.getAllModifications();
+        int size = modifications.size();
+        for (Modification m : modifications) {
+            if (m instanceof Insertion) {
+                Insertion insertion = (Insertion) m;
+                Node node = insertion.getInsertedNode();
+                if (node == null) return null;
+                String str = node.toSrcString().toString();
+                if ((size == 1 && node instanceof EmptyStmt)
+                        || str.startsWith("System.") || str.startsWith("Log.")) {
+                    return null;
+                }
+            }
+        }
+        return p;
     }
 
     private List<String> filterPatterns(Set<String> keys, int topK) throws IOException {
@@ -327,9 +344,7 @@ public class Repair {
 
             TextDiff diff = new TextDiff(origin, fixed);
             LevelLogger.debug("Repair code :\n" + diff.toString());
-            try {
-                FileUtils.forceDeleteOnExit(new File(clazzFile));
-            } catch (IOException e) {}
+            Utils.deleteFiles(clazzFile);
             switch (validate(buggyFile, code)) {
                 case PASS:
                     writeLog(pattern.getPatternName(), buggyFile, origin,
@@ -389,13 +404,14 @@ public class Repair {
             for (String s : patterns) {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
+                if (p == null) { continue; }
                 scope.reset(p.getNewVars());
                 tryFix(node, p, scope, clazzFile, retType, exceptions);
             }
         }
     }
 
-    public void repair() throws IOException {
+    public void repair() {
         LevelLogger.info("Repair : " + _subject.getHome());
         _subject.backup();
 
@@ -404,8 +420,7 @@ public class Repair {
         String srcBin = _subject.getHome() + _subject.getSbin();
         String testBin = _subject.getHome() + _subject.getTbin();
 
-        FileUtils.deleteDirectory(new File(srcBin));
-        FileUtils.deleteDirectory(new File(testBin));
+        Utils.deleteDirs(srcBin, testBin);
 
         Purification purification = new Purification(_subject);
         List<String> purifiedFailedTestCases = purification.purify(_subject.purify());
@@ -431,8 +446,7 @@ public class Repair {
 
             _subject.restore(srcSrc);
             _subject.restorePurifiedTest();
-            FileUtils.deleteDirectory(new File(srcBin));
-            FileUtils.deleteDirectory(new File(testBin));
+            Utils.deleteDirs(srcBin, testBin);
 
             _currentFailedTests.clear();
             if (_subject.purify()) {
@@ -560,9 +574,7 @@ public class Repair {
             JavaFile.writeStringToFile(file, subject.getName() + "_" + subject.getId() + " > PATCH : ", true);
             LevelLogger.info(subject.getHome() + ", " + subject.toString());
             Repair repair = new Repair(subject, patternRecords);
-            try {
-                repair.repair();
-            } catch (IOException e) {}
+            repair.repair();
             JavaFile.writeStringToFile(file, repair.patch() + "\n", true);
         }
     }

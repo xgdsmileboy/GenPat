@@ -89,7 +89,13 @@ public class SuperMethodInv extends Expr {
 		if (_label != null) {
 			label = _label.formalForm(nameMapping, consider, keywords);
 		}
-		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
+		StringBuffer name = null;
+		if (!_name.isAbstract() && (isChanged() || isExpanded())) {
+			name = _name.toSrcString();
+			keywords.add(name.toString());
+		} else if (isConsidered()) {
+			name = new StringBuffer(nameMapping.getMethodID(this));
+		}
 		StringBuffer arg = _arguments.formalForm(nameMapping, consider, keywords);
 		if (label == null && name == null && arg == null) {
 			return super.toFormalForm0(nameMapping, parentConsidered, keywords);

@@ -11,7 +11,6 @@ import mfix.common.java.D4jSubject;
 import mfix.common.util.Utils;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -24,11 +23,7 @@ public class PurificationTest {
 		String d4jHome = Utils.join(Constant.SEP, Constant.HOME, "projects");
 		D4jSubject subject = new D4jSubject(d4jHome, "math", 72);
 
-		try {
-			subject.backup();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		subject.backup();
 		Purification purification = new Purification(subject);
 		List<String> purifiedFailedTestCases = purification.purify(true);
 		for(String teString : purifiedFailedTestCases){

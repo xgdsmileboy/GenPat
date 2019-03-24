@@ -11,7 +11,6 @@ import mfix.TestCase;
 import mfix.common.conf.Constant;
 import mfix.common.java.D4jSubject;
 import mfix.common.util.JavaFile;
-import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.locator.D4JManualLocator;
 import mfix.core.locator.Location;
@@ -27,7 +26,6 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -91,11 +89,7 @@ public class RepairTest extends TestCase {
         PatternExtractor extractor = new PatternExtractor();
         Set<Pattern> patterns = extractor.extractPattern(buggyFile, fixedFile);
         D4jSubject subject = new D4jSubject(d4jHome, proj, id);
-        try {
-            subject.backup();
-        } catch (IOException e) {
-            LevelLogger.error("Backup source file failed!", e);
-        }
+        subject.backup();
         D4JManualLocator locator = new D4JManualLocator(subject);
         List<Location> locations = locator.getLocations(3);
         Repair repair = new Repair(subject, null);
@@ -119,11 +113,7 @@ public class RepairTest extends TestCase {
                 repair.tryFix(node, p, scope, clazzFile, retType, exceptions);
             }
         }
-        try {
-            subject.restore();
-        } catch (IOException e) {
-            LevelLogger.error("Restore source file failed!", e);
-        }
+        subject.restore();
 
     }
 

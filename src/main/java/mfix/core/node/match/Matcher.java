@@ -737,7 +737,8 @@ public class Matcher {
                 Insertion insertion = (Insertion) modification;
                 tmp = insertion.apply(vars, exprMap, retType, exceptions);
                 if (tmp == null) return false;
-
+                String str = tmp.toString();
+                if (str.startsWith("super(") || str.startsWith("this(")) return false;
                 Node insNode = insertion.getInsertedNode();
                 Set<Node> before = new HashSet<>();
                 Set<Node> after = new HashSet<>();

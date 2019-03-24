@@ -95,7 +95,7 @@ public class EmptyStmt extends Stmt {
 
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		return toSrcString();
+		return new StringBuffer();
 	}
 
 	@Override
