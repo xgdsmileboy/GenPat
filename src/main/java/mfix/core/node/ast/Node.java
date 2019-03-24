@@ -788,6 +788,18 @@ public abstract class Node implements NodeComparator, Serializable {
         return set;
     }
 
+    public String getTypeStr() {
+        return null;
+    }
+
+    public String getAPIStr() {
+        return null;
+    }
+
+    public String getNameStr() {
+        return null;
+    }
+
     /*********************************************************/
     /***************** pattern clustering ********************/
     /*********************************************************/

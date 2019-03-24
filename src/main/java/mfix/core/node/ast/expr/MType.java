@@ -69,6 +69,11 @@ public class MType extends Node {
 		}
 	}
 
+	@Override
+	public String getTypeStr() {
+		return NodeUtils.distillBasicType(this);
+	}
+
 	public int getDimension() {
 		if (isArrayType()) {
 			return ((ArrayType) _type).getDimensions();

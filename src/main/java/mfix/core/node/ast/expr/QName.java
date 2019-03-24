@@ -119,9 +119,9 @@ public class QName extends Label {
 		_selfFVector = new FVector();
 
 		_completeFVector = new FVector();
-		String name = _name.toString();
-		String sname = _sname.toString();
-		if (_name instanceof SName && Character.isUpperCase(name.charAt(0)) && sname.toUpperCase().equals(sname)) {
+		String sname = _sname.getName();
+		if (_name instanceof SName && NodeUtils.possibleClassName(((SName) _name).getName())
+				&& sname.toUpperCase().equals(sname)) {
 			_selfFVector.inc(FVector.OTHER);
 			_completeFVector.inc(FVector.OTHER);
 		} else {

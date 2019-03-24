@@ -32,7 +32,7 @@ public abstract class Expr extends Node {
     protected String _exprTypeStr = "?";
     protected transient Type _exprType = null;
 
-    protected boolean _abstractNode = true;
+    protected boolean _abstractName = true;
     protected boolean _abstractType = true;
 
     protected Expr(String fileName, int startLine, int endLine, ASTNode node) {
@@ -147,5 +147,10 @@ public abstract class Expr extends Node {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getTypeStr() {
+        return NodeUtils.distillBasicType(_exprTypeStr);
     }
 }

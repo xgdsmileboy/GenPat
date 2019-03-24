@@ -11,14 +11,9 @@ import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.MiningUtils;
-import mfix.common.util.Pair;
+import mfix.common.util.Triple;
 import mfix.common.util.Utils;
-import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.ast.expr.Expr;
-import mfix.core.node.ast.expr.MType;
-import mfix.core.node.ast.expr.MethodInv;
-import mfix.core.node.ast.expr.TyLiteral;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -36,15 +31,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,13 +46,14 @@ public class TokenStatistic {
 
     private Map<String, Integer> _cacheApiMap;
     private Map<String, Integer> _cacheTypeMap;
+    private Map<String, Integer> _catchVarMap;
     private Set<String> _files;
     private int totalFile;
 
     private int _currThreadCount = 0;
     private int _maxThreadCount = Constant.MAX_FILTER_THREAD_NUM;
     private ExecutorService _threadPool;
-    private List<Future<Pair<Set<String>, Set<String>>>> _threadResultList = new ArrayList<>();
+    private List<Future<Triple<Set<String>, Set<String>, Set<String>>>> _threadResultList = new ArrayList<>();
 
     private final static String COMMAND = "<command> -if <arg> [-op <arg>] [-dir <arg>]";
 
@@ -93,6 +81,7 @@ public class TokenStatistic {
     public TokenStatistic() {
         _cacheApiMap = new HashMap<>();
         _cacheTypeMap = new HashMap<>();
+        _catchVarMap = new HashMap<>();
         _files = new HashSet<>();
     }
 
@@ -131,8 +120,8 @@ public class TokenStatistic {
         try {
             if (_currThreadCount >= _maxThreadCount) {
                 LevelLogger.debug("Thread pool is full ....");
-                for (Future<Pair<Set<String>, Set<String>>> fs : _threadResultList) {
-                    Pair<Set<String>, Set<String>> result = fs.get();
+                for (Future<Triple<Set<String>, Set<String>, Set<String>>> fs : _threadResultList) {
+                    Triple<Set<String>, Set<String>, Set<String>> result = fs.get();
                     totalFile ++;
                     LevelLogger.debug("Parse file : ----- < " + totalFile + " > -----");
                     if (result != null) {
@@ -147,6 +136,11 @@ public class TokenStatistic {
                             count = count == null ? 1 : count + 1;
                             _cacheApiMap.put(s, count);
                         }
+                        for (String s : result.getThird()) {
+                            count = _catchVarMap.get(s);
+                            count = count == null ? 1 : count + 1;
+                            _catchVarMap.put(s, count);
+                        }
                     }
                     _currThreadCount--;
                 }
@@ -154,7 +148,8 @@ public class TokenStatistic {
                 _currThreadCount = _threadResultList.size();
                 LevelLogger.debug("Cleared thread pool : " + _currThreadCount);
             }
-            Future<Pair<Set<String>, Set<String>>> future = _threadPool.submit(new ParseKey(patternFiles));
+            Future<Triple<Set<String>, Set<String>, Set<String>>> future =
+                    _threadPool.submit(new ParseKey(patternFiles));
             _threadResultList.add(future);
             _currThreadCount++;
 
@@ -251,8 +246,10 @@ public class TokenStatistic {
         }
         String apiFile = Utils.join(Constant.SEP, outPath, "AllTokens_api.txt");
         String typeFile = Utils.join(Constant.SEP, outPath, "AllTokens_type.txt");
+        String varFile = Utils.join(Constant.SEP, outPath, "AllTokens_var.txt");
         optionMap.put("api", apiFile);
         optionMap.put("type", typeFile);
+        optionMap.put("var", varFile);
 
         return optionMap;
     }
@@ -261,7 +258,8 @@ public class TokenStatistic {
         Map<String, String> optionMap = parseOption(args);
         String apiOutFile = optionMap.get("api");
         String typeOutFile = optionMap.get("type");
-        init(apiOutFile, typeOutFile);
+        String varOutFile = optionMap.get("var");
+        init(apiOutFile, typeOutFile, varOutFile);
 
         totalFile = 0;
         _threadPool = Executors.newFixedThreadPool(_maxThreadCount);
@@ -271,6 +269,7 @@ public class TokenStatistic {
         try {
             writeFile(apiOutFile, _cacheApiMap);
             writeFile(typeOutFile, _cacheTypeMap);
+            writeFile(varOutFile, _catchVarMap);
             writeBuggyFiles(Utils.join(Constant.SEP, Constant.HOME, "BuggyFiles.txt"));
         } catch (IOException e) {
             LevelLogger.error("Dump to result to file failed!", e);
@@ -287,10 +286,10 @@ public class TokenStatistic {
 
 }
 
-class ParseKey implements Callable<Pair<Set<String>, Set<String>>> {
+class ParseKey implements Callable<Triple<Set<String>, Set<String>, Set<String>>> {
 
 
-    private static final Set<String> EmptySet = new HashSet<>(0);
+    private static final Set<String> EmptySet = Collections.emptySet();
     private Set<String> _patternFiles;
 
     public ParseKey(Set<String> patterns) {
@@ -298,12 +297,14 @@ class ParseKey implements Callable<Pair<Set<String>, Set<String>>> {
     }
 
     @Override
-    public Pair<Set<String>, Set<String>> call() {
+    public Triple<Set<String>, Set<String>, Set<String>> call() {
         if (_patternFiles == null || _patternFiles.isEmpty()) {
-            return new Pair<>(EmptySet, EmptySet);
+            return new Triple<>(EmptySet, EmptySet, EmptySet);
         }
         Set<String> types = new HashSet<>();
         Set<String> apis = new HashSet<>();
+        Set<String> vars = new HashSet<>();
+        String type, api, var;
         for (String f : _patternFiles) {
             Pattern p;
             try {
@@ -316,30 +317,22 @@ class ParseKey implements Callable<Pair<Set<String>, Set<String>>> {
             nodes.add(node);
             while (!nodes.isEmpty()) {
                 node = nodes.poll();
-                if (node instanceof Expr) {
-                    String type = NodeUtils.distillBasicType(((Expr) node).getTypeString());
-                    if (type != null && !"?".equals(type)) {
-                        types.add(type);
-                    }
+                type = node.getTypeStr();
+                if (type != null && !"?".equals(type)) {
+                    types.add(type);
                 }
-                switch (node.getNodeType()) {
-                    case MINVOCATION:
-                        MethodInv methodInv = (MethodInv) node;
-                        apis.add(methodInv.getName().getName());
-                        break;
-                    case TYPE:
-                        types.add(NodeUtils.distillBasicType((MType) node));
-                        break;
-                    case TLITERAL:
-                        TyLiteral tyLiteral = (TyLiteral) node;
-                        types.add(tyLiteral.getDeclType().typeStr());
-                    default:
-
+                api = node.getAPIStr();
+                if (api != null) {
+                    apis.add(api);
+                }
+                var = node.getNameStr();
+                if (var != null) {
+                    vars.add(var);
                 }
                 nodes.addAll(node.getAllChildren());
             }
         }
-        return new Pair<>(types, apis);
+        return new Triple<>(types, apis, vars);
     }
 
 }

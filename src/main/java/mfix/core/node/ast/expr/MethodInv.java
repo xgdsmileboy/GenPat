@@ -179,6 +179,11 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
+	public String getAPIStr() {
+		return _name.getName();
+	}
+
+	@Override
 	public void computeFeatureVector() {
 		_selfFVector = new FVector();
 		_selfFVector.inc(FVector.E_MINV);

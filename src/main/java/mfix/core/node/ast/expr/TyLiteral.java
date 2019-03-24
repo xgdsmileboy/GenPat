@@ -90,6 +90,11 @@ public class TyLiteral extends Expr {
 	}
 
 	@Override
+	public String getTypeStr() {
+		return _type.getTypeStr();
+	}
+
+	@Override
 	public void computeFeatureVector() {
 		_selfFVector = new FVector();
 		_selfFVector.inc(FVector.E_TYPE);

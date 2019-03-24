@@ -184,6 +184,10 @@ public class NodeUtils {
         return false;
     }
 
+    public static boolean possibleClassName(String name) {
+        return Character.isUpperCase(name.charAt(0));
+    }
+
     /**
      * check whether the given node is a simple node,
      * which usually represents a one token

@@ -74,6 +74,11 @@ public class AryCreation extends Expr {
     }
 
     @Override
+    public String getTypeStr() {
+        return _type.getTypeStr();
+    }
+
+    @Override
     public List<Node> getAllChildren() {
         List<Node> children = new ArrayList<>(_dimension.size() + 1);
         children.addAll(_dimension);

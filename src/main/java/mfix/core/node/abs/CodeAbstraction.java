@@ -20,6 +20,8 @@ public interface CodeAbstraction {
         TYPE
     }
 
+    boolean shouldAbstract(String string);
+
     boolean shouldAbstract(Node node);
 
     boolean shouldAbstract(Node node, Category category);

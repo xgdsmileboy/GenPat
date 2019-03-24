@@ -84,6 +84,11 @@ public class TermFrequency implements CodeAbstraction {
     }
 
     @Override
+    public boolean shouldAbstract(String string) {
+        return abstraction(string, _tokenMap);
+    }
+
+    @Override
     public boolean shouldAbstract(Node node) {
         String token;
         if (node.getNodeType() == Node.TYPE.TYPE) {

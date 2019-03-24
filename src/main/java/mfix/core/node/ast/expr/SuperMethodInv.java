@@ -156,6 +156,11 @@ public class SuperMethodInv extends Expr {
 		return children;
 	}
 
+	@Override
+	public String getAPIStr() {
+		return _name.getName();
+	}
+
 	public List<Node> flattenTreeNode(List<Node> nodes) {
 		nodes.add(this);
 		_arguments.flattenTreeNode(nodes);
