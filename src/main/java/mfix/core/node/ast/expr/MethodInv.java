@@ -99,7 +99,14 @@ public class MethodInv extends Expr {
 		if (_expression != null) {
 			exp = _expression.formalForm(nameMapping, consider, keywords);
 		}
-		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
+		StringBuffer name = null;
+		if (!_name.isAbstract() && (isChanged() || isExpanded())) {
+			name = _name.toSrcString();
+			keywords.add(name.toString());
+		} else if (isConsidered()) {
+			name = new StringBuffer(nameMapping.getMethodID(this));
+		}
+
 		StringBuffer arg = _arguments.formalForm(nameMapping, consider, keywords);
 
 		if (exp == null && name == null) {
