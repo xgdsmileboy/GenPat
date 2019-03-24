@@ -6,7 +6,6 @@
  */
 package mfix.core.node.ast;
 
-import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.expr.Expr;
@@ -757,24 +756,6 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     protected abstract StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered,
                                                   Set<String> keywords);
-
-    public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
-        Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
-        for (MethodInv m : mSet) {
-            set.add(new Pair<>(m.getName().getName(), m.getArguments().getExpr().size()));
-        }
-        return set;
-    }
-
-    public Set<Pair<Pair<String, Integer>, String>> getUniversalAPIsWithType(boolean isPattern,
-                                                                             Set<Pair<Pair<String, Integer>, String>> set) {
-        Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
-        for (MethodInv m : mSet) {
-            set.add(new Pair<>(new Pair<>(m.getName().getName(), m.getArguments().getExpr().size()),
-                    m.getExpression().getTypeString()));
-        }
-        return set;
-    }
 
     public Set<MethodInv> getUniversalAPIs(Set<MethodInv> set, boolean isPattern) {
         if (!isPattern || (isConsidered() && !isAbstract())) {
