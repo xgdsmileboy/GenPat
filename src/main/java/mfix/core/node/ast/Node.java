@@ -685,7 +685,7 @@ public abstract class Node implements NodeComparator, Serializable {
 
     /**
      * abstract node with the given {@code abstracter}
-     * NOTE : this method is designed for API abstraction
+     * NOTE : this method is designed for node abstraction
      * and will not be used later
      *
      * @param abstracter: abstracter for code abstraction

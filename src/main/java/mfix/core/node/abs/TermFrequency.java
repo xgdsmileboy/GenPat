@@ -119,11 +119,11 @@ public class TermFrequency implements CodeAbstraction {
     public boolean shouldAbstract(String string, Category category) {
         if (string != null) {
             switch (category) {
-                case API:
+                case API_TOKEN:
                     return abstraction(string, _apiMap);
-                case TYPE:
+                case TYPE_TOKEN:
                     return abstraction(string, _typeMap);
-                case NAME:
+                case NAME_TOKEN:
                     return abstraction(string, _nameMap);
             }
         }

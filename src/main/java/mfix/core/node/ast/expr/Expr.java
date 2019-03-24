@@ -7,7 +7,9 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.pattern.cluster.NameMapping;
@@ -64,6 +66,14 @@ public abstract class Expr extends Node {
     @Override
     public List<Stmt> getChildren() {
         return new ArrayList<>(0);
+    }
+
+    @Override
+    public void doAbstraction(CodeAbstraction abstracter) {
+        if (isChanged() || isExpanded()) {
+            _abstractType = abstracter.shouldAbstract(NodeUtils.distillBasicType(_exprTypeStr),
+                    CodeAbstraction.Category.TYPE_TOKEN);
+        }
     }
 
     @Override
