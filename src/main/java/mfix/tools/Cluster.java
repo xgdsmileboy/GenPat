@@ -118,9 +118,10 @@ public class Cluster {
         LevelLogger.debug("Start to load patterns from files!");
         Set<Pattern> patterns = new HashSet<>();
         Pattern p;
+        int size = files.size();
         for (String f : files) {
             try {
-                LevelLogger.debug("Deserialize : " + f);
+                LevelLogger.debug("< " + (size --) + "> Deserialize : " + f);
                 p = (Pattern) Utils.deserialize(f);
                 p.setPatternName(f);
                 patterns.add(p);
