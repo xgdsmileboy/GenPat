@@ -6,7 +6,6 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
@@ -16,10 +15,6 @@ import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
-import mfix.core.stats.element.ElementCounter;
-import mfix.core.stats.element.ElementException;
-import mfix.core.stats.element.ElementQueryType;
-import mfix.core.stats.element.MethodElement;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -224,22 +219,6 @@ public class MethodInv extends Expr {
 			_arguments.postAccurateMatch(methodInv.getArguments());
 		}
 		return match;
-	}
-
-	@Override
-	public void doAbstraction(ElementCounter counter) {
-		if (isConsidered()) {
-			ElementQueryType qtype = new ElementQueryType(false,
-					false, ElementQueryType.CountType.COUNT_FILES);
-			MethodElement methodElement = new MethodElement(_name.getName(), null);
-			methodElement.setArgsNumber(_arguments.getExpr().size());
-			try {
-				_abstract = counter.count(methodElement, qtype) < Constant.API_FREQUENCY;
-			} catch (ElementException e) {
-				_abstract = true;
-			}
-		}
-		super.doAbstraction(counter);
 	}
 
 	@Override

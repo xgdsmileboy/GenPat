@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public class TermFrequency implements CodeAbstraction {
     private static Map<String, Integer> _tokenMap;
+    private static Map<String, Integer> _nameMap;
     private static Map<String, Integer> _apiMap;
     private static Map<String, Integer> _typeMap;
     private final static int TOTAL_FILE_NUM = Constant.TOTAL_BUGGY_FILE_NUMBER;
@@ -36,9 +37,10 @@ public class TermFrequency implements CodeAbstraction {
 
     static {
         try {
-            _tokenMap = loadTokenMap(Constant.TF_IDF_TOKENS);
-//            _apiMap = loadTokenMap(Constant.API_TOKENS);
-//            _typeMap = loadTokenMap(Constant.TYPE_TOKENS);
+//            _tokenMap = loadTokenMap(Constant.TF_IDF_TOKENS);
+            _nameMap = loadTokenMap(Constant.NAME_TOKENS);
+            _apiMap = loadTokenMap(Constant.API_TOKENS);
+            _typeMap = loadTokenMap(Constant.TYPE_TOKENS);
         } catch (IOException e) {
             LevelLogger.fatal("Load token mapping ");
         }
@@ -78,7 +80,7 @@ public class TermFrequency implements CodeAbstraction {
     }
 
     private boolean abstraction(String token, Map<String, Integer> map) {
-        double numInDoc = _tokenMap.getOrDefault(token, 1);
+        double numInDoc = map.getOrDefault(token, 1);
         double frequency = numInDoc / TOTAL_FILE_NUM;
         return frequency < _threshold;
     }
@@ -97,9 +99,6 @@ public class TermFrequency implements CodeAbstraction {
             token = node.toSrcString().toString();
         }
         return abstraction(token, _tokenMap);
-//        double numInDoc = _tokenMap.getOrDefault(token, 1) + 1;
-//        double frequency = numInDoc / TOTAL_FILE_NUM;
-//        return frequency < _threshold;
     }
 
     @Override
@@ -111,11 +110,21 @@ public class TermFrequency implements CodeAbstraction {
             } else {
                 token = node.toSrcString().toString();
             }
+            shouldAbstract(token, category);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean shouldAbstract(String string, Category category) {
+        if (string != null) {
             switch (category) {
                 case API:
-                    return abstraction(token, _apiMap);
+                    return abstraction(string, _apiMap);
                 case TYPE:
-                    return abstraction(token, _typeMap);
+                    return abstraction(string, _typeMap);
+                case NAME:
+                    return abstraction(string, _nameMap);
             }
         }
         return true;

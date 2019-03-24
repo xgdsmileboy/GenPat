@@ -97,8 +97,8 @@ public class PatternExtractor {
                     }
                 }
 //                srcNode.doAbstraction(counter);
-                srcNode.doAbstractionNew(abstraction.lazyInit());
-                tarNode.doAbstractionNew(abstraction);
+                srcNode.doAbstraction(abstraction.lazyInit());
+                tarNode.doAbstraction(abstraction);
                 // serialize feature vector
                 srcNode.getFeatureVector();
                 tarNode.getFeatureVector();

@@ -110,6 +110,11 @@ public class TF_IDF implements CodeAbstraction {
         return false;
     }
 
+    @Override
+    public boolean shouldAbstract(String string, Category category) {
+        return false;
+    }
+
     private class TokenCollector extends ASTVisitor {
 
         private String _file;

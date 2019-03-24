@@ -40,6 +40,7 @@ public class Constant {
     /* files used for pattern abstraction */
     public final static String API_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_api.txt");
     public final static String TYPE_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_type.txt");
+    public final static String NAME_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_var.txt");
 
     public final static String TF_IDF_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens.txt");
     public final static String DB_CACHE_FILE = Utils.join(SEP, RES_DIR, "db", "MethodTableElements.txt");
@@ -89,11 +90,13 @@ public class Constant {
     /* max pattern number for each round of clustering, used only the option SPLIT_CLUSTER is true */
     public static int MAX_PATTERN_NUM_EACH_CLUSTER;
 
+    private final static String RESULT = Utils.join(SEP, HOME, "result");
+
     /* default directory to patch log info */
-    public final static String PATCH_PATH = Utils.join(SEP, HOME, "patch");
+    public final static String PATCH_PATH = Utils.join(SEP, RESULT, "patch");
 
     /* default directory to log info */
-    public final static String REPAIR_LOG_PATH = Utils.join(SEP, HOME, "log");
+    public final static String REPAIR_LOG_PATH = Utils.join(SEP, RESULT, "log");
 
     /* default home directory of pattern files */
     public final static String DEFAULT_PATTERN_HOME = "/home/jiajun/GithubData";
@@ -103,12 +106,6 @@ public class Constant {
     public static String CMD_DEFECTS4J;
     public static String JAVA_7_HOME;
     public static String CMD_TIMEOUT;
-
-    /*
-     * markers
-     */
-    public final static boolean INGORE_OPERATOR_FOR_DELETE_MATCH = false;
-
 
     /*
      * Defects4j configure information

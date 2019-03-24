@@ -55,7 +55,7 @@ public class SName extends Label {
 	}
 
 	@Override
-	public void doAbstractionNew(CodeAbstraction abstraction) {
+	public void doAbstraction(CodeAbstraction abstraction) {
 		_abstractName = abstraction.shouldAbstract(this);
 		_abstractType = abstraction.shouldAbstract(_exprTypeStr);
 		_abstract = _abstractName && _abstractType;

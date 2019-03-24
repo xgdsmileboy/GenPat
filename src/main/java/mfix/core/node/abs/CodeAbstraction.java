@@ -17,12 +17,15 @@ public interface CodeAbstraction {
 
     enum Category{
         API,
-        TYPE
+        TYPE,
+        NAME
     }
 
     boolean shouldAbstract(String string);
 
     boolean shouldAbstract(Node node);
+
+    boolean shouldAbstract(String string, Category category);
 
     boolean shouldAbstract(Node node, Category category);
 
