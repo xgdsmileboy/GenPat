@@ -111,6 +111,10 @@ public class NodeUtils {
     }
 
     public static String distillBasicType(String s) {
+        if (s == null) return null;
+        if (s.startsWith("java.lang.")) {
+            s = s.substring(10/*java.lang.*/);
+        }
         int index = s.indexOf('<');
         return index > 0 ? s.substring(0, index) : s;
     }
