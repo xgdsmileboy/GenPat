@@ -83,6 +83,12 @@ public class Constant {
     /* max number of modifications for pattern filtering */
     public static int FILTER_MAX_CHANGE_ACTION;
 
+    /* split clustering */
+    public static boolean SPLIT_CLUSTER;
+
+    /* max pattern number for each round of clustering, used only the option SPLIT_CLUSTER is true */
+    public static int MAX_PATTERN_NUM_EACH_CLUSTER;
+
     /* default directory to patch log info */
     public final static String PATCH_PATH = Utils.join(SEP, HOME, "patch");
 
@@ -146,6 +152,8 @@ public class Constant {
             MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
             FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
             FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));
+            SPLIT_CLUSTER = Boolean.parseBoolean(prop.getProperty("CLUSTER.SPLIT", "false"));
+            MAX_PATTERN_NUM_EACH_CLUSTER = Integer.parseInt(prop.getProperty("CLUSTER.SIZE", "10000"));
 
             /* fault localization */
             CMD_TIMEOUT = prop.getProperty("CMD.TIMEOUT", "/usr/bin/timeout");

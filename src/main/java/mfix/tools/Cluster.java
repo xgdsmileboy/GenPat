@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -153,6 +154,23 @@ public class Cluster {
         LevelLogger.debug("Finish dumping result to file : " + outFile);
     }
 
+    private List<Set<String>> split(Set<String> strings) {
+        List<Set<String>> list = new LinkedList<>();
+        Set<String> set = new HashSet<>();
+        for (String s : strings) {
+            set.add(s);
+            if (set.size() >= Constant.MAX_PATTERN_NUM_EACH_CLUSTER) {
+                list.add(set);
+                set = new HashSet<>();
+            }
+        }
+        if (!set.isEmpty()) {
+            list.add(set);
+        }
+        LevelLogger.debug("Split to < " + list.size() + " > batch.");
+        return list;
+    }
+
     private void clusterPatterns(String baseDir, String outFile, String... recordFiles) {
         Map<Keys, Set<String>> key2Paths = new HashMap<>();
         try {
@@ -169,15 +187,24 @@ public class Cluster {
         int loop = key2Paths.size();
         ClusterImpl cluster = new ClusterImpl();
         LevelLogger.info("====================== Total clusters : [ " + loop + " ] ===================");
+        List<Set<String>> list;
         for (Map.Entry<Keys, Set<String>> entry : key2Paths.entrySet()) {
             LevelLogger.debug(">>>>>>>>>> LOOP LEFT [ " + (loop --) + " ] <<<<<<<<<<<");
-            patterns = readPatterns(entry.getValue());
-            Set<Group> result = cluster.reset().cluster(patterns);
-            try {
-                dump2File(result, outFile, append);
-                append = true;
-            } catch (IOException e) {
-                LevelLogger.error(String.format("Dump result to <%s> failed!", outFile));
+            if (Constant.SPLIT_CLUSTER) {
+                list = split(entry.getValue());
+            } else {
+                list = new LinkedList<>();
+                list.add(entry.getValue());
+            }
+            for (Set<String> set : list) {
+                patterns = readPatterns(set);
+                Set<Group> result = cluster.reset().cluster(patterns);
+                try {
+                    dump2File(result, outFile, append);
+                    append = true;
+                } catch (IOException e) {
+                    LevelLogger.error(String.format("Dump result to <%s> failed!", outFile));
+                }
             }
         }
     }
