@@ -439,6 +439,7 @@ public class Repair {
             String teString = purifiedFailedTestCases.get(currentTry);
             JavaFile.writeStringToFile(_logfile, "Current failed test : " +
                     teString + " | " + simpleDateFormat.format(new Date()) + "\n", true);
+            LevelLogger.debug("Current failed test : " + teString);
             if (_alreadyFixedTests.contains(teString)) {
                 JavaFile.writeStringToFile(_logfile, "Already fixed : " + teString + "\n", true);
                 continue;
