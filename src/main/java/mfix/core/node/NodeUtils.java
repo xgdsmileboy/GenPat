@@ -481,7 +481,8 @@ public class NodeUtils {
                 String str = expStmt.toSrcString().toString();
                 if (str.startsWith("System.out.") || str.startsWith("System.exit")
                         || str.startsWith("System.err") || str.startsWith("System.gc")
-                        || str.startsWith("Log") || str.startsWith("LevelLogger")) {
+                        || str.startsWith("Log") || str.startsWith("LevelLogger")
+                        || str.startsWith("Thread.currentThread()")) {
                     return false;
                 }
             }
