@@ -64,7 +64,7 @@ public class VarScope {
         Set<LineRange> ranges = _localVars.get(variable);
         if (ranges != null) {
             for (LineRange r : ranges) {
-                if (r.contains(line)) {
+                if (r.getStart() < line/*r.contains(line)*/) {
                     return true;
                 }
             }

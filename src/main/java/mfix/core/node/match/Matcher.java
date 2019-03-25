@@ -776,7 +776,7 @@ public class Matcher {
                         }
                     }
                 }
-                if (afterIndex < beforeIndex) {
+                if (afterIndex < beforeIndex || (afterIndex * beforeIndex <= 0)) {
                     if (beforeIndex >= 0) {
                         List<StringBuffer> list = insertionBefore.get(statements.get(beforeIndex));
                         if (list == null) {
