@@ -81,6 +81,11 @@ public class SBFLocator extends AbstractFaultLocator {
         if (lines == null || lines.isEmpty()) {
             lines = ochiaiResult(getOchiaiFile(), topK);
         }
+        StringBuffer buffer = new StringBuffer();
+        for (Location location : lines) {
+            buffer.append(location.toString()).append(Constant.NEW_LINE);
+        }
+        JavaFile.writeStringToFile(getRealtimeResultFile(), buffer.toString(), false);
         return lines;
     }
 
@@ -119,7 +124,6 @@ public class SBFLocator extends AbstractFaultLocator {
         }
 
         List<Pair<String, Double>> suspStmt = new ArrayList<>(lines.size());
-        StringBuffer buffer = new StringBuffer();
         int i = lines.get(0).endsWith("Suspiciousness") ? 1 : 0;
         for (; i < lines.size(); i++) {
             String[] lineAndSusp = lines.get(i).split(",");
@@ -127,7 +131,6 @@ public class SBFLocator extends AbstractFaultLocator {
                 LevelLogger.error("Suspicious line format error : " + lines.get(i));
                 continue;
             }
-            buffer.append(lines.get(i)).append(Constant.NEW_LINE);
 
             String stmt = lineAndSusp[0];
             double susp = Double.parseDouble(lineAndSusp[1]);
@@ -135,8 +138,6 @@ public class SBFLocator extends AbstractFaultLocator {
         }
 
         LevelLogger.info("Write SBFL result into : " + getRealtimeResultFile());
-        // write result to file
-        JavaFile.writeStringToFile(getRealtimeResultFile(), buffer.toString());
 
         suspStmt = suspStmt.stream()
                 .sorted(Comparator.comparingDouble(Pair<String, Double>::getSecond).reversed())
