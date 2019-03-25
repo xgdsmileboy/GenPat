@@ -17,6 +17,8 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.SuperMethodInv;
+import mfix.core.node.ast.stmt.EmptyStmt;
+import mfix.core.node.ast.stmt.ExpressionStmt;
 import mfix.core.node.ast.stmt.IfStmt;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
@@ -319,16 +321,25 @@ public class NodeUtils {
                 }
             }
             if (notmatch) {
-                Deletion deletion = new Deletion(pNode, src.get(i), i);
-                deletions.add(deletion);
+                if (considerNode(src.get(i))) {
+                    Deletion deletion = new Deletion(pNode, src.get(i), i);
+                    deletions.add(deletion);
+                } else {
+                    // avoid consider for matching
+                    src.get(i).setBindingNode(src.get(i));
+                }
             }
         }
         for (int i = 0; i < tar.size(); i++) {
             if (set.contains(i)) continue;
             Node n = tar.get(i);
-            Insertion insertion = new Insertion(pNode, i, n);
-            insertions.add(insertion);
-
+            if (considerNode(n)) {
+                Insertion insertion = new Insertion(pNode, i, n);
+                insertions.add(insertion);
+            } else {
+                // do not consider for matching
+                n.setBindingNode(n);
+            }
         }
 
         List<Modification> modifications = new LinkedList<>();
@@ -456,6 +467,26 @@ public class NodeUtils {
             }
         }
         return parent;
+    }
+
+    public static boolean considerNode(Node node) {
+        // avoid inserting empty statement
+        if (node instanceof EmptyStmt) {
+            return false;
+        }
+        // avoid inserting print or logging statement
+        if (node instanceof ExpressionStmt) {
+            ExpressionStmt expStmt = (ExpressionStmt) node;
+            if (expStmt.getExpression() instanceof MethodInv) {
+                String str = expStmt.toSrcString().toString();
+                if (str.startsWith("System.out.") || str.startsWith("System.exit")
+                        || str.startsWith("System.err") || str.startsWith("System.gc")
+                        || str.startsWith("Log") || str.startsWith("LevelLogger")) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static String getDefaultValue(String type){

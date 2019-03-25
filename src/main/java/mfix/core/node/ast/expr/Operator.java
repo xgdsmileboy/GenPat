@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
@@ -52,6 +53,13 @@ public abstract class Operator extends Node {
 		_selfFVector.inc(toSrcString().toString());
 		_completeFVector = new FVector();
 		_completeFVector.inc(toSrcString().toString());
+	}
+
+	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		if (isChanged()) {
+			_abstract = false;
+		}
 	}
 
 	@Override

@@ -7,7 +7,6 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
-import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
@@ -74,6 +73,8 @@ public abstract class Expr extends Node {
             _abstractType = abstracter.shouldAbstract(NodeUtils.distillBasicType(_exprTypeStr),
                     CodeAbstraction.Category.TYPE_TOKEN);
         }
+        _abstract = _abstractName && _abstractType;
+        super.doAbstraction(abstracter);
     }
 
     @Override
@@ -134,8 +135,16 @@ public abstract class Expr extends Node {
 
     protected StringBuffer leafFormalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (!isAbstract() && (isChanged() || isExpanded())) {
-            StringBuffer buffer = toSrcString();
-            keywords.add(buffer.toString());
+            StringBuffer buffer;
+            if (!_abstractName) {
+                buffer = toSrcString();
+                keywords.add(buffer.toString());
+            } else if (!_abstractType) {
+                buffer = new StringBuffer(NodeUtils.distillBasicType(_exprTypeStr));
+            } else {
+                // should not happen
+                buffer = new StringBuffer(nameMapping.getExprID(this));
+            }
             return buffer;
         } else if (isConsidered()) {
             return new StringBuffer(nameMapping.getExprID(this));

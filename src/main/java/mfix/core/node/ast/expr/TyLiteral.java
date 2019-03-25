@@ -6,6 +6,8 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -53,6 +55,15 @@ public class TyLiteral extends Expr {
 		stringBuffer.append(_type.toSrcString());
 		stringBuffer.append(".class");
 		return stringBuffer;
+	}
+
+	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		if (isConsidered()) {
+			_abstract = abstracter.shouldAbstract(NodeUtils.distillBasicType(_type),
+					CodeAbstraction.Category.TYPE_TOKEN);
+			_abstractType = _abstractName = _abstract;
+		}
 	}
 
 	@Override

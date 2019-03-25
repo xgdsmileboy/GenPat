@@ -25,12 +25,9 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
-import mfix.core.node.ast.stmt.EmptyStmt;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.Matcher;
-import mfix.core.node.modify.Insertion;
-import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
@@ -160,29 +157,11 @@ public class Repair {
         try {
             Pattern fixPattern = (Pattern) Utils.deserialize(patternFile);
             fixPattern.setPatternName(patternFile);
-            return postFilter(fixPattern);
+            return fixPattern;
         } catch (IOException | ClassNotFoundException e) {
             LevelLogger.error("Deserialize pattern failed!", e);
         }
         return null;
-    }
-
-    private Pattern postFilter(Pattern p) {
-        Set<Modification> modifications = p.getAllModifications();
-        int size = modifications.size();
-        for (Modification m : modifications) {
-            if (m instanceof Insertion) {
-                Insertion insertion = (Insertion) m;
-                Node node = insertion.getInsertedNode();
-                if (node == null) return null;
-                String str = node.toSrcString().toString();
-                if ((size == 1 && node instanceof EmptyStmt)
-                        || str.startsWith("System.") || str.startsWith("Log.")) {
-                    return null;
-                }
-            }
-        }
-        return p;
     }
 
     private List<String> filterPatterns(Set<String> keys, int topK) throws IOException {

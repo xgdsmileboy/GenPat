@@ -56,9 +56,16 @@ public class SName extends Label {
 
 	@Override
 	public void doAbstraction(CodeAbstraction abstraction) {
-		_abstractName = abstraction.shouldAbstract(this);
-		_abstractType = abstraction.shouldAbstract(_exprTypeStr);
-		_abstract = _abstractName && _abstractType;
+		if (isConsidered()) {
+			if (NodeUtils.isMethodName(this)) {
+				_abstractName = abstraction.shouldAbstract(this, CodeAbstraction.Category.API_TOKEN);
+			} else if (NodeUtils.possibleClassName(_name)) {
+				_abstractName = abstraction.shouldAbstract(this, CodeAbstraction.Category.TYPE_TOKEN);
+			} else {
+				_abstractName = abstraction.shouldAbstract(this, CodeAbstraction.Category.NAME_TOKEN);
+			}
+		}
+		super.doAbstraction(abstraction);
 	}
 
 	@Override

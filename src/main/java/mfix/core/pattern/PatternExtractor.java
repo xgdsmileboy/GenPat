@@ -100,8 +100,6 @@ public class PatternExtractor {
                 srcNode.doAbstraction(abstraction.lazyInit());
                 tarNode.doAbstraction(abstraction);
                 // serialize feature vector
-                srcNode.getFeatureVector();
-                tarNode.getFeatureVector();
                 Pattern pattern = new Pattern(srcNode, imports);
                 pattern.getFeatureVector();
                 pattern.addNewVars(newVars);

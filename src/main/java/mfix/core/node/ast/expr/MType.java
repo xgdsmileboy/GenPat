@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
@@ -88,6 +89,14 @@ public class MType extends Node {
 			return _typeStr.equals(((MType) other)._typeStr);
 		}
 		return false;
+	}
+
+	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		if (isConsidered()) {
+			_abstract = abstracter.shouldAbstract(NodeUtils.distillBasicType(this),
+					CodeAbstraction.Category.TYPE_TOKEN);
+		}
 	}
 
 	@Override
