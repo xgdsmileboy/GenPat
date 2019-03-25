@@ -284,10 +284,12 @@ public class MethDecl extends Node {
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if (node instanceof MethDecl) {
             MethDecl methDecl = (MethDecl) node;
-            return _name.ifMatch(methDecl.getName(), matchedNode, matchedStrings)
-                    && _body.ifMatch(methDecl.getBody(), matchedNode, matchedStrings)
-                    && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-                    && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+            if (_name.ifMatch(methDecl.getName(), matchedNode, matchedStrings)) {
+                if (_body == null) return methDecl._body == null;
+                return _body.ifMatch(methDecl.getBody(), matchedNode, matchedStrings)
+                        && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+            }
         }
         return false;
     }
