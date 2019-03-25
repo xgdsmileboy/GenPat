@@ -189,6 +189,8 @@ public class ExprList extends Node {
             _modifications = NodeUtils.genModificationList(this, _exprs, exprList.getExpr());
             if (!_modifications.isEmpty()) {
                 _modifications.clear();
+                exprList.setBindingNode(null);
+                setBindingNode(null);
                 _modifications.add(new Update(this, this, exprList));
             }
         }
