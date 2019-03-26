@@ -10,13 +10,15 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
-import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -177,7 +179,17 @@ public class ExprList extends Node {
         if (exprList == null) {
             continueTopDownMatchNull();
         } else {
-            NodeUtils.greedyMatchListNode(_exprs, exprList.getExpr());
+            List<Expr> exprs = exprList.getExpr();
+            int start = 0;
+            for (int i = 0; i < _exprs.size(); i++) {
+                for (int j = start; j < exprs.size(); j ++) {
+                    if (_exprs.get(i).postAccurateMatch(exprs.get(j))) {
+                        start = j + 1;
+                        break;
+                    }
+                }
+            }
+//            NodeUtils.greedyMatchListNode(_exprs, exprList.getExpr());
         }
         return match;
     }
@@ -187,12 +199,6 @@ public class ExprList extends Node {
         if (getBindingNode() != null) {
             ExprList exprList = (ExprList) getBindingNode();
             _modifications = NodeUtils.genModificationList(this, _exprs, exprList.getExpr());
-            if (!_modifications.isEmpty()) {
-                _modifications.clear();
-                exprList.setBindingNode(null);
-                setBindingNode(null);
-                _modifications.add(new Update(this, this, exprList));
-            }
         }
         return true;
     }
@@ -227,27 +233,113 @@ public class ExprList extends Node {
         return stringBuffer;
     }
 
+
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
-        StringBuffer stringBuffer = new StringBuffer();
-        StringBuffer tmp;
-        Node node = NodeUtils.checkModification(this);
-        if (node != null) {
-            return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions);
-        }
+                                 Set<String> exceptions) {
+        Node pnode = NodeUtils.checkModification(this);
+        if (pnode != null) {
 
-        if(!_exprs.isEmpty()) {
-            tmp = _exprs.get(0).adaptModifications(vars, exprMap, retType, exceptions);
-            if(tmp == null) return null;
-            stringBuffer.append(tmp);
-            for(int i = 1; i < _exprs.size(); i++) {
-                stringBuffer.append(",");
-                tmp = _exprs.get(i).adaptModifications(vars, exprMap, retType, exceptions);
-                if(tmp == null) return null;
-                stringBuffer.append(tmp);
+            Map<Node, List<StringBuffer>> insertionBefore = new HashMap<>();
+            Map<Node, List<StringBuffer>> insertionAfter = new HashMap<>();
+            Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
+            Map<Node, StringBuffer> map = new HashMap<>(_exprs.size());
+            if (!Matcher.applyNodeListModifications(pnode.getModifications(), _exprs, insertionBefore,
+                    insertionAfter, insertionAt, map, vars, exprMap, retType, exceptions)) {
+                return null;
             }
+
+            StringBuffer stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+
+            boolean first = true;
+            int curIndex = 0;
+            for(int index = 0; index < _exprs.size(); index ++) {
+                Node node = _exprs.get(index);
+                List<StringBuffer> list;
+                while(insertionAt.containsKey(curIndex)) {
+                    list = insertionAt.get(curIndex);
+                    for (int i = 0; i < list.size(); i++) {
+                        if (!first) {
+                            stringBuffer.append(',');
+                        }
+                        first = false;
+                        stringBuffer.append(list.get(i));
+                    }
+                    curIndex += list.size();
+                    insertionAt.remove(index);
+                }
+
+                if (map.containsKey(node)) {
+                    StringBuffer update = map.get(node);
+                    if (update != null) {
+                        if(!first) {
+                            stringBuffer.append(",");
+                        }
+                        first = false;
+                        stringBuffer.append(update);
+                        curIndex ++;
+                    }
+                } else {
+                    if(!first) {
+                        stringBuffer.append(",");
+                    }
+                    first = false;
+                    tmp = node.adaptModifications(vars, exprMap, retType, exceptions);
+                    if(tmp == null) return null;
+                    stringBuffer.append(tmp);
+                    curIndex ++;
+                }
+            }
+            if (!insertionAt.isEmpty()) {
+                List<Map.Entry<Integer, List<StringBuffer>>> list = new ArrayList<>(insertionAt.entrySet());
+                list.stream().sorted(Comparator.comparingInt(Map.Entry::getKey));
+                for (Map.Entry<Integer, List<StringBuffer>> entry : list) {
+                    for (StringBuffer s : entry.getValue()) {
+                        stringBuffer.append(',').append(s);
+                    }
+                }
+            }
+            return stringBuffer;
+        } else {
+            StringBuffer stringBuffer = new StringBuffer();
+            StringBuffer tmp;
+            if (!_exprs.isEmpty()) {
+                tmp = _exprs.get(0).adaptModifications(vars, exprMap, retType, exceptions);
+                if (tmp == null) return null;
+                stringBuffer.append(tmp);
+                for (int i = 1; i < _exprs.size(); i++) {
+                    stringBuffer.append(",");
+                    tmp = _exprs.get(i).adaptModifications(vars, exprMap, retType, exceptions);
+                    if (tmp == null) return null;
+                    stringBuffer.append(tmp);
+                }
+            }
+            return stringBuffer;
         }
-        return stringBuffer;
     }
+
+//    @Override
+//    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+//                                           Set<String> exceptions) {
+//        StringBuffer stringBuffer = new StringBuffer();
+//        StringBuffer tmp;
+//        Node node = NodeUtils.checkModification(this);
+//        if (node != null) {
+//            return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions);
+//        }
+//
+//        if(!_exprs.isEmpty()) {
+//            tmp = _exprs.get(0).adaptModifications(vars, exprMap, retType, exceptions);
+//            if(tmp == null) return null;
+//            stringBuffer.append(tmp);
+//            for(int i = 1; i < _exprs.size(); i++) {
+//                stringBuffer.append(",");
+//                tmp = _exprs.get(i).adaptModifications(vars, exprMap, retType, exceptions);
+//                if(tmp == null) return null;
+//                stringBuffer.append(tmp);
+//            }
+//        }
+//        return stringBuffer;
+//    }
 }

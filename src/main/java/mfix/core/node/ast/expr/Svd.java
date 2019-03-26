@@ -170,8 +170,10 @@ public class Svd extends Expr {
 			match = (svd == node);
 		} else if (canBinding(node)) {
 			svd = (Svd) node;
-			setBindingNode(node);
-			match = true;
+			if (svd.getName().getName().equals(_name.getName())) {
+				setBindingNode(node);
+				match = true;
+			}
 		}
 		if (svd == null) {
 			continueTopDownMatchNull();

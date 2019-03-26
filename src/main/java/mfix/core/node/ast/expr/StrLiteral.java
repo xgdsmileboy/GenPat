@@ -137,11 +137,7 @@ public class StrLiteral extends Expr {
 
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
-		if (stringBuffer == null) {
-			stringBuffer = toSrcString();
-		}
-		return stringBuffer;
+		return toSrcString();
 	}
 
 	@Override

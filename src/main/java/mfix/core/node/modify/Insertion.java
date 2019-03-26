@@ -4,6 +4,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.pattern.cluster.VIndex;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 

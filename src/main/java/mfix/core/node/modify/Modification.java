@@ -15,6 +15,7 @@ public abstract class Modification implements Serializable {
     protected Modification(Node parent, int fIndex) {
         _parent = parent;
         _fIndex = fIndex;
+        _parent.setConsidered(true);
     }
 
     public Node getParent() {

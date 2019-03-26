@@ -114,7 +114,7 @@ public class SName extends Label {
 	@Override
 	public boolean postAccurateMatch(Node node) {
 		if (getBindingNode() == node) return true;
-		if (getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == null && compare(node)) {
 			setBindingNode(node);
 			return true;
 		}
