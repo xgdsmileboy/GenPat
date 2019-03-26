@@ -60,7 +60,9 @@ public class D4jSubject extends Subject {
     public boolean test(String testcase) {
         LevelLogger.info("SINGLE TEST : " + testcase);
         return checkSuccess(ExecuteCommand.execute(CmdFactory.createCommand(getHome(),
-                Constant.CMD_DEFECTS4J + " test -t " + testcase), getJDKHome()), _key_test_suc);
+                Constant.CMD_TIMEOUT + " " + Constant.TEST_CASE_TIMEOUT + " "
+                        + Constant.CMD_DEFECTS4J + " test -t " + testcase),
+                getJDKHome()), _key_test_suc);
     }
 
     public boolean test(String clazz, String method) {

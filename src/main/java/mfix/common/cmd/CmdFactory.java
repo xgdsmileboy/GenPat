@@ -42,12 +42,18 @@ public class CmdFactory {
         return cmd;
     }
 
-    public static String[] createTestCommand(Subject subject) {
+    public static String[] createTestCommand(int timeout, Subject subject) {
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("cd " + subject.getHome());
-        stringBuffer.append(" && " + subject.getTestCommand());
+        stringBuffer.append("cd ").append(subject.getHome())
+                .append(" && ").append(Constant.CMD_TIMEOUT)
+                .append(" ").append(timeout)
+                .append(" ").append(subject.getTestCommand());
         String[] cmd = new String[] { "/bin/bash", "-c", stringBuffer.toString() };
         return cmd;
+    }
+
+    public static String[] createTestCommand(Subject subject) {
+        return createTestCommand(Constant.TEST_SUBJECT_TIMEOUT, subject);
     }
 
     public static String[] createComipleCommand(Subject subject) {

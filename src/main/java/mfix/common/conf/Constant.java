@@ -107,6 +107,9 @@ public class Constant {
     public static String JAVA_7_HOME;
     public static String CMD_TIMEOUT;
 
+    public final static int TEST_SUBJECT_TIMEOUT=600; //in seconds
+    public final static int TEST_CASE_TIMEOUT=120; //in seconds
+
     /*
      * Defects4j configure information
      */
