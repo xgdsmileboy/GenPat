@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
@@ -101,9 +102,21 @@ public class Vdf extends Node {
 	}
 
 	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		super.doAbstraction(abstracter);
+		if (isChanged() || isExpanded()) {
+			_abstract = _abstract && abstracter.shouldAbstract(_identifier, CodeAbstraction.Category.NAME_TOKEN);
+		}
+	}
+
+	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
 		StringBuffer identifier = _identifier.formalForm(nameMapping, consider, keywords);
+		if (identifier == null && !isAbstract()) {
+			keywords.add(_identifier.getName());
+			identifier = new StringBuffer(_identifier.getName());
+		}
 		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, consider, keywords);
 		if (identifier == null && exp == null) {
 			if (isConsidered()) {

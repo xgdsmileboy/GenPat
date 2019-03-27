@@ -63,6 +63,15 @@ public abstract class Operator extends Node {
 	}
 
 	@Override
+	public Set<Node> expand(Set<Node> nodes) {
+		super.expand(nodes);
+		if (isChanged()) {
+			nodes.addAll(getParent().getAllChildren());
+		}
+		return nodes;
+	}
+
+	@Override
 	public boolean postAccurateMatch(Node node) {
 		if (getBindingNode() == node) return true;
 		if (getBindingNode() == null && canBinding(node)

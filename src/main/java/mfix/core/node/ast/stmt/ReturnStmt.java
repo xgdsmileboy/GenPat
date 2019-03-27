@@ -160,8 +160,13 @@ public class ReturnStmt extends Stmt {
 					_modifications.add(update);
 				}
 			} else if(_expression.getBindingNode() != returnStmt.getExpression()) {
-				Update update = new Update(this, _expression, returnStmt.getExpression());
-				_modifications.add(update);
+				if (_expression.getBindingNode() == null
+						|| !_expression.getBindingNode().compare(returnStmt.getExpression())) {
+					Update update = new Update(this, _expression, returnStmt.getExpression());
+					_modifications.add(update);
+				} else {
+					_expression.setBindingNode(returnStmt.getExpression());
+				}
 			} else {
 				_expression.genModifications();
 			}

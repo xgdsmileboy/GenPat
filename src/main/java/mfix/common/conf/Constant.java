@@ -51,7 +51,7 @@ public class Constant {
     public final static int TOTAL_BUGGY_FILE_NUMBER = 1217392; // used to compute TF-IDF
     public final static int API_FREQUENCY = 100;
     public final static double TF_IDF_FREQUENCY = 0.5;
-    public final static double TOKEN_FREQENCY = 0.01;
+    public final static double TOKEN_FREQENCY = 0.005;
 
     /* runtime configurations */
     public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");

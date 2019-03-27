@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -78,9 +79,21 @@ public class VarDeclarationExpr extends Expr {
 	}
 
 	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		if (isChanged() || isExpanded()) {
+			_abstractType = abstracter.shouldAbstract(_declType, CodeAbstraction.Category.TYPE_TOKEN);
+		}
+		super.doAbstraction(abstracter);
+	}
+
+	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		boolean consider = isConsidered() || parentConsidered;
 		StringBuffer dec = _declType.formalForm(nameMapping, consider, keywords);
+		if (dec == null && !_abstractType) {
+			keywords.add(_declType.typeStr());
+			dec = new StringBuffer(_declType.typeStr());
+		}
 		List<StringBuffer> buffers = new ArrayList<>(_vdfs.size());
 		StringBuffer b;
 		boolean contain = false;

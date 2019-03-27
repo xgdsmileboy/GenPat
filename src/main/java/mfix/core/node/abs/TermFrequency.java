@@ -110,7 +110,7 @@ public class TermFrequency implements CodeAbstraction {
             } else {
                 token = node.toSrcString().toString();
             }
-            shouldAbstract(token, category);
+            return shouldAbstract(token, category);
         }
         return true;
     }

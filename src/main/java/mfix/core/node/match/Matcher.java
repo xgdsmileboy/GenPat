@@ -361,7 +361,8 @@ public class Matcher {
                 notmatched = false;
             } else {
                 for (int j = 0; j < tarStmt.size(); j++) {
-                    if (!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
+                    if (!tarMatched.contains(j) && tarStmt.get(j).getBindingNode() == null
+                            && srcStmt.get(i).compare(tarStmt.get(j))) {
                         srcStmt.get(i).setBindingNode(tarStmt.get(j));
                         srcStmt.get(i).postAccurateMatch(tarStmt.get(j));
                         tarMatched.add(j);
