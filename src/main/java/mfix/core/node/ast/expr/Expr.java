@@ -70,7 +70,7 @@ public abstract class Expr extends Node {
     @Override
     public void doAbstraction(CodeAbstraction abstracter) {
         if (isChanged() || isExpanded()) {
-            _abstractType = abstracter.shouldAbstract(NodeUtils.distillBasicType(_exprTypeStr),
+            _abstractType = _abstractType && abstracter.shouldAbstract(NodeUtils.distillBasicType(_exprTypeStr),
                     CodeAbstraction.Category.TYPE_TOKEN);
         }
         super.doAbstraction(abstracter);
@@ -127,7 +127,13 @@ public abstract class Expr extends Node {
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (isConsidered()) {
-            return new StringBuffer(nameMapping.getExprID(this));
+            StringBuffer buff = new StringBuffer();
+            if (!_abstractType) {
+                keywords.add(_exprTypeStr);
+                buff.append(_exprTypeStr).append("::");
+            }
+            buff.append(nameMapping.getExprID(this));
+            return buff;
         } else {
             return null;
         }
@@ -139,16 +145,17 @@ public abstract class Expr extends Node {
             if (!_abstractType) {
                 String type = NodeUtils.distillBasicType(_exprTypeStr);
                 if (!"?".equals(type)) {
+                    keywords.add(type);
                     buffer.append(type).append("::");
                 }
             }
             if (!_abstractName) {
+                keywords.add(toSrcString().toString());
                 buffer.append(toSrcString());
             }else {
                 // should not happen
                 buffer.append(nameMapping.getExprID(this));
             }
-            keywords.add(buffer.toString());
             return buffer;
         } else if (isConsidered()) {
             return new StringBuffer(nameMapping.getExprID(this));

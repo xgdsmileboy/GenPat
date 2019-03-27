@@ -552,7 +552,8 @@ public abstract class Node implements NodeComparator, Serializable {
             if (_bindingNode.getControldependency() != null) {
                 return true;
             }
-        } else if (getControldependency().getBindingNode()
+        }
+        else if (getControldependency().getBindingNode()
                 != _bindingNode.getControldependency()
                 || _bindingNode.getControldependency() == null) {
             return true;

@@ -72,10 +72,12 @@ public class StrLiteral extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (toSrcString().toString().length() < 10) {
-			return leafFormalForm(nameMapping, parentConsidered, keywords);
+		if (isChanged()) {
+			keywords.add(toString());
+			return toSrcString();
 		} else if (isConsidered()){
-			return new StringBuffer(nameMapping.getExprID(this));
+			keywords.add("String");
+			return new StringBuffer("String::").append(nameMapping.getExprID(this));
 		} else {
 			return null;
 		}

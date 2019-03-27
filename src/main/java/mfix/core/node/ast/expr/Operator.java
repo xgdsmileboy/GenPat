@@ -104,8 +104,11 @@ public abstract class Operator extends Node {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isConsidered()) {
-			return this.toSrcString();
+		if (isChanged()) {
+			keywords.add(toSrcString().toString());
+			return toSrcString();
+		} else if (isConsidered()) {
+			return new StringBuffer(nameMapping.getOpID(this));
 		} else {
 			return null;
 		}

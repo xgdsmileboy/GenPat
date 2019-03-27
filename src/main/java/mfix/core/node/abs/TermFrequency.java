@@ -124,6 +124,9 @@ public class TermFrequency implements CodeAbstraction {
                 case TYPE_TOKEN:
                     return abstraction(string, _typeMap);
                 case NAME_TOKEN:
+                    if (string.length() <= 1) {
+                        return true;
+                    }
                     return abstraction(string, _nameMap);
             }
         }

@@ -90,13 +90,16 @@ public class TermFrequencyTest extends TestCase {
             PatternExtractor extractor = new PatternExtractor();
             Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
             for (Pattern p : patterns) {
-                for (Modification m : p.getAllModifications()) {
-                    System.out.println(m);
-                }
+//                for (Modification m : p.getAllModifications()) {
+//                    System.out.println(m);
+//                }
                 for (Node node : p.getConsideredNodes()) {
                     System.out.println(node);
                 }
                 System.out.println(p.formalForm());
+                for (String s : p.getKeywords()) {
+                    System.out.println(s);
+                }
             }
 
         }

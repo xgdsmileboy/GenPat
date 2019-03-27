@@ -45,7 +45,8 @@ public class NillLiteral extends Expr {
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 //		return leafFormalForm(nameMapping, parentConsidered, keywords);
 		if (isConsidered()) {
-			return new StringBuffer(nameMapping.getExprID(this));
+			keywords.add("null");
+			return toSrcString();
 		} else {
 			return null;
 		}
