@@ -51,7 +51,7 @@ public class TokenStatistic {
     private int totalFile;
 
     private int _currThreadCount = 0;
-    private int _maxThreadCount = Constant.MAX_FILTER_THREAD_NUM;
+    private int _maxThreadCount = Constant.MAX_KEYWORD_STATISTIC_THREAD_NUM;
     private ExecutorService _threadPool;
     private List<Pair<String, Future<Keyword>>> _threadResultList = new ArrayList<>();
     private final String error_file = Utils.join(Constant.SEP, Constant.HOME, "error.log");
