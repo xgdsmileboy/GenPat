@@ -320,7 +320,6 @@ public class Repair {
             String code = JavaFile.sourceReplace(buggyFile, pattern.getImports(),
                     sources, startLine, endLine, fixed);
 
-
             TextDiff diff = new TextDiff(origin, fixed);
             LevelLogger.debug("Repair code :\n" + diff.toString());
             Utils.deleteFiles(clazzFile);
@@ -348,7 +347,9 @@ public class Repair {
         for (Location location : locations) {
             if (shouldStop()) { break; }
             _alreadyGenerated.clear();
-            LevelLogger.info("Location : " + location.getRelClazzFile() + "#" + location.getLine());
+            String message = "Location : " + location.getRelClazzFile() + "#" + location.getLine();
+            LevelLogger.info(message);
+            JavaFile.writeStringToFile(_logfile, message + "\n", true);
 
             final String file = Utils.join(Constant.SEP, srcSrc, location.getRelClazzFile());
             final String clazzFile = Utils.join(Constant.SEP, srcBin,
@@ -361,7 +362,9 @@ public class Repair {
             }
             Node node = getBuggyNode(file, location.getLine());
             if (node == null) {
-                LevelLogger.error("Get faulty node failed ! " + file + "#" + location.getLine());
+                String err = "Get faulty node failed ! " + file + "#" + location.getLine();
+                LevelLogger.error(err);
+                JavaFile.writeStringToFile(_logfile, err + "\n", true);
                 continue;
             }
             String retType = "void";
@@ -377,6 +380,7 @@ public class Repair {
                 patterns = filterPatterns(getKeys(node), Constant.TOP_K_PATTERN_EACH_LOCATION);
             } catch (IOException e) {
                 LevelLogger.error("Filter patterns failed!", e);
+                JavaFile.writeStringToFile(_logfile, "Filter patterns failed!\n", true);
                 continue;
             }
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
@@ -391,7 +395,9 @@ public class Repair {
     }
 
     public void repair() {
-        LevelLogger.info("Repair : " + _subject.getHome());
+        String message = "Repair : " + _subject.getName() + "_" + _subject.getId();
+        JavaFile.writeStringToFile(_logfile, message + "\n", false);
+        LevelLogger.info(message);
         _subject.backup();
 
         String srcSrc = _subject.getHome() + _subject.getSsrc();
@@ -445,8 +451,9 @@ public class Repair {
 
         _subject.restore();
 
-        String message = "Finish : " + _subject.getName() + " > patch : " + _patchNum
+        message = "Finish : " + _subject.getName() + " > patch : " + _patchNum
                 + " | Start : " + start + " | End : " + simpleDateFormat.format(new Date());
+        JavaFile.writeStringToFile(_logfile, message + "\n", true);
         System.out.println(message);
         LevelLogger.info(message);
     }
