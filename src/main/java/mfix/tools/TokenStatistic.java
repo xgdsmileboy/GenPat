@@ -11,7 +11,7 @@ import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.MiningUtils;
-import mfix.common.util.Triple;
+import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
 import mfix.core.pattern.Pattern;
@@ -53,7 +53,8 @@ public class TokenStatistic {
     private int _currThreadCount = 0;
     private int _maxThreadCount = Constant.MAX_FILTER_THREAD_NUM;
     private ExecutorService _threadPool;
-    private List<Future<Triple<Set<String>, Set<String>, Set<String>>>> _threadResultList = new ArrayList<>();
+    private List<Pair<String, Future<Keyword>>> _threadResultList = new ArrayList<>();
+    private final String error_file = Utils.join(Constant.SEP, Constant.HOME, "error.log");
 
     private final static String COMMAND = "<command> -if <arg> [-op <arg>] [-dir <arg>]";
 
@@ -117,45 +118,47 @@ public class TokenStatistic {
     private void statistic(String buggyFileName, Set<String> patternFiles) {
         LevelLogger.info("Statistic : " + buggyFileName);
         _files.add(buggyFileName);
-        try {
-            if (_currThreadCount >= _maxThreadCount) {
-                LevelLogger.debug("Thread pool is full ....");
-                for (Future<Triple<Set<String>, Set<String>, Set<String>>> fs : _threadResultList) {
-                    Triple<Set<String>, Set<String>, Set<String>> result = fs.get();
-                    totalFile ++;
-                    LevelLogger.debug("Parse file : ----- < " + totalFile + " > -----");
-                    if (result != null) {
-                        Integer count;
-                        for (String s : result.getFirst()) {
-                            count = _cacheTypeMap.get(s);
-                            count = count == null ? 1 : count + 1;
-                            _cacheTypeMap.put(s, count);
-                        }
-                        for (String s : result.getSecond()) {
-                            count = _cacheApiMap.get(s);
-                            count = count == null ? 1 : count + 1;
-                            _cacheApiMap.put(s, count);
-                        }
-                        for (String s : result.getThird()) {
-                            count = _catchVarMap.get(s);
-                            count = count == null ? 1 : count + 1;
-                            _catchVarMap.put(s, count);
-                        }
-                    }
-                    _currThreadCount--;
+        if (_currThreadCount >= _maxThreadCount) {
+            LevelLogger.debug("Thread pool is full ....");
+            Keyword result;
+            for (Pair<String, Future<Keyword>> fs : _threadResultList) {
+                try {
+                    result = fs.getSecond().get();
+                } catch (Exception e) {
+                    LevelLogger.error("Do keyword statistic failed : ", e);
+                    fs.getSecond().cancel(true);
+                    JavaFile.writeStringToFile(error_file, fs.getFirst() + "\n", true);
+                    continue;
                 }
-                _threadResultList.clear();
-                _currThreadCount = _threadResultList.size();
-                LevelLogger.debug("Cleared thread pool : " + _currThreadCount);
+                totalFile++;
+                LevelLogger.debug("Parse file : ----- < " + totalFile + " > -----");
+                if (result != null) {
+                    Integer count;
+                    for (String s : result.getTypes()) {
+                        count = _cacheTypeMap.get(s);
+                        count = count == null ? 1 : count + 1;
+                        _cacheTypeMap.put(s, count);
+                    }
+                    for (String s : result.getAPIS()) {
+                        count = _cacheApiMap.get(s);
+                        count = count == null ? 1 : count + 1;
+                        _cacheApiMap.put(s, count);
+                    }
+                    for (String s : result.getNames()) {
+                        count = _catchVarMap.get(s);
+                        count = count == null ? 1 : count + 1;
+                        _catchVarMap.put(s, count);
+                    }
+                }
+                _currThreadCount--;
             }
-            Future<Triple<Set<String>, Set<String>, Set<String>>> future =
-                    _threadPool.submit(new ParseKey(patternFiles));
-            _threadResultList.add(future);
-            _currThreadCount++;
-
-        } catch (Exception e) {
-            LevelLogger.error("Do keyword statistic failed : ", e);
+            _threadResultList.clear();
+            _currThreadCount = _threadResultList.size();
+            LevelLogger.debug("Cleared thread pool : " + _currThreadCount);
         }
+        Future<Keyword> future = _threadPool.submit(new ParseKey(patternFiles));
+        _threadResultList.add(new Pair<>(buggyFileName, future));
+        _currThreadCount++;
     }
 
     private void statisticWithExistingRecord(String baseDir, String file) {
@@ -210,7 +213,7 @@ public class TokenStatistic {
         }
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, false),
                 StandardCharsets.UTF_8));
-        for (String s: _files) {
+        for (String s : _files) {
             bw.write(s);
             bw.newLine();
         }
@@ -286,10 +289,10 @@ public class TokenStatistic {
 
 }
 
-class ParseKey implements Callable<Triple<Set<String>, Set<String>, Set<String>>> {
+
+class ParseKey implements Callable<Keyword> {
 
 
-    private static final Set<String> EmptySet = Collections.emptySet();
     private Set<String> _patternFiles;
 
     public ParseKey(Set<String> patterns) {
@@ -297,9 +300,9 @@ class ParseKey implements Callable<Triple<Set<String>, Set<String>, Set<String>>
     }
 
     @Override
-    public Triple<Set<String>, Set<String>, Set<String>> call() {
+    public Keyword call() {
         if (_patternFiles == null || _patternFiles.isEmpty()) {
-            return new Triple<>(EmptySet, EmptySet, EmptySet);
+            return new Keyword();
         }
         Set<String> types = new HashSet<>();
         Set<String> apis = new HashSet<>();
@@ -332,7 +335,37 @@ class ParseKey implements Callable<Triple<Set<String>, Set<String>, Set<String>>
                 nodes.addAll(node.getAllChildren());
             }
         }
-        return new Triple<>(types, apis, vars);
+        return new Keyword(vars, apis, types);
     }
 
+}
+
+class Keyword {
+    private Set<String> _names;
+    private Set<String> _apis;
+    private Set<String> _types;
+
+    public Keyword() {
+        _names = Collections.emptySet();
+        _apis = Collections.emptySet();
+        _types = Collections.emptySet();
+    }
+
+    public Keyword(Set<String> names, Set<String> apis, Set<String> types) {
+        _names = names;
+        _apis = apis;
+        _types = types;
+    }
+
+    public Set<String> getNames() {
+        return _names;
+    }
+
+    public Set<String> getTypes() {
+        return _types;
+    }
+
+    public Set<String> getAPIS() {
+        return _apis;
+    }
 }
