@@ -142,7 +142,7 @@ public class Filter {
                 LevelLogger.debug("Thread pool is full ....");
                 for (Future<List<String>> fs : _threadResultList) {
                     try {
-                        List<String> result = fs.get(10, TimeUnit.SECONDS);
+                        List<String> result = fs.get(5, TimeUnit.MINUTES);
                         writeFile(result);
                     } catch (Exception e) {
                         LevelLogger.warn("Parse pattern timeout !");
