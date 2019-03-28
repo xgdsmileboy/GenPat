@@ -145,7 +145,7 @@ public class Filter {
                         List<String> result = fs.get(5, TimeUnit.MINUTES);
                         writeFile(result);
                     } catch (Exception e) {
-                        LevelLogger.warn("Parse pattern timeout !");
+                        LevelLogger.warn("Parse pattern error !", e);
                         fs.cancel(true);
                     }
                     _currThreadCount--;
