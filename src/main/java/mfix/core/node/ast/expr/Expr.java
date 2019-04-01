@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
@@ -90,10 +91,10 @@ public abstract class Expr extends Node {
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
         if ((!_modifications.isEmpty() && node.getNodeType() == getNodeType())
                 || (_modifications.isEmpty() && node instanceof Expr)) {
-            String typeStr = ((Expr) node).getTypeString();
-            if ((!"boolean".equals(getTypeString()) && !"boolean".equals(typeStr))
-                    || ("boolean".equals(getTypeString()) && "boolean".equals(typeStr))
-                    && !(node instanceof Operator)) {
+            String typeStr = getTypeStr();
+            boolean matchType = _abstractType ? true : Utils.safeStringEqual(getTypeStr(), typeStr);
+            boolean matchName = _abstractName ? true : Utils.safeBufferEqual(toSrcString(), node.toSrcString());
+            if (matchName && matchType) {
                 if (NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
                         && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL) {
                     boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
@@ -104,6 +105,8 @@ public abstract class Expr extends Node {
         }
         return false;
     }
+
+//    public abstract boolean ifMatch0(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedString);
 
     // this method should be abstract and reimplemented in all the sub expression classes
     // currently, I did not consider the structure of the expression but only the keywords
