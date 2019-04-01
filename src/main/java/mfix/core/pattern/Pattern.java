@@ -212,10 +212,14 @@ public class Pattern implements PatternMatcher, Serializable {
 
         boolean match;
         Map<Node, Node> map = new Hashtable<>();
+        Map<Node, Node> temp = new Hashtable<>();
         for (Node node : nodes) {
             match = false;
             for (Iterator<Node> iter = others.iterator(); iter.hasNext();) {
-                if (node.patternMatch(iter.next(), map)) {
+                temp.clear();
+                temp.putAll(map);
+                if (node.patternMatch(iter.next(), temp)) {
+                    map.putAll(temp);
                     match = true;
                     iter.remove();
                     break;
