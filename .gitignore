@@ -17,6 +17,6 @@ sbfl/spectra
 /resources/**/build
 /resources/**/build-tests
 /resources/**/target
-resources/db
+/resources/db/AllTokens.txt
 *.log
 
