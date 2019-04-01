@@ -13,7 +13,6 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.Node;
-import mfix.core.node.modify.Modification;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.PatternExtractor;
 import org.junit.Test;
