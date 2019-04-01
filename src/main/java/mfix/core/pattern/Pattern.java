@@ -12,7 +12,10 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Deletion;
+import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
+import mfix.core.node.modify.Wrap;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.Vector;
 import mfix.core.pattern.match.PatternMatcher;
@@ -145,6 +148,41 @@ public class Pattern implements PatternMatcher, Serializable {
         }
     }
 
+    private boolean possibleSameModification(Pattern p) {
+        Set<Modification> modifications = getAllModifications();
+        Set<Modification> pmodifications = p.getAllModifications();
+
+        if (modifications.size() != modifications.size()) {
+            return false;
+        }
+
+        int insCount = 0, delCount = 0, updCount = 0, wrapCount = 0;
+        for (Modification m : modifications) {
+            if (m instanceof Wrap) {
+                wrapCount ++;
+            } else if (m instanceof Insertion) {
+                insCount ++;
+            } else if (m instanceof Deletion) {
+                delCount ++;
+            } else {
+                updCount ++;
+            }
+        }
+
+        for (Modification m : pmodifications) {
+            if (m instanceof Wrap) {
+                wrapCount --;
+            } else if (m instanceof Insertion) {
+                insCount --;
+            } else if (m instanceof Deletion) {
+                delCount --;
+            } else {
+                updCount --;
+            }
+        }
+        return insCount == 0 && delCount == 0 && updCount == 0 && wrapCount == 0;
+    }
+
     @Override
     public boolean matches(Pattern p) {
         Set<String> srcKey = getKeywords();
@@ -161,7 +199,7 @@ public class Pattern implements PatternMatcher, Serializable {
             return false;
         }
 
-        if (getAllModifications().size() != p.getAllModifications().size()) {
+        if (!possibleSameModification(p)) {
             return false;
         }
 
