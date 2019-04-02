@@ -291,7 +291,7 @@ public class Repair {
         int startLine = bNode.getStartLine();
         int endLine = bNode.getEndLine();
 
-        Set<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern);
+        List<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern);
 
         for (MatchInstance matchInstance : fixPositions) {
             if (shouldStop()) { break; }

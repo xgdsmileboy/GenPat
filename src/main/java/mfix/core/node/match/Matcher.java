@@ -19,6 +19,8 @@ import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.ast.stmt.ExpressionStmt;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.ast.stmt.VarDeclarationStmt;
+import mfix.core.node.match.metric.ISimilarity;
+import mfix.core.node.match.metric.NodeSimilarity;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
@@ -32,6 +34,7 @@ import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import javax.management.relation.Relation;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: Jiajun
@@ -188,7 +191,15 @@ public class Matcher {
      * @param pattern : pattern node
      * @return : a set of possible solutions
      */
-    public static Set<MatchInstance> tryMatch(Node buggy, Pattern pattern) {
+    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern) {
+        return tryMatch(buggy, pattern, null);
+    }
+
+    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch) {
+        return tryMatch(buggy, pattern, needToMatch, 100);
+    }
+
+    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch, int topk) {
         List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
         List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
 
@@ -208,19 +219,27 @@ public class Matcher {
                 }
             }
             if (matchNodes.isEmpty()) {
-                return new HashSet<>();
+                return new LinkedList<>();
             }
             matchLists.add(new MatchList(pNodes.get(i)).setMatchedNodes(matchNodes));
         }
 
-        Collections.sort(matchLists, new Comparator<MatchList>() {
-            @Override
-            public int compare(MatchList o1, MatchList o2) {
-                return o1.getMatchedNodes().size() - o2.getMatchedNodes().size();
-            }
-        });
+        // match instance with fewer matching node first for better performance
+        // fewer back-tracking
+        matchLists.sort(Comparator.comparingInt(MatchList::matchSize));
 
-        return permutePossibleMatches(matchLists);
+        List<MatchInstance> matches = new LinkedList<>(permutePossibleMatches(matchLists));
+        if (needToMatch != null && !needToMatch.isEmpty()) {
+            // matched node exists in the given lines (line level fault localization)
+            matches = matches.stream().filter(in -> in.modifyAny(needToMatch))
+                    .sorted(Comparator.comparingDouble(MatchInstance::similarity).reversed())
+                    .limit(topk).collect(Collectors.toList());
+        } else {
+            // sort matching instance descending by similarity
+            matches = matches.stream().sorted(Comparator.comparingDouble(MatchInstance::similarity).reversed())
+                    .limit(topk).collect(Collectors.toList());
+        }
+        return matches;
     }
 
     /**
@@ -236,8 +255,15 @@ public class Matcher {
         return results;
     }
 
+    private final static List<ISimilarity> similarities;
+    static {
+        // similarity metrics used for match instance sorting
+        similarities = new LinkedList<>();
+        similarities.add(new NodeSimilarity());
+    }
+
     /**
-     * Recursively match each node in the pattern based on the matching result in {@code list}
+     * recursively match each node in the pattern based on the matching result in {@code list}
      *
      * @param matchedNodeMap : already matched node maps
      * @param list           : contains all nodes can be matched for each node in the pattern
@@ -256,6 +282,7 @@ public class Matcher {
                 strMap.putAll(entry.getValue().getStrMap());
             }
             MatchInstance matchInstance = new MatchInstance(nodeMap, strMap);
+            matchInstance.computeSimilarity(similarities);
             instances.add(matchInstance);
         } else {
             Iterator<MatchNode> itor = list.get(i).getIterator();

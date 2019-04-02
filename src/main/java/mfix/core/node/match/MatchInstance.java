@@ -8,8 +8,11 @@
 package mfix.core.node.match;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.ISimilarity;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -19,6 +22,7 @@ public class MatchInstance {
 
     private Map<Node, Node> _nodeMap;
     private Map<String, String> _strMap;
+    private double _matchSimilarity = -1;
 
     public MatchInstance(Map<Node, Node> nodeMap, Map<String, String> strMap) {
         _nodeMap = nodeMap;
@@ -31,6 +35,27 @@ public class MatchInstance {
 
     public Map<String, String> getStrMap() {
         return _strMap;
+    }
+
+    public boolean modifyAny(Set<Integer> lines) {
+        for (Map.Entry<Node, Node> entry : _nodeMap.entrySet()) {
+            if (lines.contains(entry.getValue().getStartLine())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void computeSimilarity(final List<ISimilarity> similarities) {
+        _matchSimilarity = 0;
+        for (ISimilarity similarity : similarities) {
+            _matchSimilarity += similarity.computeSimilarity(_nodeMap, _strMap);
+        }
+        _matchSimilarity /= (double) similarities.size();
+    }
+
+    public double similarity() {
+        return _matchSimilarity;
     }
 
     public void apply() {
