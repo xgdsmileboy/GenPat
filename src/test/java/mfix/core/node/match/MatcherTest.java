@@ -135,10 +135,10 @@ public class MatcherTest extends TestCase {
         Set<Pattern> matched = Matcher.filter(node, patterns);
         Assert.assertTrue(matched.size() == 1);
 
-        Set<MatchInstance> set = Matcher.tryMatch(node, matched.iterator().next());
+        List<MatchInstance> set = Matcher.tryMatch(node, matched.iterator().next());
         Assert.assertTrue(set.size() == 1);
 
-        MatchInstance instance = set.iterator().next();
+        MatchInstance instance = set.get(0);
         instance.apply();
         StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), instance.getStrMap(), "void",
                 new HashSet<>());
@@ -217,7 +217,7 @@ public class MatcherTest extends TestCase {
             Node node = parser.process(m);
             Set<Pattern> matched = Matcher.filter(node, patterns);
             for (Pattern p : matched) {
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                List<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     Assert.assertTrue(node.adaptModifications(varMaps.get(node.getStartLine()),
@@ -292,7 +292,7 @@ public class MatcherTest extends TestCase {
                 for (String ip : p.getImports()) {
                     b.append(ip).append(Constant.NEW_LINE);
                 }
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                List<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()),
@@ -308,11 +308,11 @@ public class MatcherTest extends TestCase {
         }
     }
 
-//    @Test
+    @Test
     public void temp() {
         String srcFile = "resources/d4j-info/buggy_fix/buggy/chart/chart_1_buggy" +
                 "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
-        String tarFile = "resources/d4j-info/buggy_fix/fixed/chart/chart_1_buggy" +
+        String tarFile = "resources/d4j-info/buggy_fix/fixed/chart/chart_1_fixed" +
                 "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
 
         PatternExtractor extractor = new PatternExtractor();
@@ -342,7 +342,7 @@ public class MatcherTest extends TestCase {
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
             for (Pattern p : patterns) {
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                List<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>(),

@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -111,7 +112,7 @@ public class MuBenchPatternTest extends TestCase {
             int count = 0;
             for (Pattern p : patterns) {
                 scope.reset(p.getNewVars());
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                List<MatchInstance> set = Matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     StringBuffer buffer = node.adaptModifications(scope, new HashMap<>(), retType, exceptions);

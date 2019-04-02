@@ -114,7 +114,7 @@ public class D4JRepairTest extends TestCase {
                 int count = 0;
                 for (Pattern p : patterns) {
                     scope.reset(p.getNewVars());
-                    Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                    List<MatchInstance> set = Matcher.tryMatch(node, p);
                     for (MatchInstance matchInstance : set) {
                         matchInstance.apply();
                         StringBuffer buffer = node.adaptModifications(scope, new HashMap<>(), retType, exceptions);
