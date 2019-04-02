@@ -132,8 +132,11 @@ public abstract class Expr extends Node {
         if (isConsidered()) {
             StringBuffer buff = new StringBuffer();
             if (!_abstractType) {
-                keywords.add(_exprTypeStr);
-                buff.append(_exprTypeStr).append("::");
+                String type = NodeUtils.distillBasicType(_exprTypeStr);
+                if (!"?".equals(type)) {
+                    keywords.add(type);
+                    buff.append(type).append("::");
+                }
             }
             buff.append(nameMapping.getExprID(this));
             return buff;
