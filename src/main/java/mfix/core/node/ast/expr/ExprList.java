@@ -80,7 +80,8 @@ public class ExprList extends Node {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         if (_exprs.size() > 0) {
             List<StringBuffer> strings = new ArrayList<>(_exprs.size());
             for (Expr expr : _exprs) {

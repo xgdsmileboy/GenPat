@@ -98,7 +98,8 @@ public class ClassInstCreation extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         StringBuffer exp = null;
         if (_expression != null) {
             exp = _expression.formalForm(nameMapping, consider, keywords);

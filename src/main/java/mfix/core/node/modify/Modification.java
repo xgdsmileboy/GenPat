@@ -15,7 +15,7 @@ public abstract class Modification implements Serializable {
     protected Modification(Node parent, int fIndex) {
         _parent = parent;
         _fIndex = fIndex;
-        _parent.setConsidered(true);
+        _parent.setExpanded();
     }
 
     public Node getParent() {
@@ -27,5 +27,6 @@ public abstract class Modification implements Serializable {
     }
 
     public abstract boolean patternMatch(Modification m, Map<Node, Node> matchedNode);
+    public abstract String formalForm();
 
 }

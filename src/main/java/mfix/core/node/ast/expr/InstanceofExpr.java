@@ -71,7 +71,8 @@ public class InstanceofExpr extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer exp = _expression.formalForm(nameMapping, consider, keywords);
 		StringBuffer type = _instanceType.formalForm(nameMapping, consider, keywords);
 		if (exp == null && type == null) {

@@ -71,7 +71,8 @@ public class QName extends Label {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
 		StringBuffer sname = _sname.formalForm(nameMapping, consider, keywords);
 		if (name == null && sname == null) {

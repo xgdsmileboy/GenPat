@@ -88,7 +88,8 @@ public class VarDeclarationExpr extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer dec = _declType.formalForm(nameMapping, consider, keywords);
 		if (dec == null && !_abstractType) {
 			keywords.add(_declType.typeStr());

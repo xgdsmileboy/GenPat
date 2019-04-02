@@ -69,7 +69,8 @@ public class PrefixExpr extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer buffer = _expression.formalForm(nameMapping, consider, keywords);
 		StringBuffer op = _operator.formalForm(nameMapping, consider, keywords);
 		if (buffer == null) {

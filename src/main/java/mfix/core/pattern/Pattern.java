@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +47,7 @@ public class Pattern implements PatternMatcher, Serializable {
     private transient NameMapping _nameMapping;
     private transient Set<String> _keywords;
     private transient Set<String> _targetKeywords;
+    private transient Set<Modification> _modifications;
 
     public Pattern(Node pNode) {
         this(pNode, new HashSet<>());
@@ -115,7 +118,10 @@ public class Pattern implements PatternMatcher, Serializable {
     }
 
     public Set<Modification> getAllModifications() {
-        return _patternNode.getAllModifications(new LinkedHashSet<>());
+        if (_modifications == null) {
+            _modifications = _patternNode.getAllModifications(new LinkedHashSet<>());
+        }
+        return _modifications;
     }
 
     public Set<MethodInv> getUniversalAPIs() {
@@ -134,6 +140,15 @@ public class Pattern implements PatternMatcher, Serializable {
             _nameMapping = new NameMapping();
         }
         return _patternNode.formalForm(_nameMapping, false, _keywords);
+    }
+
+    public List<String> formalModifications() {
+        List<String> strings = new LinkedList<>();
+        formalForm();
+        for (Modification m : getAllModifications()) {
+            strings.add(m.formalForm());
+        }
+        return strings;
     }
 
     public Set<Node> getConsideredNodes() {

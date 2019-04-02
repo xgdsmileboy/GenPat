@@ -94,7 +94,8 @@ public class Svd extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer type = _decType.formalForm(nameMapping, consider, keywords);
 		if (type == null && !_abstractType){
 			keywords.add(_decType.typeStr());

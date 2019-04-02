@@ -87,15 +87,21 @@ public class PatternExtractor {
                 Set<Node> temp;
                 for(Node node : nodes) {
                     if (node.getBindingNode() != null) {
-                        node.getBindingNode().setConsidered(true);
+                        node.getBindingNode().setExpanded();
                     }
                     temp = node.expand(new HashSet<>());
                     for(Node n : temp) {
                         if (n.getBindingNode() != null) {
-                            n.getBindingNode().setConsidered(true);
+                            n.getBindingNode().setExpanded();
                         }
                     }
                 }
+
+//                nodes = srcNode.getConsideredNodesRec(new HashSet<>(), true);
+//                for (Node n : nodes) {
+//                    System.out.println(n);
+//                }
+
 //                srcNode.doAbstraction(counter);
                 srcNode.doAbstraction(abstraction.lazyInit());
                 tarNode.doAbstraction(abstraction);

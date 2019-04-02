@@ -88,7 +88,8 @@ public class Assign extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         StringBuffer lhs = _lhs.formalForm(nameMapping, consider, keywords);
         StringBuffer op = _operator.formalForm(nameMapping, consider, keywords);
         StringBuffer rhs = _rhs.formalForm(nameMapping, consider, keywords);

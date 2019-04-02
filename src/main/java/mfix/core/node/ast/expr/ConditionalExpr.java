@@ -81,7 +81,8 @@ public class ConditionalExpr extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         StringBuffer cond = _condition.formalForm(nameMapping, consider, keywords);
         StringBuffer first = _first.formalForm(nameMapping, consider, keywords);
         StringBuffer snd = _snd.formalForm(nameMapping, consider, keywords);

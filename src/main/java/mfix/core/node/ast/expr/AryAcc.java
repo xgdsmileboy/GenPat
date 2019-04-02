@@ -80,7 +80,8 @@ public class AryAcc extends Expr {
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         StringBuffer array, index;
-        boolean consider = parentConsidered || isConsidered();
+//        boolean consider = parentConsidered || isConsidered();
+        boolean consider = isConsidered();
         array = _array.formalForm(nameMapping, consider, keywords);
         index = _index.formalForm(nameMapping, consider, keywords);
         if (array == null && index == null) {

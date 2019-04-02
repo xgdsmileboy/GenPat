@@ -84,7 +84,8 @@ public class SuperMethodInv extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer label = null;
 		if (_label != null) {
 			label = _label.formalForm(nameMapping, consider, keywords);

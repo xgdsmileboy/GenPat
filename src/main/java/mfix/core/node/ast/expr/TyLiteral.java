@@ -68,7 +68,7 @@ public class TyLiteral extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		StringBuffer type = _type.formalForm(nameMapping, isConsidered() || parentConsidered, keywords);
+		StringBuffer type = _type.formalForm(nameMapping, isConsidered()/* || parentConsidered*/, keywords);
 		if (type == null) {
 			return leafFormalForm(nameMapping, parentConsidered, keywords);
 		}

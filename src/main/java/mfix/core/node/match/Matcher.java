@@ -394,7 +394,8 @@ public class Matcher {
             for (int i = 0; i < srcExprs.size(); i++) {
                 if (srcExprs.get(i).getBindingNode() == null) {
                     for (int j = 0; j < tarExprs.size(); j++) {
-                        if (!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
+                        if (!matchedIndex.contains(j) && tarExprs.get(j).getBindingNode() == null
+                                && srcExprs.get(i).compare(tarExprs.get(j))) {
                             srcExprs.get(i).setBindingNode(tarExprs.get(j));
                             matchedIndex.add(j);
                             break;

@@ -34,6 +34,11 @@ public class Movement extends Modification {
     }
 
     @Override
+    public String formalForm() {
+        return "";
+    }
+
+    @Override
     public String toString() {
         return String.format("[MOV] %s FROM %d TO %d", _movedNode, _oriIndex, _tarIndex);
     }

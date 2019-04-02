@@ -111,7 +111,8 @@ public class Vdf extends Node {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer identifier = _identifier.formalForm(nameMapping, consider, keywords);
 		if (identifier == null && !isAbstract()) {
 			keywords.add(_identifier.getName());
