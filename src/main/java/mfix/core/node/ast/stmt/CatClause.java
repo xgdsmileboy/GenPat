@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Svd;
@@ -189,12 +190,12 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof CatClause) {
 			CatClause catClause = (CatClause) node;
-			return _exception.ifMatch(catClause.getException(), matchedNode, matchedStrings)
-					&& _blk.ifMatch(catClause.getBody(), matchedNode, matchedStrings)
-					&& NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			return _exception.ifMatch(catClause.getException(), matchedNode, matchedStrings, level)
+					&& _blk.ifMatch(catClause.getBody(), matchedNode, matchedStrings, level)
+					&& NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		}
 		return false;

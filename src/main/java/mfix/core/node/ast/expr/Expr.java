@@ -10,6 +10,7 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.pattern.cluster.NameMapping;
@@ -88,7 +89,7 @@ public abstract class Expr extends Node {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if ((!_modifications.isEmpty() && node.getNodeType() == getNodeType())
                 || (_modifications.isEmpty() && node instanceof Expr)) {
             String typeStr = getTypeStr();
@@ -98,7 +99,7 @@ public abstract class Expr extends Node {
                 if (NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
                         && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL) {
                     boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
-                    return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                    return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
                             && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
                 }
             }

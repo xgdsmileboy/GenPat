@@ -841,7 +841,8 @@ public abstract class Node implements NodeComparator, Serializable {
         return _buggyBinding == null;
     }
 
-    public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings);
+    public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings,
+                                    MatchLevel level);
 
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
                                  List<Node> nodes) {

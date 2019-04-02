@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -274,16 +275,16 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof ForStmt) {
             ForStmt forStmt = (ForStmt) node;
-            boolean match = _initializers.ifMatch(forStmt.getInitializer(), matchedNode, matchedStrings);
+            boolean match = _initializers.ifMatch(forStmt.getInitializer(), matchedNode, matchedStrings, level);
             if (_condition != null && forStmt.getCondition() != null) {
-                match = match && _condition.ifMatch(forStmt.getCondition(), matchedNode, matchedStrings);
+                match = match && _condition.ifMatch(forStmt.getCondition(), matchedNode, matchedStrings, level);
             }
-            match = match && _updaters.ifMatch(forStmt.getUpdaters(), matchedNode, matchedStrings);
-            match = match && _body.ifMatch(forStmt.getBody(), matchedNode, matchedStrings);
-            return match && super.ifMatch(node, matchedNode, matchedStrings);
+            match = match && _updaters.ifMatch(forStmt.getUpdaters(), matchedNode, matchedStrings, level);
+            match = match && _body.ifMatch(forStmt.getBody(), matchedNode, matchedStrings, level);
+            return match && super.ifMatch(node, matchedNode, matchedStrings, level);
         }
         return false;
     }

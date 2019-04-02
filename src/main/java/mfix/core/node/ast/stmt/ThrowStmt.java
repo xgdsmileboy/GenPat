@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.ClassInstCreation;
@@ -159,11 +160,11 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof ThrowStmt) {
 			ThrowStmt throwStmt = (ThrowStmt) node;
-			return _expression.ifMatch(throwStmt.getExpression(), matchedNode, matchedStrings)
-					&& super.ifMatch(node, matchedNode, matchedStrings);
+			return _expression.ifMatch(throwStmt.getExpression(), matchedNode, matchedStrings, level)
+					&& super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}

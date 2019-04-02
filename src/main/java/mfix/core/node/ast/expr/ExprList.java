@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
@@ -205,9 +206,9 @@ public class ExprList extends Node {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if(node instanceof ExprList) {
-            return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+            return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
                     && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
         }
         return false;

@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -253,8 +254,8 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		if(super.ifMatch(node, matchedNode, matchedStrings)) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+		if(super.ifMatch(node, matchedNode, matchedStrings, level)) {
 			if (node.getNodeType() == TYPE.MINVOCATION) {
 				MethodInv methodInv = (MethodInv) node;
 				if (_expression != null && methodInv._expression != null) {

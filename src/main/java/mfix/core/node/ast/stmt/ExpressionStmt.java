@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -157,10 +158,10 @@ public class ExpressionStmt extends Stmt {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) node;
-            if (_expression.ifMatch(expressionStmt.getExpression(), matchedNode, matchedStrings)) {
+            if (_expression.ifMatch(expressionStmt.getExpression(), matchedNode, matchedStrings, level)) {
                 matchedNode.put(this, node);
                 return true;
             }

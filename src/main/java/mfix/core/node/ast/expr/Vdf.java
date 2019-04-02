@@ -9,6 +9,7 @@ package mfix.core.node.ast.expr;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
@@ -270,22 +271,22 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;
-			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_identifier, vdf._identifier, matchedNode, matchedStrings);
 			}
 		} else if (node.getNodeType() == TYPE.SINGLEVARDECL && _modifications.isEmpty()) {
 			Svd svd = (Svd) node;
-			if (NodeUtils.checkDependency(this, svd, matchedNode, matchedStrings)
+			if (NodeUtils.checkDependency(this, svd, matchedNode, matchedStrings, level)
 				&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_identifier, svd.getName(), matchedNode, matchedStrings);
 			}
 		} else if ((_expression != null) && (node.getNodeType() == TYPE.ASSIGN) && _modifications.isEmpty()) {
 			Assign assign = (Assign) node;
-			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_identifier, assign.getLhs(), matchedNode, matchedStrings);
 			}

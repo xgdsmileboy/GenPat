@@ -10,6 +10,7 @@ import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
@@ -197,10 +198,11 @@ public class Matcher {
     }
 
     public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch) {
-        return tryMatch(buggy, pattern, needToMatch, Constant.MAX_INSTANCE_PER_PATTERN);
+        return tryMatch(buggy, pattern, needToMatch, Constant.MAX_INSTANCE_PER_PATTERN, MatchLevel.ALL);
     }
 
-    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch, int topk) {
+    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch,
+                                               int topk, MatchLevel level) {
         List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
         List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
 
@@ -215,7 +217,7 @@ public class Matcher {
             for (int j = 0; j < bSize; j++) {
                 nodeMap = new HashMap<>();
                 strMap = new HashMap<>();
-                if (pNodes.get(i).ifMatch(bNodes.get(j), nodeMap, strMap)) {
+                if (pNodes.get(i).ifMatch(bNodes.get(j), nodeMap, strMap, level)) {
                     matchNodes.add(new MatchNode(bNodes.get(j), nodeMap, strMap));
                 }
             }

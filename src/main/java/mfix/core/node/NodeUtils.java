@@ -8,8 +8,10 @@ package mfix.core.node;
 
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
+import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.LineRange;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.Variable;
@@ -105,6 +107,20 @@ public class NodeUtils {
             }
         }
         return stringBuffer;
+    }
+
+    public static boolean match(boolean matchName, boolean matchType, MatchLevel level) {
+        switch (level) {
+            case ALL:
+                return matchName && matchType;
+            case TYPE:
+                return matchType;
+            case NAME:
+                return matchName;
+            default:
+                LevelLogger.error("Should not be here!");
+                return false;
+        }
     }
 
     public static String distillBasicType(MType type) {
@@ -247,12 +263,13 @@ public class NodeUtils {
      * @param other          : target node for match
      * @param matchedNode    : map of nodes that already matches
      * @param matchedStrings : map of string that already matches
+     * @param level
      * @return : true if their data dependencies match each other, otherwise false
      */
     public static boolean checkDependency(Node node, Node other, Map<Node, Node> matchedNode,
-                                          Map<String, String> matchedStrings) {
+                                          Map<String, String> matchedStrings, MatchLevel level) {
         if (node.getDataDependency() != null && other.getDataDependency() != null) {
-            if (node.getDataDependency().ifMatch(other.getDataDependency(), matchedNode, matchedStrings)) {
+            if (node.getDataDependency().ifMatch(other.getDataDependency(), matchedNode, matchedStrings, level)) {
                 return true;
             }
             return false;

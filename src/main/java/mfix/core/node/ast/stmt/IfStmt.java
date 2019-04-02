@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -255,15 +256,15 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof IfStmt) {
 			IfStmt ifStmt = (IfStmt) node;
-			boolean match = _condition.ifMatch(ifStmt.getCondition(), matchedNode, matchedStrings);
-			match = match && _then.ifMatch(ifStmt.getThen(), matchedNode, matchedStrings);
+			boolean match = _condition.ifMatch(ifStmt.getCondition(), matchedNode, matchedStrings, level);
+			match = match && _then.ifMatch(ifStmt.getThen(), matchedNode, matchedStrings, level);
 			if(_else != null && ifStmt.getElse() != null) {
-				match = match && _else.ifMatch(ifStmt.getElse(), matchedNode, matchedStrings);
+				match = match && _else.ifMatch(ifStmt.getElse(), matchedNode, matchedStrings, level);
 			}
-			return match && super.ifMatch(node, matchedNode, matchedStrings);
+			return match && super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}

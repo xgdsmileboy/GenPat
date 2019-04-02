@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -185,12 +186,12 @@ public class Assign extends Expr {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if (super.ifMatch(node, matchedNode, matchedStrings)) {
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+        if (super.ifMatch(node, matchedNode, matchedStrings, level)) {
             if (node instanceof Assign) {
                 Assign assign = (Assign) node;
                 if (NodeUtils.matchSameNodeType(_lhs, assign.getLhs(), matchedNode, matchedStrings)
-                        && NodeUtils.checkDependency(_rhs, assign.getRhs(), matchedNode, matchedStrings)
+                        && NodeUtils.checkDependency(_rhs, assign.getRhs(), matchedNode, matchedStrings, level)
                         && NodeUtils.matchSameNodeType(_rhs, assign.getRhs(), matchedNode, matchedStrings)) {
                     matchedNode.put(_operator, assign.getOperator());
                     return true;

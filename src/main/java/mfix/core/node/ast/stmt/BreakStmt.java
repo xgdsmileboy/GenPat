@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.SName;
@@ -160,10 +161,10 @@ public class BreakStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof BreakStmt) {
 			BreakStmt breakStmt = (BreakStmt) node;
-			if(super.ifMatch(node, matchedNode, matchedStrings)) {
+			if(super.ifMatch(node, matchedNode, matchedStrings, level)) {
 				if (_identifier != null && breakStmt._identifier != null) {
 					matchedNode.put(_identifier, breakStmt._identifier);
 					matchedStrings.put(_identifier.toString(), breakStmt._identifier.toString());
