@@ -96,7 +96,7 @@ public class CatClause extends Node {
 		}
 		if (isConsidered()) {
 			return node.getNodeType() == TYPE.CATCHCLAUSE
-					&& NodeUtils.patternMatch(this, node, matchedNode, true);
+					&& NodeUtils.patternMatch(this, node, matchedNode);
 		}
 		return node instanceof Stmt;
 	}

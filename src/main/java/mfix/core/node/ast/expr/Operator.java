@@ -119,6 +119,6 @@ public abstract class Operator extends Node {
 		if (node == null || isConsidered() != node.isConsidered()) {
 			return false;
 		}
-		return NodeUtils.patternMatch(this, node, matchedNode, false);
+		return NodeUtils.patternMatch(this, node, matchedNode);
 	}
 }

@@ -116,7 +116,7 @@ public class ExprList extends Node {
         }
         if (isConsidered()) {
             if (getModifications().isEmpty() || node.getNodeType() == TYPE.EXPRLST) {
-                return NodeUtils.patternMatch(this, node, matchedNode, false);
+                return NodeUtils.patternMatch(this, node, matchedNode);
             }
             return false;
         }

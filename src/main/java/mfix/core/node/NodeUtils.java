@@ -121,10 +121,9 @@ public class NodeUtils {
         return index > 0 ? s.substring(0, index) : s;
     }
 
-    public static boolean patternMatch(Node fst, Node snd, Map<Node, Node> matchedNode, boolean skipFormalCmp) {
+    public static boolean patternMatch(Node fst, Node snd, Map<Node, Node> matchedNode) {
         if (fst.isConsidered() != snd.isConsidered()) return false;
-        if ((skipFormalCmp || Utils.safeBufferEqual(fst.getFormalForm(), snd.getFormalForm()))
-                && fst.getModifications().size() == snd.getModifications().size()) {
+        if (fst.getModifications().size() == snd.getModifications().size()) {
             Node dp1 = fst.getDataDependency();
             Node dp2 = snd.getDataDependency();
             if (dp1 != null && dp1.isConsidered()) {

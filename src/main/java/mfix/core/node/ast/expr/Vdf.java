@@ -144,7 +144,7 @@ public class Vdf extends Node {
 		}
 		if (isConsidered()) {
 			if (getModifications().isEmpty() || node.getNodeType() == TYPE.VARDECLFRAG) {
-				return NodeUtils.patternMatch(this, node, matchedNode, false);
+				return NodeUtils.patternMatch(this, node, matchedNode);
 			}
 			return false;
 		}

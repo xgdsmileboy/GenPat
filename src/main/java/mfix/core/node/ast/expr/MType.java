@@ -125,7 +125,7 @@ public class MType extends Node {
 			return false;
 		}
 		if (isConsidered()) {
-			return NodeUtils.patternMatch(this, node, matchedNode,false);
+			return NodeUtils.patternMatch(this, node, matchedNode);
 		}
 		return true;
 	}

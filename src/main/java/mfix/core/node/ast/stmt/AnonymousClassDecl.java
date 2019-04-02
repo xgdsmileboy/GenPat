@@ -115,7 +115,7 @@ public class AnonymousClassDecl extends Node {
 		return node != null && isConsidered() == node.isConsidered()
 				&& node.getNodeType() == TYPE.ANONYMOUSCDECL
 				&& Utils.checkCompatibleBidirectionalPut(this, node, matchedNode)
-				&& NodeUtils.patternMatch(this, node, matchedNode, false);
+				&& NodeUtils.patternMatch(this, node, matchedNode);
 	}
 
 	@Override

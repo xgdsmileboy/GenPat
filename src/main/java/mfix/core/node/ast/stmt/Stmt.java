@@ -48,7 +48,7 @@ public abstract class Stmt extends Node {
 		if (node != null && isConsidered() == node.isConsidered() && (node instanceof Stmt)) {
 			if (isConsidered()) {
 				return node.getNodeType() == getNodeType()
-						&& NodeUtils.patternMatch(this, node, matchedNode, true);
+						&& NodeUtils.patternMatch(this, node, matchedNode);
 			}
 			return true;
 		}

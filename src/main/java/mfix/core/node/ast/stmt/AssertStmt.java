@@ -58,7 +58,7 @@ public class AssertStmt extends Stmt {
 	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
 		return node != null && isConsidered() == node.isConsidered()
 				&& node.getNodeType() == TYPE.ASSERT
-				&& NodeUtils.patternMatch(this, node, matchedNode, false);
+				&& NodeUtils.patternMatch(this, node, matchedNode);
 	}
 
 	@Override
