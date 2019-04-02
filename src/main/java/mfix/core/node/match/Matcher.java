@@ -6,6 +6,7 @@
  */
 package mfix.core.node.match;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
@@ -196,7 +197,7 @@ public class Matcher {
     }
 
     public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch) {
-        return tryMatch(buggy, pattern, needToMatch, 100);
+        return tryMatch(buggy, pattern, needToMatch, Constant.MAX_INSTANCE_PER_PATTERN);
     }
 
     public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch, int topk) {

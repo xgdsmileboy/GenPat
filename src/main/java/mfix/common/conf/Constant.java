@@ -66,6 +66,9 @@ public class Constant {
     /* max number of concurrent threads for keyword statistics */
     public static int MAX_KEYWORD_STATISTIC_THREAD_NUM;
 
+    /* max number of candidate match instances for one pattern */
+    public static int MAX_INSTANCE_PER_PATTERN;
+
     /* max number of candidate patches for each subject */
     public static int MAX_PATCH_NUMBER;
 
@@ -145,6 +148,7 @@ public class Constant {
             String number = prop.getProperty("PATTERN.NUMBER", "All");
             TOP_K_PATTERN_EACH_LOCATION = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
             MAX_REPAIR_TIME = Integer.parseInt(prop.getProperty("REPAIR.TIME", "120"));
+            MAX_INSTANCE_PER_PATTERN = Integer.parseInt(prop.getProperty("REPAIR.MATCH", "100"));
             MAX_PATCH_NUMBER = Integer.parseInt(prop.getProperty("REPAIR.PATCH", "100"));
             MAX_REPAIR_LOCATION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
             MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
