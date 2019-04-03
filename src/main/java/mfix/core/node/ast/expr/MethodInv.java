@@ -72,6 +72,11 @@ public class MethodInv extends Expr {
 		return _arguments;
 	}
 
+	public void setExpanded() {
+		super.setExpanded();
+		_name.setExpanded();
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();

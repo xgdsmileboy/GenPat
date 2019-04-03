@@ -18,11 +18,9 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 /**
@@ -92,14 +90,15 @@ public abstract class Expr extends Node {
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if ((!_modifications.isEmpty() && node.getNodeType() == getNodeType())
                 || (_modifications.isEmpty() && node instanceof Expr)) {
-            String typeStr = getTypeStr();
+            String typeStr = node.getTypeStr();
             boolean matchType = _abstractType ? true : Utils.safeStringEqual(getTypeStr(), typeStr);
             boolean matchName = _abstractName ? true : Utils.safeBufferEqual(toSrcString(), node.toSrcString());
             if (NodeUtils.match(matchName, matchType, level)) {
                 if (NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
                         && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL) {
-                    boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
-                    return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
+//                    boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
+//                    return match &&
+                    return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
                             && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
                 }
             }
@@ -107,26 +106,24 @@ public abstract class Expr extends Node {
         return false;
     }
 
-//    public abstract boolean ifMatch0(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedString);
-
-    // this method should be abstract and reimplemented in all the sub expression classes
-    // currently, I did not consider the structure of the expression but only the keywords
-    public boolean ifMatch0(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        Set<String> keys = flattenTreeNode(new LinkedList<>()).stream()
-                .filter(n -> NodeUtils.isSimpleExpr(n) && !(n.isChanged() || n.isExpanded()) && !isAbstract())
-                .map(n -> n.toSrcString().toString())
-                .collect(Collectors.toSet());
-        Set<String> content = node.flattenTreeNode(new LinkedList<>()).stream()
-                .filter(n -> NodeUtils.isSimpleExpr(n))
-                .map(n -> n.toSrcString().toString())
-                .collect(Collectors.toSet());
-        for (String key : keys) {
-            if (!content.contains(key)) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    // this method should be abstract and reimplemented in all the sub expression classes
+//    // currently, I did not consider the structure of the expression but only the keywords
+//    public boolean ifMatch0(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+//        Set<String> keys = flattenTreeNode(new LinkedList<>()).stream()
+//                .filter(n -> NodeUtils.isSimpleExpr(n) && !(n.isChanged() || n.isExpanded()) && !isAbstract())
+//                .map(n -> n.toSrcString().toString())
+//                .collect(Collectors.toSet());
+//        Set<String> content = node.flattenTreeNode(new LinkedList<>()).stream()
+//                .filter(n -> NodeUtils.isSimpleExpr(n))
+//                .map(n -> n.toSrcString().toString())
+//                .collect(Collectors.toSet());
+//        for (String key : keys) {
+//            if (!content.contains(key)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
