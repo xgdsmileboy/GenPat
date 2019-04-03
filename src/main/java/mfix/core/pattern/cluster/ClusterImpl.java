@@ -93,7 +93,6 @@ public class ClusterImpl {
                 size++;
             }
             LevelLogger.debug("Finish clear ....");
-            size = threadResultList.size();
             threadResultList.clear();
         } catch (Exception e) {
             LevelLogger.warn("Clustering error !", e);
