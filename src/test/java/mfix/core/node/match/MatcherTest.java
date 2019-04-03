@@ -15,7 +15,6 @@ import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
-import mfix.core.node.ast.stmt.ReturnStmt;
 import mfix.core.node.ast.stmt.SwCase;
 import mfix.core.node.ast.stmt.SwitchStmt;
 import mfix.core.node.diff.TextDiff;
@@ -133,6 +132,7 @@ public class MatcherTest extends TestCase {
                 "}\n" +
                 "}";
 
+        // THIS METHOD IS DEPRECATED
         Set<Pattern> matched = Matcher.filter(node, patterns);
         Assert.assertTrue(matched.size() == 1);
 
@@ -165,8 +165,8 @@ public class MatcherTest extends TestCase {
         Insertion insertion = (Insertion) modifications.get(0);
         Assert.assertTrue(insertion.getInsertedNode() instanceof SwCase);
         Assert.assertTrue(insertion.getParent() instanceof SwitchStmt);
-        Assert.assertTrue(insertion.getPrenode() instanceof ReturnStmt);
-        Assert.assertTrue(insertion.getNextnode() instanceof SwCase);
+        Assert.assertNull(insertion.getPrenode());
+        Assert.assertNull(insertion.getNextnode());
 
     }
 
