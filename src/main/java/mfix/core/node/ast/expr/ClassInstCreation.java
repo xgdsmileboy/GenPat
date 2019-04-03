@@ -268,38 +268,6 @@ public class ClassInstCreation extends Expr {
         }
     }
 
-    //    @Override
-//    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-//        if(node instanceof Expr) {
-//            if(isAbstract()) {
-//                return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-//                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
-//            } else if (node instanceof ClassInstCreation){
-//                ClassInstCreation classInstCreation = (ClassInstCreation) node;
-//                List<Expr> exprs = _arguments.getExpr();
-//                List<Expr> others = classInstCreation.getArguments().getExpr();
-//                if (_classType.compare(classInstCreation.getClassType()) && exprs.size() == others.size()) {
-//                    matchedNode.put(_classType, classInstCreation.getClassType());
-//                    matchedNode.put(this, node);
-//                    matchedStrings.put(toString(), node.toString());
-//                    if(_expression != null && classInstCreation.getExpression() != null) {
-//                        matchedNode.put(_expression, classInstCreation.getExpression());
-//                        matchedStrings.put(_expression.toString(), classInstCreation.getExpression().toString());
-//                    }
-//                    for(int i = 0; i < exprs.size(); i++) {
-//                        matchedNode.put(exprs.get(i), others.get(i));
-//                        matchedStrings.put(exprs.get(i).toString(), others.get(i).toString());
-//                    }
-//                    return true;
-//                }
-//                return false;
-//            } else {
-//                return false;
-//            }
-//        }
-//        return false;
-//    }
-
     @Override
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);

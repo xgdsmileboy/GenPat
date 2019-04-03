@@ -77,11 +77,12 @@ public class AssignOperator extends Operator {
 
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
-        if (node instanceof AssignOperator && _operatorStr.equals(node.toSrcString().toString())) {
-            matchedNode.put(this, node);
-            return true;
-        } else {
-            return false;
+        if (node instanceof AssignOperator){
+            if (!isChanged() || _operatorStr.equals(node.toSrcString().toString())) {
+                matchedNode.put(this, node);
+                return true;
+            }
         }
+        return false;
     }
 }

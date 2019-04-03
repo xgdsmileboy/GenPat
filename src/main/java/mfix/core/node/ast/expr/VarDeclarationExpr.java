@@ -214,6 +214,15 @@ public class VarDeclarationExpr extends Expr {
 	}
 
 	@Override
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
+		if(node instanceof VarDeclarationExpr) {
+			return NodeUtils.patternMatch(this, node, matchedNode);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {

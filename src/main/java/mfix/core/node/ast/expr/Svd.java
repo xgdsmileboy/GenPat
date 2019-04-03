@@ -270,6 +270,15 @@ public class Svd extends Expr {
 	}
 
 	@Override
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
+		if (node instanceof Svd) {
+			return NodeUtils.patternMatch(this, node, matchedNode);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
                                            Set<String> exceptions) {
 		StringBuffer declType = null;
