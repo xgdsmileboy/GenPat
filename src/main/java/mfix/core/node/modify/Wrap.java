@@ -20,6 +20,7 @@ import java.util.Set;
  */
 public class Wrap extends Update {
 
+    private static final long serialVersionUID = 4871112003593684776L;
     private List<Node> _nodes;
 
     public Wrap(Node parent, Node del, Node wrapper, List<Node> wrapped) {

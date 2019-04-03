@@ -17,6 +17,8 @@ import java.util.Map;
  */
 @Deprecated
 public class Movement extends Modification {
+
+    private static final long serialVersionUID = -4187409198171276499L;
     private int _oriIndex;
     private int _tarIndex;
     private Node _movedNode;
