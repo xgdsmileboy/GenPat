@@ -212,6 +212,10 @@ public class Repair {
         while(!queue.isEmpty()) {
             Node n = queue.poll();
             queue.addAll(n.getAllChildren());
+            String type = n.getTypeStr();
+            if (type != null && !"?".equals(type)) {
+                keys.add(type);
+            }
             if (NodeUtils.isSimpleExpr(n)) {
                 keys.add(n.toSrcString().toString());
             }
