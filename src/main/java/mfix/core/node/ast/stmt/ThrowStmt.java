@@ -32,6 +32,7 @@ import java.util.Set;
  */
 public class ThrowStmt extends Stmt {
 
+	private static final long serialVersionUID = 6373618160322079237L;
 	private Expr _expression = null;
 	
 	/**

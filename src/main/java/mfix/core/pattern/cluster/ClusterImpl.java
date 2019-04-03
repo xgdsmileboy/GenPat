@@ -48,7 +48,7 @@ public class ClusterImpl {
         ExecutorService threadPool = Executors.newFixedThreadPool(_maxThreadCount);
         List<Future<Set<Group>>> threadResultList = new LinkedList<>();
         while (true) {
-            if (threadResultList.isEmpty() && compareClusters.size() == 1) {
+            if (threadResultList.isEmpty() && compareClusters.size() <= 1) {
                 Triple<Set<Group>, Set<Group>, Integer> pair = compareClusters.iterator().next();
                 if (pair.getFirst() == null || pair.getSecond() == null) {
                     if (pair.getFirst() != null) {
