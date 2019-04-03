@@ -21,7 +21,8 @@ import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.ast.stmt.ExpressionStmt;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.ast.stmt.VarDeclarationStmt;
-import mfix.core.node.match.metric.ISimilarity;
+import mfix.core.node.match.metric.IScore;
+import mfix.core.node.match.metric.LocationScore;
 import mfix.core.node.match.metric.NodeSimilarity;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
@@ -197,11 +198,11 @@ public class Matcher {
         return tryMatch(buggy, pattern, null);
     }
 
-    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch) {
-        return tryMatch(buggy, pattern, needToMatch, Constant.MAX_INSTANCE_PER_PATTERN, MatchLevel.ALL);
+    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, List<Integer> buggyLines) {
+        return tryMatch(buggy, pattern, buggyLines, Constant.MAX_INSTANCE_PER_PATTERN, MatchLevel.ALL);
     }
 
-    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, Set<Integer> needToMatch,
+    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, List<Integer> buggyLines,
                                                int topk, MatchLevel level) {
         List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
         List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
@@ -232,8 +233,14 @@ public class Matcher {
         // fewer back-tracking
         matchLists.sort(Comparator.comparingInt(MatchList::matchSize));
 
-        List<MatchInstance> matches = new LinkedList<>(permutePossibleMatches(matchLists));
-        if (needToMatch != null && !needToMatch.isEmpty()) {
+        // similarity metrics used for match instance sorting
+        List<IScore> similarities = new LinkedList<>();
+        similarities.add(new NodeSimilarity(0.5));
+        similarities.add(new LocationScore(0.5, buggyLines));
+
+        List<MatchInstance> matches = new LinkedList<>(permutePossibleMatches(matchLists, similarities));
+        if (buggyLines != null && !buggyLines.isEmpty()) {
+            Set<Integer> needToMatch = new HashSet<>(buggyLines);
             // matched node exists in the given lines (line level fault localization)
             matches = matches.stream().filter(in -> in.modifyAny(needToMatch))
                     .sorted(Comparator.comparingDouble(MatchInstance::similarity).reversed())
@@ -253,17 +260,11 @@ public class Matcher {
      * @param matchLists : node matching result
      * @return : all possible matching solutions
      */
-    private static Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists) {
+    private static Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists,
+                                                             List<IScore> similarities) {
         Set<MatchInstance> results = new HashSet<>();
-        matchNext(new HashMap<>(), matchLists, 0, new HashSet<>(), results);
+        matchNext(new HashMap<>(), matchLists, 0, new HashSet<>(), results, similarities);
         return results;
-    }
-
-    private final static List<ISimilarity> similarities;
-    static {
-        // similarity metrics used for match instance sorting
-        similarities = new LinkedList<>();
-        similarities.add(new NodeSimilarity());
     }
 
     /**
@@ -277,7 +278,8 @@ public class Matcher {
      * @param instances      : contains possible matching solutions
      */
     private static void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
-                                  Set<Node> alreadyMatched, Set<MatchInstance> instances) {
+                                  Set<Node> alreadyMatched, Set<MatchInstance> instances,
+                                  List<IScore> similarities) {
         if (i == list.size()) {
             Map<Node, Node> nodeMap = new HashMap<>();
             Map<String, String> strMap = new HashMap<>();
@@ -301,7 +303,7 @@ public class Matcher {
                 if (checkCompatibility(matchedNodeMap, curNode, curMatchNode)) {
                     matchedNodeMap.put(curNode, curMatchNode);
                     alreadyMatched.add(toMatch);
-                    matchNext(matchedNodeMap, list, i + 1, alreadyMatched, instances);
+                    matchNext(matchedNodeMap, list, i + 1, alreadyMatched, instances, similarities);
                     matchedNodeMap.remove(curNode);
                     alreadyMatched.remove(toMatch);
                 }

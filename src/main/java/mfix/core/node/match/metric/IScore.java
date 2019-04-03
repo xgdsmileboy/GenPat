@@ -15,8 +15,12 @@ import java.util.Map;
  * @author: Jiajun
  * @date: 2019-04-02
  */
-public interface ISimilarity {
+public interface IScore {
 
-    double computeSimilarity(Map<Node, Node> nodeMap, Map<String, String> strMap);
+    double getWeight();
+
+    void setWeight(double weight);
+
+    double computeScore(Map<Node, Node> nodeMap, Map<String, String> strMap);
 
 }

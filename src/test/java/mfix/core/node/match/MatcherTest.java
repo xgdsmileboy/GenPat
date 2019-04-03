@@ -379,7 +379,7 @@ public class MatcherTest extends TestCase {
             }
         });
 
-        Set<Integer> need2Match = new HashSet<>(Arrays.asList(1797));
+        List<Integer> need2Match = new ArrayList<>(Arrays.asList(1797));
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
         for (MethodDeclaration m : methods) {
@@ -425,7 +425,7 @@ public class MatcherTest extends TestCase {
             }
         });
 
-        Set<Integer> need2Match = new HashSet<>(Arrays.asList(1797));
+        List<Integer> need2Match = new ArrayList<>(Arrays.asList(1797));
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
         for (MethodDeclaration m : methods) {

@@ -16,10 +16,14 @@ import java.util.Map;
  * @author: Jiajun
  * @date: 2019-04-02
  */
-public class NodeSimilarity implements ISimilarity {
+public class NodeSimilarity extends AbsSimilarity {
+
+    public NodeSimilarity(double weight) {
+        super(weight);
+    }
 
     @Override
-    public double computeSimilarity(Map<Node, Node> nodeMap, Map<String, String> strMap) {
+    public double computeScore(Map<Node, Node> nodeMap, Map<String, String> strMap) {
         double score = 0;
         Node src, tar;
         Expr srcExpr, tarExpr;

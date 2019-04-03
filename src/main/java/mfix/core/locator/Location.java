@@ -9,6 +9,9 @@ package mfix.core.locator;
 
 import mfix.common.conf.Constant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author: Jiajun
  * @date: 2018/9/25
@@ -20,6 +23,7 @@ public class Location {
     private final String _method;
     private final int _line;
     private final double _suspicious;
+    private final List<Integer> _consideredLines = new ArrayList<>();
 
     public Location(String relClazz, int line, double suspicious) {
         this(relClazz, null, null, line, suspicious);
@@ -51,6 +55,19 @@ public class Location {
 
     public int getLine() {
         return _line;
+    }
+
+    public List<Integer> getConsideredLines() {
+        _consideredLines.add(getLine());
+        return _consideredLines;
+    }
+
+    public void addConsideredLine(Integer line) {
+        _consideredLines.add(line);
+    }
+
+    public void addConsideredLines(List<Integer> lines) {
+        _consideredLines.addAll(lines);
     }
 
     public double getSuspicious() {

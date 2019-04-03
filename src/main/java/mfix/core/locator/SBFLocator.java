@@ -189,23 +189,36 @@ public class SBFLocator extends AbstractFaultLocator {
             result.put(f, list);
         }
 
+        Map<String, Map<LineRange, Location>> file2Range2Location = new HashMap<>();
         List<Location> locations = new LinkedList<>();
         for (Triple<String, Integer, Double> triple : clazzLineSusp) {
             if (locations.size() >= topK) {
                 break;
             }
             String clazz = triple.getFirst();
+            Map<LineRange, Location> rangeLocationMap = file2Range2Location.get(clazz);
+            if (rangeLocationMap == null) {
+                rangeLocationMap = new HashMap<>();
+                file2Range2Location.put(clazz, rangeLocationMap);
+            }
             LevelLogger.debug("Transform location : " + clazz + "#" + triple.getSecond());
             List<Pair<LineRange, String>> list = result.get(clazz);
             if (list != null) {
                 int line = triple.getSecond();
                 Iterator<Pair<LineRange, String>> itor = list.iterator();
                 Pair<LineRange, String> pair;
+                LineRange range;
                 while(itor.hasNext()) {
                     pair = itor.next();
-                    if (pair.getFirst().contains(line)) {
-                        locations.add(new Location(clazz, null, pair.getSecond(), line, triple.getThird()));
-                        itor.remove();
+                    range = pair.getFirst();
+                    if (range.contains(line)) {
+                        Location location = rangeLocationMap.get(range);
+                        if (location == null) {
+                            location = new Location(clazz, null, pair.getSecond(), line, triple.getThird());
+                            rangeLocationMap.put(range, location);
+                            locations.add(location);
+                        }
+                        location.addConsideredLine(line);
                         break;
                     }
                 }

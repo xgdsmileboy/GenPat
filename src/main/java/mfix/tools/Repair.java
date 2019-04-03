@@ -279,7 +279,7 @@ public class Repair {
     }
 
     protected void tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile, String retType,
-                          Set<String> exceptions) {
+                          Set<String> exceptions, List<Integer> buggyLines) {
         if (bNode == null || pattern == null || shouldStop()) {
             return;
         }
@@ -291,7 +291,7 @@ public class Repair {
         int startLine = bNode.getStartLine();
         int endLine = bNode.getEndLine();
 
-        List<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern);
+        List<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern, buggyLines);
 
         for (MatchInstance matchInstance : fixPositions) {
             if (shouldStop()) { break; }
@@ -384,12 +384,13 @@ public class Repair {
                 continue;
             }
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
+            List<Integer> buggyLines = location.getConsideredLines();
             for (String s : patterns) {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
                 if (p == null) { continue; }
                 scope.reset(p.getNewVars());
-                tryFix(node, p, scope, clazzFile, retType, exceptions);
+                tryFix(node, p, scope, clazzFile, retType, exceptions, buggyLines);
             }
         }
     }

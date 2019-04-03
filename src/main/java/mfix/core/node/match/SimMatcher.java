@@ -83,7 +83,7 @@ public class SimMatcher {
 //					for (Node pattern : changedPattern) {
 //						for (Node candNode : allNodes) {
 //							if (pattern.getParentStmt().getFeatureVector()
-//									.computeSimilarity(candNode.getParentStmt().getFeatureVector(), ALGO.COSINE) > 0.8) {
+//									.computeScore(candNode.getParentStmt().getFeatureVector(), ALGO.COSINE) > 0.8) {
 //								similar = true;
 //								break;
 //							}
