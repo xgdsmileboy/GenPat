@@ -177,6 +177,18 @@ public class ReturnStmt extends Stmt {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof ReturnStmt) {
+			ReturnStmt returnStmt = (ReturnStmt) node;
+			if (getExpression() != null && returnStmt.getExpression() != null
+					&& NodeUtils.matchSameNodeType(getExpression(), returnStmt.getExpression(), matchedNode,
+					matchedStrings)) {
+				getExpression().greedyMatchBinding(returnStmt.getExpression(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof ReturnStmt) {
 			ReturnStmt returnStmt = (ReturnStmt) node;

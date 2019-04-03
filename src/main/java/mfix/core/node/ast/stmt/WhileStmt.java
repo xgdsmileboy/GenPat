@@ -174,6 +174,17 @@ public class WhileStmt extends Stmt {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof WhileStmt) {
+			WhileStmt whileStmt = (WhileStmt) node;
+			if (NodeUtils.matchSameNodeType(getExpression(), whileStmt.getExpression(), matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(getBody(), whileStmt.getBody(), matchedNode, matchedStrings)) {
+				getExpression().greedyMatchBinding(whileStmt.getExpression(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof WhileStmt) {
 			WhileStmt whileStmt = (WhileStmt) node;

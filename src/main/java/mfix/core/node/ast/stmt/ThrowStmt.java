@@ -160,6 +160,16 @@ public class ThrowStmt extends Stmt {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof ThrowStmt) {
+			ThrowStmt ts = (ThrowStmt) node;
+			if (NodeUtils.matchSameNodeType(getExpression(), ts.getExpression(), matchedNode, matchedStrings)) {
+				getExpression().greedyMatchBinding(ts.getExpression(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof ThrowStmt) {
 			ThrowStmt throwStmt = (ThrowStmt) node;

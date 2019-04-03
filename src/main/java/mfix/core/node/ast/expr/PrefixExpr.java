@@ -164,6 +164,16 @@ public class PrefixExpr extends Expr {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof PrefixExpr) {
+			PrefixExpr pe = (PrefixExpr) node;
+			if (NodeUtils.matchSameNodeType(getExpression(), pe.getExpression(), matchedNode, matchedStrings)) {
+				getExpression().greedyMatchBinding(pe.getExpression(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {

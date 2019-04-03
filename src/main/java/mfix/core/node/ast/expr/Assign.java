@@ -186,6 +186,19 @@ public class Assign extends Expr {
     }
 
     @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof Assign) {
+            Assign assign = (Assign) node;
+            if (NodeUtils.matchSameNodeType(_lhs, assign.getLhs(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(_rhs, assign.getRhs(), matchedNode, matchedStrings)) {
+                matchedNode.put(_operator, assign.getOperator());
+                getLhs().greedyMatchBinding(assign.getLhs(), matchedNode, matchedStrings);
+                getRhs().greedyMatchBinding(assign.getRhs(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (super.ifMatch(node, matchedNode, matchedStrings, level)) {
             if (node instanceof Assign) {

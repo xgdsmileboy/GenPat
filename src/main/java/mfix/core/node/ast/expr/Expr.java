@@ -95,7 +95,7 @@ public abstract class Expr extends Node {
             String typeStr = getTypeStr();
             boolean matchType = _abstractType ? true : Utils.safeStringEqual(getTypeStr(), typeStr);
             boolean matchName = _abstractName ? true : Utils.safeBufferEqual(toSrcString(), node.toSrcString());
-            if (matchName && matchType) {
+            if (NodeUtils.match(matchName, matchType, level)) {
                 if (NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
                         && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL) {
                     boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);

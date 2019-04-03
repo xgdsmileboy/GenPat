@@ -186,6 +186,15 @@ public class DoStmt extends Stmt {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof DoStmt) {
+			DoStmt doStmt = (DoStmt) node;
+			NodeUtils.matchSameNodeType(getExpression(), doStmt.getExpression(), matchedNode, matchedStrings);
+			NodeUtils.matchSameNodeType(getBody(), doStmt.getBody(), matchedNode, matchedStrings);
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof DoStmt) {
 			DoStmt doStmt = (DoStmt) node;

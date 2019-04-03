@@ -229,6 +229,20 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof VarDeclarationStmt) {
+			VarDeclarationStmt vds = (VarDeclarationStmt) node;
+			if (getFragments().size() == 1 && vds.getFragments().size() == 1
+					&& NodeUtils.matchSameNodeType(getFragments().get(0), vds.getFragments().get(0),
+					matchedNode, matchedStrings)) {
+				getFragments().get(0).greedyMatchBinding(vds.getFragments().get(0), matchedNode, matchedStrings);
+			} else {
+				super.greedyMatchBinding(node, matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof VarDeclarationStmt) {
 			return super.ifMatch(node, matchedNode, matchedStrings, level);

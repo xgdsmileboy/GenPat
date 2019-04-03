@@ -270,6 +270,17 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof IfStmt) {
+			IfStmt ifStmt = (IfStmt) node;
+			if (NodeUtils.matchSameNodeType(getCondition(), ifStmt.getCondition(), matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(getThen(), ifStmt.getThen(), matchedNode, matchedStrings)) {
+				getCondition().greedyMatchBinding(ifStmt.getCondition(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
 								 List<Node> nodes) {
 		StringBuffer stringBuffer = new StringBuffer("if(");

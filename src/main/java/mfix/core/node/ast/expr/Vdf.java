@@ -271,6 +271,19 @@ public class Vdf extends Node {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof Vdf) {
+			Vdf vdf = (Vdf) node;
+			if (NodeUtils.matchSameNodeType(getNameNode(), vdf.getNameNode(), matchedNode, matchedStrings)) {
+				if (getExpression() != null && vdf.getExpression() != null
+						&& NodeUtils.matchSameNodeType(getExpression(), vdf.getExpression(), matchedNode, matchedStrings)) {
+					getExpression().greedyMatchBinding(vdf.getExpression(), matchedNode, matchedStrings);
+				}
+			}
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;

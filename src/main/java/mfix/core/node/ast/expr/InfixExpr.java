@@ -190,6 +190,18 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof InfixExpr) {
+			InfixExpr infixExpr = (InfixExpr) node;
+			if (NodeUtils.matchSameNodeType(getLhs(), infixExpr.getLhs(), matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(getRhs(), infixExpr.getRhs(), matchedNode, matchedStrings)) {
+				getLhs().greedyMatchBinding(infixExpr.getLhs(), matchedNode, matchedStrings);
+				getRhs().greedyMatchBinding(infixExpr.getRhs(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
 		if (stringBuffer == null) {

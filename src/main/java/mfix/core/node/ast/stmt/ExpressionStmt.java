@@ -158,6 +158,16 @@ public class ExpressionStmt extends Stmt {
     }
 
     @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof ExpressionStmt) {
+            ExpressionStmt es = (ExpressionStmt) node;
+            if (NodeUtils.matchSameNodeType(getExpression(), es.getExpression(), matchedNode, matchedStrings)) {
+                getExpression().greedyMatchBinding(es.getExpression(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) node;

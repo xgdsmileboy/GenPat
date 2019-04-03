@@ -195,6 +195,20 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof ConditionalExpr) {
+            ConditionalExpr ce = (ConditionalExpr) node;
+            if (NodeUtils.matchSameNodeType(getCondition(), ce.getCondition(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getfirst(), ce.getfirst(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getSecond(), ce.getSecond(), matchedNode, matchedStrings)) {
+                getCondition().greedyMatchBinding(ce.getCondition(), matchedNode, matchedStrings);
+                getfirst().greedyMatchBinding(ce.getfirst(), matchedNode, matchedStrings);
+                getSecond().greedyMatchBinding(ce.getSecond(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    @Override
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {

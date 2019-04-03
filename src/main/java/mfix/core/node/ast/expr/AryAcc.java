@@ -173,6 +173,18 @@ public class AryAcc extends Expr {
     }
 
     @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof AryAcc) {
+            AryAcc aryAcc = (AryAcc) node;
+            if (NodeUtils.matchSameNodeType(getArray(), aryAcc.getArray(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getIndex(), aryAcc.getIndex(), matchedNode, matchedStrings)) {
+                getArray().greedyMatchBinding(aryAcc.getArray(), matchedNode, matchedStrings);
+                getIndex().greedyMatchBinding(aryAcc.getIndex(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    @Override
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
         if (stringBuffer == null) {

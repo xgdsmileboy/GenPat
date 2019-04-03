@@ -218,6 +218,7 @@ public class Matcher {
                 nodeMap = new HashMap<>();
                 strMap = new HashMap<>();
                 if (pNodes.get(i).ifMatch(bNodes.get(j), nodeMap, strMap, level)) {
+                    pNodes.get(i).greedyMatchBinding(bNodes.get(j), nodeMap, strMap);
                     matchNodes.add(new MatchNode(bNodes.get(j), nodeMap, strMap));
                 }
             }

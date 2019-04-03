@@ -275,6 +275,18 @@ public class ForStmt extends Stmt {
     }
 
     @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof ForStmt) {
+            ForStmt forStmt = (ForStmt) node;
+            if (getCondition() != null && forStmt.getCondition() != null
+                    && NodeUtils.matchSameNodeType(getCondition(), forStmt.getCondition(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getBody(), forStmt.getBody(), matchedNode, matchedStrings)) {
+                getCondition().greedyMatchBinding(forStmt.getCondition(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof ForStmt) {
             ForStmt forStmt = (ForStmt) node;

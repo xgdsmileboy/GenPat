@@ -182,6 +182,17 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof SynchronizedStmt) {
+			SynchronizedStmt ss = (SynchronizedStmt) node;
+			if (NodeUtils.matchSameNodeType(getExpression(), ss.getExpression(), matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(getBody(), ss.getBody(), matchedNode, matchedStrings)) {
+				getExpression().greedyMatchBinding(getExpression(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof SynchronizedStmt) {
 			SynchronizedStmt stmt = (SynchronizedStmt) node;

@@ -256,7 +256,19 @@ public class ClassInstCreation extends Expr {
         return true;
     }
 
-//    @Override
+    @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof ClassInstCreation) {
+            ClassInstCreation classInstCreation = (ClassInstCreation) node;
+            if (getExpression() != null && classInstCreation.getExpression() != null
+                    && NodeUtils.matchSameNodeType(getExpression(), classInstCreation.getExpression(), matchedNode,
+                    matchedStrings)) {
+                getExpression().greedyMatchBinding(classInstCreation.getExpression(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    //    @Override
 //    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 //        if(node instanceof Expr) {
 //            if(isAbstract()) {

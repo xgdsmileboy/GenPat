@@ -841,6 +841,11 @@ public abstract class Node implements NodeComparator, Serializable {
         return _buggyBinding == null;
     }
 
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode,
+                                            Map<String, String> matchedStrings) {
+        NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+    }
+
     public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings,
                                     MatchLevel level);
 

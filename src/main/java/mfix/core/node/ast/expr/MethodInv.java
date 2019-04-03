@@ -254,6 +254,18 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node.getNodeType() == TYPE.MINVOCATION) {
+			MethodInv methodInv = (MethodInv) node;
+			if (_expression != null && methodInv._expression != null) {
+				if (NodeUtils.matchSameNodeType(_expression, methodInv._expression, matchedNode, matchedStrings)) {
+					_expression.greedyMatchBinding(methodInv.getExpression(), matchedNode, matchedStrings);
+				}
+			}
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(super.ifMatch(node, matchedNode, matchedStrings, level)) {
 			if (node.getNodeType() == TYPE.MINVOCATION) {

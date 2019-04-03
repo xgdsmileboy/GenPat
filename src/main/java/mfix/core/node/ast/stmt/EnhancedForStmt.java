@@ -224,6 +224,19 @@ public class EnhancedForStmt extends Stmt {
     }
 
     @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof EnhancedForStmt) {
+            EnhancedForStmt efs = (EnhancedForStmt) node;
+            if (NodeUtils.matchSameNodeType(getParameter(), efs.getParameter(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getExpression(), efs.getExpression(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getBody(), efs.getBody(), matchedNode, matchedStrings)) {
+                getParameter().greedyMatchBinding(efs.getParameter(), matchedNode, matchedStrings);
+                getExpression().greedyMatchBinding(efs.getExpression(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof EnhancedForStmt) {
             EnhancedForStmt enhancedForStmt = (EnhancedForStmt) node;

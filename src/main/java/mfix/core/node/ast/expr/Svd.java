@@ -237,6 +237,14 @@ public class Svd extends Expr {
 	}
 
 	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof Svd) {
+			Svd svd = (Svd) node;
+			NodeUtils.matchSameNodeType(getName(), svd.getName(), matchedNode, matchedStrings);
+		}
+	}
+
+	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof Svd) {
 			Svd svd = (Svd) node;
