@@ -49,16 +49,18 @@ public class ClusterImpl {
         List<Future<Set<Group>>> threadResultList = new LinkedList<>();
         while (true) {
             if (threadResultList.isEmpty() && compareClusters.size() <= 1) {
-                Triple<Set<Group>, Set<Group>, Integer> pair = compareClusters.iterator().next();
-                if (pair.getFirst() == null || pair.getSecond() == null) {
-                    if (pair.getFirst() != null) {
-                        results = pair.getFirst();
-                    } else if (pair.getSecond() != null) {
-                        results = pair.getSecond();
-                    } else {
-                        LevelLogger.fatal("Empty pattern nodes after clustering!");
+                if (compareClusters.size() == 1) {
+                    Triple<Set<Group>, Set<Group>, Integer> pair = compareClusters.iterator().next();
+                    if (pair.getFirst() == null || pair.getSecond() == null) {
+                        if (pair.getFirst() != null) {
+                            results = pair.getFirst();
+                        } else if (pair.getSecond() != null) {
+                            results = pair.getSecond();
+                        } else {
+                            LevelLogger.fatal("Empty pattern nodes after clustering!");
+                        }
+                        break;
                     }
-                    break;
                 }
             }
             Iterator<Triple<Set<Group>, Set<Group>, Integer>> iter = compareClusters.iterator();
