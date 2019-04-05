@@ -88,7 +88,7 @@ public class RepairTest extends TestCase {
     private void test(String proj, int id) {
         test(proj, id, null);
     }
-
+    
     private void test(String proj, int id, List<Integer> buggyLines) {
         String buggyFile = Utils.join(Constant.SEP, base, proj + "_" + id, "buggy.java");
         String fixedFile = Utils.join(Constant.SEP, base, proj + "_" + id, "fixed.java");

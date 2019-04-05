@@ -32,4 +32,14 @@ public class SBFLocatorTest {
         }
     }
 
+    @Test
+    public void test_chart() {
+        D4jSubject subject = new D4jSubject(d4jHome, "chart", 1);
+        SBFLocator sbfLocator = new SBFLocator(subject);
+        List<Location> locations = sbfLocator.getLocations(100);
+        for (Location l : locations) {
+            System.out.println(l);
+        }
+    }
+
 }
