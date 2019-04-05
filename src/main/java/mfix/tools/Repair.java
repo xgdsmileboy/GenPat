@@ -363,7 +363,7 @@ public class Repair {
         for (Location location : locations) {
             if (shouldStop()) { break; }
             _alreadyGenerated.clear();
-            String message = "Location : " + location.getRelClazzFile() + "#" + location.getLine();
+            String message = "Location : " + location.getRelClazzFile() + "#" + location.getConsideredLines();
             LevelLogger.info(message);
             JavaFile.writeStringToFile(_logfile, message + "\n", true);
 
