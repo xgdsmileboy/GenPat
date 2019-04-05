@@ -192,8 +192,8 @@ public class SBFLocator extends AbstractFaultLocator {
         Map<String, Map<LineRange, Location>> file2Range2Location = new HashMap<>();
         List<Location> locations = new LinkedList<>();
         for (Triple<String, Integer, Double> triple : clazzLineSusp) {
-            if (locations.size() >= topK) {
-                break;
+            if (triple.getThird() <= 0.000001) {
+                continue;
             }
             String clazz = triple.getFirst();
             Map<LineRange, Location> rangeLocationMap = file2Range2Location.get(clazz);
@@ -214,6 +214,9 @@ public class SBFLocator extends AbstractFaultLocator {
                     if (range.contains(line)) {
                         Location location = rangeLocationMap.get(range);
                         if (location == null) {
+                            if (locations.size() >= topK) {
+                                continue;
+                            }
                             location = new Location(clazz, null, pair.getSecond(), line, triple.getThird());
                             rangeLocationMap.put(range, location);
                             locations.add(location);

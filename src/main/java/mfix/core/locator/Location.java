@@ -58,7 +58,6 @@ public class Location {
     }
 
     public List<Integer> getConsideredLines() {
-        _consideredLines.add(getLine());
         return _consideredLines;
     }
 
@@ -77,6 +76,6 @@ public class Location {
     @Override
     public String toString() {
         return _relClazz + (_innerClazz == null ? "" : "$" + _innerClazz) + (_method == null ? "" : "." + _method) +
-                ":" + _line + "#" + _suspicious;
+                ":" + getConsideredLines() + "#" + _suspicious;
     }
 }
