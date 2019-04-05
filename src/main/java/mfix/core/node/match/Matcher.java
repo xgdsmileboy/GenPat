@@ -209,6 +209,7 @@ public class Matcher {
 
     public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, List<Integer> buggyLines,
                                                int topk, MatchLevel level) {
+        LevelLogger.info("Try match with level : " + level.name());
         List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
         List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
 
@@ -255,6 +256,7 @@ public class Matcher {
             matches = matches.stream().sorted(Comparator.comparingDouble(MatchInstance::similarity).reversed())
                     .limit(topk).collect(Collectors.toList());
         }
+        LevelLogger.info("Finish match!");
         return matches;
     }
 

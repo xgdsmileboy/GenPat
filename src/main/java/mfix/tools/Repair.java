@@ -291,6 +291,7 @@ public class Repair {
         if (bNode == null || pattern == null || shouldStop()) {
             return;
         }
+        LevelLogger.info("Try fix with : " + pattern.getPatternName());
         String origin = bNode.toSrcString().toString();
         String buggyFile = bNode.getFileName();
         String oriSrcCode = JavaFile.readFileToString(buggyFile);
@@ -309,7 +310,7 @@ public class Repair {
                 fixPositions = Matcher.tryMatch(bNode, pattern, buggyLines, MatchLevel.FUZZY);
             }
         }
-
+        LevelLogger.info("Match instances : " + fixPositions.size());
         for (MatchInstance matchInstance : fixPositions) {
             if (shouldStop()) { break; }
 
