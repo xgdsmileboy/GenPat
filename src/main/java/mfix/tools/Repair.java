@@ -22,6 +22,7 @@ import mfix.core.locator.Location;
 import mfix.core.locator.purify.CommentTestCase;
 import mfix.core.locator.purify.Purification;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
@@ -243,10 +244,10 @@ public class Repair {
     }
 
 
-    private void writeLog(String patternName, String buggyFile, String original, Set<String> imports,
-                          String fixed, int startLine, int endLine, boolean patch) {
+    private void writeLog(Pattern pattern, String buggyFile, String original, String fixed,
+                          int startLine, int endLine, boolean patch, MatchLevel level) {
         StringBuffer b = new StringBuffer();
-        for (String s : imports) {
+        for (String s : pattern.getImports()) {
             b.append(s).append(Constant.NEW_LINE);
         }
         b.append(fixed);
@@ -267,7 +268,10 @@ public class Repair {
                 .append(diff.toString())
                 .append(Constant.NEW_LINE)
                 .append("PATTERN : ")
-                .append(patternName)
+                .append(pattern.getPatternName())
+                .append(Constant.NEW_LINE)
+                .append("MATCHLEVEL : ")
+                .append(level.name())
                 .append(Constant.NEW_LINE)
                 .append("---------")
                 .append("TIME : ")
@@ -295,7 +299,16 @@ public class Repair {
         int startLine = bNode.getStartLine();
         int endLine = bNode.getEndLine();
 
+        MatchLevel level = MatchLevel.ALL;
         List<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern, buggyLines);
+        if (fixPositions.isEmpty()) {
+            level = MatchLevel.TYPE;
+            fixPositions = Matcher.tryMatch(bNode, pattern, buggyLines, MatchLevel.TYPE);
+            if (fixPositions.isEmpty()) {
+                level = MatchLevel.FUZZY;
+                fixPositions = Matcher.tryMatch(bNode, pattern, buggyLines, MatchLevel.FUZZY);
+            }
+        }
 
         for (MatchInstance matchInstance : fixPositions) {
             if (shouldStop()) { break; }
@@ -329,13 +342,11 @@ public class Repair {
             Utils.deleteFiles(clazzFile);
             switch (validate(buggyFile, code)) {
                 case PASS:
-                    writeLog(pattern.getPatternName(), buggyFile, origin,
-                            pattern.getImports(), fixed, startLine, endLine, true);
+                    writeLog(pattern, buggyFile, origin, fixed, startLine, endLine, true, level);
                     _patchNum ++;
                     break;
                 case TEST_FAILED:
-                    writeLog(pattern.getPatternName(), buggyFile, origin,
-                            pattern.getImports(), fixed, startLine, endLine, false);
+                    writeLog(pattern, buggyFile, origin, fixed, startLine, endLine, false, level);
                 case COMPILE_FAILED:
                 default:
             }

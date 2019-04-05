@@ -117,6 +117,8 @@ public class NodeUtils {
                 return matchType;
             case NAME:
                 return matchName;
+            case FUZZY:
+                return true;
             default:
                 LevelLogger.error("Should not be here!");
                 return false;

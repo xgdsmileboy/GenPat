@@ -203,6 +203,11 @@ public class Matcher {
     }
 
     public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, List<Integer> buggyLines,
+                                               MatchLevel level) {
+        return tryMatch(buggy, pattern, buggyLines, Constant.MAX_INSTANCE_PER_PATTERN, level);
+    }
+
+    public static List<MatchInstance> tryMatch(Node buggy, Pattern pattern, List<Integer> buggyLines,
                                                int topk, MatchLevel level) {
         List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
         List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
