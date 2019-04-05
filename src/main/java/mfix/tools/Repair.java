@@ -28,7 +28,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
-import mfix.core.node.match.Matcher;
+import mfix.core.node.match.RepairMatcher;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
@@ -51,6 +51,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -300,16 +304,22 @@ public class Repair {
         int startLine = bNode.getStartLine();
         int endLine = bNode.getEndLine();
 
-        MatchLevel level = MatchLevel.ALL;
-        List<MatchInstance> fixPositions = Matcher.tryMatch(bNode, pattern, buggyLines);
-        if (fixPositions.isEmpty()) {
-            level = MatchLevel.TYPE;
-            fixPositions = Matcher.tryMatch(bNode, pattern, buggyLines, MatchLevel.TYPE);
-            if (fixPositions.isEmpty()) {
-                level = MatchLevel.FUZZY;
-                fixPositions = Matcher.tryMatch(bNode, pattern, buggyLines, MatchLevel.FUZZY);
-            }
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        RepairMatcher matcher = new RepairMatcher(bNode, pattern, buggyLines);
+        Future<List<MatchInstance>> task = service.submit(matcher);
+        List<MatchInstance> fixPositions = null;
+        try {
+            fixPositions = task.get(1, TimeUnit.MINUTES);
+        } catch (Exception e) {
+            LevelLogger.debug("Repair match failed!");
+            task.cancel(true);
         }
+        service.shutdown();
+        if (fixPositions == null) {
+            return;
+        }
+
+        MatchLevel level = matcher.getMatchLevel();
         LevelLogger.info("Match instances : " + fixPositions.size());
         for (MatchInstance matchInstance : fixPositions) {
             if (shouldStop()) { break; }
