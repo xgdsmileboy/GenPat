@@ -87,6 +87,9 @@ public class Constant {
     /* max number of modifications for pattern filtering */
     public static int FILTER_MAX_CHANGE_ACTION;
 
+    /* filter deletion operation */
+    public static boolean FILTER_DELETION;
+
     /* split clustering */
     public static boolean SPLIT_CLUSTER;
 
@@ -156,6 +159,7 @@ public class Constant {
             MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
             FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
             FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));
+            FILTER_DELETION = Boolean.parseBoolean(prop.getProperty("REMOVE.DELETION", "false"));
             SPLIT_CLUSTER = Boolean.parseBoolean(prop.getProperty("CLUSTER.SPLIT", "false"));
             MAX_PATTERN_NUM_EACH_CLUSTER = Integer.parseInt(prop.getProperty("CLUSTER.SIZE", "10000"));
 

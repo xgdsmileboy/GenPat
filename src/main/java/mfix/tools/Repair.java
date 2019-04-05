@@ -29,6 +29,8 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.RepairMatcher;
+import mfix.core.node.modify.Deletion;
+import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
@@ -162,6 +164,18 @@ public class Repair {
         try {
             Pattern fixPattern = (Pattern) Utils.deserialize(patternFile);
             fixPattern.setPatternName(patternFile);
+            Set<Modification> modifications = fixPattern.getAllModifications();
+            if (Constant.FILTER_DELETION) {
+                Deletion del;
+                for (Modification modification : modifications) {
+                    if (modification instanceof Deletion) {
+                        del = (Deletion) modification;
+                        if (del.getDelNode() != null && del.getDelNode().noBinding()) {
+                            return null;
+                        }
+                    }
+                }
+            }
             return fixPattern;
         } catch (IOException | ClassNotFoundException e) {
             LevelLogger.error("Deserialize pattern failed!", e);
