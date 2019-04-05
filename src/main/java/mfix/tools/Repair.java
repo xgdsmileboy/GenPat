@@ -327,8 +327,9 @@ public class Repair {
         } catch (Exception e) {
             LevelLogger.debug("Repair match failed!");
             task.cancel(true);
+            LevelLogger.debug("Cancel task now!");
         }
-        service.shutdown();
+        service.shutdownNow();
         if (fixPositions == null) {
             return;
         }
