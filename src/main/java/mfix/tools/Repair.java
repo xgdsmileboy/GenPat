@@ -93,7 +93,7 @@ public class Repair {
     }
 
     private boolean shouldStop() {
-        return _patchNum > Constant.MAX_PATCH_NUMBER || _timer.timeout();
+        return _patchNum >= Constant.MAX_PATCH_NUMBER || _timer.timeout();
     }
 
     protected void setTimer(Timer timer) {
