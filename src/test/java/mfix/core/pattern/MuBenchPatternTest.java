@@ -17,7 +17,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
-import mfix.core.node.match.Matcher;
+import mfix.core.node.match.RepairMatcher;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -110,9 +110,10 @@ public class MuBenchPatternTest extends TestCase {
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             Set<String> already = new HashSet<>();
             int count = 0;
+            RepairMatcher matcher = new RepairMatcher();
             for (Pattern p : patterns) {
                 scope.reset(p.getNewVars());
-                List<MatchInstance> set = Matcher.tryMatch(node, p);
+                List<MatchInstance> set = matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     StringBuffer buffer = node.adaptModifications(scope, new HashMap<>(), retType, exceptions);

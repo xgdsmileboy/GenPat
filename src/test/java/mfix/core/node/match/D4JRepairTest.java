@@ -112,9 +112,10 @@ public class D4JRepairTest extends TestCase {
                 VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
                 Set<String> already = new HashSet<>();
                 int count = 0;
+                RepairMatcher matcher = new RepairMatcher();
                 for (Pattern p : patterns) {
                     scope.reset(p.getNewVars());
-                    List<MatchInstance> set = Matcher.tryMatch(node, p);
+                    List<MatchInstance> set = matcher.tryMatch(node, p);
                     for (MatchInstance matchInstance : set) {
                         matchInstance.apply();
                         StringBuffer buffer = node.adaptModifications(scope, new HashMap<>(), retType, exceptions);
