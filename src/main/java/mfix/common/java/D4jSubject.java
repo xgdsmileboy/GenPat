@@ -27,12 +27,16 @@ public class D4jSubject extends Subject {
     private List<String> _failedTestCases;
 
     public D4jSubject(String base, String name, int id) {
+        this(base, name, id, false);
+    }
+
+    public D4jSubject(String base, String name, int id, boolean memCompile) {
         super(Utils.join(Constant.SEP, base, name, name + "_" + id + "_buggy"), name);
         _type = NAME;
         _id = id;
         setClasspath(obtainClasspath(name));
         setSourceLevel(name.equals("chart") ? SOURCE_LEVEL.L_1_4 : SOURCE_LEVEL.L_1_7);
-        setCompileFile(false);
+        setCompileFile(memCompile);
         setCompileProject(true);
         setTestProject(true);
         setCompileCommand(Constant.CMD_DEFECTS4J + " compile");

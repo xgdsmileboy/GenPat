@@ -558,6 +558,7 @@ public class Repair {
         } else if (cmd.hasOption("d4j")) {
             String[] ids = cmd.getOptionValue("d4j").split(",");
             String base = cmd.hasOption("d4jhome") ? cmd.getOptionValue("d4jhome") : Constant.D4J_PROJ_DEFAULT_HOME;
+            boolean memCompile = true;
             // math_1,lang_1-10,
             for (String id : ids) {
                 String[] info = id.split("_");
@@ -570,13 +571,13 @@ public class Repair {
                 D4jSubject subject;
                 if (seqs.length == 1) {
                     int number = Integer.parseInt(seqs[0]);
-                    subject = new D4jSubject(base, name, number);
+                    subject = new D4jSubject(base, name, number, memCompile);
                     subjects.add(subject);
                 } else if (seqs.length == 2) {
                     int start = Integer.parseInt(seqs[0]);
                     int end = Integer.parseInt(seqs[1]);
                     for (; start <= end; start ++) {
-                        subject = new D4jSubject(base, name, start);
+                        subject = new D4jSubject(base, name, start, memCompile);
                         subjects.add(subject);
                     }
                 } else {
