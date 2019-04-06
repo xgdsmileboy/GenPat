@@ -298,7 +298,11 @@ public class ExprList extends Node {
                 list.stream().sorted(Comparator.comparingInt(Map.Entry::getKey));
                 for (Map.Entry<Integer, List<StringBuffer>> entry : list) {
                     for (StringBuffer s : entry.getValue()) {
-                        stringBuffer.append(',').append(s);
+                        if (!first) {
+                            stringBuffer.append(',');
+                        }
+                        first = false;
+                        stringBuffer.append(s);
                     }
                 }
             }
