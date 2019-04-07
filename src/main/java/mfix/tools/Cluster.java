@@ -137,7 +137,7 @@ public class Cluster {
 
     private void dump2File(Set<Group> groups, String outFile, boolean append) throws IOException {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile, append), "UTF-8"));
-        LevelLogger.debug("Start dumping result to file : " + outFile);
+        LevelLogger.info("Start dumping result to file : " + outFile);
         for (Group g : groups) {
             for (String s : g.getRepresentPattern().getKeywords()) {
                 bw.write(s);
@@ -152,7 +152,7 @@ public class Cluster {
             }
         }
         bw.close();
-        LevelLogger.debug("Finish dumping result to file : " + outFile);
+        LevelLogger.info("Finish dumping result to file : " + outFile);
     }
 
     private List<Set<String>> split(Set<String> strings) {
@@ -168,7 +168,7 @@ public class Cluster {
         if (!set.isEmpty()) {
             list.add(set);
         }
-        LevelLogger.debug("Split to < " + list.size() + " > batch.");
+        LevelLogger.info("Split to < " + list.size() + " > batch.");
         return list;
     }
 
@@ -190,7 +190,7 @@ public class Cluster {
         LevelLogger.info("====================== Total clusters : [ " + loop + " ] ===================");
         List<Set<String>> list;
         for (Map.Entry<Keys, Set<String>> entry : key2Paths.entrySet()) {
-            LevelLogger.debug(">>>>>>>>>> LOOP LEFT [ " + (loop --) + " ] <<<<<<<<<<<");
+            LevelLogger.info(">>>>>>>>>> LOOP LEFT [ " + (loop --) + " ] <<<<<<<<<<<");
             if (Constant.SPLIT_CLUSTER) {
                 list = split(entry.getValue());
             } else {

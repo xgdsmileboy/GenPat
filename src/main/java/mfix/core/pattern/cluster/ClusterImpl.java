@@ -42,6 +42,7 @@ public class ClusterImpl {
     }
 
     public Set<Group> cluster(Set<Pattern> patterns) {
+        LevelLogger.info("Start cluster : size >> " + patterns.size());
         Set<Group> results = new HashSet<>();
         List<Triple<Set<Group>, Set<Group>, Integer>> compareClusters = initClusterPair(patterns);
         int currTaskCount = 0;
@@ -74,7 +75,7 @@ public class ClusterImpl {
             compareClusters.addAll(buildClusterPair(_returnedNodes));
             // Haffman-encoding-like merge, merge small sets first
             compareClusters.sort(Comparator.comparingInt(Triple::getThird));
-            LevelLogger.debug("Pair size : " + compareClusters.size());
+            LevelLogger.info("Pair size : " + compareClusters.size());
             _returnedNodes = new HashSet<>();
             if (currTaskCount >= _maxThreadCount || compareClusters.isEmpty()) {
                 currTaskCount -= waitSubThreads(threadResultList);
@@ -88,13 +89,13 @@ public class ClusterImpl {
     private int waitSubThreads(List<Future<Set<Group>>> threadResultList) {
         int size = 0;
         try {
-            LevelLogger.debug("Clear existing thread ...");
+            LevelLogger.info("Clear existing thread ...");
             for (Future<Set<Group>> future : threadResultList) {
                 Set<Group> result = future.get();
                 _returnedNodes.add(result);
                 size++;
             }
-            LevelLogger.debug("Finish clear ....");
+            LevelLogger.info("Finish clear ....");
             threadResultList.clear();
         } catch (Exception e) {
             LevelLogger.warn("Clustering error !", e);
