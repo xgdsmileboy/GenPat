@@ -462,7 +462,10 @@ public class Repair {
         String start = _timer.start();
         LevelLogger.info(start);
 
+        int all = 0;
         for(int currentTry = 0; currentTry < purifiedFailedTestCases.size(); currentTry ++) {
+            all += _patchNum;
+            _patchNum = 0;
             String teString = purifiedFailedTestCases.get(currentTry);
             JavaFile.writeStringToFile(_logfile, "Current failed test : " +
                     teString + " | " + simpleDateFormat.format(new Date()) + "\n", true);
@@ -493,7 +496,7 @@ public class Repair {
 
         _subject.restore();
 
-        message = "Finish : " + _subject.getName() + " > patch : " + _patchNum
+        message = "Finish : " + _subject.getName() + " > patch : " + all
                 + " | Start : " + start + " | End : " + simpleDateFormat.format(new Date());
         JavaFile.writeStringToFile(_logfile, message + "\n", true);
         System.out.println(message);
