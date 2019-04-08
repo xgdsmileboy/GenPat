@@ -30,7 +30,9 @@ import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.RepairMatcher;
 import mfix.core.node.modify.Deletion;
+import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
+import mfix.core.node.modify.Update;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
@@ -165,12 +167,23 @@ public class Repair {
             Pattern fixPattern = (Pattern) Utils.deserialize(patternFile);
             fixPattern.setPatternName(patternFile);
             Set<Modification> modifications = fixPattern.getAllModifications();
-            if (Constant.FILTER_DELETION) {
-                Deletion del;
-                for (Modification modification : modifications) {
-                    if (modification instanceof Deletion) {
-                        del = (Deletion) modification;
-                        if (del.getDelNode() != null && del.getDelNode().noBinding()) {
+            for (Modification modification : modifications) {
+                if (Constant.FILTER_DELETION && modification instanceof Deletion) {
+                    Deletion del = (Deletion) modification;
+                    if (del.getDelNode() != null && del.getDelNode().noBinding()) {
+                        return null;
+                    }
+                } else if (modification instanceof Insertion) {
+                    Insertion ins = (Insertion) modification;
+                    StringBuffer buffer = ins.getInsertedNode().toSrcString();
+                    if (buffer != null && buffer.toString().contains("System.exit")) {
+                        return null;
+                    }
+                } else if (modification instanceof Update) {
+                    Update update = (Update) modification;
+                    if (update.getTarNode() != null) {
+                        StringBuffer buffer = update.getTarNode().toSrcString();
+                        if (buffer != null && buffer.toString().contains("System.exit")) {
                             return null;
                         }
                     }
