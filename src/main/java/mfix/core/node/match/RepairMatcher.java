@@ -15,6 +15,7 @@ import mfix.core.node.match.metric.IScore;
 import mfix.core.node.match.metric.LocationScore;
 import mfix.core.node.match.metric.NodeSimilarity;
 import mfix.core.pattern.Pattern;
+import mfix.tools.Timer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,13 +39,15 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
     private Pattern _pattern;
     private List<Integer> _buggyLines;
     private MatchLevel _level;
+    private Timer _timer;
 
     public RepairMatcher() {}
 
-    public RepairMatcher(Node bNode, Pattern pattern, List<Integer> buggyLines) {
+    public RepairMatcher(Node bNode, Pattern pattern, List<Integer> buggyLines, int minutes) {
         _bNode = bNode;
         _pattern = pattern;
         _buggyLines = buggyLines;
+        _timer = new Timer(minutes);
     }
 
     public MatchLevel getMatchLevel() {
@@ -53,6 +56,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
 
     @Override
     public List<MatchInstance> call() {
+        _timer.start();
         _level = MatchLevel.ALL;
         List<MatchInstance> fixPositions = tryMatch(_bNode, _pattern, _buggyLines);
         if (fixPositions.isEmpty()) {
@@ -167,6 +171,9 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
     private void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
                                   Set<Node> alreadyMatched, Set<MatchInstance> instances,
                                   List<IScore> similarities) {
+        if (_timer.timeout()) {
+            return;
+        }
         if (i == list.size()) {
             Map<Node, Node> nodeMap = new HashMap<>();
             Map<String, String> strMap = new HashMap<>();
@@ -215,6 +222,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
         MatchNode matchNode;
         Node toMatch = curMatchNode.getNode();
         for (Map.Entry<Node, MatchNode> entry : matchedNodeMap.entrySet()) {
+            if (_timer.timeout()) return false;
             node = entry.getKey();
             matchNode = entry.getValue();
             previous = matchNode.getNode();

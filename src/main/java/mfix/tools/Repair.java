@@ -319,7 +319,7 @@ public class Repair {
         int endLine = bNode.getEndLine();
 
         ExecutorService service = Executors.newSingleThreadExecutor();
-        RepairMatcher matcher = new RepairMatcher(bNode, pattern, buggyLines);
+        RepairMatcher matcher = new RepairMatcher(bNode, pattern, buggyLines, 1);
         Future<List<MatchInstance>> task = service.submit(matcher);
         List<MatchInstance> fixPositions = null;
         try {
@@ -329,8 +329,12 @@ public class Repair {
             task.cancel(true);
             LevelLogger.debug("Cancel task now!");
         }
+        LevelLogger.debug("Try to shut down server.");
         service.shutdownNow();
+        LevelLogger.debug("Finish shutting down server.");
+
         if (fixPositions == null) {
+            LevelLogger.info("No match point found!");
             return;
         }
 
