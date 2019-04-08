@@ -464,7 +464,6 @@ public class Repair {
 
         int all = 0;
         for(int currentTry = 0; currentTry < purifiedFailedTestCases.size(); currentTry ++) {
-            all += _patchNum;
             _patchNum = 0;
             String teString = purifiedFailedTestCases.get(currentTry);
             JavaFile.writeStringToFile(_logfile, "Current failed test : " +
@@ -492,6 +491,7 @@ public class Repair {
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
 
             repair0(locations, buggyFileVarMap);
+            all += _patchNum;
         }
 
         _subject.restore();
