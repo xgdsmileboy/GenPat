@@ -41,7 +41,9 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
     private MatchLevel _level;
     private Timer _timer;
 
-    public RepairMatcher() {}
+    public RepairMatcher() {
+        this(null, null, new LinkedList<>(), 30);
+    }
 
     public RepairMatcher(Node bNode, Pattern pattern, List<Integer> buggyLines, int minutes) {
         _bNode = bNode;
