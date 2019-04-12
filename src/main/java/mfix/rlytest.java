@@ -1,5 +1,6 @@
 package mfix;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.Method;
 import mfix.common.util.Pair;
@@ -24,7 +25,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class rlytest {
-    final static String LOCAL_DATASET = "/Users/luyaoren/MineFix/resources/SysEdit-part1";
+    final static String LOCAL_DATASET = Constant.RES_DIR + Constant.SEP + "SysEdit-part1";
 
     // find method with name & argType
     static MethodDeclaration findMethodFromFile(String file, Method method) {
@@ -79,6 +80,8 @@ public class rlytest {
 
             if (buffer != null && tar_node.toString().equals(buffer.toString())) {
                 System.out.println("Correct!");
+            } else {
+                System.out.println("Incorrect!");
             }
         }
     }
