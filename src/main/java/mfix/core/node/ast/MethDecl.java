@@ -348,9 +348,10 @@ public class MethDecl extends Node {
         if (_body == null) {
             stringBuffer.append(";");
         } else {
-            List<Modification> modifications = getModifications();
+            Node node = getBuggyBindingNode();
+            List<Modification> modifications = node != null ? node.getModifications() : null;
             StringBuffer tmp;
-            if (modifications.isEmpty()) {
+            if (node == null || modifications.isEmpty()) {
                 tmp = _body.adaptModifications(vars, exprMap, retType, exceptions);
             } else {
                 Update update = (Update) modifications.get(0);
