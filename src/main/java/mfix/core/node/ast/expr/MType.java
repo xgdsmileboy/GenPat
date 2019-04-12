@@ -16,7 +16,6 @@ import mfix.core.node.match.metric.FVector;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.Type;
 
@@ -36,10 +35,11 @@ public class MType extends Node {
 	private String _typeStr;
 	private transient Type _type;
 
-	public MType(String fileName, int startLine, int endLine, ASTNode oriNode) {
+	public MType(String fileName, int startLine, int endLine, Type oriNode) {
 		super(fileName, startLine, endLine, oriNode);
 		_nodeType = TYPE.TYPE;
 		_fIndex = VIndex.EXP_TYPE;
+		_type = oriNode;
 		_typeStr = oriNode.toString();
 	}
 
@@ -47,8 +47,10 @@ public class MType extends Node {
 		if (type == null) {
 			type = AST.newAST(AST.JLS8).newWildcardType();
 		}
-		this._type = type;
-		_typeStr = type.toString();
+		if (_type == null) {
+			this._type = type;
+			_typeStr = type.toString();
+		}
 	}
 
 	public Type type() {
