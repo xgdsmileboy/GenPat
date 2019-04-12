@@ -14,6 +14,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.match.metric.IScore;
 import mfix.core.node.match.metric.LocationScore;
 import mfix.core.node.match.metric.NodeSimilarity;
+import mfix.core.node.match.metric.TokenSimilarity;
 import mfix.core.pattern.Pattern;
 import mfix.tools.Timer;
 
@@ -50,6 +51,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
         _pattern = pattern;
         _buggyLines = buggyLines;
         _timer = new Timer(minutes);
+        _timer.start();
     }
 
     public MatchLevel getMatchLevel() {
@@ -127,8 +129,9 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
 
         // similarity metrics used for match instance sorting
         List<IScore> similarities = new LinkedList<>();
-        similarities.add(new NodeSimilarity(0.5));
-        similarities.add(new LocationScore(0.5, buggyLines));
+        similarities.add(new NodeSimilarity(0.33));
+        similarities.add(new LocationScore(0.33, buggyLines));
+        similarities.add(new TokenSimilarity(0.33));
 
         List<MatchInstance> matches = new LinkedList<>(permutePossibleMatches(matchLists, similarities));
         if (buggyLines != null && !buggyLines.isEmpty()) {

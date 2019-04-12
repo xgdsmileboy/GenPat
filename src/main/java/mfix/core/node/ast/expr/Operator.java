@@ -116,7 +116,7 @@ public abstract class Operator extends Node {
 
 	@Override
 	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
-		if (node == null || isConsidered() != node.isConsidered()) {
+		if (node == null || isConsidered() != node.isConsidered() || node.getNodeType() != getNodeType()) {
 			return false;
 		}
 		return NodeUtils.patternMatch(this, node, matchedNode);

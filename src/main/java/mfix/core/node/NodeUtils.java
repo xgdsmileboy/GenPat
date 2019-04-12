@@ -540,8 +540,14 @@ public class NodeUtils {
     }
 
     public static boolean isLegalVar(String var) {
+        String[] strings = var.split("\\.");
         Pattern p = Pattern.compile("[\\w|_][\\w|\\d|_]*(\\[.*\\])?");
-        return p.matcher(var).matches();
+        for (String s : strings) {
+            if (!p.matcher(s).matches()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static Type parseExprType(Expr left, String operator, Expr right) {

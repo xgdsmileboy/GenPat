@@ -436,31 +436,11 @@ public class Matcher {
     }
 
     public static Map<Integer, Integer> match(Object[] src, Object[] tar) {
-        return match(Arrays.asList(src), Arrays.asList(tar), new Comparator<Object>() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                if (o1.equals(o2)) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-
-            ;
-        });
+        return match(Arrays.asList(src), Arrays.asList(tar), (o1, o2) -> o1.equals(o2) ? 1 : 0);
     }
 
     public static Map<Integer, Integer> match(List<Stmt> src, List<Stmt> tar) {
-        return match(src, tar, new Comparator<Stmt>() {
-            @Override
-            public int compare(Stmt o1, Stmt o2) {
-                if (o1.compare(o2)) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
+        return match(src, tar, (o1, o2) -> o1.compare(o2) ? 1 : 0);
     }
 
     enum Direction {
@@ -569,10 +549,11 @@ public class Matcher {
                 }
                 if (index < 0) return false;
                 List<Node> toWrap = new LinkedList<>();
+                toWrap.add(node);
                 Set<String> set = getDefVars(node);
-                for (index ++; index < statements.size(); index ++) {
+                for (index++; index < statements.size(); index++) {
                     if (statements.get(index).flattenTreeNode(new LinkedList<>())
-                            .stream().anyMatch(n-> NodeUtils.isSimpleExpr(n)
+                            .stream().anyMatch(n -> NodeUtils.isSimpleExpr(n)
                                     && set.contains(n.toSrcString().toString()))) {
                         toWrap.add(statements.get(index));
                         set.addAll(getDefVars(statements.get(index)));
@@ -658,15 +639,13 @@ public class Matcher {
                         }
                         list.add(tmp);
                     }
-                } else if (before.isEmpty() && after.isEmpty()){
+                } else {
                     List<StringBuffer> list = insertAt.get(insertion.getIndex());
                     if (list == null) {
                         list = new LinkedList<>();
                         insertAt.put(insertion.getIndex(), list);
                     }
                     list.add(tmp);
-                } else {
-                    return false;
                 }
             }
         }

@@ -28,6 +28,10 @@ public class Wrap extends Update {
         _nodes = wrapped;
     }
 
+    public List<Node> wrappedNode() {
+        return _nodes;
+    }
+
     public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType,
                               Set<String> exceptions, List<Node> nodes) {
         if(getTarNode() == null) {

@@ -290,30 +290,11 @@ public class IfStmt extends Stmt {
 		stringBuffer.append(tmp);
 		stringBuffer.append(")");
 		stringBuffer.append("{" + Constant.NEW_LINE);
-		if (_then.getNodeType() == TYPE.BLOCK) {
-			Blk blk = (Blk) _then;
-			List<Stmt> stmts = blk.getStatement();
-			for (int i = 0; i < stmts.size(); i++) {
-				tmp = stmts.get(i).transfer(vars, exprMap, retType, exceptions);
-				if(tmp == null) return null;
-				stringBuffer.append(tmp).append(Constant.NEW_LINE);
-			}
-		} else {
-			tmp = _then.transfer(vars, exprMap, retType, exceptions);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp).append(Constant.NEW_LINE);
-		}
 		for (Node n : nodes) {
 			stringBuffer.append(n.toSrcString().toString())
 					.append(Constant.NEW_LINE);
 		}
 		stringBuffer.append("}");
-		if(_else != null) {
-			stringBuffer.append("else ");
-			tmp = _else.transfer(vars, exprMap, retType, exceptions);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
-		}
 		return stringBuffer;
 	}
 

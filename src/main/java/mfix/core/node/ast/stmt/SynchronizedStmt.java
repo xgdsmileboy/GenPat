@@ -211,11 +211,6 @@ public class SynchronizedStmt extends Stmt {
 		if(tmp == null) return null;
 		stringBuffer.append(tmp);
 		stringBuffer.append("){").append(Constant.NEW_LINE);
-		for (Stmt stmt : _blk.getStatement()) {
-			tmp = stmt.transfer(vars, exprMap, retType, exceptions);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp).append(Constant.NEW_LINE);
-		}
 		for (Node node : nodes) {
 			stringBuffer.append(node.toSrcString().toString()).append(Constant.NEW_LINE);
 		}

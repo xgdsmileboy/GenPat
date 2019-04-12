@@ -134,6 +134,14 @@ public class Assign extends Expr {
     }
 
     @Override
+    public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
+        if (node.getNodeType() == getNodeType()) {
+            return super.patternMatch(node, matchedNode);
+        }
+        return false;
+    }
+
+    @Override
     public boolean postAccurateMatch(Node node) {
         boolean match = false;
         Assign assign = null;

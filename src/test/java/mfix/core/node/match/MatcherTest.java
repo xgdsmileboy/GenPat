@@ -231,41 +231,6 @@ public class MatcherTest extends TestCase {
     }
 
     @Test
-    public void test_formal_form() {
-        String srcFile = testbase + Constant.SEP + "src_Project.java";
-        String tarFile = testbase + Constant.SEP + "tar_Project.java";
-
-        PatternExtractor extractor = new PatternExtractor();
-        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
-
-        /*  // Pattern form
-        METHOD(){
-            TYPE_0 listeners=EXPR_1;
-            for(EXPR_4;i<listeners.size();EXPR_5){}
-        }
-        */
-
-        String p1str = "METHOD\\(\\)\\{\n" +
-                "TYPE(_\\d+)?\\s{1}listeners=EXPR(_\\d+)?;\n" +
-                "for\\(EXPR(_\\d+)?;i<listeners.size\\(\\);EXPR(_\\d+)?\\)\\{\\}\n" +
-                "\\}";
-        String p2str = "METHOD\\(\\)\\{\n" +
-                "TYPE(_\\d+)?\\s{1}listeners=EXPR(_\\d+)?;\n" +
-                "synchronized\\(EXPR(_\\d+)?\\)\\{\n" +
-                "for\\(EXPR(_\\d+)?;i<listeners.size\\(\\);EXPR(_\\d+)?\\)\\{\\}\n" +
-                "\\}\n" +
-                "\\}";
-
-        java.util.regex.Pattern p1 = java.util.regex.Pattern.compile(p1str);
-        java.util.regex.Pattern p2 = java.util.regex.Pattern.compile(p2str);
-
-        for (Pattern p : patterns) {
-            String formal = p.formalForm().toString();
-            Assert.assertTrue(p1.matcher(formal).matches() || p2.matcher(formal).matches());
-        }
-    }
-
-    @Test
     public void test_secure_add_import() {
         String srcFile = testbase + Constant.SEP + "src_security_insert_depend_add_import.java";
         String tarFile = testbase + Constant.SEP + "tar_security_insert_depend_add_import.java";
