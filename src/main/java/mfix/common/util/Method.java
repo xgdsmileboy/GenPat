@@ -52,6 +52,33 @@ public class Method {
         return new Method(retType, name, arguments);
     }
 
+    public Method(MethodDeclaration method) {
+        _retType = method.getReturnType2() == null ? null : method.getReturnType2().toString();
+        _name = method.getName().getIdentifier();
+        List<SingleVariableDeclaration> args = method.parameters();
+        _argTypes = new ArrayList<>(args.size());
+        for (int i = 0; i < args.size(); i++) {
+            _argTypes.add(args.get(i).getType().toString());
+        }
+    }
+
+    public boolean argTypeSame(MethodDeclaration method) {
+        List<SingleVariableDeclaration> args = method.parameters();
+        if (args.size() != _argTypes.size()) {
+            return false;
+        }
+        for (int i = 0; i < _argTypes.size(); i++) {
+            if (!_argTypes.get(i).equals(args.get(i).getType().toString())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return  _retType + " " + _name + _argTypes.toString();
+    }
 
     public boolean same(MethodDeclaration method) {
         String retType = method.getReturnType2() == null ? null : method.getReturnType2().toString();
