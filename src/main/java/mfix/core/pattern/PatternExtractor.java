@@ -40,6 +40,12 @@ public class PatternExtractor {
         return extractPattern(srcFile, tarFile, Constant.FILTER_MAX_CHANGE_LINE);
     }
 
+    public Set<Pattern> extractPattern(String srcFile, String tarFile, Method focus) {
+        Set<Method> set = new HashSet<>();
+        set.add(focus);
+        return extractPattern(srcFile, tarFile, set, Constant.FILTER_MAX_CHANGE_LINE);
+    }
+
     public Set<Pattern> extractPattern(String srcFile, String tarFile, Set<Method> focus) {
         return extractPattern(srcFile, tarFile, focus, Constant.FILTER_MAX_CHANGE_LINE);
     }

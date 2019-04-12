@@ -8,7 +8,7 @@
 package mfix.common.util;
 
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import java.util.List;
 
@@ -44,12 +44,12 @@ public class Method {
         String retType = method.getReturnType2() == null ? null : method.getReturnType2().toString();
         String name = method.getName().getIdentifier();
         if (Utils.safeStringEqual(_retType, retType) && _name.equals(name)) {
-            List<Type> args = method.typeParameters();
+            List<SingleVariableDeclaration> args = method.parameters();
             if (args.size() != _argTypes.size()) {
                 return false;
             }
             for (int i = 0; i < _argTypes.size(); i++) {
-                if (!_argTypes.get(i).equals(args.get(i).toString())) {
+                if (!_argTypes.get(i).equals(args.get(i).getType().toString())) {
                     return false;
                 }
             }

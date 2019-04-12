@@ -10,6 +10,7 @@ package mfix.core.node.match;
 import mfix.TestCase;
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
+import mfix.common.util.Method;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
@@ -87,6 +88,20 @@ public class MatcherTest extends TestCase {
         Assert.assertTrue(pattern.getAllModifications().size() == 1);
         Modification modification = pattern.getAllModifications().iterator().next();
         Assert.assertTrue(modification instanceof Update);
+    }
+
+    @Test
+    public void test_pattern_filtering() {
+        String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
+        String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
+
+
+        Method method = new Method("void", "onItemClick", Arrays.asList("AdapterView<?>", "View", "int", "long"));
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile, method);
+
+        // there is only one method changed
+        Assert.assertTrue(patterns.size() == 1);
     }
 
     @Test
