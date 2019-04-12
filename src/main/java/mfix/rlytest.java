@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class rlytest {
+    final static String LOCAL_DATASET = "/Users/luyaoren/Desktop/SysEdit-part1";
+
+    // find method with name & argType
     static MethodDeclaration findMethodFromFile(String file, Method method) {
         CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
         final Set<MethodDeclaration> methods = new HashSet<>();
@@ -66,8 +69,13 @@ public class rlytest {
 
             String target = m2.getSecond();
             Node tar_node = JavaFile.getNode(target, m2Func);
-            // System.out.println(tar_node.toString());
-            // System.out.println(buffer.toString());
+
+            if (buffer != null) {
+                System.out.println(tar_node.toString());
+                System.out.println("--------------");
+                System.out.println(buffer.toString());
+                System.out.println("-----end------");
+            }
 
             if (buffer != null && tar_node.toString().equals(buffer.toString())) {
                 System.out.println("Correct!");
@@ -76,13 +84,12 @@ public class rlytest {
     }
 
     public static String getPath(JSONObject o) {
-        return "/Users/luyaoren/Desktop/csp" + (String)o.get("file");
+        return  LOCAL_DATASET + (String)o.get("file");
     }
 
     public static Method json2method(JSONObject src) {
         Method tmp = new Method(null, (String)src.get("name"), (List<String>)src.get("argTypes"));
         return new Method(findMethodFromFile(getPath(src), tmp));
-        // return tmp;
     }
 
     public static void work(String path) {
@@ -122,7 +129,7 @@ public class rlytest {
     }
     public static void main(String[] args) {
         for (int i = 1; i <= 50; ++i) {
-            String path = String.format("/Users/luyaoren/Desktop/csp/%d/info.json", i);
+            String path = LOCAL_DATASET + String.format("/%d/info.json", i);
             if (new File(path).exists()) {
                 System.out.println("current: " + i);
                 try {
