@@ -285,7 +285,6 @@ public class AryCreation extends Expr {
                 stringBuffer.append("]");
             }
             if (_initializer != null) {
-                stringBuffer.append("=");
                 tmp = _initializer.transfer(vars, exprMap, retType, exceptions);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
@@ -338,13 +337,11 @@ public class AryCreation extends Expr {
         }
         if(initializer == null) {
             if(_initializer != null) {
-                stringBuffer.append("=");
                 tmp = _initializer.adaptModifications(vars, exprMap, retType, exceptions);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }
         } else if (!initializer.toString().isEmpty()){
-            stringBuffer.append("=");
             stringBuffer.append(initializer);
         }
         return stringBuffer;

@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,13 +21,27 @@ import java.util.List;
 public class Method {
 
     private String _retType;
-    private String _name;
+    private String _name = "DUMMY";
     private List<String> _argTypes;
 
     public Method(String retType, String name, List<String> args) {
         _retType = retType;
         _name = name;
         _argTypes = args;
+    }
+
+
+    public Method(MethodDeclaration method) {
+        List<SingleVariableDeclaration> args = new LinkedList<>();
+        if (method != null) {
+            _retType = method.getReturnType2() == null ? null : method.getReturnType2().toString();
+            _name = method.getName().getIdentifier();
+            args = method.parameters();
+        }
+        _argTypes = new ArrayList<>(args.size());
+        for (int i = 0; i < args.size(); i++) {
+            _argTypes.add(args.get(i).getType().toString());
+        }
     }
 
     public String getRetType() {
@@ -39,27 +54,6 @@ public class Method {
 
     public List<String> getArgTypes() {
         return _argTypes;
-    }
-
-    public Method toMethod(MethodDeclaration method) {
-        String retType = method.getReturnType2() == null ? null : method.getReturnType2().toString();
-        String name = method.getName().getIdentifier();
-        List<SingleVariableDeclaration> args = method.parameters();
-        List<String> arguments = new ArrayList<>(args.size());
-        for (int i = 0; i < _argTypes.size(); i++) {
-            arguments.add(args.get(i).getType().toString());
-        }
-        return new Method(retType, name, arguments);
-    }
-
-    public Method(MethodDeclaration method) {
-        _retType = method.getReturnType2() == null ? null : method.getReturnType2().toString();
-        _name = method.getName().getIdentifier();
-        List<SingleVariableDeclaration> args = method.parameters();
-        _argTypes = new ArrayList<>(args.size());
-        for (int i = 0; i < args.size(); i++) {
-            _argTypes.add(args.get(i).getType().toString());
-        }
     }
 
     public boolean argTypeSame(MethodDeclaration method) {

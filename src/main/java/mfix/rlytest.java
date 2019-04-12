@@ -5,8 +5,10 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.Method;
 import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
+import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.RepairMatcher;
 import mfix.core.pattern.Pattern;
@@ -22,7 +24,10 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class rlytest {
     final static String LOCAL_DATASET = Constant.RES_DIR + Constant.SEP + "SysEdit-part1";
@@ -58,27 +63,44 @@ public class rlytest {
         String buggy = m2.getFirst();
 
         Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
-        Node node = JavaFile.getNode(buggy, m2Func);
-        List<MatchInstance> set = new RepairMatcher().tryMatch(node, patterns.iterator().next());
-
+        MethDecl node = (MethDecl) JavaFile.getNode(buggy, m2Func);
+        if (patterns.isEmpty()) {
+            System.err.println("No pattern !");
+            return;
+        }
+        Pattern p = patterns.iterator().next();
+        List<MatchInstance> set = new RepairMatcher().tryMatch(node, p);
+        VarScope scope = varMaps.get(node.getStartLine());
+        scope.reset(p.getNewVars());
+        Set<String> already = new HashSet<>();
         for (MatchInstance instance : set) {
             instance.apply();
-            StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), instance.getStrMap(), "void",
-                    new HashSet<>());
+            StringBuffer buffer = node.adaptModifications(scope, instance.getStrMap(), node.getRetTypeStr(),
+                    new HashSet<>(node.getThrows()));
 
             instance.reset();
 
             String target = m2.getSecond();
             Node tar_node = JavaFile.getNode(target, m2Func);
 
-            if (buffer != null) {
-                System.out.println(tar_node.toString());
-                System.out.println("--------------");
-                System.out.println(buffer.toString());
-                System.out.println("-----end------");
+            if (buffer == null) {
+                System.err.println("Adaptation failed!");
+                continue;
             }
 
-            if (buffer != null && tar_node.toString().equals(buffer.toString())) {
+            String transformed = buffer.toString();
+            if (already.contains(transformed)) {
+                continue;
+            }
+            already.add(transformed);
+            String original = tar_node.toString();
+
+            TextDiff diff = new TextDiff(original, transformed);
+
+            System.out.println(diff.toString());
+            System.out.println("-----end------");
+
+            if (original.equals(transformed)) {
                 System.out.println("Correct!");
             } else {
                 System.out.println("Incorrect!");
@@ -91,7 +113,9 @@ public class rlytest {
     }
 
     public static Method json2method(JSONObject src) {
-        Method tmp = new Method(null, (String)src.get("name"), (List<String>)src.get("argTypes"));
+        List<String> args = (List<String>)src.get("argTypes");
+        args.remove("");
+        Method tmp = new Method(null, (String)src.get("name"), args);
         return new Method(findMethodFromFile(getPath(src), tmp));
     }
 
@@ -131,7 +155,7 @@ public class rlytest {
                 new Pair<>(getPath(q_src), getPath(q_tar)), q_m_src);
     }
     public static void main(String[] args) {
-        for (int i = 1; i <= 1; ++i) {
+        for (int i = 9; i <= 50; ++i) {
             String path = LOCAL_DATASET + String.format("/%d/info.json", i);
             if (new File(path).exists()) {
                 System.out.println("current: " + i);
