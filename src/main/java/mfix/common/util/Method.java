@@ -10,6 +10,7 @@ package mfix.common.util;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +40,18 @@ public class Method {
     public List<String> getArgTypes() {
         return _argTypes;
     }
+
+    public Method toMethod(MethodDeclaration method) {
+        String retType = method.getReturnType2() == null ? null : method.getReturnType2().toString();
+        String name = method.getName().getIdentifier();
+        List<SingleVariableDeclaration> args = method.parameters();
+        List<String> arguments = new ArrayList<>(args.size());
+        for (int i = 0; i < _argTypes.size(); i++) {
+            arguments.add(args.get(i).getType().toString());
+        }
+        return new Method(retType, name, arguments);
+    }
+
 
     public boolean same(MethodDeclaration method) {
         String retType = method.getReturnType2() == null ? null : method.getReturnType2().toString();
