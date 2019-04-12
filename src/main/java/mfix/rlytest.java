@@ -155,7 +155,7 @@ public class rlytest {
                 new Pair<>(getPath(q_src), getPath(q_tar)), q_m_src);
     }
     public static void main(String[] args) {
-        for (int i = 9; i <= 50; ++i) {
+        for (int i = 1; i <= 50; ++i) {
             String path = LOCAL_DATASET + String.format("/%d/info.json", i);
             if (new File(path).exists()) {
                 System.out.println("current: " + i);
@@ -165,6 +165,7 @@ public class rlytest {
                     e.printStackTrace();
                 }
             }
+//            break;
         }
     }
 }
