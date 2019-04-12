@@ -12,6 +12,8 @@ import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Blk;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Modification;
+import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -274,8 +276,18 @@ public class MethDecl extends Node {
 
     @Override
     public boolean genModifications() {
-        for(Node node : getAllChildren()) {
-            node.genModifications();
+        MethDecl methDecl = null;
+        for (Expr expr : _arguments) {
+            expr.genModifications();
+        }
+        if (!_body.genModifications()) {
+            if (getBindingNode() != null) {
+                methDecl = (MethDecl) getBindingNode();
+                Update update = new Update(this, _body, methDecl.getBody());
+                _modifications.add(update);
+            } else {
+                return false;
+            }
         }
         return true;
     }
@@ -332,11 +344,19 @@ public class MethDecl extends Node {
                 stringBuffer.append("," + _throws.get(i));
             }
         }
-        if(_body == null) {
+
+        if (_body == null) {
             stringBuffer.append(";");
         } else {
-            StringBuffer tmp = _body.adaptModifications(vars, exprMap, retType, exceptions);
-            if(tmp == null) return null;
+            List<Modification> modifications = getModifications();
+            StringBuffer tmp;
+            if (modifications.isEmpty()) {
+                tmp = _body.adaptModifications(vars, exprMap, retType, exceptions);
+            } else {
+                Update update = (Update) modifications.get(0);
+                tmp = update.apply(vars, exprMap, retType, exceptions);
+            }
+            if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
         return stringBuffer;
