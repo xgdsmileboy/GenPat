@@ -71,4 +71,27 @@ public class Method {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return _name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Method)) {
+            return false;
+        }
+        Method m = (Method) obj;
+        List<String> args = m.getArgTypes();
+        if (Utils.safeStringEqual(_retType, m.getRetType()) && _name.equals(m.getName())
+                && _argTypes.size() == args.size()) {
+            for (int i = 0; i < _argTypes.size(); i++) {
+                if (!Utils.safeStringEqual(_argTypes.get(i), args.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }
