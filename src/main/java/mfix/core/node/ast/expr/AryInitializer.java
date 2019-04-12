@@ -66,7 +66,8 @@ public class AryInitializer extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         if (_expressions.size() > 0) {
             List<StringBuffer> strings = new ArrayList<>(_expressions.size());
             for (int i = 0; i < _expressions.size(); i++) {

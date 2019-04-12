@@ -80,7 +80,8 @@ public class AryAcc extends Expr {
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         StringBuffer array, index;
-        boolean consider = parentConsidered || isConsidered();
+//        boolean consider = parentConsidered || isConsidered();
+        boolean consider = isConsidered();
         array = _array.formalForm(nameMapping, consider, keywords);
         index = _index.formalForm(nameMapping, consider, keywords);
         if (array == null && index == null) {
@@ -169,6 +170,18 @@ public class AryAcc extends Expr {
             _array.genModifications();
         }
         return true;
+    }
+
+    @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof AryAcc) {
+            AryAcc aryAcc = (AryAcc) node;
+            if (NodeUtils.matchSameNodeType(getArray(), aryAcc.getArray(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getIndex(), aryAcc.getIndex(), matchedNode, matchedStrings)) {
+                getArray().greedyMatchBinding(aryAcc.getArray(), matchedNode, matchedStrings);
+                getIndex().greedyMatchBinding(aryAcc.getIndex(), matchedNode, matchedStrings);
+            }
+        }
     }
 
     @Override

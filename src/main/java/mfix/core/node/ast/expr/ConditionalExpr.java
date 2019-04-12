@@ -81,7 +81,8 @@ public class ConditionalExpr extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         StringBuffer cond = _condition.formalForm(nameMapping, consider, keywords);
         StringBuffer first = _first.formalForm(nameMapping, consider, keywords);
         StringBuffer snd = _snd.formalForm(nameMapping, consider, keywords);
@@ -191,6 +192,20 @@ public class ConditionalExpr extends Expr {
             }
         }
         return true;
+    }
+
+    @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof ConditionalExpr) {
+            ConditionalExpr ce = (ConditionalExpr) node;
+            if (NodeUtils.matchSameNodeType(getCondition(), ce.getCondition(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getfirst(), ce.getfirst(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getSecond(), ce.getSecond(), matchedNode, matchedStrings)) {
+                getCondition().greedyMatchBinding(ce.getCondition(), matchedNode, matchedStrings);
+                getfirst().greedyMatchBinding(ce.getfirst(), matchedNode, matchedStrings);
+                getSecond().greedyMatchBinding(ce.getSecond(), matchedNode, matchedStrings);
+            }
+        }
     }
 
     @Override

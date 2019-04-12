@@ -10,12 +10,12 @@ package mfix.core.node.match;
 import mfix.TestCase;
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
+import mfix.common.util.Method;
 import mfix.common.util.Pair;
 import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
-import mfix.core.node.ast.stmt.ReturnStmt;
 import mfix.core.node.ast.stmt.SwCase;
 import mfix.core.node.ast.stmt.SwitchStmt;
 import mfix.core.node.diff.TextDiff;
@@ -33,6 +33,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -90,6 +91,20 @@ public class MatcherTest extends TestCase {
     }
 
     @Test
+    public void test_pattern_filtering() {
+        String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
+        String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
+
+
+        Method method = new Method("void", "onItemClick", Arrays.asList("AdapterView<?>", "View", "int", "long"));
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile, method);
+
+        // there is only one method changed
+        Assert.assertTrue(patterns.size() == 1);
+    }
+
+    @Test
     public void test_match_demo_fix() {
         String srcFile = testbase + Constant.SEP + "src_CustomSelectionPopUp.java";
         String tarFile = testbase + Constant.SEP + "tar_CustomSelectionPopUp.java";
@@ -132,13 +147,14 @@ public class MatcherTest extends TestCase {
                 "}\n" +
                 "}";
 
+        // THIS METHOD IS DEPRECATED
         Set<Pattern> matched = Matcher.filter(node, patterns);
         Assert.assertTrue(matched.size() == 1);
 
-        Set<MatchInstance> set = Matcher.tryMatch(node, matched.iterator().next());
+        List<MatchInstance> set = new RepairMatcher().tryMatch(node, matched.iterator().next());
         Assert.assertTrue(set.size() == 1);
 
-        MatchInstance instance = set.iterator().next();
+        MatchInstance instance = set.get(0);
         instance.apply();
         StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), instance.getStrMap(), "void",
                 new HashSet<>());
@@ -164,8 +180,8 @@ public class MatcherTest extends TestCase {
         Insertion insertion = (Insertion) modifications.get(0);
         Assert.assertTrue(insertion.getInsertedNode() instanceof SwCase);
         Assert.assertTrue(insertion.getParent() instanceof SwitchStmt);
-        Assert.assertTrue(insertion.getPrenode() instanceof ReturnStmt);
-        Assert.assertTrue(insertion.getNextnode() instanceof SwCase);
+        Assert.assertNull(insertion.getPrenode());
+        Assert.assertNull(insertion.getNextnode());
 
     }
 
@@ -213,11 +229,12 @@ public class MatcherTest extends TestCase {
 
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
+        RepairMatcher matcher = new RepairMatcher();
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
             Set<Pattern> matched = Matcher.filter(node, patterns);
             for (Pattern p : matched) {
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                List<MatchInstance> set = matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     Assert.assertTrue(node.adaptModifications(varMaps.get(node.getStartLine()),
@@ -225,41 +242,6 @@ public class MatcherTest extends TestCase {
                     matchInstance.reset();
                 }
             }
-        }
-    }
-
-    @Test
-    public void test_formal_form() {
-        String srcFile = testbase + Constant.SEP + "src_Project.java";
-        String tarFile = testbase + Constant.SEP + "tar_Project.java";
-
-        PatternExtractor extractor = new PatternExtractor();
-        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
-
-        /*  // Pattern form
-        METHOD(){
-            TYPE_0 listeners=EXPR_1;
-            for(EXPR_4;i<listeners.size();EXPR_5){}
-        }
-        */
-
-        String p1str = "METHOD\\(\\)\\{\n" +
-                "TYPE(_\\d+)?\\s{1}listeners=EXPR(_\\d+)?;\n" +
-                "for\\(EXPR(_\\d+)?;i<listeners.size\\(\\);EXPR(_\\d+)?\\)\\{\\}\n" +
-                "\\}";
-        String p2str = "METHOD\\(\\)\\{\n" +
-                "TYPE(_\\d+)?\\s{1}listeners=EXPR(_\\d+)?;\n" +
-                "synchronized\\(EXPR(_\\d+)?\\)\\{\n" +
-                "for\\(EXPR(_\\d+)?;i<listeners.size\\(\\);EXPR(_\\d+)?\\)\\{\\}\n" +
-                "\\}\n" +
-                "\\}";
-
-        java.util.regex.Pattern p1 = java.util.regex.Pattern.compile(p1str);
-        java.util.regex.Pattern p2 = java.util.regex.Pattern.compile(p2str);
-
-        for (Pattern p : patterns) {
-            String formal = p.formalForm().toString();
-            Assert.assertTrue(p1.matcher(formal).matches() || p2.matcher(formal).matches());
         }
     }
 
@@ -285,6 +267,7 @@ public class MatcherTest extends TestCase {
 
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
+        RepairMatcher matcher = new RepairMatcher();
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
             for (Pattern p : patterns) {
@@ -292,7 +275,7 @@ public class MatcherTest extends TestCase {
                 for (String ip : p.getImports()) {
                     b.append(ip).append(Constant.NEW_LINE);
                 }
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                List<MatchInstance> set = matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()),
@@ -308,11 +291,11 @@ public class MatcherTest extends TestCase {
         }
     }
 
-//    @Test
-    public void temp() {
+    @Test //three matches
+    public void test_sef_repair_without_filtering() {
         String srcFile = "resources/d4j-info/buggy_fix/buggy/chart/chart_1_buggy" +
                 "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
-        String tarFile = "resources/d4j-info/buggy_fix/fixed/chart/chart_1_buggy" +
+        String tarFile = "resources/d4j-info/buggy_fix/fixed/chart/chart_1_fixed" +
                 "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
 
         PatternExtractor extractor = new PatternExtractor();
@@ -333,16 +316,13 @@ public class MatcherTest extends TestCase {
             }
         });
 
-        for (Pattern pattern : patterns) {
-            System.out.println(pattern.formalForm());
-        }
-
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
+        RepairMatcher matcher = new RepairMatcher();
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
             for (Pattern p : patterns) {
-                Set<MatchInstance> set = Matcher.tryMatch(node, p);
+                List<MatchInstance> set = matcher.tryMatch(node, p);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
                     StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>(),
@@ -355,6 +335,99 @@ public class MatcherTest extends TestCase {
                 }
             }
         }
+    }
 
+    @Test  // only one matches
+    public void test_self_repair_with_line_filtering() {
+        String srcFile = "resources/d4j-info/buggy_fix/buggy/chart/chart_1_buggy" +
+                "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
+        String tarFile = "resources/d4j-info/buggy_fix/fixed/chart/chart_1_fixed" +
+                "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
+
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
+
+        String buggy = srcFile;
+        Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
+
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                if ("getLegendItems".equals(node.getName().getIdentifier())) {
+                    methods.add(node);
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        List<Integer> need2Match = new ArrayList<>(Arrays.asList(1797));
+        NodeParser parser = new NodeParser();
+        parser.setCompilationUnit(buggy, unit);
+        RepairMatcher matcher = new RepairMatcher();
+        for (MethodDeclaration m : methods) {
+            Node node = parser.process(m);
+            for (Pattern p : patterns) {
+                List<MatchInstance> set = matcher.tryMatch(node, p, need2Match);
+                for (MatchInstance matchInstance : set) {
+                    matchInstance.apply();
+                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>(),
+                            "Object", new HashSet<>());
+                    if (buffer != null) {
+                        TextDiff diff = new TextDiff(node.toSrcString().toString(), buffer.toString());
+                        System.out.println(diff.toString());
+                    }
+                    matchInstance.reset();
+                }
+            }
+        }
+    }
+
+//    @Test
+    public void temp() {
+        String srcFile = "resources/d4j-info/buggy_fix/buggy/chart/chart_1_buggy" +
+                "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
+        String tarFile = "resources/d4j-info/buggy_fix/fixed/chart/chart_1_fixed" +
+                "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
+
+        PatternExtractor extractor = new PatternExtractor();
+        Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
+
+        String buggy = srcFile;
+        Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
+
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
+        final Set<MethodDeclaration> methods = new HashSet<>();
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                if ("getLegendItems".equals(node.getName().getIdentifier())) {
+                    methods.add(node);
+                    return false;
+                }
+                return true;
+            }
+        });
+
+        List<Integer> need2Match = new ArrayList<>(Arrays.asList(1797));
+        NodeParser parser = new NodeParser();
+        parser.setCompilationUnit(buggy, unit);
+        RepairMatcher matcher = new RepairMatcher();
+        for (MethodDeclaration m : methods) {
+            Node node = parser.process(m);
+            for (Pattern p : patterns) {
+                List<MatchInstance> set = matcher.tryMatch(node, p, need2Match);
+                for (MatchInstance matchInstance : set) {
+                    matchInstance.apply();
+                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>(),
+                            "Object", new HashSet<>());
+                    if (buffer != null) {
+                        TextDiff diff = new TextDiff(node.toSrcString().toString(), buffer.toString());
+                        System.out.println(diff.toString());
+                    }
+                    matchInstance.reset();
+                }
+            }
+        }
     }
 }

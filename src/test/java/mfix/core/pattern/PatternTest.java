@@ -7,10 +7,9 @@
 
 package mfix.core.pattern;
 
+import mfix.TestCase;
 import mfix.common.conf.Constant;
 import mfix.common.util.Utils;
-import mfix.TestCase;
-import mfix.core.node.modify.Modification;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -64,7 +63,9 @@ public class PatternTest extends TestCase {
         Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
         for (Pattern pattern : patterns) {
-            for (Modification m : pattern.getAllModifications()) {
+            System.out.println(pattern.formalForm());
+            System.out.println(pattern.getPatternVector());
+            for (String m : pattern.formalModifications()) {
                 System.out.println(m);
             }
         }

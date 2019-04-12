@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.MType;
@@ -228,9 +229,23 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof VarDeclarationStmt) {
+			VarDeclarationStmt vds = (VarDeclarationStmt) node;
+			if (getFragments().size() == 1 && vds.getFragments().size() == 1
+					&& NodeUtils.matchSameNodeType(getFragments().get(0), vds.getFragments().get(0),
+					matchedNode, matchedStrings)) {
+				getFragments().get(0).greedyMatchBinding(vds.getFragments().get(0), matchedNode, matchedStrings);
+			} else {
+				super.greedyMatchBinding(node, matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof VarDeclarationStmt) {
-			return super.ifMatch(node, matchedNode, matchedStrings);
+			return super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}
@@ -365,7 +380,11 @@ public class VarDeclarationStmt extends Stmt {
 				list.stream().sorted(Comparator.comparingInt(Map.Entry::getKey));
 				for (Map.Entry<Integer, List<StringBuffer>> entry : list) {
 					for (StringBuffer s : entry.getValue()) {
-						stringBuffer.append(',').append(s);
+						if (!first) {
+							stringBuffer.append(',');
+						}
+						first = false;
+						stringBuffer.append(s);
 					}
 				}
 			}

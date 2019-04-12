@@ -8,6 +8,8 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
@@ -101,9 +103,22 @@ public class Vdf extends Node {
 	}
 
 	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		super.doAbstraction(abstracter);
+		if (isChanged() || isExpanded()) {
+			_abstract = _abstract && abstracter.shouldAbstract(_identifier, CodeAbstraction.Category.NAME_TOKEN);
+		}
+	}
+
+	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer identifier = _identifier.formalForm(nameMapping, consider, keywords);
+		if (identifier == null && !isAbstract()) {
+			keywords.add(_identifier.getName());
+			identifier = new StringBuffer(_identifier.getName());
+		}
 		StringBuffer exp = _expression == null ? null : _expression.formalForm(nameMapping, consider, keywords);
 		if (identifier == null && exp == null) {
 			if (isConsidered()) {
@@ -125,12 +140,13 @@ public class Vdf extends Node {
 
 	@Override
 	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
-		if (node == null || isConsidered() != node.isConsidered()) {
+		if (node == null || isConsidered() != node.isConsidered()
+				|| node.getNodeType() != TYPE.VARDECLFRAG) {
 			return false;
 		}
 		if (isConsidered()) {
-			if (getModifications().isEmpty() || node.getNodeType() == TYPE.VARDECLFRAG) {
-				return NodeUtils.patternMatch(this, node, matchedNode, false);
+			if (getModifications().isEmpty()) {
+				return NodeUtils.patternMatch(this, node, matchedNode);
 			}
 			return false;
 		}
@@ -213,8 +229,10 @@ public class Vdf extends Node {
 			match = (vdf == node);
 		} else if (canBinding(node)) {
 			vdf = (Vdf) node;
-			setBindingNode(node);
-			match = true;
+			if (getName().equals(vdf.getName())) {
+				setBindingNode(node);
+				match = true;
+			}
 		}
 		if (vdf == null) {
 			continueTopDownMatchNull();
@@ -231,43 +249,58 @@ public class Vdf extends Node {
 	public boolean genModifications() {
 		if (getBindingNode() != null) {
 			Vdf vdf = (Vdf) getBindingNode();
-			if (_identifier.compare(vdf._identifier)) {
-				if(_expression == null) {
-					if(vdf.getExpression() != null) {
-						Update update = new Update(this, _expression, vdf.getExpression());
-						_modifications.add(update);
-					}
-				} else if(_expression.getBindingNode() != vdf.getExpression()) {
+			if (!_identifier.compare(vdf._identifier)) {
+				Update update = new Update(this, _identifier, vdf._identifier);
+				_modifications.add(update);
+			}
+			if(_expression == null) {
+				if(vdf.getExpression() != null) {
 					Update update = new Update(this, _expression, vdf.getExpression());
 					_modifications.add(update);
-				} else if (vdf.getExpression() == null) {
-					Update update = new Update(this, _expression, null);
-					_modifications.add(update);
-				} else {
-					_expression.genModifications();
 				}
+			} else if(_expression.getBindingNode() != vdf.getExpression()) {
+				Update update = new Update(this, _expression, vdf.getExpression());
+				_modifications.add(update);
+			} else if (vdf.getExpression() == null) {
+				Update update = new Update(this, _expression, null);
+				_modifications.add(update);
+			} else {
+				_expression.genModifications();
 			}
 		}
 		return true;
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if (node instanceof Vdf) {
 			Vdf vdf = (Vdf) node;
-			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			if (NodeUtils.matchSameNodeType(getNameNode(), vdf.getNameNode(), matchedNode, matchedStrings)) {
+				if (getExpression() != null && vdf.getExpression() != null
+						&& NodeUtils.matchSameNodeType(getExpression(), vdf.getExpression(), matchedNode, matchedStrings)) {
+					getExpression().greedyMatchBinding(vdf.getExpression(), matchedNode, matchedStrings);
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+		if (node instanceof Vdf) {
+			Vdf vdf = (Vdf) node;
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_identifier, vdf._identifier, matchedNode, matchedStrings);
 			}
 		} else if (node.getNodeType() == TYPE.SINGLEVARDECL && _modifications.isEmpty()) {
 			Svd svd = (Svd) node;
-			if (NodeUtils.checkDependency(this, svd, matchedNode, matchedStrings)
+			if (NodeUtils.checkDependency(this, svd, matchedNode, matchedStrings, level)
 				&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_identifier, svd.getName(), matchedNode, matchedStrings);
 			}
 		} else if ((_expression != null) && (node.getNodeType() == TYPE.ASSIGN) && _modifications.isEmpty()) {
 			Assign assign = (Assign) node;
-			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_identifier, assign.getLhs(), matchedNode, matchedStrings);
 			}

@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.ExprList;
@@ -171,9 +172,9 @@ public class ConstructorInv extends Stmt {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof ConstructorInv) {
-            return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+            return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
                     && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
         }
         return false;

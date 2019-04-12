@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
@@ -55,6 +56,22 @@ public abstract class Operator extends Node {
 	}
 
 	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		if (isChanged()) {
+			_abstract = false;
+		}
+	}
+
+	@Override
+	public Set<Node> expand(Set<Node> nodes) {
+		super.expand(nodes);
+		if (isChanged()) {
+			nodes.addAll(getParent().getAllChildren());
+		}
+		return nodes;
+	}
+
+	@Override
 	public boolean postAccurateMatch(Node node) {
 		if (getBindingNode() == node) return true;
 		if (getBindingNode() == null && canBinding(node)
@@ -87,8 +104,11 @@ public abstract class Operator extends Node {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		if (isConsidered()) {
-			return this.toSrcString();
+		if (isChanged()) {
+			keywords.add(toSrcString().toString());
+			return toSrcString();
+		} else if (isConsidered()) {
+			return new StringBuffer(nameMapping.getOpID(this));
 		} else {
 			return null;
 		}
@@ -96,9 +116,9 @@ public abstract class Operator extends Node {
 
 	@Override
 	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
-		if (node == null || isConsidered() != node.isConsidered()) {
+		if (node == null || isConsidered() != node.isConsidered() || node.getNodeType() != getNodeType()) {
 			return false;
 		}
-		return NodeUtils.patternMatch(this, node, matchedNode, false);
+		return NodeUtils.patternMatch(this, node, matchedNode);
 	}
 }

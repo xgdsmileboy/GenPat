@@ -51,8 +51,17 @@ public class NumLiteral extends Expr {
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 //		return leafFormalForm(nameMapping, parentConsidered, keywords);
-		if (isConsidered()) {
-			return new StringBuffer(nameMapping.getExprID(this));
+		if (isChanged()) {
+			keywords.add(toString());
+			return toSrcString();
+		} else if (isConsidered()) {
+			StringBuffer buffer = new StringBuffer();
+			if (!_abstractType) {
+				keywords.add(_exprTypeStr);
+				buffer.append(_exprTypeStr).append("::");
+			}
+			buffer.append(nameMapping.getExprID(this));
+			return buffer;
 		} else {
 			return null;
 		}
@@ -92,8 +101,10 @@ public class NumLiteral extends Expr {
 	public boolean postAccurateMatch(Node node) {
 		if (getBindingNode() == node) return true;
 		if (getBindingNode() == null && canBinding(node)) {
-			setBindingNode(node);
-			return true;
+			if (node.toSrcString().toString().equals(toSrcString().toString())) {
+				setBindingNode(node);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -111,11 +122,7 @@ public class NumLiteral extends Expr {
 
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
-		if (stringBuffer == null) {
-			stringBuffer = toSrcString();
-		}
-		return stringBuffer;
+		return toSrcString();
 	}
 
 	@Override

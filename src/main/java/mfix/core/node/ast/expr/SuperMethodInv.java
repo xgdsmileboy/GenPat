@@ -84,7 +84,8 @@ public class SuperMethodInv extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer label = null;
 		if (_label != null) {
 			label = _label.formalForm(nameMapping, consider, keywords);
@@ -154,6 +155,11 @@ public class SuperMethodInv extends Expr {
 		children.add(_name);
 		children.add(_arguments);
 		return children;
+	}
+
+	@Override
+	public String getAPIStr() {
+		return _name.getName();
 	}
 
 	public List<Node> flattenTreeNode(List<Node> nodes) {

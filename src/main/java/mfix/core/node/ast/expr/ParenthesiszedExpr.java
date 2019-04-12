@@ -59,7 +59,8 @@ public class ParenthesiszedExpr extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer buffer = _expression.formalForm(nameMapping, consider, keywords);
 		if (buffer != null) {
 			if (nameMapping.isPlaceHolder(buffer.toString())) {
@@ -140,6 +141,16 @@ public class ParenthesiszedExpr extends Expr {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof ParenthesiszedExpr) {
+			ParenthesiszedExpr pe = (ParenthesiszedExpr) node;
+			if (NodeUtils.matchSameNodeType(getExpression(), pe.getExpression(), matchedNode, matchedStrings)) {
+				getExpression().greedyMatchBinding(pe.getExpression(), matchedNode, matchedStrings);
+			}
+		}
 	}
 
 	@Override

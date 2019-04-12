@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,7 +70,8 @@ public class RepairTest extends TestCase {
     @Test
     public void test_chart_4() {
         // success repair
-        test("chart", 4);
+//        test("chart", 4);
+        test("chart", 4, Arrays.asList(4493));
     }
 
     @Test
@@ -84,6 +86,10 @@ public class RepairTest extends TestCase {
     }
 
     private void test(String proj, int id) {
+        test(proj, id, null);
+    }
+
+    private void test(String proj, int id, List<Integer> buggyLines) {
         String buggyFile = Utils.join(Constant.SEP, base, proj + "_" + id, "buggy.java");
         String fixedFile = Utils.join(Constant.SEP, base, proj + "_" + id, "fixed.java");
         PatternExtractor extractor = new PatternExtractor();
@@ -110,7 +116,7 @@ public class RepairTest extends TestCase {
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             for (Pattern p : list) {
                 scope.reset(p.getNewVars());
-                repair.tryFix(node, p, scope, clazzFile, retType, exceptions);
+                repair.tryFix(node, p, scope, clazzFile, retType, exceptions, buggyLines);
             }
         }
         subject.restore();

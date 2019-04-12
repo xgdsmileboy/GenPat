@@ -31,7 +31,15 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import javax.management.relation.Relation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: Jiajun
@@ -180,154 +188,6 @@ public class Matcher {
         return nodes;
     }
 
-    /**
-     * Try to figure out all possible matching solutions between
-     * buggy node {@code buggy} and pattern node {@code pattern}.
-     *
-     * @param buggy   : buggy node
-     * @param pattern : pattern node
-     * @return : a set of possible solutions
-     */
-    public static Set<MatchInstance> tryMatch(Node buggy, Pattern pattern) {
-        List<Node> bNodes = new ArrayList<>(buggy.flattenTreeNode(new LinkedList<>()));
-        List<Node> pNodes = new ArrayList<>(pattern.getConsideredNodes());
-
-        int bSize = bNodes.size();
-        int pSize = pNodes.size();
-
-        ArrayList<MatchList> matchLists = new ArrayList<>(pSize);
-        Map<Node, Node> nodeMap;
-        Map<String, String> strMap;
-        for (int i = 0; i < pSize; i++) {
-            List<MatchNode> matchNodes = new LinkedList<>();
-            for (int j = 0; j < bSize; j++) {
-                nodeMap = new HashMap<>();
-                strMap = new HashMap<>();
-                if (pNodes.get(i).ifMatch(bNodes.get(j), nodeMap, strMap)) {
-                    matchNodes.add(new MatchNode(bNodes.get(j), nodeMap, strMap));
-                }
-            }
-            if (matchNodes.isEmpty()) {
-                return new HashSet<>();
-            }
-            matchLists.add(new MatchList(pNodes.get(i)).setMatchedNodes(matchNodes));
-        }
-
-        Collections.sort(matchLists, new Comparator<MatchList>() {
-            @Override
-            public int compare(MatchList o1, MatchList o2) {
-                return o1.getMatchedNodes().size() - o2.getMatchedNodes().size();
-            }
-        });
-
-        return permutePossibleMatches(matchLists);
-    }
-
-    /**
-     * Given the node matching result {@code matchLists},
-     * permute all possible matching solutions.
-     *
-     * @param matchLists : node matching result
-     * @return : all possible matching solutions
-     */
-    private static Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists) {
-        Set<MatchInstance> results = new HashSet<>();
-        matchNext(new HashMap<>(), matchLists, 0, new HashSet<>(), results);
-        return results;
-    }
-
-    /**
-     * Recursively match each node in the pattern based on the matching result in {@code list}
-     *
-     * @param matchedNodeMap : already matched node maps
-     * @param list           : contains all nodes can be matched for each node in the pattern
-     * @param i              : index of pattern node in {@code list} to match
-     * @param alreadyMatched : a set of node to contain already matched node in the buggy code
-     *                       to avoid duplicate matching.
-     * @param instances      : contains possible matching solutions
-     */
-    private static void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
-                                  Set<Node> alreadyMatched, Set<MatchInstance> instances) {
-        if (i == list.size()) {
-            Map<Node, Node> nodeMap = new HashMap<>();
-            Map<String, String> strMap = new HashMap<>();
-            for (Map.Entry<Node, MatchNode> entry : matchedNodeMap.entrySet()) {
-                nodeMap.putAll(entry.getValue().getNodeMap());
-                strMap.putAll(entry.getValue().getStrMap());
-            }
-            MatchInstance matchInstance = new MatchInstance(nodeMap, strMap);
-            instances.add(matchInstance);
-        } else {
-            Iterator<MatchNode> itor = list.get(i).getIterator();
-            Node toMatch, curNode = list.get(i).getNode();
-            MatchNode curMatchNode;
-            while (itor.hasNext()) {
-                curMatchNode = itor.next();
-                toMatch = curMatchNode.getNode();
-                if (alreadyMatched.contains(toMatch)) {
-                    continue;
-                }
-                if (checkCompatibility(matchedNodeMap, curNode, curMatchNode)) {
-                    matchedNodeMap.put(curNode, curMatchNode);
-                    alreadyMatched.add(toMatch);
-                    matchNext(matchedNodeMap, list, i + 1, alreadyMatched, instances);
-                    matchedNodeMap.remove(curNode);
-                    alreadyMatched.remove(toMatch);
-                }
-            }
-        }
-    }
-
-    /**
-     * Given already matched node pairs {@code matchedNodeMap},
-     * checking syntax relation and dependency relation compatibility
-     * for the new match between {@code curNode} and {@code curMatchNode}.
-     *
-     * @param matchedNodeMap : already matched node pairs
-     * @param curNode        : current node under match (in pattern)
-     * @param curMatchNode   : the node to match (in buggy code)
-     * @return : {@code true} if node {@code curNode} can match {@code curMatchNode},
-     * otherwise {@code false}
-     */
-    private static boolean checkCompatibility(Map<Node, MatchNode> matchedNodeMap, Node curNode,
-                                              MatchNode curMatchNode) {
-        Node node, previous;
-        MatchNode matchNode;
-        Node toMatch = curMatchNode.getNode();
-        for (Map.Entry<Node, MatchNode> entry : matchedNodeMap.entrySet()) {
-            node = entry.getKey();
-            matchNode = entry.getValue();
-            previous = matchNode.getNode();
-            if ((node.isParentOf(curNode) && !previous.isParentOf(toMatch))
-                    || (curNode.isParentOf(node) && !toMatch.isParentOf(previous))
-                    || (dataDependOn(node, curNode) && !dataDependOn(previous, toMatch))
-                    || (dataDependOn(curNode, node) && !dataDependOn(toMatch, previous))) {
-//                    || (node.isDataDependOn(curNode) && !previous.isDataDependOn(toMatch))
-//                    || (curNode.isDataDependOn(node) && !toMatch.isDataDependOn(previous))) {
-//                    || node.isControlDependOn(curNode) != previous.isControlDependOn(toMatch)){
-                return false;
-            }
-            Map<Node, Node> nodeMap = matchNode.getNodeMap();
-            for (Map.Entry<Node, Node> inner : curMatchNode.getNodeMap().entrySet()) {
-                if (nodeMap.containsKey(inner.getKey()) && nodeMap.get(inner.getKey()) != inner.getValue()) {
-                    return false;
-                }
-            }
-            Map<String, String> strMap = matchNode.getStrMap();
-            for (Map.Entry<String, String> inner : curMatchNode.getStrMap().entrySet()) {
-                if (strMap.containsKey(inner.getKey()) && !strMap.get(inner.getKey()).equals(inner.getValue())) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private static boolean dataDependOn(Node src, Node dep) {
-        Set<Node> nodes = src.recursivelyGetDataDependency(new HashSet<>());
-        return nodes.contains(dep);
-    }
-
     private static Map<Relation, Integer> mapRelation2LstIndex(List<Relation> relations) {
         Map<Relation, Integer> map = new HashMap<>();
         if (relations != null) {
@@ -361,7 +221,8 @@ public class Matcher {
                 notmatched = false;
             } else {
                 for (int j = 0; j < tarStmt.size(); j++) {
-                    if (!tarMatched.contains(j) && srcStmt.get(i).compare(tarStmt.get(j))) {
+                    if (!tarMatched.contains(j) && tarStmt.get(j).getBindingNode() == null
+                            && srcStmt.get(i).compare(tarStmt.get(j))) {
                         srcStmt.get(i).setBindingNode(tarStmt.get(j));
                         srcStmt.get(i).postAccurateMatch(tarStmt.get(j));
                         tarMatched.add(j);
@@ -393,7 +254,8 @@ public class Matcher {
             for (int i = 0; i < srcExprs.size(); i++) {
                 if (srcExprs.get(i).getBindingNode() == null) {
                     for (int j = 0; j < tarExprs.size(); j++) {
-                        if (!matchedIndex.contains(j) && srcExprs.get(i).compare(tarExprs.get(j))) {
+                        if (!matchedIndex.contains(j) && tarExprs.get(j).getBindingNode() == null
+                                && srcExprs.get(i).compare(tarExprs.get(j))) {
                             srcExprs.get(i).setBindingNode(tarExprs.get(j));
                             matchedIndex.add(j);
                             break;
@@ -406,8 +268,12 @@ public class Matcher {
         src.postAccurateMatch(tar);
         src.genModifications();
         Set<Modification> modifications = src.getAllModifications(new HashSet<>());
-        // System.exit(0);
-        java.util.regex.Pattern avoid = java.util.regex.Pattern.compile("System\\.exit\\(\\d+\\);");
+        if (modifications.isEmpty()) {
+            return false;
+        }
+        // System.exit/out/error, Log(),LOG();
+        final String string = "(System\\.(exit|out|error).*|(Log|LOG)(\\.|\\().*)";
+        java.util.regex.Pattern avoid = java.util.regex.Pattern.compile(string);
         for (Modification m : modifications) {
             if(m instanceof Insertion) {
                 Insertion insertion = (Insertion) m;
@@ -570,31 +436,11 @@ public class Matcher {
     }
 
     public static Map<Integer, Integer> match(Object[] src, Object[] tar) {
-        return match(Arrays.asList(src), Arrays.asList(tar), new Comparator<Object>() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                if (o1.equals(o2)) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-
-            ;
-        });
+        return match(Arrays.asList(src), Arrays.asList(tar), (o1, o2) -> o1.equals(o2) ? 1 : 0);
     }
 
     public static Map<Integer, Integer> match(List<Stmt> src, List<Stmt> tar) {
-        return match(src, tar, new Comparator<Stmt>() {
-            @Override
-            public int compare(Stmt o1, Stmt o2) {
-                if (o1.compare(o2)) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
+        return match(src, tar, (o1, o2) -> o1.compare(o2) ? 1 : 0);
     }
 
     enum Direction {
@@ -703,10 +549,11 @@ public class Matcher {
                 }
                 if (index < 0) return false;
                 List<Node> toWrap = new LinkedList<>();
+                toWrap.add(node);
                 Set<String> set = getDefVars(node);
-                for (index ++; index < statements.size(); index ++) {
+                for (index++; index < statements.size(); index++) {
                     if (statements.get(index).flattenTreeNode(new LinkedList<>())
-                            .stream().anyMatch(n-> NodeUtils.isSimpleExpr(n)
+                            .stream().anyMatch(n -> NodeUtils.isSimpleExpr(n)
                                     && set.contains(n.toSrcString().toString()))) {
                         toWrap.add(statements.get(index));
                         set.addAll(getDefVars(statements.get(index)));
@@ -776,7 +623,7 @@ public class Matcher {
                         }
                     }
                 }
-                if (afterIndex < beforeIndex) {
+                if (afterIndex < beforeIndex || (afterIndex * beforeIndex <= 0)) {
                     if (beforeIndex >= 0) {
                         List<StringBuffer> list = insertionBefore.get(statements.get(beforeIndex));
                         if (list == null) {
@@ -792,15 +639,13 @@ public class Matcher {
                         }
                         list.add(tmp);
                     }
-                } else if (before.isEmpty() && after.isEmpty()){
+                } else {
                     List<StringBuffer> list = insertAt.get(insertion.getIndex());
                     if (list == null) {
                         list = new LinkedList<>();
                         insertAt.put(insertion.getIndex(), list);
                     }
                     list.add(tmp);
-                } else {
-                    return false;
                 }
             }
         }

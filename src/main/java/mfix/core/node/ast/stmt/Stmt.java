@@ -7,6 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -38,8 +39,8 @@ public abstract class Stmt extends Node {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+		return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 				&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 	}
 
@@ -48,10 +49,11 @@ public abstract class Stmt extends Node {
 		if (node != null && isConsidered() == node.isConsidered() && (node instanceof Stmt)) {
 			if (isConsidered()) {
 				return node.getNodeType() == getNodeType()
-						&& NodeUtils.patternMatch(this, node, matchedNode, true);
+						&& NodeUtils.patternMatch(this, node, matchedNode);
 			}
 			return true;
 		}
 		return false;
 	}
+
 }

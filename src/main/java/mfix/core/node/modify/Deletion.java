@@ -1,8 +1,10 @@
 package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
+import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 
+import java.util.HashSet;
 import java.util.Map;
 
 public class Deletion extends Modification {
@@ -38,6 +40,11 @@ public class Deletion extends Modification {
             return getDelNode().patternMatch(deletion.getDelNode(), matchedNode);
         }
         return false;
+    }
+
+    @Override
+    public String formalForm() {
+        return "[DEL]" + _node2Del.formalForm(new NameMapping(), false, new HashSet<>());
     }
 
     @Override

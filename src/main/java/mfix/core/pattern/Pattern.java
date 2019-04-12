@@ -12,7 +12,10 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.Variable;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Deletion;
+import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
+import mfix.core.node.modify.Wrap;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.Vector;
 import mfix.core.pattern.match.PatternMatcher;
@@ -22,6 +25,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,6 +47,7 @@ public class Pattern implements PatternMatcher, Serializable {
     private transient NameMapping _nameMapping;
     private transient Set<String> _keywords;
     private transient Set<String> _targetKeywords;
+    private transient Set<Modification> _modifications;
 
     public Pattern(Node pNode) {
         this(pNode, new HashSet<>());
@@ -112,7 +118,10 @@ public class Pattern implements PatternMatcher, Serializable {
     }
 
     public Set<Modification> getAllModifications() {
-        return _patternNode.getAllModifications(new LinkedHashSet<>());
+        if (_modifications == null) {
+            _modifications = _patternNode.getAllModifications(new LinkedHashSet<>());
+        }
+        return _modifications;
     }
 
     public Set<MethodInv> getUniversalAPIs() {
@@ -133,6 +142,15 @@ public class Pattern implements PatternMatcher, Serializable {
         return _patternNode.formalForm(_nameMapping, false, _keywords);
     }
 
+    public List<String> formalModifications() {
+        List<String> strings = new LinkedList<>();
+        formalForm();
+        for (Modification m : getAllModifications()) {
+            strings.add(m.formalForm());
+        }
+        return strings;
+    }
+
     public Set<Node> getConsideredNodes() {
         return _patternNode.getConsideredNodesRec(new HashSet<>(), true);
     }
@@ -143,6 +161,41 @@ public class Pattern implements PatternMatcher, Serializable {
         for (Node node : getConsideredNodes()) {
             _fVector.combineFeature(node.getSingleFeatureVector());
         }
+    }
+
+    private boolean possibleSameModification(Pattern p) {
+        Set<Modification> modifications = getAllModifications();
+        Set<Modification> pmodifications = p.getAllModifications();
+
+        if (modifications.size() != modifications.size()) {
+            return false;
+        }
+
+        int insCount = 0, delCount = 0, updCount = 0, wrapCount = 0;
+        for (Modification m : modifications) {
+            if (m instanceof Wrap) {
+                wrapCount ++;
+            } else if (m instanceof Insertion) {
+                insCount ++;
+            } else if (m instanceof Deletion) {
+                delCount ++;
+            } else {
+                updCount ++;
+            }
+        }
+
+        for (Modification m : pmodifications) {
+            if (m instanceof Wrap) {
+                wrapCount --;
+            } else if (m instanceof Insertion) {
+                insCount --;
+            } else if (m instanceof Deletion) {
+                delCount --;
+            } else {
+                updCount --;
+            }
+        }
+        return insCount == 0 && delCount == 0 && updCount == 0 && wrapCount == 0;
     }
 
     @Override
@@ -161,7 +214,7 @@ public class Pattern implements PatternMatcher, Serializable {
             return false;
         }
 
-        if (getAllModifications().size() != p.getAllModifications().size()) {
+        if (!possibleSameModification(p)) {
             return false;
         }
 
@@ -174,10 +227,14 @@ public class Pattern implements PatternMatcher, Serializable {
 
         boolean match;
         Map<Node, Node> map = new Hashtable<>();
+        Map<Node, Node> temp = new Hashtable<>();
         for (Node node : nodes) {
             match = false;
             for (Iterator<Node> iter = others.iterator(); iter.hasNext();) {
-                if (node.patternMatch(iter.next(), map)) {
+                temp.clear();
+                temp.putAll(map);
+                if (node.patternMatch(iter.next(), temp)) {
+                    map.putAll(temp);
                     match = true;
                     iter.remove();
                     break;

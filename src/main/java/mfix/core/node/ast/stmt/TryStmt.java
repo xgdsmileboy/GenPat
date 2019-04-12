@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.conf.Constant;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.VarDeclarationExpr;
@@ -356,14 +357,14 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof TryStmt) {
 			TryStmt tryStmt = (TryStmt) node;
-			boolean match = _blk.ifMatch(tryStmt.getBody(), matchedNode, matchedStrings);
+			boolean match = _blk.ifMatch(tryStmt.getBody(), matchedNode, matchedStrings, level);
 			if(_finallyBlk != null && tryStmt.getFinally() != null) {
-				match = match && _finallyBlk.ifMatch(tryStmt.getFinally(), matchedNode, matchedStrings);
+				match = match && _finallyBlk.ifMatch(tryStmt.getFinally(), matchedNode, matchedStrings, level);
 			}
-			return match && super.ifMatch(node, matchedNode, matchedStrings);
+			return match && super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}
@@ -394,11 +395,6 @@ public class TryStmt extends Stmt {
 				stringBuffer.append(tmp);
 			} else {
 				stringBuffer.append("{").append(Constant.NEW_LINE);
-				for (Stmt stmt : _blk.getStatement()) {
-					tmp = stmt.transfer(vars, exprMap, retType, exceptions);
-					if (tmp == null) return null;
-					stringBuffer.append(tmp).append(Constant.NEW_LINE);
-				}
 				for (Node node : nodes) {
 					stringBuffer.append(node.toSrcString().toString()).append(Constant.NEW_LINE);
 				}

@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -255,17 +256,28 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof IfStmt) {
 			IfStmt ifStmt = (IfStmt) node;
-			boolean match = _condition.ifMatch(ifStmt.getCondition(), matchedNode, matchedStrings);
-			match = match && _then.ifMatch(ifStmt.getThen(), matchedNode, matchedStrings);
+			boolean match = _condition.ifMatch(ifStmt.getCondition(), matchedNode, matchedStrings, level);
+			match = match && _then.ifMatch(ifStmt.getThen(), matchedNode, matchedStrings, level);
 			if(_else != null && ifStmt.getElse() != null) {
-				match = match && _else.ifMatch(ifStmt.getElse(), matchedNode, matchedStrings);
+				match = match && _else.ifMatch(ifStmt.getElse(), matchedNode, matchedStrings, level);
 			}
-			return match && super.ifMatch(node, matchedNode, matchedStrings);
+			return match && super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
+	}
+
+	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof IfStmt) {
+			IfStmt ifStmt = (IfStmt) node;
+			if (NodeUtils.matchSameNodeType(getCondition(), ifStmt.getCondition(), matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(getThen(), ifStmt.getThen(), matchedNode, matchedStrings)) {
+				getCondition().greedyMatchBinding(ifStmt.getCondition(), matchedNode, matchedStrings);
+			}
+		}
 	}
 
 	@Override
@@ -278,30 +290,11 @@ public class IfStmt extends Stmt {
 		stringBuffer.append(tmp);
 		stringBuffer.append(")");
 		stringBuffer.append("{" + Constant.NEW_LINE);
-		if (_then.getNodeType() == TYPE.BLOCK) {
-			Blk blk = (Blk) _then;
-			List<Stmt> stmts = blk.getStatement();
-			for (int i = 0; i < stmts.size(); i++) {
-				tmp = stmts.get(i).transfer(vars, exprMap, retType, exceptions);
-				if(tmp == null) return null;
-				stringBuffer.append(tmp).append(Constant.NEW_LINE);
-			}
-		} else {
-			tmp = _then.transfer(vars, exprMap, retType, exceptions);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp).append(Constant.NEW_LINE);
-		}
 		for (Node n : nodes) {
 			stringBuffer.append(n.toSrcString().toString())
 					.append(Constant.NEW_LINE);
 		}
 		stringBuffer.append("}");
-		if(_else != null) {
-			stringBuffer.append("else ");
-			tmp = _else.transfer(vars, exprMap, retType, exceptions);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp);
-		}
 		return stringBuffer;
 	}
 

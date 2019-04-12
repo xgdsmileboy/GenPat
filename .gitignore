@@ -2,9 +2,9 @@
 /logs
 /log
 /patch
+/result
 /tmp
 /sbfl/data
-d4j-info/realtime/location/
 sbfl/ochiai
 sbfl/spectra
 /target
@@ -16,6 +16,7 @@ sbfl/spectra
 /resources/**/build
 /resources/**/build-tests
 /resources/**/target
-resources/db
+/resources/db/AllTokens.txt
+/resources/d4j-info/location/realtime
 *.log
 

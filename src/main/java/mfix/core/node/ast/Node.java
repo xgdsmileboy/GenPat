@@ -6,12 +6,10 @@
  */
 package mfix.core.node.ast;
 
-import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
-import mfix.core.node.ast.expr.Operator;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.ast.visitor.NodeVisitor;
@@ -20,7 +18,6 @@ import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.Vector;
-import mfix.core.stats.element.ElementCounter;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.io.Serializable;
@@ -486,13 +483,37 @@ public abstract class Node implements NodeComparator, Serializable {
         return null;
     }
 
-    public boolean isConsidered() {
-        return _expanded || _changed || _insertDepend || _bindingNode == null;
+    public void setExpanded() {
+        _expanded = true;
     }
 
-    public void setConsidered(boolean considered) {
-        _expanded = considered;
+    public boolean isInsertDep() {
+        return _insertDepend;
     }
+
+    public boolean noBinding() {
+        return _bindingNode == null;
+    }
+
+    public boolean noBindingTree() {
+        boolean noBinding = false;
+        if (noBinding()) {
+            noBinding = true;
+            for (Node node : getAllChildren()) {
+                noBinding = noBinding && node.noBindingTree();
+            }
+        }
+        return noBinding;
+    }
+
+
+    public boolean isConsidered() {
+        return _expanded || _changed || _insertDepend;
+    }
+
+//    public void setConsidered(boolean considered) {
+//        _expanded = considered;
+//    }
 
     public void setInsertDepend(boolean insertDepend) {
         _insertDepend = insertDepend;
@@ -523,7 +544,7 @@ public abstract class Node implements NodeComparator, Serializable {
      * @return : a set of nodes
      */
     public Set<Node> getConsideredNodesRec(Set<Node> nodes, boolean includeExpanded) {
-        if (_bindingNode == null) {
+        if (noBinding()) {
             nodes.add(this);
         } else {
             if ((includeExpanded && _expanded) || _changed || _insertDepend
@@ -532,8 +553,10 @@ public abstract class Node implements NodeComparator, Serializable {
             }
         }
 
-        for (Node node : getAllChildren()) {
-            node.getConsideredNodesRec(nodes, includeExpanded);
+        if (!noBindingTree()) {
+            for (Node node : getAllChildren()) {
+                node.getConsideredNodesRec(nodes, includeExpanded);
+            }
         }
         return nodes;
     }
@@ -551,15 +574,16 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     private boolean controlDependencyChanged() {
-        if (getControldependency() == null) {
-            if (_bindingNode.getControldependency() != null) {
-                return true;
-            }
-        } else if (getControldependency().getBindingNode()
-                != _bindingNode.getControldependency()
-                || _bindingNode.getControldependency() == null) {
-            return true;
-        }
+//        if (getControldependency() == null) {
+//            if (_bindingNode.getControldependency() != null) {
+//                return true;
+//            }
+//        }
+//        else if (getControldependency().getBindingNode()
+//                != _bindingNode.getControldependency()
+//                || _bindingNode.getControldependency() == null) {
+//            return true;
+//        }
         return false;
     }
 
@@ -583,7 +607,7 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     private void expandDependency(Set<Node> nodes) {
         if (_datadependency != null) {
-            _datadependency.setConsidered(true);
+            _datadependency.setExpanded();
             nodes.add(_datadependency);
         }
 //        if (_controldependency != null) {
@@ -599,7 +623,7 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     private void expandTopDown(Set<Node> nodes) {
         for (Node node : getAllChildren()) {
-            node.setConsidered(true);
+            node.setExpanded();
         }
         nodes.addAll(getAllChildren());
     }
@@ -611,7 +635,7 @@ public abstract class Node implements NodeComparator, Serializable {
      */
     private void expandBottomUp(Set<Node> nodes) {
         if (_parent != null) {
-            _parent.setConsidered(true);
+            _parent.setExpanded();
             nodes.add(_parent);
         }
     }
@@ -687,40 +711,17 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     /**
-     * abstract node with the given {@code counter}
-     * NOTE : this method is designed for API abstraction
+     * abstract node with the given {@code abstracter}
+     * NOTE : this method is designed for node abstraction
      * and will not be used later
      *
-     * @param counter : ElementCounter for node abstraction
+     * @param abstracter: abstracter for code abstraction
      */
-    public void doAbstraction(ElementCounter counter) {
+    public void doAbstraction(CodeAbstraction abstracter) {
+        _abstract = true;
         for (Node node : getAllChildren()) {
-            node.doAbstraction(counter);
-        }
-    }
-
-    /**
-     * abstract node with the given {@code abstraction} object
-     * this method performs token level abstraction
-     *
-     * @param abstraction : the object to abstract node
-     */
-    public void doAbstractionNew(CodeAbstraction abstraction) {
-        if (this instanceof Operator) {
-            _abstract = true;
-        } else {
-            // is the node is simple/leaf node, we perform node abstraction
-            // otherwise, whether the node is abstract or not depends on the
-            // nodes in the subtree
-            if (NodeUtils.isSimpleExpr(this)) {
-                _abstract = abstraction.shouldAbstract(this);
-            } else {
-                _abstract = true;
-                for (Node node : getAllChildren()) {
-                    node.doAbstractionNew(abstraction);
-                    _abstract = _abstract && node.isAbstract();
-                }
-            }
+            node.doAbstraction(abstracter);
+            _abstract = _abstract && node.isAbstract();
         }
     }
 
@@ -758,26 +759,8 @@ public abstract class Node implements NodeComparator, Serializable {
     protected abstract StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered,
                                                   Set<String> keywords);
 
-    public Set<Pair<String, Integer>> getUniversalAPIs(boolean isPattern, Set<Pair<String, Integer>> set) {
-        Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
-        for (MethodInv m : mSet) {
-            set.add(new Pair<>(m.getName().getName(), m.getArguments().getExpr().size()));
-        }
-        return set;
-    }
-
-    public Set<Pair<Pair<String, Integer>, String>> getUniversalAPIsWithType(boolean isPattern,
-                                                                             Set<Pair<Pair<String, Integer>, String>> set) {
-        Set<MethodInv> mSet = getUniversalAPIs(new HashSet<>(), isPattern);
-        for (MethodInv m : mSet) {
-            set.add(new Pair<>(new Pair<>(m.getName().getName(), m.getArguments().getExpr().size()),
-                    m.getExpression().getTypeString()));
-        }
-        return set;
-    }
-
     public Set<MethodInv> getUniversalAPIs(Set<MethodInv> set, boolean isPattern) {
-        if (!isPattern || (isConsidered() && !isAbstract())) {
+        if (!isPattern || ((isChanged() || isExpanded() || isInsertDep() || noBinding()) && !isAbstract())) {
             if (this instanceof MethodInv) {
                 set.add((MethodInv) this);
             }
@@ -786,6 +769,18 @@ public abstract class Node implements NodeComparator, Serializable {
             node.getUniversalAPIs(set, isPattern);
         }
         return set;
+    }
+
+    public String getTypeStr() {
+        return null;
+    }
+
+    public String getAPIStr() {
+        return null;
+    }
+
+    public String getNameStr() {
+        return null;
     }
 
     /*********************************************************/
@@ -842,11 +837,17 @@ public abstract class Node implements NodeComparator, Serializable {
         return _buggyBinding;
     }
 
-    public boolean isBoundBuggy() {
-        return _buggyBinding != null;
+    public boolean noBuggyBinding() {
+        return _buggyBinding == null;
     }
 
-    public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings);
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode,
+                                            Map<String, String> matchedStrings) {
+        NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+    }
+
+    public abstract boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings,
+                                    MatchLevel level);
 
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
                                  List<Node> nodes) {

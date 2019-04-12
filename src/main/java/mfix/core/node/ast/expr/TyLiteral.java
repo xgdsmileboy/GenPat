@@ -6,6 +6,9 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -56,8 +59,17 @@ public class TyLiteral extends Expr {
 	}
 
 	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		if (isConsidered()) {
+			_abstract = abstracter.shouldAbstract(NodeUtils.distillBasicType(_type),
+					CodeAbstraction.Category.TYPE_TOKEN);
+			_abstractType = _abstractName = _abstract;
+		}
+	}
+
+	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		StringBuffer type = _type.formalForm(nameMapping, isConsidered() || parentConsidered, keywords);
+		StringBuffer type = _type.formalForm(nameMapping, isConsidered()/* || parentConsidered*/, keywords);
 		if (type == null) {
 			return leafFormalForm(nameMapping, parentConsidered, keywords);
 		}
@@ -87,6 +99,11 @@ public class TyLiteral extends Expr {
 	@Override
 	public List<Node> getAllChildren() {
 		return new ArrayList<>(0);
+	}
+
+	@Override
+	public String getTypeStr() {
+		return _type.getTypeStr();
 	}
 
 	@Override
@@ -131,20 +148,24 @@ public class TyLiteral extends Expr {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
+		if (node.getNodeType() == getNodeType()) {
+			super.patternMatch(node, matchedNode);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof TyLiteral) {
-			return super.ifMatch(node, matchedNode, matchedStrings);
+			return super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}
 
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
-		if (stringBuffer == null) {
-			stringBuffer = toSrcString();
-		}
-		return stringBuffer;
+		return toSrcString();
 	}
 
 	@Override

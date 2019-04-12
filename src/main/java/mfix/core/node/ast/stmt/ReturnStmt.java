@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -160,8 +161,13 @@ public class ReturnStmt extends Stmt {
 					_modifications.add(update);
 				}
 			} else if(_expression.getBindingNode() != returnStmt.getExpression()) {
-				Update update = new Update(this, _expression, returnStmt.getExpression());
-				_modifications.add(update);
+				if (_expression.getBindingNode() == null
+						|| !_expression.getBindingNode().compare(returnStmt.getExpression())) {
+					Update update = new Update(this, _expression, returnStmt.getExpression());
+					_modifications.add(update);
+				} else {
+					_expression.setBindingNode(returnStmt.getExpression());
+				}
 			} else {
 				_expression.genModifications();
 			}
@@ -171,14 +177,26 @@ public class ReturnStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof ReturnStmt) {
+			ReturnStmt returnStmt = (ReturnStmt) node;
+			if (getExpression() != null && returnStmt.getExpression() != null
+					&& NodeUtils.matchSameNodeType(getExpression(), returnStmt.getExpression(), matchedNode,
+					matchedStrings)) {
+				getExpression().greedyMatchBinding(returnStmt.getExpression(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof ReturnStmt) {
 			ReturnStmt returnStmt = (ReturnStmt) node;
 			if(_expression != null && returnStmt.getExpression() != null) {
-				return _expression.ifMatch(returnStmt.getExpression(), matchedNode, matchedStrings)
-						&& super.ifMatch(node, matchedNode, matchedStrings);
+				return _expression.ifMatch(returnStmt.getExpression(), matchedNode, matchedStrings, level)
+						&& super.ifMatch(node, matchedNode, matchedStrings, level);
 			} else {
-				return super.ifMatch(node, matchedNode, matchedStrings);
+				return super.ifMatch(node, matchedNode, matchedStrings, level);
 			}
 		}
 		return false;

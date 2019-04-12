@@ -56,8 +56,12 @@ public class BoolLiteral extends Expr {
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 //        return leafFormalForm(nameMapping, parentConsidered, keywords);
-        if (isConsidered()) {
-            return new StringBuffer(nameMapping.getExprID(this));
+        if (isChanged()) {
+            keywords.add(toString());
+            return toSrcString();
+        } else if (isConsidered()) {
+            keywords.add("boolean");
+            return new StringBuffer("boolean::").append(nameMapping.getExprID(this));
         } else {
             return null;
         }
@@ -114,11 +118,7 @@ public class BoolLiteral extends Expr {
 
     @Override
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
-        if (stringBuffer == null) {
-            stringBuffer = toSrcString();
-        }
-        return stringBuffer;
+        return toSrcString();
     }
 
     @Override

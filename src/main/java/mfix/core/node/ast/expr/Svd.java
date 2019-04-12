@@ -8,6 +8,8 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -82,10 +84,29 @@ public class Svd extends Expr {
 	}
 
 	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		if (isChanged() || isExpanded()) {
+			_abstractType = abstracter.shouldAbstract(NodeUtils.distillBasicType(_decType),
+					CodeAbstraction.Category.TYPE_TOKEN);
+			_abstractName = abstracter.shouldAbstract(_name.getName(), CodeAbstraction.Category.NAME_TOKEN);
+		}
+		super.doAbstraction(abstracter);
+	}
+
+	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer type = _decType.formalForm(nameMapping, consider, keywords);
+		if (type == null && !_abstractType){
+			keywords.add(_decType.typeStr());
+			type = new StringBuffer(_decType.typeStr());
+		}
 		StringBuffer name = _name.formalForm(nameMapping, consider, keywords);
+		if (name == null && !_abstractName) {
+			keywords.add(_name.getName());
+			name = new StringBuffer(_name.getName());
+		}
 		StringBuffer init = null;
 		if (_initializer != null) {
 			init = _initializer.formalForm(nameMapping, consider, keywords);
@@ -170,8 +191,10 @@ public class Svd extends Expr {
 			match = (svd == node);
 		} else if (canBinding(node)) {
 			svd = (Svd) node;
-			setBindingNode(node);
-			match = true;
+			if (svd.getName().getName().equals(_name.getName())) {
+				setBindingNode(node);
+				match = true;
+			}
 		}
 		if (svd == null) {
 			continueTopDownMatchNull();
@@ -214,28 +237,45 @@ public class Svd extends Expr {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if (node instanceof Svd) {
 			Svd svd = (Svd) node;
-			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			NodeUtils.matchSameNodeType(getName(), svd.getName(), matchedNode, matchedStrings);
+		}
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+		if (node instanceof Svd) {
+			Svd svd = (Svd) node;
+			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_name, svd.getName(), matchedNode, matchedStrings);
 			}
 			return false;
 		} else if ((node instanceof Vdf) && _modifications.isEmpty()) {
 			Vdf vdf = (Vdf) node;
-			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			if(NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_name, vdf.getNameNode(), matchedNode, matchedStrings);
 			}
 		} else if ((_initializer != null) && (node.getNodeType() == TYPE.ASSIGN) && _modifications.isEmpty()) {
 			Assign assign = (Assign) node;
-			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			if (NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings)) {
 				return NodeUtils.matchSameNodeType(_name, assign.getLhs(), matchedNode, matchedStrings);
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
+		if (node instanceof Svd) {
+			return NodeUtils.patternMatch(this, node, matchedNode);
+		} else {
+			return false;
+		}
 	}
 
 	@Override

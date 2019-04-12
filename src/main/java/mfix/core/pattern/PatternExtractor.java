@@ -9,6 +9,7 @@ package mfix.core.pattern;
 
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
+import mfix.common.util.Method;
 import mfix.common.util.Pair;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.abs.TermFrequency;
@@ -39,7 +40,21 @@ public class PatternExtractor {
         return extractPattern(srcFile, tarFile, Constant.FILTER_MAX_CHANGE_LINE);
     }
 
+    public Set<Pattern> extractPattern(String srcFile, String tarFile, Method focus) {
+        Set<Method> set = new HashSet<>();
+        set.add(focus);
+        return extractPattern(srcFile, tarFile, set, Constant.FILTER_MAX_CHANGE_LINE);
+    }
+
+    public Set<Pattern> extractPattern(String srcFile, String tarFile, Set<Method> focus) {
+        return extractPattern(srcFile, tarFile, focus, Constant.FILTER_MAX_CHANGE_LINE);
+    }
+
     public Set<Pattern> extractPattern(String srcFile, String tarFile, int maxChangeLine) {
+        return extractPattern(srcFile, tarFile, null, Constant.FILTER_MAX_CHANGE_LINE);
+    }
+
+    public Set<Pattern> extractPattern(String srcFile, String tarFile, Set<Method> focus, int maxChangeLine) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
         Set<String> imports = new HashSet<>();
@@ -67,6 +82,18 @@ public class PatternExtractor {
 //        counter.loadCache();
 
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+            if (focus != null) {
+                boolean contain = false;
+                for (Method method : focus) {
+                    if (method.same(pair.getFirst())) {
+                        contain = true;
+                        break;
+                    }
+                }
+                if (!contain) {
+                    continue;
+                }
+            }
             nodeParser.setCompilationUnit(srcFile, srcUnit);
             Node srcNode = nodeParser.process(pair.getFirst());
             nodeParser.setCompilationUnit(tarFile, tarUnit);
@@ -87,21 +114,25 @@ public class PatternExtractor {
                 Set<Node> temp;
                 for(Node node : nodes) {
                     if (node.getBindingNode() != null) {
-                        node.getBindingNode().setConsidered(true);
+                        node.getBindingNode().setExpanded();
                     }
                     temp = node.expand(new HashSet<>());
                     for(Node n : temp) {
                         if (n.getBindingNode() != null) {
-                            n.getBindingNode().setConsidered(true);
+                            n.getBindingNode().setExpanded();
                         }
                     }
                 }
+
+//                nodes = srcNode.getConsideredNodesRec(new HashSet<>(), true);
+//                for (Node n : nodes) {
+//                    System.out.println(n);
+//                }
+
 //                srcNode.doAbstraction(counter);
-                srcNode.doAbstractionNew(abstraction.lazyInit());
-                tarNode.doAbstractionNew(abstraction);
+                srcNode.doAbstraction(abstraction.lazyInit());
+                tarNode.doAbstraction(abstraction);
                 // serialize feature vector
-                srcNode.getFeatureVector();
-                tarNode.getFeatureVector();
                 Pattern pattern = new Pattern(srcNode, imports);
                 pattern.getFeatureVector();
                 pattern.addNewVars(newVars);

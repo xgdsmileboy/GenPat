@@ -79,7 +79,8 @@ public class InfixExpr extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer lhs = _lhs.formalForm(nameMapping, consider, keywords);
 		StringBuffer op = _operator.formalForm(nameMapping, consider, keywords);
 		StringBuffer rhs = _rhs.formalForm(nameMapping, consider, keywords);
@@ -162,17 +163,23 @@ public class InfixExpr extends Expr {
 	public boolean genModifications() {
 		if (super.genModifications()) {
 			InfixExpr infixExpr = (InfixExpr) getBindingNode();
+			boolean lhs = false, rhs = false;
 			if (_lhs.getBindingNode() != infixExpr.getLhs()) {
 				Update update = new Update(this, _lhs, infixExpr.getLhs());
 				_modifications.add(update);
 			} else {
+				lhs = true;
 				_lhs.genModifications();
 			}
 			if (_rhs.getBindingNode() != infixExpr.getRhs()) {
 				Update update = new Update(this, _rhs, infixExpr.getRhs());
 				_modifications.add(update);
 			} else {
+				rhs = true;
 				_rhs.genModifications();
+			}
+			if (lhs != rhs) {
+				_operator.setExpanded();
 			}
 			if (!_operator.compare(infixExpr.getOperator())) {
 				Update update = new Update(this, _operator, infixExpr.getOperator());
@@ -180,6 +187,18 @@ public class InfixExpr extends Expr {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof InfixExpr) {
+			InfixExpr infixExpr = (InfixExpr) node;
+			if (NodeUtils.matchSameNodeType(getLhs(), infixExpr.getLhs(), matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(getRhs(), infixExpr.getRhs(), matchedNode, matchedStrings)) {
+				getLhs().greedyMatchBinding(infixExpr.getLhs(), matchedNode, matchedStrings);
+				getRhs().greedyMatchBinding(infixExpr.getRhs(), matchedNode, matchedStrings);
+			}
+		}
 	}
 
 	@Override

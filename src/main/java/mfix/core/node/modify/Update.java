@@ -2,8 +2,10 @@ package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
+import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,6 +59,12 @@ public class Update extends Modification {
             return getTarNode().patternMatch(update.getTarNode(), matchedNode);
         }
         return false;
+    }
+
+    @Override
+    public String formalForm() {
+        return "[UPD]" + _srcNode.formalForm(new NameMapping(), false, new HashSet<>())
+                + " TO " + _tarNode.formalForm(new NameMapping(), false, new HashSet<>());
     }
 
     @Override

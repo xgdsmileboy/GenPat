@@ -281,13 +281,21 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof MethDecl) {
+            MethDecl decl = (MethDecl) node;
+            getBody().greedyMatchBinding(decl.getBody(), matchedNode, matchedStrings);
+        }
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof MethDecl) {
             MethDecl methDecl = (MethDecl) node;
-            if (_name.ifMatch(methDecl.getName(), matchedNode, matchedStrings)) {
+            if (_name.ifMatch(methDecl.getName(), matchedNode, matchedStrings, level)) {
                 if (_body == null) return methDecl._body == null;
-                return _body.ifMatch(methDecl.getBody(), matchedNode, matchedStrings)
-                        && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+                return _body.ifMatch(methDecl.getBody(), matchedNode, matchedStrings, level)
+                        && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
                         && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
             }
         }

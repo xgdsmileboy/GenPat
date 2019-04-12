@@ -38,6 +38,10 @@ public class MatchList {
         return _matchNodes;
     }
 
+    public int matchSize() {
+        return _matchNodes.size();
+    }
+
     public Iterator<MatchNode> getIterator() {
         return _matchNodes.iterator();
     }

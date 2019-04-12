@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -88,7 +89,8 @@ public class Assign extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         StringBuffer lhs = _lhs.formalForm(nameMapping, consider, keywords);
         StringBuffer op = _operator.formalForm(nameMapping, consider, keywords);
         StringBuffer rhs = _rhs.formalForm(nameMapping, consider, keywords);
@@ -129,6 +131,14 @@ public class Assign extends Expr {
         _completeFVector.combineFeature(_selfFVector);
         _completeFVector.combineFeature(_lhs.getFeatureVector());
         _completeFVector.combineFeature(_rhs.getFeatureVector());
+    }
+
+    @Override
+    public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
+        if (node.getNodeType() == getNodeType()) {
+            return super.patternMatch(node, matchedNode);
+        }
+        return false;
     }
 
     @Override
@@ -184,12 +194,25 @@ public class Assign extends Expr {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if (super.ifMatch(node, matchedNode, matchedStrings)) {
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof Assign) {
+            Assign assign = (Assign) node;
+            if (NodeUtils.matchSameNodeType(_lhs, assign.getLhs(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(_rhs, assign.getRhs(), matchedNode, matchedStrings)) {
+                matchedNode.put(_operator, assign.getOperator());
+                getLhs().greedyMatchBinding(assign.getLhs(), matchedNode, matchedStrings);
+                getRhs().greedyMatchBinding(assign.getRhs(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+        if (super.ifMatch(node, matchedNode, matchedStrings, level)) {
             if (node instanceof Assign) {
                 Assign assign = (Assign) node;
                 if (NodeUtils.matchSameNodeType(_lhs, assign.getLhs(), matchedNode, matchedStrings)
-                        && NodeUtils.checkDependency(_rhs, assign.getRhs(), matchedNode, matchedStrings)
+                        && NodeUtils.checkDependency(_rhs, assign.getRhs(), matchedNode, matchedStrings, level)
                         && NodeUtils.matchSameNodeType(_rhs, assign.getRhs(), matchedNode, matchedStrings)) {
                     matchedNode.put(_operator, assign.getOperator());
                     return true;

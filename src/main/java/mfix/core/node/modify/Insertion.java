@@ -2,8 +2,10 @@ package mfix.core.node.modify;
 
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
+import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -73,6 +75,11 @@ public class Insertion extends Modification {
                     && getInsertedNode().patternMatch(insertion.getInsertedNode(), matchedNode);
         }
         return false;
+    }
+
+    @Override
+    public String formalForm() {
+        return "[INS]" + _insert.formalForm(new NameMapping(), false, new HashSet<>());
     }
 
     @Override

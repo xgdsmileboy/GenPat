@@ -20,11 +20,16 @@ import java.util.Set;
  */
 public class Wrap extends Update {
 
+    private static final long serialVersionUID = 4871112003593684776L;
     private List<Node> _nodes;
 
     public Wrap(Node parent, Node del, Node wrapper, List<Node> wrapped) {
         super(parent, del, wrapper);
         _nodes = wrapped;
+    }
+
+    public List<Node> wrappedNode() {
+        return _nodes;
     }
 
     public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType,

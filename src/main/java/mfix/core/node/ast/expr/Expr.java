@@ -7,7 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.pattern.cluster.NameMapping;
@@ -15,11 +18,9 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Type;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 /**
@@ -32,7 +33,7 @@ public abstract class Expr extends Node {
     protected String _exprTypeStr = "?";
     protected transient Type _exprType = null;
 
-    protected boolean _abstractNode = true;
+    protected boolean _abstractName = true;
     protected boolean _abstractType = true;
 
     protected Expr(String fileName, int startLine, int endLine, ASTNode node) {
@@ -67,6 +68,16 @@ public abstract class Expr extends Node {
     }
 
     @Override
+    public void doAbstraction(CodeAbstraction abstracter) {
+        if (isChanged() || isExpanded()) {
+            _abstractType = _abstractType && abstracter.shouldAbstract(NodeUtils.distillBasicType(_exprTypeStr),
+                    CodeAbstraction.Category.TYPE_TOKEN);
+        }
+        super.doAbstraction(abstracter);
+        _abstract = _abstract && _abstractName && _abstractType;
+    }
+
+    @Override
     public boolean genModifications() {
         if (getBindingNode() == null) {
             LevelLogger.warn("Should not be null since we cannot delete an expression : " + getFileName());
@@ -76,47 +87,33 @@ public abstract class Expr extends Node {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if ((!_modifications.isEmpty() && node.getNodeType() == getNodeType())
                 || (_modifications.isEmpty() && node instanceof Expr)) {
-            String typeStr = ((Expr) node).getTypeString();
-            if ((!"boolean".equals(getTypeString()) && !"boolean".equals(typeStr))
-                    || ("boolean".equals(getTypeString()) && "boolean".equals(typeStr))
-                    && !(node instanceof Operator)) {
-                if (NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
-                        && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL) {
-                    boolean match = isAbstract() || ifMatch0(node, matchedNode, matchedStrings);
-                    return match && NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-                            && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
-                }
+            String typeStr = node.getTypeStr();
+            boolean matchType = _abstractType ? true : Utils.safeStringEqual(getTypeStr(), typeStr);
+            boolean matchName = _abstractName ? true : Utils.safeBufferEqual(toSrcString(), node.toSrcString());
+            if (NodeUtils.match(matchName, matchType, level) && guarantee(node)) {
+                return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
+                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
             }
         }
         return false;
     }
 
-    // this method should be abstract and reimplemented in all the sub expression classes
-    // currently, I did not consider the structure of the expression but only the keywords
-    public boolean ifMatch0(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        Set<String> keys = flattenTreeNode(new LinkedList<>()).stream()
-                .filter(n -> NodeUtils.isSimpleExpr(n) && !(n.isChanged() || n.isExpanded()) && !isAbstract())
-                .map(n -> n.toSrcString().toString())
-                .collect(Collectors.toSet());
-        Set<String> content = node.flattenTreeNode(new LinkedList<>()).stream()
-                .filter(n -> NodeUtils.isSimpleExpr(n))
-                .map(n -> n.toSrcString().toString())
-                .collect(Collectors.toSet());
-        for (String key : keys) {
-            if (!content.contains(key)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (isConsidered()) {
-            return new StringBuffer(nameMapping.getExprID(this));
+            StringBuffer buff = new StringBuffer();
+            if (!_abstractType) {
+                String type = NodeUtils.distillBasicType(_exprTypeStr);
+                if (!"?".equals(type)) {
+                    keywords.add(type);
+                    buff.append(type).append("::");
+                }
+            }
+            buff.append(nameMapping.getExprID(this));
+            return buff;
         } else {
             return null;
         }
@@ -124,8 +121,21 @@ public abstract class Expr extends Node {
 
     protected StringBuffer leafFormalForm(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
         if (!isAbstract() && (isChanged() || isExpanded())) {
-            StringBuffer buffer = toSrcString();
-            keywords.add(buffer.toString());
+            StringBuffer buffer = new StringBuffer();
+            if (!_abstractType) {
+                String type = NodeUtils.distillBasicType(_exprTypeStr);
+                if (!"?".equals(type)) {
+                    keywords.add(type);
+                    buffer.append(type).append("::");
+                }
+            }
+            if (!_abstractName) {
+                keywords.add(toSrcString().toString());
+                buffer.append(toSrcString());
+            }else {
+                // should not happen
+                buffer.append(nameMapping.getExprID(this));
+            }
             return buffer;
         } else if (isConsidered()) {
             return new StringBuffer(nameMapping.getExprID(this));
@@ -134,18 +144,33 @@ public abstract class Expr extends Node {
         }
     }
 
+    private boolean guarantee(Node node) {
+        return NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
+                && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL;
+    }
+
     @Override
     public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
-        if (node == null || isConsidered() != node.isConsidered()) {
+        if (node == null || isConsidered() != node.isConsidered() || !(node instanceof Expr)) {
             return false;
         }
         if (isConsidered()) {
-            int size = getModifications().size() + node.getModifications().size();
-            if ((size == 0 && node instanceof Expr) || getNodeType() == node.getNodeType()) {
-                return NodeUtils.patternMatch(this, node, matchedNode, false);
+            String typeStr = node.getTypeStr();
+            boolean matchType = _abstractType ? true : Utils.safeStringEqual(getTypeStr(), typeStr);
+            boolean matchName = _abstractName ? true : Utils.safeBufferEqual(toSrcString(), node.toSrcString());
+            if (NodeUtils.match(matchName, matchType, MatchLevel.ALL) && guarantee(node) ) {
+                int size = getModifications().size() + node.getModifications().size();
+                if ((size == 0 && node instanceof Expr) || getNodeType() == node.getNodeType()) {
+                    return NodeUtils.patternMatch(this, node, matchedNode);
+                }
             }
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getTypeStr() {
+        return NodeUtils.distillBasicType(_exprTypeStr);
     }
 }

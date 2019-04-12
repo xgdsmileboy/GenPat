@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.conf.Constant;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -208,11 +209,11 @@ public class SwitchStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof SwitchStmt) {
 			SwitchStmt switchStmt = (SwitchStmt) node;
-			return _expression.ifMatch(switchStmt.getExpression(), matchedNode, matchedStrings)
-					&& super.ifMatch(node, matchedNode, matchedStrings);
+			return _expression.ifMatch(switchStmt.getExpression(), matchedNode, matchedStrings, level)
+					&& super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}

@@ -6,9 +6,9 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -16,10 +16,6 @@ import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
-import mfix.core.stats.element.ElementCounter;
-import mfix.core.stats.element.ElementException;
-import mfix.core.stats.element.ElementQueryType;
-import mfix.core.stats.element.MethodElement;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -76,6 +72,11 @@ public class MethodInv extends Expr {
 		return _arguments;
 	}
 
+	public void setExpanded() {
+		super.setExpanded();
+		_name.setExpanded();
+	}
+
 	@Override
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
@@ -94,7 +95,8 @@ public class MethodInv extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer exp = null;
 		if (_expression != null) {
 			exp = _expression.formalForm(nameMapping, consider, keywords);
@@ -179,6 +181,11 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
+	public String getAPIStr() {
+		return _name.getName();
+	}
+
+	@Override
 	public void computeFeatureVector() {
 		_selfFVector = new FVector();
 		_selfFVector.inc(FVector.E_MINV);
@@ -222,22 +229,6 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public void doAbstraction(ElementCounter counter) {
-		if (isConsidered()) {
-			ElementQueryType qtype = new ElementQueryType(false,
-					false, ElementQueryType.CountType.COUNT_FILES);
-			MethodElement methodElement = new MethodElement(_name.getName(), null);
-			methodElement.setArgsNumber(_arguments.getExpr().size());
-			try {
-				_abstract = counter.count(methodElement, qtype) < Constant.API_FREQUENCY;
-			} catch (ElementException e) {
-				_abstract = true;
-			}
-		}
-		super.doAbstraction(counter);
-	}
-
-	@Override
 	public boolean genModifications() {
 		if (super.genModifications()) {
 			MethodInv methodInv = (MethodInv) getBindingNode();
@@ -268,8 +259,20 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-		if(super.ifMatch(node, matchedNode, matchedStrings)) {
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node.getNodeType() == TYPE.MINVOCATION) {
+			MethodInv methodInv = (MethodInv) node;
+			if (_expression != null && methodInv._expression != null) {
+				if (NodeUtils.matchSameNodeType(_expression, methodInv._expression, matchedNode, matchedStrings)) {
+					_expression.greedyMatchBinding(methodInv.getExpression(), matchedNode, matchedStrings);
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+		if(super.ifMatch(node, matchedNode, matchedStrings, level)) {
 			if (node.getNodeType() == TYPE.MINVOCATION) {
 				MethodInv methodInv = (MethodInv) node;
 				if (_expression != null && methodInv._expression != null) {

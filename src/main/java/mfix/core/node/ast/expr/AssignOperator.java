@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -75,12 +76,13 @@ public class AssignOperator extends Operator {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-        if (node instanceof AssignOperator && _operatorStr.equals(node.toSrcString().toString())) {
-            matchedNode.put(this, node);
-            return true;
-        } else {
-            return false;
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+        if (node instanceof AssignOperator){
+            if (!isChanged() || _operatorStr.equals(node.toSrcString().toString())) {
+                matchedNode.put(this, node);
+                return true;
+            }
         }
+        return false;
     }
 }

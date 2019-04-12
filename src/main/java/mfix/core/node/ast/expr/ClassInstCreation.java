@@ -98,7 +98,8 @@ public class ClassInstCreation extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         StringBuffer exp = null;
         if (_expression != null) {
             exp = _expression.formalForm(nameMapping, consider, keywords);
@@ -255,37 +256,17 @@ public class ClassInstCreation extends Expr {
         return true;
     }
 
-//    @Override
-//    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
-//        if(node instanceof Expr) {
-//            if(isAbstract()) {
-//                return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
-//                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
-//            } else if (node instanceof ClassInstCreation){
-//                ClassInstCreation classInstCreation = (ClassInstCreation) node;
-//                List<Expr> exprs = _arguments.getExpr();
-//                List<Expr> others = classInstCreation.getArguments().getExpr();
-//                if (_classType.compare(classInstCreation.getClassType()) && exprs.size() == others.size()) {
-//                    matchedNode.put(_classType, classInstCreation.getClassType());
-//                    matchedNode.put(this, node);
-//                    matchedStrings.put(toString(), node.toString());
-//                    if(_expression != null && classInstCreation.getExpression() != null) {
-//                        matchedNode.put(_expression, classInstCreation.getExpression());
-//                        matchedStrings.put(_expression.toString(), classInstCreation.getExpression().toString());
-//                    }
-//                    for(int i = 0; i < exprs.size(); i++) {
-//                        matchedNode.put(exprs.get(i), others.get(i));
-//                        matchedStrings.put(exprs.get(i).toString(), others.get(i).toString());
-//                    }
-//                    return true;
-//                }
-//                return false;
-//            } else {
-//                return false;
-//            }
-//        }
-//        return false;
-//    }
+    @Override
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof ClassInstCreation) {
+            ClassInstCreation classInstCreation = (ClassInstCreation) node;
+            if (getExpression() != null && classInstCreation.getExpression() != null
+                    && NodeUtils.matchSameNodeType(getExpression(), classInstCreation.getExpression(), matchedNode,
+                    matchedStrings)) {
+                getExpression().greedyMatchBinding(classInstCreation.getExpression(), matchedNode, matchedStrings);
+            }
+        }
+    }
 
     @Override
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {

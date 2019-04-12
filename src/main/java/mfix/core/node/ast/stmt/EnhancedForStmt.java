@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -223,13 +224,26 @@ public class EnhancedForStmt extends Stmt {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+        if (node instanceof EnhancedForStmt) {
+            EnhancedForStmt efs = (EnhancedForStmt) node;
+            if (NodeUtils.matchSameNodeType(getParameter(), efs.getParameter(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getExpression(), efs.getExpression(), matchedNode, matchedStrings)
+                    && NodeUtils.matchSameNodeType(getBody(), efs.getBody(), matchedNode, matchedStrings)) {
+                getParameter().greedyMatchBinding(efs.getParameter(), matchedNode, matchedStrings);
+                getExpression().greedyMatchBinding(efs.getExpression(), matchedNode, matchedStrings);
+            }
+        }
+    }
+
+    @Override
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof EnhancedForStmt) {
             EnhancedForStmt enhancedForStmt = (EnhancedForStmt) node;
-            return _varDecl.ifMatch(enhancedForStmt.getParameter(), matchedNode, matchedStrings)
-                    && _expression.ifMatch(enhancedForStmt.getExpression(), matchedNode, matchedStrings)
-                    && _statement.ifMatch(enhancedForStmt.getBody(), matchedNode, matchedStrings)
-                    && super.ifMatch(node, matchedNode, matchedStrings);
+            return _varDecl.ifMatch(enhancedForStmt.getParameter(), matchedNode, matchedStrings, level)
+                    && _expression.ifMatch(enhancedForStmt.getExpression(), matchedNode, matchedStrings, level)
+                    && _statement.ifMatch(enhancedForStmt.getBody(), matchedNode, matchedStrings, level)
+                    && super.ifMatch(node, matchedNode, matchedStrings, level);
         }
         return false;
     }

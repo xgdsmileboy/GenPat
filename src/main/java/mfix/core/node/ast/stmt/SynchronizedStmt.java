@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -181,12 +182,23 @@ public class SynchronizedStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof SynchronizedStmt) {
+			SynchronizedStmt ss = (SynchronizedStmt) node;
+			if (NodeUtils.matchSameNodeType(getExpression(), ss.getExpression(), matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(getBody(), ss.getBody(), matchedNode, matchedStrings)) {
+				getExpression().greedyMatchBinding(getExpression(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof SynchronizedStmt) {
 			SynchronizedStmt stmt = (SynchronizedStmt) node;
-			return _expression.ifMatch(stmt.getExpression(), matchedNode, matchedStrings)
-					&& _blk.ifMatch(stmt.getBody(), matchedNode, matchedStrings)
-					&& super.ifMatch(node, matchedNode, matchedStrings);
+			return _expression.ifMatch(stmt.getExpression(), matchedNode, matchedStrings, level)
+					&& _blk.ifMatch(stmt.getBody(), matchedNode, matchedStrings, level)
+					&& super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}
@@ -199,11 +211,6 @@ public class SynchronizedStmt extends Stmt {
 		if(tmp == null) return null;
 		stringBuffer.append(tmp);
 		stringBuffer.append("){").append(Constant.NEW_LINE);
-		for (Stmt stmt : _blk.getStatement()) {
-			tmp = stmt.transfer(vars, exprMap, retType, exceptions);
-			if(tmp == null) return null;
-			stringBuffer.append(tmp).append(Constant.NEW_LINE);
-		}
 		for (Node node : nodes) {
 			stringBuffer.append(node.toSrcString().toString()).append(Constant.NEW_LINE);
 		}

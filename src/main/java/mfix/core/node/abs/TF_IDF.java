@@ -101,7 +101,17 @@ public class TF_IDF implements CodeAbstraction {
     }
 
     @Override
+    public boolean shouldAbstract(String string) {
+        return false;
+    }
+
+    @Override
     public boolean shouldAbstract(Node node, Category category) {
+        return false;
+    }
+
+    @Override
+    public boolean shouldAbstract(String string, Category category) {
         return false;
     }
 

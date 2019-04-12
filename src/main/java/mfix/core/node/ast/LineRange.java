@@ -21,6 +21,14 @@ public class LineRange {
         _end = end;
     }
 
+    public int getStart() {
+        return _start;
+    }
+
+    public int getEnd() {
+        return _end;
+    }
+
     public boolean contains(int line) {
         return _start <= line && line <= _end;
     }

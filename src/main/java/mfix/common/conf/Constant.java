@@ -40,6 +40,7 @@ public class Constant {
     /* files used for pattern abstraction */
     public final static String API_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_api.txt");
     public final static String TYPE_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_type.txt");
+    public final static String NAME_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens_var.txt");
 
     public final static String TF_IDF_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens.txt");
     public final static String DB_CACHE_FILE = Utils.join(SEP, RES_DIR, "db", "MethodTableElements.txt");
@@ -50,7 +51,7 @@ public class Constant {
     public final static int TOTAL_BUGGY_FILE_NUMBER = 1217392; // used to compute TF-IDF
     public final static int API_FREQUENCY = 100;
     public final static double TF_IDF_FREQUENCY = 0.5;
-    public final static double TOKEN_FREQENCY = 0.01;
+    public final static double TOKEN_FREQENCY = 0.005;
 
     /* runtime configurations */
     public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");
@@ -64,6 +65,9 @@ public class Constant {
 
     /* max number of concurrent threads for keyword statistics */
     public static int MAX_KEYWORD_STATISTIC_THREAD_NUM;
+
+    /* max number of candidate match instances for one pattern */
+    public static int MAX_INSTANCE_PER_PATTERN;
 
     /* max number of candidate patches for each subject */
     public static int MAX_PATCH_NUMBER;
@@ -83,17 +87,22 @@ public class Constant {
     /* max number of modifications for pattern filtering */
     public static int FILTER_MAX_CHANGE_ACTION;
 
+    /* filter deletion operation */
+    public static boolean FILTER_DELETION;
+
     /* split clustering */
     public static boolean SPLIT_CLUSTER;
 
     /* max pattern number for each round of clustering, used only the option SPLIT_CLUSTER is true */
     public static int MAX_PATTERN_NUM_EACH_CLUSTER;
 
+    private final static String RESULT = Utils.join(SEP, HOME, "result");
+
     /* default directory to patch log info */
-    public final static String PATCH_PATH = Utils.join(SEP, HOME, "patch");
+    public final static String PATCH_PATH = Utils.join(SEP, RESULT, "patch");
 
     /* default directory to log info */
-    public final static String REPAIR_LOG_PATH = Utils.join(SEP, HOME, "log");
+    public final static String REPAIR_LOG_PATH = Utils.join(SEP, RESULT, "log");
 
     /* default home directory of pattern files */
     public final static String DEFAULT_PATTERN_HOME = "/home/jiajun/GithubData";
@@ -104,11 +113,8 @@ public class Constant {
     public static String JAVA_7_HOME;
     public static String CMD_TIMEOUT;
 
-    /*
-     * markers
-     */
-    public final static boolean INGORE_OPERATOR_FOR_DELETE_MATCH = false;
-
+    public final static int TEST_SUBJECT_TIMEOUT=600; //in seconds
+    public final static int TEST_CASE_TIMEOUT=120; //in seconds
 
     /*
      * Defects4j configure information
@@ -145,6 +151,7 @@ public class Constant {
             String number = prop.getProperty("PATTERN.NUMBER", "All");
             TOP_K_PATTERN_EACH_LOCATION = "All".equals(number) ? Integer.MAX_VALUE : Integer.parseInt(number);
             MAX_REPAIR_TIME = Integer.parseInt(prop.getProperty("REPAIR.TIME", "120"));
+            MAX_INSTANCE_PER_PATTERN = Integer.parseInt(prop.getProperty("REPAIR.MATCH", "100"));
             MAX_PATCH_NUMBER = Integer.parseInt(prop.getProperty("REPAIR.PATCH", "100"));
             MAX_REPAIR_LOCATION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
             MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
@@ -152,6 +159,7 @@ public class Constant {
             MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
             FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
             FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));
+            FILTER_DELETION = Boolean.parseBoolean(prop.getProperty("REMOVE.DELETION", "false"));
             SPLIT_CLUSTER = Boolean.parseBoolean(prop.getProperty("CLUSTER.SPLIT", "false"));
             MAX_PATTERN_NUM_EACH_CLUSTER = Integer.parseInt(prop.getProperty("CLUSTER.SIZE", "10000"));
 

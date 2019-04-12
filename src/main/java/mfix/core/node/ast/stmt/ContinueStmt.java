@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.SName;
@@ -163,10 +164,10 @@ public class ContinueStmt extends Stmt {
     }
 
     @Override
-    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+    public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if (node instanceof ContinueStmt) {
             ContinueStmt continueStmt = (ContinueStmt) node;
-            if (super.ifMatch(node, matchedNode, matchedStrings)) {
+            if (super.ifMatch(node, matchedNode, matchedStrings, level)) {
                 if (_identifier != null && continueStmt._identifier != null) {
                     matchedNode.put(_identifier, continueStmt._identifier);
                     matchedStrings.put(_identifier.toString(), continueStmt._identifier.toString());

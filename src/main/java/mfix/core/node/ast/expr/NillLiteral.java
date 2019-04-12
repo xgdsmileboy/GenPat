@@ -25,6 +25,7 @@ import java.util.Set;
  */
 public class NillLiteral extends Expr {
 
+	private static final long serialVersionUID = 3790017124979289916L;
 	private String _value = "null";
 	
 	/**
@@ -45,7 +46,8 @@ public class NillLiteral extends Expr {
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 //		return leafFormalForm(nameMapping, parentConsidered, keywords);
 		if (isConsidered()) {
-			return new StringBuffer(nameMapping.getExprID(this));
+			keywords.add("null");
+			return toSrcString();
 		} else {
 			return null;
 		}

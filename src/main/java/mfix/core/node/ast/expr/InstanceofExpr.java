@@ -8,6 +8,7 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -71,7 +72,8 @@ public class InstanceofExpr extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer exp = _expression.formalForm(nameMapping, consider, keywords);
 		StringBuffer type = _instanceType.formalForm(nameMapping, consider, keywords);
 		if (exp == null && type == null) {
@@ -164,6 +166,17 @@ public class InstanceofExpr extends Expr {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+		if (node instanceof InstanceofExpr) {
+			InstanceofExpr instanceofExpr = (InstanceofExpr) node;
+			if (NodeUtils.matchSameNodeType(getExpression(), instanceofExpr.getExpression(),
+					matchedNode, matchedStrings)) {
+				getExpression().greedyMatchBinding(instanceofExpr.getExpression(), matchedNode, matchedStrings);
+			}
+		}
 	}
 
 	@Override

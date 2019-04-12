@@ -7,6 +7,8 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
@@ -69,6 +71,11 @@ public class MType extends Node {
 		}
 	}
 
+	@Override
+	public String getTypeStr() {
+		return NodeUtils.distillBasicType(this);
+	}
+
 	public int getDimension() {
 		if (isArrayType()) {
 			return ((ArrayType) _type).getDimensions();
@@ -83,6 +90,14 @@ public class MType extends Node {
 			return _typeStr.equals(((MType) other)._typeStr);
 		}
 		return false;
+	}
+
+	@Override
+	public void doAbstraction(CodeAbstraction abstracter) {
+		if (isConsidered()) {
+			_abstract = abstracter.shouldAbstract(NodeUtils.distillBasicType(this),
+					CodeAbstraction.Category.TYPE_TOKEN);
+		}
 	}
 
 	@Override
@@ -111,7 +126,7 @@ public class MType extends Node {
 			return false;
 		}
 		if (isConsidered()) {
-			return NodeUtils.patternMatch(this, node, matchedNode,false);
+			return NodeUtils.patternMatch(this, node, matchedNode);
 		}
 		return true;
 	}
@@ -171,9 +186,9 @@ public class MType extends Node {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof MType) {
-			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings)
+			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 		} else {
 			return false;

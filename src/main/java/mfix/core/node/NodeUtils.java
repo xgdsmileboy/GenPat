@@ -8,8 +8,10 @@ package mfix.core.node;
 
 import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
+import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.LineRange;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.Variable;
@@ -17,6 +19,8 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.SuperMethodInv;
+import mfix.core.node.ast.stmt.EmptyStmt;
+import mfix.core.node.ast.stmt.ExpressionStmt;
 import mfix.core.node.ast.stmt.IfStmt;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
@@ -105,20 +109,39 @@ public class NodeUtils {
         return stringBuffer;
     }
 
+    public static boolean match(boolean matchName, boolean matchType, MatchLevel level) {
+        switch (level) {
+            case ALL:
+                return matchName && matchType;
+            case TYPE:
+                return matchType;
+            case NAME:
+                return matchName;
+            case FUZZY:
+                return true;
+            default:
+                LevelLogger.error("Should not be here!");
+                return false;
+        }
+    }
+
     public static String distillBasicType(MType type) {
         String s = type.toSrcString().toString();
         return distillBasicType(s);
     }
 
     public static String distillBasicType(String s) {
+        if (s == null) return null;
+        if (s.startsWith("java.lang.")) {
+            s = s.substring(10/*java.lang.*/);
+        }
         int index = s.indexOf('<');
         return index > 0 ? s.substring(0, index) : s;
     }
 
-    public static boolean patternMatch(Node fst, Node snd, Map<Node, Node> matchedNode, boolean skipFormalCmp) {
+    public static boolean patternMatch(Node fst, Node snd, Map<Node, Node> matchedNode) {
         if (fst.isConsidered() != snd.isConsidered()) return false;
-        if ((skipFormalCmp || Utils.safeBufferEqual(fst.getFormalForm(), snd.getFormalForm()))
-                && fst.getModifications().size() == snd.getModifications().size()) {
+        if (fst.getModifications().size() == snd.getModifications().size()) {
             Node dp1 = fst.getDataDependency();
             Node dp2 = snd.getDataDependency();
             if (dp1 != null && dp1.isConsidered()) {
@@ -184,6 +207,10 @@ public class NodeUtils {
         return false;
     }
 
+    public static boolean possibleClassName(String name) {
+        return Character.isUpperCase(name.charAt(0));
+    }
+
     /**
      * check whether the given node is a simple node,
      * which usually represents a one token
@@ -238,12 +265,13 @@ public class NodeUtils {
      * @param other          : target node for match
      * @param matchedNode    : map of nodes that already matches
      * @param matchedStrings : map of string that already matches
+     * @param level
      * @return : true if their data dependencies match each other, otherwise false
      */
     public static boolean checkDependency(Node node, Node other, Map<Node, Node> matchedNode,
-                                          Map<String, String> matchedStrings) {
+                                          Map<String, String> matchedStrings, MatchLevel level) {
         if (node.getDataDependency() != null && other.getDataDependency() != null) {
-            if (node.getDataDependency().ifMatch(other.getDataDependency(), matchedNode, matchedStrings)) {
+            if (node.getDataDependency().ifMatch(other.getDataDependency(), matchedNode, matchedStrings, level)) {
                 return true;
             }
             return false;
@@ -311,16 +339,25 @@ public class NodeUtils {
                 }
             }
             if (notmatch) {
-                Deletion deletion = new Deletion(pNode, src.get(i), i);
-                deletions.add(deletion);
+                if (considerNode(src.get(i))) {
+                    Deletion deletion = new Deletion(pNode, src.get(i), i);
+                    deletions.add(deletion);
+                } else {
+                    // avoid consider for matching
+                    src.get(i).setBindingNode(src.get(i));
+                }
             }
         }
         for (int i = 0; i < tar.size(); i++) {
             if (set.contains(i)) continue;
             Node n = tar.get(i);
-            Insertion insertion = new Insertion(pNode, i, n);
-            insertions.add(insertion);
-
+            if (considerNode(n)) {
+                Insertion insertion = new Insertion(pNode, i, n);
+                insertions.add(insertion);
+            } else {
+                // do not consider for matching
+                n.setBindingNode(n);
+            }
         }
 
         List<Modification> modifications = new LinkedList<>();
@@ -450,6 +487,27 @@ public class NodeUtils {
         return parent;
     }
 
+    public static boolean considerNode(Node node) {
+        // avoid inserting empty statement
+        if (node instanceof EmptyStmt) {
+            return false;
+        }
+        // avoid inserting print or logging statement
+        if (node instanceof ExpressionStmt) {
+            ExpressionStmt expStmt = (ExpressionStmt) node;
+            if (expStmt.getExpression() instanceof MethodInv) {
+                String str = expStmt.toSrcString().toString();
+                if (str.startsWith("System.out.") || str.startsWith("System.exit")
+                        || str.startsWith("System.err") || str.startsWith("System.gc")
+                        || str.startsWith("Log") || str.startsWith("LevelLogger")
+                        || str.startsWith("Thread.currentThread()")) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public static String getDefaultValue(String type){
         if (type == null) return null;
         switch(type){
@@ -482,8 +540,14 @@ public class NodeUtils {
     }
 
     public static boolean isLegalVar(String var) {
+        String[] strings = var.split("\\.");
         Pattern p = Pattern.compile("[\\w|_][\\w|\\d|_]*(\\[.*\\])?");
-        return p.matcher(var).matches();
+        for (String s : strings) {
+            if (!p.matcher(s).matches()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static Type parseExprType(Expr left, String operator, Expr right) {

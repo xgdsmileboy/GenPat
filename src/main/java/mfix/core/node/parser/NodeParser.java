@@ -1163,6 +1163,7 @@ public class NodeParser {
         mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
         mType.setParent(varDeclarationExpr);
         varDeclarationExpr.setDeclType(mType);
+        varDeclarationExpr.setType(node.getType());
 
         List<Vdf> vdfs = new ArrayList<>();
         for (Object object : node.fragments()) {
@@ -1207,6 +1208,7 @@ public class NodeParser {
         mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
         mType.setParent(svd);
         svd.setDecType(mType);
+        svd.setType(node.getType());
         if (node.getInitializer() != null) {
             Expr initializer = (Expr) process(node.getInitializer(), scope, strcture);
             initializer.setParent(svd);

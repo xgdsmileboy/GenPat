@@ -74,6 +74,11 @@ public class AryCreation extends Expr {
     }
 
     @Override
+    public String getTypeStr() {
+        return _type.getTypeStr();
+    }
+
+    @Override
     public List<Node> getAllChildren() {
         List<Node> children = new ArrayList<>(_dimension.size() + 1);
         children.addAll(_dimension);
@@ -104,7 +109,8 @@ public class AryCreation extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = parentConsidered || isConsidered();
+//        boolean consider = parentConsidered || isConsidered();
+        boolean consider = isConsidered();
         StringBuffer typeStr = _type.formalForm(nameMapping, consider, keywords);
         StringBuffer dimension = new StringBuffer();
         boolean contain = false;

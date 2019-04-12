@@ -156,7 +156,7 @@ public class AnnounceFrame extends TaskFrame implements ActionListener
     public void internalClose()
     {
         // stop timer
-        timer.stop();
+        a = timer.stop();
 
         super.internalClose();
     }

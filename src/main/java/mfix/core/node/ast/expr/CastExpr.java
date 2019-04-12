@@ -71,7 +71,8 @@ public class CastExpr extends Expr {
 
     @Override
     protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-        boolean consider = isConsidered() || parentConsidered;
+//        boolean consider = isConsidered() || parentConsidered;
+        boolean consider = isConsidered();
         StringBuffer type = _castType.formalForm(nameMapping, consider, keywords);
         StringBuffer exp = _expression.formalForm(nameMapping, consider, keywords);
         if (type == null && exp == null) {

@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -223,15 +224,16 @@ public class SuperConstructorInv extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if (node instanceof SuperConstructorInv) {
 			SuperConstructorInv superConstructorInv = (SuperConstructorInv) node;
 			boolean match = true;
 			if (_expression != null && superConstructorInv.getExpression() != null) {
-				match = match && _expression.ifMatch(superConstructorInv.getExpression(), matchedNode, matchedStrings);
+				match = match && _expression.ifMatch(superConstructorInv.getExpression(),
+						matchedNode, matchedStrings, level);
 			}
-			match = match && _arguments.ifMatch(superConstructorInv.getArgument(), matchedNode, matchedStrings);
-			return match && super.ifMatch(node, matchedNode, matchedStrings);
+			match = match && _arguments.ifMatch(superConstructorInv.getArgument(), matchedNode, matchedStrings, level);
+			return match && super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}

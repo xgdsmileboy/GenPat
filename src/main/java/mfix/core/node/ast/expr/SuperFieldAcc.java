@@ -69,7 +69,8 @@ public class SuperFieldAcc extends Expr {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		boolean consider = isConsidered() || parentConsidered;
+//		boolean consider = isConsidered() || parentConsidered;
+		boolean consider = isConsidered();
 		StringBuffer name = null;
 		if (_name != null) {
 			name = _name.formalForm(nameMapping, consider, keywords);

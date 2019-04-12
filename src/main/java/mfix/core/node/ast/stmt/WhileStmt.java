@@ -8,6 +8,7 @@ package mfix.core.node.ast.stmt;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
@@ -173,12 +174,23 @@ public class WhileStmt extends Stmt {
 	}
 
 	@Override
-	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
+	public void greedyMatchBinding(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings) {
 		if (node instanceof WhileStmt) {
 			WhileStmt whileStmt = (WhileStmt) node;
-			return _expression.ifMatch(whileStmt.getExpression(), matchedNode, matchedStrings)
-					&& _body.ifMatch(whileStmt.getBody(), matchedNode, matchedStrings)
-					&& super.ifMatch(node, matchedNode, matchedStrings);
+			if (NodeUtils.matchSameNodeType(getExpression(), whileStmt.getExpression(), matchedNode, matchedStrings)
+					&& NodeUtils.matchSameNodeType(getBody(), whileStmt.getBody(), matchedNode, matchedStrings)) {
+				getExpression().greedyMatchBinding(whileStmt.getExpression(), matchedNode, matchedStrings);
+			}
+		}
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+		if (node instanceof WhileStmt) {
+			WhileStmt whileStmt = (WhileStmt) node;
+			return _expression.ifMatch(whileStmt.getExpression(), matchedNode, matchedStrings, level)
+					&& _body.ifMatch(whileStmt.getBody(), matchedNode, matchedStrings, level)
+					&& super.ifMatch(node, matchedNode, matchedStrings, level);
 		}
 		return false;
 	}

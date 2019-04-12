@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
+import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -54,6 +55,20 @@ public class SName extends Label {
 	}
 
 	@Override
+	public void doAbstraction(CodeAbstraction abstraction) {
+		if (isConsidered()) {
+			if (NodeUtils.isMethodName(this)) {
+				_abstractName = abstraction.shouldAbstract(this, CodeAbstraction.Category.API_TOKEN);
+			} else if (NodeUtils.possibleClassName(_name)) {
+				_abstractName = abstraction.shouldAbstract(this, CodeAbstraction.Category.TYPE_TOKEN);
+			} else {
+				_abstractName = abstraction.shouldAbstract(this, CodeAbstraction.Category.NAME_TOKEN);
+			}
+		}
+		super.doAbstraction(abstraction);
+	}
+
+	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
 		return leafFormalForm(nameMapping, parentConsidered, keywords);
 	}
@@ -79,6 +94,15 @@ public class SName extends Label {
 	}
 
 	@Override
+	public String getNameStr() {
+		if (NodeUtils.isMethodName(this)
+				|| NodeUtils.possibleClassName(_name)) {
+			return null;
+		}
+		return _name;
+	}
+
+	@Override
 	public void computeFeatureVector() {
 		_selfFVector = new FVector();
 		_selfFVector.inc(FVector.E_VAR);
@@ -90,7 +114,7 @@ public class SName extends Label {
 	@Override
 	public boolean postAccurateMatch(Node node) {
 		if (getBindingNode() == node) return true;
-		if (getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == null && compare(node)) {
 			setBindingNode(node);
 			return true;
 		}

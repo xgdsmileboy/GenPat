@@ -9,8 +9,10 @@ package mfix.core.pattern.cluster;
 
 import mfix.core.node.abs.id.AbsExpr;
 import mfix.core.node.abs.id.AbsMethod;
+import mfix.core.node.abs.id.AbsOp;
 import mfix.core.node.abs.id.AbsType;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.expr.Operator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,9 +27,12 @@ public class NameMapping {
     private int _EXPR_ID;
     private int _METHOD_ID;
     private int _TYPE_ID;
+    private int _OP_ID;
     private Map<String, AbsExpr> _expr2Id;
     private Map<String, AbsMethod> _methodName2Id;
     private Map<String, AbsType> _type2Id;
+    private Map<String, AbsOp> _op2Id;
+
 
     private final static boolean debug = false;
     private final static Pattern REGEX = Pattern.compile(debug ? "(EXPR|METH|TYPE)_\\d+" : "EXPR|METH|TYPE");
@@ -37,9 +42,11 @@ public class NameMapping {
         _EXPR_ID = 0;
         _METHOD_ID = 0;
         _TYPE_ID = 0;
+        _OP_ID = 0;
         _expr2Id = new HashMap<>();
         _methodName2Id = new HashMap<>();
         _type2Id = new HashMap<>();
+        _op2Id = new HashMap<>();
     }
 
     public String getExprID(Node node) {
@@ -82,6 +89,20 @@ public class NameMapping {
             _type2Id.put(type, absType);
         }
         return absType.toString();
+    }
+
+    public String getOpID(Operator operator) {
+        return getOpID(operator.toSrcString().toString());
+    }
+
+    public String getOpID(String operator) {
+        AbsOp absOp = _op2Id.get(operator);
+        if (absOp == null) {
+            absOp = new AbsOp(_OP_ID);
+            _OP_ID ++;
+            _op2Id.put(operator, absOp);
+        }
+        return absOp.toString();
     }
 
     public boolean isPlaceHolder(String string) {
