@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class rlytest {
-    final static String LOCAL_DATASET = "/Users/luyaoren/Desktop/SysEdit-part1";
+    final static String LOCAL_DATASET = "/Users/luyaoren/MineFix/resources/SysEdit-part1";
 
     // find method with name & argType
     static MethodDeclaration findMethodFromFile(String file, Method method) {
@@ -128,7 +128,7 @@ public class rlytest {
                 new Pair<>(getPath(q_src), getPath(q_tar)), q_m_src);
     }
     public static void main(String[] args) {
-        for (int i = 1; i <= 50; ++i) {
+        for (int i = 1; i <= 1; ++i) {
             String path = LOCAL_DATASET + String.format("/%d/info.json", i);
             if (new File(path).exists()) {
                 System.out.println("current: " + i);
