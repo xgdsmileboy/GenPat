@@ -8,12 +8,16 @@
 package mfix.common.util;
 
 import mfix.common.conf.Constant;
+import mfix.core.node.ast.Node;
+import mfix.core.node.parser.NodeParser;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,6 +33,33 @@ import java.util.Set;
 public class JavaFile {
 
     private final static String __name__ = "@JavaFile ";
+
+    /**
+     * extract the given method node
+     *
+     * @param file : class file
+     * @param method : given method signature
+     * @return node of the corresponds to the given method signature
+     */
+    public static Node getNode(String file, Method method) {
+        if (method == null) return null;
+        CompilationUnit unit = genAST(file);
+        final List<MethodDeclaration> declarations = new ArrayList<>(1);
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration m) {
+                if (method.same(m)) {
+                    declarations.add(m);
+                    return false;
+                }
+                return true;
+            }
+        });
+        if (declarations.size() == 0) {
+            return null;
+        }
+        NodeParser parser = new NodeParser();
+        return parser.setCompilationUnit(file, unit).process(declarations.get(0));
+    }
     /**
      * @param icu
      * @return
