@@ -146,6 +146,9 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
                     .limit(topk).collect(Collectors.toList());
         }
         LevelLogger.info("Finish match!");
+        if (matches.isEmpty()) {
+            System.err.println("No matches !");
+        }
         return matches;
     }
 

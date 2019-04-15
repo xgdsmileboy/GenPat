@@ -15,6 +15,7 @@ import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.Variable;
+import mfix.core.node.ast.expr.Assign;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.MethodInv;
@@ -431,7 +432,16 @@ public class NodeUtils {
                 if (insertNode == children.get(index)) {
                     tag = true;
                 } else if (tag) {
-                    Set<Node> nodes = children.get(index)
+                    Node next = children.get(index);
+                    if (next instanceof ExpressionStmt) {
+                        ExpressionStmt expressionStmt = (ExpressionStmt) next;
+                        if (expressionStmt.getExpression() instanceof Assign) {
+                            next = ((Assign) expressionStmt.getExpression()).getRhs();
+                        }
+                    } else {
+                        break;
+                    }
+                    Set<Node> nodes = next
                             .flattenTreeNode(new LinkedList<>()).stream()
                             .filter(n -> n.getNodeType() == Node.TYPE.SNAME
                                     && vars.contains(n.toSrcString().toString()))

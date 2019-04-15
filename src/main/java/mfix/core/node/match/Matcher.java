@@ -57,14 +57,14 @@ public class Matcher {
         tar.accept(methodDeclCollector);
         List<MethodDeclaration> tarMethods = methodDeclCollector.getAllMethDecl();
 
-        if (srcMethods.size() != tarMethods.size()) {
-            LevelLogger.info("Different numbers of method declarations for two source files.");
-            return matchPair;
-        }
+//        if (srcMethods.size() != tarMethods.size()) {
+//            LevelLogger.info("Different numbers of method declarations for two source files.");
+//            return matchPair;
+//        }
 
+        boolean noMatch = true;
         for (MethodDeclaration sm : srcMethods) {
-            boolean noMatch = true;
-            for (int i = 0; noMatch && i < tarMethods.size(); i++) {
+            for (int i = 0; i < tarMethods.size(); i++) {
                 MethodDeclaration tm = tarMethods.get(i);
                 final DiffType diff = sameSignature(sm, tm);
                 switch (diff) {
@@ -74,15 +74,14 @@ public class Matcher {
                         noMatch = false;
                         break;
                     default:
-                        LevelLogger.info(diff.toString());
+                        // LevelLogger.info(diff.toString());
                 }
             }
-            if (noMatch) {
-                LevelLogger.warn("No match for method declaration !!!");
-                return new LinkedList<>();
-            }
         }
-
+        if (noMatch) {
+            LevelLogger.warn("No match for method declaration !!!");
+            return new LinkedList<>();
+        }
         return matchPair;
     }
 
