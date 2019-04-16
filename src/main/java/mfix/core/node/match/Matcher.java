@@ -625,7 +625,7 @@ public class Matcher {
                         Iterator<Pair<Insertion, StringBuffer>> iterator = insertNoDep.iterator();
                         while(iterator.hasNext()) {
                             Pair<Insertion, StringBuffer> item = iterator.next();
-                            if (item.getFirst().getIndex() < insertion.getIndex()) {
+                            if (item.getFirst().getIndex() < insertion.getIndex() && item.getFirst().getIndex() > beforeIndex) {
                                 list.add(item.getSecond());
                                 iterator.remove();
                             }
@@ -640,7 +640,7 @@ public class Matcher {
                         Iterator<Pair<Insertion, StringBuffer>> iterator = insertNoDep.iterator();
                         while(iterator.hasNext()) {
                             Pair<Insertion, StringBuffer> item = iterator.next();
-                            if (item.getFirst().getIndex() < insertion.getIndex()) {
+                            if (item.getFirst().getIndex() < insertion.getIndex() && item.getFirst().getIndex() > afterIndex) {
                                 list.add(item.getSecond());
                                 iterator.remove();
                             }
