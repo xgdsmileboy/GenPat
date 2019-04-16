@@ -221,7 +221,7 @@ public class ExprList extends Node {
     @Override
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
         StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
-        if (stringBuffer == null) {
+        if (stringBuffer == null || !getModifications().isEmpty()) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             if (!_exprs.isEmpty()) {

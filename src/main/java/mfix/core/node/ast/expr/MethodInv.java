@@ -215,6 +215,8 @@ public class MethodInv extends Expr {
 			if (methodInv.getName().getName().equals(getName().getName())) {
 				setBindingNode(methodInv);
 				match = true;
+			} else {
+				methodInv = null;
 			}
 		}
 		if (methodInv == null) {
