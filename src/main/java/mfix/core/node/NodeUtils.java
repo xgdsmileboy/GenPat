@@ -128,7 +128,7 @@ public class NodeUtils {
     }
 
     public static String decorateMethodName(SName name) {
-        return "MFIXTD_" + name.getName();
+        return "MFIXTD_" + (name == null ? "" : name.getName());
     }
 
     public static String dedecorateMethodName(String name) {

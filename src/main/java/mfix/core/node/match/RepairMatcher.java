@@ -9,8 +9,11 @@ package mfix.core.node.match;
 
 import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MatchLevel;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
+import mfix.core.node.ast.expr.SName;
 import mfix.core.node.match.metric.IScore;
 import mfix.core.node.match.metric.LocationScore;
 import mfix.core.node.match.metric.NodeSimilarity;
@@ -104,6 +107,8 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
         int bSize = bNodes.size();
         int pSize = pNodes.size();
 
+        String buggyMethodName = NodeUtils.decorateMethodName(distilMethodName(buggy));
+        String patternMethodName = NodeUtils.decorateMethodName(distilMethodName(pattern.getPatternNode()));
         ArrayList<MatchList> matchLists = new ArrayList<>(pSize);
         Map<Node, Node> nodeMap;
         Map<String, String> strMap;
@@ -112,6 +117,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
             for (int j = 0; j < bSize; j++) {
                 nodeMap = new HashMap<>();
                 strMap = new HashMap<>();
+                strMap.put(patternMethodName, buggyMethodName);
                 if (pNodes.get(i).ifMatch(bNodes.get(j), nodeMap, strMap, level)) {
                     pNodes.get(i).greedyMatchBinding(bNodes.get(j), nodeMap, strMap);
                     matchNodes.add(new MatchNode(bNodes.get(j), nodeMap, strMap));
@@ -262,5 +268,12 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
     private boolean dataDependOn(Node src, Node dep) {
         Set<Node> nodes = src.recursivelyGetDataDependency(new HashSet<>());
         return nodes.contains(dep);
+    }
+
+    private SName distilMethodName(Node node) {
+        if (node != null && node instanceof MethDecl) {
+            return ((MethDecl) node).getName();
+        }
+        return null;
     }
 }
