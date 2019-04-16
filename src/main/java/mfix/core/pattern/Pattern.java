@@ -43,6 +43,7 @@ public class Pattern implements PatternMatcher, Serializable {
     private FVector _fVector;
     private Set<Variable> _newVars;
     private Set<String> _imports;
+    private Set<String> _fields;
     private transient String _patternName;
     private transient NameMapping _nameMapping;
     private transient Set<String> _keywords;
@@ -50,11 +51,12 @@ public class Pattern implements PatternMatcher, Serializable {
     private transient Set<Modification> _modifications;
 
     public Pattern(Node pNode) {
-        this(pNode, new HashSet<>());
+        this(pNode, new HashSet<>(), new HashSet<>());
     }
 
-    public Pattern(Node pNode, Set<String> imports) {
+    public Pattern(Node pNode, Set<String> fields, Set<String> imports) {
         _patternNode = pNode;
+        _fields = fields;
         _imports = imports;
         _newVars = new HashSet<>();
     }
@@ -80,6 +82,10 @@ public class Pattern implements PatternMatcher, Serializable {
 
     public void setPatternName(String name) {
         _patternName = name;
+    }
+
+    public Set<String> getFields() {
+        return _fields;
     }
 
     public Set<String> getImports() {
