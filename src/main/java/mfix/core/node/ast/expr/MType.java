@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.MatchLevel;
@@ -175,7 +176,7 @@ public class MType extends Node {
 	@Override
 	public boolean postAccurateMatch(Node node) {
 		if (getBindingNode() == node) return true;
-		if (getBindingNode() == null && canBinding(node)) {
+		if (getBindingNode() == null && compare(node)) {
 			setBindingNode(node);
 			return true;
 		}
@@ -190,11 +191,19 @@ public class MType extends Node {
 	@Override
 	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
 		if(node instanceof MType) {
-			return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
-					&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
-		} else {
-			return false;
+			MType type = (MType) node;
+			if (!isChanged() || compare(node)) {
+				String typeStr1 = type.getTypeStr();
+				String typeStr2 = getTypeStr();
+				typeStr1 = "?".equals(typeStr1) ? typeStr2 : typeStr1;
+				typeStr2 = "?".equals(typeStr2) ? typeStr1 : typeStr2;
+				boolean matchType = isAbstract() ? true : Utils.safeStringEqual(typeStr1, typeStr2);
+				return NodeUtils.match(true, matchType, level)
+						&& NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
+						&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+			}
 		}
+		return false;
 	}
 
 	@Override

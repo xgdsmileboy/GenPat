@@ -8,9 +8,11 @@ package mfix.core.node.ast;
 
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
+import mfix.core.node.ast.expr.Assign;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MethodInv;
 import mfix.core.node.ast.expr.SName;
+import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.ast.visitor.NodeVisitor;
 import mfix.core.node.comp.NodeComparator;
@@ -568,9 +570,29 @@ public abstract class Node implements NodeComparator, Serializable {
             }
         } else if (getDataDependency().getBindingNode()
                 != _bindingNode.getDataDependency()) {
-            return true;
+            return !fakeChange(getDataDependency(), _bindingNode.getDataDependency());
         }
         return false;
+    }
+
+    private boolean fakeChange(Node d1, Node d2) {
+        Node assigned1 = null;
+        if (d1 instanceof Vdf) {
+            assigned1 = ((Vdf) d1).getExpression();
+        } else if (d1 instanceof Assign) {
+            assigned1 = ((Assign) d1).getRhs();
+        }
+        Node assigned2 = null;
+        if (d2 instanceof Vdf) {
+            assigned2 = ((Vdf) d2).getExpression();
+        } else if (d2 instanceof Assign) {
+            assigned2 = ((Assign) d2).getRhs();
+        }
+        if (assigned1 == null) {
+            return assigned2 == null;
+        } else {
+            return assigned1.getBindingNode() == assigned2;
+        }
     }
 
     private boolean controlDependencyChanged() {

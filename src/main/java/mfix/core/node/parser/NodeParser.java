@@ -53,7 +53,12 @@ public class NodeParser {
         }
         methDecl.setModifiers(modifiers);
         if(node.getReturnType2() != null) {
-            methDecl.setRetType(typeFromBinding(node.getAST(), node.getReturnType2().resolveBinding()));
+            Type type = typeFromBinding(node.getAST(), node.getReturnType2().resolveBinding());
+            if (type == null || type instanceof WildcardType) {
+                methDecl.setRetType(node.getReturnType2());
+            } else {
+                methDecl.setRetType(type);
+            }
         }
         SName name = (SName) process(node.getName(), scope, strcture);
         name.setParent(methDecl);
@@ -69,7 +74,7 @@ public class NodeParser {
         List<String> throwTypes = new ArrayList<>(7);
         for(Object object : node.thrownExceptionTypes()) {
             Type throwType = typeFromBinding(node.getAST(), ((Type) object).resolveBinding());
-            if(throwType == null) {
+            if(throwType == null || throwType instanceof WildcardType) {
                 throwTypes.add(object.toString());
             } else {
                 throwTypes.add(throwType.toString());
@@ -496,7 +501,11 @@ public class NodeParser {
         }
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
+        Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
+        if (type == null || type instanceof WildcardType) {
+            type = node.getType();
+        }
+        mType.setType(type);
         mType.setParent(varDeclarationStmt);
         varDeclarationStmt.setDeclType(mType);
 
@@ -563,7 +572,11 @@ public class NodeParser {
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AryCreation aryCreation = new AryCreation(_fileName, startLine, endLine, node);
         MType mType = new MType(_fileName, startLine, endLine, node.getType().getElementType());
-        mType.setType(typeFromBinding(node.getAST(), node.getType().getElementType().resolveBinding()));
+        Type type = typeFromBinding(node.getAST(), node.getType().getElementType().resolveBinding());
+        if (type == null || type instanceof WildcardType) {
+            type = node.getType().getElementType();
+        }
+        mType.setType(type);
         mType.setParent(aryCreation);
         aryCreation.setArrayType(mType);
         aryCreation.setType(node.getType());
@@ -641,7 +654,11 @@ public class NodeParser {
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         CastExpr castExpr = new CastExpr(_fileName, startLine, endLine, node);
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
+        Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
+        if (type == null || type instanceof WildcardType) {
+            type = node.getType();
+        }
+        mType.setType(type);
         mType.setParent(castExpr);
         castExpr.setCastType(mType);
         Expr expression = (Expr) process(node.getExpression(), scope, strcture);
@@ -698,6 +715,9 @@ public class NodeParser {
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
         Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
+        if (type == null || type instanceof WildcardType) {
+            type = node.getType();
+        }
         mType.setType(type);
         mType.setParent(classInstCreation);
         classInstCreation.setClassType(mType);
@@ -1139,6 +1159,9 @@ public class NodeParser {
         TyLiteral tyLiteral = new TyLiteral(_fileName, startLine, endLine, node);
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
         Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
+        if (type == null || type instanceof WildcardType) {
+            type = node.getType();
+        }
         mType.setType(type);
         mType.setParent(tyLiteral);
         tyLiteral.setValue(mType);
@@ -1160,7 +1183,11 @@ public class NodeParser {
         VarDeclarationExpr varDeclarationExpr = new VarDeclarationExpr(_fileName, startLine, endLine, node);
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
+        Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
+        if(type == null || type instanceof WildcardType) {
+            type = node.getType();
+        }
+        mType.setType(type);
         mType.setParent(varDeclarationExpr);
         varDeclarationExpr.setDeclType(mType);
         varDeclarationExpr.setType(node.getType());
@@ -1205,7 +1232,11 @@ public class NodeParser {
         Svd svd = new Svd(_fileName, startLine, endLine, node);
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
-        mType.setType(typeFromBinding(node.getAST(), node.getType().resolveBinding()));
+        Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
+        if (type == null || type instanceof WildcardType) {
+            type = node.getType();
+        }
+        mType.setType(type);
         mType.setParent(svd);
         svd.setDecType(mType);
         svd.setType(node.getType());

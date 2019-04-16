@@ -7,6 +7,7 @@
 package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
+import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
@@ -214,6 +215,8 @@ public class MethodInv extends Expr {
 			if (methodInv.getName().getName().equals(getName().getName())) {
 				setBindingNode(methodInv);
 				match = true;
+			} else {
+				methodInv = null;
 			}
 		}
 		if (methodInv == null) {
@@ -275,6 +278,8 @@ public class MethodInv extends Expr {
 		if(super.ifMatch(node, matchedNode, matchedStrings, level)) {
 			if (node.getNodeType() == TYPE.MINVOCATION) {
 				MethodInv methodInv = (MethodInv) node;
+				Utils.checkCompatiblePut(NodeUtils.decorateMethodName(_name),
+						NodeUtils.decorateMethodName(methodInv.getName()), matchedStrings);
 				if (_expression != null && methodInv._expression != null) {
 					return NodeUtils.matchSameNodeType(_expression, methodInv._expression, matchedNode, matchedStrings);
 				}
@@ -296,7 +301,13 @@ public class MethodInv extends Expr {
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
 			}
-			stringBuffer.append(_name.getName());
+			String name = exprMap.get(NodeUtils.decorateMethodName(_name));
+			name = NodeUtils.dedecorateMethodName(name);
+			if (name == null) {
+				stringBuffer.append(_name.getName());
+			} else {
+				stringBuffer.append(name);
+			}
 			stringBuffer.append("(");
 			if (_arguments != null) {
 				tmp = _arguments.transfer(vars, exprMap,retType, exceptions);

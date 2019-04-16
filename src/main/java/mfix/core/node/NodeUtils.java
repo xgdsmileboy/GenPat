@@ -19,6 +19,7 @@ import mfix.core.node.ast.expr.Assign;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.MethodInv;
+import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.expr.SuperMethodInv;
 import mfix.core.node.ast.stmt.EmptyStmt;
 import mfix.core.node.ast.stmt.ExpressionStmt;
@@ -124,6 +125,18 @@ public class NodeUtils {
                 LevelLogger.error("Should not be here!");
                 return false;
         }
+    }
+
+    public static String decorateMethodName(SName name) {
+        return "MFIXTD_" + (name == null ? "" : name.getName());
+    }
+
+    public static String dedecorateMethodName(String name) {
+        if (name == null) return null;
+        if (name.startsWith("MFIXTD_")) {
+            return name.substring("MFIXTD_".length());
+        }
+        return name;
     }
 
     public static String distillBasicType(MType type) {

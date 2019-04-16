@@ -31,15 +31,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import javax.management.relation.Relation;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: Jiajun
@@ -533,6 +525,7 @@ public class Matcher {
                                                      VarScope vars, Map<String, String> exprMap,
                                                      String retType, Set<String> exceptions) {
         StringBuffer tmp;
+        List<Pair<Insertion, StringBuffer>> insertNoDep = new LinkedList<>();
         for (Modification modification : modifications) {
             if (modification instanceof Wrap) {
                 Wrap wrap = (Wrap) modification;
@@ -629,6 +622,14 @@ public class Matcher {
                             list = new LinkedList<>();
                             insertionBefore.put(statements.get(beforeIndex), list);
                         }
+                        Iterator<Pair<Insertion, StringBuffer>> iterator = insertNoDep.iterator();
+                        while(iterator.hasNext()) {
+                            Pair<Insertion, StringBuffer> item = iterator.next();
+                            if (item.getFirst().getIndex() < insertion.getIndex() && item.getFirst().getIndex() > beforeIndex) {
+                                list.add(item.getSecond());
+                                iterator.remove();
+                            }
+                        }
                         list.add(tmp);
                     } else {
                         List<StringBuffer> list = insertionAfter.get(statements.get(afterIndex));
@@ -636,18 +637,30 @@ public class Matcher {
                             list = new LinkedList<>();
                             insertionAfter.put(statements.get(afterIndex), list);
                         }
+                        Iterator<Pair<Insertion, StringBuffer>> iterator = insertNoDep.iterator();
+                        while(iterator.hasNext()) {
+                            Pair<Insertion, StringBuffer> item = iterator.next();
+                            if (item.getFirst().getIndex() < insertion.getIndex() && item.getFirst().getIndex() > afterIndex) {
+                                list.add(item.getSecond());
+                                iterator.remove();
+                            }
+                        }
                         list.add(tmp);
                     }
                 } else {
-                    List<StringBuffer> list = insertAt.get(insertion.getIndex());
-                    if (list == null) {
-                        list = new LinkedList<>();
-                        insertAt.put(insertion.getIndex(), list);
-                    }
-                    list.add(tmp);
+                    insertNoDep.add(new Pair<>(insertion, tmp));
                 }
             }
         }
+        for (Pair<Insertion, StringBuffer> pair : insertNoDep) {
+            List<StringBuffer> list = insertAt.get(pair.getFirst().getIndex());
+            if (list == null) {
+                list = new LinkedList<>();
+                insertAt.put(pair.getFirst().getIndex(), list);
+            }
+            list.add(pair.getSecond());
+        }
+
         return true;
     }
 

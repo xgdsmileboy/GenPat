@@ -21,9 +21,14 @@ import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.parser.NodeParser;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,21 +62,13 @@ public class PatternExtractor {
     public Set<Pattern> extractPattern(String srcFile, String tarFile, Set<Method> focus, int maxChangeLine) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
-        Set<String> imports = new HashSet<>();
-        Set<String> srcImports = new HashSet<>();
-        for (Object o : srcUnit.imports()) {
-            srcImports.add(o.toString());
-        }
-        for (Object o : tarUnit.imports()) {
-            String s = o.toString();
-            if (!srcImports.contains(s)) {
-                imports.add(s);
-            }
-        }
         Set<Pattern> patterns = new HashSet<>();
         if (srcUnit == null || tarUnit == null) {
             return patterns;
         }
+
+        Set<String> imports = parseImports(srcUnit, tarUnit);
+
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
         NodeParser nodeParser = new NodeParser();
 
@@ -94,6 +91,7 @@ public class PatternExtractor {
                     continue;
                 }
             }
+            Pair<Set<Variable>, Set<String>> fields = parseFields(pair.getFirst(), pair.getSecond());
             nodeParser.setCompilationUnit(srcFile, srcUnit);
             Node srcNode = nodeParser.process(pair.getFirst());
             nodeParser.setCompilationUnit(tarFile, tarUnit);
@@ -133,9 +131,10 @@ public class PatternExtractor {
                 srcNode.doAbstraction(abstraction.lazyInit());
                 tarNode.doAbstraction(abstraction);
                 // serialize feature vector
-                Pattern pattern = new Pattern(srcNode, imports);
+                Pattern pattern = new Pattern(srcNode, fields.getSecond(), imports);
                 pattern.getFeatureVector();
                 pattern.addNewVars(newVars);
+                pattern.addNewVars(fields.getFirst());
                 patterns.add(pattern);
             }
         }
@@ -162,5 +161,75 @@ public class PatternExtractor {
             queue.addAll(node.getAllChildren());
         }
         return vars;
+    }
+
+    private Set<String> parseImports(CompilationUnit srcUnit, CompilationUnit tarUnit) {
+        Set<String> imports = new HashSet<>();
+        Set<String> srcImports = new HashSet<>();
+        for (Object o : srcUnit.imports()) {
+            srcImports.add(o.toString());
+        }
+        for (Object o : tarUnit.imports()) {
+            String s = o.toString();
+            if (!srcImports.contains(s)) {
+                imports.add(s);
+            }
+        }
+        return imports;
+    }
+
+    private Pair<Set<Variable>, Set<String>> parseFields(ASTNode m1, ASTNode m2) {
+        // TODO : define classes for fields and imports
+        TypeDeclaration srcType = null;
+        TypeDeclaration tarType = null;
+        while(m1 != null) {
+            if (m1 instanceof TypeDeclaration) {
+                srcType = (TypeDeclaration) m1;
+                break;
+            }
+            m1 = m1.getParent();
+        }
+        while(m2 != null) {
+            if (m2 instanceof TypeDeclaration) {
+                tarType = (TypeDeclaration) m2;
+                break;
+            }
+            m2 = m2.getParent();
+        }
+        if (srcType == null || tarType == null) {
+            return new Pair<>(Collections.emptySet(), Collections.emptySet());
+        }
+        final Set<Variable> srcFields = new HashSet<>();
+        for (FieldDeclaration node : srcType.getFields()) {
+            String type = node.getType().toString();
+            for (Object obj : node.fragments()) {
+                if (obj instanceof VariableDeclarationFragment) {
+                    String name = ((VariableDeclarationFragment)obj).getName().getIdentifier();
+                    srcFields.add(new Variable(name, type));
+                }
+            }
+        }
+
+        final Set<String> addedFields = new HashSet<>();
+        final Set<Variable> newVars = new HashSet<>();
+        for (FieldDeclaration node : tarType.getFields()) {
+            StringBuffer buffer = new StringBuffer();
+            for (Object o : node.modifiers()) {
+                buffer.append(o.toString()).append(" ");
+            }
+            String type = node.getType().toString();
+            buffer.append(type).append(" ");
+            for (Object obj : node.fragments()) {
+                if (obj instanceof VariableDeclarationFragment) {
+                    String name = ((VariableDeclarationFragment)obj).getName().getIdentifier();
+                    Variable var = new Variable(name, type);
+                    if (!srcFields.contains(var)) {
+                        newVars.add(var);
+                        addedFields.add(buffer.toString() + obj.toString() + ";");
+                    }
+                }
+            }
+        }
+        return new Pair<>(newVars, addedFields);
     }
 }
