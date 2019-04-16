@@ -69,7 +69,7 @@ public class NodeParser {
         List<String> throwTypes = new ArrayList<>(7);
         for(Object object : node.thrownExceptionTypes()) {
             Type throwType = typeFromBinding(node.getAST(), ((Type) object).resolveBinding());
-            if(throwType == null) {
+            if(throwType == null || throwType instanceof WildcardType) {
                 throwTypes.add(object.toString());
             } else {
                 throwTypes.add(throwType.toString());
