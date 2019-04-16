@@ -208,8 +208,12 @@ public class ExprList extends Node {
     @Override
     public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
         if(node instanceof ExprList) {
-            return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
-                    && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+            ExprList list = (ExprList) node;
+            if (getModifications().isEmpty() || getExpr().size() == list.getExpr().size()) {
+                return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
+                        && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
+            }
+            return false;
         }
         return false;
     }
