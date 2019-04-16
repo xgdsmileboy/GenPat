@@ -9,6 +9,7 @@ package mfix.core.node.ast.stmt;
 import mfix.common.conf.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.MatchLevel;
+import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.Matcher;
@@ -147,13 +148,21 @@ public class Blk extends Stmt {
     public boolean postAccurateMatch(Node node) {
         Blk blk = null;
         boolean match = false;
-        if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
-            blk = (Blk) getBindingNode();
-            match = blk == node;
-        } else if (canBinding(node)) {
-            blk = (Blk) node;
-            setBindingNode(node);
-            match = true;
+        if (getParent() instanceof MethDecl) {
+            if (node.getParent() instanceof MethDecl) {
+                blk = (Blk) node;
+                setBindingNode(node);
+                match = true;
+            }
+        } else {
+            if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
+                blk = (Blk) getBindingNode();
+                match = blk == node;
+            } else if (canBinding(node)) {
+                blk = (Blk) node;
+                setBindingNode(node);
+                match = true;
+            }
         }
         if (blk == null) {
             continueTopDownMatchNull();
