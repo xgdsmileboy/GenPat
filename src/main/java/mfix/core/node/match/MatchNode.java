@@ -8,7 +8,9 @@
 package mfix.core.node.match;
 
 import mfix.core.node.ast.Node;
+import mfix.core.node.match.metric.IScore;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,11 +21,20 @@ public class MatchNode {
     private Node _node;
     private Map<Node, Node> _nodeMap;
     private Map<String, String> _strMap;
+    private double _score;
 
-    public MatchNode(Node node, Map<Node, Node> nodeMap, Map<String, String> strMap) {
+    public MatchNode(Node node, Map<Node, Node> nodeMap, Map<String, String> strMap, final List<IScore> scores) {
         _node = node;
         _nodeMap = nodeMap;
         _strMap = strMap;
+        _score = 0;
+        for (IScore score : scores) {
+            _score += score.computeScore(nodeMap, strMap) * score.getWeight();
+        }
+    }
+
+    public double getScore() {
+        return _score;
     }
 
     public Node getNode() {

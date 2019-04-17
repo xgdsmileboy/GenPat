@@ -107,6 +107,12 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
         int bSize = bNodes.size();
         int pSize = pNodes.size();
 
+        // similarity metrics used for match instance sorting
+        List<IScore> similarities = new LinkedList<>();
+        similarities.add(new NodeSimilarity(0.33));
+        similarities.add(new LocationScore(0.33, buggyLines));
+        similarities.add(new TokenSimilarity(0.33));
+
         String buggyMethodName = NodeUtils.decorateMethodName(distilMethodName(buggy));
         String patternMethodName = NodeUtils.decorateMethodName(distilMethodName(pattern.getPatternNode()));
         ArrayList<MatchList> matchLists = new ArrayList<>(pSize);
@@ -120,7 +126,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
                 strMap.put(patternMethodName, buggyMethodName);
                 if (pNodes.get(i).ifMatch(bNodes.get(j), nodeMap, strMap, level)) {
                     pNodes.get(i).greedyMatchBinding(bNodes.get(j), nodeMap, strMap);
-                    matchNodes.add(new MatchNode(bNodes.get(j), nodeMap, strMap));
+                    matchNodes.add(new MatchNode(bNodes.get(j), nodeMap, strMap, similarities));
                 }
             }
             if (matchNodes.isEmpty()) {
@@ -131,15 +137,18 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
 
         // match instance with fewer matching node first for better performance
         // fewer back-tracking
-        matchLists.sort(Comparator.comparingInt(MatchList::matchSize));
+        matchLists.sort(Comparator.comparing(MatchList::nodeSize).reversed().thenComparing(MatchList::matchSize));
 
-        // similarity metrics used for match instance sorting
-        List<IScore> similarities = new LinkedList<>();
-        similarities.add(new NodeSimilarity(0.33));
-        similarities.add(new LocationScore(0.33, buggyLines));
-        similarities.add(new TokenSimilarity(0.33));
+        for (MatchList list : matchLists) {
+            if ("buttons.add(Box.createGlue());".equals(list.getNode().toString())) {
+                for (MatchNode n : list.getMatchedNodes()) {
+                    System.out.println(n);
+                }
+            }
+        }
 
-        List<MatchInstance> matches = new LinkedList<>(permutePossibleMatches(matchLists, similarities));
+
+        List<MatchInstance> matches = permutePossibleMatches(matchLists, similarities);
         if (buggyLines != null && !buggyLines.isEmpty()) {
             Set<Integer> needToMatch = new HashSet<>(buggyLines);
             // matched node exists in the given lines (line _level fault localization)
@@ -155,6 +164,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
         if (matches.isEmpty()) {
             System.err.println("No matches !");
         }
+
         return matches;
     }
 
@@ -165,9 +175,9 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
      * @param matchLists : node matching result
      * @return : all possible matching solutions
      */
-    private Set<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists,
+    private List<MatchInstance> permutePossibleMatches(ArrayList<MatchList> matchLists,
                                                              List<IScore> similarities) {
-        Set<MatchInstance> results = new HashSet<>();
+        List<MatchInstance> results = new LinkedList<>();
         matchNext(new HashMap<>(), matchLists, 0, new HashSet<>(), results, similarities);
         return results;
     }
@@ -183,9 +193,9 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
      * @param instances      : contains possible matching solutions
      */
     private void matchNext(Map<Node, MatchNode> matchedNodeMap, List<MatchList> list, int i,
-                                  Set<Node> alreadyMatched, Set<MatchInstance> instances,
+                                  Set<Node> alreadyMatched, List<MatchInstance> instances,
                                   List<IScore> similarities) {
-        if (_timer.timeout()) {
+        if (_timer.timeout() || instances.size() >= 2 * Constant.MAX_INSTANCE_PER_PATTERN) {
             return;
         }
         if (i == list.size()) {
