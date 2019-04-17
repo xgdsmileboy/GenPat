@@ -1,0 +1,1 @@
+[[{"name": "elementMoved", "argTypes": ["Object", "Object"], "file": "/2/l1/TextMergeViewer.java"}, {"name": "elementMoved", "argTypes": ["Object", "Object"], "file": "/2/l2/TextMergeViewer.java"}], [{"name": "elementDeleted", "argTypes": ["Object"], "file": "/2/r1/TextMergeViewer.java"}, {"name": "elementDeleted", "argTypes": ["Object"], "file": "/2/r2/TextMergeViewer.java"}]]

@@ -1,0 +1,1 @@
+[[{"name": "getStrokeColor", "argTypes": ["Diff"], "file": "/15/l1/TextMergeViewer.java"}, {"name": "getStrokeColor", "argTypes": ["Diff"], "file": "/15/l2/TextMergeViewer.java"}], [{"name": "getFillColor", "argTypes": ["Diff"], "file": "/15/r1/TextMergeViewer.java"}, {"name": "getFillColor", "argTypes": ["Diff"], "file": "/15/r2/TextMergeViewer.java"}]]
