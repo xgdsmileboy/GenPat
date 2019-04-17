@@ -94,7 +94,7 @@ public abstract class Expr extends Node {
             String typeStr2 = getTypeStr();
             typeStr1 = "?".equals(typeStr1) ? typeStr2 : typeStr1;
             typeStr2 = "?".equals(typeStr2) ? typeStr1 : typeStr2;
-            boolean matchType = _abstractType ? true : Utils.safeStringEqual(typeStr1, typeStr2);
+            boolean matchType = _abstractType ? true : NodeUtils.matchType(typeStr1, typeStr2);
             boolean matchName = _abstractName ? true : Utils.safeBufferEqual(toSrcString(), node.toSrcString());
             if (NodeUtils.match(matchName, matchType, level) && guarantee(node)) {
                 return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
