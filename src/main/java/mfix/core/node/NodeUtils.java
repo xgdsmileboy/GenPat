@@ -127,6 +127,14 @@ public class NodeUtils {
         }
     }
 
+    public final static Set<String> primitives = new HashSet<>(Arrays.asList("int", "float", "double"));
+    public static boolean matchType(String t1, String t2) {
+        if (t1 == t2) return true;
+        if (t1 == null) return t2 == null;
+        if (t1.equals(t2)) return true;
+        return primitives.contains(t1) && primitives.contains(t2);
+    }
+
     public static String decorateMethodName(SName name) {
         return "MFIXTD_" + (name == null ? "" : name.getName());
     }

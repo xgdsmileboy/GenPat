@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,8 @@ public class StrLiteral extends Expr {
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 //		_tokens.add("\"" + _value + "\"");
-		_tokens.add(_value);
+		String string = _value.replace(".", "\".\"");
+		_tokens.addAll(Arrays.asList(string.split("\\.")));
 	}
 
 	@Override

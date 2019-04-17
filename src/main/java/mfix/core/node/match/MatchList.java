@@ -7,11 +7,14 @@
 
 package mfix.core.node.match;
 
+import mfix.common.conf.Constant;
 import mfix.core.node.ast.Node;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author: Jiajun
@@ -27,6 +30,9 @@ public class MatchList {
 
     public MatchList setMatchedNodes(List<MatchNode> nodes) {
         _matchNodes = new ArrayList<>(nodes);
+        _matchNodes = _matchNodes.stream()
+                .sorted(Comparator.comparingDouble(MatchNode::getScore).reversed())
+                .limit(Constant.MAX_INSTANCE_PER_PATTERN).collect(Collectors.toList());
         return this;
     }
 
@@ -38,6 +44,10 @@ public class MatchList {
         return _matchNodes;
     }
 
+    public int nodeSize() {
+        return _pNode.getAllChildren().size();
+    }
+
     public int matchSize() {
         return _matchNodes.size();
     }
@@ -45,5 +55,4 @@ public class MatchList {
     public Iterator<MatchNode> getIterator() {
         return _matchNodes.iterator();
     }
-
 }
