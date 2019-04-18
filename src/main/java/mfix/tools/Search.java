@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class Search implements Callable<String> {
 
     private final static String result = Constant.HOME + Constant.SEP + "path.txt";
-    private final static int  threadPoolSize = 10;
+    private static int  threadPoolSize = 10;
 
     private String _fileName;
     private String _ins;
@@ -184,6 +184,11 @@ public class Search implements Callable<String> {
         option.setRequired(false);
         options.addOption(option);
 
+        option = new Option("thread", "thread", true,
+                "Max number of concurrent threads.");
+        option.setRequired(false);
+        options.addOption(option);
+
         return options;
     }
 
@@ -200,6 +205,10 @@ public class Search implements Callable<String> {
             formatter.printHelp("<command> -if <arg> [-ins <arg>] [-del <arg>] [-upd <arg>]", options);
             System.exit(1);
         }
+        if (cmd.hasOption("thread")) {
+            threadPoolSize = Integer.parseInt(cmd.getOptionValue("thread"));
+        }
+
         search(cmd.getOptionValue("if"), cmd.getOptionValue("ins"),
                 cmd.getOptionValue("del"), cmd.getOptionValue("upd"));
     }
