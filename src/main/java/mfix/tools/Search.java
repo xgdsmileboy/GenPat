@@ -137,12 +137,14 @@ public class Search implements Callable<String> {
         List<Future<String>> threads = new LinkedList<>();
         int count = 0;
         for (String file : files) {
-            if (count >= threadPoolSize) {
-                clear(threads);
-                threads.clear();
-                count = 0;
+            if (file.startsWith(Constant.DEFAULT_PATTERN_HOME)) {
+                if (count >= threadPoolSize) {
+                    clear(threads);
+                    threads.clear();
+                    count = 0;
+                }
+                threads.add(pool.submit(new Search(file, ins, del, upd)));
             }
-            threads.add(pool.submit(new Search(file, ins, del, upd)));
         }
         clear(threads);
         pool.shutdown();
