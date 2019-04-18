@@ -58,6 +58,7 @@ public class Search implements Callable<String> {
 
     @Override
     public String call() throws Exception {
+        LevelLogger.info(_fileName);
         Pattern p = (Pattern) Utils.deserialize(_fileName);
         Set<Modification> modifications = p.getAllModifications();
         if (_ins != null) {
@@ -139,9 +140,9 @@ public class Search implements Callable<String> {
                 buffer = new StringBuffer();
                 for (Future<String> future : threads) {
                     try {
-                        String rlst = future.get(30, TimeUnit.SECONDS);
-                        if (rlst != null) {
-                            buffer.append(rlst).append("\n");
+                        String rslt = future.get(30, TimeUnit.SECONDS);
+                        if (rslt != null) {
+                            buffer.append(rslt).append("\n");
                         }
                     } catch (Exception e) {
                         LevelLogger.error("Get result exception.");
