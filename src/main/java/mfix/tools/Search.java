@@ -137,27 +137,33 @@ public class Search implements Callable<String> {
         int count = 0;
         for (String file : files) {
             if (count >= threadPoolSize) {
-                buffer = new StringBuffer();
-                for (Future<String> future : threads) {
-                    try {
-                        String rslt = future.get(30, TimeUnit.SECONDS);
-                        if (rslt != null) {
-                            buffer.append(rslt).append("\n");
-                        }
-                    } catch (Exception e) {
-                        LevelLogger.error("Get result exception.");
-                        future.cancel(true);
-                    }
-                }
+                clear(threads);
                 threads.clear();
                 count = 0;
-                if (buffer.length() > 0) {
-                    JavaFile.writeStringToFile(result, buffer.toString(), true);
-                }
             }
             threads.add(pool.submit(new Search(file, ins, del, upd)));
         }
+        clear(threads);
         pool.shutdown();
+    }
+
+    private static void clear(List<Future<String>> threads) {
+        StringBuffer buffer = new StringBuffer();
+        for (Future<String> future : threads) {
+            try {
+                String rslt = future.get(30, TimeUnit.SECONDS);
+                if (rslt != null) {
+                    buffer.append(rslt).append("\n");
+                }
+            } catch (Exception e) {
+                LevelLogger.error("Get result exception.");
+                future.cancel(true);
+            }
+        }
+        threads.clear();
+        if (buffer.length() > 0) {
+            JavaFile.writeStringToFile(result, buffer.toString(), true);
+        }
     }
 
     private static Options options() {
@@ -214,8 +220,30 @@ public class Search implements Callable<String> {
     }
 
 
-    public static void main(String[] args) {
-        search(args);
+    public static void main(String[] args) throws Exception{
+//        search(args);
+        Pattern p = (Pattern) Utils.deserialize("p.pattern");
+        Set<Modification> modifications = p.getAllModifications();
+        String _upd = "instance";
+        if (_upd != null) {
+            Set<Modification> updates = modifications.stream()
+                    .filter(m -> m instanceof Update)
+                    .collect(Collectors.toSet());
+            boolean contain = false;
+            Update update;
+            for (Modification m : updates) {
+                update = (Update) m;
+                if (update.getSrcNode() != null && update.getSrcNode().toString().contains(_upd)) {
+                    contain = true;
+                    break;
+                }
+                if (update.getTarNode() != null && update.getTarNode().toString().contains(_upd)) {
+                    contain = true;
+                    break;
+                }
+            }
+            System.out.println(contain);
+        }
     }
 
 }
