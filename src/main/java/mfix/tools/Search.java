@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 /**
@@ -155,6 +156,9 @@ public class Search implements Callable<String> {
                 if (rslt != null) {
                     buffer.append(rslt).append("\n");
                 }
+            } catch (TimeoutException e) {
+                LevelLogger.error("Get result timeout.");
+                future.cancel(true);
             } catch (Exception e) {
                 LevelLogger.error("Get result exception.");
                 future.cancel(true);
