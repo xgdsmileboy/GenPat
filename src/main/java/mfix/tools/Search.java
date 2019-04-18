@@ -126,11 +126,11 @@ public class Search implements Callable<String> {
         }
         StringBuffer buffer = new StringBuffer("INS : ")
                 .append(ins == null ? "" : ins)
-                .append("DEL : ")
+                .append("\nDEL : ")
                 .append(del == null ? "" : del)
-                .append("UPD : ")
+                .append("\nUPD : ")
                 .append(upd == null ? "" : upd)
-                .append("---------------\n");
+                .append("\n---------------\n");
         JavaFile.writeStringToFile(result, buffer.toString(), false);
         ExecutorService pool = Executors.newFixedThreadPool(threadPoolSize);
         List<Future<String>> threads = new LinkedList<>();
