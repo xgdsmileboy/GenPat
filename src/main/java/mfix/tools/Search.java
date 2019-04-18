@@ -160,7 +160,7 @@ public class Search implements Callable<String> {
                 LevelLogger.error("Get result timeout.");
                 future.cancel(true);
             } catch (Exception e) {
-                LevelLogger.error("Get result exception.");
+                LevelLogger.error("Get result exception.", e);
                 future.cancel(true);
             }
         }
@@ -224,30 +224,8 @@ public class Search implements Callable<String> {
     }
 
 
-    public static void main(String[] args) throws Exception{
-//        search(args);
-        Pattern p = (Pattern) Utils.deserialize("p.pattern");
-        Set<Modification> modifications = p.getAllModifications();
-        String _upd = "instance";
-        if (_upd != null) {
-            Set<Modification> updates = modifications.stream()
-                    .filter(m -> m instanceof Update)
-                    .collect(Collectors.toSet());
-            boolean contain = false;
-            Update update;
-            for (Modification m : updates) {
-                update = (Update) m;
-                if (update.getSrcNode() != null && update.getSrcNode().toString().contains(_upd)) {
-                    contain = true;
-                    break;
-                }
-                if (update.getTarNode() != null && update.getTarNode().toString().contains(_upd)) {
-                    contain = true;
-                    break;
-                }
-            }
-            System.out.println(contain);
-        }
+    public static void main(String[] args) {
+        search(args);
     }
 
 }
