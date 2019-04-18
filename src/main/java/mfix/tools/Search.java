@@ -151,7 +151,7 @@ public class Search implements Callable<String> {
         StringBuffer buffer = new StringBuffer();
         for (Future<String> future : threads) {
             try {
-                String rslt = future.get(30, TimeUnit.SECONDS);
+                String rslt = future.get(2, TimeUnit.MINUTES);
                 if (rslt != null) {
                     buffer.append(rslt).append("\n");
                 }
