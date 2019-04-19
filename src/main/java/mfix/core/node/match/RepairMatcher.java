@@ -139,15 +139,6 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
         // fewer back-tracking
         matchLists.sort(Comparator.comparing(MatchList::nodeSize).reversed().thenComparing(MatchList::matchSize));
 
-        for (MatchList list : matchLists) {
-            if ("buttons.add(Box.createGlue());".equals(list.getNode().toString())) {
-                for (MatchNode n : list.getMatchedNodes()) {
-                    System.out.println(n);
-                }
-            }
-        }
-
-
         List<MatchInstance> matches = permutePossibleMatches(matchLists, similarities);
         if (buggyLines != null && !buggyLines.isEmpty()) {
             Set<Integer> needToMatch = new HashSet<>(buggyLines);

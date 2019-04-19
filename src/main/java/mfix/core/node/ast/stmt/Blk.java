@@ -157,6 +157,11 @@ public class Blk extends Stmt {
         } else {
             if (getBindingNode() != null && (getBindingNode() == node || !compare(node))) {
                 blk = (Blk) getBindingNode();
+                if (node != null && getParent().getBindingNode() == node.getParent() && node instanceof Blk) {
+                    blk.setBindingNode(null);
+                    setBindingNode(node);
+                    blk = (Blk) node;
+                }
                 match = blk == node;
             } else if (canBinding(node)) {
                 blk = (Blk) node;

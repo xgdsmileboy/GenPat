@@ -11,6 +11,7 @@ import mfix.tools.Cluster;
 import mfix.tools.Filter;
 import mfix.tools.PatternPrinter;
 import mfix.tools.Repair;
+import mfix.tools.Search;
 import mfix.tools.TokenStatistic;
 
 public class Main {
@@ -25,6 +26,7 @@ public class Main {
             System.err.println("\tfilter : serialize and filter patterns and output pattern records.");
             System.err.println("\tcluster : cluster serialized patterns.");
             System.err.println("\tstatistic : keyword statistics.");
+            System.err.println("\tsearch : search desired patterns.");
             System.exit(1);
         }
 
@@ -48,6 +50,9 @@ public class Main {
             case "statistic":
                 TokenStatistic tokenStatistic = new TokenStatistic();
                 tokenStatistic.statistic(args);
+                break;
+            case "search":
+                Search.search(args);
                 break;
             default:
                 Repair.repairAPI(args);
