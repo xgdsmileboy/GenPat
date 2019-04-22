@@ -815,6 +815,28 @@ public class NodeParser {
 
         infixExpr.setType(NodeUtils.parseExprType(lhs, node.getOperator().toString(), rhs));
 
+        // process special cases
+        if (node.hasExtendedOperands()) {
+            lhs = infixExpr;
+            for (Object o : node.extendedOperands()) {
+                rhs = (Expr) process((Expression) o, scope, strcture);
+                infixExpr = new InfixExpr(_fileName, startLine, endLine, (ASTNode) o);
+                lhs.setParent(infixExpr);
+                infixExpr.setLeftHandSide(lhs);
+
+                rhs.setParent(infixExpr);
+                infixExpr.setRightHandSide(rhs);
+
+                infixOperator = new InfixOperator(_fileName, startLine, endLine, null);
+                infixOperator.setOperator(node.getOperator());
+                infixOperator.setParent(infixExpr);
+                infixExpr.setOperator(infixOperator);
+
+                infixExpr.setType(NodeUtils.parseExprType(lhs, node.getOperator().toString(), rhs));
+                lhs = infixExpr;
+            }
+        }
+
         return infixExpr;
     }
 
