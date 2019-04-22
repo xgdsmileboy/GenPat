@@ -24,22 +24,21 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class rlytest {
     final static String LOCAL_DATASET = Constant.RES_DIR + Constant.SEP + "SysEdit-part1";
 
-    // find method with name & argType
+    // find method with same name & same argType
     static MethodDeclaration findMethodFromFile(String file, Method method) {
         CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
         final Set<MethodDeclaration> methods = new HashSet<>();
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration node) {
                 if (method.getName().equals(node.getName().getIdentifier()) &&
-                        method.argTypeSame(node)) {
+                        // method.argTypeSame(node)
+                        method.getArgTypes().size() == node.parameters().size()
+                ) {
                     methods.add(node);
                     return false;
                 }
@@ -155,6 +154,7 @@ public class rlytest {
                 new Pair<>(getPath(q_src), getPath(q_tar)), q_m_src);
     }
     public static void main(String[] args) {
+        /*
         for (int i = 1; i <= 50; ++i) {
             String path = LOCAL_DATASET + String.format("/%d/info.json", i);
             if (new File(path).exists()) {
@@ -166,6 +166,84 @@ public class rlytest {
                 }
             }
 //            break;
+        }
+        */
+        runc3();
+    }
+
+    static final java.util.regex.Pattern MethodPattern = java.util.regex.Pattern.compile("\\S+\\(.*\\)");
+
+    public static Method parseMethodFromString(String s) {
+        java.util.regex.Matcher m = MethodPattern.matcher(s);
+        if (m.find()) {
+            String method = m.group();
+//            System.out.println(method);
+            String[] arr = method.substring(0, method.length() - 1).split("\\(");
+            String methodName = arr[0];
+            List<String> methodArgs = new ArrayList<>();
+            if (arr.length > 1) {
+                methodArgs = Arrays.asList(arr[1].split(","));
+            }
+//            System.out.println(methodName);
+//            System.out.println(methodArgs);
+            return new Method(null, methodName, methodArgs);
+        } else {
+            System.err.println("Parse method error!");
+            return null;
+        }
+    }
+
+    public static void runc3() {
+        for (int i = 1; i <= 100; ++i) {
+            String path = "/Users/luyaoren/Downloads/cluster/" + i;
+
+            JSONParser parser = new JSONParser();
+            JSONObject ret = null;
+            try {
+                ret = (JSONObject) parser.parse(new FileReader(path + "/info.json"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            JSONArray methods = (JSONArray)ret.get("members");
+
+            List<Method> src_methods, tar_methods;
+            src_methods = new ArrayList<>();
+            tar_methods = new ArrayList<>();
+
+            for (int j = 0; j < methods.size(); ++j) {
+                String src0 = path + "/" + "src_0.java";
+                String tar0 = path + "/" + "tar_0.java";
+
+                String src = path + "/" + "src_" + j + ".java";
+                String tar = path + "/" + "tar_" + j + ".java";
+
+                String src_method = (String)((JSONObject)methods.get(j)).get("signatureBeforeChange");
+                String tar_method = (String)((JSONObject)methods.get(j)).get("signatureAfterChange");
+
+                System.out.println(src_method);
+                System.out.println(tar_method);
+
+
+                if ((new File(src).exists()) && (new File(tar).exists())) {
+                    src_methods.add(new Method(findMethodFromFile(src, parseMethodFromString(src_method))));
+                    tar_methods.add(new Method(findMethodFromFile(tar, parseMethodFromString(tar_method))));
+                } else {
+                    System.err.println("File not exist!");
+                }
+
+                System.out.println(src_methods.get(j));
+                System.out.println(tar_methods.get(j));
+
+                if (j > 0) {
+                    if (src_methods.get(0).equals(tar_methods.get(0)) &&
+                            src_methods.get(j).equals(tar_methods.get(j))) {
+                        tryApply(new Pair<>(src0, tar0), src_methods.get(0), new Pair<>(src, tar), src_methods.get(j));
+                    } else {
+                        System.err.println("Method signature is different!");
+                    }
+                }
+            }
+
         }
     }
 }
