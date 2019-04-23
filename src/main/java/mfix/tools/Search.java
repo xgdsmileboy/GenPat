@@ -68,7 +68,7 @@ public class Search implements Callable<String> {
         Set<Modification> modifications = p.getAllModifications();
         if (_ins != null) {
             Set<Node> inserts = modifications.stream()
-                    .filter(m -> m instanceof Insertion || m instanceof Wrap)
+                    .filter(m -> m instanceof Insertion)
                     .map(m -> ((Insertion) m).getInsertedNode())
                     .collect(Collectors.toSet());
             boolean contain = _regex ? containRegex(inserts, _ins) : containStr(inserts, _ins);
@@ -85,7 +85,7 @@ public class Search implements Callable<String> {
         }
         if (_upd != null) {
             Set<Modification> updates = modifications.stream()
-                    .filter(m -> m instanceof Update)
+                    .filter(m -> m instanceof Update || m instanceof Wrap)
                     .collect(Collectors.toSet());
             Update update;
             Set<Node> nodes = new HashSet<>();
