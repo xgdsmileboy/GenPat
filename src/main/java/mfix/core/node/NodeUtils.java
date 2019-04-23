@@ -292,13 +292,16 @@ public class NodeUtils {
      */
     public static boolean checkDependency(Node node, Node other, Map<Node, Node> matchedNode,
                                           Map<String, String> matchedStrings, MatchLevel level) {
-        if (node.getDataDependency() != null && other.getDataDependency() != null) {
-            if (node.getDataDependency().ifMatch(other.getDataDependency(), matchedNode, matchedStrings, level)) {
-                return true;
+        if (Constant.EXPAND_PATTERN || node.isChanged() || other.isChanged()) {
+            if (node.getDataDependency() != null && other.getDataDependency() != null) {
+                if (node.getDataDependency().ifMatch(other.getDataDependency(), matchedNode, matchedStrings, level)) {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            return node.getDataDependency() == other.getDataDependency();
         }
-        return node.getDataDependency() == other.getDataDependency();
+        return true;
     }
 
     /**

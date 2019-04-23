@@ -113,6 +113,8 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
         similarities.add(new LocationScore(0.33, buggyLines));
         similarities.add(new TokenSimilarity(0.33));
 
+        String pRet = ((MethDecl) pattern.getPatternNode()).getRetTypeStr();
+        String bRet = ((MethDecl) buggy).getRetTypeStr();
         String buggyMethodName = NodeUtils.decorateMethodName(distilMethodName(buggy));
         String patternMethodName = NodeUtils.decorateMethodName(distilMethodName(pattern.getPatternNode()));
         ArrayList<MatchList> matchLists = new ArrayList<>(pSize);
@@ -125,6 +127,9 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
                 strMap = new HashMap<>();
                 strMap.put(patternMethodName, buggyMethodName);
                 if (pNodes.get(i).ifMatch(bNodes.get(j), nodeMap, strMap, level)) {
+                    if (!"?".equals(pRet) && !"?".equals(bRet)) {
+                        strMap.put(pRet, bRet);
+                    }
                     pNodes.get(i).greedyMatchBinding(bNodes.get(j), nodeMap, strMap);
                     matchNodes.add(new MatchNode(bNodes.get(j), nodeMap, strMap, similarities));
                 }

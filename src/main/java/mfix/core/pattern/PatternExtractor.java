@@ -114,10 +114,12 @@ public class PatternExtractor {
                     if (node.getBindingNode() != null) {
                         node.getBindingNode().setExpanded();
                     }
-                    temp = node.expand(new HashSet<>());
-                    for(Node n : temp) {
-                        if (n.getBindingNode() != null) {
-                            n.getBindingNode().setExpanded();
+                    if (Constant.EXPAND_PATTERN) {
+                        temp = node.expand(new HashSet<>());
+                        for (Node n : temp) {
+                            if (n.getBindingNode() != null) {
+                                n.getBindingNode().setExpanded();
+                            }
                         }
                     }
                 }
