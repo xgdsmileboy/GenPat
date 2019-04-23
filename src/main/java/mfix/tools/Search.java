@@ -226,7 +226,7 @@ public class Search implements Callable<String> {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             LevelLogger.error(e.getMessage());
-            formatter.printHelp("<command> -if <arg> [-ins <arg>] [-del <arg>] [-upd <arg>]", options);
+            formatter.printHelp("<command> -if <arg> [-e] [-ins <arg>] [-del <arg>] [-upd <arg>]", options);
             System.exit(1);
         }
         if (cmd.hasOption("thread")) {
