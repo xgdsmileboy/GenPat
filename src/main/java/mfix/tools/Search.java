@@ -11,6 +11,7 @@ import mfix.common.conf.Constant;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
+import mfix.core.node.ast.Node;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
@@ -25,6 +26,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -46,12 +48,14 @@ public class Search implements Callable<String> {
     private static int  threadPoolSize = 10;
 
     private String _fileName;
+    private boolean _regex;
     private String _ins;
     private String _del;
     private String _upd;
 
-    public Search(String fileName, String ins, String del, String upd) {
+    public Search(String fileName, boolean regex, String ins, String del, String upd) {
         _fileName = fileName;
+        _regex = regex;
         _ins = ins;
         _del = del;
         _upd = upd;
@@ -63,33 +67,19 @@ public class Search implements Callable<String> {
         Pattern p = (Pattern) Utils.deserialize(_fileName);
         Set<Modification> modifications = p.getAllModifications();
         if (_ins != null) {
-            Set<Modification> inserts = modifications.stream()
+            Set<Node> inserts = modifications.stream()
                     .filter(m -> m instanceof Insertion || m instanceof Wrap)
+                    .map(m -> ((Insertion) m).getInsertedNode())
                     .collect(Collectors.toSet());
-            boolean contain = false;
-            Insertion insertion;
-            for (Modification m : inserts) {
-                insertion = (Insertion) m;
-                if (insertion.getInsertedNode().toString().contains(_ins)) {
-                    contain = true;
-                    break;
-                }
-            }
+            boolean contain = _regex ? containRegex(inserts, _ins) : containStr(inserts, _ins);
             if (!contain) return null;
         }
         if (_del != null) {
-            Set<Modification> deletes = modifications.stream()
+            Set<Node> deletes = modifications.stream()
                     .filter(m -> m instanceof Deletion)
+                    .map(m -> ((Deletion) m).getDelNode())
                     .collect(Collectors.toSet());
-            boolean contain = false;
-            Deletion deletion;
-            for (Modification m : deletes) {
-                deletion = (Deletion) m;
-                if (deletion.getDelNode().toString().contains(_del)) {
-                    contain = true;
-                    break;
-                }
-            }
+            boolean contain = _regex ? containRegex(deletes, _del) : containStr(deletes, _del);
             if (!contain) return null;
 
         }
@@ -97,25 +87,41 @@ public class Search implements Callable<String> {
             Set<Modification> updates = modifications.stream()
                     .filter(m -> m instanceof Update)
                     .collect(Collectors.toSet());
-            boolean contain = false;
             Update update;
+            Set<Node> nodes = new HashSet<>();
             for (Modification m : updates) {
                 update = (Update) m;
-                if (update.getSrcNode() != null && update.getSrcNode().toString().contains(_upd)) {
-                    contain = true;
-                    break;
-                }
-                if (update.getTarNode() != null && update.getTarNode().toString().contains(_upd)) {
-                    contain = true;
-                    break;
-                }
+                nodes.add(update.getSrcNode());
+                nodes.add(update.getTarNode());
             }
+            boolean contain = _regex ? containRegex(nodes, _upd) : containStr(nodes, _upd);
             if (!contain) return null;
         }
         return _fileName;
     }
 
-    private static void search(String fileName, String ins, String del, String upd) {
+    private boolean containRegex(Set<Node> nodes, String string) {
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(string);
+        for (Node node : nodes) {
+            if (node == null) continue;
+            if (pattern.matcher(node.toSrcString().toString()).find()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean containStr(Set<Node> nodes, String string) {
+        for (Node node : nodes) {
+            if (node == null) continue;
+            if (node.toSrcString().toString().contains(string)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void search(String fileName, boolean regex, String ins, String del, String upd) {
         if (ins == null && del == null && upd == null) {
             LevelLogger.error("Please given searching criteria.");
             return;
@@ -131,6 +137,7 @@ public class Search implements Callable<String> {
                 .append(del == null ? "" : del)
                 .append("\nUPD : ")
                 .append(upd == null ? "" : upd)
+                .append("\nRegex : ").append(regex)
                 .append("\n---------------\n");
         JavaFile.writeStringToFile(result, buffer.toString(), false);
         ExecutorService pool = Executors.newFixedThreadPool(threadPoolSize);
@@ -143,7 +150,7 @@ public class Search implements Callable<String> {
                     threads.clear();
                     count = 0;
                 }
-                threads.add(pool.submit(new Search(file, ins, del, upd)));
+                threads.add(pool.submit(new Search(file, regex, ins, del, upd)));
             }
         }
         clear(threads);
@@ -178,6 +185,11 @@ public class Search implements Callable<String> {
         Option option = new Option("if", "RecordFile", true,
                 "The file that contains the paths of patterns to search.");
         option.setRequired(true);
+        options.addOption(option);
+
+        option = new Option("e", "E", false,
+                "Use regular expression for code search");
+        option.setRequired(false);
         options.addOption(option);
 
         option = new Option("ins", "insert", true,
@@ -221,7 +233,7 @@ public class Search implements Callable<String> {
             threadPoolSize = Integer.parseInt(cmd.getOptionValue("thread"));
         }
 
-        search(cmd.getOptionValue("if"), cmd.getOptionValue("ins"),
+        search(cmd.getOptionValue("if"), cmd.hasOption("e"), cmd.getOptionValue("ins"),
                 cmd.getOptionValue("del"), cmd.getOptionValue("upd"));
     }
 

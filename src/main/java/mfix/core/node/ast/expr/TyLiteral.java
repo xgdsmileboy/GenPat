@@ -165,6 +165,10 @@ public class TyLiteral extends Expr {
 
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+		StringBuffer buffer = super.transfer(vars, exprMap, retType, exceptions);
+		if (buffer != null) {
+			return buffer;
+		}
 		return toSrcString();
 	}
 

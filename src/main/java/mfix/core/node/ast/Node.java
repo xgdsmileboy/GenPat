@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast;
 
+import mfix.common.conf.Constant;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.expr.Assign;
@@ -199,8 +200,10 @@ public abstract class Node implements NodeComparator, Serializable {
         if (_datadependency != null) {
             nodes.add(_datadependency);
         }
-        for (Node node : getAllChildren()) {
-            node.recursivelyGetDataDependency(nodes);
+        if (Constant.EXPAND_PATTERN) {
+            for (Node node : getAllChildren()) {
+                node.recursivelyGetDataDependency(nodes);
+            }
         }
         return nodes;
     }

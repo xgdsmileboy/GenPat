@@ -263,6 +263,7 @@ public class ExprList extends Node {
             for(int index = 0; index < _exprs.size(); index ++) {
                 Node node = _exprs.get(index);
                 List<StringBuffer> list;
+                curIndex = index;
                 while(insertionAt.containsKey(curIndex)) {
                     list = insertionAt.get(curIndex);
                     for (int i = 0; i < list.size(); i++) {
@@ -272,8 +273,8 @@ public class ExprList extends Node {
                         first = false;
                         stringBuffer.append(list.get(i));
                     }
+                    insertionAt.remove(curIndex);
                     curIndex += list.size();
-                    insertionAt.remove(index);
                 }
 
                 if (map.containsKey(node)) {
