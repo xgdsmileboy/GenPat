@@ -31,13 +31,16 @@ public class rlytest {
 
     // find method with same name & same argType
     static MethodDeclaration findMethodFromFile(String file, Method method) {
+        if (method == null) {
+            return null;
+        }
         CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
         final Set<MethodDeclaration> methods = new HashSet<>();
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration node) {
-                if (method.getName().equals(node.getName().getIdentifier()) &&
-                        // method.argTypeSame(node)
-                        method.getArgTypes().size() == node.parameters().size()
+                if (method.getName().equals(node.getName().getIdentifier())
+                        // && method.argTypeSame(node)
+                         && method.getArgTypes().size() == node.parameters().size()
                 ) {
                     methods.add(node);
                     return false;
@@ -50,11 +53,19 @@ public class rlytest {
         }
         return methods.iterator().next();
     }
+    static String removeEmpty(String s) {
+        return s.replace("\n", "").replace(" ", "");
+    }
 
     static void tryApply(Pair<String, String> m1, Method m1Func, Pair<String, String> m2, Method m2Func) {
+        if (m1Func == null || m2Func == null) {
+            return;
+        }
+
         String srcFile = m1.getFirst(), tarFile = m1.getSecond();
 
-        System.out.println(srcFile + " -> " + tarFile);
+        System.out.println("pattern:" + srcFile + " -> " + tarFile);
+        System.out.println("ground:" + m2.getFirst() + " -> " + m2.getSecond());
 
         Set<Pattern> patterns = (new PatternExtractor()).extractPattern(srcFile, tarFile, m1Func);
         System.out.println("size = " + patterns.size());
@@ -72,6 +83,10 @@ public class rlytest {
         VarScope scope = varMaps.get(node.getStartLine());
         scope.reset(p.getNewVars());
         Set<String> already = new HashSet<>();
+
+        int correct_cnt  = 0, incorrect_cnt = 0;
+        List<TextDiff> diffRet = new LinkedList<>();
+
         for (MatchInstance instance : set) {
             instance.apply();
             StringBuffer buffer = node.adaptModifications(scope, instance.getStrMap(), node.getRetTypeStr(),
@@ -96,15 +111,45 @@ public class rlytest {
 
             TextDiff diff = new TextDiff(original, transformed);
 
-            System.out.println(diff.toString());
-            System.out.println("-----end------");
+            // System.out.println(diff.toString());
+            diffRet.add(diff);
 
-            if (original.equals(transformed)) {
-                System.out.println("Correct!");
+            if (removeEmpty(original).equals(removeEmpty(transformed))) {
+                correct_cnt += 1;
             } else {
+                incorrect_cnt += 1;
+            }
+            break;
+        }
+
+        System.out.println("TP, FP = " + correct_cnt + "," + incorrect_cnt);
+
+        if (correct_cnt > 0) {
+            System.out.println("Correct!");
+            if (incorrect_cnt > 0) {
+                System.out.println("Also with incorrect!");
+            }
+        } else {
+            if (incorrect_cnt > 0) {
                 System.out.println("Incorrect!");
+            } else {
+                System.out.println("Not Found!");
+            }
+
+            System.out.println("original_before=\n" + node.toString());
+
+            for (int i = 0; i < diffRet.size(); ++i) {
+                if (i >= 3) {
+                    System.out.println("More....");
+                    break;
+                }
+                System.out.println("-----------");
+                System.out.println("Candidate " + i + ":");
+                System.out.println(diffRet.get(i).toString());
+                System.out.println("-----------");
             }
         }
+        System.out.println("-----end------");
     }
 
     public static String getPath(JSONObject o) {
@@ -188,13 +233,16 @@ public class rlytest {
 //            System.out.println(methodArgs);
             return new Method(null, methodName, methodArgs);
         } else {
-            System.err.println("Parse method error!");
+            System.err.println("Parse method error! Method:" + s);
             return null;
         }
     }
 
     public static void runc3() {
-        for (int i = 1; i <= 100; ++i) {
+        int cntTotal = 0, cntEqual = 0;
+        for (int i = 1; i <= 1000; ++i) {
+            System.out.println("run cluster:" + i);
+
             String path = "/Users/luyaoren/Downloads/cluster/" + i;
 
             JSONParser parser = new JSONParser();
@@ -206,11 +254,16 @@ public class rlytest {
             }
             JSONArray methods = (JSONArray)ret.get("members");
 
+//            if (methods.size() > 5) {
+//                continue;
+//            }
+
             List<Method> src_methods, tar_methods;
             src_methods = new ArrayList<>();
             tar_methods = new ArrayList<>();
 
-            for (int j = 0; j < methods.size(); ++j) {
+//            for (int j = 0; j < methods.size(); ++j) {
+            for (int j = 0; j < 2; ++j) {
                 String src0 = path + "/" + "src_0.java";
                 String tar0 = path + "/" + "tar_0.java";
 
@@ -220,9 +273,17 @@ public class rlytest {
                 String src_method = (String)((JSONObject)methods.get(j)).get("signatureBeforeChange");
                 String tar_method = (String)((JSONObject)methods.get(j)).get("signatureAfterChange");
 
-                System.out.println(src_method);
-                System.out.println(tar_method);
+                if (j == 0) {
+                    System.out.println("PATTERN:");
+                    System.out.println(src_method);
+                    System.out.println(tar_method);
 
+                    JSONArray diff = (JSONArray) (((JSONObject) methods.get(j)).get("diff"));
+                    for (int d = 0; d < diff.size(); ++d) {
+                        System.out.println(diff.get(d));
+                    }
+                    System.out.println("--end--");
+                }
 
                 if ((new File(src).exists()) && (new File(tar).exists())) {
                     src_methods.add(new Method(findMethodFromFile(src, parseMethodFromString(src_method))));
@@ -231,20 +292,32 @@ public class rlytest {
                     System.err.println("File not exist!");
                 }
 
-                System.out.println(src_methods.get(j));
-                System.out.println(tar_methods.get(j));
+
+                cntTotal += 1;
+                if (src_methods.get(j).equals(tar_methods.get(j))) {
+                    cntEqual += 1;
+                } else {
+                    // System.out.println(src_methods.get(j) + "->" + tar_methods.get(j));
+                }
 
                 if (j > 0) {
                     if (src_methods.get(0).equals(tar_methods.get(0)) &&
                             src_methods.get(j).equals(tar_methods.get(j))) {
-                        tryApply(new Pair<>(src0, tar0), src_methods.get(0), new Pair<>(src, tar), src_methods.get(j));
+                        try {
+                            tryApply(new Pair<>(src0, tar0), src_methods.get(0), new Pair<>(src, tar), src_methods.get(j));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } else {
-                        System.err.println("Method signature is different!");
+                        // System.err.println("Method signature is different: ");
                     }
                 }
             }
-
         }
+        System.out.println(cntEqual);
+        System.out.println(cntTotal);
+        System.out.println(1.0 * cntEqual / cntTotal);
+
     }
 }
 
