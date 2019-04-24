@@ -525,6 +525,9 @@ public abstract class Node implements NodeComparator, Serializable {
     }
 
     public void setBindingNode(Node binding) {
+        if (_bindingNode != null) {
+            _bindingNode._bindingNode = null;
+        }
         _bindingNode = binding;
         if (_bindingNode != null) {
             binding._bindingNode = this;
