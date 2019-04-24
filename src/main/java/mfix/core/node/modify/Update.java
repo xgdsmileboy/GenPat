@@ -69,6 +69,7 @@ public class Update extends Modification {
 
     @Override
     public String toString() {
-        return "[UPD]" + _srcNode + " TO " + _tarNode;
+        return "[UPD]" + (_srcNode == null ? "NULL" : _srcNode) + " TO "
+                + (_tarNode == null ? "NULL" : _tarNode.toString());
     }
 }
