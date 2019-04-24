@@ -148,7 +148,7 @@ public class Blk extends Stmt {
     public boolean postAccurateMatch(Node node) {
         Blk blk = null;
         boolean match = false;
-        if (getParent() instanceof MethDecl) {
+        if (getParent() instanceof MethDecl && node != null) {
             if (node.getParent() instanceof MethDecl) {
                 blk = (Blk) node;
                 setBindingNode(node);
