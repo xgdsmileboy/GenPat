@@ -280,7 +280,7 @@ public class MethDecl extends Node {
         for (Expr expr : _arguments) {
             expr.genModifications();
         }
-        if (!_body.genModifications()) {
+        if (_body!= null && !_body.genModifications()) {
             if (getBindingNode() != null) {
                 methDecl = (MethDecl) getBindingNode();
                 Update update = new Update(this, _body, methDecl.getBody());
