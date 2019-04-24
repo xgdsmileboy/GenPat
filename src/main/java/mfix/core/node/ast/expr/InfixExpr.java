@@ -105,7 +105,7 @@ public class InfixExpr extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof InfixExpr) {
+		if (other != null && other instanceof InfixExpr) {
 			InfixExpr infixExpr = (InfixExpr) other;
 			match = _operator.compare(infixExpr._operator) && _lhs.compare(infixExpr._lhs)
 					&& _rhs.compare(infixExpr._rhs);

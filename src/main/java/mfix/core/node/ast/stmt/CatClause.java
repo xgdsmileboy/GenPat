@@ -134,7 +134,7 @@ public class CatClause extends Node {
 	
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof CatClause) {
+		if(other != null && other instanceof CatClause) {
 			CatClause catClause = (CatClause) other;
 			return _exception.compare(catClause._exception) && _blk.compare(catClause._blk);
 		}

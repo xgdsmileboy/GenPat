@@ -111,7 +111,7 @@ public class ConditionalExpr extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof ConditionalExpr) {
+        if (other != null && other instanceof ConditionalExpr) {
             ConditionalExpr conditionalExpr = (ConditionalExpr) other;
             match = _condition.compare(conditionalExpr._condition) && _first.compare(conditionalExpr._first)
                     && _snd.compare(conditionalExpr._snd);

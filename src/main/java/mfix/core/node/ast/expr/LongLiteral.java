@@ -49,7 +49,7 @@ public class LongLiteral extends NumLiteral {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof LongLiteral) {
+		if (other != null && other instanceof LongLiteral) {
 			LongLiteral literal = (LongLiteral) other;
 			match = (_value == literal._value);
 		}

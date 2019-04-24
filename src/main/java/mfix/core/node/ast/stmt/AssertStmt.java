@@ -79,7 +79,27 @@ public class AssertStmt extends Stmt {
 
 	@Override
 	protected StringBuffer toFormalForm0(NameMapping nameMapping, boolean parentConsidered, Set<String> keywords) {
-		return null;
+		if (isAbstract() && !isConsidered()) return null;
+		StringBuffer expression = _expresion.formalForm(nameMapping, isConsidered(), keywords);
+		StringBuffer message = _message == null ? null : _message.formalForm(nameMapping, isConsidered(), keywords);
+		if (expression == null && message == null) {
+			if (isConsidered()) {
+				return new StringBuffer("assert ")
+						.append(nameMapping.getExprID(_expresion)).append(';');
+			}
+			return null;
+		}
+		StringBuffer buffer = new StringBuffer("assert ");
+		if (expression != null) {
+			buffer.append(expression);
+		} else {
+			buffer.append(nameMapping.getExprID(_expresion));
+		}
+		if (message != null) {
+			buffer.append(":").append(message);
+		}
+		buffer.append(";");
+		return buffer;
 	}
 
 	@Override
@@ -106,7 +126,7 @@ public class AssertStmt extends Stmt {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof AssertStmt) {
+		if (other != null && other instanceof AssertStmt) {
 			AssertStmt assertStmt = (AssertStmt) other;
 			if (_expresion.compare(assertStmt.getExpression())) {
 				if (_message == null) {

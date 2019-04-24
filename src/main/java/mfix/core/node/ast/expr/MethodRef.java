@@ -59,7 +59,7 @@ public class MethodRef extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof MethodRef) {
+		if (other != null && other instanceof MethodRef) {
 			match = _str.equals(((MethodRef) other)._str);
 		}
 		return match;

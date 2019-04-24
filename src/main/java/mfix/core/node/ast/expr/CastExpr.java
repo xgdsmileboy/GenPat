@@ -105,7 +105,7 @@ public class CastExpr extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof CastExpr) {
+        if (other != null && other instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) other;
             match = _castType.compare(castExpr._castType);
             match = match && _expression.compare(castExpr._expression);

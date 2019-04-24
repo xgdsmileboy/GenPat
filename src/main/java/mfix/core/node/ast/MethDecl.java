@@ -222,7 +222,7 @@ public class MethDecl extends Node {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof MethDecl) {
+        if (other != null && other instanceof MethDecl) {
             MethDecl methDecl = (MethDecl) other;
             match = _name.compare(methDecl._name) && (_arguments.size() == methDecl._arguments.size());
             for (int i = 0; match && i < _arguments.size(); i++) {

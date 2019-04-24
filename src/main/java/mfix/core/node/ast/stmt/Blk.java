@@ -124,7 +124,7 @@ public class Blk extends Stmt {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof Blk) {
+        if (other != null && other instanceof Blk) {
             Blk blk = (Blk) other;
             match = (_statements.size() == blk._statements.size());
             for (int i = 0; match && i < _statements.size(); i++) {

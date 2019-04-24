@@ -50,7 +50,7 @@ public class ExprList extends Node {
 
     @Override
     public boolean compare(Node other) {
-        if (other instanceof ExprList) {
+        if (other != null && other instanceof ExprList) {
             ExprList exprList = (ExprList) other;
             if (_exprs.size() == exprList._exprs.size()) {
                 for (int i = 0; i < _exprs.size(); i++) {

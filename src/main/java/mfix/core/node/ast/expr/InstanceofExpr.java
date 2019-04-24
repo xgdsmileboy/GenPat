@@ -97,7 +97,7 @@ public class InstanceofExpr extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof InstanceofExpr) {
+		if (other != null && other instanceof InstanceofExpr) {
 			InstanceofExpr instanceofExpr = (InstanceofExpr) other;
 			match = _instanceType.compare(instanceofExpr._instanceType)
 					&& _expression.compare(instanceofExpr._expression);

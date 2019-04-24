@@ -168,7 +168,7 @@ public class IfStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof IfStmt) {
+		if(other != null && other instanceof IfStmt) {
 			IfStmt ifStmt = (IfStmt) other;
 			match = _condition.compare(ifStmt._condition) && _then.compare(ifStmt._then);
 			if(_else == null) {

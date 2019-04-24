@@ -169,7 +169,7 @@ public class Vdf extends Node {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof Vdf) {
+		if (other != null && other instanceof Vdf) {
 			Vdf vdf = (Vdf) other;
 			match = (_dimensions == vdf._dimensions) && _identifier.compare(vdf._identifier);
 			if (_expression == null) {

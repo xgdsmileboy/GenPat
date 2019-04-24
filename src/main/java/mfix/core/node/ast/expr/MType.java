@@ -89,7 +89,7 @@ public class MType extends Node {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof MType) {
+		if (other != null && other instanceof MType) {
 			return _typeStr.equals(((MType) other)._typeStr);
 		}
 		return false;

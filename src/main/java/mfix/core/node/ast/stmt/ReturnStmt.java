@@ -108,7 +108,7 @@ public class ReturnStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof ReturnStmt) {
+		if(other != null && other instanceof ReturnStmt) {
 			ReturnStmt returnStmt = (ReturnStmt) other;
 			if(_expression == null) {
 				match = (returnStmt._expression == null);

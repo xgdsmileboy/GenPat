@@ -103,7 +103,7 @@ public class SuperFieldAcc extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof SuperFieldAcc) {
+		if (other != null && other instanceof SuperFieldAcc) {
 			SuperFieldAcc superFieldAcc = (SuperFieldAcc) other;
 			match = (_name == null) ? (superFieldAcc._name == null) : _name.compare(superFieldAcc._name);
 			if (match) {

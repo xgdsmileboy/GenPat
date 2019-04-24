@@ -115,7 +115,7 @@ public class Assign extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof Assign) {
+        if (other != null && other instanceof Assign) {
             Assign assign = (Assign) other;
             match = _operator.compare(assign._operator) && _lhs.compare(assign._lhs) && _rhs.compare(assign._rhs);
         }

@@ -62,7 +62,7 @@ public class NillLiteral extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof NillLiteral) {
+		if(other != null && other instanceof NillLiteral) {
 			match = true;
 		}
 		return match;

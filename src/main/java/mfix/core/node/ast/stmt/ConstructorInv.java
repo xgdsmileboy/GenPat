@@ -119,7 +119,7 @@ public class ConstructorInv extends Stmt {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof ConstructorInv) {
+        if (other != null && other instanceof ConstructorInv) {
             ConstructorInv constructorInv = (ConstructorInv) other;
             match = _arguments.compare(constructorInv._arguments);
         }

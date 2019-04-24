@@ -97,7 +97,7 @@ public class CharLiteral extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof CharLiteral) {
+        if (other != null && other instanceof CharLiteral) {
             CharLiteral charLiteral = (CharLiteral) other;
             match = (_value == charLiteral._value);
         }

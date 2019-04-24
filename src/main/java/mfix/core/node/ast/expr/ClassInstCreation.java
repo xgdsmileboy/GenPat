@@ -148,7 +148,7 @@ public class ClassInstCreation extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof ClassInstCreation) {
+        if (other != null && other instanceof ClassInstCreation) {
             ClassInstCreation classInstCreation = (ClassInstCreation) other;
             match = _expression == null ? (classInstCreation._expression == null) :
 					_expression.compare(classInstCreation._expression);
