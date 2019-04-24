@@ -53,6 +53,8 @@ public class Constant {
     public final static double TF_IDF_FREQUENCY = 0.5;
     public final static double TOKEN_FREQENCY = 0.005;
 
+    public static boolean EXPAND_PATTERN = true;
+
     /* runtime configurations */
     public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");
     public final static String RUNTIME_CONF_FILE = Utils.join(SEP, RES_DIR, "conf", "configure.properties");

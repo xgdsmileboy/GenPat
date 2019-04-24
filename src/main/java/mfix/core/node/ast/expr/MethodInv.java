@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
@@ -75,7 +76,9 @@ public class MethodInv extends Expr {
 
 	public void setExpanded() {
 		super.setExpanded();
-		_name.setExpanded();
+		if (Constant.EXPAND_PATTERN) {
+			_name.setExpanded();
+		}
 	}
 
 	@Override
