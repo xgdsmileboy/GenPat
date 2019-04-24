@@ -149,7 +149,7 @@ public class TyLiteral extends Expr {
 
 	@Override
 	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
-		if (node.getNodeType() == getNodeType()) {
+		if (node != null && node.getNodeType() == getNodeType()) {
 			super.patternMatch(node, matchedNode);
 		}
 		return false;

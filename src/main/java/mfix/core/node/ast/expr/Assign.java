@@ -135,7 +135,7 @@ public class Assign extends Expr {
 
     @Override
     public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
-        if (node.getNodeType() == getNodeType()) {
+        if (node != null && node.getNodeType() == getNodeType()) {
             return super.patternMatch(node, matchedNode);
         }
         return false;
