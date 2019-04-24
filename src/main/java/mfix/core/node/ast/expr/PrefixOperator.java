@@ -57,7 +57,7 @@ public class PrefixOperator extends Operator {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof PrefixOperator) {
+		if (other != null && other instanceof PrefixOperator) {
 			return _operatorStr.equals(((PrefixOperator) other)._operatorStr);
 		}
 		return false;

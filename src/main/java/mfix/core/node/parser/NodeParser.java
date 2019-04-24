@@ -98,6 +98,26 @@ public class NodeParser {
         int start = _cunit.getLineNumber(node.getStartPosition());
         int end = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         AssertStmt assertStmt = new AssertStmt(_fileName, start, end, node);
+        Expression expression = node.getExpression();
+        ParenthesiszedExpr expr;
+        if (expression instanceof ParenthesizedExpression) {
+            expr = (ParenthesiszedExpr) process(expression, scope, structure);
+        } else {
+            expr = new ParenthesiszedExpr(_fileName, start, end, expression);
+            Expr e = (Expr) process(expression, scope, structure);
+            e.setParent(expr);
+            expr.setExpr(e);
+        }
+        expr.setType(typeFromBinding(expression.getAST(), expression.resolveTypeBinding()));
+        expr.setParent(assertStmt);
+        assertStmt.setExpression(expr);
+
+        if (node.getMessage() != null) {
+            Expr message = (Expr) process(node.getMessage(), scope, structure);
+            message.setParent(assertStmt);
+            assertStmt.setMessage(message);
+        }
+
         assertStmt.setControldependency(structure);
         return assertStmt;
     }

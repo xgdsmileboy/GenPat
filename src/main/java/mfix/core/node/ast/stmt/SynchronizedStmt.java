@@ -125,7 +125,7 @@ public class SynchronizedStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof SynchronizedStmt) {
+		if (other != null && other instanceof SynchronizedStmt) {
 			SynchronizedStmt synchronizedStmt = (SynchronizedStmt) other;
 			match = _expression.compare(synchronizedStmt._expression) && _blk.compare(synchronizedStmt._blk);
 		}

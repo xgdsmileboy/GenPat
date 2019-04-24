@@ -125,7 +125,7 @@ public class DoStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof DoStmt) {
+		if(other != null && other instanceof DoStmt) {
 			DoStmt doStmt = (DoStmt) other;
 			match = _expression.compare(doStmt._expression) && _stmt.compare(doStmt._stmt);
 		}

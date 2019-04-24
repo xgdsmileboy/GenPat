@@ -107,7 +107,7 @@ public class ThrowStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof ThrowStmt) {
+		if(other != null && other instanceof ThrowStmt) {
 			ThrowStmt throwStmt = (ThrowStmt) other;
 			match = _expression.compare(throwStmt._expression);
 		}

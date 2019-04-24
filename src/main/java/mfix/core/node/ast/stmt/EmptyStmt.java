@@ -60,7 +60,7 @@ public class EmptyStmt extends Stmt {
 
 	@Override
 	public boolean compare(Node other) {
-		if(other instanceof EmptyStmt) {
+		if(other != null && other instanceof EmptyStmt) {
 			return true;
 		}
 		return false;

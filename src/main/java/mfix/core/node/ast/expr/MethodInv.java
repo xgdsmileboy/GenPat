@@ -162,7 +162,7 @@ public class MethodInv extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof MethodInv) {
+		if (other != null && other instanceof MethodInv) {
 			MethodInv methodInv = (MethodInv) other;
 			match = _name.compare(methodInv._name);
 			if (match) {

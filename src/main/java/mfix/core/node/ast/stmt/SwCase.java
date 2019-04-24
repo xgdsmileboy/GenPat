@@ -117,9 +117,7 @@ public class SwCase extends Stmt {
 	
 	@Override
 	public boolean compare(Node other) {
-		boolean match = false;
-		if(other instanceof SwCase) {
-			match = true;
+		if(other != null && other instanceof SwCase) {
 			SwCase swCase = (SwCase) other;
 			if(_expression != null) {
 				return _expression.compare(swCase._expression);
@@ -127,7 +125,7 @@ public class SwCase extends Stmt {
 				return swCase._expression == null;
 			}
 		}
-		return match;
+		return false;
 	}
 	
 	@Override

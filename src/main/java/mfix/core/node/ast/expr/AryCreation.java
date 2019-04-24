@@ -171,7 +171,7 @@ public class AryCreation extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof AryCreation) {
+        if (other != null && other instanceof AryCreation) {
             AryCreation aryCreation = (AryCreation) other;
             match = _type.compare(aryCreation._type);
             if (match) {

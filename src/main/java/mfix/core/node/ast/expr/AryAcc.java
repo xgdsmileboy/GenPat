@@ -108,7 +108,7 @@ public class AryAcc extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof AryAcc) {
+        if (other != null && other instanceof AryAcc) {
             match = _array.compare(((AryAcc) other)._array) && _index.compare(((AryAcc) other)._index);
         }
         return match;

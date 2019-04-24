@@ -103,7 +103,7 @@ public class BreakStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof BreakStmt) {
+		if (other != null && other instanceof BreakStmt) {
 			BreakStmt breakStmt = (BreakStmt) other;
 			match = _identifier == null ? (breakStmt._identifier == null) : _identifier.compare(breakStmt._identifier);
 		}

@@ -81,7 +81,7 @@ public class SName extends Label {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof SName) {
+		if (other != null && other instanceof SName) {
 			SName sName = (SName) other;
 			return _name.equals(sName._name);
 		}

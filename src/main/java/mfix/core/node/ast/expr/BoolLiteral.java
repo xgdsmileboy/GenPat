@@ -80,7 +80,7 @@ public class BoolLiteral extends Expr {
 
     @Override
     public boolean compare(Node other) {
-        if (other instanceof BoolLiteral) {
+        if (other != null && other instanceof BoolLiteral) {
             return (_value == ((BoolLiteral) other)._value);
         }
         return false;

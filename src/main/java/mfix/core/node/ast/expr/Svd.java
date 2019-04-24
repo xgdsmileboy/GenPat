@@ -137,7 +137,7 @@ public class Svd extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof Svd) {
+		if (other != null && other instanceof Svd) {
 			Svd svd = (Svd) other;
 			match = _decType.compare(svd._decType);
 			match = match && _name.compare(svd._name);

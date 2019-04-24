@@ -133,7 +133,7 @@ public class SuperConstructorInv extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof SuperConstructorInv) {
+		if(other != null && other instanceof SuperConstructorInv) {
 			SuperConstructorInv superConstructorInv = (SuperConstructorInv) other;
 			if(_expression == null) {
 				match = (superConstructorInv._expression == null);

@@ -60,7 +60,7 @@ public class ThisExpr extends Expr {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof ThisExpr) {
+		if (other != null && other instanceof ThisExpr) {
 			return _oriNode.toString().equals(((ThisExpr) other)._oriNode.toString());
 		}
 		return false;

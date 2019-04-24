@@ -55,7 +55,7 @@ public class SuperMethodRef extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof SuperMethodRef) {
+		if (other != null && other instanceof SuperMethodRef) {
 			match = _oriNode.toString().equals(((SuperMethodRef) other)._oriNode.toString());
 		}
 		return match;

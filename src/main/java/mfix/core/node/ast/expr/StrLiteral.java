@@ -96,7 +96,7 @@ public class StrLiteral extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof StrLiteral) {
+		if (other != null && other instanceof StrLiteral) {
 			StrLiteral strLiteral = (StrLiteral) other;
 			match = _value.equals(strLiteral._value);
 		}
