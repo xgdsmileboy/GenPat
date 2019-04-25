@@ -45,7 +45,6 @@ public class Constant {
     public final static String TF_IDF_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens.txt");
     public final static String DB_CACHE_FILE = Utils.join(SEP, RES_DIR, "db", "MethodTableElements.txt");
     public final static String DB_CACHE_FILE_WITH_TYPE = Utils.join(SEP, RES_DIR, "db", "MethodTableElementsWithType.txt");
-    public final static String BANNED_API_FILE = Utils.join(SEP, RES_DIR, "conf", "whiteList.txt");
 
     /* values for pattern abstraction */
     public final static int TOTAL_BUGGY_FILE_NUMBER = 1217392; // used to compute TF-IDF
