@@ -114,24 +114,24 @@ public class Repair {
     }
 
     private ValidateResult validate(String clazzName, String source) {
-        if (_subject.compileFile()) {
-            LevelLogger.debug("Compile single file : " + clazzName);
-            boolean compile = new JCompiler().compile(_subject, clazzName, source);
-            if (!compile) {
-                LevelLogger.debug("Compiling single file failed!");
-                return ValidateResult.COMPILE_FAILED;
-            }
-            LevelLogger.debug("Compiling single file success!");
-        }
-//        if (_subject.compileProject()){
-//            LevelLogger.debug("Compile subject : " + _subject.getName());
-//            boolean compile = _subject.compile();
-//            if (!compile){
-//                LevelLogger.debug("Compiling subject failed!");
+//        if (_subject.compileFile()) {
+//            LevelLogger.debug("Compile single file : " + clazzName);
+//            boolean compile = new JCompiler().compile(_subject, clazzName, source);
+//            if (!compile) {
+//                LevelLogger.debug("Compiling single file failed!");
 //                return ValidateResult.COMPILE_FAILED;
 //            }
-//            LevelLogger.debug("Compiling subject success!");
+//            LevelLogger.debug("Compiling single file success!");
 //        }
+        if (_subject.compileProject()){
+            LevelLogger.debug("Compile subject : " + _subject.getName());
+            boolean compile = _subject.compile();
+            if (!compile){
+                LevelLogger.debug("Compiling subject failed!");
+                return ValidateResult.COMPILE_FAILED;
+            }
+            LevelLogger.debug("Compiling subject success!");
+        }
 //
 //        for (String string : _currentFailedTests) {
 //            LevelLogger.debug("Test : " + string);
