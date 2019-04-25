@@ -120,43 +120,43 @@ public class Repair {
             }
             LevelLogger.debug("Compiling single file success!");
         }
-        if (_subject.compileProject()){
-            LevelLogger.debug("Compile subject : " + _subject.getName());
-            boolean compile = _subject.compile();
-            if (!compile){
-                LevelLogger.debug("Compiling subject failed!");
-                return ValidateResult.COMPILE_FAILED;
-            }
-            LevelLogger.debug("Compiling subject success!");
-        }
-
-        for (String string : _currentFailedTests) {
-            LevelLogger.debug("Test : " + string);
-            if (!_subject.test(string)) {
-                return ValidateResult.TEST_FAILED;
-            }
-        }
-
-        if (_subject.testProject()) {
-            LevelLogger.debug("Test project : " + _subject.getName());
-            boolean test = _subject.test();
-            if (!test) {
-                LevelLogger.debug("Testing project failed!");
-                return ValidateResult.TEST_FAILED;
-            }
-            LevelLogger.debug("Testing project success!");
-        }
+//        if (_subject.compileProject()){
+//            LevelLogger.debug("Compile subject : " + _subject.getName());
+//            boolean compile = _subject.compile();
+//            if (!compile){
+//                LevelLogger.debug("Compiling subject failed!");
+//                return ValidateResult.COMPILE_FAILED;
+//            }
+//            LevelLogger.debug("Compiling subject success!");
+//        }
+//
+//        for (String string : _currentFailedTests) {
+//            LevelLogger.debug("Test : " + string);
+//            if (!_subject.test(string)) {
+//                return ValidateResult.TEST_FAILED;
+//            }
+//        }
+//
+//        if (_subject.testProject()) {
+//            LevelLogger.debug("Test project : " + _subject.getName());
+//            boolean test = _subject.test();
+//            if (!test) {
+//                LevelLogger.debug("Testing project failed!");
+//                return ValidateResult.TEST_FAILED;
+//            }
+//            LevelLogger.debug("Testing project success!");
+//        }
 
         _alreadyFixedTests.addAll(_currentFailedTests);
-        _subject.restorePurifiedTest();
-        for (String s : _allFailedTests) {
-            if (_allFailedTests.contains(s)) {
-                continue;
-            }
-            if (_subject.test(s)) {
-                _alreadyFixedTests.add(s);
-            }
-        }
+//        _subject.restorePurifiedTest();
+//        for (String s : _allFailedTests) {
+//            if (_allFailedTests.contains(s)) {
+//                continue;
+//            }
+//            if (_subject.test(s)) {
+//                _alreadyFixedTests.add(s);
+//            }
+//        }
 
         return ValidateResult.PASS;
     }
