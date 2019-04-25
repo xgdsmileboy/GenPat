@@ -215,7 +215,8 @@ public class MethodInv extends Expr {
 			match = (methodInv == node);
 		} else if (canBinding(node)) {
 			methodInv = (MethodInv) node;
-			if (methodInv.getName().getName().equals(getName().getName())) {
+			if (methodInv.getName().getName().equals(getName().getName())
+					|| (_expression != null && _expression.compare(methodInv._expression))) {
 				setBindingNode(methodInv);
 				match = true;
 			} else {
