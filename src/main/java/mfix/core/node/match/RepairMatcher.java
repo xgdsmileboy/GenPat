@@ -183,7 +183,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
             matches = matches.stream().sorted(Comparator.comparingDouble(MatchInstance::similarity).reversed())
                     .limit(topk).collect(Collectors.toList());
         }
-        LevelLogger.info("Finish match!");
+        LevelLogger.info("Finish match : " + matches.size());
         if (matches.isEmpty()) {
             System.err.println("No matches !");
         }
