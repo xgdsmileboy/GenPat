@@ -302,7 +302,7 @@ public class NodeUtils {
                 }
                 return false;
             }
-            return node.getDataDependency() == other.getDataDependency();
+            return node.getDataDependency() == null;
         }
         return true;
     }
