@@ -150,7 +150,7 @@ public class Repair {
         _alreadyFixedTests.addAll(_currentFailedTests);
         _subject.restorePurifiedTest();
         for (String s : _allFailedTests) {
-            if (_allFailedTests.contains(s)) {
+            if (_alreadyFixedTests.contains(s)) {
                 continue;
             }
             if (_subject.test(s)) {
