@@ -387,20 +387,20 @@ public class MatcherTest extends TestCase {
     @Test
     public void temp_file_pair() {
 
-        String srcFile = Constant.HOME + "/src.java";
-        String tarFile = Constant.HOME + "/tar.java";
+        String srcFile = Constant.HOME + "/tmp/src.java";
+        String tarFile = Constant.HOME + "/tmp/tar.java";
 
         PatternExtractor extractor = new PatternExtractor();
         Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
-        String buggy = Constant.HOME + "/Equality.java";
+        String buggy = Constant.HOME + "/tmp/closure-92.java";
         Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration node) {
-                if (node.getName().getIdentifier().equals("areEqual")) {
+                if (node.getName().getIdentifier().equals("replace")) {
                     methods.add(node);
                     return false;
                 }
@@ -418,7 +418,7 @@ public class MatcherTest extends TestCase {
                 List<MatchInstance> set = matcher.tryMatch(node, p, need2Match);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
-                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>(),
+                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap(),
                             "Class", new HashSet<>());
                     if (buffer != null) {
                         TextDiff diff = new TextDiff(node.toSrcString().toString(), buffer.toString());
@@ -426,44 +426,6 @@ public class MatcherTest extends TestCase {
                     }
                     matchInstance.reset();
                 }
-            }
-        }
-    }
-
-    @Test
-    public void temp_pattern() throws Exception {
-        Pattern p = (Pattern) Utils.deserialize(Constant.HOME + "/test.pattern");
-        String buggy = Constant.HOME + "/Equality.java";
-        Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
-
-        CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
-        final Set<MethodDeclaration> methods = new HashSet<>();
-        unit.accept(new ASTVisitor() {
-            public boolean visit(MethodDeclaration node) {
-                if (node.getName().getIdentifier().equals("areEqual")) {
-                    methods.add(node);
-                    return false;
-                }
-                return true;
-            }
-        });
-
-        List<Integer> need2Match = null;//new ArrayList<>(Arrays.asList());
-        NodeParser parser = new NodeParser();
-        parser.setCompilationUnit(buggy, unit);
-        RepairMatcher matcher = new RepairMatcher();
-        for (MethodDeclaration m : methods) {
-            Node node = parser.process(m);
-            List<MatchInstance> set = matcher.tryMatch(node, p, need2Match);
-            for (MatchInstance matchInstance : set) {
-                matchInstance.apply();
-                StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap(),
-                        "Class", new HashSet<>());
-                if (buffer != null) {
-                    TextDiff diff = new TextDiff(node.toSrcString().toString(), buffer.toString());
-                    System.out.println(diff.toString());
-                }
-                matchInstance.reset();
             }
         }
     }
