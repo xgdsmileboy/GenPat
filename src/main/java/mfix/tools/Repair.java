@@ -322,6 +322,7 @@ public class Repair {
         if (bNode == null || pattern == null || shouldStop()) {
             return;
         }
+        LevelLogger.info("Current Pattern : " + pattern.getPatternName());
         LevelLogger.info("Try fix with : " + pattern.getPatternName());
         String origin = bNode.toSrcString().toString();
         String buggyFile = bNode.getFileName();
