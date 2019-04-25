@@ -96,7 +96,7 @@ public abstract class Expr extends Node {
             typeStr2 = "?".equals(typeStr2) ? typeStr1 : typeStr2;
             boolean matchType = _abstractType ? true : NodeUtils.matchType(typeStr1, typeStr2);
             boolean matchName = _abstractName ? true : Utils.safeBufferEqual(toSrcString(), node.toSrcString());
-            if (NodeUtils.match(matchName, matchType, level) && guarantee(node)) {
+            if (NodeUtils.match(this, node, matchName, matchType, level) && guarantee(node)) {
                 return NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
                         && NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
             }
@@ -161,7 +161,7 @@ public abstract class Expr extends Node {
             String typeStr = node.getTypeStr();
             boolean matchType = _abstractType ? true : Utils.safeStringEqual(getTypeStr(), typeStr);
             boolean matchName = _abstractName ? true : Utils.safeBufferEqual(toSrcString(), node.toSrcString());
-            if (NodeUtils.match(matchName, matchType, MatchLevel.ALL) && guarantee(node) ) {
+            if (NodeUtils.match(this, node, matchName, matchType, MatchLevel.ALL) && guarantee(node) ) {
                 int size = getModifications().size() + node.getModifications().size();
                 if ((size == 0 && node instanceof Expr) || getNodeType() == node.getNodeType()) {
                     return NodeUtils.patternMatch(this, node, matchedNode);

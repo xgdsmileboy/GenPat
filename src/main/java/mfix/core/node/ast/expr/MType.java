@@ -198,7 +198,7 @@ public class MType extends Node {
 				typeStr1 = "?".equals(typeStr1) ? typeStr2 : typeStr1;
 				typeStr2 = "?".equals(typeStr2) ? typeStr1 : typeStr2;
 				boolean matchType = isAbstract() ? true : Utils.safeStringEqual(typeStr1, typeStr2);
-				return NodeUtils.match(true, matchType, level)
+				return NodeUtils.match(this, node,true, matchType, level)
 						&& NodeUtils.checkDependency(this, node, matchedNode, matchedStrings, level)
 						&& NodeUtils.matchSameNodeType(this, node, matchedNode, matchedStrings);
 			}
