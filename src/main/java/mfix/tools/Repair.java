@@ -114,24 +114,24 @@ public class Repair {
     }
 
     private ValidateResult validate(String clazzName, String source) {
-//        if (_subject.compileFile()) {
-//            LevelLogger.debug("Compile single file : " + clazzName);
-//            boolean compile = new JCompiler().compile(_subject, clazzName, source);
-//            if (!compile) {
-//                LevelLogger.debug("Compiling single file failed!");
-//                return ValidateResult.COMPILE_FAILED;
-//            }
-//            LevelLogger.debug("Compiling single file success!");
-//        }
-        if (_subject.compileProject()){
-            LevelLogger.debug("Compile subject : " + _subject.getName());
-            boolean compile = _subject.compile();
-            if (!compile){
-                LevelLogger.debug("Compiling subject failed!");
+        if (_subject.compileFile()) {
+            LevelLogger.debug("Compile single file : " + clazzName);
+            boolean compile = new JCompiler().compile(_subject, clazzName, source);
+            if (!compile) {
+                LevelLogger.debug("Compiling single file failed!");
                 return ValidateResult.COMPILE_FAILED;
             }
-            LevelLogger.debug("Compiling subject success!");
+            LevelLogger.debug("Compiling single file success!");
         }
+//        if (_subject.compileProject()){
+//            LevelLogger.debug("Compile subject : " + _subject.getName());
+//            boolean compile = _subject.compile();
+//            if (!compile){
+//                LevelLogger.debug("Compiling subject failed!");
+//                return ValidateResult.COMPILE_FAILED;
+//            }
+//            LevelLogger.debug("Compiling subject success!");
+//        }
 //
 //        for (String string : _currentFailedTests) {
 //            LevelLogger.debug("Test : " + string);
@@ -474,6 +474,13 @@ public class Repair {
         String testBin = _subject.getHome() + _subject.getTbin();
 
         Utils.deleteDirs(srcBin, testBin);
+        if (_subject.compileProject()) {
+            // first check compilable
+            if (!_subject.compile()) {
+                JavaFile.writeStringToFile(_logfile, "Compile failed at the beginning!" + "\n", true);
+                return;
+            }
+        }
 
         Purification purification = new Purification(_subject);
         List<String> purifiedFailedTestCases = purification.purify(_subject.purify());
