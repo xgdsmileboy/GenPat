@@ -149,7 +149,8 @@ public abstract class Expr extends Node {
 
     private boolean guarantee(Node node) {
         return NodeUtils.isMethodName(this) == NodeUtils.isMethodName(node)
-                && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL;
+                && node.getNodeType() != TYPE.VARDECLEXPR && node.getNodeType() != TYPE.SINGLEVARDECL
+                && ((node.getNodeType() == TYPE.NULL) == (getNodeType() == TYPE.NULL));
     }
 
     @Override
