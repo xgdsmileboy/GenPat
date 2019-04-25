@@ -283,8 +283,15 @@ public class MethodInv extends Expr {
 				MethodInv methodInv = (MethodInv) node;
 				Utils.checkCompatiblePut(NodeUtils.decorateMethodName(_name),
 						NodeUtils.decorateMethodName(methodInv.getName()), matchedStrings);
-				if (_expression != null && methodInv._expression != null) {
-					return NodeUtils.matchSameNodeType(_expression, methodInv._expression, matchedNode, matchedStrings);
+				if (_expression != null && methodInv._expression != null
+						&& NodeUtils.matchSameNodeType(_expression, methodInv._expression, matchedNode, matchedStrings)) {
+					ExprList list = methodInv.getArguments();
+					if (_arguments.getExpr().size() == list.getExpr().size()) {
+						for (int i = 0; i < _arguments.getExpr().size(); i++) {
+							NodeUtils.matchSameNodeType(_arguments.getExpr().get(i), list.getExpr().get(i),
+									matchedNode, matchedStrings);
+						}
+					}
 				}
 			}
 			return true;
