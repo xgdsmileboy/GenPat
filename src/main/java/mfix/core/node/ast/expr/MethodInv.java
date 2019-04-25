@@ -347,7 +347,7 @@ public class MethodInv extends Expr {
 						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					} else if (changedNode == methodInv._name) {
-						name = update.apply(vars, exprMap, retType, exceptions);
+						name = update.getTarNode().toSrcString();
 						if (name == null) return null;
 					} else {
 						arguments = update.apply(vars, exprMap, retType, exceptions);
