@@ -30,12 +30,12 @@ public class MatchList {
 
     public MatchList setMatchedNodes(List<MatchNode> nodes) {
         _matchNodes = new ArrayList<>(nodes);
-        if (_pNode.getAllChildren().size() > 5) {
+        final int number = _pNode.getAllChildren().size() > 5 ?
+                Constant.MAX_INSTANCE_PER_PATTERN : nodes.size();
             // complex expression can be filtered ahead of time
-            _matchNodes = _matchNodes.stream()
-                    .sorted(Comparator.comparingDouble(MatchNode::getScore).reversed())
-                    .limit(Constant.MAX_INSTANCE_PER_PATTERN).collect(Collectors.toList());
-        }
+        _matchNodes = _matchNodes.stream()
+                .sorted(Comparator.comparingDouble(MatchNode::getScore).reversed())
+                .limit(number).collect(Collectors.toList());
         return this;
     }
 
