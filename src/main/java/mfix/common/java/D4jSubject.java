@@ -36,8 +36,8 @@ public class D4jSubject extends Subject {
         _id = id;
         setClasspath(obtainClasspath(name));
         setSourceLevel(name.equals("chart") ? SOURCE_LEVEL.L_1_4 : SOURCE_LEVEL.L_1_7);
-        setCompileFile(memCompile);
-        setCompileProject(true);
+        setCompileFile(memCompile && !"mockito".equals(name));
+        setCompileProject("mockito".equals(name));
         setTestProject(true);
         setCompileCommand(Constant.CMD_DEFECTS4J + " compile");
         setTestCommand(Constant.CMD_DEFECTS4J + " test");
