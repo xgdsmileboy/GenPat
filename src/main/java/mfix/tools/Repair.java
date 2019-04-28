@@ -31,9 +31,7 @@ import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.RepairMatcher;
 import mfix.core.node.modify.Deletion;
-import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
-import mfix.core.node.modify.Update;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import org.apache.commons.cli.CommandLine;
@@ -459,7 +457,7 @@ public class Repair {
         String testBin = _subject.getHome() + _subject.getTbin();
 
         Utils.deleteDirs(srcBin, testBin);
-        if (_subject.compileProject()) {
+        if (_subject instanceof D4jSubject) {
             // first check compilable
             if (!_subject.compile()) {
                 JavaFile.writeStringToFile(_logfile, "Compile failed at the beginning!" + "\n", true);
