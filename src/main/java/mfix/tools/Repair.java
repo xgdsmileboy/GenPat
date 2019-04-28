@@ -79,7 +79,7 @@ public class Repair {
 
     private Set<String> _allFailedTests = new HashSet<>();
     private Set<String> _alreadyFixedTests = new HashSet<>();
-    private List<String> _currentFailedTests = new LinkedList<>();
+    private List<String> _currentFailedTests = new ArrayList<>();
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
 
@@ -291,6 +291,13 @@ public class Repair {
                 .append("MATCHLEVEL : ")
                 .append(level.name())
                 .append(Constant.NEW_LINE)
+                .append("Failing Tests:")
+                .append(_currentFailedTests)
+                .append(Constant.NEW_LINE)
+                .append("---------")
+                .append("START : ")
+                .append(simpleDateFormat.format(new Date(_timer.whenStart())))
+                .append(Constant.NEW_LINE)
                 .append("---------")
                 .append("TIME : ")
                 .append(simpleDateFormat.format(new Date()))
@@ -300,6 +307,7 @@ public class Repair {
 
         JavaFile.writeStringToFile(_logfile, buffer.toString(), true);
         if (patch) {
+            LevelLogger.info("Find a patch!");
             JavaFile.writeStringToFile(_patchFile, buffer.toString(), true);
         }
     }
@@ -344,13 +352,11 @@ public class Repair {
             if (shouldStop()) { break; }
 
             matchInstance.apply();
-            StringBuffer fixedCode;
+            StringBuffer fixedCode = null;
             try{
                 fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap(), retType, exceptions);
             } catch (Exception e) {
-                matchInstance.reset();
                 LevelLogger.error("AdaptModification causes exception ....", e);
-                continue;
             }
 
             if (fixedCode == null) {
@@ -512,10 +518,9 @@ public class Repair {
 
         _subject.restore();
 
-        message = "Finish : " + _subject.getName() + " > patch : " + all
+        message = "Finish : " + _subject.getName() + "-" + _subject.getId() + " > patch : " + all
                 + " | Start : " + start + " | End : " + simpleDateFormat.format(new Date());
         JavaFile.writeStringToFile(_logfile, message + "\n", true);
-        System.out.println(message);
         LevelLogger.info(message);
     }
 
