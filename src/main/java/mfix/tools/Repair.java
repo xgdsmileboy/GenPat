@@ -300,6 +300,7 @@ public class Repair {
 
         JavaFile.writeStringToFile(_logfile, buffer.toString(), true);
         if (patch) {
+            LevelLogger.info("Find a patch!");
             JavaFile.writeStringToFile(_patchFile, buffer.toString(), true);
         }
     }
@@ -344,13 +345,11 @@ public class Repair {
             if (shouldStop()) { break; }
 
             matchInstance.apply();
-            StringBuffer fixedCode;
+            StringBuffer fixedCode = null;
             try{
                 fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap(), retType, exceptions);
             } catch (Exception e) {
-                matchInstance.reset();
                 LevelLogger.error("AdaptModification causes exception ....", e);
-                continue;
             }
 
             if (fixedCode == null) {
@@ -512,10 +511,9 @@ public class Repair {
 
         _subject.restore();
 
-        message = "Finish : " + _subject.getName() + " > patch : " + all
+        message = "Finish : " + _subject.getName() + "-" + _subject.getId() + " > patch : " + all
                 + " | Start : " + start + " | End : " + simpleDateFormat.format(new Date());
         JavaFile.writeStringToFile(_logfile, message + "\n", true);
-        System.out.println(message);
         LevelLogger.info(message);
     }
 
