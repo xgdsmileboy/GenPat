@@ -79,7 +79,7 @@ public class Repair {
 
     private Set<String> _allFailedTests = new HashSet<>();
     private Set<String> _alreadyFixedTests = new HashSet<>();
-    private List<String> _currentFailedTests = new LinkedList<>();
+    private List<String> _currentFailedTests = new ArrayList<>();
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
 
@@ -290,6 +290,9 @@ public class Repair {
                 .append(Constant.NEW_LINE)
                 .append("MATCHLEVEL : ")
                 .append(level.name())
+                .append(Constant.NEW_LINE)
+                .append("Failing Tests:")
+                .append(_currentFailedTests)
                 .append(Constant.NEW_LINE)
                 .append("---------")
                 .append("START : ")
