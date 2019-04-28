@@ -53,6 +53,10 @@ public class NewD4JTest extends TestCase {
         temp_pattern("closure-92", "replace");
     }
 
+    @Test //closure-93 is the same
+    public void test_closure_2() throws Exception {
+        temp_pattern("closure-2", "checkInterfaceConflictProperties");
+    }
 
     public void temp_pattern(final String bugId, final String method) throws Exception {
         Pattern p = (Pattern) Utils.deserialize(Constant.HOME + "/tmp/" + bugId + ".pattern");
