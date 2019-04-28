@@ -8,6 +8,7 @@
 package mfix.common.java;
 
 import mfix.common.util.JavaFile;
+import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 
 import javax.tools.Diagnostic;
@@ -51,11 +52,11 @@ public class JCompiler {
     public static class MDiagnosticListener implements DiagnosticListener<JavaFileObject> {
         public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
             if (diagnostic.getKind() == Diagnostic.Kind.ERROR) {
-                System.out.println("Line Number->" + diagnostic.getLineNumber());
-                System.out.println("code       ->" + diagnostic.getCode());
-                System.out.println("Message    ->" + diagnostic.getMessage(Locale.ENGLISH));
-                System.out.println("Source     ->" + diagnostic.getSource());
-                System.out.println("");
+                LevelLogger.debug("Line Number->" + diagnostic.getLineNumber());
+                LevelLogger.debug("code       ->" + diagnostic.getCode());
+                LevelLogger.debug("Message    ->" + diagnostic.getMessage(Locale.ENGLISH));
+                LevelLogger.debug("Source     ->" + diagnostic.getSource());
+                LevelLogger.debug("");
             }
         }
     }
