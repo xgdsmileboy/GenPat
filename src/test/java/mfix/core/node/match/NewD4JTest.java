@@ -60,7 +60,7 @@ public class NewD4JTest extends TestCase {
 
     public void temp_pattern(final String bugId, final String method) throws Exception {
         Pattern p = (Pattern) Utils.deserialize(Constant.HOME + "/tmp/" + bugId + ".pattern");
-        System.out.println(p.getPatternName());
+        System.out.println(p.getFileName());
         String buggy = Constant.HOME + "/tmp/" + bugId + ".java";
         Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
