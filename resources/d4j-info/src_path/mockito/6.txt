@@ -1,0 +1,4 @@
+/src
+/build/classes/main
+/test
+/build/classes/test

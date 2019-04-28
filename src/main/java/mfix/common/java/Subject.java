@@ -183,7 +183,7 @@ public class Subject implements IExecute {
     }
 
     public String getPatchFile() {
-        return Utils.join(Constant.SEP, Constant.PATCH_PATH, _name, _id + ".txt");
+        return Utils.join(Constant.SEP, Constant.PATCH_PATH, _name, _id + ".diff");
     }
 
     public String getLogFile() {

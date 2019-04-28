@@ -162,7 +162,7 @@ public class MethodInv extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof MethodInv) {
+		if (other != null && other instanceof MethodInv) {
 			MethodInv methodInv = (MethodInv) other;
 			match = _name.compare(methodInv._name);
 			if (match) {
@@ -215,7 +215,8 @@ public class MethodInv extends Expr {
 			match = (methodInv == node);
 		} else if (canBinding(node)) {
 			methodInv = (MethodInv) node;
-			if (methodInv.getName().getName().equals(getName().getName())) {
+			if (methodInv.getName().getName().equals(getName().getName())
+					|| (_expression != null && _expression.compare(methodInv._expression))) {
 				setBindingNode(methodInv);
 				match = true;
 			} else {
@@ -283,8 +284,15 @@ public class MethodInv extends Expr {
 				MethodInv methodInv = (MethodInv) node;
 				Utils.checkCompatiblePut(NodeUtils.decorateMethodName(_name),
 						NodeUtils.decorateMethodName(methodInv.getName()), matchedStrings);
-				if (_expression != null && methodInv._expression != null) {
-					return NodeUtils.matchSameNodeType(_expression, methodInv._expression, matchedNode, matchedStrings);
+				if (_expression != null && methodInv._expression != null
+						&& NodeUtils.matchSameNodeType(_expression, methodInv._expression, matchedNode, matchedStrings)) {
+					ExprList list = methodInv.getArguments();
+					if (_arguments.getExpr().size() == list.getExpr().size()) {
+						for (int i = 0; i < _arguments.getExpr().size(); i++) {
+							NodeUtils.matchSameNodeType(_arguments.getExpr().get(i), list.getExpr().get(i),
+									matchedNode, matchedStrings);
+						}
+					}
 				}
 			}
 			return true;
@@ -339,7 +347,7 @@ public class MethodInv extends Expr {
 						expression = update.apply(vars, exprMap, retType, exceptions);
 						if (expression == null) return null;
 					} else if (changedNode == methodInv._name) {
-						name = update.apply(vars, exprMap, retType, exceptions);
+						name = update.getTarNode().toSrcString();
 						if (name == null) return null;
 					} else {
 						arguments = update.apply(vars, exprMap, retType, exceptions);

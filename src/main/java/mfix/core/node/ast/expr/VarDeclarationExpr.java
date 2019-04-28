@@ -134,7 +134,7 @@ public class VarDeclarationExpr extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof VarDeclarationExpr) {
+		if (other != null && other instanceof VarDeclarationExpr) {
 			VarDeclarationExpr varDeclarationExpr = (VarDeclarationExpr) other;
 			match = _declType.compare(varDeclarationExpr._declType);
 			match = match && (_vdfs.size() == varDeclarationExpr._vdfs.size());

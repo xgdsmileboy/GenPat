@@ -70,7 +70,7 @@ public class LabeledStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof LabeledStmt) {
+		if(other != null && other instanceof LabeledStmt) {
 			match = _codeStr.equals(((LabeledStmt) other)._codeStr);
 		}
 		return match;

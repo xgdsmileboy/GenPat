@@ -147,7 +147,7 @@ public class SwitchStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof SwitchStmt) {
+		if(other != null && other instanceof SwitchStmt) {
 			SwitchStmt switchStmt = (SwitchStmt) other;
 			match = _expression.compare(switchStmt._expression)
 					&& (_statements.size() == switchStmt._statements.size());

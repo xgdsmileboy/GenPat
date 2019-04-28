@@ -94,7 +94,7 @@ public class PrefixExpr extends Expr {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof PrefixExpr) {
+		if (other != null && other instanceof PrefixExpr) {
 			PrefixExpr prefixExpr = (PrefixExpr) other;
 			return _operator.compare(prefixExpr._operator) && _expression.compare(prefixExpr._expression);
 		}

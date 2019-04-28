@@ -98,7 +98,7 @@ public class RepairTest extends TestCase {
         subject.backup();
         D4JManualLocator locator = new D4JManualLocator(subject);
         List<Location> locations = locator.getLocations(3);
-        Repair repair = new Repair(subject, null);
+        Repair repair = new Repair(subject, null, null);
         Timer timer = new Timer(Constant.MAX_REPAIR_TIME);
         repair.setTimer(timer);
         timer.start();

@@ -99,7 +99,7 @@ public class ExpressionStmt extends Stmt {
 
     @Override
     public boolean compare(Node other) {
-        if (other instanceof ExpressionStmt) {
+        if (other != null && other instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) other;
             return _expression.compare(expressionStmt._expression);
         }

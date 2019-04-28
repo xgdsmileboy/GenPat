@@ -61,7 +61,7 @@ public class LambdaExpr extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof LambdaExpr) {
+		if (other != null && other instanceof LambdaExpr) {
 			match = _codeStr.equals(((LambdaExpr) other)._codeStr);
 		}
 		return match;

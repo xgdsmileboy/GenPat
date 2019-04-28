@@ -46,7 +46,7 @@ public class PostOperator extends Operator {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof PostOperator) {
+		if (other != null && other instanceof PostOperator) {
 			return _operatorStr.equals(((PostOperator) other)._operatorStr);
 		}
 		return false;

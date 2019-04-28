@@ -15,6 +15,7 @@ import mfix.common.java.Subject;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Pair;
+import mfix.common.util.Triple;
 import mfix.common.util.Utils;
 import mfix.core.locator.AbstractFaultLocator;
 import mfix.core.locator.FaultLocatorFactory;
@@ -72,6 +73,7 @@ public class Repair {
     private String _patchFile;
     private int _patchNum;
     private Set<String> _patternRecords;
+    private String _singlePattern;
 
     private Timer _timer;
 
@@ -83,10 +85,11 @@ public class Repair {
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
 
-    public Repair(Subject subject, Set<String> patternRecords) {
+    public Repair(Subject subject, Set<String> patternRecords, String singlePattern) {
         _subject = subject;
         _patchNum = 0;
         _patternRecords = patternRecords;
+        _singlePattern = singlePattern;
         _patchFile = _subject.getPatchFile();
         _logfile = _subject.getLogFile();
         _timer = new Timer(Constant.MAX_REPAIR_TIME);
@@ -150,7 +153,7 @@ public class Repair {
         _alreadyFixedTests.addAll(_currentFailedTests);
         _subject.restorePurifiedTest();
         for (String s : _allFailedTests) {
-            if (_allFailedTests.contains(s)) {
+            if (_alreadyFixedTests.contains(s)) {
                 continue;
             }
             if (_subject.test(s)) {
@@ -172,20 +175,6 @@ public class Repair {
                     Deletion del = (Deletion) modification;
                     if (del.getDelNode() != null && del.getDelNode().noBinding()) {
                         return null;
-                    }
-                } else if (modification instanceof Insertion) {
-                    Insertion ins = (Insertion) modification;
-                    StringBuffer buffer = ins.getInsertedNode().toSrcString();
-                    if (buffer != null && buffer.toString().contains("System.exit")) {
-                        return null;
-                    }
-                } else if (modification instanceof Update) {
-                    Update update = (Update) modification;
-                    if (update.getTarNode() != null) {
-                        StringBuffer buffer = update.getTarNode().toSrcString();
-                        if (buffer != null && buffer.toString().contains("System.exit")) {
-                            return null;
-                        }
                     }
                 }
             }
@@ -434,12 +423,17 @@ public class Repair {
             }
 
             List<String> patterns;
-            try {
-                patterns = filterPatterns(getKeys(node), Constant.TOP_K_PATTERN_EACH_LOCATION);
-            } catch (IOException e) {
-                LevelLogger.error("Filter patterns failed!", e);
-                JavaFile.writeStringToFile(_logfile, "Filter patterns failed!\n", true);
-                continue;
+            if (_singlePattern != null) {
+                patterns = new LinkedList<>();
+                patterns.add(_singlePattern);
+            } else {
+                try {
+                    patterns = filterPatterns(getKeys(node), Constant.TOP_K_PATTERN_EACH_LOCATION);
+                } catch (IOException e) {
+                    LevelLogger.error("Filter patterns failed!", e);
+                    JavaFile.writeStringToFile(_logfile, "Filter patterns failed!\n", true);
+                    continue;
+                }
             }
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             List<Integer> buggyLines = location.getConsideredLines();
@@ -465,6 +459,13 @@ public class Repair {
         String testBin = _subject.getHome() + _subject.getTbin();
 
         Utils.deleteDirs(srcBin, testBin);
+        if (_subject.compileProject()) {
+            // first check compilable
+            if (!_subject.compile()) {
+                JavaFile.writeStringToFile(_logfile, "Compile failed at the beginning!" + "\n", true);
+                return;
+            }
+        }
 
         Purification purification = new Purification(_subject);
         List<String> purifiedFailedTestCases = purification.purify(_subject.purify());
@@ -521,7 +522,7 @@ public class Repair {
     }
 
     private final static String COMMAND = "<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) " +
-            "-pf <arg> [-d4jhome <arg>]";
+            "(-pf <arg> | -pattern <arg>) [-d4jhome <arg>]";
 
     private static Options options() {
         Options options = new Options();
@@ -534,19 +535,23 @@ public class Repair {
         optionGroup.addOption(new Option("xml", "useXml", false, "Read subject from project.xml."));
         options.addOptionGroup(optionGroup);
 
-        Option option = new Option("pf", "PatternFile", true,
-                "Pattern record file which record all pattern paths.");
-        option.setRequired(true);
-        options.addOption(option);
+        optionGroup = new OptionGroup();
+        optionGroup.setRequired(true);
 
-        option = new Option("d4jhome", "defects4jHome", true, "Home directory of defects4j buggy code.");
+        optionGroup.addOption(new Option("pf", "PatternFile", true,
+                "Pattern record file which record all pattern paths."));
+        optionGroup.addOption(new Option("pattern", "pattern", true,
+                "Single pattern file"));
+        options.addOptionGroup(optionGroup);
+
+        Option option = new Option("d4jhome", "defects4jHome", true, "Home directory of defects4j buggy code.");
         option.setRequired(false);
         options.addOption(option);
 
         return options;
     }
 
-    private static Pair<Set<String>, List<Subject>> parseCommandLine(String[] args) {
+    private static Triple<String, Set<String>, List<Subject>> parseCommandLine(String[] args) {
         Options options = options();
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -560,7 +565,14 @@ public class Repair {
             System.exit(1);
         }
 
-        Set<String> patternFile = new HashSet<>(Arrays.asList(cmd.getOptionValue("pf").split(",")));
+        String singlePattern = null;
+        if (cmd.hasOption("pattern")) {
+            singlePattern = cmd.getOptionValue("pattern");
+        }
+        Set<String> patternFile = null;
+        if (cmd.hasOption("pf")) {
+            patternFile =new HashSet<>(Arrays.asList(cmd.getOptionValue("pf").split(",")));
+        }
         List<Subject> subjects = new LinkedList<>();
         if (cmd.hasOption("xml")) {
             subjects = Utils.getSubjectFromXML(Constant.DEFAULT_SUBJECT_XML);
@@ -607,23 +619,24 @@ public class Repair {
         } else {
             return null;
         }
-        return new Pair<>(patternFile, subjects);
+        return new Triple<>(singlePattern, patternFile, subjects);
     }
 
     public static void repairAPI(String[] args) {
-        Pair<Set<String>, List<Subject>> pair = parseCommandLine(args);
+        Triple<String, Set<String>, List<Subject>> pair = parseCommandLine(args);
         if (pair == null) {
             LevelLogger.error("Wrong command line input!");
             return;
         }
 
-        Set<String> patternRecords = pair.getFirst();
-        List<Subject> subjects = pair.getSecond();
+        String singlePattern = pair.getFirst();
+        Set<String> patternRecords = pair.getSecond();
+        List<Subject> subjects = pair.getThird();
         String file = Utils.join(Constant.SEP, Constant.HOME, "repair.rec");
         for (Subject subject : subjects) {
             JavaFile.writeStringToFile(file, subject.getName() + "_" + subject.getId() + " > PATCH : ", true);
             LevelLogger.info(subject.getHome() + ", " + subject.toString());
-            Repair repair = new Repair(subject, patternRecords);
+            Repair repair = new Repair(subject, patternRecords, singlePattern);
             repair.repair();
             JavaFile.writeStringToFile(file, repair.patch() + "\n", true);
         }

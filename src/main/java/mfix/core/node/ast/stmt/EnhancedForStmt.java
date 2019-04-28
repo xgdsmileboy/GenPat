@@ -153,7 +153,7 @@ public class EnhancedForStmt extends Stmt {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof EnhancedForStmt) {
+        if (other != null && other instanceof EnhancedForStmt) {
             EnhancedForStmt enhancedForStmt = (EnhancedForStmt) other;
             match =
 					_varDecl.compare(enhancedForStmt._varDecl) && _expression.compare(enhancedForStmt._expression) && _statement.compare(enhancedForStmt._statement);

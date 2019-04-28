@@ -49,7 +49,7 @@ public class FloatLiteral extends NumLiteral {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof FloatLiteral) {
+		if (other != null && other instanceof FloatLiteral) {
 			return (Math.abs(_value - ((FloatLiteral) other)._value) < EPSILON);
 		}
 		return false;

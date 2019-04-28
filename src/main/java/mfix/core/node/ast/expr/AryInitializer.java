@@ -109,7 +109,7 @@ public class AryInitializer extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof AryInitializer) {
+        if (other != null && other instanceof AryInitializer) {
             AryInitializer aryInitializer = (AryInitializer) other;
             match = (_expressions.size() == aryInitializer._expressions.size());
             for (int i = 0; match && i < _expressions.size(); i++) {

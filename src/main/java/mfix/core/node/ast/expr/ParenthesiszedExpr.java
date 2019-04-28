@@ -82,7 +82,7 @@ public class ParenthesiszedExpr extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof ParenthesiszedExpr) {
+		if (other != null && other instanceof ParenthesiszedExpr) {
 			ParenthesiszedExpr parenthesiszedExpr = (ParenthesiszedExpr) other;
 			match = _expression.compare(parenthesiszedExpr._expression);
 		}

@@ -59,7 +59,7 @@ public class Comment extends Expr {
 
     @Override
     public boolean compare(Node other) {
-        if (other instanceof Comment) {
+        if (other != null && other instanceof Comment) {
             return _comment.equals(((Comment) other)._comment);
         }
         return false;

@@ -6,6 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
@@ -62,7 +63,7 @@ public class NillLiteral extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof NillLiteral) {
+		if(other != null && other instanceof NillLiteral) {
 			match = true;
 		}
 		return match;
@@ -95,6 +96,11 @@ public class NillLiteral extends Expr {
 	@Override
 	public boolean genModifications() {
 		return true;
+	}
+
+	@Override
+	public boolean ifMatch(Node node, Map<Node, Node> matchedNode, Map<String, String> matchedStrings, MatchLevel level) {
+		return node instanceof NillLiteral;
 	}
 
 	@Override
