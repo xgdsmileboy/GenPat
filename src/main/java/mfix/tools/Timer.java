@@ -23,6 +23,10 @@ public class Timer {
         System.out.println("TIMEOUT : " + _timeout + "ms");
     }
 
+    public long whenStart() {
+        return _start;
+    }
+
     public String start(){
         _start = System.currentTimeMillis();
         return new Date(_start).toString();
