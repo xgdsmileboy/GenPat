@@ -552,11 +552,14 @@ public abstract class Node implements NodeComparator, Serializable {
      * @return : a set of nodes
      */
     public Set<Node> getConsideredNodesRec(Set<Node> nodes, boolean includeExpanded) {
+        return getConsideredNodesRec(nodes, includeExpanded, new HashSet<>());
+    }
+    public Set<Node> getConsideredNodesRec(Set<Node> nodes, boolean includeExpanded, Set<Node> dependency) {
         if (noBinding()) {
             nodes.add(this);
         } else {
             if ((includeExpanded && _expanded) || _changed || _insertDepend
-                    || dataDependencyChanged() || controlDependencyChanged()) {
+                    || dataDependencyChanged(nodes) || controlDependencyChanged()) {
                 nodes.add(this);
             }
         }
@@ -569,13 +572,20 @@ public abstract class Node implements NodeComparator, Serializable {
         return nodes;
     }
 
-    private boolean dataDependencyChanged() {
+    private boolean dataDependencyChanged(Set<Node> nodes) {
         if (getDataDependency() == null) {
             if (_bindingNode.getDataDependency() != null) {
                 return true;
             }
         } else if (getDataDependency().getBindingNode()
                 != _bindingNode.getDataDependency()) {
+            if (nodes.contains(getDataDependency())
+                    || nodes.contains(_bindingNode.getDataDependency())) {
+                return false;
+            }
+            // avoid too much dependency changes
+            nodes.add(getDataDependency());
+            nodes.add(_bindingNode.getDataDependency());
             return !fakeChange(getDataDependency(), _bindingNode.getDataDependency());
         }
         return false;
