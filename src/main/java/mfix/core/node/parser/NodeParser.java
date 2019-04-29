@@ -1272,6 +1272,7 @@ public class NodeParser {
         int startLine = _cunit.getLineNumber(node.getStartPosition());
         int endLine = _cunit.getLineNumber(node.getStartPosition() + node.getLength());
         Svd svd = new Svd(_fileName, startLine, endLine, node);
+        svd.setVariant(node.isVarargs());
 
         MType mType = new MType(_fileName, startLine, endLine, node.getType());
         Type type = typeFromBinding(node.getAST(), node.getType().resolveBinding());
