@@ -38,8 +38,13 @@ public class MatchInstance {
     }
 
     public boolean modifyAny(Set<Integer> lines) {
+        Node node;
         for (Map.Entry<Node, Node> entry : _nodeMap.entrySet()) {
-            if (lines.contains(entry.getValue().getParentStmt().getStartLine())) {
+            node = entry.getValue();
+            if (lines.contains(node.getStartLine())) {
+                return true;
+            } else if (node.getParentStmt() == null
+                    || lines.contains(node.getParentStmt().getStartLine())) {
                 return true;
             }
         }

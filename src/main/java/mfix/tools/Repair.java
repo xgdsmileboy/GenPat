@@ -441,6 +441,11 @@ public class Repair {
             }
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             List<Integer> buggyLines = location.getConsideredLines();
+            if (node instanceof MethDecl) {
+                for (Node n : ((MethDecl) node).getArguments()) {
+                    buggyLines.add(n.getStartLine());
+                }
+            }
             for (String s : patterns) {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
