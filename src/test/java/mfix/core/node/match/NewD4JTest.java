@@ -68,6 +68,11 @@ public class NewD4JTest extends TestCase {
         temp_pattern("chart-4", "getDataRange");
     }
 
+    @Test
+    public void test_lang_21() throws Exception {
+        temp_pattern("lang-21", "isSameLocalTime");
+    }
+
     public void temp_pattern(final String bugId, final String method) throws Exception {
         Pattern p = (Pattern) Utils.deserialize(Constant.HOME + "/tmp/" + bugId + ".pattern");
         System.out.println(p.getFileName());
