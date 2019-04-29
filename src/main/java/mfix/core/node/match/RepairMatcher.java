@@ -45,6 +45,10 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
     private MatchLevel _level;
     private Timer _timer;
 
+    public RepairMatcher(int minutes) {
+        this(null, null, new LinkedList<>(), minutes);
+    }
+
     public RepairMatcher() {
         this(null, null, new LinkedList<>(), 30);
     }
@@ -64,15 +68,42 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
     @Override
     public List<MatchInstance> call() {
         _timer.start();
-        _level = MatchLevel.ALL;
-        List<MatchInstance> fixPositions = tryMatch(_bNode, _pattern, _buggyLines);
-        if (fixPositions.isEmpty()) {
-            _level = MatchLevel.TYPE;
-            fixPositions = tryMatch(_bNode, _pattern, _buggyLines, MatchLevel.TYPE);
-            if (fixPositions.isEmpty()) {
-                _level = MatchLevel.FUZZY;
+        List<MatchInstance> fixPositions;
+        _level = Constant.PATTERN_MATCH_LEVEL;
+        switch(Constant.PATTERN_MATCH_LEVEL) {
+            case AST:
                 fixPositions = tryMatch(_bNode, _pattern, _buggyLines, MatchLevel.FUZZY);
-            }
+                break;
+            case ALL:
+                fixPositions = tryMatch(_bNode, _pattern, _buggyLines);
+                break;
+            case TYPE:
+                fixPositions = tryMatch(_bNode, _pattern, _buggyLines);
+                _level = MatchLevel.ALL;
+                if (fixPositions.isEmpty()) {
+                    fixPositions = tryMatch(_bNode, _pattern, _buggyLines, MatchLevel.TYPE);
+                    _level = MatchLevel.TYPE;
+                }
+                break;
+            case NAME:
+                fixPositions = tryMatch(_bNode, _pattern, _buggyLines);
+                _level = MatchLevel.ALL;
+                if (fixPositions.isEmpty()) {
+                    fixPositions = tryMatch(_bNode, _pattern, _buggyLines, MatchLevel.NAME);
+                    _level = MatchLevel.NAME;
+                }
+                break;
+            default:
+                fixPositions = tryMatch(_bNode, _pattern, _buggyLines);
+                _level = MatchLevel.ALL;
+                if (fixPositions.isEmpty()) {
+                    _level = MatchLevel.TYPE;
+                    fixPositions = tryMatch(_bNode, _pattern, _buggyLines, MatchLevel.TYPE);
+                    if (fixPositions.isEmpty()) {
+                        _level = MatchLevel.FUZZY;
+                        fixPositions = tryMatch(_bNode, _pattern, _buggyLines, MatchLevel.FUZZY);
+                    }
+                }
         }
         return fixPositions;
     }
@@ -156,7 +187,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
             matches = matches.stream().sorted(Comparator.comparingDouble(MatchInstance::similarity).reversed())
                     .limit(topk).collect(Collectors.toList());
         }
-        LevelLogger.info("Finish match!");
+        LevelLogger.info("Finish match : " + matches.size());
         if (matches.isEmpty()) {
             System.err.println("No matches !");
         }

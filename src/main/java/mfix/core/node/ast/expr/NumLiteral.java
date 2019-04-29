@@ -76,7 +76,7 @@ public class NumLiteral extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof NumLiteral) {
+		if (other != null && other instanceof NumLiteral) {
 			NumLiteral numLiteral = (NumLiteral) other;
 			match = _token.equals(numLiteral._token);
 		}

@@ -138,7 +138,7 @@ public class SuperMethodInv extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof SuperMethodInv) {
+		if (other != null && other instanceof SuperMethodInv) {
 			SuperMethodInv superMethodInv = (SuperMethodInv) other;
 			match = (_label == null) ? (superMethodInv._label == null) : _label.compare(superMethodInv._label);
 			match = match && _name.compare(superMethodInv._name) && _arguments.compare(superMethodInv._arguments);

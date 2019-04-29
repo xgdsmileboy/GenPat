@@ -105,7 +105,7 @@ public class ContinueStmt extends Stmt {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof ContinueStmt) {
+        if (other != null && other instanceof ContinueStmt) {
             ContinueStmt continueStmt = (ContinueStmt) other;
             match = (_identifier == null) ? (continueStmt._identifier == null)
                     : _identifier.compare(continueStmt._identifier);

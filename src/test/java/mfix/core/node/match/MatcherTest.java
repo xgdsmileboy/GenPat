@@ -384,24 +384,23 @@ public class MatcherTest extends TestCase {
         }
     }
 
-//    @Test
-    public void temp() {
-        String srcFile = "resources/d4j-info/buggy_fix/buggy/chart/chart_1_buggy" +
-                "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
-        String tarFile = "resources/d4j-info/buggy_fix/fixed/chart/chart_1_fixed" +
-                "/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java";
+    @Test
+    public void temp_file_pair() {
+
+        String srcFile = Constant.HOME + "/tmp/src.java";
+        String tarFile = Constant.HOME + "/tmp/tar.java";
 
         PatternExtractor extractor = new PatternExtractor();
         Set<Pattern> patterns = extractor.extractPattern(srcFile, tarFile);
 
-        String buggy = srcFile;
+        String buggy = Constant.HOME + "/tmp/closure-92.java";
         Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
 
         CompilationUnit unit = JavaFile.genASTFromFileWithType(buggy);
         final Set<MethodDeclaration> methods = new HashSet<>();
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration node) {
-                if ("getLegendItems".equals(node.getName().getIdentifier())) {
+                if (node.getName().getIdentifier().equals("replace")) {
                     methods.add(node);
                     return false;
                 }
@@ -409,7 +408,7 @@ public class MatcherTest extends TestCase {
             }
         });
 
-        List<Integer> need2Match = new ArrayList<>(Arrays.asList(1797));
+        List<Integer> need2Match = null;//new ArrayList<>(Arrays.asList(18,19,20));
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
         RepairMatcher matcher = new RepairMatcher();
@@ -419,8 +418,8 @@ public class MatcherTest extends TestCase {
                 List<MatchInstance> set = matcher.tryMatch(node, p, need2Match);
                 for (MatchInstance matchInstance : set) {
                     matchInstance.apply();
-                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), new HashMap<>(),
-                            "Object", new HashSet<>());
+                    StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap(),
+                            "Class", new HashSet<>());
                     if (buffer != null) {
                         TextDiff diff = new TextDiff(node.toSrcString().toString(), buffer.toString());
                         System.out.println(diff.toString());
@@ -430,4 +429,5 @@ public class MatcherTest extends TestCase {
             }
         }
     }
-}
+
+ }

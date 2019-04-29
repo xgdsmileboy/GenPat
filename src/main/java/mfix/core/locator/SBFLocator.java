@@ -108,7 +108,7 @@ public class SBFLocator extends AbstractFaultLocator {
                 if(index > 0){
                     stmt = stmt.substring(0, index);
                 }
-                suspStmt.add(new Triple<>(stmt, lineNumber, 0.0));
+                suspStmt.add(new Triple<>(stmt, lineNumber, 1.0));
             }
         }
         return transformLine2Method(suspStmt, topk);

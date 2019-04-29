@@ -89,7 +89,7 @@ public class TyLiteral extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof TyLiteral) {
+		if (other != null && other instanceof TyLiteral) {
 			TyLiteral literal = (TyLiteral) other;
 			match = _type.compare(literal._type);
 		}
@@ -149,7 +149,7 @@ public class TyLiteral extends Expr {
 
 	@Override
 	public boolean patternMatch(Node node, Map<Node, Node> matchedNode) {
-		if (node.getNodeType() == getNodeType()) {
+		if (node != null && node.getNodeType() == getNodeType()) {
 			super.patternMatch(node, matchedNode);
 		}
 		return false;

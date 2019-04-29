@@ -183,7 +183,7 @@ public class Subject implements IExecute {
     }
 
     public String getPatchFile() {
-        return Utils.join(Constant.SEP, Constant.PATCH_PATH, _name, _id + ".txt");
+        return Utils.join(Constant.SEP, Constant.PATCH_PATH, _name, _id + ".diff");
     }
 
     public String getLogFile() {
@@ -268,6 +268,7 @@ public class Subject implements IExecute {
 
     @Override
     public boolean test() {
+        LevelLogger.info("SINGLE TEST : " + _name + "_" + _id);
         return checkSuccess(ExecuteCommand.executeTest(this), _key_test_suc);
     }
 

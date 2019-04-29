@@ -111,8 +111,11 @@ public class NodeUtils {
         return stringBuffer;
     }
 
-    public static boolean match(boolean matchName, boolean matchType, MatchLevel level) {
+    public static boolean match(Node src, Node tar, boolean matchName, boolean matchType, MatchLevel level) {
         switch (level) {
+            case AST:
+                return src != null && tar != null
+                        && src.getNodeType() == tar.getNodeType();
             case ALL:
                 return matchName && matchType;
             case TYPE:
@@ -299,7 +302,7 @@ public class NodeUtils {
                 }
                 return false;
             }
-            return node.getDataDependency() == other.getDataDependency();
+            return node.getDataDependency() == null;
         }
         return true;
     }

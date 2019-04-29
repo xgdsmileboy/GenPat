@@ -60,7 +60,7 @@ public class CreationRef extends Expr {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof CreationRef) {
+        if (other != null && other instanceof CreationRef) {
             CreationRef creationRef = (CreationRef) other;
             match = _str.equals(creationRef.toString());
         }

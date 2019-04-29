@@ -71,7 +71,7 @@ public class TypeDeclarationStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof TypeDeclarationStmt) {
+		if(other != null && other instanceof TypeDeclarationStmt) {
 			match = _codeStr.equals(((TypeDeclarationStmt) other)._codeStr);
 		}
 		return match;

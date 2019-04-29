@@ -176,7 +176,7 @@ public class ForStmt extends Stmt {
     @Override
     public boolean compare(Node other) {
         boolean match = false;
-        if (other instanceof ForStmt) {
+        if (other != null && other instanceof ForStmt) {
             ForStmt forStmt = (ForStmt) other;
             match = _initializers.compare(forStmt._initializers);
             if (_condition != null) {

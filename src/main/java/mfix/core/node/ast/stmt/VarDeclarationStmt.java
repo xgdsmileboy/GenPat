@@ -161,7 +161,7 @@ public class VarDeclarationStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof VarDeclarationStmt) {
+		if (other != null && other instanceof VarDeclarationStmt) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) other;
 			match = _declType.compare(varDeclarationStmt._declType);
 			if (_modifier == null) {

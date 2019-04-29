@@ -100,7 +100,7 @@ public class QName extends Label {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof QName) {
+		if (other != null && other instanceof QName) {
 			QName qName = (QName) other;
 			match = _name.compare(qName._name) && _sname.compare(qName._sname);
 		}

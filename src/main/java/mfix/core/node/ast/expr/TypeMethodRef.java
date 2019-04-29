@@ -55,7 +55,7 @@ public class TypeMethodRef extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof TypeMethodRef) {
+		if (other != null && other instanceof TypeMethodRef) {
 			match = _oriNode.toString().equals(((TypeMethodRef) other)._oriNode.toString());
 		}
 		return match;

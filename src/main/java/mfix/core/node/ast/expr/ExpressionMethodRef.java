@@ -58,7 +58,7 @@ public class ExpressionMethodRef extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof ExpressionMethodRef) {
+		if(other != null && other instanceof ExpressionMethodRef) {
 			match = _str.equals(((ExpressionMethodRef) other)._str);
 		}
 		return match;

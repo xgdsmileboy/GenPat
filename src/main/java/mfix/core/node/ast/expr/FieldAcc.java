@@ -96,7 +96,7 @@ public class FieldAcc extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof FieldAcc) {
+		if(other != null && other instanceof FieldAcc) {
 			FieldAcc fieldAcc = (FieldAcc) other;
 			match = _expression.compare(fieldAcc._expression);
 			match = match && _identifier.compare(fieldAcc._identifier);

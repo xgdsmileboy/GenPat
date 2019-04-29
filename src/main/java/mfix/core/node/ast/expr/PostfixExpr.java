@@ -94,7 +94,7 @@ public class PostfixExpr extends Expr {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if (other instanceof PostfixExpr) {
+		if (other != null && other instanceof PostfixExpr) {
 			PostfixExpr postfixExpr = (PostfixExpr) other;
 			match = _operator.compare(postfixExpr._operator) && _expression.compare(postfixExpr._expression);
 		}

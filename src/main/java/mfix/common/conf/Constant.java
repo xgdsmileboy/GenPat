@@ -9,6 +9,7 @@ package mfix.common.conf;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
+import mfix.core.node.ast.MatchLevel;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -45,7 +46,6 @@ public class Constant {
     public final static String TF_IDF_TOKENS = Utils.join(SEP, RES_DIR, "db", "AllTokens.txt");
     public final static String DB_CACHE_FILE = Utils.join(SEP, RES_DIR, "db", "MethodTableElements.txt");
     public final static String DB_CACHE_FILE_WITH_TYPE = Utils.join(SEP, RES_DIR, "db", "MethodTableElementsWithType.txt");
-    public final static String BANNED_API_FILE = Utils.join(SEP, RES_DIR, "conf", "whiteList.txt");
 
     /* values for pattern abstraction */
     public final static int TOTAL_BUGGY_FILE_NUMBER = 1217392; // used to compute TF-IDF
@@ -54,6 +54,7 @@ public class Constant {
     public final static double TOKEN_FREQENCY = 0.005;
 
     public static boolean EXPAND_PATTERN = true;
+    public static MatchLevel PATTERN_MATCH_LEVEL = MatchLevel.ALL;
 
     /* runtime configurations */
     public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");
@@ -156,12 +157,16 @@ public class Constant {
             MAX_INSTANCE_PER_PATTERN = Integer.parseInt(prop.getProperty("REPAIR.MATCH", "100"));
             MAX_PATCH_NUMBER = Integer.parseInt(prop.getProperty("REPAIR.PATCH", "100"));
             MAX_REPAIR_LOCATION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
+            PATTERN_MATCH_LEVEL = MatchLevel.valueOf(prop.getProperty("MATCH.LEVEL", "FUZZY"));
+
             MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
             MAX_CLUSTER_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER.THREAD", "10"));
             MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
+
             FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
             FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));
             FILTER_DELETION = Boolean.parseBoolean(prop.getProperty("REMOVE.DELETION", "false"));
+
             SPLIT_CLUSTER = Boolean.parseBoolean(prop.getProperty("CLUSTER.SPLIT", "false"));
             MAX_PATTERN_NUM_EACH_CLUSTER = Integer.parseInt(prop.getProperty("CLUSTER.SIZE", "10000"));
 

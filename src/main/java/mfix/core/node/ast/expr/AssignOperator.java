@@ -46,7 +46,7 @@ public class AssignOperator extends Operator {
 
     @Override
     public boolean compare(Node other) {
-        if (other instanceof AssignOperator) {
+        if (other != null && other instanceof AssignOperator) {
             return _operatorStr.equals(((AssignOperator) other)._operatorStr);
         }
         return false;

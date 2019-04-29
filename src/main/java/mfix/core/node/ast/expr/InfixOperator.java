@@ -46,7 +46,7 @@ public class InfixOperator extends Operator {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof InfixOperator) {
+		if (other != null && other instanceof InfixOperator) {
 			InfixOperator infixOperator = (InfixOperator) other;
 			return _operatorStr.equals(infixOperator._operatorStr);
 		}

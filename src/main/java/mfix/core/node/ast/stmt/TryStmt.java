@@ -238,7 +238,7 @@ public class TryStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof TryStmt) {
+		if(other != null && other instanceof TryStmt) {
 			TryStmt tryStmt = (TryStmt) other;
 			if(_resource == null) {
 				match = (tryStmt._resource == null);

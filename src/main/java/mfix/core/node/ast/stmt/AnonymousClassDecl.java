@@ -65,7 +65,7 @@ public class AnonymousClassDecl extends Node {
 
 	@Override
 	public boolean compare(Node other) {
-		if (other instanceof AnonymousClassDecl) {
+		if (other != null && other instanceof AnonymousClassDecl) {
 //			return _codeStr.equals(((AnonymousClassDecl) other)._codeStr);
 			return true;
 		}

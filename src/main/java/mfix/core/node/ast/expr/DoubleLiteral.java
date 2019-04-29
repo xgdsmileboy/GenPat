@@ -50,7 +50,7 @@ public class DoubleLiteral extends NumLiteral {
 
     @Override
     public boolean compare(Node other) {
-        if (other instanceof DoubleLiteral) {
+        if (other != null && other instanceof DoubleLiteral) {
             return (Math.abs(_value - ((DoubleLiteral) other)._value) < EPSILON);
         }
         return false;

@@ -118,7 +118,7 @@ public class WhileStmt extends Stmt {
 	@Override
 	public boolean compare(Node other) {
 		boolean match = false;
-		if(other instanceof WhileStmt) {
+		if(other != null && other instanceof WhileStmt) {
 			WhileStmt whileStmt = (WhileStmt) other;
 			match = _expression.compare(whileStmt._expression) && _body.compare(whileStmt._body);
 		}
