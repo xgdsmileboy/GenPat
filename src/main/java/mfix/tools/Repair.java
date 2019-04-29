@@ -81,6 +81,8 @@ public class Repair {
     private Set<String> _alreadyFixedTests = new HashSet<>();
     private List<String> _currentFailedTests = new ArrayList<>();
 
+    private Set<String> _priorityPattern = new HashSet<>();
+
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
 
     public Repair(Subject subject, Set<String> patternRecords, String singlePattern) {
@@ -379,7 +381,8 @@ public class Repair {
             switch (validate(buggyFile, code)) {
                 case PASS:
                     writeLog(pattern, buggyFile, origin, fixed, startLine, endLine, true, level);
-                    _patchNum ++;
+                    _priorityPattern.add(pattern.getPatternName());
+                    _patchNum += 1;
                     break;
                 case TEST_FAILED:
                     writeLog(pattern, buggyFile, origin, fixed, startLine, endLine, false, level);
@@ -446,8 +449,16 @@ public class Repair {
                     buggyLines.add(n.getStartLine());
                 }
             }
+            for (String s : _priorityPattern) {
+                if (shouldStop()) { break; }
+                Pattern p = readPattern(s);
+                if (p == null) { continue; }
+                scope.reset(p.getNewVars());
+                tryFix(node, p, scope, clazzFile, retType, exceptions, buggyLines);
+            }
             for (String s : patterns) {
                 if (shouldStop()) { break; }
+                if (_priorityPattern.contains(s)) { continue; }
                 Pattern p = readPattern(s);
                 if (p == null) { continue; }
                 scope.reset(p.getNewVars());
@@ -461,6 +472,7 @@ public class Repair {
         JavaFile.writeStringToFile(_logfile, message + "\n", false);
         LevelLogger.info(message);
         _subject.backup();
+        _priorityPattern = new HashSet<>();
 
         String srcSrc = _subject.getHome() + _subject.getSsrc();
         String testSrc = _subject.getHome() + _subject.getTsrc();
