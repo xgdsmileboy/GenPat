@@ -39,7 +39,7 @@ public class MatchInstance {
 
     public boolean modifyAny(Set<Integer> lines) {
         for (Map.Entry<Node, Node> entry : _nodeMap.entrySet()) {
-            if (lines.contains(entry.getValue().getStartLine())) {
+            if (lines.contains(entry.getValue().getParentStmt().getStartLine())) {
                 return true;
             }
         }
