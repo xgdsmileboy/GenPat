@@ -58,6 +58,16 @@ public class NewD4JTest extends TestCase {
         temp_pattern("closure-2", "checkInterfaceConflictProperties");
     }
 
+    @Test
+    public void test_lang_16() throws Exception {
+        temp_pattern("lang-16", "createNumber");
+    }
+
+    @Test
+    public void test_chart_4_() throws Exception {
+        temp_pattern("chart-4", "getDataRange");
+    }
+
     public void temp_pattern(final String bugId, final String method) throws Exception {
         Pattern p = (Pattern) Utils.deserialize(Constant.HOME + "/tmp/" + bugId + ".pattern");
         System.out.println(p.getFileName());
