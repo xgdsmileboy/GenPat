@@ -26,9 +26,34 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+
 public class rlytest {
     final static String LOCAL_DATASET = Constant.RES_DIR + Constant.SEP + "SysEdit-part1";
 
+    static int correctCaseNum = 0, incorrectCaseNum = 0, caseNum;
+    static List<Integer> correctCase;
+
+    static MethodDeclaration getKthMethodFromFile(String file, int index) {
+        CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
+        LinkedList<MethodDeclaration> all_methods = new LinkedList<>();
+        unit.accept(new ASTVisitor() {
+            public boolean visit(MethodDeclaration node) {
+                if (node instanceof MethodDeclaration) {
+                    all_methods.add(node);
+                }
+                return false;
+            }
+        });
+        if (index >= all_methods.size()) {
+            return null;
+        }
+
+        for (MethodDeclaration m : all_methods) {
+            System.out.println(m.getName());
+        }
+
+        return all_methods.get(index);
+    }
     // find method with same name & same argType
     static MethodDeclaration findMethodFromFile(String file, Method method) {
         if (method == null) {
@@ -36,11 +61,11 @@ public class rlytest {
         }
         CompilationUnit unit = JavaFile.genASTFromFileWithType(file);
         final Set<MethodDeclaration> methods = new HashSet<>();
+
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration node) {
                 if (method.getName().equals(node.getName().getIdentifier())
-                        // && method.argTypeSame(node)
-                         && method.getArgTypes().size() == node.parameters().size()
+                && method.getArgTypes().size() == node.parameters().size()
                 ) {
                     methods.add(node);
                     return false;
@@ -48,9 +73,11 @@ public class rlytest {
                 return true;
             }
         });
+
         if (methods.size() == 0) {
             return null;
         }
+
         return methods.iterator().next();
     }
     static String removeEmpty(String s) {
@@ -126,11 +153,14 @@ public class rlytest {
 
         if (correct_cnt > 0) {
             System.out.println("Correct!");
+            correctCaseNum += 1;
+            correctCase.add(caseNum);
             if (incorrect_cnt > 0) {
                 System.out.println("Also with incorrect!");
             }
         } else {
             if (incorrect_cnt > 0) {
+                incorrectCaseNum += 1;
                 System.out.println("Incorrect!");
             } else {
                 System.out.println("Not Found!");
@@ -240,10 +270,16 @@ public class rlytest {
 
     public static void runc3() {
         int cntTotal = 0, cntEqual = 0;
-        for (int i = 1; i <= 1000; ++i) {
-            System.out.println("run cluster:" + i);
+        correctCaseNum = 0;
+        incorrectCaseNum = 0;
+        correctCase = new LinkedList<>();
 
-            String path = "/Users/luyaoren/Downloads/cluster/" + i;
+        for (caseNum = 1000; caseNum <= 2000; ++caseNum) {
+            System.out.println("run cluster:" + caseNum);
+//            if (caseNum == 1166) continue;
+//            if (caseNum == 1228) continue;
+
+            String path = "/Users/luyaoren/Downloads/cluster/" + caseNum;
 
             JSONParser parser = new JSONParser();
             JSONObject ret = null;
@@ -272,7 +308,10 @@ public class rlytest {
 
                 String src_method = (String)((JSONObject)methods.get(j)).get("signatureBeforeChange");
                 String tar_method = (String)((JSONObject)methods.get(j)).get("signatureAfterChange");
+                int src_method_num = (int)(long)((JSONObject)methods.get(j)).get("methodNumberBeforeChange");
+                int tar_method_num = (int)(long)((JSONObject)methods.get(j)).get("methodNumberAfterChange");
 
+                /*
                 if (j == 0) {
                     System.out.println("PATTERN:");
                     System.out.println(src_method);
@@ -284,10 +323,22 @@ public class rlytest {
                     }
                     System.out.println("--end--");
                 }
+                */
 
                 if ((new File(src).exists()) && (new File(tar).exists())) {
                     src_methods.add(new Method(findMethodFromFile(src, parseMethodFromString(src_method))));
+//                    MethodDeclaration point_src_method = getKthMethodFromFile(src, src_method_num);
+//                    System.out.println(point_src_method.getName());
+//                    System.out.println(src_method);
+//                    src_methods.add(new Method(point_src_method));
+
+
                     tar_methods.add(new Method(findMethodFromFile(tar, parseMethodFromString(tar_method))));
+//                    MethodDeclaration point_tar_method = getKthMethodFromFile(tar, tar_method_num);
+//                    System.out.println(point_tar_method.getName());
+//                    System.out.println(tar_method);
+//                    tar_methods.add(new Method(point_tar_method));
+
                 } else {
                     System.err.println("File not exist!");
                 }
@@ -317,6 +368,9 @@ public class rlytest {
         System.out.println(cntEqual);
         System.out.println(cntTotal);
         System.out.println(1.0 * cntEqual / cntTotal);
+        System.out.println("correctCaseNum=" + correctCaseNum);
+        System.out.println("incorrectCaseNum=" + incorrectCaseNum);
+        System.out.println("correctCase:" + correctCase.toString());
 
     }
 }
