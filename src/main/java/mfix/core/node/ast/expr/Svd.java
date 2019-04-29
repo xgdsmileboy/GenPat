@@ -35,6 +35,7 @@ public class Svd extends Expr {
 	private MType _decType = null;
 	private SName _name = null;
 	private Expr _initializer = null;
+	private boolean _isVariant = false;
 	
 	/**
 	 * { ExtendedModifier } Type {Annotation} [ ... ] Identifier { Dimension } [ = Expression ]
@@ -44,6 +45,10 @@ public class Svd extends Expr {
 		super(fileName, startLine, endLine, node);
 		_nodeType = TYPE.SINGLEVARDECL;
 		_fIndex = VIndex.EXP_SVD;
+	}
+
+	public void setVariant(boolean isVariant) {
+		_isVariant = isVariant;
 	}
 
 	public void setDecType(MType decType) {
@@ -74,7 +79,7 @@ public class Svd extends Expr {
 	public StringBuffer toSrcString() {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(_decType.toSrcString());
-		stringBuffer.append(" ");
+		stringBuffer.append(_isVariant ? "... " : " ");
 		stringBuffer.append(_name.toSrcString());
 		if (_initializer != null) {
 			stringBuffer.append("=");
@@ -127,6 +132,9 @@ public class Svd extends Expr {
 	protected void tokenize() {
 		_tokens = new LinkedList<>();
 		_tokens.addAll(_decType.tokens());
+		if (_isVariant) {
+			_tokens.add("...");
+		}
 		_tokens.addAll(_name.tokens());
 		if (_initializer != null) {
 			_tokens.addFirst("=");
@@ -141,6 +149,7 @@ public class Svd extends Expr {
 			Svd svd = (Svd) other;
 			match = _decType.compare(svd._decType);
 			match = match && _name.compare(svd._name);
+			match = match && _isVariant == svd._isVariant;
 			if (_initializer == null) {
 				match = match && (svd._initializer == null);
 			} else {
