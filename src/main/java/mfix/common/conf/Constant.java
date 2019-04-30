@@ -56,6 +56,8 @@ public class Constant {
     public static boolean EXPAND_PATTERN = true;
     public static MatchLevel PATTERN_MATCH_LEVEL = MatchLevel.ALL;
 
+    public static boolean SKIP_FAULTLOCALIZATION = false;
+
     /* runtime configurations */
     public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");
     public final static String RUNTIME_CONF_FILE = Utils.join(SEP, RES_DIR, "conf", "configure.properties");

@@ -304,7 +304,7 @@ public class PatternRanking {
     }
 
     private final static String COMMAND = "<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) " +
-            "(-pf <arg> | -pattern <arg>) [-d4jhome <arg>]";
+            "(-pf <arg> | -pattern <arg>) [-d4jhome <arg>] [-skipFL]";
 
     private static Options options() {
         Options options = new Options();
@@ -330,6 +330,10 @@ public class PatternRanking {
         option.setRequired(false);
         options.addOption(option);
 
+        option = new Option("skipFL", "skipFaultLocalization", false, "Skip fault localization and use Ochiai result.");
+        option.setRequired(false);
+        options.addOption(option);
+
         return options;
     }
 
@@ -347,6 +351,7 @@ public class PatternRanking {
             System.exit(1);
         }
 
+        Constant.SKIP_FAULTLOCALIZATION = cmd.hasOption("skipFL");
         String singlePattern = null;
         if (cmd.hasOption("pattern")) {
             singlePattern = cmd.getOptionValue("pattern");
