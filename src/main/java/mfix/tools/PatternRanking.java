@@ -139,7 +139,7 @@ public class PatternRanking {
                                 LevelLogger.error("Record file format error : " + line);
                             } else {
                                 if (thread > Constant.MAX_PRANK_THRED_NUM) {
-                                    Utils.finishFutures(futures, true, 30, TimeUnit.SECONDS);
+                                    patterns.addAll(Utils.finishFutures(futures, true, 30, TimeUnit.SECONDS));
                                     thread = 0;
                                 }
                                 futures.add(executor.submit(new ChangeCounter(info[0], Integer.parseInt(info[1]))));
@@ -154,6 +154,7 @@ public class PatternRanking {
             }
             br.close();
         }
+        patterns.addAll(Utils.finishFutures(futures, true, 30, TimeUnit.SECONDS));
         topK = topK > patterns.size() ? patterns.size() : topK;
         // priority:
         // (1) prefer small changes
