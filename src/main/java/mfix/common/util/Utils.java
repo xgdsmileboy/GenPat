@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -44,6 +45,22 @@ import java.util.concurrent.TimeoutException;
  */
 public class Utils {
 
+    public static <T> List<T> finishFutures(List<Future<T>> futures, boolean interrupt, long timeout, TimeUnit unit) {
+        List<T> result = new LinkedList<>();
+        T t;
+        for (Future<T> future : futures) {
+            try {
+                t = future.get(timeout, unit);
+                if (t != null) {
+                    result.add(t);
+                }
+            } catch (Exception e) {
+                future.cancel(interrupt);
+            }
+        }
+        futures.clear();
+        return result;
+    }
 
     public static boolean moveFile(String src, String tar) {
         File file = new File(src);

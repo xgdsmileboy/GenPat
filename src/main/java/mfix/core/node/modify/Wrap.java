@@ -32,6 +32,15 @@ public class Wrap extends Update {
         return _nodes;
     }
 
+    @Override
+    public int size() {
+        if (getTarNode() == null) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
     public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType,
                               Set<String> exceptions, List<Node> nodes) {
         if(getTarNode() == null) {

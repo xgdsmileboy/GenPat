@@ -26,6 +26,7 @@ public abstract class Modification implements Serializable {
         return _fIndex;
     }
 
+    public abstract int size();
     public abstract boolean patternMatch(Modification m, Map<Node, Node> matchedNode);
     public abstract String formalForm();
 

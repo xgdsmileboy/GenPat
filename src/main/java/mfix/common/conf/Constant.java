@@ -62,6 +62,9 @@ public class Constant {
     public final static String DEFAULT_SUBJECT_XML = Utils.join(SEP, RES_DIR, "conf", "project.xml");
     public final static String RUNTIME_CONF_FILE = Utils.join(SEP, RES_DIR, "conf", "configure.properties");
 
+    /* max number of concurrent threads for pattern ranking */
+    public static int MAX_PRANK_THRED_NUM;
+
     /* max number of concurrent threads for pattern cluster process */
     public static int MAX_CLUSTER_THREAD_NUM;
 
@@ -164,6 +167,7 @@ public class Constant {
             MAX_FILTER_THREAD_NUM = Integer.parseInt(prop.getProperty("FILTER.THREAD", "10"));
             MAX_CLUSTER_THREAD_NUM = Integer.parseInt(prop.getProperty("CLUSTER.THREAD", "10"));
             MAX_KEYWORD_STATISTIC_THREAD_NUM = Integer.parseInt(prop.getProperty("STATISTIC.THREAD", "10"));
+            MAX_PRANK_THRED_NUM = Integer.parseInt(prop.getProperty("RANK.THREAD", "10"));
 
             FILTER_MAX_CHANGE_LINE = Integer.parseInt(prop.getProperty("FILTER.LINE", "10"));
             FILTER_MAX_CHANGE_ACTION = Integer.parseInt(prop.getProperty("FILTER.ACTION", "5"));

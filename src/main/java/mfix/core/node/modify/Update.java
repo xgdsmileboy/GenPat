@@ -1,12 +1,15 @@
 package mfix.core.node.modify;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 public class Update extends Modification {
@@ -33,6 +36,27 @@ public class Update extends Modification {
 
     public Node getTarNode() {
         return _tarNode;
+    }
+
+    @Override
+    public int size() {
+        Queue<Node> nodes = new LinkedList<>();
+        if (_srcNode != null) {
+            nodes.add(_srcNode);
+        }
+        if (_tarNode != null) {
+            nodes.add(_tarNode);
+        }
+        Node node;
+        int size = 0;
+        while(!nodes.isEmpty()) {
+            node = nodes.poll();
+            if (NodeUtils.isSimpleExpr(node)) {
+                size ++;
+            }
+            nodes.addAll(node.getAllChildren());
+        }
+        return size;
     }
 
     public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {

@@ -31,6 +31,11 @@ public class Movement extends Modification {
     }
 
     @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
     public boolean patternMatch(Modification m, Map<Node, Node> matchedNode) {
         return false;
     }

@@ -14,7 +14,6 @@ import mfix.common.java.JCompiler;
 import mfix.common.java.Subject;
 import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
-import mfix.common.util.Pair;
 import mfix.common.util.Triple;
 import mfix.common.util.Utils;
 import mfix.core.locator.AbstractFaultLocator;
@@ -30,6 +29,8 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.RepairMatcher;
+import mfix.core.node.modify.ChangeCounter;
+import mfix.core.node.modify.ChangeMetric;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
@@ -186,8 +187,12 @@ public class Repair {
     }
 
     private List<String> filterPatterns(Set<String> keys, int topK) throws IOException {
-        List<Pair<String, Integer>> patterns = new LinkedList<>();
         Set<String> set = new HashSet<>();
+        ExecutorService executor = Executors.newFixedThreadPool(Constant.MAX_PRANK_THRED_NUM);
+        List<Future<ChangeMetric>> futures = new LinkedList<>();
+        List<ChangeMetric> patterns = new LinkedList<>();
+        int thread = 0;
+
         for (String file : _patternRecords) {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
                     StandardCharsets.UTF_8));
@@ -207,7 +212,12 @@ public class Repair {
                             if (info.length != 2) {
                                 LevelLogger.error("Record file format error : " + line);
                             } else {
-                                patterns.add(new Pair<>(info[0], Integer.parseInt(info[1])));
+                                if (thread > Constant.MAX_PRANK_THRED_NUM) {
+                                    Utils.finishFutures(futures, true, 30, TimeUnit.SECONDS);
+                                    thread = 0;
+                                }
+                                futures.add(executor.submit(new ChangeCounter(info[0])));
+                                thread += 1;
                             }
                         }
                     }
@@ -219,9 +229,14 @@ public class Repair {
             br.close();
         }
         topK = topK > patterns.size() ? patterns.size() : topK;
-        List<String> result = patterns.stream()
-                .sorted(Comparator.comparingInt(Pair<String, Integer>::getSecond).reversed())
-                .limit(topK).map(pair -> pair.getFirst()).collect(Collectors.toList());
+        // priority:
+        // (1) prefer small changes
+        // (2) prefer more updates
+        // (3) prefer more inserts
+        // (4) deletes
+        List<String> result = patterns.stream().sorted(Comparator.comparingInt(ChangeMetric::getChangeNumber)
+                .thenComparingInt(ChangeMetric::negUpd).thenComparingInt(ChangeMetric::negIns)).limit(topK)
+                .map(m -> m.getFile()).collect(Collectors.toList());
         return result;
     }
 

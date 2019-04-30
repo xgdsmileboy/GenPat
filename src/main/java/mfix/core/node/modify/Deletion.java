@@ -31,6 +31,11 @@ public class Deletion extends Modification {
     }
 
     @Override
+    public int size() {
+        return _node2Del == null ? 0 : _node2Del.tokens().size();
+    }
+
+    @Override
     public boolean patternMatch(Modification m, Map<Node, Node> matchedNode) {
         if (m instanceof Deletion) {
             Deletion deletion = (Deletion) m;
