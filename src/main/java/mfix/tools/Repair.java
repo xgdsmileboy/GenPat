@@ -216,7 +216,7 @@ public class Repair {
                                     Utils.finishFutures(futures, true, 30, TimeUnit.SECONDS);
                                     thread = 0;
                                 }
-                                futures.add(executor.submit(new ChangeCounter(info[0])));
+                                futures.add(executor.submit(new ChangeCounter(info[0], Integer.parseInt(info[1]))));
                                 thread += 1;
                             }
                         }
@@ -234,8 +234,9 @@ public class Repair {
         // (2) prefer more updates
         // (3) prefer more inserts
         // (4) deletes
-        List<String> result = patterns.stream().sorted(Comparator.comparingInt(ChangeMetric::getChangeNumber)
-                .thenComparingInt(ChangeMetric::negUpd).thenComparingInt(ChangeMetric::negIns)).limit(topK)
+        List<String> result = patterns.stream().sorted(Comparator.comparingInt(ChangeMetric::negCluster)
+                .thenComparingInt(ChangeMetric::getChangeNumber).thenComparingInt(ChangeMetric::negUpd)
+                .thenComparingInt(ChangeMetric::negIns)).limit(topK)
                 .map(m -> m.getFile()).collect(Collectors.toList());
         return result;
     }

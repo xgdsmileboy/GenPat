@@ -19,11 +19,12 @@ import java.util.concurrent.Callable;
  */
 public class ChangeCounter implements Callable<ChangeMetric> {
 
-    private double _counter = 0;
+    private int _cluster;
     private String _patternFile;
 
-    public ChangeCounter(String file) {
+    public ChangeCounter(String file, int cluster) {
         _patternFile = file;
+        _cluster = cluster;
     }
 
     @Override
@@ -47,6 +48,6 @@ public class ChangeCounter implements Callable<ChangeMetric> {
                 del += m.size();
             }
         }
-        return new ChangeMetric(_patternFile, size, upd, ins, del);
+        return new ChangeMetric(_patternFile, size, upd, ins, del, _cluster);
     }
 }

@@ -18,14 +18,16 @@ public class ChangeMetric {
     private int _del;
     private int _mod;
     private int _all;
+    private int _cluster;
     private String _file;
 
-    public ChangeMetric(String file, int modnum, int upd, int ins, int del) {
+    public ChangeMetric(String file, int modnum, int upd, int ins, int del, int cluster) {
         _file = file;
         _upd = upd;
         _ins = ins;
         _del = del;
         _mod = modnum;
+        _cluster = cluster;
         _all = upd + ins + del;
     }
 
@@ -61,12 +63,20 @@ public class ChangeMetric {
         return _del;
     }
 
+    public int negCluster() {
+        return - _cluster;
+    }
+
+    public int getCluster() {
+        return _cluster;
+    }
+
     public String getFile() {
         return _file;
     }
 
     @Override
     public String toString() {
-        return "<" + _mod + ", " + _all + ", " + _upd + ", " + _ins + ", " + _del + ">";
+        return "<" + _mod + ", " + _all + ", " + _upd + ", " + _ins + ", " + _del + ", " + _cluster + ">";
     }
 }
