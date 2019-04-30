@@ -415,18 +415,24 @@ public class Repair {
                 buggyFileVarMap.put(file, varMaps);
             }
             Node node = getBuggyNode(file, location.getLine());
+            List<Integer> buggyLines = location.getConsideredLines();
+
             if (node == null) {
                 String err = "Get faulty node failed ! " + file + "#" + location.getLine();
                 LevelLogger.error(err);
                 JavaFile.writeStringToFile(_logfile, err + "\n", true);
                 continue;
             }
+
             String retType = "void";
             Set<String> exceptions = new HashSet<>();
             if (node instanceof MethDecl) {
                 MethDecl decl = (MethDecl) node;
                 retType = decl.getRetTypeStr();
                 exceptions.addAll(decl.getThrows());
+                for (Node n : decl.getArguments()) {
+                    buggyLines.add(n.getStartLine());
+                }
             }
 
             List<String> patterns;
@@ -443,12 +449,7 @@ public class Repair {
                 }
             }
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
-            List<Integer> buggyLines = location.getConsideredLines();
-            if (node instanceof MethDecl) {
-                for (Node n : ((MethDecl) node).getArguments()) {
-                    buggyLines.add(n.getStartLine());
-                }
-            }
+
             for (String s : _priorityPattern) {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
