@@ -130,7 +130,7 @@ public class NodeUtils {
         }
     }
 
-    public final static Set<String> primitives = new HashSet<>(Arrays.asList("int", "float", "double"));
+    public final static Set<String> primitives = new HashSet<>(Arrays.asList("char", "short", "int", "float", "double"));
     public static boolean matchType(String t1, String t2) {
         if (t1 == t2) return true;
         if (t1 == null) return t2 == null;
