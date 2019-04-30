@@ -59,8 +59,6 @@ public class PatternRanking {
 
     private Subject _subject;
     private String _logfile;
-    private String _patchFile;
-    private int _patchNum;
     private Set<String> _patternRecords;
     private String _singlePattern;
 
@@ -78,16 +76,10 @@ public class PatternRanking {
 
     public PatternRanking(Subject subject, Set<String> patternRecords, String singlePattern) {
         _subject = subject;
-        _patchNum = 0;
         _patternRecords = patternRecords;
         _singlePattern = singlePattern;
-        _patchFile = _subject.getPatchFile();
         _logfile = _subject.getLogFile();
         _timer = new Timer(Constant.MAX_REPAIR_TIME);
-    }
-
-    private boolean shouldStop() {
-        return _patchNum >= Constant.MAX_PATCH_NUMBER || _timer.timeout();
     }
 
     protected void setTimer(Timer timer) {
@@ -199,9 +191,6 @@ public class PatternRanking {
         final String srcBin = _subject.getHome() + _subject.getSbin();
 
         for (Location location : locations) {
-            if (shouldStop()) {
-                break;
-            }
             _alreadyGenerated.clear();
             String message = "Location : " + location.toString();
             LevelLogger.info(message);
@@ -283,7 +272,6 @@ public class PatternRanking {
         LevelLogger.info(start);
 
         for (int currentTry = 0; currentTry < purifiedFailedTestCases.size(); currentTry++) {
-            _patchNum = 0;
             String teString = purifiedFailedTestCases.get(currentTry);
             JavaFile.writeStringToFile(_logfile, "Current failed test : " +
                     teString + " | " + simpleDateFormat.format(new Date()) + "\n", true);
@@ -426,18 +414,15 @@ public class PatternRanking {
         String singlePattern = pair.getFirst();
         Set<String> patternRecords = pair.getSecond();
         List<Subject> subjects = pair.getThird();
-        String file = Utils.join(Constant.SEP, Constant.HOME, "repair.rec");
         for (Subject subject : subjects) {
-            JavaFile.writeStringToFile(file, subject.getName() + "_" + subject.getId() + " > PATCH : ", true);
             LevelLogger.info(subject.getHome() + ", " + subject.toString());
-            mfix.tools.Repair repair = new mfix.tools.Repair(subject, patternRecords, singlePattern);
-            repair.repair();
-            JavaFile.writeStringToFile(file, repair.patch() + "\n", true);
+            PatternRanking ranking = new PatternRanking(subject, patternRecords, singlePattern);
+            ranking.repair();
         }
     }
 
     public static void main(String[] args) {
-        mfix.tools.Repair.repairAPI(args);
+        repairAPI(args);
     }
 
 
