@@ -39,13 +39,33 @@ public class NewD4JTest extends TestCase {
     }
 
     @Test
+    public void test_CommonsJXPath_1() throws Exception {
+        temp_pattern("CommonsJXPath-1", "prepare");
+    }
+
+    @Test
     public void test_mockito_22() throws Exception {
         temp_pattern("mockito-22", "areEqual");
     }
 
     @Test
-    public void test_CommonsJXPath_1() throws Exception {
-        temp_pattern("CommonsJXPath-1", "prepare");
+    public void test_closure_2() throws Exception {
+        temp_pattern("closure-2", "checkInterfaceConflictProperties");
+    }
+
+    @Test //closure-63 is the same
+    public void test_closure_62() throws Exception {
+        temp_pattern("closure-62", "format");
+    }
+
+    @Test //closure-93 is the same
+    public void test_closure_73() throws Exception {
+        temp_pattern("closure-73", "strEscape");
+    }
+
+    @Test
+    public void test_closure_86() throws Exception {
+        temp_pattern("closure-86", "evaluatesToLocalValue");
     }
 
     @Test //closure-93 is the same
@@ -53,9 +73,9 @@ public class NewD4JTest extends TestCase {
         temp_pattern("closure-92", "replace");
     }
 
-    @Test //closure-93 is the same
-    public void test_closure_2() throws Exception {
-        temp_pattern("closure-2", "checkInterfaceConflictProperties");
+    @Test
+    public void test_closure_115() throws Exception {
+        temp_pattern("closure-115", "canInlineReferenceDirectly");
     }
 
     @Test
@@ -64,17 +84,65 @@ public class NewD4JTest extends TestCase {
     }
 
     @Test
+    public void test_lang_21() throws Exception {
+        temp_pattern("lang-21", "isSameLocalTime");
+    }
+
+    @Test
+    public void test_lang_33() throws Exception {
+        temp_pattern("lang-33", "toClass");
+    }
+
+    @Test
+    public void test_lang_47() throws Exception {
+//        temp_pattern("lang-47", "appendFixedWidthPadLeft");
+        temp_pattern("lang-47", "appendFixedWidthPadRight");
+    }
+
+    @Test
+    public void test_lang_60() throws Exception {
+        temp_pattern("lang-60", "contains");
+        temp_pattern("lang-60", "indexOf");
+    }
+
+    @Test
+    public void test_chart_1() throws Exception {
+        temp_pattern("chart-1", "getLegendItems");
+    }
+
+    @Test
     public void test_chart_4_() throws Exception {
         temp_pattern("chart-4", "getDataRange");
     }
 
     @Test
-    public void test_lang_21() throws Exception {
-        temp_pattern("lang-21", "isSameLocalTime");
+    public void test_chart_11() throws Exception {
+        temp_pattern("chart-11", "equal");
+    }
+
+    @Test
+    public void test_chart_24() throws Exception {
+        temp_pattern("chart-24", "getPaint");
+    }
+
+    @Test // the second place is the same
+    public void test_math_4() throws Exception {
+        temp_pattern("math-4", "intersection");
+    }
+
+    @Test
+    public void test_math_22() throws Exception {
+        temp_pattern("math-22-1", "isSupportLowerBoundInclusive");
+        temp_pattern("math-22-2", "isSupportUpperBoundInclusive");
+    }
+
+    @Test
+    public void test_math_70() throws Exception {
+        temp_pattern("math-70", "solve");
     }
 
     public void temp_pattern(final String bugId, final String method) throws Exception {
-        Pattern p = (Pattern) Utils.deserialize(Constant.HOME + "/tmp/" + bugId + ".pattern");
+        Pattern p = (Pattern) Utils.deserialize(Constant.HOME + "/tmp/observe/" + bugId + ".pattern");
         System.out.println(p.getFileName());
         String buggy = Constant.HOME + "/tmp/" + bugId + ".java";
         Map<Integer, VarScope> varMaps = NodeUtils.getUsableVariables(buggy);
