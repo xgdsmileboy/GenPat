@@ -217,10 +217,10 @@ public class PatternRanking {
                 buggyFileVarMap.put(file, varMaps);
             }
             Node node = getBuggyNode(file, location.getLine());
+            List<Integer> buggyLines = location.getConsideredLines();
             if (node == null) {
                 String err = "Get faulty node failed ! " + file + "#" + location.getLine();
                 LevelLogger.error(err);
-                JavaFile.writeStringToFile(_logfile, err + "\n", true);
                 continue;
             }
             String retType = "void";
@@ -229,6 +229,9 @@ public class PatternRanking {
                 MethDecl decl = (MethDecl) node;
                 retType = decl.getRetTypeStr();
                 exceptions.addAll(decl.getThrows());
+                for (Node n : decl.getArguments()) {
+                    buggyLines.add(n.getStartLine());
+                }
             }
 
             List<String> patterns;
@@ -240,46 +243,21 @@ public class PatternRanking {
                     patterns = filterPatterns(getKeys(node), Constant.TOP_K_PATTERN_EACH_LOCATION);
                 } catch (IOException e) {
                     LevelLogger.error("Filter patterns failed!", e);
-                    JavaFile.writeStringToFile(_logfile, "Filter patterns failed!\n", true);
                     continue;
                 }
             }
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
-            List<Integer> buggyLines = location.getConsideredLines();
-            if (node instanceof MethDecl) {
-                for (Node n : ((MethDecl) node).getArguments()) {
-                    buggyLines.add(n.getStartLine());
-                }
-            }
             for (String s : _priorityPattern) {
-                if (shouldStop()) {
-                    break;
-                }
-                Pattern p = readPattern(s);
-                if (p == null) {
-                    continue;
-                }
-                scope.reset(p.getNewVars());
+                JavaFile.writeStringToFile(_logfile, s + "\n", true);
             }
             for (String s : patterns) {
-                if (shouldStop()) {
-                    break;
-                }
-                if (_priorityPattern.contains(s)) {
-                    continue;
-                }
-                Pattern p = readPattern(s);
-                if (p == null) {
-                    continue;
-                }
-                scope.reset(p.getNewVars());
+                JavaFile.writeStringToFile(_logfile, s + "\n", true);
             }
         }
     }
 
     public void repair() {
         String message = "Repair : " + _subject.getName() + "_" + _subject.getId();
-        JavaFile.writeStringToFile(_logfile, message + "\n", false);
         LevelLogger.info(message);
         _subject.backup();
         _priorityPattern = new HashSet<>();
@@ -290,13 +268,6 @@ public class PatternRanking {
         String testBin = _subject.getHome() + _subject.getTbin();
 
         Utils.deleteDirs(srcBin, testBin);
-        if (_subject instanceof D4jSubject) {
-            // first check compilable
-            if (!_subject.compile()) {
-                JavaFile.writeStringToFile(_logfile, "Compile failed at the beginning!" + "\n", true);
-                return;
-            }
-        }
 
         Purification purification = new Purification(_subject);
         List<String> purifiedFailedTestCases = purification.purify(_subject.purify());
@@ -311,7 +282,6 @@ public class PatternRanking {
         String start = _timer.start();
         LevelLogger.info(start);
 
-        int all = 0;
         for (int currentTry = 0; currentTry < purifiedFailedTestCases.size(); currentTry++) {
             _patchNum = 0;
             String teString = purifiedFailedTestCases.get(currentTry);
@@ -319,7 +289,6 @@ public class PatternRanking {
                     teString + " | " + simpleDateFormat.format(new Date()) + "\n", true);
             LevelLogger.debug("Current failed test : " + teString);
             if (_alreadyFixedTests.contains(teString)) {
-                JavaFile.writeStringToFile(_logfile, "Already fixed : " + teString + "\n", true);
                 continue;
             }
 
@@ -340,15 +309,10 @@ public class PatternRanking {
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
 
             repair0(locations, buggyFileVarMap);
-            all += _patchNum;
         }
 
         _subject.restore();
 
-        message = "Finish : " + _subject.getName() + "-" + _subject.getId() + " > patch : " + all
-                + " | Start : " + start + " | End : " + simpleDateFormat.format(new Date());
-        JavaFile.writeStringToFile(_logfile, message + "\n", true);
-        LevelLogger.info(message);
     }
 
     private final static String COMMAND = "<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) " +
