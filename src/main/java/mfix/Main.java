@@ -58,8 +58,11 @@ public class Main {
             case "rank":
                 PatternRanking.rankAPI(args);
                 break;
-            default:
+            case "repair":
                 Repair.repairAPI(args);
+                break;
+            default:
+                System.err.println("Command error!");
         }
     }
 }
