@@ -46,6 +46,9 @@ public class LocationScore implements IScore {
         Set<Integer> lines = new HashSet<>();
         for (Map.Entry<Node, Node> entry : nodeMap.entrySet()) {
             lines.add(entry.getValue().getStartLine());
+            if (entry.getValue().getParentStmt() != null) {
+                lines.add(entry.getValue().getParentStmt().getStartLine());
+            }
         }
         for (int i = 0; i < _buggyLines.size(); i++) {
             if (lines.contains(_buggyLines.get(i))) {
