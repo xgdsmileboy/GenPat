@@ -550,8 +550,8 @@ public class Repair {
 
         OptionGroup optionGroup = new OptionGroup();
         optionGroup.setRequired(true);
-        optionGroup.addOption(new Option("bp", "path", true, "Directory of source code for rank."));
-        optionGroup.addOption(new Option("bf", "file", true, "Single file of source code for rank."));
+        optionGroup.addOption(new Option("bp", "path", true, "Directory of source code for repair."));
+        optionGroup.addOption(new Option("bf", "file", true, "Single file of source code for repair."));
         optionGroup.addOption(new Option("d4j", "d4jBug", true, "Bug id in defects4j, e.g., chart_1"));
         optionGroup.addOption(new Option("xml", "useXml", false, "Read subject from project.xml."));
         options.addOptionGroup(optionGroup);
