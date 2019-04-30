@@ -246,7 +246,7 @@ public class PatternRanking {
     }
 
     public void rank() {
-        String message = "Repair : " + _subject.getName() + "_" + _subject.getId();
+        String message = "Rank : " + _subject.getName() + "_" + _subject.getId();
         LevelLogger.info(message);
         _subject.backup();
         _priorityPattern = new HashSet<>();
