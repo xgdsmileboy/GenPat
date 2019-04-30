@@ -10,6 +10,7 @@ import mfix.tools.Cleaner;
 import mfix.tools.Cluster;
 import mfix.tools.Filter;
 import mfix.tools.PatternPrinter;
+import mfix.tools.PatternRanking;
 import mfix.tools.Repair;
 import mfix.tools.Search;
 import mfix.tools.TokenStatistic;
@@ -22,7 +23,7 @@ public class Main {
             System.err.println("Please given the arguments");
             System.err.println("\tclean : delete serialized pattern files.");
             System.err.println("\tprint : print detail information of given pattern.");
-            System.err.println("\trepair : repair bugs.");
+            System.err.println("\trank : rank bugs.");
             System.err.println("\tfilter : serialize and filter patterns and output pattern records.");
             System.err.println("\tcluster : cluster serialized patterns.");
             System.err.println("\tstatistic : keyword statistics.");
@@ -53,6 +54,9 @@ public class Main {
                 break;
             case "search":
                 Search.search(args);
+                break;
+            case "rank":
+                PatternRanking.rankAPI(args);
                 break;
             default:
                 Repair.repairAPI(args);

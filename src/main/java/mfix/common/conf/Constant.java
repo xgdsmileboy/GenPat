@@ -75,13 +75,13 @@ public class Constant {
     /* max number of candidate patches for each subject */
     public static int MAX_PATCH_NUMBER;
 
-    /* max number of repair time for single subject (in minutes) */
+    /* max number of rank time for single subject (in minutes) */
     public static int MAX_REPAIR_TIME;
 
-    /* max number of locations to repair */
+    /* max number of locations to rank */
     public static int MAX_REPAIR_LOCATION;
 
-    /* max number of patterns used to repair one location */
+    /* max number of patterns used to rank one location */
     public static int TOP_K_PATTERN_EACH_LOCATION;
 
     /* max number of changed lines for pattern filtering */

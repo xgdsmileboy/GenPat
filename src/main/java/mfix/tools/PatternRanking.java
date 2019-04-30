@@ -186,7 +186,7 @@ public class PatternRanking {
     }
 
 
-    private void repair0(List<Location> locations, Map<String, Map<Integer, VarScope>> buggyFileVarMap) {
+    private void rank0(List<Location> locations, Map<String, Map<Integer, VarScope>> buggyFileVarMap) {
         final String srcSrc = _subject.getHome() + _subject.getSsrc();
         final String srcBin = _subject.getHome() + _subject.getSbin();
 
@@ -245,7 +245,7 @@ public class PatternRanking {
         }
     }
 
-    public void repair() {
+    public void rank() {
         String message = "Repair : " + _subject.getName() + "_" + _subject.getId();
         LevelLogger.info(message);
         _subject.backup();
@@ -296,7 +296,7 @@ public class PatternRanking {
             locator.setFailedTests(_currentFailedTests);
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
 
-            repair0(locations, buggyFileVarMap);
+            rank0(locations, buggyFileVarMap);
         }
 
         _subject.restore();
@@ -311,8 +311,8 @@ public class PatternRanking {
 
         OptionGroup optionGroup = new OptionGroup();
         optionGroup.setRequired(true);
-        optionGroup.addOption(new Option("bp", "path", true, "Directory of source code for repair."));
-        optionGroup.addOption(new Option("bf", "file", true, "Single file of source code for repair."));
+        optionGroup.addOption(new Option("bp", "path", true, "Directory of source code for rank."));
+        optionGroup.addOption(new Option("bf", "file", true, "Single file of source code for rank."));
         optionGroup.addOption(new Option("d4j", "d4jBug", true, "Bug id in defects4j, e.g., chart_1"));
         optionGroup.addOption(new Option("xml", "useXml", false, "Read subject from project.xml."));
         options.addOptionGroup(optionGroup);
@@ -404,7 +404,7 @@ public class PatternRanking {
         return new Triple<>(singlePattern, patternFile, subjects);
     }
 
-    public static void repairAPI(String[] args) {
+    public static void rankAPI(String[] args) {
         Triple<String, Set<String>, List<Subject>> pair = parseCommandLine(args);
         if (pair == null) {
             LevelLogger.error("Wrong command line input!");
@@ -417,12 +417,12 @@ public class PatternRanking {
         for (Subject subject : subjects) {
             LevelLogger.info(subject.getHome() + ", " + subject.toString());
             PatternRanking ranking = new PatternRanking(subject, patternRecords, singlePattern);
-            ranking.repair();
+            ranking.rank();
         }
     }
 
     public static void main(String[] args) {
-        repairAPI(args);
+        rankAPI(args);
     }
 
 

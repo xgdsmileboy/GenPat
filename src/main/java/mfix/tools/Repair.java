@@ -550,8 +550,8 @@ public class Repair {
 
         OptionGroup optionGroup = new OptionGroup();
         optionGroup.setRequired(true);
-        optionGroup.addOption(new Option("bp", "path", true, "Directory of source code for repair."));
-        optionGroup.addOption(new Option("bf", "file", true, "Single file of source code for repair."));
+        optionGroup.addOption(new Option("bp", "path", true, "Directory of source code for rank."));
+        optionGroup.addOption(new Option("bf", "file", true, "Single file of source code for rank."));
         optionGroup.addOption(new Option("d4j", "d4jBug", true, "Bug id in defects4j, e.g., chart_1"));
         optionGroup.addOption(new Option("xml", "useXml", false, "Read subject from project.xml."));
         options.addOptionGroup(optionGroup);
@@ -653,7 +653,7 @@ public class Repair {
         String singlePattern = pair.getFirst();
         Set<String> patternRecords = pair.getSecond();
         List<Subject> subjects = pair.getThird();
-        String file = Utils.join(Constant.SEP, Constant.HOME, "repair.rec");
+        String file = Utils.join(Constant.SEP, Constant.HOME, "rank.rec");
         for (Subject subject : subjects) {
             JavaFile.writeStringToFile(file, subject.getName() + "_" + subject.getId() + " > PATCH : ", true);
             LevelLogger.info(subject.getHome() + ", " + subject.toString());
