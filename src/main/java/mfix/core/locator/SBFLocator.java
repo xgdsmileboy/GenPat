@@ -45,11 +45,14 @@ public class SBFLocator extends AbstractFaultLocator {
     @Override
     protected void locateFault(double threshold) {
         try {
-            LevelLogger.info("Perform SBFL ....");
-            Utils.deleteFiles(getBuggyLineSuspFile());
-            ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
-                    _subject.getJDKHome(), Constant.D4J_HOME);
-            LevelLogger.info("Finish SBFL ...");
+            // skip fault localization for closure
+            if (!"closure".equals(_subject.getName())) {
+                LevelLogger.info("Perform SBFL ....");
+                Utils.deleteFiles(getBuggyLineSuspFile());
+                ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
+                        _subject.getJDKHome(), Constant.D4J_HOME);
+                LevelLogger.info("Finish SBFL ...");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
