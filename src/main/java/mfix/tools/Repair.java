@@ -328,6 +328,8 @@ public class Repair {
                         _patchNum += 1;
                         writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
                                 end, true, adaptee.getMatchLevel());
+                    default:
+                        LevelLogger.info("Test failed!");
                 }
             }
         }
