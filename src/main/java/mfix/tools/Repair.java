@@ -321,6 +321,7 @@ public class Repair {
             LevelLogger.debug("Current candidate :");
             LevelLogger.debug(adaptee.getDiff().toString());
             if (shouldStop()) {
+                LevelLogger.info("Timeout : output candidate to file");
                 writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
                         end, false, adaptee.getMatchLevel());
             } else {
@@ -330,6 +331,7 @@ public class Repair {
                 _patchNum += pass ? 1 : 0;
                 writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
                         end, pass, adaptee.getMatchLevel());
+                LevelLogger.info(pass ? "Pass test case!" : "Test failed!");
             }
         }
     }
