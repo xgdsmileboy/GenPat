@@ -204,7 +204,7 @@ public class SBFLocator extends AbstractFaultLocator {
                 rangeLocationMap = new HashMap<>();
                 file2Range2Location.put(clazz, rangeLocationMap);
             }
-            LevelLogger.debug("Transform location : " + clazz + "#" + triple.getSecond());
+//            LevelLogger.debug("Transform location : " + clazz + "#" + triple.getSecond());
             List<Pair<LineRange, String>> list = result.get(clazz);
             if (list != null) {
                 int line = triple.getSecond();
