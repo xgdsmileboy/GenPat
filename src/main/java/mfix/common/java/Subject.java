@@ -231,6 +231,17 @@ public class Subject implements IExecute {
         Utils.copyDir(new File(testDir), new File(testDir + "_purify"));
     }
 
+    public void tempBackupPrurifiedTest() {
+        String testDir = getHome() + getTsrc();
+        Utils.copyDir(new File(testDir), new File(testDir + "_purify_temp"));
+    }
+
+    public void tempRestorePrurifiedTest() {
+        String testDir = getHome() + getTsrc();
+        Utils.copyDir(new File(testDir + "_purify_temp"), new File(testDir));
+        Utils.deleteDirs(new File(testDir + "_purify_temp"));
+    }
+
     public void restorePurifiedTest() {
         String testDir = getHome() + getTsrc();
         Utils.copyDir(new File(testDir + "_purify"), new File(testDir));

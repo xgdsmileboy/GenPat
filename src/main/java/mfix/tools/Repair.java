@@ -154,14 +154,24 @@ public class Repair {
         }
 
         _alreadyFixedTests.addAll(_currentFailedTests);
+        _subject.tempBackupPrurifiedTest();
         _subject.restorePurifiedTest();
+        boolean delete = false;
         for (String s : _allFailedTests) {
             if (_alreadyFixedTests.contains(s)) {
                 continue;
             }
+            Utils.deleteDirs(_subject.getHome() + _subject.getTbin());
+            Utils.deleteDirs(_subject.getHome() + _subject.getSbin());
+            delete = true;
             if (_subject.test(s)) {
                 _alreadyFixedTests.add(s);
             }
+        }
+        _subject.tempRestorePrurifiedTest();
+        if (delete) {
+            Utils.deleteDirs(_subject.getHome() + _subject.getTbin());
+            Utils.deleteDirs(_subject.getHome() + _subject.getSbin());
         }
 
         return ValidateResult.PASS;
@@ -325,7 +335,6 @@ public class Repair {
                 LevelLogger.info("Timeout : output candidate to file");
                 writeLog(adaptee, fileName, false);
             } else {
-                LevelLogger.debug(adaptee.getAdaptedCode());
                 JavaFile.writeStringToFile(fileName, adaptee.getAdaptedCode());
                 Utils.deleteFiles(clazzFile);
                 boolean pass = testValid() == ValidateResult.PASS;
@@ -334,6 +343,7 @@ public class Repair {
                 LevelLogger.info(pass ? "Pass test case!" : "Test failed!");
             }
         }
+        Utils.deleteFiles(clazzFile);
     }
 
     protected List<Adaptee> tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile, String retType,
@@ -345,7 +355,7 @@ public class Repair {
         LevelLogger.info("Try fix with : " + pattern.getPatternName());
         String origin = bNode.toSrcString().toString();
         String buggyFile = bNode.getFileName();
-        String oldSource = JavaFile.readFileToString(buggyFile);
+//        String oldSource = JavaFile.readFileToString(buggyFile);
         List<String> sources = JavaFile.readFileToStringList(buggyFile);
         sources.add(0, "");
         int startLine = bNode.getStartLine();
@@ -425,7 +435,8 @@ public class Repair {
             }
             matchInstance.reset();
         }
-        compileValid(buggyFile, oldSource);
+//        JavaFile.writeStringToFile(buggyFile, oldSource);
+//        compileValid(buggyFile, oldSource);
         return adaptedCode;
     }
 
@@ -439,7 +450,7 @@ public class Repair {
             String message = "Location : " + location.toString();
             LevelLogger.info(message);
             JavaFile.writeStringToFile(_logfile, message + "\n", true);
-            _subject.restore();
+            _subject.restore(srcSrc);
             final String file = Utils.join(Constant.SEP, srcSrc, location.getRelClazzFile());
             final String clazzFile = Utils.join(Constant.SEP, srcBin,
                     location.getRelClazzFile().replace(".java", ".class"));
@@ -473,7 +484,7 @@ public class Repair {
             List<String> patterns;
             if (_singlePattern != null) {
                 patterns = new LinkedList<>();
-                patterns.add(_singlePattern);
+                patterns.addAll(Arrays.asList(_singlePattern.split(",")));
             } else {
                 try {
                     patterns = filterPatterns(getKeys(node), Constant.TOP_K_PATTERN_EACH_LOCATION);
@@ -483,11 +494,8 @@ public class Repair {
                     continue;
                 }
             }
-            if (_subject instanceof D4jSubject) {
-                Utils.deleteDirs(srcBin);
-                _subject.test();
-            }
 
+            _subject.test();
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             List<Adaptee> allCandidates = new LinkedList<>();
             String start = simpleDateFormat.format(new Date());
@@ -569,7 +577,7 @@ public class Repair {
         }
 
         _subject.restore();
-
+        _patchNum = all;
         message = "Finish : " + _subject.getName() + "-" + _subject.getId() + " > patch : " + all
                 + " | Start : " + start + " | End : " + simpleDateFormat.format(new Date());
         JavaFile.writeStringToFile(_logfile, message + "\n", true);

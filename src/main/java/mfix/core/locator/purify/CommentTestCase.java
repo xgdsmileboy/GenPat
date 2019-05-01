@@ -44,6 +44,11 @@ public class CommentTestCase {
 		
 		for(Entry<String, Set<String>> entry : clazzAndMethods.entrySet()){
 			String fileName = fileBasePath + "/" + entry.getKey().replace(".", "/") + ".java";
+			// special case, should be handle more elegant
+			if (fileBasePath.contains("math_22_buggy")) {
+				fileName = fileName.replace("FDistributionTest", "RealDistributionAbstractTest");
+				fileName = fileName.replace("UniformRealDistributionTest", "RealDistributionAbstractTest");
+			}
 			CompilationUnit cUnit = JavaFile.genASTFromFileWithType(fileName);
 			CommentTestCaseVisitor visitor = new CommentTestCaseVisitor(entry.getValue());
 			cUnit.accept(visitor);
