@@ -483,6 +483,7 @@ public class Repair {
                 }
             }
             if (_subject instanceof D4jSubject) {
+                Utils.deleteDirs(srcBin);
                 _subject.test();
             }
 
