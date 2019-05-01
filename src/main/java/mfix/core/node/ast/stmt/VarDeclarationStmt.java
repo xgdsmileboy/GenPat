@@ -14,6 +14,7 @@ import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -251,23 +252,24 @@ public class VarDeclarationStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			if (_modifier != null) {
 				stringBuffer.append(_modifier + " ");
 			}
-			StringBuffer tmp = _declType.transfer(vars, exprMap, retType, exceptions);
+			StringBuffer tmp = _declType.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" ");
-			tmp = _fragments.get(0).transfer(vars, exprMap, retType, exceptions);
+			tmp = _fragments.get(0).transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			for (int i = 1; i < _fragments.size(); i++) {
 				stringBuffer.append(",");
-				tmp = _fragments.get(i).transfer(vars, exprMap, retType, exceptions);
+				tmp = _fragments.get(i).transfer(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -278,7 +280,7 @@ public class VarDeclarationStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) pnode;
@@ -288,7 +290,7 @@ public class VarDeclarationStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == varDeclarationStmt._declType) {
-						declType = update.apply(vars, exprMap, retType, exceptions);
+						declType = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (declType == null) return null;
 					} else {
 						modifications.add(update);
@@ -303,7 +305,7 @@ public class VarDeclarationStmt extends Stmt {
 			Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
 			Map<Node, StringBuffer> map = new HashMap<>(_fragments.size());
 			if (!Matcher.applyNodeListModifications(modifications, _fragments, insertionBefore, insertionAfter,
-				insertionAt, map, vars, exprMap, retType, exceptions)) {
+				insertionAt, map, vars, exprMap, retType, exceptions, metric)) {
 				return null;
 			}
 
@@ -313,7 +315,7 @@ public class VarDeclarationStmt extends Stmt {
 				stringBuffer.append(_modifier + " ");
 			}
 			if(declType == null) {
-				tmp = _declType.adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _declType.adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			} else {
@@ -360,7 +362,7 @@ public class VarDeclarationStmt extends Stmt {
 						stringBuffer.append(",");
 					}
 					first = false;
-					tmp = node.adaptModifications(vars, exprMap, retType, exceptions);
+					tmp = node.adaptModifications(vars, exprMap, retType, exceptions, metric);
 					if(tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
@@ -396,16 +398,16 @@ public class VarDeclarationStmt extends Stmt {
 			if (_modifier != null) {
 				stringBuffer.append(_modifier + " ");
 			}
-			tmp = _declType.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _declType.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" ");
-			tmp = _fragments.get(0).adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _fragments.get(0).adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			for (int i = 1; i < _fragments.size(); i++) {
 				stringBuffer.append(",");
-				tmp = _fragments.get(i).adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _fragments.get(i).adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

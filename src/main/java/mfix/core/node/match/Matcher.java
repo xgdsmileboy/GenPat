@@ -19,6 +19,7 @@ import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.ast.stmt.ExpressionStmt;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.ast.stmt.VarDeclarationStmt;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
@@ -523,7 +524,8 @@ public class Matcher {
                                                      Map<Integer, List<StringBuffer>> insertAt,
                                                      Map<Node, StringBuffer> changeNodeMap,
                                                      VarScope vars, Map<String, String> exprMap,
-                                                     String retType, Set<String> exceptions) {
+                                                     String retType, Set<String> exceptions,
+                                                     Adaptee metric) {
         StringBuffer tmp;
         List<Pair<Insertion, StringBuffer>> insertNoDep = new LinkedList<>();
         for (Modification modification : modifications) {
@@ -554,7 +556,7 @@ public class Matcher {
                         break;
                     }
                 }
-                tmp = wrap.apply(vars, exprMap, retType, exceptions, toWrap);
+                tmp = wrap.apply(vars, exprMap, retType, exceptions, toWrap, metric);
                 if (tmp == null) return false;
                 changeNodeMap.put(node, tmp);
             } else if (modification instanceof Update) {
@@ -562,7 +564,7 @@ public class Matcher {
                 Node node = update.getSrcNode().getBuggyBindingNode();
                 assert node != null;
                 // map current node to the updated node string
-                tmp = update.apply(vars, exprMap, retType, exceptions);
+                tmp = update.apply(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return false;
                 changeNodeMap.put(node, tmp);
             } else if (modification instanceof Deletion) {
@@ -571,10 +573,13 @@ public class Matcher {
                 // node to be deleted to should be completely matched
                 assert node != null;
                 // map deleted node to null
+                if (node.getBuggyBindingNode() == null) {
+                    metric.add(node.getAllChildren().size() + 1, Adaptee.CHANGE.DELETE);
+                }
                 changeNodeMap.put(node, null);
             } else if (modification instanceof Insertion) {
                 Insertion insertion = (Insertion) modification;
-                tmp = insertion.apply(vars, exprMap, retType, exceptions);
+                tmp = insertion.apply(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return false;
                 String str = tmp.toString();
                 if (str.startsWith("super(") || str.startsWith("this(")) return false;

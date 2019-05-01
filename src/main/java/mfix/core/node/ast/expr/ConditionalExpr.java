@@ -11,6 +11,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -209,20 +210,21 @@ public class ConditionalExpr extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
-            tmp = _condition.transfer(vars, exprMap, retType, exceptions);
+            tmp = _condition.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append("?");
-            tmp = _first.transfer(vars, exprMap, retType, exceptions);
+            tmp = _first.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(":");
-            tmp = _snd.transfer(vars, exprMap, retType, exceptions);
+            tmp = _snd.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -231,7 +233,7 @@ public class ConditionalExpr extends Expr {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer condition = null;
         StringBuffer first = null;
         StringBuffer snd = null;
@@ -243,13 +245,13 @@ public class ConditionalExpr extends Expr {
                     Update update = (Update) modification;
                     Node changedNode = update.getSrcNode();
                     if (changedNode == conditionalExpr._condition) {
-                        condition = update.apply(vars, exprMap, retType, exceptions);
+                        condition = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (condition == null) return null;
                     } else if (changedNode == conditionalExpr._first) {
-                        first = update.apply(vars, exprMap, retType, exceptions);
+                        first = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (first == null) return null;
                     } else if (changedNode == conditionalExpr._snd) {
-                        snd = update.apply(vars, exprMap, retType, exceptions);
+                        snd = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (snd == null) return null;
                     }
                 } else {
@@ -261,7 +263,7 @@ public class ConditionalExpr extends Expr {
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
         if(condition == null) {
-            tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -269,7 +271,7 @@ public class ConditionalExpr extends Expr {
         }
         stringBuffer.append("?");
         if(first == null) {
-            tmp = _first.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _first.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -277,7 +279,7 @@ public class ConditionalExpr extends Expr {
         }
         stringBuffer.append(":");
         if(snd == null) {
-            tmp = _snd.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _snd.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

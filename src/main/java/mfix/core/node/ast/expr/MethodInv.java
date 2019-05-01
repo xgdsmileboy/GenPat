@@ -14,6 +14,7 @@ import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -301,13 +302,14 @@ public class MethodInv extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			if (_expression != null) {
-				tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+				tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -319,9 +321,10 @@ public class MethodInv extends Expr {
 			} else {
 				stringBuffer.append(name);
 			}
+			metric.inc();
 			stringBuffer.append("(");
 			if (_arguments != null) {
-				tmp = _arguments.transfer(vars, exprMap,retType, exceptions);
+				tmp = _arguments.transfer(vars, exprMap,retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -332,7 +335,7 @@ public class MethodInv extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer expression = null;
 		StringBuffer name = null;
 		StringBuffer arguments = null;
@@ -344,13 +347,14 @@ public class MethodInv extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == methodInv._expression) {
-						expression = update.apply(vars, exprMap, retType, exceptions);
+						expression = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (expression == null) return null;
 					} else if (changedNode == methodInv._name) {
 						name = update.getTarNode().toSrcString();
+						metric.add(1, Adaptee.CHANGE.UPDATE);
 						if (name == null) return null;
 					} else {
-						arguments = update.apply(vars, exprMap, retType, exceptions);
+						arguments = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (arguments == null) return null;
 					}
 				} else {
@@ -362,7 +366,7 @@ public class MethodInv extends Expr {
 		StringBuffer tmp;
 		if(expression == null) {
 			if (_expression != null) {
-				tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 				stringBuffer.append(".");
@@ -378,7 +382,7 @@ public class MethodInv extends Expr {
 		stringBuffer.append("(");
 		if(arguments == null) {
 			if (_arguments != null) {
-				tmp = _arguments.adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _arguments.adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

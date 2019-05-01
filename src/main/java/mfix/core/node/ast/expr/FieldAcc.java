@@ -11,6 +11,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -171,16 +172,17 @@ public class FieldAcc extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+			tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(".");
-			tmp = _identifier.transfer(vars, exprMap, retType, exceptions);
+			tmp = _identifier.transfer(vars, exprMap, retType, exceptions, metric);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -189,7 +191,7 @@ public class FieldAcc extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer expression = null;
 		StringBuffer identifier = null;
 		Node node = NodeUtils.checkModification(this);
@@ -199,10 +201,10 @@ public class FieldAcc extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == fieldAcc._expression) {
-						expression = update.apply(vars, exprMap, retType, exceptions);
+						expression = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (expression == null) return null;
 					} else {
-						identifier = update.apply(vars, exprMap, retType, exceptions);
+						identifier = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (identifier == null) return null;
 					}
 				} else {
@@ -214,7 +216,7 @@ public class FieldAcc extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -222,7 +224,7 @@ public class FieldAcc extends Expr {
 		}
 		stringBuffer.append(".");
 		if(identifier == null) {
-			tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

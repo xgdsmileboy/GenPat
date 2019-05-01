@@ -58,11 +58,13 @@ public class Insertion extends Modification {
         return _insert;
     }
 
-    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                              Adaptee metric) {
+        metric.setChange(Adaptee.CHANGE.INSERT);
         if(_insert == null) {
             return new StringBuffer("null");
         } else {
-            return _insert.transfer(vars, exprMap, retType, exceptions);
+            return _insert.transfer(vars, exprMap, retType, exceptions, metric);
         }
     }
 

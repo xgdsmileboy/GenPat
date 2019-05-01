@@ -24,6 +24,7 @@ import mfix.core.node.ast.expr.SuperMethodInv;
 import mfix.core.node.ast.stmt.EmptyStmt;
 import mfix.core.node.ast.stmt.ExpressionStmt;
 import mfix.core.node.ast.stmt.IfStmt;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
@@ -60,7 +61,8 @@ public class NodeUtils {
                                         Map<Node, StringBuffer> map,
                                         Map<Integer, List<StringBuffer>> insertionAt,
                                         VarScope vars, Map<String, String> exprMap,
-                                        String retType, Set<String> exceptions) {
+                                        String retType, Set<String> exceptions,
+                                        Adaptee metric) {
 
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
@@ -88,7 +90,7 @@ public class NodeUtils {
                     stringBuffer.append(update).append(Constant.NEW_LINE);
                 }
             } else {
-                tmp = node.adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = node.adaptModifications(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp).append(Constant.NEW_LINE);
             }

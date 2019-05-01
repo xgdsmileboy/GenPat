@@ -15,6 +15,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.parser.NodeParser;
 import mfix.core.pattern.Pattern;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -111,7 +112,7 @@ public class NewD4JTest extends TestCase {
     }
 
     @Test
-    public void test_chart_4_() throws Exception {
+    public void test_chart_4() throws Exception {
         temp_pattern("chart-4", "getDataRange");
     }
 
@@ -163,16 +164,22 @@ public class NewD4JTest extends TestCase {
         NodeParser parser = new NodeParser();
         parser.setCompilationUnit(buggy, unit);
         RepairMatcher matcher = new RepairMatcher();
+        Adaptee adaptee = null;
         for (MethodDeclaration m : methods) {
             Node node = parser.process(m);
             List<MatchInstance> set = matcher.tryMatch(node, p, need2Match);
             for (MatchInstance matchInstance : set) {
                 matchInstance.apply();
+                adaptee = new Adaptee(0);
                 StringBuffer buffer = node.adaptModifications(varMaps.get(node.getStartLine()), matchInstance.getStrMap(),
-                        "Class", new HashSet<>());
+                        "Class", new HashSet<>(), adaptee);
                 if (buffer != null) {
                     TextDiff diff = new TextDiff(node.toSrcString().toString(), buffer.toString());
                     System.out.println(diff.toString());
+                    System.out.println("TOTAL CHANGE : " + adaptee.getAll());
+                    System.out.println("INS : " + adaptee.getIns());
+                    System.out.println("UPD : " + adaptee.getUpd());
+                    System.out.println("DEL : " + adaptee.getDel());
                 }
                 matchInstance.reset();
             }

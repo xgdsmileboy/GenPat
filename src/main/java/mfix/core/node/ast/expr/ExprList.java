@@ -13,6 +13,7 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -219,18 +220,19 @@ public class ExprList extends Node {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null || !getModifications().isEmpty()) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             if (!_exprs.isEmpty()) {
-                tmp = _exprs.get(0).transfer(vars, exprMap, retType, exceptions);
+                tmp = _exprs.get(0).transfer(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _exprs.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _exprs.get(i).transfer(vars, exprMap, retType, exceptions);
+                    tmp = _exprs.get(i).transfer(vars, exprMap, retType, exceptions, metric);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }
@@ -242,7 +244,7 @@ public class ExprList extends Node {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                 Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
 
@@ -251,7 +253,7 @@ public class ExprList extends Node {
             Map<Integer, List<StringBuffer>> insertionAt = new HashMap<>();
             Map<Node, StringBuffer> map = new HashMap<>(_exprs.size());
             if (!Matcher.applyNodeListModifications(pnode.getModifications(), _exprs, insertionBefore,
-                    insertionAfter, insertionAt, map, vars, exprMap, retType, exceptions)) {
+                    insertionAfter, insertionAt, map, vars, exprMap, retType, exceptions, metric)) {
                 return null;
             }
 
@@ -292,7 +294,7 @@ public class ExprList extends Node {
                         stringBuffer.append(",");
                     }
                     first = false;
-                    tmp = node.adaptModifications(vars, exprMap, retType, exceptions);
+                    tmp = node.adaptModifications(vars, exprMap, retType, exceptions, metric);
                     if(tmp == null) return null;
                     stringBuffer.append(tmp);
                     curIndex ++;
@@ -316,12 +318,12 @@ public class ExprList extends Node {
             StringBuffer stringBuffer = new StringBuffer();
             StringBuffer tmp;
             if (!_exprs.isEmpty()) {
-                tmp = _exprs.get(0).adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = _exprs.get(0).adaptModifications(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _exprs.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _exprs.get(i).adaptModifications(vars, exprMap, retType, exceptions);
+                    tmp = _exprs.get(i).adaptModifications(vars, exprMap, retType, exceptions, metric);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }

@@ -11,6 +11,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -270,22 +271,23 @@ public class AryCreation extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("new ");
-            stringBuffer.append(_type.transfer(vars, exprMap, retType, exceptions));
+            stringBuffer.append(_type.transfer(vars, exprMap, retType, exceptions, metric));
             for (Expr expr : _dimension) {
                 stringBuffer.append("[");
-                tmp = expr.transfer(vars, exprMap, retType, exceptions);
+                tmp = expr.transfer(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append("]");
             }
             if (_initializer != null) {
-                tmp = _initializer.transfer(vars, exprMap, retType, exceptions);
+                tmp = _initializer.transfer(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -295,7 +297,7 @@ public class AryCreation extends Expr {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer stringBuffer = new StringBuffer();
         Map<Integer, StringBuffer> dimensionMap = new HashMap<>();
         StringBuffer initializer = null;
@@ -306,12 +308,12 @@ public class AryCreation extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == aryCreation._initializer) {
-                        initializer = update.apply(vars, exprMap, retType, exceptions);
+                        initializer = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (initializer == null) return null;
                     } else {
                         for (int i = 0; i < aryCreation._dimension.size(); i++) {
                             if (update.getSrcNode() == aryCreation._dimension.get(i)) {
-                                StringBuffer buffer = update.apply(vars, exprMap, retType, exceptions);
+                                StringBuffer buffer = update.apply(vars, exprMap, retType, exceptions, metric);
                                 if (buffer == null) return null;
                                 dimensionMap.put(i, buffer);
                             }
@@ -324,12 +326,12 @@ public class AryCreation extends Expr {
         }
         stringBuffer.append("new ");
         StringBuffer tmp;
-        stringBuffer.append(_type.transfer(vars, exprMap, retType, exceptions));
+        stringBuffer.append(_type.adaptModifications(vars, exprMap, retType, exceptions, metric));
         for(int i = 0; i < _dimension.size(); i++) {
             stringBuffer.append("[");
             tmp = dimensionMap.get(i);
             if (tmp == null) {
-                tmp = _dimension.get(i).adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = _dimension.get(i).adaptModifications(vars, exprMap, retType, exceptions, metric);
             }
             if(tmp == null) return null;
             stringBuffer.append(tmp);
@@ -337,7 +339,7 @@ public class AryCreation extends Expr {
         }
         if(initializer == null) {
             if(_initializer != null) {
-                tmp = _initializer.adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = _initializer.adaptModifications(vars, exprMap, retType, exceptions, metric);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
             }

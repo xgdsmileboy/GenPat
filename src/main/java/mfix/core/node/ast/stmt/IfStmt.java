@@ -14,6 +14,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -282,10 +283,10 @@ public class IfStmt extends Stmt {
 
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
-								 List<Node> nodes) {
+                                 List<Node> nodes, Adaptee metric) {
 		StringBuffer stringBuffer = new StringBuffer("if(");
 		StringBuffer tmp;
-		tmp = _condition.transfer(vars, exprMap, retType, exceptions);
+		tmp = _condition.transfer(vars, exprMap, retType, exceptions, metric);
 		if(tmp == null) return null;
 		stringBuffer.append(tmp);
 		stringBuffer.append(")");
@@ -299,21 +300,22 @@ public class IfStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("if(");
 			StringBuffer tmp;
-			tmp = _condition.transfer(vars, exprMap, retType, exceptions);
+			tmp = _condition.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _then.transfer(vars, exprMap, retType, exceptions);
+			tmp = _then.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.transfer(vars, exprMap, retType, exceptions);
+				tmp = _else.transfer(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -323,7 +325,7 @@ public class IfStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer condition = null;
 		StringBuffer then = null;
 		StringBuffer els = null;
@@ -335,13 +337,13 @@ public class IfStmt extends Stmt {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode();
 					if(node == ifStmt._condition) {
-						condition = update.apply(vars, exprMap, retType, exceptions);
+						condition = update.apply(vars, exprMap, retType, exceptions, metric);
 						if(condition == null) return null;
 					} else if(node == ifStmt._then) {
-						then = update.apply(vars, exprMap, retType, exceptions);
+						then = update.apply(vars, exprMap, retType, exceptions, metric);
 						if(then == null) return null;
 					} else {
-						els = update.apply(vars, exprMap, retType, exceptions);
+						els = update.apply(vars, exprMap, retType, exceptions, metric);
 						if(els == null) return null;
 					}
 				} else {
@@ -352,7 +354,7 @@ public class IfStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("if(");
 		StringBuffer tmp;
 		if(condition == null) {
-			tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -360,7 +362,7 @@ public class IfStmt extends Stmt {
 		}
 		stringBuffer.append(")");
 		if(then == null) {
-			tmp = _then.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _then.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -369,7 +371,7 @@ public class IfStmt extends Stmt {
 		if(els == null) {
 			if(_else != null) {
 				stringBuffer.append("else ");
-				tmp = _else.adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _else.adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

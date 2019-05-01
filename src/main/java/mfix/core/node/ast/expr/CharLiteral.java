@@ -10,6 +10,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
@@ -136,16 +137,18 @@ public class CharLiteral extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        metric.inc();
         return toSrcString();
     }
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         Node node = NodeUtils.checkModification(this);
         if (node != null) {
-            return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions);
+            return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions, metric);
         }
         return toSrcString();
     }

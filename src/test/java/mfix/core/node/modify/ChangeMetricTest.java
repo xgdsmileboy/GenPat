@@ -23,22 +23,22 @@ public class ChangeMetricTest extends TestCase {
 
     @Test
     public void test_sort() {
-        List<ChangeMetric> metrics = new LinkedList<>();
-        metrics.add(new ChangeMetric(2, 0, 5, 0));
-        metrics.add(new ChangeMetric(4, 0, 4, 0));
-        metrics.add(new ChangeMetric(2, 2, 1, 0));
-        metrics.add(new ChangeMetric(2, 1, 2, 0));
-        metrics.add(new ChangeMetric(3, 1, 1, 0));
-        metrics.add(new ChangeMetric(5, 4, 3, 0));
-        metrics.add(new ChangeMetric(2, 4, 1, 0));
-        metrics.add(new ChangeMetric(4, 4, 2, 0));
-        metrics.add(new ChangeMetric(8, 6, 1, 0));
-        metrics.add(new ChangeMetric(2, 0, 1, 0));
+        List<Adaptee> metrics = new LinkedList<>();
+        metrics.add(new Adaptee(2, 0, 5, 0));
+        metrics.add(new Adaptee(4, 0, 4, 0));
+        metrics.add(new Adaptee(2, 2, 1, 0));
+        metrics.add(new Adaptee(2, 1, 2, 0));
+        metrics.add(new Adaptee(3, 1, 1, 0));
+        metrics.add(new Adaptee(5, 4, 3, 0));
+        metrics.add(new Adaptee(2, 4, 1, 0));
+        metrics.add(new Adaptee(4, 4, 2, 0));
+        metrics.add(new Adaptee(8, 6, 1, 0));
+        metrics.add(new Adaptee(2, 0, 1, 0));
 
-        metrics = metrics.stream().sorted(Comparator.comparingInt(ChangeMetric::getChangeNumber)
-                .thenComparingInt(ChangeMetric::negUpd).thenComparingInt(ChangeMetric::negIns))
+        metrics = metrics.stream().sorted(Comparator.comparingInt(Adaptee::getChangeNumber)
+                .thenComparingInt(Adaptee::negUpd).thenComparingInt(Adaptee::negIns))
                 .collect(Collectors.toList());
-        for (ChangeMetric metric : metrics) {
+        for (Adaptee metric : metrics) {
             System.out.println(metric);
         }
     }

@@ -12,6 +12,7 @@ import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Blk;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -315,13 +316,14 @@ public class MethDecl extends Node {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
         return null;
     }
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer stringBuffer = new StringBuffer();
         for(Object modifier : _modifiers) {
             stringBuffer.append(modifier.toString() + " ");
@@ -352,10 +354,10 @@ public class MethDecl extends Node {
             List<Modification> modifications = node != null ? node.getModifications() : null;
             StringBuffer tmp;
             if (node == null || modifications.isEmpty()) {
-                tmp = _body.adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = _body.adaptModifications(vars, exprMap, retType, exceptions, metric);
             } else {
                 Update update = (Update) modifications.get(0);
-                tmp = update.apply(vars, exprMap, retType, exceptions);
+                tmp = update.apply(vars, exprMap, retType, exceptions, metric);
             }
             if (tmp == null) return null;
             stringBuffer.append(tmp);

@@ -10,6 +10,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
@@ -154,12 +155,13 @@ public class ParenthesiszedExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			stringBuffer.append("(");
-			StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+			StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
@@ -169,15 +171,15 @@ public class ParenthesiszedExpr extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
-			return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions);
+			return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions, metric);
 		}
 
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("(");
-		StringBuffer tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+		StringBuffer tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		stringBuffer.append(")");

@@ -11,6 +11,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -202,18 +203,19 @@ public class InfixExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _lhs.transfer(vars, exprMap, retType, exceptions);
+			tmp = _lhs.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _operator.transfer(vars, exprMap, retType, exceptions);
+			tmp = _operator.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
-			tmp = _rhs.transfer(vars, exprMap, retType, exceptions);
+			tmp = _rhs.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -222,7 +224,7 @@ public class InfixExpr extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer lhs = null;
 		StringBuffer operator = null;
 		StringBuffer rhs = null;
@@ -234,13 +236,17 @@ public class InfixExpr extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == infixExpr._lhs) {
-						lhs = update.apply(vars, exprMap, retType, exceptions);
+						lhs = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (lhs == null) return null;
 					} else if (changedNode == infixExpr._operator) {
-						operator = update.apply(vars, exprMap, retType, exceptions);
+						if ("&&".equals(_operator.getOperatorStr())
+								&& "||".equals(update.getTarNode().toString())){
+							return null;
+						}
+						operator = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (operator == null) return null;
 					} else {
-						rhs = update.apply(vars, exprMap, retType, exceptions);
+						rhs = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (rhs == null) return null;
 					}
 				} else {
@@ -251,21 +257,21 @@ public class InfixExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(lhs == null) {
-			tmp = _lhs.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _lhs.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(lhs);
 		}
 		if(operator == null) {
-			tmp = _operator.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _operator.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(operator);
 		}
 		if(rhs == null) {
-			tmp = _rhs.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _rhs.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

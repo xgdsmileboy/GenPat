@@ -14,6 +14,7 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.ExprList;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -302,26 +303,28 @@ public class ForStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("for(");
+            metric.inc();
             StringBuffer tmp;
-            tmp = _initializers.transfer(vars, exprMap, retType, exceptions);
+            tmp = _initializers.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(";");
             if (_condition != null) {
-                tmp = _condition.transfer(vars, exprMap, retType, exceptions);
+                tmp = _condition.transfer(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
             stringBuffer.append(";");
-            tmp = _updaters.transfer(vars, exprMap, retType, exceptions);
+            tmp = _updaters.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
-            tmp = _body.transfer(vars, exprMap, retType, exceptions);
+            tmp = _body.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -330,7 +333,7 @@ public class ForStmt extends Stmt {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer initializer = null;
         StringBuffer condition = null;
         StringBuffer updater = null;
@@ -342,13 +345,13 @@ public class ForStmt extends Stmt {
                     Update update = (Update) modification;
                     Node node = update.getSrcNode();
                     if (node == forStmt._initializers) {
-                        initializer = update.apply(vars, exprMap, retType, exceptions);
+                        initializer = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (initializer == null) return null;
                     } else if (node == forStmt._condition) {
-                        condition = update.apply(vars, exprMap, retType, exceptions);
+                        condition = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (condition == null) return null;
                     } else if (node == forStmt._updaters) {
-                        updater = update.apply(vars, exprMap, retType, exceptions);
+                        updater = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (updater == null) return null;
                     } else {
                         LevelLogger.error("@ForStmt ERROR");
@@ -362,7 +365,7 @@ public class ForStmt extends Stmt {
         StringBuffer stringBuffer = new StringBuffer("for(");
         StringBuffer tmp;
         if (initializer == null) {
-            tmp = _initializers.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _initializers.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -371,7 +374,7 @@ public class ForStmt extends Stmt {
         stringBuffer.append(";");
         if (condition == null) {
             if (_condition != null) {
-                tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = _condition.adaptModifications(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -380,14 +383,14 @@ public class ForStmt extends Stmt {
         }
         stringBuffer.append(";");
         if (updater == null) {
-            tmp = _updaters.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _updaters.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(updater);
         }
         stringBuffer.append(")");
-        tmp = _body.adaptModifications(vars, exprMap, retType, exceptions);
+        tmp = _body.adaptModifications(vars, exprMap, retType, exceptions, metric);
         if (tmp == null) return null;
         stringBuffer.append(tmp);
         return stringBuffer;

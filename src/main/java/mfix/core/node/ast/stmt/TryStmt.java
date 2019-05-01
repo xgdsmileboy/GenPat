@@ -14,6 +14,7 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.VarDeclarationExpr;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -371,26 +372,26 @@ public class TryStmt extends Stmt {
 
 	@Override
 	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
-								 List<Node> nodes) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+                                 List<Node> nodes, Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("try");
 			StringBuffer tmp;
 			if (_resource != null && _resource.size() > 0) {
 				stringBuffer.append("(");
-				tmp = _resource.get(0).transfer(vars, exprMap, retType, exceptions);
+				tmp = _resource.get(0).transfer(vars, exprMap, retType, exceptions, metric);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 				for (int i = 1; i < _resource.size(); i++) {
 					stringBuffer.append(";");
-					tmp = _resource.get(i).transfer(vars, exprMap, retType, exceptions);
+					tmp = _resource.get(i).transfer(vars, exprMap, retType, exceptions, metric);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
 				stringBuffer.append(")");
 			}
 			if (nodes == null) {
-				tmp = _blk.transfer(vars, exprMap, retType, exceptions);
+				tmp = _blk.transfer(vars, exprMap, retType, exceptions, metric);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 			} else {
@@ -402,14 +403,14 @@ public class TryStmt extends Stmt {
 			}
 			if (_catches != null) {
 				for (CatClause catClause : _catches) {
-					tmp = catClause.transfer(vars, exprMap, retType, exceptions);
+					tmp = catClause.transfer(vars, exprMap, retType, exceptions, metric);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
 			}
 			if (_finallyBlk != null) {
 				stringBuffer.append("finally");
-				tmp = _finallyBlk.transfer(vars, exprMap, retType, exceptions);
+				tmp = _finallyBlk.transfer(vars, exprMap, retType, exceptions, metric);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
@@ -418,8 +419,9 @@ public class TryStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			return transfer(vars, exprMap, retType, exceptions, null);
 		}
@@ -428,7 +430,7 @@ public class TryStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
 			TryStmt tryStmt = (TryStmt) pnode;
@@ -439,7 +441,7 @@ public class TryStmt extends Stmt {
 					Update update = (Update) modification;
 					Node node = update.getSrcNode();
 					if (node == tryStmt._finallyBlk) {
-						finallyBlock = update.apply(vars, exprMap, retType, exceptions);
+						finallyBlock = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (finallyBlock == null) return null;
 					} else {
 						catchModifications.add(modification);
@@ -461,7 +463,7 @@ public class TryStmt extends Stmt {
 				stringBuffer.append(")");
 			}
 
-			tmp = _blk.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _blk.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 
@@ -474,17 +476,17 @@ public class TryStmt extends Stmt {
 					Map<Node, StringBuffer> map = new HashMap<>(_catches.size());
 
 					if (!Matcher.applyNodeListModifications(catchModifications, _catches, insertionBefore,
-							insertionAfter, insertionAt, map, vars, exprMap, retType, exceptions)) {
+							insertionAfter, insertionAt, map, vars, exprMap, retType, exceptions, metric)) {
 						return null;
 					}
 
 					tmp = NodeUtils.assemble(_catches, insertionBefore, insertionAfter, map, insertionAt
-							, vars, exprMap, retType, exceptions);
+							, vars, exprMap, retType, exceptions, metric);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				} else {
 					for (CatClause catClause : _catches) {
-						tmp = catClause.adaptModifications(vars, exprMap, retType, exceptions);
+						tmp = catClause.adaptModifications(vars, exprMap, retType, exceptions, metric);
 						if (tmp == null) return null;
 						stringBuffer.append(tmp);
 					}
@@ -493,7 +495,7 @@ public class TryStmt extends Stmt {
 			if (finallyBlock == null) {
 				if (_finallyBlk != null) {
 					stringBuffer.append("finally");
-					tmp = _finallyBlk.adaptModifications(vars, exprMap, retType, exceptions);
+					tmp = _finallyBlk.adaptModifications(vars, exprMap, retType, exceptions, metric);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
@@ -508,30 +510,30 @@ public class TryStmt extends Stmt {
 			StringBuffer tmp;
 			if (_resource != null && _resource.size() > 0) {
 				stringBuffer.append("(");
-				tmp = _resource.get(0).adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _resource.get(0).adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 				for (int i = 1; i < _resource.size(); i++) {
 					stringBuffer.append(";");
-					tmp = _resource.get(i).adaptModifications(vars, exprMap, retType, exceptions);
+					tmp = _resource.get(i).adaptModifications(vars, exprMap, retType, exceptions, metric);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
 				stringBuffer.append(")");
 			}
-			tmp = _blk.adaptModifications(vars, exprMap,retType, exceptions);
+			tmp = _blk.adaptModifications(vars, exprMap,retType, exceptions, metric);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			if (_catches != null) {
 				for (CatClause catClause : _catches) {
-					tmp = catClause.adaptModifications(vars, exprMap, retType, exceptions);
+					tmp = catClause.adaptModifications(vars, exprMap, retType, exceptions, metric);
 					if (tmp == null) return null;
 					stringBuffer.append(tmp);
 				}
 			}
 			if (_finallyBlk != null) {
 				stringBuffer.append("finally");
-				tmp = _finallyBlk.adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _finallyBlk.adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if (tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

@@ -1,12 +1,15 @@
 package mfix.core.node.modify;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 public class Update extends Modification {
@@ -35,11 +38,31 @@ public class Update extends Modification {
         return _tarNode;
     }
 
-    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                              Adaptee metric) {
+        metric.setChange(Adaptee.CHANGE.UPDATE);
+        int oldSize = 0;
+        if (_srcNode != null && _srcNode.getBuggyBindingNode() != null) {
+            Queue<Node> nodes = new LinkedList<>();
+            Node node = _srcNode.getBuggyBindingNode();
+            nodes.add(node);
+            while(!nodes.isEmpty()) {
+                node = nodes.poll();
+                if (NodeUtils.isSimpleExpr(node)) {
+                    oldSize += 1;
+                }
+                nodes.addAll(node.getAllChildren());
+            }
+        }
         if (_tarNode == null) {
+            metric.add(oldSize);
             return new StringBuffer();
         }
-        return _tarNode.transfer(vars, exprMap, retType, exceptions);
+        Adaptee adaptee = new Adaptee(0);
+        adaptee.setChange(Adaptee.CHANGE.UPDATE);
+        StringBuffer buffer = _tarNode.transfer(vars, exprMap, retType, exceptions, adaptee);
+        metric.add(oldSize > adaptee.getUpd() ? oldSize : adaptee.getUpd());
+        return buffer;
     }
 
     @Override
