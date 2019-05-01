@@ -105,6 +105,7 @@ public class ExecuteCommand {
         ProcessBuilder builder = new ProcessBuilder(command);
         Map<String, String> evn = builder.environment();
         evn.put("JAVA_HOME", jhome);
+        evn.put("JAVA_TOOL_OPTIONS", "-Dfile.encoding=UTF8");
         evn.put("PATH", jhome + "/bin:" + evn.get("PATH"));
         return builder;
     }
@@ -113,6 +114,7 @@ public class ExecuteCommand {
         ProcessBuilder builder = new ProcessBuilder(command);
         Map<String, String> evn = builder.environment();
         evn.put("JAVA_HOME", jhome);
+        evn.put("JAVA_TOOL_OPTIONS", "-Dfile.encoding=UTF8");
         evn.put("DEFECTS4J_HOME", d4jhome);
         evn.put("PATH", jhome + "/bin:" + evn.get("PATH"));
         return builder;
