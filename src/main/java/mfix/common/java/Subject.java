@@ -268,7 +268,7 @@ public class Subject implements IExecute {
 
     @Override
     public boolean test() {
-        LevelLogger.info("SINGLE TEST : " + _name + "_" + _id);
+        LevelLogger.info("TESTING : " + _name + "_" + _id);
         return checkSuccess(ExecuteCommand.executeTest(this), _key_test_suc);
     }
 
