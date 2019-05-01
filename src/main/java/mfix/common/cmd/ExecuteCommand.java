@@ -95,6 +95,9 @@ public class ExecuteCommand {
                 process.destroy();
             }
         }
+        for (String s : results) {
+            LevelLogger.debug(s);
+        }
         return results;
     }
 

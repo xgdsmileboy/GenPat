@@ -479,6 +479,10 @@ public class Repair {
                     continue;
                 }
             }
+            if (_subject instanceof D4jSubject) {
+                _subject.test();
+            }
+
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             List<Adaptee> allCandidates = new LinkedList<>();
             String start = simpleDateFormat.format(new Date());
@@ -554,11 +558,6 @@ public class Repair {
             AbstractFaultLocator locator = FaultLocatorFactory.dispatch(_subject);
             locator.setFailedTests(_currentFailedTests);
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
-
-            if (_subject instanceof D4jSubject) {
-                // first check compilable
-                _subject.test();
-            }
 
             repair0(locations, buggyFileVarMap);
             all += _patchNum;
