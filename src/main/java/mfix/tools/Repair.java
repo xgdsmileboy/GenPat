@@ -434,7 +434,7 @@ public class Repair {
             String message = "Location : " + location.toString();
             LevelLogger.info(message);
             JavaFile.writeStringToFile(_logfile, message + "\n", true);
-
+            _subject.restore();
             final String file = Utils.join(Constant.SEP, srcSrc, location.getRelClazzFile());
             final String clazzFile = Utils.join(Constant.SEP, srcBin,
                     location.getRelClazzFile().replace(".java", ".class"));
@@ -514,10 +514,7 @@ public class Repair {
         Utils.deleteDirs(srcBin, testBin);
         if (_subject instanceof D4jSubject) {
             // first check compilable
-            if (!_subject.compile()) {
-                JavaFile.writeStringToFile(_logfile, "Compile failed at the beginning!" + "\n", true);
-                return;
-            }
+            _subject.test();
         }
 
         Purification purification = new Purification(_subject);
