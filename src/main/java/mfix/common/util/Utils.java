@@ -108,7 +108,7 @@ public class Utils {
             file = new File(f);
             if (file.exists()) {
                 try {
-                    FileUtils.forceDeleteOnExit(file);
+                    FileUtils.forceDelete(file);
                 } catch (IOException e) {
                     LevelLogger.error("Delete file failed!", e);
                     result = false;
