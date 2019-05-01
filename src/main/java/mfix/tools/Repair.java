@@ -475,16 +475,22 @@ public class Repair {
             }
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
             List<Adaptee> allCandidates = new LinkedList<>();
+            String start = simpleDateFormat.format(new Date());
+            int pNumber = 0;
             for (String s : patterns) {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
                 if (p == null) { continue; }
+                pNumber += 1;
                 scope.reset(p.getNewVars());
                 allCandidates.addAll(tryFix(node, p, scope, clazzFile, retType, exceptions, buggyLines));
                 if (allCandidates.size() > Constant.MAX_CONDITATE_NUMBER) {
                     break;
                 }
             }
+            String msg = String.format("Compute Candidate : %s - %s , PNumber : %d, CandNumber : %s ",
+                    start, simpleDateFormat.format(new Date()), pNumber, allCandidates.size());
+            JavaFile.writeStringToFile(_logfile, msg + "\n", true);
             rankAndValidate(allCandidates, node, clazzFile);
         }
     }
