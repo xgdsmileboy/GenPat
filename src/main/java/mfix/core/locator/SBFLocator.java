@@ -174,7 +174,7 @@ public class SBFLocator extends AbstractFaultLocator {
 
         Map<String, List<Pair<LineRange, String>>> result = new HashMap<>();
         for (String f : relFiles) {
-            LevelLogger.debug("Collect methods in file : " + f);
+//            LevelLogger.debug("Collect methods in file : " + f);
             String file = Utils.join(Constant.SEP, srcBase, f.replace('.', Constant.SEP) + ".java");
             final List<Pair<LineRange, String>> list = result.getOrDefault(f, new LinkedList<>());
             final CompilationUnit unit = JavaFile.genAST(file);
