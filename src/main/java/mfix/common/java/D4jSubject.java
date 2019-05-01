@@ -36,8 +36,8 @@ public class D4jSubject extends Subject {
         _id = id;
         setClasspath(obtainClasspath(name));
         setSourceLevel(name.equals("chart") ? SOURCE_LEVEL.L_1_4 : SOURCE_LEVEL.L_1_7);
-        setCompileFile(memCompile && !"mockito".equals(name));
-        setCompileProject("mockito".equals(name));
+        setCompileFile(memCompile);
+        setCompileProject(!memCompile);
         setTestProject(true);
         setCompileCommand(Constant.CMD_DEFECTS4J + " compile");
         setTestCommand(Constant.CMD_DEFECTS4J + " test");
@@ -118,6 +118,19 @@ public class D4jSubject extends Subject {
                 classpath.add(Constant.D4J_LIB_DIR + "/joda-convert-1.2.jar");
                 break;
             case "mockito":
+                classpath.add(Constant.D4J_LIB_DIR + "/junit-4.11.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/asm-all-5.0.4.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/assertj-core-2.1.0.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/cglib-and-asm-1.0.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/cobertura-2.0.3.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/fest-assert-1.3.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/fest-util-1.1.4.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/hamcrest-all-1.3.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/hamcrest-core-1.1.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/objenesis-2.1.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/objenesis-2.2.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/powermock-reflect-1.2.5.jar");
+                classpath.add(Constant.D4J_LIB_DIR + "/.jar");
                 break;
             default:
                 System.err.println("UNKNOWN project name : " + projName);
