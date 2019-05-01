@@ -33,6 +33,8 @@ public class Adaptee {
     private MatchLevel _level;
     private String _patternName;
     private TextDiff _diff;
+    private int _startLine;
+    private int _endLine;
 
     public Adaptee(int modnum) {
         this(modnum, 0, 0, 0);
@@ -60,6 +62,19 @@ public class Adaptee {
 
     public TextDiff getDiff() {
         return _diff;
+    }
+
+    public void setLine(int start, int end) {
+        _startLine = start;
+        _endLine = end;
+    }
+
+    public int getStartLine() {
+        return _startLine;
+    }
+
+    public int getEndLine() {
+        return _endLine;
     }
 
     public void setMatchLevel(MatchLevel level) {

@@ -267,27 +267,31 @@ public class Repair {
     }
 
 
-    private void writeLog(String patternName, String buggyFile, TextDiff diff,
-                          int startLine, int endLine, boolean patch, MatchLevel level) {
+    private void writeLog(Adaptee adaptee, String buggyFile, boolean patch) {
         StringBuffer buffer = new StringBuffer();
         buffer.append("FILE : ").append(buggyFile)
                 .append('[')
-                .append(startLine)
+                .append(adaptee.getStartLine())
                 .append(',')
-                .append(endLine)
+                .append(adaptee.getEndLine())
                 .append(']')
                 .append(Constant.NEW_LINE)
                 .append("------------")
                 .append(patch ? "Solution" : "Candidate")
                 .append("---------------")
                 .append(Constant.NEW_LINE)
-                .append(diff.toString())
+                .append(adaptee.getDiff().toString())
                 .append(Constant.NEW_LINE)
                 .append("PATTERN : ")
-                .append(patternName)
+                .append(adaptee.getPatternName())
                 .append(Constant.NEW_LINE)
                 .append("MATCHLEVEL : ")
-                .append(level.name())
+                .append(adaptee.getMatchLevel().name())
+                .append(Constant.NEW_LINE)
+                .append("ALL : ").append(adaptee.getAll())
+                .append(", UPD : ").append(adaptee.getUpd())
+                .append(", INS : ").append(adaptee.getIns())
+                .append(", DEL : ").append(adaptee.getDel())
                 .append(Constant.NEW_LINE)
                 .append("Failing Tests:")
                 .append(_currentFailedTests)
@@ -310,28 +314,23 @@ public class Repair {
         }
     }
 
-    public void rankAndValidate(List<Adaptee> candidates, Node bNode, String clazzFile) {
+    public void rankAndValidate(List<Adaptee> candidates, String fileName, String clazzFile) {
         candidates = candidates.stream().sorted(Comparator.comparingInt(Adaptee::getAll))
                 .collect(Collectors.toList());
-        String fileName = bNode.getFileName();
-        int start = bNode.getStartLine();
-        int end = bNode.getEndLine();
         LevelLogger.debug("All candidate patches : " + candidates.size());
         for (Adaptee adaptee : candidates) {
             LevelLogger.debug("Current candidate :");
             LevelLogger.debug(adaptee.getDiff().toString());
             if (shouldStop()) {
                 LevelLogger.info("Timeout : output candidate to file");
-                writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
-                        end, false, adaptee.getMatchLevel());
+                writeLog(adaptee, fileName, false);
             } else {
                 LevelLogger.debug(adaptee.getAdaptedCode());
                 JavaFile.writeStringToFile(fileName, adaptee.getAdaptedCode());
                 Utils.deleteFiles(clazzFile);
                 boolean pass = testValid() == ValidateResult.PASS;
                 _patchNum += pass ? 1 : 0;
-                writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
-                        end, pass, adaptee.getMatchLevel());
+                writeLog(adaptee, fileName, pass);
                 LevelLogger.info(pass ? "Pass test case!" : "Test failed!");
             }
         }
@@ -413,10 +412,12 @@ public class Repair {
             Utils.deleteFiles(clazzFile);
             switch (compileValid(buggyFile, code)) {
                 case PASS:
+                    LevelLogger.info("Build passed!");
                     adaptee.setAdaptedCode(code);
                     adaptee.setMatchLevel(level);
                     adaptee.setPatternName(pattern.getPatternName());
                     adaptee.setDiff(diff);
+                    adaptee.setLine(bNode.getStartLine(), bNode.getEndLine());
                     adaptedCode.add(adaptee);
                     break;
                 default:
@@ -505,7 +506,7 @@ public class Repair {
             String msg = String.format("Compute Candidate : %s - %s , PNumber : %d, CandNumber : %s ",
                     start, simpleDateFormat.format(new Date()), pNumber, allCandidates.size());
             JavaFile.writeStringToFile(_logfile, msg + "\n", true);
-            rankAndValidate(allCandidates, node, clazzFile);
+            rankAndValidate(allCandidates, node.getFileName(), clazzFile);
         }
     }
 
