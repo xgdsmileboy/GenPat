@@ -512,10 +512,6 @@ public class Repair {
         String testBin = _subject.getHome() + _subject.getTbin();
 
         Utils.deleteDirs(srcBin, testBin);
-        if (_subject instanceof D4jSubject) {
-            // first check compilable
-            _subject.test();
-        }
 
         Purification purification = new Purification(_subject);
         List<String> purifiedFailedTestCases = purification.purify(_subject.purify());
@@ -557,6 +553,11 @@ public class Repair {
             AbstractFaultLocator locator = FaultLocatorFactory.dispatch(_subject);
             locator.setFailedTests(_currentFailedTests);
             List<Location> locations = locator.getLocations(Constant.MAX_REPAIR_LOCATION);
+
+            if (_subject instanceof D4jSubject) {
+                // first check compilable
+                _subject.test();
+            }
 
             repair0(locations, buggyFileVarMap);
             all += _patchNum;
