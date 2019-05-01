@@ -325,6 +325,7 @@ public class Repair {
                 writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
                         end, false, adaptee.getMatchLevel());
             } else {
+                LevelLogger.debug(adaptee.getAdaptedCode());
                 JavaFile.writeStringToFile(fileName, adaptee.getAdaptedCode());
                 Utils.deleteFiles(clazzFile);
                 boolean pass = testValid() == ValidateResult.PASS;
@@ -345,6 +346,7 @@ public class Repair {
         LevelLogger.info("Try fix with : " + pattern.getPatternName());
         String origin = bNode.toSrcString().toString();
         String buggyFile = bNode.getFileName();
+        String oldSource = JavaFile.readFileToString(buggyFile);
         List<String> sources = JavaFile.readFileToStringList(buggyFile);
         sources.add(0, "");
         int startLine = bNode.getStartLine();
@@ -422,6 +424,7 @@ public class Repair {
             }
             matchInstance.reset();
         }
+        compileValid(buggyFile, oldSource);
         return adaptedCode;
     }
 
