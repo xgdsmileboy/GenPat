@@ -396,23 +396,26 @@ public class Repair {
             String code = JavaFile.sourceReplace(buggyFile, pattern.getImports(),
                     sources, startLine, endLine, fixed, false);
 
+            StringBuffer b = new StringBuffer();
+            for (String s : pattern.getImports()) {
+                b.append(s).append(Constant.NEW_LINE);
+            }
+            b.append(fixed);
+            TextDiff diff = new TextDiff(origin, b.toString());
+            LevelLogger.debug("----Adapted Patch----");
+            LevelLogger.debug(diff.toString());
+
             Utils.deleteFiles(clazzFile);
             switch (compileValid(buggyFile, code)) {
                 case PASS:
                     adaptee.setAdaptedCode(code);
                     adaptee.setMatchLevel(level);
                     adaptee.setPatternName(pattern.getPatternName());
-                    StringBuffer b = new StringBuffer();
-                    for (String s : pattern.getImports()) {
-                        b.append(s).append(Constant.NEW_LINE);
-                    }
-                    b.append(fixed);
-                    TextDiff diff = new TextDiff(origin, b.toString());
                     adaptee.setDiff(diff);
                     adaptedCode.add(adaptee);
-                    LevelLogger.debug("----Compiled Patch----");
-                    LevelLogger.debug(diff.toString());
+                    break;
                 default:
+                    LevelLogger.info("Build failed!");
             }
             matchInstance.reset();
         }
