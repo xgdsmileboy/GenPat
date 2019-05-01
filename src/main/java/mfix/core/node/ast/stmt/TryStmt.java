@@ -423,7 +423,7 @@ public class TryStmt extends Stmt {
                                  Adaptee metric) {
 		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
-			return transfer(vars, exprMap, retType, exceptions, metric);
+			return transfer(vars, exprMap, retType, exceptions, null, metric);
 		}
 		return stringBuffer;
 	}
