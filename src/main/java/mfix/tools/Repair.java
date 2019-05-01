@@ -316,21 +316,20 @@ public class Repair {
         String fileName = bNode.getFileName();
         int start = bNode.getStartLine();
         int end = bNode.getEndLine();
+        LevelLogger.debug("All candidate patches : " + candidates.size());
         for (Adaptee adaptee : candidates) {
+            LevelLogger.debug("Current candidate :");
+            LevelLogger.debug(adaptee.getDiff().toString());
             if (shouldStop()) {
                 writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
                         end, false, adaptee.getMatchLevel());
             } else {
                 JavaFile.writeStringToFile(fileName, adaptee.getAdaptedCode());
                 Utils.deleteFiles(clazzFile);
-                switch (testValid()) {
-                    case PASS:
-                        _patchNum += 1;
-                        writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
-                                end, true, adaptee.getMatchLevel());
-                    default:
-                        LevelLogger.info("Test failed!");
-                }
+                boolean pass = testValid() == ValidateResult.PASS;
+                _patchNum += pass ? 1 : 0;
+                writeLog(adaptee.getPatternName(), fileName, adaptee.getDiff(), start,
+                        end, pass, adaptee.getMatchLevel());
             }
         }
     }
