@@ -7,9 +7,7 @@ import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
 public class Update extends Modification {
@@ -41,19 +39,7 @@ public class Update extends Modification {
     public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
                               Adaptee metric) {
         metric.setChange(Adaptee.CHANGE.UPDATE);
-        int oldSize = 0;
-        if (_srcNode != null && _srcNode.getBuggyBindingNode() != null) {
-            Queue<Node> nodes = new LinkedList<>();
-            Node node = _srcNode.getBuggyBindingNode();
-            nodes.add(node);
-            while(!nodes.isEmpty()) {
-                node = nodes.poll();
-                if (NodeUtils.isSimpleExpr(node)) {
-                    oldSize += 1;
-                }
-                nodes.addAll(node.getAllChildren());
-            }
-        }
+        int oldSize = NodeUtils.parseTreeSize(_srcNode.getBuggyBindingNode());
         if (_tarNode == null) {
             metric.add(oldSize);
             return new StringBuffer();

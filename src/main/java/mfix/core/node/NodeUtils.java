@@ -32,16 +32,8 @@ import mfix.core.node.modify.Update;
 import mfix.core.node.modify.Wrap;
 import org.eclipse.jdt.core.dom.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -130,6 +122,25 @@ public class NodeUtils {
                 LevelLogger.error("Should not be here!");
                 return false;
         }
+    }
+
+    public static int parseTreeSize(Node node) {
+        int size = 0;
+        if (node != null) {
+            if (node != null) {
+                Queue<Node> nodes = new LinkedList<>();
+                nodes.add(node);
+                while (!nodes.isEmpty()) {
+                    node = nodes.poll();
+                    if (NodeUtils.isSimpleExpr(node)) {
+                        size += 1;
+                    } else {
+                        nodes.addAll(node.getAllChildren());
+                    }
+                }
+            }
+        }
+        return size;
     }
 
     public final static Set<String> primitives = new HashSet<>(Arrays.asList("char", "short", "int", "float", "double"));

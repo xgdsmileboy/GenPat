@@ -896,8 +896,9 @@ public abstract class Node implements NodeComparator, Serializable {
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
                                  Adaptee metric) {
         if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
-            int size = getBindingNode().getBuggyBindingNode().getAllChildren().size();
-            metric.add(size > 0 ? size : 1);
+//            int size = NodeUtils.parseTreeSize(getBindingNode().getBuggyBindingNode());
+//            metric.add(size > 0 ? size : 1);
+            metric.inc();
             return getBindingNode().getBuggyBindingNode().toSrcString();
         } else if (exprMap.containsKey(toSrcString().toString())) {
             metric.inc();

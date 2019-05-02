@@ -528,10 +528,13 @@ public class Matcher {
                                                      Adaptee metric) {
         StringBuffer tmp;
         List<Pair<Insertion, StringBuffer>> insertNoDep = new LinkedList<>();
+        Set<Node> wrapped = new HashSet<>();
+        Set<Node> deleted = new HashSet<>();
         for (Modification modification : modifications) {
             if (modification instanceof Wrap) {
                 Wrap wrap = (Wrap) modification;
                 Node node = wrap.getSrcNode().getBuggyBindingNode();
+                wrapped.add(node);
                 assert node != null;
                 int index = -1;
                 for (int i = 0; i < statements.size(); i++) {
@@ -556,6 +559,7 @@ public class Matcher {
                         break;
                     }
                 }
+                wrapped.addAll(toWrap);
                 tmp = wrap.apply(vars, exprMap, retType, exceptions, toWrap, metric);
                 if (tmp == null) return false;
                 changeNodeMap.put(node, tmp);
@@ -572,10 +576,7 @@ public class Matcher {
                 Node node = deletion.getDelNode().getBuggyBindingNode();
                 // node to be deleted to should be completely matched
                 assert node != null;
-                // map deleted node to null
-                if (node.getBuggyBindingNode() == null) {
-                    metric.add(node.getAllChildren().size() + 1, Adaptee.CHANGE.DELETE);
-                }
+                deleted.add(node);
                 changeNodeMap.put(node, null);
             } else if (modification instanceof Insertion) {
                 Insertion insertion = (Insertion) modification;
@@ -664,6 +665,12 @@ public class Matcher {
                 insertAt.put(pair.getFirst().getIndex(), list);
             }
             list.add(pair.getSecond());
+        }
+
+        for (Node node : deleted) {
+            if (!wrapped.contains(node)) {
+                metric.add(NodeUtils.parseTreeSize(node), Adaptee.CHANGE.DELETE);
+            }
         }
 
         return true;

@@ -215,6 +215,7 @@ public class ReturnStmt extends Stmt {
 					if(tmp == null) return null;
 					stringBuffer.append(tmp);
 				} else if (retType != null){
+					metric.inc();
 					stringBuffer.append(NodeUtils.getDefaultValue(retType));
 				}
 			}
