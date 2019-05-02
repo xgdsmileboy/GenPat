@@ -238,7 +238,8 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>mfix.Main</mainClass>
+                                    <!--<mainClass>mfix.Main</mainClass>-->
+                                    <mainClass>mfix.rlytest</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
