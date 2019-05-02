@@ -434,10 +434,6 @@ public class rlytest {
             }
             JSONArray methods = (JSONArray)ret.get("members");
 
-//            if (methods.size() > 5) {
-//                continue;
-//            }
-
             List<Method> src_methods, tar_methods;
             src_methods = new ArrayList<>();
             tar_methods = new ArrayList<>();
@@ -481,30 +477,32 @@ public class rlytest {
                     System.out.println(tar_method);
                 }
 
-                if (j == selectCases.get(caseNum).getSecond()) {
-                    try {
-                        BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/luyaoren/Desktop/ase-data/junit_gd.txt", true));
-                        writer.write("counter:"  + currentRunCases);
-                        writer.newLine();
-                        writer.write("-----start-----");
-                        writer.newLine();
-                        writer.write(point_tar_method.toString());
-                        writer.write("-----end-----");
-                        writer.newLine();
-
-                        writer.close();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                if ((selectCases != null) && (j == selectCases.get(caseNum).getSecond())) {
+//                    try {
+//                        BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/luyaoren/Desktop/ase-data/junit_gd.txt", true));
+//                        writer.write("counter:"  + currentRunCases);
+//                        writer.newLine();
+//                        writer.write("-----start-----");
+//                        writer.newLine();
+//                        writer.write(point_tar_method.toString());
+//                        writer.write("-----end-----");
+//                        writer.newLine();
+//
+//                        writer.close();
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
             }
             // Finish all methods
 
             int x_ind = 0, y_ind = 1;
 
-            x_ind = selectCases.get(caseNum).getFirst();
-            y_ind = selectCases.get(caseNum).getSecond();
+            if (selectCases != null) {
+                x_ind = selectCases.get(caseNum).getFirst();
+                y_ind = selectCases.get(caseNum).getSecond();
+            }
 
             String x_src = path + "/" + "src_" + x_ind + ".java";
             String x_tar = path + "/" + "tar_" + x_ind + ".java";
@@ -572,7 +570,7 @@ public class rlytest {
 //        System.out.println("cluFolder=" + cluFolder + ";");
 //        System.out.println("outFile=" + outFile + ";");
 
-        readXML("/Users/luyaoren/Downloads/junit_all.xml");
+        // readXML("/Users/luyaoren/Downloads/junit_all.xml");
 
         runc3();
 
