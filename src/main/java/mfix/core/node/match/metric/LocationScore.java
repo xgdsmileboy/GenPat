@@ -18,24 +18,13 @@ import java.util.Set;
  * @author: Jiajun
  * @date: 2019-04-02
  */
-public class LocationScore implements IScore {
+public class LocationScore extends AbsSimilarity {
 
-    private double _weight;
     private List<Integer> _buggyLines;
 
     public LocationScore(double weight, List<Integer> buggyLines) {
-        _weight = weight;
+        super(weight);
         _buggyLines = buggyLines;
-    }
-
-    @Override
-    public double getWeight() {
-        return _weight;
-    }
-
-    @Override
-    public void setWeight(double weight) {
-        _weight = weight;
     }
 
     @Override
