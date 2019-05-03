@@ -7,7 +7,7 @@
 
 package mfix.core.node.modify;
 
-import mfix.core.node.ast.MatchLevel;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.diff.TextDiff;
 
 /**

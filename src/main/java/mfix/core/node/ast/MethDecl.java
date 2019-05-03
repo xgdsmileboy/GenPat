@@ -11,6 +11,7 @@ import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.stmt.Blk;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
