@@ -24,6 +24,7 @@ import mfix.core.node.ast.expr.SuperMethodInv;
 import mfix.core.node.ast.stmt.EmptyStmt;
 import mfix.core.node.ast.stmt.ExpressionStmt;
 import mfix.core.node.ast.stmt.IfStmt;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Insertion;
 import mfix.core.node.modify.Modification;
@@ -31,16 +32,8 @@ import mfix.core.node.modify.Update;
 import mfix.core.node.modify.Wrap;
 import org.eclipse.jdt.core.dom.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -60,7 +53,8 @@ public class NodeUtils {
                                         Map<Node, StringBuffer> map,
                                         Map<Integer, List<StringBuffer>> insertionAt,
                                         VarScope vars, Map<String, String> exprMap,
-                                        String retType, Set<String> exceptions) {
+                                        String retType, Set<String> exceptions,
+                                        Adaptee metric) {
 
         StringBuffer stringBuffer = new StringBuffer();
         StringBuffer tmp;
@@ -88,7 +82,7 @@ public class NodeUtils {
                     stringBuffer.append(update).append(Constant.NEW_LINE);
                 }
             } else {
-                tmp = node.adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = node.adaptModifications(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp).append(Constant.NEW_LINE);
             }
@@ -130,7 +124,26 @@ public class NodeUtils {
         }
     }
 
-    public final static Set<String> primitives = new HashSet<>(Arrays.asList("int", "float", "double"));
+    public static int parseTreeSize(Node node) {
+        int size = 0;
+        if (node != null) {
+            if (node != null) {
+                Queue<Node> nodes = new LinkedList<>();
+                nodes.add(node);
+                while (!nodes.isEmpty()) {
+                    node = nodes.poll();
+                    if (NodeUtils.isSimpleExpr(node)) {
+                        size += 1;
+                    } else {
+                        nodes.addAll(node.getAllChildren());
+                    }
+                }
+            }
+        }
+        return size;
+    }
+
+    public final static Set<String> primitives = new HashSet<>(Arrays.asList("char", "short", "int", "float", "double"));
     public static boolean matchType(String t1, String t2) {
         if (t1 == t2) return true;
         if (t1 == null) return t2 == null;

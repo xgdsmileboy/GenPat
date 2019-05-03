@@ -33,11 +33,12 @@ public class Wrap extends Update {
     }
 
     public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType,
-                              Set<String> exceptions, List<Node> nodes) {
+                              Set<String> exceptions, List<Node> nodes, Adaptee metric) {
+        metric.setChange(Adaptee.CHANGE.WRAP);
         if(getTarNode() == null) {
             return new StringBuffer("NULL");
         } else {
-            return getTarNode().transfer(vars, exprMap, retType, exceptions, nodes);
+            return getTarNode().transfer(vars, exprMap, retType, exceptions, nodes, metric);
         }
     }
 

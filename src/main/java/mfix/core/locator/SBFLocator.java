@@ -45,11 +45,14 @@ public class SBFLocator extends AbstractFaultLocator {
     @Override
     protected void locateFault(double threshold) {
         try {
-            LevelLogger.info("Perform SBFL ....");
-            Utils.deleteFiles(getBuggyLineSuspFile());
-            ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
-                    _subject.getJDKHome(), Constant.D4J_HOME);
-            LevelLogger.info("Finish SBFL ...");
+            // skip fault localization for closure
+            if (!"closure".equals(_subject.getName())) {
+                LevelLogger.info("Perform SBFL ....");
+                Utils.deleteFiles(getBuggyLineSuspFile());
+                ExecuteCommand.execute(CmdFactory.createSbflCmd((D4jSubject) _subject, Constant.SBFL_TIMEOUT),
+                        _subject.getJDKHome(), Constant.D4J_HOME);
+                LevelLogger.info("Finish SBFL ...");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -171,7 +174,7 @@ public class SBFLocator extends AbstractFaultLocator {
 
         Map<String, List<Pair<LineRange, String>>> result = new HashMap<>();
         for (String f : relFiles) {
-            LevelLogger.debug("Collect methods in file : " + f);
+//            LevelLogger.debug("Collect methods in file : " + f);
             String file = Utils.join(Constant.SEP, srcBase, f.replace('.', Constant.SEP) + ".java");
             final List<Pair<LineRange, String>> list = result.getOrDefault(f, new LinkedList<>());
             final CompilationUnit unit = JavaFile.genAST(file);
@@ -201,7 +204,7 @@ public class SBFLocator extends AbstractFaultLocator {
                 rangeLocationMap = new HashMap<>();
                 file2Range2Location.put(clazz, rangeLocationMap);
             }
-            LevelLogger.debug("Transform location : " + clazz + "#" + triple.getSecond());
+//            LevelLogger.debug("Transform location : " + clazz + "#" + triple.getSecond());
             List<Pair<LineRange, String>> list = result.get(clazz);
             if (list != null) {
                 int line = triple.getSecond();

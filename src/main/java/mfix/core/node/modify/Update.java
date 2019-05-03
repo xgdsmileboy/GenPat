@@ -1,5 +1,6 @@
 package mfix.core.node.modify;
 
+import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.pattern.cluster.NameMapping;
@@ -35,11 +36,19 @@ public class Update extends Modification {
         return _tarNode;
     }
 
-    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+    public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                              Adaptee metric) {
+        metric.setChange(Adaptee.CHANGE.UPDATE);
+        int oldSize = NodeUtils.parseTreeSize(_srcNode.getBuggyBindingNode());
         if (_tarNode == null) {
+            metric.add(oldSize);
             return new StringBuffer();
         }
-        return _tarNode.transfer(vars, exprMap, retType, exceptions);
+        Adaptee adaptee = new Adaptee(0);
+        adaptee.setChange(Adaptee.CHANGE.UPDATE);
+        StringBuffer buffer = _tarNode.transfer(vars, exprMap, retType, exceptions, adaptee);
+        metric.add(oldSize > adaptee.getUpd() ? oldSize : adaptee.getUpd());
+        return buffer;
     }
 
     @Override

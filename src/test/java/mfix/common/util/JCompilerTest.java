@@ -72,6 +72,16 @@ public class JCompilerTest {
         Assert.assertTrue(compiler.compile(subject, "org/apache/commons/lang3/ArrayUtils.java", content));
     }
 
+    @Test
+    public void test_compile_mockito_file() {
+        String relJavaFile = "/mockito/mockito_22_buggy/src/org/mockito/internal/matchers/Equality.java";
+        String content = JavaFile
+                .readFileToString(base + relJavaFile);
+        Subject subject = new D4jSubject(base, "mockito", 22);
+        JCompiler compiler = new JCompiler();
+        Assert.assertTrue(compiler.compile(subject, "src/org/mockito/internal/matchers/Equality.java", content));
+    }
+
 //    @Test
     public void test_aclang() {
         List<Subject> subjects = Utils.getSubjectFromXML(Constant.DEFAULT_SUBJECT_XML);

@@ -684,7 +684,7 @@ public class JavaFile {
      * @throws IOException
      */
     public static String sourceReplace(String fileName, Set<String> imports, List<String> source,
-                                     int startLine, int endLine, String replace) {
+                                     int startLine, int endLine, String replace, boolean outFile) {
         StringBuffer replacedSource = new StringBuffer();
         boolean flag = false;
         StringBuffer stringBuffer = new StringBuffer();
@@ -731,7 +731,9 @@ public class JavaFile {
             }
         }
         String srcCode = replacedSource.toString();
-        JavaFile.writeStringToFile(fileName, srcCode);
+        if (outFile) {
+            JavaFile.writeStringToFile(fileName, srcCode);
+        }
         return srcCode;
     }
 }

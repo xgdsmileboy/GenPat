@@ -11,6 +11,7 @@ import mfix.core.node.abs.CodeAbstraction;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
@@ -134,9 +135,11 @@ public class SName extends Label {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
+			metric.inc();
 			stringBuffer = toSrcString();
 			if (!Character.isUpperCase(stringBuffer.charAt(0))) {
 				if (!vars.canUse(stringBuffer.toString(), _exprTypeStr, _startLine)) {
@@ -149,10 +152,10 @@ public class SName extends Label {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
-			return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions);
+			return ((Update) node.getModifications().get(0)).apply(vars, exprMap, retType, exceptions, metric);
 		}
 		return toSrcString();
 	}

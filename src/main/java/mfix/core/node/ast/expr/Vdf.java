@@ -14,6 +14,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -309,18 +310,19 @@ public class Vdf extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
-			StringBuffer tmp = _identifier.transfer(vars, exprMap, retType, exceptions);
+			StringBuffer tmp = _identifier.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			for (int i = 0; i < _dimensions; i++) {
 				stringBuffer.append("[]");
 			}
 			if (_expression != null) {
-				tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+				tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
 				if (tmp == null) return null;
 				stringBuffer.append('=').append(tmp);
 			}
@@ -330,7 +332,7 @@ public class Vdf extends Node {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer expression = null;
 		Node node = NodeUtils.checkModification(this);
 		if (node != null) {
@@ -339,7 +341,7 @@ public class Vdf extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == vdf._expression) {
-						expression = update.apply(vars, exprMap, retType, exceptions);
+						expression = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (expression == null) return null;
 					}
 				} else {
@@ -349,7 +351,7 @@ public class Vdf extends Node {
 		}
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
-		tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions);
+		tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions, metric);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		for (int i = 0; i < _dimensions; i++){
@@ -358,7 +360,7 @@ public class Vdf extends Node {
 		if(expression == null) {
 			if(_expression != null){
 				stringBuffer.append("=");
-				tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}

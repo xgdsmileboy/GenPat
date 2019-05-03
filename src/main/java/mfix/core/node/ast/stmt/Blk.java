@@ -14,6 +14,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -196,14 +197,15 @@ public class Blk extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("{" + Constant.NEW_LINE);
             for (int i = 0; i < _statements.size(); i++) {
-                tmp = _statements.get(i).transfer(vars, exprMap, retType, exceptions);
+                tmp = _statements.get(i).transfer(vars, exprMap, retType, exceptions, metric);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append(Constant.NEW_LINE);
@@ -215,7 +217,7 @@ public class Blk extends Stmt {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
             Blk blk = (Blk) pnode;
@@ -224,13 +226,13 @@ public class Blk extends Stmt {
             Map<Integer, List<StringBuffer>> insertAt = new HashMap<>();
             Map<Node, StringBuffer> map = new HashMap<>(_statements.size());
             if (!Matcher.applyNodeListModifications(blk.getModifications(), _statements, insertBefore,
-                    insertAfter, insertAt, map, vars, exprMap, retType, exceptions)) {
+                    insertAfter, insertAt, map, vars, exprMap, retType, exceptions, metric)) {
                 return null;
             }
             StringBuffer stringBuffer = new StringBuffer();
             stringBuffer.append("{" + Constant.NEW_LINE);
             StringBuffer tmp = NodeUtils.assemble(_statements, insertBefore, insertAfter, map, insertAt,
-                    vars, exprMap, retType, exceptions);
+                    vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append("}");
@@ -241,7 +243,7 @@ public class Blk extends Stmt {
             StringBuffer tmp;
             stringBuffer.append("{" + Constant.NEW_LINE);
             for (int i = 0; i < _statements.size(); i++) {
-                tmp = _statements.get(i).adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = _statements.get(i).adaptModifications(vars, exprMap, retType, exceptions, metric);
                 if(tmp == null) return null;
                 stringBuffer.append(tmp);
                 stringBuffer.append(Constant.NEW_LINE);

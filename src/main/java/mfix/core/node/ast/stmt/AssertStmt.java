@@ -13,6 +13,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -224,15 +225,17 @@ public class AssertStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer("assert ");
-			StringBuffer tmp = _expresion.transfer(vars, exprMap, retType, exceptions);
+			metric.inc();
+			StringBuffer tmp = _expresion.transfer(vars, exprMap, retType, exceptions, metric);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 			if (_message != null) {
-				tmp = _message.transfer(vars, exprMap, retType, exceptions);
+				tmp = _message.transfer(vars, exprMap, retType, exceptions, metric);
 				if (tmp == null) return null;
 				stringBuffer.append(":").append(tmp);
 			}
@@ -243,7 +246,7 @@ public class AssertStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer expression = null;
 		StringBuffer message = null;
 		Node pnode = NodeUtils.checkModification(this);
@@ -254,10 +257,10 @@ public class AssertStmt extends Stmt {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == assertStmt.getExpression()) {
-						expression = update.apply(vars, exprMap, retType, exceptions);
+						expression = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (expression == null) return null;
 					} else if (changedNode == assertStmt.getMessage()) {
-						message = update.apply(vars, exprMap, retType, exceptions);
+						message = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (message == null) return null;
 					}
 				} else {
@@ -269,7 +272,7 @@ public class AssertStmt extends Stmt {
 		StringBuffer stringBuffer = new StringBuffer("assert ");
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expresion.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _expresion.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -278,7 +281,7 @@ public class AssertStmt extends Stmt {
 
 		if (message == null) {
 			if (_message != null) {
-				tmp = _message.adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _message.adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if (tmp == null) return null;
 				stringBuffer.append(":").append(tmp);
 			}

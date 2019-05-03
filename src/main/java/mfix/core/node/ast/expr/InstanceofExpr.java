@@ -8,10 +8,10 @@ package mfix.core.node.ast.expr;
 
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
-import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -180,16 +180,17 @@ public class InstanceofExpr extends Expr {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+			tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" instanceof ");
-			tmp = _instanceType.transfer(vars, exprMap, retType, exceptions);
+			tmp = _instanceType.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -198,7 +199,7 @@ public class InstanceofExpr extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer expression = null;
 		StringBuffer instanceType = null;
 		Node node = NodeUtils.checkModification(this);
@@ -208,10 +209,10 @@ public class InstanceofExpr extends Expr {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == instanceofExpr._expression) {
-						expression = update.apply(vars, exprMap, retType, exceptions);
+						expression = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (expression == null) return null;
 					} else {
-						instanceType = update.apply(vars, exprMap, retType, exceptions);
+						instanceType = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (instanceofExpr == null) return null;
 					}
 				} else {
@@ -222,7 +223,7 @@ public class InstanceofExpr extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if(expression == null) {
-			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -230,7 +231,7 @@ public class InstanceofExpr extends Expr {
 		}
 		stringBuffer.append(" instanceof ");
 		if(instanceType == null) {
-			tmp = _instanceType.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _instanceType.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

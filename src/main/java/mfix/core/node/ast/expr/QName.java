@@ -11,6 +11,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -171,18 +172,19 @@ public class QName extends Label {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp = toSrcString();
 			if (!Character.isUpperCase(tmp.charAt(0))) {
-				tmp = _name.transfer(vars, exprMap, retType, exceptions);
+				tmp = _name.transfer(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) {
 					return null;
 				}
 				stringBuffer.append(".");
-				tmp = _sname.transfer(vars, exprMap, retType, exceptions);
+				tmp = _sname.transfer(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			} else {
@@ -194,7 +196,7 @@ public class QName extends Label {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer name = null;
 		StringBuffer sname = null;
 		Node node = NodeUtils.checkModification(this);
@@ -204,10 +206,10 @@ public class QName extends Label {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == qName._name) {
-						name = update.apply(vars, exprMap, retType, exceptions);
+						name = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (name == null) return null;
 					} else {
-						sname = update.apply(vars, exprMap, retType, exceptions);
+						sname = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (sname == null) return null;
 					}
 				} else {
@@ -218,7 +220,7 @@ public class QName extends Label {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if (name == null) {
-			tmp = _name.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _name.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -226,7 +228,7 @@ public class QName extends Label {
 		}
 		stringBuffer.append(".");
 		if(sname == null) {
-			tmp = _sname.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _sname.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

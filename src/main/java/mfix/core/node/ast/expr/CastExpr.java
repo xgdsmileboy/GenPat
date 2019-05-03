@@ -11,6 +11,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -166,17 +167,18 @@ public class CastExpr extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("(");
-            tmp = _castType.transfer(vars, exprMap, retType, exceptions);
+            tmp = _castType.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
-            tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+            tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -185,7 +187,7 @@ public class CastExpr extends Expr {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer castType = null;
         StringBuffer expression = null;
         Node node = NodeUtils.checkModification(this);
@@ -195,10 +197,10 @@ public class CastExpr extends Expr {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == _castType) {
-                        castType = update.apply(vars, exprMap, retType, exceptions);
+                        castType = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (castType == null) return null;
                     } else {
-                        expression = update.apply(vars, exprMap, retType, exceptions);
+                        expression = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (expression == null) return null;
                     }
                 } else {
@@ -210,7 +212,7 @@ public class CastExpr extends Expr {
         StringBuffer tmp;
         stringBuffer.append("(");
         if (castType == null) {
-            tmp = _castType.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _castType.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -218,7 +220,7 @@ public class CastExpr extends Expr {
         }
         stringBuffer.append(")");
         if(expression == null) {
-            tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if(tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

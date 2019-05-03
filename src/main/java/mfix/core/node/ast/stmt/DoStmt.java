@@ -13,6 +13,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -206,17 +207,19 @@ public class DoStmt extends Stmt {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			stringBuffer.append("do ");
-			tmp = _stmt.transfer(vars, exprMap, retType, exceptions);
+			metric.inc();
+			tmp = _stmt.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(" while(");
-			tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+			tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(");");
@@ -226,7 +229,7 @@ public class DoStmt extends Stmt {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer stmt = null;
 		StringBuffer expression = null;
 		Node pnode = NodeUtils.checkModification(this);
@@ -236,7 +239,7 @@ public class DoStmt extends Stmt {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == doStmt._expression) {
-						expression = update.apply(vars, exprMap, retType, exceptions);
+						expression = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (expression == null) return null;
 					}
 				} else {
@@ -248,7 +251,7 @@ public class DoStmt extends Stmt {
 		StringBuffer tmp;
 		stringBuffer.append("do ");
 		if (stmt == null) {
-			tmp = _stmt.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _stmt.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -256,7 +259,7 @@ public class DoStmt extends Stmt {
 		}
 		stringBuffer.append(" while(");
 		if (expression == null) {
-			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if (tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {

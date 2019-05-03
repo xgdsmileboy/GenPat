@@ -30,6 +30,7 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.RepairMatcher;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Deletion;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.parser.NodeParser;
@@ -111,7 +112,7 @@ public class Repair {
         PASS
     }
 
-    private ValidateResult validate(String clazzName, String source) {
+    private ValidateResult compileValid(String clazzName, String source) {
         if (_subject.compileFile()) {
             LevelLogger.debug("Compile single file : " + clazzName);
             boolean compile = new JCompiler().compile(_subject, clazzName, source);
@@ -130,6 +131,10 @@ public class Repair {
             }
             LevelLogger.debug("Compiling subject success!");
         }
+        return ValidateResult.PASS;
+    }
+
+    private ValidateResult testValid() {
 
         for (String string : _currentFailedTests) {
             LevelLogger.debug("Test : " + string);
@@ -149,14 +154,24 @@ public class Repair {
         }
 
         _alreadyFixedTests.addAll(_currentFailedTests);
+        _subject.tempBackupPrurifiedTest();
         _subject.restorePurifiedTest();
+        boolean delete = false;
         for (String s : _allFailedTests) {
             if (_alreadyFixedTests.contains(s)) {
                 continue;
             }
+            Utils.deleteDirs(_subject.getHome() + _subject.getTbin());
+            Utils.deleteDirs(_subject.getHome() + _subject.getSbin());
+            delete = true;
             if (_subject.test(s)) {
                 _alreadyFixedTests.add(s);
             }
+        }
+        _subject.tempRestorePrurifiedTest();
+        if (delete) {
+            Utils.deleteDirs(_subject.getHome() + _subject.getTbin());
+            Utils.deleteDirs(_subject.getHome() + _subject.getSbin());
         }
 
         return ValidateResult.PASS;
@@ -262,34 +277,31 @@ public class Repair {
     }
 
 
-    private void writeLog(Pattern pattern, String buggyFile, String original, String fixed,
-                          int startLine, int endLine, boolean patch, MatchLevel level) {
-        StringBuffer b = new StringBuffer();
-        for (String s : pattern.getImports()) {
-            b.append(s).append(Constant.NEW_LINE);
-        }
-        b.append(fixed);
-
-        TextDiff diff = new TextDiff(original, b.toString());
+    private void writeLog(Adaptee adaptee, String buggyFile, boolean patch) {
         StringBuffer buffer = new StringBuffer();
         buffer.append("FILE : ").append(buggyFile)
                 .append('[')
-                .append(startLine)
+                .append(adaptee.getStartLine())
                 .append(',')
-                .append(endLine)
+                .append(adaptee.getEndLine())
                 .append(']')
                 .append(Constant.NEW_LINE)
                 .append("------------")
                 .append(patch ? "Solution" : "Candidate")
                 .append("---------------")
                 .append(Constant.NEW_LINE)
-                .append(diff.toString())
+                .append(adaptee.getDiff().toString())
                 .append(Constant.NEW_LINE)
                 .append("PATTERN : ")
-                .append(pattern.getPatternName())
+                .append(adaptee.getPatternName())
                 .append(Constant.NEW_LINE)
                 .append("MATCHLEVEL : ")
-                .append(level.name())
+                .append(adaptee.getMatchLevel().name())
+                .append(Constant.NEW_LINE)
+                .append("ALL : ").append(adaptee.getAll())
+                .append(", UPD : ").append(adaptee.getUpd())
+                .append(", INS : ").append(adaptee.getIns())
+                .append(", DEL : ").append(adaptee.getDel())
                 .append(Constant.NEW_LINE)
                 .append("Failing Tests:")
                 .append(_currentFailedTests)
@@ -312,15 +324,38 @@ public class Repair {
         }
     }
 
-    protected void tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile, String retType,
-                          Set<String> exceptions, List<Integer> buggyLines) {
+    public void rankAndValidate(List<Adaptee> candidates, String fileName, String clazzFile) {
+        candidates = candidates.stream().sorted(Comparator.comparingInt(Adaptee::getAll))
+                .collect(Collectors.toList());
+        LevelLogger.debug("All candidate patches : " + candidates.size());
+        for (Adaptee adaptee : candidates) {
+            LevelLogger.debug("Current candidate :");
+            LevelLogger.debug(adaptee.getDiff().toString());
+            if (shouldStop()) {
+                LevelLogger.info("Timeout : output candidate to file");
+                writeLog(adaptee, fileName, false);
+            } else {
+                JavaFile.writeStringToFile(fileName, adaptee.getAdaptedCode());
+                Utils.deleteFiles(clazzFile);
+                boolean pass = testValid() == ValidateResult.PASS;
+                _patchNum += pass ? 1 : 0;
+                writeLog(adaptee, fileName, pass);
+                LevelLogger.info(pass ? "Pass test case!" : "Test failed!");
+            }
+        }
+        Utils.deleteFiles(clazzFile);
+    }
+
+    protected List<Adaptee> tryFix(Node bNode, Pattern pattern, VarScope scope, String clazzFile, String retType,
+                                   Set<String> exceptions, List<Integer> buggyLines) {
+        List<Adaptee> adaptedCode = new LinkedList<>();
         if (bNode == null || pattern == null || shouldStop()) {
-            return;
+            return adaptedCode;
         }
         LevelLogger.info("Try fix with : " + pattern.getPatternName());
         String origin = bNode.toSrcString().toString();
         String buggyFile = bNode.getFileName();
-        String oriSrcCode = JavaFile.readFileToString(buggyFile);
+//        String oldSource = JavaFile.readFileToString(buggyFile);
         List<String> sources = JavaFile.readFileToStringList(buggyFile);
         sources.add(0, "");
         int startLine = bNode.getStartLine();
@@ -343,9 +378,10 @@ public class Repair {
 
         if (fixPositions == null) {
             LevelLogger.info("No match point found!");
-            return;
+            return adaptedCode;
         }
 
+        int size = pattern.getAllModifications().size();
         MatchLevel level = matcher.getMatchLevel();
         LevelLogger.info("Match instances : " + fixPositions.size());
         for (MatchInstance matchInstance : fixPositions) {
@@ -353,8 +389,9 @@ public class Repair {
 
             matchInstance.apply();
             StringBuffer fixedCode = null;
+            Adaptee adaptee = new Adaptee(size);
             try{
-                fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap(), retType, exceptions);
+                fixedCode = bNode.adaptModifications(scope, matchInstance.getStrMap(), retType, exceptions, adaptee);
             } catch (Exception e) {
                 LevelLogger.error("AdaptModification causes exception ....", e);
             }
@@ -371,24 +408,36 @@ public class Repair {
             }
             _alreadyGenerated.add(fixed);
             String code = JavaFile.sourceReplace(buggyFile, pattern.getImports(),
-                    sources, startLine, endLine, fixed);
+                    sources, startLine, endLine, fixed, false);
 
-            TextDiff diff = new TextDiff(origin, fixed);
-            LevelLogger.debug("Repair code :\n" + diff.toString());
+            StringBuffer b = new StringBuffer();
+            for (String s : pattern.getImports()) {
+                b.append(s).append(Constant.NEW_LINE);
+            }
+            b.append(fixed);
+            TextDiff diff = new TextDiff(origin, b.toString());
+            LevelLogger.debug("----Adapted Patch----");
+            LevelLogger.debug(diff.toString());
+
             Utils.deleteFiles(clazzFile);
-            switch (validate(buggyFile, code)) {
+            switch (compileValid(buggyFile, code)) {
                 case PASS:
-                    writeLog(pattern, buggyFile, origin, fixed, startLine, endLine, true, level);
-                    _patchNum ++;
+                    LevelLogger.info("Build passed!");
+                    adaptee.setAdaptedCode(code);
+                    adaptee.setMatchLevel(level);
+                    adaptee.setPatternName(pattern.getPatternName());
+                    adaptee.setDiff(diff);
+                    adaptee.setLine(bNode.getStartLine(), bNode.getEndLine());
+                    adaptedCode.add(adaptee);
                     break;
-                case TEST_FAILED:
-                    writeLog(pattern, buggyFile, origin, fixed, startLine, endLine, false, level);
-                case COMPILE_FAILED:
                 default:
+                    LevelLogger.info("Build failed!");
             }
             matchInstance.reset();
         }
-        JavaFile.writeStringToFile(buggyFile, oriSrcCode);
+//        JavaFile.writeStringToFile(buggyFile, oldSource);
+//        compileValid(buggyFile, oldSource);
+        return adaptedCode;
     }
 
     private void repair0(List<Location> locations, Map<String, Map<Integer, VarScope>> buggyFileVarMap) {
@@ -401,7 +450,7 @@ public class Repair {
             String message = "Location : " + location.toString();
             LevelLogger.info(message);
             JavaFile.writeStringToFile(_logfile, message + "\n", true);
-
+            _subject.restore(srcSrc);
             final String file = Utils.join(Constant.SEP, srcSrc, location.getRelClazzFile());
             final String clazzFile = Utils.join(Constant.SEP, srcBin,
                     location.getRelClazzFile().replace(".java", ".class"));
@@ -412,24 +461,30 @@ public class Repair {
                 buggyFileVarMap.put(file, varMaps);
             }
             Node node = getBuggyNode(file, location.getLine());
+
             if (node == null) {
                 String err = "Get faulty node failed ! " + file + "#" + location.getLine();
                 LevelLogger.error(err);
                 JavaFile.writeStringToFile(_logfile, err + "\n", true);
                 continue;
             }
+
             String retType = "void";
             Set<String> exceptions = new HashSet<>();
+            List<Integer> buggyLines = location.getConsideredLines();
             if (node instanceof MethDecl) {
                 MethDecl decl = (MethDecl) node;
                 retType = decl.getRetTypeStr();
                 exceptions.addAll(decl.getThrows());
+                for (Node n : decl.getArguments()) {
+                    buggyLines.add(n.getStartLine());
+                }
             }
 
             List<String> patterns;
             if (_singlePattern != null) {
                 patterns = new LinkedList<>();
-                patterns.add(_singlePattern);
+                patterns.addAll(Arrays.asList(_singlePattern.split(",")));
             } else {
                 try {
                     patterns = filterPatterns(getKeys(node), Constant.TOP_K_PATTERN_EACH_LOCATION);
@@ -439,15 +494,27 @@ public class Repair {
                     continue;
                 }
             }
+
+            _subject.test();
             VarScope scope = varMaps.getOrDefault(node.getStartLine(), new VarScope());
-            List<Integer> buggyLines = location.getConsideredLines();
+            List<Adaptee> allCandidates = new LinkedList<>();
+            String start = simpleDateFormat.format(new Date());
+            int pNumber = 0;
             for (String s : patterns) {
                 if (shouldStop()) { break; }
                 Pattern p = readPattern(s);
                 if (p == null) { continue; }
+                pNumber += 1;
                 scope.reset(p.getNewVars());
-                tryFix(node, p, scope, clazzFile, retType, exceptions, buggyLines);
+                allCandidates.addAll(tryFix(node, p, scope, clazzFile, retType, exceptions, buggyLines));
+                if (allCandidates.size() > Constant.MAX_CONDITATE_NUMBER) {
+                    break;
+                }
             }
+            String msg = String.format("Compute Candidate : %s - %s , PNumber : %d, CandNumber : %s ",
+                    start, simpleDateFormat.format(new Date()), pNumber, allCandidates.size());
+            JavaFile.writeStringToFile(_logfile, msg + "\n", true);
+            rankAndValidate(allCandidates, node.getFileName(), clazzFile);
         }
     }
 
@@ -463,13 +530,6 @@ public class Repair {
         String testBin = _subject.getHome() + _subject.getTbin();
 
         Utils.deleteDirs(srcBin, testBin);
-        if (_subject instanceof D4jSubject) {
-            // first check compilable
-            if (!_subject.compile()) {
-                JavaFile.writeStringToFile(_logfile, "Compile failed at the beginning!" + "\n", true);
-                return;
-            }
-        }
 
         Purification purification = new Purification(_subject);
         List<String> purifiedFailedTestCases = purification.purify(_subject.purify());
@@ -517,7 +577,7 @@ public class Repair {
         }
 
         _subject.restore();
-
+        _patchNum = all;
         message = "Finish : " + _subject.getName() + "-" + _subject.getId() + " > patch : " + all
                 + " | Start : " + start + " | End : " + simpleDateFormat.format(new Date());
         JavaFile.writeStringToFile(_logfile, message + "\n", true);

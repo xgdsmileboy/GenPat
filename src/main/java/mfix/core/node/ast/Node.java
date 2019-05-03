@@ -18,6 +18,7 @@ import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.ast.visitor.NodeVisitor;
 import mfix.core.node.comp.NodeComparator;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.Vector;
@@ -888,21 +889,31 @@ public abstract class Node implements NodeComparator, Serializable {
                                     MatchLevel level);
 
     public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
-                                 List<Node> nodes) {
+                                 List<Node> nodes, Adaptee metric) {
         return null;
     }
 
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
         if (getBindingNode() != null && getBindingNode().getBuggyBindingNode() != null) {
+//            int size = NodeUtils.parseTreeSize(getBindingNode().getBuggyBindingNode());
+//            metric.add(size > 0 ? size : 1);
+            metric.inc();
             return getBindingNode().getBuggyBindingNode().toSrcString();
         } else if (exprMap.containsKey(toSrcString().toString())) {
+            metric.inc();
             return new StringBuffer(exprMap.get(toSrcString().toString()));
         }
         return null;
     }
 
+    public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
+                                                    Set<String> exceptions) {
+        return adaptModifications(vars, exprMap, retType, exceptions, new Adaptee(0));
+    }
+
     public abstract StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                                    Set<String> exceptions);
+                                                    Set<String> exceptions, Adaptee metric);
 
 
     /******************************************************************************************/

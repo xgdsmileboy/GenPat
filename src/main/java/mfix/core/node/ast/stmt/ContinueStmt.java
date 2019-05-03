@@ -13,6 +13,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.SName;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -179,13 +180,14 @@ public class ContinueStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("continue");
             if (_identifier != null) {
                 stringBuffer.append(" ");
-                StringBuffer tmp = _identifier.transfer(vars, exprMap, retType, exceptions);
+                StringBuffer tmp = _identifier.transfer(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }
@@ -197,7 +199,7 @@ public class ContinueStmt extends Stmt {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer identifier = null;
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
@@ -206,7 +208,7 @@ public class ContinueStmt extends Stmt {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == continueStmt._identifier) {
-                        identifier = update.apply(vars, exprMap, retType, exceptions);
+                        identifier = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (identifier == null) return null;
                     } else {
                         LevelLogger.error("@ContinueStmt ERROR");
@@ -220,7 +222,7 @@ public class ContinueStmt extends Stmt {
         if (identifier == null) {
             if (_identifier != null) {
                 stringBuffer.append(" ");
-                StringBuffer tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions);
+                StringBuffer tmp = _identifier.adaptModifications(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
             }

@@ -75,6 +75,9 @@ public class Constant {
     /* max number of candidate patches for each subject */
     public static int MAX_PATCH_NUMBER;
 
+    /* max number of compiled patches for each location for ranking */
+    public static int MAX_CONDITATE_NUMBER;
+
     /* max number of repair time for single subject (in minutes) */
     public static int MAX_REPAIR_TIME;
 
@@ -156,6 +159,7 @@ public class Constant {
             MAX_REPAIR_TIME = Integer.parseInt(prop.getProperty("REPAIR.TIME", "120"));
             MAX_INSTANCE_PER_PATTERN = Integer.parseInt(prop.getProperty("REPAIR.MATCH", "100"));
             MAX_PATCH_NUMBER = Integer.parseInt(prop.getProperty("REPAIR.PATCH", "100"));
+            MAX_CONDITATE_NUMBER = Integer.parseInt(prop.getProperty("RANKING.SIZE", "10000"));
             MAX_REPAIR_LOCATION = Integer.parseInt(prop.getProperty("REPAIR.LOCATION", "100"));
             PATTERN_MATCH_LEVEL = MatchLevel.valueOf(prop.getProperty("MATCH.LEVEL", "FUZZY"));
 

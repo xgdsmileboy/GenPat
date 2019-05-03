@@ -10,6 +10,7 @@ import mfix.core.node.NodeUtils;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.pattern.cluster.NameMapping;
 import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -169,18 +170,19 @@ public class AryInitializer extends Expr {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer("{");
             StringBuffer tmp;
             if (_expressions.size() > 0) {
-                tmp = _expressions.get(0).transfer(vars, exprMap, retType, exceptions);
+                tmp = _expressions.get(0).transfer(vars, exprMap, retType, exceptions, metric);
                 if (tmp == null) return null;
                 stringBuffer.append(tmp);
                 for (int i = 1; i < _expressions.size(); i++) {
                     stringBuffer.append(",");
-                    tmp = _expressions.get(i).transfer(vars, exprMap, retType, exceptions);
+                    tmp = _expressions.get(i).transfer(vars, exprMap, retType, exceptions, metric);
                     if (tmp == null) return null;
                     stringBuffer.append(tmp);
                 }
@@ -192,17 +194,17 @@ public class AryInitializer extends Expr {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer stringBuffer = new StringBuffer("{");
         StringBuffer tmp;
         // not consider modification
         if (_expressions.size() > 0) {
-            tmp = _expressions.get(0).adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _expressions.get(0).adaptModifications(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             for (int i = 1; i < _expressions.size(); i++) {
                 stringBuffer.append(",");
-                tmp = _expressions.get(i).adaptModifications(vars, exprMap, retType, exceptions);
+                tmp = _expressions.get(i).adaptModifications(vars, exprMap, retType, exceptions, metric);
                 stringBuffer.append(tmp);
             }
         }

@@ -14,6 +14,7 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -249,21 +250,23 @@ public class EnhancedForStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
             StringBuffer tmp;
             stringBuffer.append("for(");
-            tmp = _varDecl.transfer(vars, exprMap, retType, exceptions);
+            metric.inc();
+            tmp = _varDecl.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(" : ");
-            tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+            tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(")");
-            tmp = _statement.transfer(vars, exprMap, retType, exceptions);
+            tmp = _statement.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         }
@@ -272,7 +275,7 @@ public class EnhancedForStmt extends Stmt {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer varDecl = null;
         StringBuffer expression = null;
         Node pnode = NodeUtils.checkModification(this);
@@ -283,10 +286,10 @@ public class EnhancedForStmt extends Stmt {
                     Update update = (Update) modification;
                     Node node = update.getSrcNode();
                     if (node == enhancedForStmt._varDecl) {
-                        varDecl = update.apply(vars, exprMap, retType, exceptions);
+                        varDecl = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (varDecl == null) return null;
                     } else if (node == enhancedForStmt._expression) {
-                        expression = update.apply(vars, exprMap, retType, exceptions);
+                        expression = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (expression == null) return null;
                     }
                 } else {
@@ -298,7 +301,7 @@ public class EnhancedForStmt extends Stmt {
         StringBuffer tmp;
         stringBuffer.append("for(");
         if (varDecl == null) {
-            tmp = _varDecl.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _varDecl.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
@@ -306,14 +309,14 @@ public class EnhancedForStmt extends Stmt {
         }
         stringBuffer.append(" : ");
         if (expression == null) {
-            tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+            tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {
             stringBuffer.append(expression);
         }
         stringBuffer.append(")");
-        tmp = _statement.adaptModifications(vars, exprMap, retType, exceptions);
+        tmp = _statement.adaptModifications(vars, exprMap, retType, exceptions, metric);
         if (tmp == null) return null;
         stringBuffer.append(tmp);
         return stringBuffer;

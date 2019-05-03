@@ -13,6 +13,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Expr;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -180,11 +181,12 @@ public class ExpressionStmt extends Stmt {
     }
 
     @Override
-    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+    public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+        StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
         if (stringBuffer == null) {
             stringBuffer = new StringBuffer();
-            StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions);
+            StringBuffer tmp = _expression.transfer(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
             stringBuffer.append(";");
@@ -194,7 +196,7 @@ public class ExpressionStmt extends Stmt {
 
     @Override
     public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
         StringBuffer expression = null;
         Node pnode = NodeUtils.checkModification(this);
         if (pnode != null) {
@@ -203,7 +205,7 @@ public class ExpressionStmt extends Stmt {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
                     if (update.getSrcNode() == expressionStmt._expression) {
-                        expression = update.apply(vars, exprMap, retType, exceptions);
+                        expression = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (expression == null) return null;
                     } else {
                         LevelLogger.error("@ExpressionStmt ERROR");
@@ -215,7 +217,7 @@ public class ExpressionStmt extends Stmt {
         }
         StringBuffer stringBuffer = new StringBuffer();
         if (expression == null) {
-            StringBuffer tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions);
+            StringBuffer tmp = _expression.adaptModifications(vars, exprMap, retType, exceptions, metric);
             if (tmp == null) return null;
             stringBuffer.append(tmp);
         } else {

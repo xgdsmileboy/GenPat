@@ -13,6 +13,7 @@ import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -202,17 +203,19 @@ public class CatClause extends Node {
 	}
 
 	@Override
-	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions) {
-		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions);
+	public StringBuffer transfer(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
+                                 Adaptee metric) {
+		StringBuffer stringBuffer = super.transfer(vars, exprMap, retType, exceptions, metric);
 		if (stringBuffer == null) {
 			stringBuffer = new StringBuffer();
 			StringBuffer tmp;
 			stringBuffer.append("catch(");
-			tmp = _exception.transfer(vars, exprMap, retType, exceptions);
+			metric.inc();
+			tmp = _exception.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 			stringBuffer.append(")");
-			tmp = _blk.transfer(vars, exprMap, retType, exceptions);
+			tmp = _blk.transfer(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		}
@@ -221,7 +224,7 @@ public class CatClause extends Node {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer exception = null;
 		Node pnode = NodeUtils.checkModification(this);
 		if (pnode != null) {
@@ -230,7 +233,7 @@ public class CatClause extends Node {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
 					if (update.getSrcNode() == catClause._exception) {
-						exception = update.apply(vars, exprMap, retType, exceptions);
+						exception = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (exception == null) return null;
 					}
 				} else {
@@ -242,14 +245,14 @@ public class CatClause extends Node {
 		StringBuffer tmp;
 		stringBuffer.append("catch(");
 		if(exception == null) {
-			tmp = _exception.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _exception.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(exception);
 		}
 		stringBuffer.append(")");
-		tmp = _blk.adaptModifications(vars, exprMap, retType, exceptions);
+		tmp = _blk.adaptModifications(vars, exprMap, retType, exceptions, metric);
 		if (tmp == null) return null;
 		stringBuffer.append(tmp);
 		return stringBuffer;

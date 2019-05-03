@@ -13,6 +13,7 @@ import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.match.metric.FVector;
+import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;
 import mfix.core.node.modify.Update;
 import mfix.core.pattern.cluster.NameMapping;
@@ -289,7 +290,7 @@ public class Svd extends Expr {
 
 	@Override
 	public StringBuffer adaptModifications(VarScope vars, Map<String, String> exprMap, String retType,
-                                           Set<String> exceptions) {
+                                           Set<String> exceptions, Adaptee metric) {
 		StringBuffer declType = null;
 		StringBuffer name = null;
 		StringBuffer initializer = null;
@@ -301,13 +302,13 @@ public class Svd extends Expr {
 					Update update = (Update) modification;
 					Node changedNode = update.getSrcNode();
 					if (changedNode == svd._decType) {
-						declType = update.apply(vars, exprMap, retType, exceptions);
+						declType = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (declType == null) return null;
 					} else if (changedNode == svd._name) {
-						name = update.apply(vars, exprMap, retType, exceptions);
+						name = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (name == null) return null;
 					} else {
-						initializer = update.apply(vars, exprMap, retType, exceptions);
+						initializer = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (initializer == null) return null;
 					}
 				} else {
@@ -318,15 +319,18 @@ public class Svd extends Expr {
 		StringBuffer stringBuffer = new StringBuffer();
 		StringBuffer tmp;
 		if (declType == null) {
-			tmp = _decType.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _decType.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
 			stringBuffer.append(declType);
+			if (_isVariant) {
+				stringBuffer.append("...");
+			}
 		}
 		stringBuffer.append(" ");
 		if(name == null) {
-			tmp = _name.adaptModifications(vars, exprMap, retType, exceptions);
+			tmp = _name.adaptModifications(vars, exprMap, retType, exceptions, metric);
 			if(tmp == null) return null;
 			stringBuffer.append(tmp);
 		} else {
@@ -335,7 +339,7 @@ public class Svd extends Expr {
 		if(initializer == null) {
 			if(_initializer != null){
 				stringBuffer.append("=");
-				tmp = _initializer.adaptModifications(vars, exprMap, retType, exceptions);
+				tmp = _initializer.adaptModifications(vars, exprMap, retType, exceptions, metric);
 				if(tmp == null) return null;
 				stringBuffer.append(tmp);
 			}
