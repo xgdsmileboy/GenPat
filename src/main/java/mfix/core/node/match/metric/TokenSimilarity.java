@@ -18,22 +18,10 @@ import java.util.Map;
  * @author: Jiajun
  * @date: 2019-04-11
  */
-public class TokenSimilarity implements IScore {
-
-    private double _weight;
+public class TokenSimilarity extends AbsSimilarity {
 
     public TokenSimilarity(double weight) {
-        _weight = weight;
-    }
-
-    @Override
-    public double getWeight() {
-        return _weight;
-    }
-
-    @Override
-    public void setWeight(double weight) {
-        _weight = weight;
+        super(weight);
     }
 
     @Override
