@@ -9,7 +9,7 @@ package mfix.common.conf;
 
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
-import mfix.core.node.ast.MatchLevel;
+import mfix.core.node.match.MatchLevel;
 
 import java.io.BufferedInputStream;
 import java.io.File;

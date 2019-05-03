@@ -11,7 +11,7 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.ast.LineRange;
-import mfix.core.node.ast.MatchLevel;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.Variable;

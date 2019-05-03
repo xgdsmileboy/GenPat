@@ -10,7 +10,7 @@ import mfix.common.util.LevelLogger;
 import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
 import mfix.core.node.abs.CodeAbstraction;
-import mfix.core.node.ast.MatchLevel;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.pattern.cluster.NameMapping;

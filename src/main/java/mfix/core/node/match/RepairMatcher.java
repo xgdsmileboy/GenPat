@@ -10,7 +10,6 @@ package mfix.core.node.match;
 import mfix.common.conf.Constant;
 import mfix.common.util.LevelLogger;
 import mfix.core.node.NodeUtils;
-import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.expr.SName;

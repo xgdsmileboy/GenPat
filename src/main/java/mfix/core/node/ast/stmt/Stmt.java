@@ -7,7 +7,7 @@
 package mfix.core.node.ast.stmt;
 
 import mfix.core.node.NodeUtils;
-import mfix.core.node.ast.MatchLevel;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.ast.Node;
 import org.eclipse.jdt.core.dom.ASTNode;
 

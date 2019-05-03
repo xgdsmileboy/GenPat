@@ -5,7 +5,7 @@
  * Written by Jiajun Jiang<jiajun.jiang@pku.edu.cn>.
  */
 
-package mfix.core.node.ast;
+package mfix.core.node.match;
 
 /**
  * @author: Jiajun

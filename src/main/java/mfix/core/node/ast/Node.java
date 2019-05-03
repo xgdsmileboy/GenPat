@@ -17,6 +17,7 @@ import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.ast.stmt.Stmt;
 import mfix.core.node.ast.visitor.NodeVisitor;
 import mfix.core.node.comp.NodeComparator;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Adaptee;
 import mfix.core.node.modify.Modification;

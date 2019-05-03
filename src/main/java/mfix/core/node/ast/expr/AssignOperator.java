@@ -6,7 +6,7 @@
  */
 package mfix.core.node.ast.expr;
 
-import mfix.core.node.ast.MatchLevel;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.pattern.cluster.VIndex;
 import org.eclipse.jdt.core.dom.ASTNode;
