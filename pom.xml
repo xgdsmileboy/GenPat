@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.edu.pku.sei.repair</groupId>
-    <artifactId>MineFix</artifactId>
+    <artifactId>GenPat</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <description>
-        MineFix is an automatic program repair tool, which leverage history repair patterns to detect fix bugs.
+        GenPat is an automatic pattern generation tool based on single code change example.
     </description>
 
-    <url>https://github.com/xgdsmileboy/MineFix</url>
+    <url>https://github.com/xgdsmileboy/GenPat</url>
 
     <properties>
         <file.encodings>UTF-8</file.encodings>
@@ -45,7 +45,7 @@
     <licenses>
         <license>
             <name>GPL-2.0</name>
-            <url>https://github.com/xgdsmileboy/MineFix/blob/master/LICENSE</url>
+            <url>https://github.com/xgdsmileboy/GenPat/blob/master/LICENSE</url>
             <distribution>repo</distribution>
             <comments>An research friendly open-source license</comments>
         </license>
