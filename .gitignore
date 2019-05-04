@@ -13,7 +13,7 @@ sbfl/spectra
 /projects
 /artifacts
 /**/.DS_Store
-/MineFix.iml
+/GenPat.iml
 /resources/**/build
 /resources/**/build-tests
 /resources/**/target
