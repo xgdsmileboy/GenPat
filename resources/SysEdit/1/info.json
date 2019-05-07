@@ -1,0 +1,1 @@
+[[{"name": "getNewRange", "argTypes": ["char", "Object"], "file": "/1/l1/TextMergeViewer.java"}, {"name": "getNewRange", "argTypes": ["char", "Object"], "file": "/1/l2/TextMergeViewer.java"}], [{"name": "getPosition", "argTypes": ["char"], "file": "/1/r1/TextMergeViewer.java"}, {"name": "getPosition", "argTypes": ["char"], "file": "/1/r2/TextMergeViewer.java"}]]
