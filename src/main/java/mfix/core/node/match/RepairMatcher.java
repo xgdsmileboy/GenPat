@@ -71,7 +71,7 @@ public class RepairMatcher implements Callable<List<MatchInstance>> {
         _level = Constant.PATTERN_MATCH_LEVEL;
         switch(Constant.PATTERN_MATCH_LEVEL) {
             case AST:
-                fixPositions = tryMatch(_bNode, _pattern, _buggyLines, MatchLevel.FUZZY);
+                fixPositions = tryMatch(_bNode, _pattern, _buggyLines, MatchLevel.AST);
                 break;
             case ALL:
                 fixPositions = tryMatch(_bNode, _pattern, _buggyLines);
