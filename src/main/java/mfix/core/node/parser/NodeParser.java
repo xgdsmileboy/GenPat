@@ -807,6 +807,7 @@ public class NodeParser {
         SName identifier = (SName) process(node.getName(), scope, strcture);
         identifier.setParent(fieldAcc);
         fieldAcc.setIdentifier(identifier);
+        identifier.setDataDependency(null);
 
         Type type = typeFromBinding(node.getAST(), node.resolveTypeBinding());
         fieldAcc.setType(type);

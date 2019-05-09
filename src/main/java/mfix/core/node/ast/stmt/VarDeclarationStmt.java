@@ -6,12 +6,13 @@
  */
 package mfix.core.node.ast.stmt;
 
+import mfix.common.util.Utils;
 import mfix.core.node.NodeUtils;
-import mfix.core.node.match.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.expr.MType;
 import mfix.core.node.ast.expr.Vdf;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Adaptee;
@@ -219,6 +220,11 @@ public class VarDeclarationStmt extends Stmt {
 	public boolean genModifications() {
 		if(super.genModifications()) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) getBindingNode();
+			if (!Utils.safeStringEqual(_modifier, varDeclarationStmt._modifier)) {
+			    String modifier = varDeclarationStmt._modifier;
+				Update update = new Update(this, this, modifier == null ? "" : modifier);
+				_modifications.add(update);
+			}
 			if (!_declType.compare(varDeclarationStmt.getDeclType())) {
 				Update update = new Update(this, _declType, varDeclarationStmt.getDeclType());
 				_modifications.add(update);
@@ -285,11 +291,14 @@ public class VarDeclarationStmt extends Stmt {
 		if (pnode != null) {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) pnode;
 			StringBuffer declType = null;
+			StringBuffer modifier = null;
 			List<Modification> modifications = new LinkedList<>();
 			for (Modification modification : varDeclarationStmt.getModifications()) {
 				if (modification instanceof Update) {
 					Update update = (Update) modification;
-					if (update.getSrcNode() == varDeclarationStmt._declType) {
+					if (update.getSrcNode() == pnode) {
+						modifier = update.apply(vars, exprMap, retType, exceptions, metric);
+					} else if (update.getSrcNode() == varDeclarationStmt._declType) {
 						declType = update.apply(vars, exprMap, retType, exceptions, metric);
 						if (declType == null) return null;
 					} else {
@@ -311,7 +320,9 @@ public class VarDeclarationStmt extends Stmt {
 
 			StringBuffer stringBuffer = new StringBuffer();
 			StringBuffer tmp;
-			if (_modifier != null) {
+			if (modifier != null) {
+				stringBuffer.append(modifier + " ");
+			} else if (_modifier != null) {
 				stringBuffer.append(_modifier + " ");
 			}
 			if(declType == null) {

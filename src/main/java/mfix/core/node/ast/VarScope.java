@@ -22,10 +22,15 @@ public class VarScope {
     private Set<Variable> _globalVars;
     private Map<Variable, Set<LineRange>> _localVars;
     private transient Set<Variable> _newVars;
+    private boolean _disable = false;
 
     public VarScope() {
         _globalVars = new HashSet<>();
         _localVars = new HashMap<>();
+    }
+
+    public void setDisable(boolean disable) {
+        _disable = disable;
     }
 
     public void reset(Set<Variable> newVars) {
@@ -60,6 +65,7 @@ public class VarScope {
     }
 
     public boolean canUse(final String name, final String type, final int line) {
+        if (_disable) return true;
         Variable variable = new Variable(name, type);
         Set<LineRange> ranges = _localVars.get(variable);
         if (ranges != null) {

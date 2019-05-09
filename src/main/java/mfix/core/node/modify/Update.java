@@ -15,6 +15,7 @@ public class Update extends Modification {
     private static final long serialVersionUID = -4006265328894276618L;
     private Node _srcNode;
     private Node _tarNode;
+    private String _tarStr;
 
     public Update(Node parent, Node srcNode, Node tarNode) {
         super(parent, VIndex.MOD_UPDATE);
@@ -25,6 +26,15 @@ public class Update extends Modification {
         }
         if (_tarNode != null) {
             _tarNode.setChanged();
+        }
+    }
+
+    public Update(Node parent, Node srcNode, String tarStr) {
+        super(parent, VIndex.MOD_UPDATE);
+        _srcNode = srcNode;
+        _tarStr = tarStr;
+        if (_srcNode != null) {
+            _srcNode.setChanged();
         }
     }
 
@@ -39,6 +49,10 @@ public class Update extends Modification {
     public StringBuffer apply(VarScope vars, Map<String, String> exprMap, String retType, Set<String> exceptions,
                               Adaptee metric) {
         metric.setChange(Adaptee.CHANGE.UPDATE);
+        if (_tarStr != null) {
+            metric.inc();
+            return new StringBuffer(_tarStr);
+        }
         int oldSize = NodeUtils.parseTreeSize(_srcNode.getBuggyBindingNode());
         if (_tarNode == null) {
             metric.add(oldSize);

@@ -11,6 +11,7 @@ import mfix.core.node.ast.VarScope;
 import mfix.core.node.diff.TextDiff;
 import mfix.core.node.match.MatchInstance;
 import mfix.core.node.match.RepairMatcher;
+import mfix.core.node.modify.Modification;
 import mfix.core.pattern.Pattern;
 import mfix.core.pattern.PatternExtractor;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -27,7 +28,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class rlytest {
-    final static String LOCAL_DATASET = Constant.RES_DIR + Constant.SEP + "SysEdit-part1";
+    final static String LOCAL_DATASET = Constant.RES_DIR + Constant.SEP + "SysEdit";
 
     // find method with same name & same argType
     static MethodDeclaration findMethodFromFile(String file, Method method) {
@@ -39,7 +40,7 @@ public class rlytest {
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration node) {
                 if (method.getName().equals(node.getName().getIdentifier())
-                        // && method.argTypeSame(node)
+                         && method.argTypeSame(node)
                          && method.getArgTypes().size() == node.parameters().size()
                 ) {
                     methods.add(node);
@@ -78,9 +79,11 @@ public class rlytest {
             System.err.println("No pattern !");
             return;
         }
+
         Pattern p = patterns.iterator().next();
         List<MatchInstance> set = new RepairMatcher().tryMatch(node, p);
         VarScope scope = varMaps.get(node.getStartLine());
+        scope.setDisable(true);
         scope.reset(p.getNewVars());
         Set<String> already = new HashSet<>();
 
@@ -199,20 +202,20 @@ public class rlytest {
                 new Pair<>(getPath(q_src), getPath(q_tar)), q_m_src);
     }
     public static void main(String[] args) {
-        /*
-        for (int i = 1; i <= 50; ++i) {
-            String path = LOCAL_DATASET + String.format("/%d/info.json", i);
-            if (new File(path).exists()) {
-                System.out.println("current: " + i);
-                try {
-                    work(path);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-//            break;
-        }
-        */
+//
+//        for (int i = 1; i <= 56; ++i) {
+//            String path = LOCAL_DATASET + String.format("/%d/info.json", i);
+//            if (new File(path).exists()) {
+//                System.out.println("current: " + i);
+//                try {
+//                    work(path);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+////            break;
+//        }
+
         runc3();
     }
 

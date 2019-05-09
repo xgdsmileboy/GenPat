@@ -16,6 +16,7 @@ import mfix.core.node.abs.TermFrequency;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.Variable;
+import mfix.core.node.ast.expr.SName;
 import mfix.core.node.ast.expr.Svd;
 import mfix.core.node.ast.expr.Vdf;
 import mfix.core.node.diff.TextDiff;
@@ -158,6 +159,16 @@ public class PatternExtractor {
                 case SINGLEVARDECL:
                     Svd svd = (Svd) node;
                     vars.add(new Variable(svd.getName().getName(), svd.getDeclType().typeStr()));
+                    break;
+                case SNAME:
+                    Node n = node.getParent();
+                    if (n.getNodeType() == Node.TYPE.VARDECLFRAG) {
+                        SName name = (SName) node;
+                        vars.add(new Variable(name.getName(), ((Vdf) n).getType().typeStr()));
+                    } else if (n.getNodeType() == Node.TYPE.SINGLEVARDECL) {
+                        SName name = (SName) node;
+                        vars.add(new Variable(name.getName(), ((Svd) n).getDeclType().typeStr()));
+                    }
                 default:
             }
             queue.addAll(node.getAllChildren());
