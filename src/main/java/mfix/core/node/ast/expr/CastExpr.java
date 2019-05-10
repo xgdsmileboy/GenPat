@@ -198,7 +198,7 @@ public class CastExpr extends Expr {
             for (Modification modification : castExpr.getModifications()) {
                 if (modification instanceof Update) {
                     Update update = (Update) modification;
-                    if (update.getSrcNode() == _castType) {
+                    if (update.getSrcNode() == castExpr._castType) {
                         castType = update.apply(vars, exprMap, retType, exceptions, metric);
                         if (castType == null) return null;
                     } else {
