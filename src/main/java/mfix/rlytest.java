@@ -5,6 +5,7 @@ import mfix.common.util.JavaFile;
 import mfix.common.util.Method;
 import mfix.common.util.Pair;
 import mfix.core.node.NodeUtils;
+import mfix.core.node.ast.MatchLevel;
 import mfix.core.node.ast.MethDecl;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
@@ -30,8 +31,24 @@ import java.util.*;
 
 
 public class rlytest {
-    final static String LOCAL_DATASET = Constant.RES_DIR + Constant.SEP + "SysEdit-part1";
-    final static int defaultWaitMinuate = 1;
+    final static boolean WRITE_TO_FILE = true;
+    static String currentCaseLog = "";
+
+    final static String LOCAL_DATASET = Constant.RES_DIR + Constant.SEP + "SysEdit-part3";
+    final static int defaultWaitMinuate = 1; // Limit by 1 mins
+//    final static String matchChoice = "FUZZY";
+    static String matchChoice = "default";
+
+    // static String cluFolder = "/Users/luyaoren/Downloads/cluster";
+    static String cluFolder = "/Users/luyaoren/Downloads/c3_cluster/jgrapht_cluster";
+
+//    static String xmlFile = "/Users/luyaoren/Downloads/jgrapht_all.xml";
+     static String xmlFile = null;
+
+//    static String groundTruthFile = "/Users/luyaoren/Desktop/ase-data/groundtruth_jgrapht.txt";
+    static String groundTruthFile = null;
+
+    static int stNum = 1, edNum = 100000;
 
     static int correctCaseNum = 0, incorrectCaseNum = 0, caseNum;
     static List<Integer> correctCase;
@@ -167,8 +184,10 @@ public class rlytest {
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration node) {
                 if (method.getName().equals(node.getName().getIdentifier())
-                && method.getArgTypes().size() == node.parameters().size()
+                 && method.getArgTypes().size() == node.parameters().size()
+                        && method.argTypeSame(node)
                 ) {
+//                    System.out.println(node.parameters().toString());
                     methods.add(node);
                     return false;
                 }
@@ -177,6 +196,7 @@ public class rlytest {
         });
 
         if (methods.size() == 0) {
+            System.out.println("not found!");
             return null;
         }
 
@@ -184,6 +204,26 @@ public class rlytest {
     }
     static String removeEmpty(String s) {
         return s.replace("\n", "").replace(" ", "");
+    }
+
+    static void writeToLocal(String s) {
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(currentCaseLog, true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            writer.write(s);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     static void tryApply(Pair<String, String> m1, Method m1Func, Pair<String, String> m2, Method m2Func) {
@@ -208,7 +248,22 @@ public class rlytest {
             return;
         }
         Pattern p = patterns.iterator().next();
-        List<MatchInstance> set = new RepairMatcher(defaultWaitMinuate).tryMatch(node, p); // Limit by 2 mins
+
+        List<MatchInstance> set = null;
+        if (matchChoice.equals("FUZZY")) {
+            System.out.println("match level: FUZZY.");
+            set = new RepairMatcher(defaultWaitMinuate).tryMatch(node, p, null, MatchLevel.FUZZY);
+        } else if (matchChoice.equals("TYPE")) {
+            System.out.println("match level: TYPE.");
+            set = new RepairMatcher(defaultWaitMinuate).tryMatch(node, p, null, MatchLevel.TYPE);
+        } else if (matchChoice.equals("NAME")) {
+            System.out.println("match level: NAME.");
+            set = new RepairMatcher(defaultWaitMinuate).tryMatch(node, p, null, MatchLevel.NAME);
+        } else {
+            System.out.println("match level: default.");
+            set = new RepairMatcher(defaultWaitMinuate).tryMatch(node, p);
+        }
+
         VarScope scope = varMaps.get(node.getStartLine());
         scope.reset(p.getNewVars());
         Set<String> already = new HashSet<>();
@@ -252,9 +307,12 @@ public class rlytest {
         }
 
         System.out.println("TP, FP = " + correct_cnt + "," + incorrect_cnt);
+        writeToLocal("TP, FP = " + correct_cnt + "," + incorrect_cnt);
 
         if (correct_cnt > 0) {
             System.out.println("Correct!");
+            writeToLocal("Correct!");
+
             correctCaseNum += 1;
             correctCase.add(caseNum);
             correctCaseRunnedNum.add(currentRunCases);
@@ -265,11 +323,13 @@ public class rlytest {
             if (incorrect_cnt > 0) {
                 incorrectCaseNum += 1;
                 System.out.println("Incorrect!");
+                writeToLocal("Incorrect!");
             } else {
                 System.out.println("Not Found!");
             }
 
             System.out.println("original_before=\n" + node.toString());
+            writeToLocal("original_before=\n" + node.toString());
 
             for (int i = 0; i < diffRet.size(); ++i) {
                 if (i >= 3) {
@@ -280,6 +340,9 @@ public class rlytest {
                 System.out.println("Candidate " + i + ":");
                 System.out.println(diffRet.get(i).toString());
                 System.out.println("-----------");
+
+                writeToLocal("Candidate " + i + ":");
+                writeToLocal(diffRet.get(i).toString());
             }
         }
         System.out.println("-----end------");
@@ -390,11 +453,6 @@ public class rlytest {
 
     }
 
-
-    static String cluFolder = "/Users/luyaoren/Downloads/cluster";
-    // static String cluFolder = "/Users/luyaoren/Downloads/c3_download/checkstyle_cluster";
-
-
     static Map<Integer, Pair<Integer, Integer>> selectCases = null;
 
     static int currentRunCases = 0;
@@ -406,24 +464,28 @@ public class rlytest {
         correctCase = new LinkedList<>();
         correctCaseRunnedNum = new LinkedList<>();
 
-        for (caseNum = 1; caseNum <= 1000000; ++caseNum) {
+        for (caseNum = stNum; caseNum <= edNum; ++caseNum) {
             if ((selectCases != null) && (!selectCases.containsKey(caseNum))) {
                 continue;
             }
 
             currentRunCases++;
 
-            if (caseNum != 234) {
-                continue;
-            }
-
-
             System.out.println("run cluster:" + caseNum);
             String path = cluFolder + "/" + caseNum;
 
             if (!(new File(path).exists())) {
+                System.out.println("[ERROR]Cluster not exist!");
                 break;
             }
+
+            currentCaseLog = path + "/run.txt";
+            if (new File(path + "/run.txt").exists()) {
+                continue;
+            }
+
+            writeToLocal("run cluster:" + caseNum);
+
 
             JSONParser parser = new JSONParser();
             JSONObject ret = null;
@@ -441,6 +503,10 @@ public class rlytest {
 
             String p0 = null;
             for (int j = 0; j < methods.size(); ++j) {
+                if ((selectCases == null) && (j > 1)) {
+                    break;
+                }
+
                 String src = path + "/" + "src_" + j + ".java";
                 String tar = path + "/" + "tar_" + j + ".java";
 
@@ -473,27 +539,30 @@ public class rlytest {
                 tar_methods.add(new Method(point_tar_method));
 
                 if (point_tar_method == null || (!tar_method.contains(point_tar_method.getName().toString()))) {
-                    System.err.println("method ind err" + tar);
+                    System.err.println("[ERROR]method ind err" + tar);
                     System.out.println(tar_method);
                 }
 
-//                if ((selectCases != null) && (j == selectCases.get(caseNum).getSecond())) {
-//                    try {
-//                        BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/luyaoren/Desktop/ase-data/junit_gd.txt", true));
-//                        writer.write("counter:"  + currentRunCases);
-//                        writer.newLine();
-//                        writer.write("-----start-----");
-//                        writer.newLine();
-//                        writer.write(point_tar_method.toString());
-//                        writer.write("-----end-----");
-//                        writer.newLine();
-//
-//                        writer.close();
-//
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+                if (groundTruthFile != null) {
+                    if ((selectCases != null) && (j == selectCases.get(caseNum).getSecond())) {
+                        try {
+                            BufferedWriter writer = new BufferedWriter(new FileWriter(groundTruthFile, true));
+                            writer.write("counter:" + currentRunCases);
+                            writer.newLine();
+                            writer.write("-----start-----");
+                            writer.newLine();
+                            writer.write(point_tar_method.toString());
+                            writer.write("-----end-----");
+                            writer.newLine();
+
+                            writer.close();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
             }
             // Finish all methods
 
@@ -516,10 +585,15 @@ public class rlytest {
             if (x_src_method.equals(x_tar_method) && y_src_method.equals(y_tar_method)) {
 
                 System.out.println("PATTERN:");
+                writeToLocal("PATTERN:");
+
                 JSONArray diff = (JSONArray) (((JSONObject) methods.get(x_ind)).get("diff"));
+                StringBuffer tmp = new StringBuffer();
                 for (int d = 0; d < diff.size(); ++d) {
-                    System.out.println(diff.get(d));
+                    tmp.append(diff.get(d) + "\n");
                 }
+                System.out.println(tmp);
+                writeToLocal(tmp.toString());
                 System.out.println("--end--");
 
 
@@ -537,18 +611,20 @@ public class rlytest {
 //        System.out.println(cntTotal);
 //        System.out.println(1.0 * cntEqual / cntTotal);
 
-
+        // System.out.println("AdaptNum=" + (correctCaseNum + incorrectCaseNum));
         System.out.println("correctCaseNum=" + correctCaseNum);
         System.out.println("incorrectCaseNum=" + incorrectCaseNum);
-        System.out.println("correctCase:" + correctCase.toString());
-        System.out.println("correctCaseRunnedNum:" + correctCaseRunnedNum.toString());
+        System.out.println("correctCase=" + correctCase.toString());
+        System.out.println("correctCaseRunnedNum=" + correctCaseRunnedNum.toString());
+        System.out.println("totalNum=" + (correctCaseNum + incorrectCaseNum));
 
     }
 
 
     public static void main(String[] args) {
+
         /*
-        for (int i = 1; i <= 50; ++i) {
+        for (int i = 22; i <= 22; ++i) {
             String path = LOCAL_DATASET + String.format("/%d/info.json", i);
             if (new File(path).exists()) {
                 System.out.println("current: " + i);
@@ -563,14 +639,30 @@ public class rlytest {
         */
 
 
+        for (int i = 0; i < args.length; i+=2) {
+            if (args[i].equals("c")) {
+                cluFolder = args[i + 1];
+            } else if (args[i].equals("gd")) {
+                groundTruthFile = args[i + 1];
+            } else if (args[i].equals("xml")) {
+                xmlFile = args[i + 1];
+            } else if (args[i].equals("choice")) {
+                matchChoice = args[i + 1];
+            } else if (args[i].equals("st")) {
+                stNum = Integer.parseInt(args[i + 1]);
+            } else if (args[i].equals("ed")) {
+                edNum = Integer.parseInt(args[i + 1]);
+            }
+        }
 
-//        cluFolder = args[0];
-//        outFile = args[1];
-//
-//        System.out.println("cluFolder=" + cluFolder + ";");
-//        System.out.println("outFile=" + outFile + ";");
+        System.out.println("cluFolder=" + cluFolder + ";");
+        System.out.println("xmlFile=" + xmlFile + ";");
+        System.out.println("groundTruthFile=" + groundTruthFile + ";");
+        System.out.println("matchChoice=" + matchChoice + ";");
 
-        // readXML("/Users/luyaoren/Downloads/junit_all.xml");
+        if (xmlFile != null) {
+            readXML(xmlFile);
+        }
 
         runc3();
 
