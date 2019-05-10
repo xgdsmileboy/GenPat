@@ -267,7 +267,11 @@ public class MethDecl extends Node {
             List<Expr> arguments = methDecl.getArguments();
             _name.postAccurateMatch(methDecl.getName());
             for(int i = 0; i < _arguments.size() && i < arguments.size(); i++) {
-                _arguments.get(i).postAccurateMatch(arguments.get(i));
+                if (!_arguments.get(i).postAccurateMatch(arguments.get(i))) {
+                    if (_arguments.get(i).noBinding() && arguments.get(i).noBinding()) {
+                        _arguments.get(i).setBindingNode(arguments.get(i));
+                    }
+                }
             }
             if (_body != null) {
                 _body.postAccurateMatch(methDecl.getBody());
@@ -334,10 +338,12 @@ public class MethDecl extends Node {
         }
         stringBuffer.append(_name.toSrcString());
         stringBuffer.append("(");
+        StringBuffer tmp;
         if(_arguments != null && _arguments.size() > 0) {
-            stringBuffer.append(_arguments.get(0).toSrcString());
-            for(int i = 1; i < _arguments.size(); i++) {
-                stringBuffer.append("," + _arguments.get(i).toSrcString());
+            for(int i = 0; i < _arguments.size(); i++) {
+                tmp = _arguments.get(i).adaptModifications(vars, exprMap, retType, exceptions, metric);
+                if (tmp == null) return null;
+                stringBuffer.append(i == 0 ? "" : ",").append(tmp);
             }
         }
         stringBuffer.append(")");
@@ -353,7 +359,6 @@ public class MethDecl extends Node {
         } else {
             Node node = getBuggyBindingNode();
             List<Modification> modifications = node != null ? node.getModifications() : null;
-            StringBuffer tmp;
             if (node == null || modifications.isEmpty()) {
                 tmp = _body.adaptModifications(vars, exprMap, retType, exceptions, metric);
             } else {

@@ -7,10 +7,10 @@
 package mfix.core.node.ast.expr;
 
 import mfix.core.node.NodeUtils;
-import mfix.core.node.match.MatchLevel;
 import mfix.core.node.ast.Node;
 import mfix.core.node.ast.VarScope;
 import mfix.core.node.ast.stmt.Stmt;
+import mfix.core.node.match.MatchLevel;
 import mfix.core.node.match.Matcher;
 import mfix.core.node.match.metric.FVector;
 import mfix.core.node.modify.Adaptee;
@@ -259,15 +259,14 @@ public class ExprList extends Node {
 
             StringBuffer stringBuffer = new StringBuffer();
             StringBuffer tmp;
-
             boolean first = true;
             int curIndex = 0;
             for(int index = 0; index < _exprs.size(); index ++) {
                 Node node = _exprs.get(index);
                 List<StringBuffer> list;
-                curIndex = index;
-                while(insertionAt.containsKey(curIndex)) {
-                    list = insertionAt.get(curIndex);
+                int tempIndex = curIndex;
+                while(insertionAt.containsKey(tempIndex)) {
+                    list = insertionAt.get(tempIndex);
                     for (int i = 0; i < list.size(); i++) {
                         if (!first) {
                             stringBuffer.append(',');
@@ -275,8 +274,9 @@ public class ExprList extends Node {
                         first = false;
                         stringBuffer.append(list.get(i));
                     }
-                    insertionAt.remove(curIndex);
+                    insertionAt.remove(tempIndex);
                     curIndex += list.size();
+                    tempIndex = curIndex;
                 }
 
                 if (map.containsKey(node)) {

@@ -161,6 +161,8 @@ public class CastExpr extends Expr {
             if (_expression.getBindingNode() != castExpr.getExpresion()) {
                 Update update = new Update(this, _expression, castExpr.getExpresion());
                 _modifications.add(update);
+            } else {
+                _expression.genModifications();
             }
         }
         return true;
