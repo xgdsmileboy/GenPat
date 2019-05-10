@@ -222,7 +222,7 @@ public class VarDeclarationStmt extends Stmt {
 			VarDeclarationStmt varDeclarationStmt = (VarDeclarationStmt) getBindingNode();
 			if (!Utils.safeStringEqual(_modifier, varDeclarationStmt._modifier)) {
 			    String modifier = varDeclarationStmt._modifier;
-				Update update = new Update(this, this, modifier == null ? "" : modifier);
+				Update update = new Update(this, modifier == null ? "" : modifier, this);
 				_modifications.add(update);
 			}
 			if (!_declType.compare(varDeclarationStmt.getDeclType())) {

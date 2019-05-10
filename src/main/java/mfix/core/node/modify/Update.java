@@ -29,7 +29,7 @@ public class Update extends Modification {
         }
     }
 
-    public Update(Node parent, Node srcNode, String tarStr) {
+    public Update(Node parent, String tarStr, Node srcNode) {
         super(parent, VIndex.MOD_UPDATE);
         _srcNode = srcNode;
         _tarStr = tarStr;
