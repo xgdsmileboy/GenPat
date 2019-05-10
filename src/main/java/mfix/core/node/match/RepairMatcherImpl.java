@@ -45,23 +45,20 @@ public class RepairMatcherImpl implements Callable<List<MatchInstance>> {
         ExecutorService service = Executors.newSingleThreadExecutor();
         RepairMatcherImpl matcher = new RepairMatcherImpl(bNode, pattern, level, timeoutMin);
         Future<List<MatchInstance>> task = service.submit(matcher);
-        List<MatchInstance> fixPositions = null;
+        List<MatchInstance> fixPositions;
         try {
-            fixPositions = task.get(1, TimeUnit.MINUTES);
+            fixPositions = task.get(timeoutMin, TimeUnit.MINUTES);
         } catch (Exception e) {
-            LevelLogger.debug("Repair match failed!");
             task.cancel(true);
             LevelLogger.debug("Cancel task now!");
             fixPositions = new LinkedList<>();
         }
-        LevelLogger.debug("Try to shut down server.");
         service.shutdownNow();
-        LevelLogger.debug("Finish shutting down server.");
         return fixPositions;
     }
 
     @Override
     public List<MatchInstance> call() {
-        return new RepairMatcher().tryMatch(_bNode, _pattern, null, _level);
+        return new RepairMatcher(_timeoutMin).tryMatch(_bNode, _pattern, null, _level);
     }
 }
