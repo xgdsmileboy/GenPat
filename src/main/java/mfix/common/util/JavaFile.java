@@ -44,6 +44,16 @@ public class JavaFile {
     public static Node getNode(String file, Method method) {
         if (method == null) return null;
         CompilationUnit unit = genAST(file);
+        MethodDeclaration declaration = getDeclaration(unit, method);
+        if (declaration == null) {
+            return null;
+        }
+        NodeParser parser = new NodeParser();
+        return parser.setCompilationUnit(file, unit).process(declaration);
+    }
+
+    public static MethodDeclaration getDeclaration(CompilationUnit unit, Method method) {
+        if (method == null || unit == null) return null;
         final List<MethodDeclaration> declarations = new ArrayList<>(1);
         unit.accept(new ASTVisitor() {
             public boolean visit(MethodDeclaration m) {
@@ -57,8 +67,7 @@ public class JavaFile {
         if (declarations.size() == 0) {
             return null;
         }
-        NodeParser parser = new NodeParser();
-        return parser.setCompilationUnit(file, unit).process(declarations.get(0));
+        return declarations.get(0);
     }
     /**
      * @param icu

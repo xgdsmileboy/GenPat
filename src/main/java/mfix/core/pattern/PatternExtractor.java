@@ -46,6 +46,30 @@ public class PatternExtractor {
         return extractPattern(srcFile, tarFile, Constant.FILTER_MAX_CHANGE_LINE);
     }
 
+    public Set<Pattern> extractPattern(String srcFile, String tarFile, Method srcMethod, Method tarMethod) {
+        return extractPattern(srcFile, tarFile, srcMethod, tarMethod, Constant.FILTER_MAX_CHANGE_LINE);
+    }
+    public Set<Pattern> extractPattern(String srcFile, String tarFile, Method srcMethod,
+                                       Method tarMethod, int maxChangeLine) {
+        CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
+        CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
+        if (srcUnit == null || tarUnit == null) {
+            return Collections.emptySet();
+        }
+        MethodDeclaration srcDecl = JavaFile.getDeclaration(srcUnit, srcMethod);
+        MethodDeclaration tarDecl = JavaFile.getDeclaration(tarUnit, tarMethod);
+
+        if (srcDecl == null || tarDecl == null) {
+            return Collections.emptySet();
+        }
+
+        Set<String> imports = parseImports(srcUnit, tarUnit);
+
+        List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = new LinkedList<>();
+        matchMap.add(new Pair<>(srcDecl, tarDecl));
+        return extractPattern(matchMap, srcFile, srcUnit, tarFile, tarUnit, imports, maxChangeLine);
+    }
+
     public Set<Pattern> extractPattern(String srcFile, String tarFile, Method focus) {
         Set<Method> set = new HashSet<>();
         set.add(focus);
@@ -57,20 +81,39 @@ public class PatternExtractor {
     }
 
     public Set<Pattern> extractPattern(String srcFile, String tarFile, int maxChangeLine) {
-        return extractPattern(srcFile, tarFile, null, Constant.FILTER_MAX_CHANGE_LINE);
+        return extractPattern(srcFile, tarFile, null, maxChangeLine);
     }
 
     public Set<Pattern> extractPattern(String srcFile, String tarFile, Set<Method> focus, int maxChangeLine) {
         CompilationUnit srcUnit = JavaFile.genASTFromFileWithType(srcFile, null);
         CompilationUnit tarUnit = JavaFile.genASTFromFileWithType(tarFile, null);
-        Set<Pattern> patterns = new HashSet<>();
         if (srcUnit == null || tarUnit == null) {
-            return patterns;
+            return Collections.emptySet();
         }
 
         Set<String> imports = parseImports(srcUnit, tarUnit);
 
         List<Pair<MethodDeclaration, MethodDeclaration>> matchMap = Matcher.match(srcUnit, tarUnit);
+        if (focus != null) {
+            List<Pair<MethodDeclaration, MethodDeclaration>> filtered = new LinkedList<>();
+            for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
+                for (Method method : focus) {
+                    if (method.same(pair.getFirst())) {
+                        filtered.add(pair);
+                        break;
+                    }
+                }
+            }
+            matchMap = filtered;
+        }
+        return extractPattern(matchMap, srcFile, srcUnit, tarFile, tarUnit, imports, maxChangeLine);
+    }
+
+    private Set<Pattern> extractPattern(List<Pair<MethodDeclaration, MethodDeclaration>> matchMap,
+                                       String srcFile, CompilationUnit srcUnit,
+                                       String tarFile, CompilationUnit tarUnit,
+                                       Set<String> imports, int maxChangeLine) {
+        Set<Pattern> patterns = new HashSet<>();
         NodeParser nodeParser = new NodeParser();
 
 //        CodeAbstraction abstraction = new TF_IDF(srcFile, Constant.TF_IDF_FREQUENCY);
@@ -80,18 +123,6 @@ public class PatternExtractor {
 //        counter.loadCache();
 
         for (Pair<MethodDeclaration, MethodDeclaration> pair : matchMap) {
-            if (focus != null) {
-                boolean contain = false;
-                for (Method method : focus) {
-                    if (method.same(pair.getFirst())) {
-                        contain = true;
-                        break;
-                    }
-                }
-                if (!contain) {
-                    continue;
-                }
-            }
             Pair<Set<Variable>, Set<String>> fields = parseFields(pair.getFirst(), pair.getSecond());
             nodeParser.setCompilationUnit(srcFile, srcUnit);
             Node srcNode = nodeParser.process(pair.getFirst());
