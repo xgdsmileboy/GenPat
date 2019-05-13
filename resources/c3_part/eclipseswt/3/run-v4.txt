@@ -1,0 +1,47 @@
+run cluster:3
+PATTERN:
+-	if (hooks (SWT.DragDetect)) {
+-		if (!display.dragging) {
+-			if ((gdkEvent.state & OS.GDK_BUTTON1_MASK) != 0) {
++	if (!display.dragging) {
++		if ((gdkEvent.state & OS.GDK_BUTTON1_MASK) != 0) {
++			if (dragDetect (display.dragStartX, display.dragStartY)) {
+-	return sendMouseEvent (SWT.MouseMove, 0, gdkEvent.time, x, y, gdkEvent.is_hint != 0, state) ? 0 : 1;
++	int result = sendMouseEvent (SWT.MouseMove, 0, gdkEvent.time, x, y, gdkEvent.is_hint != 0, state) ? 0 : 1;
++	if (display.dragOverride) result = 1;
++	return result;
+
+TP, FP = 0,0
+original_before=
+int gtk_motion_notify_event(int widget,int event){
+GdkEventMotion gdkEvent=new GdkEventMotion();
+OS.memmove(gdkEvent,event,GdkEventMotion.sizeof);
+if(hooks(SWT.DragDetect)){
+if(!display.dragging){
+if((gdkEvent.state&OS.GDK_BUTTON1_MASK)!=0){
+if(OS.gtk_drag_check_threshold(handle,display.dragStartX,display.dragStartY,(int)gdkEvent.x,(int)gdkEvent.y)){
+display.dragging=true;
+Event e=new Event();
+e.x=display.dragStartX;
+e.y=display.dragStartY;
+postEvent(SWT.DragDetect,e);
+}
+}
+}
+}
+if(hooks(SWT.MouseHover)||filters(SWT.MouseHover)){
+display.addMouseHoverTimeout(handle);
+}
+double x=gdkEvent.x_root,y=gdkEvent.y_root;
+int state=gdkEvent.state;
+if(gdkEvent.is_hint!=0){
+int[] pointer_x=new int[1],pointer_y=new int[1],mask=new int[1];
+int window=OS.GTK_WIDGET_WINDOW(eventHandle());
+OS.gdk_window_get_pointer(window,pointer_x,pointer_y,mask);
+x=pointer_x[0];
+y=pointer_y[0];
+state=mask[0];
+}
+sendMouseEvent(SWT.MouseMove,0,gdkEvent.time,x,y,gdkEvent.is_hint!=0,state);
+return 0;
+}
