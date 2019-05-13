@@ -39,6 +39,8 @@ public class Main {
     static String currentRepo = null, cluFolder = null;
     static String currentCase = null;
 
+    static boolean varScopeFlag = false;
+
     final static int defaultWaitMinuate = 1; // Limit by 1 mins
 
     static String matchChoice = "default";
@@ -245,6 +247,7 @@ public class Main {
         }
 
         VarScope scope = varMaps.get(node.getStartLine());
+        scope.setDisable(varScopeFlag);
         scope.reset(p.getNewVars());
         Set<String> already = new HashSet<>();
 
@@ -616,6 +619,8 @@ public class Main {
                 }
                 break;
             case "sydit":
+                varScopeFlag = true;
+                
                 runsydit();
                 break;
             default:
