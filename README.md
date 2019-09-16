@@ -65,11 +65,13 @@ where the `FUNC` denotes which function do you want to use and `ARGS` is a set o
 The following details some of the `FUNC` that are important:
 
 ```powershell
-print:
-filter:
-repair:
-cluster:
+print: print the details of pattern
+filter: filter and serialize patterns with given criteria.
+repair: run porgram repair
+cluster: run pattern cluster
 ```
+
+More Details related to each `FUNC`: TBD.
 
 #### Result Analysis
 
