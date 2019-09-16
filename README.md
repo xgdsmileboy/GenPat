@@ -8,7 +8,7 @@
 
 ## I. Introduction
 
-*GenPath* is an automatic program transformation inferring framework, which infers general (reusable) transformations from singular examples. In this process, it leverage a big code corpus to guide the inference process. The following figure is the workflow of our approach.
+*GenPath* is an automatic program transformation inferring framework, which infers general (reusable) transformations from singular examples. In this process, it leverages a big code corpus to guide the inference process. The following figure is the workflow of our approach.
 
 ![The workflow of this technique.\label{workflow}](./doc/figure/overview.png)
 
@@ -54,7 +54,7 @@ As a result, the final transformation pattern contains a subset of the nodes in 
 
 #### Running Options 
 
-Our prototype of *GenPat* have multiple user interfaces for different purposes, basically you can run it within command line as:
+Our prototype of *GenPat* has multiple user interfaces for different purposes, basically you can run it within command line as:
 
 ```powershell
 java -jar GenPat.jar FUNC ARGS
