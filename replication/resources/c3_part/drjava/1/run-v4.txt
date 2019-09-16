@@ -1,0 +1,29 @@
+run cluster:1
+PATTERN:
+-    doc.setDefinitionsIndent(2);
++    doc.setIndent(2);
+
+TP, FP = 0,1
+Incorrect!
+original_before=
+public void testNoDDocInCache(){
+OpenDefinitionsDocument doc1=_model.newFile();
+assertTrue("The document should now be closed",_model.closeFile(doc1));
+try{
+doc1.getDocument();
+fail("the open defintions document should not be in the cache");
+}catch(NoSuchDocumentException e){
+}
+}
+Candidate 0:
+ public void testNoDDocInCache(){
+ OpenDefinitionsDocument doc1=_model.newFile();
+ assertTrue("The document should now be closed",_model.closeFile(doc1));
+ try{
+-doc1.getLength();
++doc1.setIndent();
+ fail("the open defintions document should not be in the cache");
+ }catch(NoSuchDocumentException e){
+ }
+ }
+

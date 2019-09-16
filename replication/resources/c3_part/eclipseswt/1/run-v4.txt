@@ -1,0 +1,14 @@
+run cluster:1
+PATTERN:
+-public static final synchronized native int /*long*/ gtk_drawing_area_new();
+-public static final synchronized native void gtk_editable_copy_clipboard(int /*long*/ editable);
++public static final native void _gtk_editable_copy_clipboard(int /*long*/ editable);
++public static final void gtk_editable_copy_clipboard(int /*long*/ editable) {
++	lock.lock();
++	try {
++		_gtk_editable_copy_clipboard(editable);
++	} finally {
++		lock.unlock();
++	}
++}
+

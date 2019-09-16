@@ -1,0 +1,52 @@
+run cluster:4
+PATTERN:
+-  private final Lambda<Iterable<? extends Type>, Type> JOIN_NORM = new Lambda<Iterable<? extends Type>, Type>() {
++    public NormJoiner(NormSubtyper subtyper) { _subtyper = subtyper; }
+-      List<Type> disjuncts = maxList(collapse(map(elements, DISJUNCTS)), new NormSubtyper());
++      List<Type> disjuncts = maxList(collapse(map(elements, DISJUNCTS)), _subtyper);
+
+TP, FP = 0,1
+Incorrect!
+original_before=
+public Type value(Iterable<? extends Type> elements){
+List<Type> disjuncts=maxList(collapse(map(elements,DISJUNCTS)),new NormSubtyper());
+switch (disjuncts.size()){
+case 0 :
+
+return BOTTOM;
+case 1 :
+
+return disjuncts.get(0);
+default :
+
+return new UnionType(disjuncts);
+}
+}
+Candidate 0:
+ public Type value(Iterable<? extends Type> elements){
+-List<Type> disjuncts=maxList(collapse(map(elements,DISJUNCTS)),_subtyper);
+-switch (disjuncts.size()){
+-case 0 :
+-
+-return BOTTOM;
+-case 1 :
+-
+-return disjuncts.get(0);
+-default :
+-
+-return new UnionType(disjuncts);
++if(IterUtil.or(elements,bindSecond(LambdaUtil.INSTANCE_OF,UnionType.class))){
++ final NormJoiner joiner=new NormJoiner(_subtyper);
++Iterable<Iterable<Type>> posElements=map(elements,new Lambda<Type,Iterable<Type>>(){
++  public Iterable<Type> value(  Type element){
++    return IterUtil.<Type,Type,Type,Type,Iterable<Type>>distribute(element,DISJUNCTS,CONJUNCTS,joiner,LambdaUtil.<Iterable<Type>>identity());
++  }
++}
++);
++List<Type> conjuncts=minList(collapse(posElements),new NormSubtyper());
++return IterUtil.distribute(conjuncts,LambdaUtil.identity(),DISJUNCTS,_meetAtomic,joiner);
++}else {
++return _meetAtomic.value(collapse(map(elements,CONJUNCTS)));
+ }
+ }
+

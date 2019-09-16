@@ -1,0 +1,77 @@
+run cluster:2
+PATTERN:
++    Utilities.invokeAndWait(new Runnable() { public void run() {
+-    _findReplace = new FindReplacePanel(this, _model);
++      _findReplace = new FindReplacePanel(MainFrame.this, _model);
+-      _debugPanel = new DebugPanel(this);
+-      _breakpointsPanel = new BreakpointsPanel(this, _model.getBreakpointManager());
++        _debugPanel = new DebugPanel(MainFrame.this);
++        _breakpointsPanel = new BreakpointsPanel(MainFrame.this, _model.getBreakpointManager());
+-    _compilerErrorPanel = new CompilerErrorPanel(_model, this);
++      _compilerErrorPanel = new CompilerErrorPanel(_model, MainFrame.this);
+-    // setUp interactions pane
+-    Utilities.invokeLater(new Runnable() {
+-      public void run() {
+-        Runnable command = new Runnable() {
++      _interactionsController =
++        new InteractionsController(_model.getInteractionsModel(),
++                                   _model.getSwingInteractionsDocument(),
++                                   new Runnable() {
+-        };
+-        _interactionsController =
+-          new InteractionsController(_model.getInteractionsModel(), _model.getSwingInteractionsDocument(), command);
++      });
+-      }
+-    });
+-    _junitErrorPanel = new JUnitPanel(_model, this);
+-    _javadocErrorPanel = new JavadocErrorPanel(_model, this);
++      _junitErrorPanel = new JUnitPanel(_model, MainFrame.this);
++      _javadocErrorPanel = new JavadocErrorPanel(_model, MainFrame.this);
+-    _bookmarksPanel = new BookmarksPanel(this, _model.getBookmarkManager());
++      _bookmarksPanel = new BookmarksPanel(MainFrame.this, _model.getBookmarkManager());
+-    _tabbedPane = new JTabbedPane();
+-    _openRecursiveCheckBox = new JCheckBox("Open folders recursively");
+-    _interactionsHistoryChooser = new JFileChooser();
+-    _recentDocFrame = new RecentDocFrame(this);
++      _recentDocFrame = new RecentDocFrame(MainFrame.this);
+-    KeyBindingManager.ONLY.setMainFrame(this);
++      KeyBindingManager.ONLY.setMainFrame(MainFrame.this);
+-    _menuBar = new MenuBar();
+-    
+-    _toolBar = new JToolBar();
+-    // Initialize DocumentRegion highlights hashtables, for easy removal of highlights
+-    _documentBreakpointHighlights = new IdentityHashMap<Breakpoint, HighlightManager.HighlightInfo>();
+-    _documentBookmarkHighlights = new IdentityHashMap<OrderedDocumentRegion, HighlightManager.HighlightInfo>();
+-    
+-    _configFrame = new ConfigFrame(this);
+-    _helpFrame = new HelpFrame();
++      _configFrame = new ConfigFrame(MainFrame.this);
+-    _quickStartFrame = new QuickStartFrame();
+-    ConfigOptionListeners.sanitizeSlaveJVMArgs(this, config.getSetting(SLAVE_JVM_ARGS), slaveJVMArgsListener);
+-    ConfigOptionListeners.sanitizeSlaveJVMXMX(this, config.getSetting(SLAVE_JVM_XMX));
+-    ConfigOptionListeners.sanitizeMasterJVMArgs(this, config.getSetting(MASTER_JVM_ARGS), masterJVMArgsListener);
+-    ConfigOptionListeners.sanitizeMasterJVMXMX(this, config.getSetting(MASTER_JVM_XMX));
+-    ConfigOptionListeners.sanitizeJavadocCustomParams(this, config.getSetting(JAVADOC_CUSTOM_PARAMS));
++      ConfigOptionListeners.sanitizeSlaveJVMArgs(MainFrame.this, config.getSetting(SLAVE_JVM_ARGS), slaveJVMArgsListener);
++      ConfigOptionListeners.sanitizeSlaveJVMXMX(MainFrame.this, config.getSetting(SLAVE_JVM_XMX));
++      ConfigOptionListeners.sanitizeMasterJVMArgs(MainFrame.this, config.getSetting(MASTER_JVM_ARGS), masterJVMArgsListener);
++      ConfigOptionListeners.sanitizeMasterJVMXMX(MainFrame.this, config.getSetting(MASTER_JVM_XMX));
++      ConfigOptionListeners.sanitizeJavadocCustomParams(MainFrame.this, config.getSetting(JAVADOC_CUSTOM_PARAMS));
+-          new RemoteControlServer(this);
++            new RemoteControlServer(MainFrame.this);
+-                 .equals(OptionConstants.FILE_EXT_REGISTRATION_CHOICES.get(1)) && // Ask me
++                 .equals(OptionConstants.FileExtRegistrationChoices.ASK_ME) && // Ask me
+-              DrJava.getConfig().setSetting(OptionConstants.FILE_EXT_REGISTRATION, 
+-                                            OptionConstants.FILE_EXT_REGISTRATION_CHOICES.get(2));
++              DrJava.getConfig().setSetting(OptionConstants.FILE_EXT_REGISTRATION,
++										    OptionConstants.FILE_EXT_REGISTRATION_CHOICES.get(2));
+-              DrJava.getConfig().setSetting(OptionConstants.FILE_EXT_REGISTRATION, 
+-                                            OptionConstants.FILE_EXT_REGISTRATION_CHOICES.get(0));
++              DrJava.getConfig().setSetting(OptionConstants.FILE_EXT_REGISTRATION,
++										    OptionConstants.FILE_EXT_REGISTRATION_CHOICES.get(0));
+-      // two dialogs on program start is too much clutter    
++      // two dialogs on program start is too much clutter
+-            .equals(OptionConstants.NEW_VERSION_NOTIFICATION_CHOICES.get(3)) &&
++            .equals(OptionConstants.VersionNotificationChoices.DISABLED) &&
++    } });
+

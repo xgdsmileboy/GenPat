@@ -1,0 +1,39 @@
+run cluster:2
+PATTERN:
+-				runConversion(AST.JLS3, cuA, true, true, true);
++				runConversion(AST.JLS3_INTERNAL, cuA, true, true, true);
+
+TP, FP = 0,1
+Incorrect!
+original_before=
+public void testBug212434a() throws CoreException,IOException{
+try{
+createJavaProject("P",new String{""},new String[0],"");
+createFile("P/A.java","public class A {\n"+"\n"+"	public void foo() {\n"+"		new Object() { \n"+"			public void bar() { \n"+"				if (true) {\n"+"					final\n"+"				}\n"+"			}\n"+"\n"+"		};  \n"+"\n"+"		if (false) {\n"+"			Object var = new Object() {\n"+"				void toto() {\n"+"					\n"+"				}\n"+"			};\n"+"		}\n"+"	}\n"+"}");
+ICompilationUnit cuA=getCompilationUnit("P/A.java");
+try{
+runConversion(AST.JLS3_INTERNAL,cuA,true,true,true);
+}catch(IllegalArgumentException e){
+assertTrue("Unexpected IllegalArgumentException",false);
+}
+}finally{
+deleteProject("P");
+}
+}
+Candidate 0:
+ public void testBug212434a() throws CoreException,IOException{
+ try{
+ createJavaProject("P",new String{""},new String[0],"");
+ createFile("P/A.java","public class A {\n"+"\n"+"	public void foo() {\n"+"		new Object() { \n"+"			public void bar() { \n"+"				if (true) {\n"+"					final\n"+"				}\n"+"			}\n"+"\n"+"		};  \n"+"\n"+"		if (false) {\n"+"			Object var = new Object() {\n"+"				void toto() {\n"+"					\n"+"				}\n"+"			};\n"+"		}\n"+"	}\n"+"}");
+ ICompilationUnit cuA=getCompilationUnit("P/A.java");
+ try{
+-runConversion(getJLS3(),cuA,true,true,true);
++runConversion(AST.JLS3_INTERNAL,cuA,true,true,true);
+ }catch(IllegalArgumentException e){
+ assertTrue("Unexpected IllegalArgumentException",false);
+ }
+ }finally{
+ deleteProject("P");
+ }
+ }
+
