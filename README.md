@@ -60,7 +60,7 @@ Our prototype of *GenPat* have multiple user interfaces for different purposes, 
 java -jar GenPat.jar FUNC ARGS
 ```
 
-where the `FUNC` denotes which function do you want to use and `ARGS` is a set of arguments corrsponds the `FUNC`.
+where the `FUNC` denotes which function do you want to use and `ARGS` is a set of arguments corresponds to the `FUNC`.
 
 The following details some of the `FUNC` that are important:
 
