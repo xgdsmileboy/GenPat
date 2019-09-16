@@ -30,7 +30,7 @@ As a result, the final transformation pattern contains a subset of the nodes in 
 ```tex
 @inproceedings{GenPat:2019,
     author   = {Jiang, Jiajun and Ren, Luyao and Xiong, Yingfei and Zhang, Lingming},
-    title    = {Inferring Program Transformations From SingularExamples via Big Code},
+    title    = {Inferring Program Transformations From Singular Examples via Big Code},
     series   = {ASE},
     year     = {2019},
     location = {San Diego, California, U.S.},
