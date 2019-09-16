@@ -1,0 +1,24 @@
+run cluster:1
+PATTERN:
+-		"element:zzObject    completion:zzObject    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE)+"\n" +
+-		"element:zzboolean    completion:zzboolean    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE)+"\n" +
+-		"element:zzdouble    completion:zzdouble    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE)+"\n" +
+-		"element:zzint    completion:zzint    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE + R_EXPECTED_TYPE)+"\n" +
+-		"element:zzlong    completion:zzlong    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE + R_EXACT_EXPECTED_TYPE),
++		"element:zzObject    completion:zzObject    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE + R_UNQUALIFIED)+"\n" +
++		"element:zzboolean    completion:zzboolean    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE + R_UNQUALIFIED)+"\n" +
++		"element:zzdouble    completion:zzdouble    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE + R_UNQUALIFIED)+"\n" +
++		"element:zzint    completion:zzint    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE + R_EXPECTED_TYPE + R_UNQUALIFIED)+"\n" +
++		"element:zzlong    completion:zzlong    relevance:"+(R_DEFAULT + R_INTERESTING + R_CASE + R_EXACT_EXPECTED_TYPE + R_UNQUALIFIED),
+
+TP, FP = 0,0
+original_before=
+public void testCompletionAllocationExpressionIsParent4() throws JavaModelException{
+CompletionTestsRequestor requestor=new CompletionTestsRequestor();
+ICompilationUnit cu=getCompilationUnit("Completion","src","","CompletionAllocationExpressionIsParent4.java");
+String str=cu.getSource();
+String completeBehind="zz";
+int cursorLocation=str.lastIndexOf(completeBehind)+completeBehind.length();
+cu.codeComplete(cursorLocation,requestor);
+assertEquals("element:zzObject    completion:zzObject    relevance:"+(R_DEFAULT+R_INTERESTING+R_CASE)+"\n"+"element:zzboolean    completion:zzboolean    relevance:"+(R_DEFAULT+R_INTERESTING+R_CASE)+"\n"+"element:zzdouble    completion:zzdouble    relevance:"+(R_DEFAULT+R_INTERESTING+R_CASE)+"\n"+"element:zzint    completion:zzint    relevance:"+(R_DEFAULT+R_INTERESTING+R_CASE+R_EXPECTED_TYPE)+"\n"+"element:zzlong    completion:zzlong    relevance:"+(R_DEFAULT+R_INTERESTING+R_CASE+R_EXACT_EXPECTED_TYPE),requestor.getResults());
+}

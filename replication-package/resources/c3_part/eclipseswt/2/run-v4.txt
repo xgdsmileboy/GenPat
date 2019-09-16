@@ -1,0 +1,5 @@
+run cluster:2
+PATTERN:
+-/*public*/ Rectangle getTextBounds (int index) {
++public Rectangle getTextBounds (int index) {
+
