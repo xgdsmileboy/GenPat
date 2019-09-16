@@ -1,9 +1,0 @@
-run cluster:7
-PATTERN:
--    ensureInterpreterConnected();
--    try { _interpreterJVM().setPrivateAccessible(allow); }
-+    InterpreterJVMRemoteI slave = ensureInterpreterConnected();
-+    try { slave.setPrivateAccessible(allow); }
-
-TP, FP = 1,0
-Correct!
