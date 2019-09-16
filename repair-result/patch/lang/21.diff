@@ -1,0 +1,85 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_21_buggy/src/main/java/org/apache/commons/lang3/time/DateUtils.java[246,270]
+------------Solution---------------
+ public static boolean isSameLocalTime(Calendar cal1,Calendar cal2){
+ if(cal1==null||cal2==null){
+ throw new IllegalArgumentException("The date must not be null");
+ }
+-return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
++return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR_OF_DAY)==cal2.get(Calendar.HOUR_OF_DAY)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V51/2982/pattern-ver1-serial/src.ca.cumulonimbus.barometernetwork.BarometerNetworkActivity.java-buildHumanDateRangeFormat.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.time.DateUtilsTest::testIsSameLocalTime_Cal]
+---------START : 2019.09.05 AD at 19:13:36 CDT
+---------TIME : 2019.09.05 AD at 19:35:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_21_buggy/src/main/java/org/apache/commons/lang3/time/DateUtils.java[246,270]
+------------Solution---------------
+ public static boolean isSameLocalTime(Calendar cal1,Calendar cal2){
+ if(cal1==null||cal2==null){
+ throw new IllegalArgumentException("The date must not be null");
+ }
+-return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
++return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.HOUR_OF_DAY)==cal2.get(Calendar.HOUR_OF_DAY)&&cal1.getClass()==cal2.getClass());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V51/2982/pattern-ver1-serial/src.ca.cumulonimbus.barometernetwork.BarometerNetworkActivity.java-buildHumanDateRangeFormat.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.time.DateUtilsTest::testIsSameLocalTime_Cal]
+---------START : 2019.09.05 AD at 19:13:36 CDT
+---------TIME : 2019.09.05 AD at 19:35:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_21_buggy/src/main/java/org/apache/commons/lang3/time/DateUtils.java[246,270]
+------------Solution---------------
+ public static boolean isSameLocalTime(Calendar cal1,Calendar cal2){
+ if(cal1==null||cal2==null){
+ throw new IllegalArgumentException("The date must not be null");
+ }
+-return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
++return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.HOUR_OF_DAY)==cal2.get(Calendar.HOUR_OF_DAY)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V51/2982/pattern-ver1-serial/src.ca.cumulonimbus.barometernetwork.BarometerNetworkActivity.java-buildHumanDateRangeFormat.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.time.DateUtilsTest::testIsSameLocalTime_Cal]
+---------START : 2019.09.05 AD at 19:13:36 CDT
+---------TIME : 2019.09.05 AD at 19:35:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_21_buggy/src/main/java/org/apache/commons/lang3/time/DateUtils.java[246,270]
+------------Solution---------------
+ public static boolean isSameLocalTime(Calendar cal1,Calendar cal2){
+ if(cal1==null||cal2==null){
+ throw new IllegalArgumentException("The date must not be null");
+ }
+-return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
++return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.HOUR_OF_DAY)==cal2.get(Calendar.HOUR_OF_DAY)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V51/2982/pattern-ver1-serial/src.ca.cumulonimbus.barometernetwork.BarometerNetworkActivity.java-buildHumanDateRangeFormat.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.time.DateUtilsTest::testIsSameLocalTime_Cal]
+---------START : 2019.09.05 AD at 19:13:36 CDT
+---------TIME : 2019.09.05 AD at 19:36:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_21_buggy/src/main/java/org/apache/commons/lang3/time/DateUtils.java[246,270]
+------------Solution---------------
+ public static boolean isSameLocalTime(Calendar cal1,Calendar cal2){
+ if(cal1==null||cal2==null){
+ throw new IllegalArgumentException("The date must not be null");
+ }
+-return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
++return (cal1.get(Calendar.MILLISECOND)==cal2.get(Calendar.MILLISECOND)&&cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)&&cal1.get(Calendar.HOUR_OF_DAY)==cal2.get(Calendar.HOUR_OF_DAY)&&cal1.get(Calendar.HOUR)==cal2.get(Calendar.HOUR)&&cal1.get(Calendar.DAY_OF_YEAR)==cal2.get(Calendar.DAY_OF_YEAR)&&cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)&&cal1.get(Calendar.ERA)==cal2.get(Calendar.ERA)&&cal1.getClass()==cal2.getClass());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V51/2982/pattern-ver1-serial/src.ca.cumulonimbus.barometernetwork.BarometerNetworkActivity.java-buildHumanDateRangeFormat.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.time.DateUtilsTest::testIsSameLocalTime_Cal]
+---------START : 2019.09.05 AD at 19:13:36 CDT
+---------TIME : 2019.09.05 AD at 19:36:29 CDT
+--------------- END -----------------

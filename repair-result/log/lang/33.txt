@@ -1,0 +1,4716 @@
+Repair : lang_33
+Current failed test : org.apache.commons.lang3.ClassUtilsTest::testToClass_object | 2019.09.06 AD at 09:00:47 CDT
+Location : org.apache.commons.lang3.ClassUtils.toClass:[903, 904, 905, 906, 908, 909, 910, 912]#1.0
+Compute Candidate : 2019.09.06 AD at 09:01:19 CDT - 2019.09.06 AD at 09:16:09 CDT , PNumber : 11394, CandNumber : 181 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++continue;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/7570/pattern-ver1-serial/src.main.java.com.rayn.jflask.framework.mvc.MultipartHelper.java-parseMultipartParamList.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+-Class<?>[] classes=new Class[array.length];
++ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/2219/pattern-ver1-serial/hazelcast.src.main.java.com.hazelcast.client.impl.MemberImpl.java-getBooleanAttribute.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++return null;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:16 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+-if(array==null){
++if(array!=null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V11/4111/pattern-ver1-serial/tephra-core.src.main.java.co.cask.tephra.snapshot.SnapshotCodecV4.java-encodeInProgress.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+-return ArrayUtils.EMPTY_CLASS_ARRAY;
++return null;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+-return classes;
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i<=array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V45/3857/pattern-ver1-serial/src.com.urverkspel.humancompanion.AttackData.java-roll.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import java.util.Collection;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,myUid;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V12/276/pattern-ver1-serial/actor-sdk.sdk-core.core.core-shared.src.main.java.im.actor.core.viewmodel.GroupVM.java-create.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,DEFAULT_TIMEOUT2;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V49/3872/pattern-ver1-serial/ui-common.src.main.java.org.exoplatform.selenium.platform.ManageAccount.java-addNewUserAccount.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i>array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V44/4500/pattern-ver1-serial/src.main.java.com.michael.e.liquislots.item.ItemLiquipack.java-addInformation.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,MAX_SERVICE_NODES;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/4395/pattern-ver1-serial/vipr-portal.com.emc.sa.common.src.java.com.emc.sa.zookeeper.ZkServiceDescriptors.java-start.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,MAX_ZK_WAIT_RETRY_TIMES;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V41/7180/pattern-ver1-serial/syssvc.src.main.java.com.emc.storageos.systemservices.impl.vdc.VdcOpHandler.java-waitForAllNodesAndReboot.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++break;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V38/3005/pattern-ver1-serial/LifeOnLine.src.lol.DateParser.java-getUserInputWithoutDueDate.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length<=0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V11/4307/pattern-ver1-serial/core.src.com.arkanoid.stm.gameStates.ArkanoidGdx.java-block.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i<array.length;i--){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V7/4666/pattern-ver1-serial/src.main.java.com.deanveloper.playtimeplus.commands.playtime.subcommand.TopSubCmd.java-execute.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length>=0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V3/848/pattern-ver1-serial/src.com.mojang.ld22.entity.Slime.java-render.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
++classes[1]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V40/6103/pattern-ver1-serial/src.br.unicamp.ic.recod.gpsi.applications.gpsiJGAPEvolver.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
++classes[i]=array[1].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V40/6103/pattern-ver1-serial/src.br.unicamp.ic.recod.gpsi.applications.gpsiJGAPEvolver.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length!=0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V46/565/pattern-ver1-serial/src.main.java.cloudservices.brokerage.policy.policycommons.model.entities.Policy.java-isValid.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,localLevel;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/1178/pattern-ver1-serial/wrapper.src.main.java.com.ankit.wrapper.Logger.java-w.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length>0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/5819/pattern-ver1-serial/FlawlessEssenceMiner.java-active.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import java.util.ArrayList;
++
++import com.sun.javafx.scene.control.behavior.KeyBinding;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i<array.length;i++,new ArrayList<KeyBinding>()){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V33/314/pattern-ver1-serial/src.main.java.jfxtras.labs.internal.scene.control.behavior.SixteenSegmentBehavior.java-SixteenSegmentBehavior.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:16:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+-Class<?>[] classes=new Class[array.length];
++Class<?>[] classes=new Class[(array.length)];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V58/4580/pattern-ver1-serial/src.sort.MergeTask.java-call.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,_afterComposeMethodCache;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V6/5922/pattern-ver1-serial/zkbind.src.org.zkoss.bind.BindComposer.java-doAfterCompose.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import java.util.List;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,mActions;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/428/pattern-ver1-serial/quickaction.src.main.java.com.imallan.quickaction.QuickActionOnTouchListener.java-onDown.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++return classes;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/2280/pattern-ver1-serial/Project1.src.searchAlgorithms.BFS.java-search.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i<array.length;i++,new ArrayList<>()){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V43/1043/pattern-ver1-serial/src.main.java.application.controllers.MainController.java-switchScene.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,mRelationId;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V16/910/pattern-ver1-serial/app.src.main.java.fr.sims.coachingproject.ui.fragment.RelationChatFragment.java-bindView.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i<classes.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/2427/pattern-ver1-serial/src.java.picard.analysis.oxidation.ArtifactCounter.java-getSummaryMetrics.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
++classes[i]=array.getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V33/3555/pattern-ver1-serial/bpm.bonita-core.bonita-process-engine.src.main.java.org.bonitasoft.engine.api.impl.PlatformAPIImpl.java-createTenantFolderInBonitaHome.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:16 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
++classes[i]=classes.getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V55/3614/pattern-ver1-serial/library.src.main.java.com.davidstemmer.screenplay.flow.Screenplay.java-go.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
++classes[i]=classes[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V55/3614/pattern-ver1-serial/library.src.main.java.com.davidstemmer.screenplay.flow.Screenplay.java-go.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++i++;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/4356/pattern-ver1-serial/src.main.java.uk.ac.ebi.pride.spectracluster.cli.SpectraClusterCliMain.java-convertClusters.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+-return classes;
++return classes.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+-return ArrayUtils.EMPTY_CLASS_ARRAY;
++return ArrayUtils.EMPTY_CLASS_ARRAY.clone();
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:17:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++i--;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/965/pattern-ver1-serial/src.Game.java-loop.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:19:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++toClass(array);
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/3252/pattern-ver1-serial/care-reporting.commcare-migration.src.main.java.org.motechproject.care.reporting.migration.task.MigrationTask.java-postToMotech.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:19:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++toClass(array);
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/3252/pattern-ver1-serial/care-reporting.commcare-migration.src.main.java.org.motechproject.care.reporting.migration.task.MigrationTask.java-postToMotech.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:19:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++toClass(array);
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/3252/pattern-ver1-serial/care-reporting.commcare-migration.src.main.java.org.motechproject.care.reporting.migration.task.MigrationTask.java-postToMotech.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:19:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,continentName,countryCode;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V9/6266/pattern-ver1-serial/app.src.main.java.com.hyperion.dashdroid.radio.RadioListFragment.java-refresh.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:19:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+-return ArrayUtils.EMPTY_CLASS_ARRAY;
++return (Class<?>[])(ArrayUtils.EMPTY_CLASS_ARRAY);
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:19:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+-return classes;
++return (Class<?>[])(classes);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:19:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++while(true){
++
++}
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V61/177/pattern-ver1-serial/flink-addons.flink-streaming.flink-streaming-core.src.main.java.org.apache.flink.streaming.api.streamvertex.StreamVertex.java-invoke.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:21:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0,userEmail;i<array.length;i++,i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V15/3912/pattern-ver1-serial/app.src.main.java.finalproject.ee461l.journey.JoinTrip.java-searchForUser.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:21:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+-if(array==null){
++if(array[0]==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V10/2172/pattern-ver1-serial/FTDriver.src.jp.ksksue.driver.serial.FTDriver.java-setFTDIEndpoints.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:21:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++if(array==null){
++return null;
++}else {
++if(array.length==0){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
++}
++}
++Class<?>[] classes=new Class[array.length];
++for(int i=0;i<array.length;i++){
++classes[i]=array[i].getClass();
++}
++return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V46/4540/pattern-ver1-serial/core-cube.src.main.java.org.apache.kylin.gridtable.GTScanRangePlanner.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:21:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++i++;
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V2/6609/pattern-ver1-serial/src.anonscanlations.downloader.chapter.NicoNicoChapter.java-download.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 1, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:21:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array==null){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V27/1221/pattern-ver1-serial/CransJavaAI.trunk.src.com.springrts.ai.crans.DGunControllerHandler.java-update.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:21:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import java.nio.charset.Charset;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i<array.length;i++,Charset.forName("UTF-8")){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3733/pattern-ver1-serial/Code.Part1.src.core.Intraprocedural.java-callgraph.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:21:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+-if(array==null){
++if(array.equals(null)){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V1/343/pattern-ver1-serial/src.gui.batches.ItemBatchView.java-selectProduct.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:21:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++array=array;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5893/pattern-ver1-serial/vipr-portal.portal.app.models.datatable.NfsACLDataTable.java-NfsAclInfo.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
++array=array;
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V31/432/pattern-ver1-serial/src.arcane_arcade_menus.MainMenuMenuCreator.java-MainMenuElement.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(i==4){
++continue;
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V29/5508/pattern-ver1-serial/common.enhancedportals.item.ItemPortalModifierUpgrade.java-getSubItems.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+-if(array==null){
++if(true){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/6216/pattern-ver1-serial/app.src.main.java.example.com.mpdlcamera.Upload.CustomAdapter.java-getView.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(true){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/6216/pattern-ver1-serial/app.src.main.java.example.com.mpdlcamera.Upload.CustomAdapter.java-getView.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(classes[i]==null){
+ classes[i]=array[i].getClass();
++}
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V53/4035/pattern-ver1-serial/whois-client.src.main.java.net.ripe.db.whois.common.rpsl.RpslAttribute.java-extractCleanValueAndComment.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
++int a=0;
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:16 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++int a=0;
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
++int a=0;
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++int a=0;
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++int a=0;
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++String OUTSTRING="";
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
++String OUTSTRING="";
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
++String OUTSTRING="";
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++String OUTSTRING="";
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++String OUTSTRING="";
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i<array.length;){
++i++;
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V22/7304/pattern-ver1-serial/vipr-portal.com.iwave.isa.content.src.java.com.emc.sa.service.vipr.file.tasks.IngestUnmanagedFilesystems.java-ingestInChunks.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 1, DEL : 2
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++int length=5;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++int ArrayUtils=5;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++int EMPTY_CLASS_ARRAY=5;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
++classes[i]=null;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/2637/pattern-ver1-serial/de.bund.bfr.knime.openkrise.views.src.de.bund.bfr.knime.openkrise.views.gisgraphview.GraphSettings.java-GraphSettings.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(Double.isNaN(array.length)){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V32/1622/pattern-ver1-serial/src.mckay.utilities.staticlibraries.StringMethods.java-getDoubleInScientificNotation.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++ final String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5976/pattern-ver1-serial/rhymecity.src.main.java.com.fly.firefly.ui.activity.Login.LoginFragment.java-forgotPassword.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++ final String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5976/pattern-ver1-serial/rhymecity.src.main.java.com.fly.firefly.ui.activity.Login.LoginFragment.java-forgotPassword.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++int indexSelection=0;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:22:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
++int indexSelection=0;
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++int indexSelection=0;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import java.util.Arrays;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
++classes[i-1]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V32/7420/pattern-ver1-serial/src.webradio.Show.java-convertArrToString.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import java.util.Arrays;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
++classes[i]=array[i-1].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V32/7420/pattern-ver1-serial/src.webradio.Show.java-convertArrToString.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(array.equals("sounds")){
++continue;
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/2569/pattern-ver1-serial/src.main.java.net.dirtydeeds.discordsoundboard.chat.ListCategoriesProcessor.java-handleEvent.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
++int a=1;
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++int a=1;
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
++int a=1;
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++int a=1;
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++int a=1;
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++String length="%#.&f";
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V9/4517/pattern-ver1-serial/src.com.amadeus.cmath.MatrixPrinter.java-printMatrix.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++String EMPTY_CLASS_ARRAY="%#.&f";
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V9/4517/pattern-ver1-serial/src.com.amadeus.cmath.MatrixPrinter.java-printMatrix.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++String length="%#.&f";
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V9/4517/pattern-ver1-serial/src.com.amadeus.cmath.MatrixPrinter.java-printMatrix.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++String EMPTY_CLASS_ARRAY="%#.&f";
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V9/4517/pattern-ver1-serial/src.com.amadeus.cmath.MatrixPrinter.java-printMatrix.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++boolean EMPTY_CLASS_ARRAY=true;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++boolean ArrayUtils=true;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++boolean length=true;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++boolean b=true;
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
++boolean b=true;
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
++boolean b=true;
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++boolean b=true;
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++boolean b=true;
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(array==null){
++continue;
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/7058/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.manager.FileManager.java-getExternalSDCardDirectory.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(classes==null){
++continue;
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/7058/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.manager.FileManager.java-getExternalSDCardDirectory.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
++for(int i=0;i<array.length;Math.abs(i++)){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/6264/pattern-ver1-serial/src.main.java.com.metal.fetcher.fetcher.impl.WeiboFetcher.java-getRandomAccount.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0-1){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/2784/pattern-ver1-serial/src.main.java.org.jboss.pressgang.ccms.server.rest.v1.TopicV1Factory.java-syncDBEntityWithRESTEntitySecondPass.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:23:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++if(array==null){
++return null;
++}
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(array==null){
++return null;
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++if(array==null){
++return null;
++}
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(classes==null){
++return null;
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++if(classes==null){
++return null;
++}
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(array[i]==null){
++return null;
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
++}
+ }
++if(array==null){
++return null;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V45/2972/pattern-ver1-serial/app.src.main.java.com.nealyi.app.activity.UserProfileActivity.java-onActivityResult.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++}
++if(classes==null){
++return null;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V6/4291/pattern-ver1-serial/src.ar.edu.it.itba.pdc.Implementations.proxy.client.ProxyClientSelectorProtocol.java-handleWrite.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
++}
++if("&null".equals(array)){
++return null;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++if("&null".equals(array)){
++return null;
++}
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
++}
+ }
++if("&null".equals(array)){
++return null;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++if("&null".equals(classes)){
++return null;
++}
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++if("&null".equals(classes)){
++return null;
++}
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++if(classes.equals("-1")){
++return null;
++}
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V10/4405/pattern-ver1-serial/src.edu.ucsb.cs.Main.java-editGuardianGivenName.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0||array.length==Long.MIN_VALUE){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V5/7087/pattern-ver1-serial/BDEBase.src.main.java.gr.demokritos.iit.base.util.Utils.java-extractYearMonthDayLiteral.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++assert (array!=null);
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++assert (array!=null);
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++assert (array!=null);
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++assert (classes!=null);
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++assert (classes!=null);
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(array.equals(InputStream.class)){
++return classes;
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++if(array.equals(InputStream.class)){
++return classes;
++}
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++if(array!=null){
++if(array.length==0){
++return ArrayUtils.EMPTY_CLASS_ARRAY;
++}
++}
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/384/pattern-ver1-serial/app.src.main.java.com.farfromsober.ffs.activities.LoginActivity.java-onDataParsed.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++if(array!=null){
++if(array==null){
++return null;
++}else {
++if(array.length==0){
++return ArrayUtils.EMPTY_CLASS_ARRAY;
++}
++}
++Class<?>[] classes=new Class[array.length];
++for(int i=0;i<array.length;i++){
++classes[i]=array[i].getClass();
++}
++return classes;
++}
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/384/pattern-ver1-serial/app.src.main.java.com.farfromsober.ffs.activities.LoginActivity.java-onDataParsed.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(array!=null){
++classes[i]=array[i].getClass();
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/384/pattern-ver1-serial/app.src.main.java.com.farfromsober.ffs.activities.LoginActivity.java-onDataParsed.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++assert (classes!=new Class[array.length]);
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/3232/pattern-ver1-serial/src.main.java.com.about.java.controllers.MainController.java-mainpage.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:24:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++assert (array!=null);
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/4812/pattern-ver1-serial/graal.com.oracle.graal.nodes.src.com.oracle.graal.nodes.calc.IsNullNode.java-IsNullNode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++assert (array!=null);
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/4812/pattern-ver1-serial/graal.com.oracle.graal.nodes.src.com.oracle.graal.nodes.calc.IsNullNode.java-IsNullNode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
++assert (array!=null);
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/4812/pattern-ver1-serial/graal.com.oracle.graal.nodes.src.com.oracle.graal.nodes.calc.IsNullNode.java-IsNullNode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++assert (classes!=null);
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/4812/pattern-ver1-serial/graal.com.oracle.graal.nodes.src.com.oracle.graal.nodes.calc.IsNullNode.java-IsNullNode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++if(classes.equals("655")){
++System.out.println();
++}
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V38/3726/pattern-ver1-serial/src.protosocket.client.WriteThread.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++}
++if(classes.equals("655")){
++System.out.println();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V38/3726/pattern-ver1-serial/src.protosocket.client.WriteThread.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
++}
++if((Thread.currentThread().interrupted())){
++return null;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++if((Thread.currentThread().interrupted())){
++return null;
++}
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:16 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
++}
+ }
++if((Thread.currentThread().interrupted())){
++return null;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+-if(array==null){
++if(array==null||"查看红包".equals(array)){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/4605/pattern-ver1-serial/app.src.main.java.xyz.monkeytong.hongbao.utils.HongbaoSignature.java-generateSignature.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0||"查看红包".equals(array.length)){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/4605/pattern-ver1-serial/app.src.main.java.xyz.monkeytong.hongbao.utils.HongbaoSignature.java-generateSignature.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0||array.length==3){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V30/1380/pattern-ver1-serial/Cluedo.src.control.Player.java-validMove.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+-if(array==null){
+-return null;
+-}else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++if(array==null){
++return null;
++}else {
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V1/4240/pattern-ver1-serial/app.src.main.java.com.extenprise.mapp.service.activity.AppointmentDetailsActivity.java-gotResponse.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 1, DEL : 4
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length<0||array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V7/1602/pattern-ver1-serial/src.engine.network.server.ServerClient.java-knowMap.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import javax.swing.table.TableCellRenderer;
++
++import java.awt.Component;
++
++import javax.swing.table.TableColumn;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++array[i]=new Object[4];
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V41/5528/pattern-ver1-serial/src.com.elance.gui.ResultTablePanel.java-listToObjectArray.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0||array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V37/1056/pattern-ver1-serial/lts-admin.src.main.java.com.github.ltsopensource.admin.web.api.SuspendJobQueueApi.java-suspendJobRecovery.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0||array.length>9){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V6/2964/pattern-ver1-serial/main.plugins.org.talend.dataquality.sampling.src.main.java.org.talend.dataquality.datamasking.FunctionApplier.java-generateDuplicate.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++}
++Class<?>[] classes=new Class[array.length];
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+-}
+ }
+-Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V37/1562/pattern-ver1-serial/assignment6.src.assignment6.TicketClient.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 1, DEL : 4
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++}
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+-}
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V37/1562/pattern-ver1-serial/assignment6.src.assignment6.TicketClient.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 1, DEL : 4
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0&&array.length<4000000){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V28/46/pattern-ver1-serial/raw.master.registryKit.registryKit.registryKit.src.main.java.com.registryKit.survey.surveyManager.java-saveSurveyDocument.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+-if(array==null){
++if(array==null||array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/4704/pattern-ver1-serial/src.main.java.com.alibaba.fastjson.parser.ParserConfig.java-createJavaBeanDeserializer.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0&&array.length!=9999){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5798/pattern-ver1-serial/SONPlugin.src.org.workcraft.plugins.son.granularity.HourMins.java-getHour.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(0>0&&array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/553/pattern-ver1-serial/src.main.java.edu.berkeley.cs.nlp.ocular.main.TrainFont.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:25:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++JOptionPane.showMessageDialog(null,"Uspješno ste odjavljeni sa sistema!","Info",JOptionPane.INFORMATION_MESSAGE);
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/3046/pattern-ver1-serial/Projekat.iTravel.src.main.java.ba.unsa.etf.si.app.iTravel.Forms.Meni.java-OdjaviSe.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++JOptionPane.showMessageDialog(null,"Uspješno ste odjavljeni sa sistema!","Info",JOptionPane.INFORMATION_MESSAGE);
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/3046/pattern-ver1-serial/Projekat.iTravel.src.main.java.ba.unsa.etf.si.app.iTravel.Forms.Meni.java-OdjaviSe.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++assert (array!=null):"Appointments day is not allowed to be null!";
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++assert (array!=null):"Appointments day is not allowed to be null!";
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++assert (array!=null):"Appointments day is not allowed to be null!";
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++assert (classes!=null):"Appointments day is not allowed to be null!";
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++assert (classes!=null):"Appointments day is not allowed to be null!";
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+-if(array.length==0){
++if(array.length==0||array.length=='"'){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/1758/pattern-ver1-serial/modules.ImportPlugin.src.main.java.org.gephi.io.importer.plugin.file.ImporterDOT.java-edgeAttributes.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+-if(array==null){
++if(array==null&&!array.equals("")){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V51/6260/pattern-ver1-serial/Client.src.com.way.chat.activity.ChatActivity.java-onItemClick.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 6, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++classes[i]=array[i].getClass();
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V14/6394/pattern-ver1-serial/src.com.withiter.frame.MainFrame.java-loadDatas.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 0, INS : 1, DEL : 6
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++Class<?>[] t=classes;
++classes=null;
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+-return classes;
++return t;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/5100/pattern-ver1-serial/CityGenJava.src.gameObjects.player.Player.java-drop.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 1, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++if(classes==null){
++throw new IllegalStateException("User isn't registered! "+array);
++}
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/5393/pattern-ver1-serial/peergos.user.UserContext.java-sendFollowRequest.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++array[i]+="_"+Integer.toString(i);
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/6433/pattern-ver1-serial/src.main.java.com.outbrain.NLP_processor.java-create_important_words_array.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(array==null||classes==null){
++throw new NullPointerException();
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2177/pattern-ver1-serial/projects.core.src.main.java.org.quick.core.prop.DefaultExpressionContext.java-withFunction.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 0, INS : 9, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++if(classes==null||array==null){
++throw new NullPointerException();
++}
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2177/pattern-ver1-serial/projects.core.src.main.java.org.quick.core.prop.DefaultExpressionContext.java-withFunction.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 0, INS : 9, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++if(array==null||classes==null){
++throw new NullPointerException();
++}
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2177/pattern-ver1-serial/projects.core.src.main.java.org.quick.core.prop.DefaultExpressionContext.java-withFunction.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 0, INS : 9, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
++if(classes==null||array==null){
++throw new NullPointerException();
++}
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2177/pattern-ver1-serial/projects.core.src.main.java.org.quick.core.prop.DefaultExpressionContext.java-withFunction.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 0, INS : 9, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++Class<?>[] classes=new Class[array.length];
++for(int i=0;i<array.length;i++){
++classes[i]=array[i].getClass();
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+-Class<?>[] classes=new Class[array.length];
+-for(int i=0;i<array.length;i++){
+-classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/5429/pattern-ver1-serial/src.com.github.dreamrec.edf.EdfWriter.java-onDataReceived.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 0, INS : 1, DEL : 8
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++if(classes[i]==null){
++throw new IllegalArgumentException("Failed to get an icon for "+array.getClass().getName());
++}
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V38/995/pattern-ver1-serial/libtech.RenderLightmap.java-renderWorldBlock.pattern
+MATCHLEVEL : ALL
+ALL : 11, UPD : 0, INS : 11, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++if(array[i]==null){
++throw new IllegalArgumentException("Failed to get an icon for "+classes.getClass().getName());
++}
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V38/995/pattern-ver1-serial/libtech.RenderLightmap.java-renderWorldBlock.pattern
+MATCHLEVEL : ALL
+ALL : 11, UPD : 0, INS : 11, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++Class<?>[] result=null;
++if(ArrayUtils.EMPTY_CLASS_ARRAY!=null){
++result=ArrayUtils.EMPTY_CLASS_ARRAY.clone();
++}
+ if(array.length==0){
+-return ArrayUtils.EMPTY_CLASS_ARRAY;
++return result;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 11, UPD : 1, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+-return ArrayUtils.EMPTY_CLASS_ARRAY;
++Class<?>[] result=null;
++if(ArrayUtils.EMPTY_CLASS_ARRAY!=null){
++result=ArrayUtils.EMPTY_CLASS_ARRAY.clone();
++}
++return result;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 11, UPD : 1, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++Class<?>[] result=null;
++if(ArrayUtils.EMPTY_CLASS_ARRAY!=null){
++result=ArrayUtils.EMPTY_CLASS_ARRAY.clone();
++}
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+-return ArrayUtils.EMPTY_CLASS_ARRAY;
++return result;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 11, UPD : 1, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
++long startTime=System.currentTimeMillis();
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++long endTime=System.currentTimeMillis();
++long totalTime=endTime-startTime;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/5668/pattern-ver1-serial/Euler.src.Euler20.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 13, UPD : 0, INS : 13, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:26:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
++long startTime=System.currentTimeMillis();
+ classes[i]=array[i].getClass();
++long endTime=System.currentTimeMillis();
++long totalTime=endTime-startTime;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/5668/pattern-ver1-serial/Euler.src.Euler20.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 13, UPD : 0, INS : 13, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:27:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
++long startTime=System.currentTimeMillis();
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
++long endTime=System.currentTimeMillis();
++long totalTime=endTime-startTime;
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/5668/pattern-ver1-serial/Euler.src.Euler20.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 13, UPD : 0, INS : 13, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:27:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
++array[28]=(byte)0x88;
++array[29]=0x58;
++array[30]=0x01;
++array[31]=0x00;
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V16/2015/pattern-ver1-serial/src.info.dreamingfish123.wavetransdemo.MainActivity.java-writeWaveFile.pattern
+MATCHLEVEL : ALL
+ALL : 17, UPD : 0, INS : 17, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:27:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_33_buggy/src/main/java/org/apache/commons/lang3/ClassUtils.java[892,913]
+------------Candidate---------------
+ public static Class<?>[] toClass(Object[] array){
+ if(array==null){
+ return null;
+ }else {
+ if(array.length==0){
+ return ArrayUtils.EMPTY_CLASS_ARRAY;
+ }
+ }
+ Class<?>[] classes=new Class[array.length];
+ for(int i=0;i<array.length;i++){
+ classes[i]=array[i].getClass();
++array[28]=(byte)0x88;
++array[29]=0x58;
++array[30]=0x01;
++array[31]=0x00;
+ }
+ return classes;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V16/2015/pattern-ver1-serial/src.info.dreamingfish123.wavetransdemo.MainActivity.java-writeWaveFile.pattern
+MATCHLEVEL : ALL
+ALL : 17, UPD : 0, INS : 17, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ClassUtilsTest::testToClass_object]
+---------START : 2019.09.06 AD at 09:00:47 CDT
+---------TIME : 2019.09.06 AD at 09:27:09 CDT
+--------------- END -----------------
+Finish : lang-33 > patch : 0 | Start : Fri Sep 06 09:00:47 CDT 2019 | End : 2019.09.06 AD at 09:27:09 CDT

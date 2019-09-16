@@ -1,0 +1,34 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_24_buggy/source/org/jfree/chart/renderer/GrayPaintScale.java[115,129]
+------------Solution---------------
+ public Paint getPaint(double value){
+ double v=Math.max(value,this.lowerBound);
+ v=Math.min(v,this.upperBound);
+-int g=(int)((value-this.lowerBound)/(this.upperBound-this.lowerBound)*255.0);
++int g=(int)((v-this.lowerBound)/(this.upperBound-this.lowerBound)*255.0);
+ return new Color(g,g,g);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V27/6021/pattern-ver1-serial/src.org.andengine.util.algorithm.path.astar.ManhattanHeuristic.java-getExpectedRestCost.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.junit.GrayPaintScaleTests::testGetPaint]
+---------START : 2019.09.05 AD at 14:57:54 CDT
+---------TIME : 2019.09.05 AD at 15:07:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_24_buggy/source/org/jfree/chart/renderer/GrayPaintScale.java[115,129]
+------------Solution---------------
+ public Paint getPaint(double value){
+ double v=Math.max(value,this.lowerBound);
+ v=Math.min(v,this.upperBound);
+-int g=(int)((value-this.lowerBound)/(this.upperBound-this.lowerBound)*255.0);
++int g=(int)(v*255.0);
+ return new Color(g,g,g);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V34/4880/pattern-ver1-serial/src.main.java.ch.trq.carrera.javapilot.akka.trackanalyzer.TrackAnalyzer.java-calculateDistance.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 10, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.junit.GrayPaintScaleTests::testGetPaint]
+---------START : 2019.09.05 AD at 14:57:54 CDT
+---------TIME : 2019.09.05 AD at 15:13:11 CDT
+--------------- END -----------------

@@ -1,0 +1,2674 @@
+Repair : lang_6
+Current failed test : org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs | 2019.09.04 AD at 21:18:02 CDT
+Location : org.apache.commons.lang3.StringEscapeUtils.escapeCsv:[556]#0.7071067811865475
+Compute Candidate : 2019.09.04 AD at 21:18:48 CDT - 2019.09.04 AD at 21:23:13 CDT , PNumber : 11192, CandNumber : 43 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
++import java.util.regex.Matcher;
++
++import java.util.regex.Pattern;
++
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input.trim());
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V27/7877/pattern-ver1-serial/src.com.genomen.ui.cli.ArgumentProcessor.java-parseRequiredSamples.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate((input).toLowerCase());
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/2032/pattern-ver1-serial/src.main.ContaminationDialog.java-onOK.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate((input).toUpperCase());
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/7401/pattern-ver1-serial/Model.src.main.java.config.SensorParams.java-SensorParams.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return "";
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V36/2133/pattern-ver1-serial/modules.cpr.src.main.java.org.atmosphere.cpr.AtmosphereRequestImpl.java-getServletPath.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input).trim();
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V14/1192/pattern-ver1-serial/NewsReader.src.com.example.net_ex04.SinaNewsParser.java-getTitle.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return input;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V52/5398/pattern-ver1-serial/extensions.fluent.src.org.exist.fluent.Item.java-valueWithDefault.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return new String(ESCAPE_CSV.translate(input));
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V50/2421/pattern-ver1-serial/src.uk.co.quartzcraft.kingdoms.features.kingdom.Kingdom.java-getKing.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return (String)ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++int a=0;
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:23:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++String OUTSTRING="";
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input.isEmpty()){
++return null;
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V3/5856/pattern-ver1-serial/src.main.java.io.aif.associations.builder.ExperimentsConnectionsGraphReducer.java-normalize.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input).toLowerCase();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/301/pattern-ver1-serial/DODO.src.Parser.Parser.java-getUserCommand.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return (String)(ESCAPE_CSV.translate(input));
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++int a=1;
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++boolean b=true;
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
++import java.util.regex.Matcher;
++
++import java.util.regex.Pattern;
++
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input)+".*";
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/6165/pattern-ver1-serial/src.main.java.com.oneandone.network.snmpman.configuration.type.WildcardOID.java-toString.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input==null){
++return "";
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/5349/pattern-ver1-serial/drools-wb-screens.drools-wb-guided-dtable-editor.drools-wb-guided-dtable-editor-client.src.main.java.org.drools.workbench.screens.guided.dtable.client.widget.table2.columns.dom.textbox.TextBoxLongSingletonDOMElementFactory.java-convert.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input==null){
++return null;
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(ESCAPE_CSV==null){
++return null;
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++assert (input!=null);
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input!=null){
++return ESCAPE_CSV.translate(input);
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/384/pattern-ver1-serial/app.src.main.java.com.farfromsober.ffs.activities.LoginActivity.java-onDataParsed.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input).replaceAll("\r","");
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V17/6011/pattern-ver1-serial/NonHTTPProxy.src.josh.nonHttp.PythonMangler.java-getPyCode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return String.format("%s",ESCAPE_CSV.translate(input));
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V44/4308/pattern-ver1-serial/src.com.github.danfickle.cpptojavasourceconverter.ExpressionModels.java-toStringRhOnly.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input.startsWith("https")){
++return input;
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V4/6342/pattern-ver1-serial/src.main.java.org.spo.fw.web.Lib_Utils.java-alterGotoUrl.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input.equalsIgnoreCase("/")){
++return input;
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/3102/pattern-ver1-serial/src.main.java.com.github.kongchen.swagger.docgen.reader.AbstractReader.java-parseOperationPath.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input.equalsIgnoreCase("")){
++return "";
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/3403/pattern-ver1-serial/src.Primitives.Stemmer.java-step4.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input)==null?"":ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/319/pattern-ver1-serial/Flattitude.app.src.main.java.com.aseupc.flattitude.Models.IDs.java-getUserToken.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input)!=null?ESCAPE_CSV.translate(input):new String();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/4736/pattern-ver1-serial/server.src.main.java.com.paypal.selion.grid.SeLionStandaloneConfiguration.java-getStandaloneConfiguration.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV==null?null:ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input)==null?new String():ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5999/pattern-ver1-serial/persistence.src.main.java.com.softserve.osbb.model.Bill.java-getApartment.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return input==null?null:ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/4622/pattern-ver1-serial/src.soot.shimple.ShimpleMethodSource.java-getBody.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(ESCAPE_CSV!=null){
+ return ESCAPE_CSV.translate(input);
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV!=null?ESCAPE_CSV.translate(input):null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input.isEmpty()){
++System.out.println("Team has to have a name");
++return null;
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V5/1672/pattern-ver1-serial/cli.src.main.java.cz.muni.fi.pa165.fast.cli.TeamCreateCommand.java-argument.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:24:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++assert (input!=null):"Appointments day is not allowed to be null!";
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:25:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input.isEmpty()){
++throw new IllegalArgumentException("Title must not be empty!");
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V55/1109/pattern-ver1-serial/eclipse.src.stoberry.dataManagement.Management.java-sendMessage.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:25:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(ESCAPE_CSV==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:25:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input==null){
++throw new IllegalStateException("Cannot instantiate Page whitout String url constructor parameter or @PageURL class annotation");
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V50/4732/pattern-ver1-serial/src.main.java.com.mgiorda.page.AbstractPage.java-AbstractPage.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:25:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
+-return ESCAPE_CSV.translate(input);
++return ESCAPE_CSV.translate(input)+"\n\n"+ESCAPE_CSV.translate("distance.desc");
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V52/3128/pattern-ver1-serial/src.alg.embed3d.r.Sammon3DEmbedder.java-getDescription.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 7, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:25:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(ESCAPE_CSV!=null){
+ return ESCAPE_CSV.translate(input);
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 3, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:25:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input.startsWith("\r\n")){
++input=input.substring(2);
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V41/7437/pattern-ver1-serial/distributed.src.main.java.com.orientechnologies.orient.server.distributed.impl.task.OSyncDatabaseTask.java-onMessage.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:25:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/StringEscapeUtils.java[533,557]
+------------Candidate---------------
+ public static final String escapeCsv(String input){
++if(input.startsWith("extern ")){
++return input.substring(6,input.length()-1).trim();
++}
+ return ESCAPE_CSV.translate(input);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V27/100/pattern-ver1-serial/plugins.org.nitlanguage.ndt.src.org.nitlanguage.ndt.ui.docmodel.Declaration.java-removeModificatorKeyword.pattern
+MATCHLEVEL : ALL
+ALL : 11, UPD : 0, INS : 11, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:25:17 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.ISO8859_1_ESCAPE:[34]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 21:25:43 CDT - 2019.09.04 AD at 21:29:37 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
+-return ISO8859_1_ESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
+-return ISO8859_1_ESCAPE.clone();
++return ISO8859_1_ESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
+-return ISO8859_1_ESCAPE.clone();
++return (String[][])ISO8859_1_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
+-return ISO8859_1_ESCAPE.clone();
++return (String[][])(ISO8859_1_ESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
++int a=0;
+ return ISO8859_1_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
++String OUTSTRING="";
+ return ISO8859_1_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
++int a=1;
+ return ISO8859_1_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
++boolean b=true;
+ return ISO8859_1_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
++if(ISO8859_1_ESCAPE==null){
++return null;
++}
+ return ISO8859_1_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:29:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
+-return ISO8859_1_ESCAPE.clone();
++return ISO8859_1_ESCAPE==null?null:ISO8859_1_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:30:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
++if(ISO8859_1_ESCAPE!=null){
+ return ISO8859_1_ESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:30:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
+-return ISO8859_1_ESCAPE.clone();
++return ISO8859_1_ESCAPE!=null?ISO8859_1_ESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:30:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
++if(ISO8859_1_ESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return ISO8859_1_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:30:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
++if(ISO8859_1_ESCAPE!=null){
+ return ISO8859_1_ESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:30:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[29,34]
+------------Candidate---------------
+ public static String[][] ISO8859_1_ESCAPE(){
+-return ISO8859_1_ESCAPE.clone();
++String[][] result=null;
++if(ISO8859_1_ESCAPE.clone()!=null){
++result=ISO8859_1_ESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:30:13 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.ISO8859_1_UNESCAPE:[138]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 21:30:40 CDT - 2019.09.04 AD at 21:34:27 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
+-return ISO8859_1_UNESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
+-return ISO8859_1_UNESCAPE.clone();
++return ISO8859_1_UNESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
+-return ISO8859_1_UNESCAPE.clone();
++return (String[][])ISO8859_1_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
+-return ISO8859_1_UNESCAPE.clone();
++return (String[][])(ISO8859_1_UNESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
++int a=0;
+ return ISO8859_1_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
++String OUTSTRING="";
+ return ISO8859_1_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
++int a=1;
+ return ISO8859_1_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
++boolean b=true;
+ return ISO8859_1_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
++if(ISO8859_1_UNESCAPE==null){
++return null;
++}
+ return ISO8859_1_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
+-return ISO8859_1_UNESCAPE.clone();
++return ISO8859_1_UNESCAPE==null?null:ISO8859_1_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
++if(ISO8859_1_UNESCAPE!=null){
+ return ISO8859_1_UNESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
+-return ISO8859_1_UNESCAPE.clone();
++return ISO8859_1_UNESCAPE!=null?ISO8859_1_UNESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
++if(ISO8859_1_UNESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return ISO8859_1_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:34:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
++if(ISO8859_1_UNESCAPE!=null){
+ return ISO8859_1_UNESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:35:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[134,138]
+------------Candidate---------------
+ public static String[][] ISO8859_1_UNESCAPE(){
+-return ISO8859_1_UNESCAPE.clone();
++String[][] result=null;
++if(ISO8859_1_UNESCAPE.clone()!=null){
++result=ISO8859_1_UNESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:35:03 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.HTML40_EXTENDED_ESCAPE:[147]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 21:35:30 CDT - 2019.09.04 AD at 21:39:38 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
+-return HTML40_EXTENDED_ESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:39:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
+-return HTML40_EXTENDED_ESCAPE.clone();
++return HTML40_EXTENDED_ESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:39:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
+-return HTML40_EXTENDED_ESCAPE.clone();
++return (String[][])HTML40_EXTENDED_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:39:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
+-return HTML40_EXTENDED_ESCAPE.clone();
++return (String[][])(HTML40_EXTENDED_ESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:39:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
++int a=0;
+ return HTML40_EXTENDED_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:39:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
++String OUTSTRING="";
+ return HTML40_EXTENDED_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:39:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
++int a=1;
+ return HTML40_EXTENDED_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:39:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
++boolean b=true;
+ return HTML40_EXTENDED_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:39:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
++if(HTML40_EXTENDED_ESCAPE==null){
++return null;
++}
+ return HTML40_EXTENDED_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:40:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
+-return HTML40_EXTENDED_ESCAPE.clone();
++return HTML40_EXTENDED_ESCAPE==null?null:HTML40_EXTENDED_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:40:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
++if(HTML40_EXTENDED_ESCAPE!=null){
+ return HTML40_EXTENDED_ESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:40:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
+-return HTML40_EXTENDED_ESCAPE.clone();
++return HTML40_EXTENDED_ESCAPE!=null?HTML40_EXTENDED_ESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:40:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
++if(HTML40_EXTENDED_ESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return HTML40_EXTENDED_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:40:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
++if(HTML40_EXTENDED_ESCAPE!=null){
+ return HTML40_EXTENDED_ESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:40:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[141,147]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_ESCAPE(){
+-return HTML40_EXTENDED_ESCAPE.clone();
++String[][] result=null;
++if(HTML40_EXTENDED_ESCAPE.clone()!=null){
++result=HTML40_EXTENDED_ESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:40:16 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.HTML40_EXTENDED_UNESCAPE:[349]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 21:40:42 CDT - 2019.09.04 AD at 21:44:49 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
+-return HTML40_EXTENDED_UNESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:44:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
+-return HTML40_EXTENDED_UNESCAPE.clone();
++return HTML40_EXTENDED_UNESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:44:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
+-return HTML40_EXTENDED_UNESCAPE.clone();
++return (String[][])HTML40_EXTENDED_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:44:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
+-return HTML40_EXTENDED_UNESCAPE.clone();
++return (String[][])(HTML40_EXTENDED_UNESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:44:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
++int a=0;
+ return HTML40_EXTENDED_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
++String OUTSTRING="";
+ return HTML40_EXTENDED_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
++int a=1;
+ return HTML40_EXTENDED_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
++boolean b=true;
+ return HTML40_EXTENDED_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
++if(HTML40_EXTENDED_UNESCAPE==null){
++return null;
++}
+ return HTML40_EXTENDED_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
+-return HTML40_EXTENDED_UNESCAPE.clone();
++return HTML40_EXTENDED_UNESCAPE==null?null:HTML40_EXTENDED_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
++if(HTML40_EXTENDED_UNESCAPE!=null){
+ return HTML40_EXTENDED_UNESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
+-return HTML40_EXTENDED_UNESCAPE.clone();
++return HTML40_EXTENDED_UNESCAPE!=null?HTML40_EXTENDED_UNESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
++if(HTML40_EXTENDED_UNESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return HTML40_EXTENDED_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
++if(HTML40_EXTENDED_UNESCAPE!=null){
+ return HTML40_EXTENDED_UNESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[345,349]
+------------Candidate---------------
+ public static String[][] HTML40_EXTENDED_UNESCAPE(){
+-return HTML40_EXTENDED_UNESCAPE.clone();
++String[][] result=null;
++if(HTML40_EXTENDED_UNESCAPE.clone()!=null){
++result=HTML40_EXTENDED_UNESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:45:22 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.BASIC_ESCAPE:[358]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 21:45:49 CDT - 2019.09.04 AD at 21:49:46 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
+-return BASIC_ESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:49:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
+-return BASIC_ESCAPE.clone();
++return BASIC_ESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:49:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
+-return BASIC_ESCAPE.clone();
++return (String[][])BASIC_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:49:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
+-return BASIC_ESCAPE.clone();
++return (String[][])(BASIC_ESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:49:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
++int a=0;
+ return BASIC_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:49:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
++String OUTSTRING="";
+ return BASIC_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
++int a=1;
+ return BASIC_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
++boolean b=true;
+ return BASIC_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
++if(BASIC_ESCAPE==null){
++return null;
++}
+ return BASIC_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
+-return BASIC_ESCAPE.clone();
++return BASIC_ESCAPE==null?null:BASIC_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
++if(BASIC_ESCAPE!=null){
+ return BASIC_ESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
+-return BASIC_ESCAPE.clone();
++return BASIC_ESCAPE!=null?BASIC_ESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
++if(BASIC_ESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return BASIC_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
++if(BASIC_ESCAPE!=null){
+ return BASIC_ESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[352,358]
+------------Candidate---------------
+ public static String[][] BASIC_ESCAPE(){
+-return BASIC_ESCAPE.clone();
++String[][] result=null;
++if(BASIC_ESCAPE.clone()!=null){
++result=BASIC_ESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:50:22 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.BASIC_UNESCAPE:[370]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 21:50:51 CDT - 2019.09.04 AD at 21:54:46 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
+-return BASIC_UNESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:54:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
+-return BASIC_UNESCAPE.clone();
++return BASIC_UNESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:54:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
+-return BASIC_UNESCAPE.clone();
++return (String[][])BASIC_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:54:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
+-return BASIC_UNESCAPE.clone();
++return (String[][])(BASIC_UNESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:54:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
++int a=0;
+ return BASIC_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:54:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
++String OUTSTRING="";
+ return BASIC_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
++int a=1;
+ return BASIC_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
++boolean b=true;
+ return BASIC_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
++if(BASIC_UNESCAPE==null){
++return null;
++}
+ return BASIC_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
+-return BASIC_UNESCAPE.clone();
++return BASIC_UNESCAPE==null?null:BASIC_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
++if(BASIC_UNESCAPE!=null){
+ return BASIC_UNESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
+-return BASIC_UNESCAPE.clone();
++return BASIC_UNESCAPE!=null?BASIC_UNESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
++if(BASIC_UNESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return BASIC_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
++if(BASIC_UNESCAPE!=null){
+ return BASIC_UNESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[366,370]
+------------Candidate---------------
+ public static String[][] BASIC_UNESCAPE(){
+-return BASIC_UNESCAPE.clone();
++String[][] result=null;
++if(BASIC_UNESCAPE.clone()!=null){
++result=BASIC_UNESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:55:22 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.APOS_ESCAPE:[377]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 21:55:50 CDT - 2019.09.04 AD at 21:59:36 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
+-return APOS_ESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
+-return APOS_ESCAPE.clone();
++return APOS_ESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
+-return APOS_ESCAPE.clone();
++return (String[][])APOS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
+-return APOS_ESCAPE.clone();
++return (String[][])(APOS_ESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
++int a=0;
+ return APOS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
++String OUTSTRING="";
+ return APOS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
++int a=1;
+ return APOS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
++boolean b=true;
+ return APOS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
++if(APOS_ESCAPE==null){
++return null;
++}
+ return APOS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 21:59:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
+-return APOS_ESCAPE.clone();
++return APOS_ESCAPE==null?null:APOS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:00:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
++if(APOS_ESCAPE!=null){
+ return APOS_ESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:00:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
+-return APOS_ESCAPE.clone();
++return APOS_ESCAPE!=null?APOS_ESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:00:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
++if(APOS_ESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return APOS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:00:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
++if(APOS_ESCAPE!=null){
+ return APOS_ESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:00:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[373,377]
+------------Candidate---------------
+ public static String[][] APOS_ESCAPE(){
+-return APOS_ESCAPE.clone();
++String[][] result=null;
++if(APOS_ESCAPE.clone()!=null){
++result=APOS_ESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:00:17 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.APOS_UNESCAPE:[386]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 22:00:44 CDT - 2019.09.04 AD at 22:04:38 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
+-return APOS_UNESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:04:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
+-return APOS_UNESCAPE.clone();
++return APOS_UNESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:04:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
+-return APOS_UNESCAPE.clone();
++return (String[][])APOS_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:04:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
+-return APOS_UNESCAPE.clone();
++return (String[][])(APOS_UNESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:04:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
++int a=0;
+ return APOS_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:04:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
++String OUTSTRING="";
+ return APOS_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:04:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
++int a=1;
+ return APOS_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:04:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
++boolean b=true;
+ return APOS_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:04:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
++if(APOS_UNESCAPE==null){
++return null;
++}
+ return APOS_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:05:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
+-return APOS_UNESCAPE.clone();
++return APOS_UNESCAPE==null?null:APOS_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:05:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
++if(APOS_UNESCAPE!=null){
+ return APOS_UNESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:05:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
+-return APOS_UNESCAPE.clone();
++return APOS_UNESCAPE!=null?APOS_UNESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:05:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
++if(APOS_UNESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return APOS_UNESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:05:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
++if(APOS_UNESCAPE!=null){
+ return APOS_UNESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:05:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[382,386]
+------------Candidate---------------
+ public static String[][] APOS_UNESCAPE(){
+-return APOS_UNESCAPE.clone();
++String[][] result=null;
++if(APOS_UNESCAPE.clone()!=null){
++result=APOS_UNESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:05:16 CDT
+--------------- END -----------------
+Location : org.apache.commons.lang3.text.translate.EntityArrays.JAVA_CTRL_CHARS_ESCAPE:[395]#0.5773502691896258
+Compute Candidate : 2019.09.04 AD at 22:05:44 CDT - 2019.09.04 AD at 22:09:50 CDT , PNumber : 11281, CandNumber : 15 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
+-return JAVA_CTRL_CHARS_ESCAPE.clone();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:09:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
+-return JAVA_CTRL_CHARS_ESCAPE.clone();
++return JAVA_CTRL_CHARS_ESCAPE.clone().clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4683/pattern-ver1-serial/backend.src.main.java.com.benine.backend.camera.ipcameracontrol.IPCamera.java-getPresets.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:09:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
+-return JAVA_CTRL_CHARS_ESCAPE.clone();
++return (String[][])JAVA_CTRL_CHARS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:09:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
+-return JAVA_CTRL_CHARS_ESCAPE.clone();
++return (String[][])(JAVA_CTRL_CHARS_ESCAPE.clone());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:09:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
++int a=0;
+ return JAVA_CTRL_CHARS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
++String OUTSTRING="";
+ return JAVA_CTRL_CHARS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
++int a=1;
+ return JAVA_CTRL_CHARS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
++boolean b=true;
+ return JAVA_CTRL_CHARS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
++if(JAVA_CTRL_CHARS_ESCAPE==null){
++return null;
++}
+ return JAVA_CTRL_CHARS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
+-return JAVA_CTRL_CHARS_ESCAPE.clone();
++return JAVA_CTRL_CHARS_ESCAPE==null?null:JAVA_CTRL_CHARS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
++if(JAVA_CTRL_CHARS_ESCAPE!=null){
+ return JAVA_CTRL_CHARS_ESCAPE.clone();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:16 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
+-return JAVA_CTRL_CHARS_ESCAPE.clone();
++return JAVA_CTRL_CHARS_ESCAPE!=null?JAVA_CTRL_CHARS_ESCAPE.clone():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
++if(JAVA_CTRL_CHARS_ESCAPE==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return JAVA_CTRL_CHARS_ESCAPE.clone();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
++if(JAVA_CTRL_CHARS_ESCAPE!=null){
+ return JAVA_CTRL_CHARS_ESCAPE.clone();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_6_buggy/src/main/java/org/apache/commons/lang3/text/translate/EntityArrays.java[389,395]
+------------Candidate---------------
+ public static String[][] JAVA_CTRL_CHARS_ESCAPE(){
+-return JAVA_CTRL_CHARS_ESCAPE.clone();
++String[][] result=null;
++if(JAVA_CTRL_CHARS_ESCAPE.clone()!=null){
++result=JAVA_CTRL_CHARS_ESCAPE.clone().clone();
++}
++return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/2121/pattern-ver1-serial/exportLibraries.xtremio.src.main.java.com.emc.storageos.xtremio.restapi.model.response.XtremIOTagsInfo.java-getTagsInfo.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 2, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testEscapeSurrogatePairs]
+---------START : 2019.09.04 AD at 21:18:02 CDT
+---------TIME : 2019.09.04 AD at 22:10:26 CDT
+--------------- END -----------------
+Finish : lang-6 > patch : 0 | Start : Wed Sep 04 21:18:02 CDT 2019 | End : 2019.09.04 AD at 22:10:26 CDT

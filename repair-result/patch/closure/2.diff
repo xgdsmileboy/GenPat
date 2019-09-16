@@ -1,0 +1,89 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_2_buggy/src/com/google/javascript/jscomp/TypeCheck.java[1554,1592]
+------------Solution---------------
+ private void checkInterfaceConflictProperties(NodeTraversal t,Node n,String functionName,HashMap<String,ObjectType> properties,HashMap<String,ObjectType> currentProperties,ObjectType interfaceType){
+ ObjectType implicitProto=interfaceType.getImplicitPrototype();
++if(implicitProto==null){
++return ;
++}
+ Set<String> currentPropertyNames;
+ currentPropertyNames=implicitProto.getOwnPropertyNames();
+ for(String name : currentPropertyNames){
+ ObjectType oType=properties.get(name);
+ if(oType!=null){
+ if(!interfaceType.getPropertyType(name).isEquivalentTo(oType.getPropertyType(name))){
+ compiler.report(t.makeError(n,INCOMPATIBLE_EXTENDED_PROPERTY_TYPE,functionName,name,oType.toString(),interfaceType.toString()));
+ }
+ }
+ currentProperties.put(name,interfaceType);
+ }
+ for(ObjectType iType : interfaceType.getCtorExtendedInterfaces()){
+ checkInterfaceConflictProperties(t,n,functionName,properties,currentProperties,iType);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/5349/pattern-ver1-serial/drools-wb-screens.drools-wb-guided-dtable-editor.drools-wb-guided-dtable-editor-client.src.main.java.org.drools.workbench.screens.guided.dtable.client.widget.table2.columns.dom.textbox.TextBoxLongSingletonDOMElementFactory.java-convert.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.TypeCheckTest::testBadInterfaceExtendsNonExistentInterfaces]
+---------START : 2019.09.10 AD at 05:31:39 CDT
+---------TIME : 2019.09.10 AD at 07:40:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_2_buggy/src/com/google/javascript/jscomp/TypeCheck.java[1554,1592]
+------------Solution---------------
+ private void checkInterfaceConflictProperties(NodeTraversal t,Node n,String functionName,HashMap<String,ObjectType> properties,HashMap<String,ObjectType> currentProperties,ObjectType interfaceType){
+ ObjectType implicitProto=interfaceType.getImplicitPrototype();
+ Set<String> currentPropertyNames;
++if(implicitProto!=null){
+ currentPropertyNames=implicitProto.getOwnPropertyNames();
+ for(String name : currentPropertyNames){
+ ObjectType oType=properties.get(name);
+ if(oType!=null){
+ if(!interfaceType.getPropertyType(name).isEquivalentTo(oType.getPropertyType(name))){
+ compiler.report(t.makeError(n,INCOMPATIBLE_EXTENDED_PROPERTY_TYPE,functionName,name,oType.toString(),interfaceType.toString()));
+ }
+ }
+ currentProperties.put(name,interfaceType);
++}
+ }
+ for(ObjectType iType : interfaceType.getCtorExtendedInterfaces()){
+ checkInterfaceConflictProperties(t,n,functionName,properties,currentProperties,iType);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V40/6354/pattern-ver1-serial/src.cager.jexpr.visitor.BoogieVisitor.java-visitPrimaryExpression.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.TypeCheckTest::testBadInterfaceExtendsNonExistentInterfaces]
+---------START : 2019.09.10 AD at 05:31:39 CDT
+---------TIME : 2019.09.10 AD at 07:43:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_2_buggy/src/com/google/javascript/jscomp/TypeCheck.java[1554,1592]
+------------Solution---------------
+ private void checkInterfaceConflictProperties(NodeTraversal t,Node n,String functionName,HashMap<String,ObjectType> properties,HashMap<String,ObjectType> currentProperties,ObjectType interfaceType){
+ ObjectType implicitProto=interfaceType.getImplicitPrototype();
+ Set<String> currentPropertyNames;
++if(implicitProto==null){
++return ;
++}
+ currentPropertyNames=implicitProto.getOwnPropertyNames();
+ for(String name : currentPropertyNames){
+ ObjectType oType=properties.get(name);
+ if(oType!=null){
+ if(!interfaceType.getPropertyType(name).isEquivalentTo(oType.getPropertyType(name))){
+ compiler.report(t.makeError(n,INCOMPATIBLE_EXTENDED_PROPERTY_TYPE,functionName,name,oType.toString(),interfaceType.toString()));
+ }
+ }
+ currentProperties.put(name,interfaceType);
+ }
+ for(ObjectType iType : interfaceType.getCtorExtendedInterfaces()){
+ checkInterfaceConflictProperties(t,n,functionName,properties,currentProperties,iType);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.TypeCheckTest::testBadInterfaceExtendsNonExistentInterfaces]
+---------START : 2019.09.10 AD at 05:31:39 CDT
+---------TIME : 2019.09.10 AD at 07:45:35 CDT
+--------------- END -----------------

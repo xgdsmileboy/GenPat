@@ -1,0 +1,168 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/XYPlot.java[2453,2466]
+------------Solution---------------
+ public boolean removeRangeMarker(Marker marker){
+-return removeRangeMarker(marker,Layer.FOREGROUND);
++return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V37/5444/pattern-ver1-serial/shellGDX.src.com.shellGDX.model2D.ModelObject2D.java-touchDown.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 03:30:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/XYPlot.java[2468,2482]
+------------Solution---------------
+ public boolean removeRangeMarker(Marker marker,Layer layer){
+-return removeRangeMarker(0,marker,layer);
++return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V37/5444/pattern-ver1-serial/shellGDX.src.com.shellGDX.model2D.ModelObject2D.java-touchDown.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 03:38:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/XYPlot.java[2484,2499]
+------------Solution---------------
+ public boolean removeRangeMarker(int index,Marker marker,Layer layer){
+-return removeRangeMarker(index,marker,layer,true);
++return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V2/2886/pattern-ver1-serial/src.freenet.node.CHKInsertSender.java-shouldTimeout.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 03:47:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/XYPlot.java[2501,2534]
+------------Solution---------------
+ public boolean removeRangeMarker(int index,Marker marker,Layer layer,boolean notify){
+ if(marker==null){
+ throw new IllegalArgumentException("Null 'marker' argument.");
+ }
+ ArrayList markers;
+ if(layer==Layer.FOREGROUND){
+ markers=(ArrayList)this.foregroundRangeMarkers.get(new Integer(index));
++return false;
+ }else {
+ markers=(ArrayList)this.backgroundRangeMarkers.get(new Integer(index));
+ }
+ boolean removed=markers.remove(marker);
+ if(removed&&notify){
+ fireChangeEvent();
+ }
+ return removed;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 04:19:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/XYPlot.java[2501,2534]
+------------Solution---------------
+ public boolean removeRangeMarker(int index,Marker marker,Layer layer,boolean notify){
+ if(marker==null){
+ throw new IllegalArgumentException("Null 'marker' argument.");
+ }
+ ArrayList markers;
+ if(layer==Layer.FOREGROUND){
+ markers=(ArrayList)this.foregroundRangeMarkers.get(new Integer(index));
++return false;
+ }else {
+ markers=(ArrayList)this.backgroundRangeMarkers.get(new Integer(index));
+ }
+ boolean removed=markers.remove(marker);
+ if(removed&&notify){
+ fireChangeEvent();
++return false;
+ }
+ return removed;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/4557/pattern-ver1-serial/src.de.rincewind.api.gui.elements.ElementCounter.java-setCount.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 04:21:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/XYPlot.java[2501,2534]
+------------Solution---------------
+ public boolean removeRangeMarker(int index,Marker marker,Layer layer,boolean notify){
+ if(marker==null){
+ throw new IllegalArgumentException("Null 'marker' argument.");
+ }
+ ArrayList markers;
+ if(layer==Layer.FOREGROUND){
+ markers=(ArrayList)this.foregroundRangeMarkers.get(new Integer(index));
+ }else {
+ markers=(ArrayList)this.backgroundRangeMarkers.get(new Integer(index));
++}
++if(markers==null){
++return false;
+ }
+ boolean removed=markers.remove(marker);
+ if(removed&&notify){
+ fireChangeEvent();
+ }
+ return removed;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.XYPlotTests::testRemoveRangeMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 04:28:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2094,2107]
+------------Solution---------------
+ public boolean removeDomainMarker(Marker marker){
+-return removeDomainMarker(marker,Layer.FOREGROUND);
++return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V37/5444/pattern-ver1-serial/shellGDX.src.com.shellGDX.model2D.ModelObject2D.java-touchDown.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveDomainMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 07:49:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2109,2123]
+------------Solution---------------
+ public boolean removeDomainMarker(Marker marker,Layer layer){
+-return removeDomainMarker(0,marker,layer);
++return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V37/5444/pattern-ver1-serial/shellGDX.src.com.shellGDX.model2D.ModelObject2D.java-touchDown.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveDomainMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 07:57:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_14_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2125,2140]
+------------Solution---------------
+ public boolean removeDomainMarker(int index,Marker marker,Layer layer){
+-return removeDomainMarker(index,marker,layer,true);
++return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V2/2886/pattern-ver1-serial/src.freenet.node.CHKInsertSender.java-shouldTimeout.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.plot.junit.CategoryPlotTests::testRemoveDomainMarker]
+---------START : 2019.09.05 AD at 03:23:19 CDT
+---------TIME : 2019.09.05 AD at 08:05:52 CDT
+--------------- END -----------------

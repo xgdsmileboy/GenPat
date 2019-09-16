@@ -1,0 +1,30 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_22_buggy/src/main/java/org/apache/commons/math3/distribution/UniformRealDistribution.java[182,185]
+------------Solution---------------
++import java.util.Collections;
++
+ public boolean isSupportUpperBoundInclusive(){
+-return false;
++return true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V2/4457/pattern-ver1-serial/library.src.main.java.com.gh.bmd.jrt.core.DefaultResultChannel.java-isOutputChannelOpen.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math3.distribution.UniformRealDistributionTest::testIsSupportUpperBoundInclusive]
+---------START : 2019.09.05 AD at 02:06:22 CDT
+---------TIME : 2019.09.05 AD at 02:13:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_22_buggy/src/main/java/org/apache/commons/math3/distribution/FDistribution.java[273,276]
+------------Solution---------------
+ public boolean isSupportLowerBoundInclusive(){
+-return true;
++return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V2/2886/pattern-ver1-serial/src.freenet.node.CHKInsertSender.java-shouldTimeout.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math3.distribution.FDistributionTest::testIsSupportLowerBoundInclusive]
+---------START : 2019.09.05 AD at 02:06:22 CDT
+---------TIME : 2019.09.05 AD at 04:28:38 CDT
+--------------- END -----------------

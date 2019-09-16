@@ -1,0 +1,1350 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+-int expPos=str.indexOf('e')+str.indexOf('E')+1;
++int expPos=str.indexOf(str,'e')+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+ if(expPos>-1){
+ mant=str.substring(0,expPos);
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7601/pattern-ver1-serial/src.neu.ComputerPlayer.java-checkImmidiateFour.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:33:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+ int expPos=str.indexOf('e')+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+-if(expPos>-1){
++if(expPos<-1){
+ mant=str.substring(0,expPos);
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V61/3672/pattern-ver1-serial/src.edu.miamioh.cse283.htw.Room.java-shoot.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:34:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+-int expPos=str.indexOf('e')+str.indexOf('E')+1;
++int expPos=str.indexOf(1,'e')+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+ if(expPos>-1){
+ mant=str.substring(0,expPos);
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V40/6767/pattern-ver1-serial/src.main.java.org.gedcom4j.writer.GedcomWriter.java-emitRepositories.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:35:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+-int expPos=str.indexOf('e')+str.indexOf('E')+1;
++int expPos=str.indexOf('e',lastChar)+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+ if(expPos>-1){
+ mant=str.substring(0,expPos);
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V16/6746/pattern-ver1-serial/controllersvc.src.main.java.com.emc.storageos.vplexcontroller.VPlexDeviceController.java-deleteStorageView.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:36:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+-int expPos=str.indexOf('e')+str.indexOf('E')+1;
++int expPos=str.indexOf('e',2)+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+ if(expPos>-1){
+ mant=str.substring(0,expPos);
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V8/2170/pattern-ver1-serial/tool.jtag.src.main.java.nl.lxtreme.ols.tool.jtag.JTAGDataSet.java-reportJTAGTdiData.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:37:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+-int expPos=str.indexOf('e')+str.indexOf('E')+1;
++int expPos=str.indexOf(str+1,'e')+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+ if(expPos>-1){
+ mant=str.substring(0,expPos);
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V40/6767/pattern-ver1-serial/src.main.java.org.gedcom4j.writer.GedcomWriter.java-emitRepositoryCitation.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:50:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+ int expPos=str.indexOf('e')+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+ if(expPos>-1){
+-mant=str.substring(0,expPos);
++mant="";
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V20/6756/pattern-ver1-serial/src.main.java.org.silvertunnel_ng.netlib.adapter.url.impl.net.http.MessageHeader.java-mergeHeader.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:55:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+ int expPos=str.indexOf('e')+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+ if(expPos>-1){
+-mant=str.substring(0,expPos);
++mant=null;
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/2637/pattern-ver1-serial/de.bund.bfr.knime.openkrise.views.src.de.bund.bfr.knime.openkrise.views.gisgraphview.GraphSettings.java-GraphSettings.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:56:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+ int expPos=str.indexOf('e')+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+-if(expPos>-1){
++if(Double.isNaN(expPos)){
+ mant=str.substring(0,expPos);
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V32/1622/pattern-ver1-serial/src.mckay.utilities.staticlibraries.StringMethods.java-getDoubleInScientificNotation.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 08:56:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_27_buggy/src/main/java/org/apache/commons/lang3/math/NumberUtils.java[426,599]
+------------Solution---------------
+ public static Number createNumber(String str) throws NumberFormatException{
+ if(str==null){
+ return null;
+ }
+ if(StringUtils.isBlank(str)){
+ throw new NumberFormatException("A blank string is not a valid number");
+ }
+ if(str.startsWith("--")){
+ return null;
+ }
+ if(str.startsWith("0x")||str.startsWith("-0x")){
+ return createInteger(str);
+ }
+ char lastChar=str.charAt(str.length()-1);
+ String mant;
+ String dec;
+ String exp;
+ int decPos=str.indexOf('.');
+ int expPos=str.indexOf('e')+str.indexOf('E')+1;
+ if(decPos>-1){
+ if(expPos>-1){
+ if(expPos<decPos){
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ dec=str.substring(decPos+1,expPos);
+ }else {
+ dec=str.substring(decPos+1);
+ }
+ mant=str.substring(0,decPos);
+ }else {
+-if(expPos>-1){
++if(-1>0&&expPos>-1){
+ mant=str.substring(0,expPos);
+ }else {
+ mant=str;
+ }
+ dec=null;
+ }
+ if(!Character.isDigit(lastChar)&&lastChar!='.'){
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length()-1);
+ }else {
+ exp=null;
+ }
+ String numeric=str.substring(0,str.length()-1);
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ switch (lastChar){
+ case 'l' :
+ 
+ case 'L' :
+ 
+ if(dec==null&&exp==null&&(numeric.charAt(0)=='-'&&isDigits(numeric.substring(1))||isDigits(numeric))){
+ try{
+ return createLong(numeric);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(numeric);
+ }
+ throw new NumberFormatException(str+" is not a valid number.");
+ case 'f' :
+ 
+ case 'F' :
+ 
+ try{
+ Float f=NumberUtils.createFloat(numeric);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ case 'd' :
+ 
+ case 'D' :
+ 
+ try{
+ Double d=NumberUtils.createDouble(numeric);
+ if(!(d.isInfinite()||(d.floatValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createBigDecimal(numeric);
+ }catch(NumberFormatException e){
+ }
+ default :
+ 
+ throw new NumberFormatException(str+" is not a valid number.");
+ }
+ }else {
+ if(expPos>-1&&expPos<str.length()-1){
+ exp=str.substring(expPos+1,str.length());
+ }else {
+ exp=null;
+ }
+ if(dec==null&&exp==null){
+ try{
+ return createInteger(str);
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ return createLong(str);
+ }catch(NumberFormatException nfe){
+ }
+ return createBigInteger(str);
+ }else {
+ boolean allZeros=isAllZeros(mant)&&isAllZeros(exp);
+ try{
+ Float f=createFloat(str);
+ if(!(f.isInfinite()||(f.floatValue()==0.0&&!allZeros))){
+ return f;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ try{
+ Double d=createDouble(str);
+ if(!(d.isInfinite()||(d.doubleValue()==0.0&&!allZeros))){
+ return d;
+ }
+ }catch(NumberFormatException nfe){
+ }
+ return createBigDecimal(str);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/553/pattern-ver1-serial/src.main.java.edu.berkeley.cs.nlp.ocular.main.TrainFont.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.math.NumberUtilsTest::testCreateNumber_purify_25]
+---------START : 2019.09.06 AD at 05:37:53 CDT
+---------TIME : 2019.09.06 AD at 09:00:47 CDT
+--------------- END -----------------

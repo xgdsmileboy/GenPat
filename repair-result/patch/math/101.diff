@@ -1,0 +1,59 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_101_buggy/src/java/org/apache/commons/math/complex/ComplexFormat.java[313,389]
+------------Solution---------------
+ public Complex parse(String source,ParsePosition pos){
+ int initialIndex=pos.getIndex();
+ parseAndIgnoreWhitespace(source,pos);
++if(source.endsWith("/")==false){
++source=source+"/";
++}
+ Number re=parseNumber(source,getRealFormat(),pos);
+ if(re==null){
+ pos.setIndex(initialIndex);
+ return null;
+ }
+ int startIndex=pos.getIndex();
+ char c=parseNextCharacter(source,pos);
+ int sign=0;
+ switch (c){
+ case 0 :
+ 
+ return new Complex(re.doubleValue(),0.0);
+ case '-' :
+ 
+ sign=-1;
+ break;
+ case '+' :
+ 
+ sign=1;
+ break;
+ default :
+ 
+ pos.setIndex(initialIndex);
+ pos.setErrorIndex(startIndex);
+ return null;
+ }
+ parseAndIgnoreWhitespace(source,pos);
+ Number im=parseNumber(source,getRealFormat(),pos);
+ if(im==null){
+ pos.setIndex(initialIndex);
+ return null;
+ }
+ int n=getImaginaryCharacter().length();
+ startIndex=pos.getIndex();
+ int endIndex=startIndex+n;
+ if(source.substring(startIndex,endIndex).compareTo(getImaginaryCharacter())!=0){
+ pos.setIndex(initialIndex);
+ pos.setErrorIndex(startIndex);
+ return null;
+ }
+ pos.setIndex(endIndex);
+ return new Complex(re.doubleValue(),im.doubleValue()*sign);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V37/627/pattern-ver1-serial/src.main.java.com.thunder.util.Util.java-restMap.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.math.complex.ComplexFormatTest::testForgottenImaginaryCharacter, org.apache.commons.math.complex.FrenchComplexFormatTest::testForgottenImaginaryCharacter]
+---------START : 2019.09.08 AD at 09:38:28 CDT
+---------TIME : 2019.09.08 AD at 10:56:54 CDT
+--------------- END -----------------

@@ -1,0 +1,239 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_9_buggy/source/org/jfree/data/time/TimeSeries.java[904,956]
+------------Solution---------------
+ public TimeSeries createCopy(RegularTimePeriod start,RegularTimePeriod end) throws CloneNotSupportedException{
+ if(start==null){
+ throw new IllegalArgumentException("Null 'start' argument.");
+ }
+ if(end==null){
+ throw new IllegalArgumentException("Null 'end' argument.");
+ }
+ if(start.compareTo(end)>0){
+ throw new IllegalArgumentException("Requires start on or before end.");
+ }
+ boolean emptyRange=false;
+ int startIndex=getIndex(start);
+ if(startIndex<0){
+ startIndex=-(startIndex+1);
+ if(startIndex==this.data.size()){
+ emptyRange=true;
+ }
+ }
+ int endIndex=getIndex(end);
+ if(endIndex<0){
+ endIndex=-(endIndex+1);
++if(endIndex-1!=0){
+ endIndex=endIndex-1;
++}
+ }
+ if(endIndex<0){
+ emptyRange=true;
+ }
+ if(emptyRange){
+ TimeSeries copy=(TimeSeries)super.clone();
+ copy.data=new java.util.ArrayList();
+ return copy;
+ }else {
+ return createCopy(startIndex,endIndex);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/7542/pattern-ver1-serial/gde-backend.src.main.java.com.nagarro.gde.persistence.model.UserSpecialization.java-populateAreaOfSpecialization.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.jfree.data.time.junit.TimeSeriesTests::testBug1864222]
+---------START : 2019.09.04 AD at 21:50:14 CDT
+---------TIME : 2019.09.04 AD at 23:36:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_9_buggy/source/org/jfree/data/time/TimeSeries.java[904,956]
+------------Solution---------------
+ public TimeSeries createCopy(RegularTimePeriod start,RegularTimePeriod end) throws CloneNotSupportedException{
+ if(start==null){
+ throw new IllegalArgumentException("Null 'start' argument.");
+ }
+ if(end==null){
+ throw new IllegalArgumentException("Null 'end' argument.");
+ }
+ if(start.compareTo(end)>0){
+ throw new IllegalArgumentException("Requires start on or before end.");
+ }
+ boolean emptyRange=false;
+ int startIndex=getIndex(start);
+ if(startIndex<0){
+ startIndex=-(startIndex+1);
+ if(startIndex==this.data.size()){
+ emptyRange=true;
+ }
+ }
+ int endIndex=getIndex(end);
+ if(endIndex<0){
+ endIndex=-(endIndex+1);
+ endIndex=endIndex-1;
+ }
+ if(endIndex<0){
+ emptyRange=true;
+ }
+ if(emptyRange){
+ TimeSeries copy=(TimeSeries)super.clone();
+ copy.data=new java.util.ArrayList();
+ return copy;
+ }else {
+-return createCopy(startIndex,endIndex);
++return createCopy(startIndex,Math.max(startIndex,endIndex));
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V11/4531/pattern-ver1-serial/rsen.src.main.java.com.rsen.github.common.L.java-i.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.jfree.data.time.junit.TimeSeriesTests::testBug1864222]
+---------START : 2019.09.04 AD at 21:50:14 CDT
+---------TIME : 2019.09.04 AD at 23:44:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_9_buggy/source/org/jfree/data/time/TimeSeries.java[904,956]
+------------Solution---------------
+ public TimeSeries createCopy(RegularTimePeriod start,RegularTimePeriod end) throws CloneNotSupportedException{
+ if(start==null){
+ throw new IllegalArgumentException("Null 'start' argument.");
+ }
+ if(end==null){
+ throw new IllegalArgumentException("Null 'end' argument.");
+ }
+ if(start.compareTo(end)>0){
+ throw new IllegalArgumentException("Requires start on or before end.");
+ }
+ boolean emptyRange=false;
+ int startIndex=getIndex(start);
+ if(startIndex<0){
+ startIndex=-(startIndex+1);
+ if(startIndex==this.data.size()){
+ emptyRange=true;
+ }
+ }
+ int endIndex=getIndex(end);
+ if(endIndex<0){
+ endIndex=-(endIndex+1);
+ endIndex=endIndex-1;
++if(endIndex==0){
++return null;
++}
+ }
+ if(endIndex<0){
+ emptyRange=true;
+ }
+ if(emptyRange){
+ TimeSeries copy=(TimeSeries)super.clone();
+ copy.data=new java.util.ArrayList();
+ return copy;
+ }else {
+ return createCopy(startIndex,endIndex);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/331/pattern-ver1-serial/flink-runtime.src.main.java.org.apache.flink.runtime.operators.hash.ReduceHashTable.java-EntryIterator.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.jfree.data.time.junit.TimeSeriesTests::testBug1864222]
+---------START : 2019.09.04 AD at 21:50:14 CDT
+---------TIME : 2019.09.04 AD at 23:53:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_9_buggy/source/org/jfree/data/time/TimeSeries.java[904,956]
+------------Solution---------------
+ public TimeSeries createCopy(RegularTimePeriod start,RegularTimePeriod end) throws CloneNotSupportedException{
+ if(start==null){
+ throw new IllegalArgumentException("Null 'start' argument.");
+ }
+ if(end==null){
+ throw new IllegalArgumentException("Null 'end' argument.");
+ }
+ if(start.compareTo(end)>0){
+ throw new IllegalArgumentException("Requires start on or before end.");
+ }
+ boolean emptyRange=false;
+ int startIndex=getIndex(start);
+ if(startIndex<0){
+ startIndex=-(startIndex+1);
+ if(startIndex==this.data.size()){
+ emptyRange=true;
+ }
+ }
+ int endIndex=getIndex(end);
+ if(endIndex<0){
+ endIndex=-(endIndex+1);
+ endIndex=endIndex-1;
+ }
+ if(endIndex<0){
+ emptyRange=true;
++}
++if(startIndex>endIndex){
++startIndex=endIndex;
+ }
+ if(emptyRange){
+ TimeSeries copy=(TimeSeries)super.clone();
+ copy.data=new java.util.ArrayList();
+ return copy;
+ }else {
+ return createCopy(startIndex,endIndex);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/5173/pattern-ver1-serial/src.com.sbar.rebudget.views.ChartView.java-addPiece.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.jfree.data.time.junit.TimeSeriesTests::testBug1864222]
+---------START : 2019.09.04 AD at 21:50:14 CDT
+---------TIME : 2019.09.05 AD at 00:02:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_9_buggy/source/org/jfree/data/time/Day.java[388,425]
+------------Solution---------------
+ public int compareTo(Object o1){
+ int result;
+ if(o1 instanceof Day){
+ Day d=(Day)o1;
+ result=-d.getSerialDate().compare(this.serialDate);
++if(result<0){
++result=0;
++}
+ }else {
+ if(o1 instanceof RegularTimePeriod){
+ result=0;
+ }else {
+ result=1;
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/4394/pattern-ver1-serial/src.main.java.cloudsync.connector.RemoteGoogleDriveConnector.java-remove.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.jfree.data.time.junit.TimeSeriesTests::testBug1864222]
+---------START : 2019.09.04 AD at 21:50:14 CDT
+---------TIME : 2019.09.05 AD at 02:04:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_9_buggy/source/org/jfree/data/time/Day.java[388,425]
+------------Solution---------------
+ public int compareTo(Object o1){
+ int result;
+ if(o1 instanceof Day){
+ Day d=(Day)o1;
+ result=-d.getSerialDate().compare(this.serialDate);
+ }else {
+ if(o1 instanceof RegularTimePeriod){
+ result=0;
+ }else {
+ result=1;
++}
+ }
++if(result<0){
++result=0;
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/4394/pattern-ver1-serial/src.main.java.cloudsync.connector.RemoteGoogleDriveConnector.java-remove.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.jfree.data.time.junit.TimeSeriesTests::testBug1864222]
+---------START : 2019.09.04 AD at 21:50:14 CDT
+---------TIME : 2019.09.05 AD at 02:05:17 CDT
+--------------- END -----------------

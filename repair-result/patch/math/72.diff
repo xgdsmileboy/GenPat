@@ -1,0 +1,520 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+-setResult(yMin,0);
++setResult(min,yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/5063/pattern-ver1-serial/odemapster-core-querytranslator.src.main.java.es.upm.fi.dia.oeg.obdi.core.querytranslator.AbstractCondSQLGenerator.java-genCondSQLSubject.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:19:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+ setResult(yMin,0);
+-return result;
++return min;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V52/5398/pattern-ver1-serial/extensions.fluent.src.org.exist.fluent.Item.java-valueWithDefault.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:20:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+ setResult(yMin,0);
+-return result;
++return result+min;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/5747/pattern-ver1-serial/src.main.java.MySimpleClass.java-add.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:27:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+-setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
++setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V66/2466/pattern-ver1-serial/tajo-core.src.main.java.org.apache.tajo.worker.Task.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:29:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+-setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
++setResult(yMin,0);
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/2420/pattern-ver1-serial/OpenWatch.src.org.ale.openwatch.fb.FBUtils.java-onPostExecute.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:32:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+-setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
++setResult(yMin,0);
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/2420/pattern-ver1-serial/OpenWatch.src.org.ale.openwatch.fb.FBUtils.java-onPostExecute.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:32:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+-setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
++setResult(yMin,0);
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/2420/pattern-ver1-serial/OpenWatch.src.org.ale.openwatch.fb.FBUtils.java-onPostExecute.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:33:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+-setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
++setResult(yMin,0);
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/2420/pattern-ver1-serial/OpenWatch.src.org.ale.openwatch.fb.FBUtils.java-onPostExecute.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:33:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+-if(Math.abs(yMin)<=functionValueAccuracy){
++if(Double.isNaN(Math.abs(yMin))){
+ setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V32/1622/pattern-ver1-serial/src.mckay.utilities.staticlibraries.StringMethods.java-getDoubleInScientificNotation.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:35:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+ setResult(yMin,0);
+-return result;
++return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/469/pattern-ver1-serial/src.ac.uk.susx.tag.filter.RegexFilter.java-matchAnnotation.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 9, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_3]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 10:39:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+ setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+-setResult(yMax,0);
++setResult(max,yMax,0);
+ return result;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/5063/pattern-ver1-serial/odemapster-core-querytranslator.src.main.java.es.upm.fi.dia.oeg.obdi.core.querytranslator.AbstractCondSQLGenerator.java-genCondSQLSubject.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_4]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 11:17:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+ setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+-return result;
++return max;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/4912/pattern-ver1-serial/polly.src.polly.configuration.ConfigurationImpl.java-readInt.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_4]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 11:19:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_72_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BrentSolver.java[78,144]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+ clearResult();
+ verifySequence(min,initial,max);
+ double yInitial=f.value(initial);
+ if(Math.abs(yInitial)<=functionValueAccuracy){
+ setResult(initial,0);
+ return result;
+ }
+ double yMin=f.value(min);
+ if(Math.abs(yMin)<=functionValueAccuracy){
+ setResult(yMin,0);
+ return result;
+ }
+ if(yInitial*yMin<0){
+ return solve(f,min,yMin,initial,yInitial,min,yMin);
+ }
+ double yMax=f.value(max);
+ if(Math.abs(yMax)<=functionValueAccuracy){
+ setResult(yMax,0);
+-return result;
++return result+max;
+ }
+ if(yInitial*yMax<0){
+ return solve(f,initial,yInitial,max,yMax,initial,yInitial);
+ }
+ if(yMin*yMax>0){
+ throw MathRuntimeException.createIllegalArgumentException(NON_BRACKETING_MESSAGE,min,max,yMin,yMax);
+ }
+ return solve(f,min,yMin,max,yMax,initial,yInitial);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/5747/pattern-ver1-serial/src.main.java.MySimpleClass.java-add.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BrentSolverTest::testRootEndpoints_purify_4]
+---------START : 2019.09.07 AD at 09:38:54 CDT
+---------TIME : 2019.09.07 AD at 11:25:57 CDT
+--------------- END -----------------

@@ -1,0 +1,62 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_47_buggy/src/java/org/apache/commons/lang/text/StrBuilder.java[1171,1199]
+------------Solution---------------
+ public StrBuilder appendFixedWidthPadLeft(Object obj,int width,char padChar){
+ if(width>0){
+ ensureCapacity(size+width);
+ String str=(obj==null?getNullText():obj.toString());
++if(str==null){
++str="";
++}
+ int strLen=str.length();
+ if(strLen>=width){
+ str.getChars(strLen-width,strLen,buffer,size);
+ }else {
+ int padLen=width-strLen;
+ for(int i=0;i<padLen;i++){
+ buffer[size+i]=padChar;
+ }
+ str.getChars(0,strLen,buffer,size+padLen);
+ }
+ size+=width;
+ }
+ return this;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V5/755/pattern-ver1-serial/src.org.simiancage.bukkit.messagechangerlite.MessageChangerLite.java-getMessage.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang.text.StrBuilderTest::testLang412Left]
+---------START : 2019.09.07 AD at 10:05:53 CDT
+---------TIME : 2019.09.07 AD at 10:52:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_47_buggy/src/java/org/apache/commons/lang/text/StrBuilder.java[1215,1243]
+------------Solution---------------
+ public StrBuilder appendFixedWidthPadRight(Object obj,int width,char padChar){
+ if(width>0){
+ ensureCapacity(size+width);
+ String str=(obj==null?getNullText():obj.toString());
++if(str==null){
++str="";
++}
+ int strLen=str.length();
+ if(strLen>=width){
+ str.getChars(0,width,buffer,size);
+ }else {
+ int padLen=width-strLen;
+ str.getChars(0,strLen,buffer,size);
+ for(int i=0;i<padLen;i++){
+ buffer[size+strLen+i]=padChar;
+ }
+ }
+ size+=width;
+ }
+ return this;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V5/755/pattern-ver1-serial/src.org.simiancage.bukkit.messagechangerlite.MessageChangerLite.java-getMessage.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang.text.StrBuilderTest::testLang412Right]
+---------START : 2019.09.07 AD at 10:05:53 CDT
+---------TIME : 2019.09.07 AD at 12:26:13 CDT
+--------------- END -----------------

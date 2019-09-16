@@ -1,0 +1,4087 @@
+Repair : time_15
+Current failed test : org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt | 2019.09.05 AD at 00:17:17 CDT
+Location : org.joda.time.field.FieldUtils.safeMultiply:[140, 138, 142, 144, 145, 148, 136]#1.0
+Compute Candidate : 2019.09.05 AD at 00:18:25 CDT - 2019.09.05 AD at 00:25:57 CDT , PNumber : 11318, CandNumber : 136 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+-long total=val1*val2;
++ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/2219/pattern-ver1-serial/hazelcast.src.main.java.com.hazelcast.client.impl.MemberImpl.java-getBooleanAttribute.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return 1;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/377/pattern-ver1-serial/src.kreuzungsSimulation.EventComparator.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
++default :
++
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/7688/pattern-ver1-serial/cluster.src.main.java.io.servicefabric.cluster.ClusterMembership.java-processUpdates.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+total);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/1162/pattern-ver1-serial/Android.C4.app.src.main.java.projectc4.c4.client.GameGridView.java-dropPowerup.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val1);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/1162/pattern-ver1-serial/Android.C4.app.src.main.java.projectc4.c4.client.GameGridView.java-dropPowerup.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return Integer.MIN_VALUE;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V4/4813/pattern-ver1-serial/src.main.java.net.openhft.chronicle.wire.BinaryWire.java-code.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+val2+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V35/174/pattern-ver1-serial/src.main.java.fr.novia.zaproxyplugin.ZAProxy.java-setUpAuthenticationMethod.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+total+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V35/174/pattern-ver1-serial/src.main.java.fr.novia.zaproxyplugin.ZAProxy.java-setUpAuthenticationMethod.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+-return val1;
++return 0;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/5321/pattern-ver1-serial/app.src.main.java.edu.gatech.johndoe.carecoordinator.community.UI.CommunityAdapter.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+-return total;
++return 0;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/5321/pattern-ver1-serial/app.src.main.java.edu.gatech.johndoe.carecoordinator.community.UI.CommunityAdapter.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return Integer.MAX_VALUE;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V20/4988/pattern-ver1-serial/hadoop-yarn-project.hadoop-yarn.hadoop-yarn-common.src.main.java.org.apache.hadoop.yarn.util.resource.Resources.java-getMemory.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return val2;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/4912/pattern-ver1-serial/polly.src.polly.configuration.ConfigurationImpl.java-readInt.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:26:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return val1;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/4912/pattern-ver1-serial/polly.src.polly.configuration.ConfigurationImpl.java-readInt.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2==val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V67/427/pattern-ver1-serial/softwaresystems.src.ss.week5.Board.java-isFull.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+-long total=val1*val2;
++Long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/3545/pattern-ver1-serial/nifi-nar-bundles.nifi-framework-bundle.nifi-framework.nifi-framework-core.src.main.java.org.apache.nifi.controller.StandardFlowFileQueue.java-summarize.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+-return val1;
++return val2;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/6187/pattern-ver1-serial/device-manager.core.src.main.java.org.dc.bco.manager.device.core.AbstractDeviceFactory.java-newInstance.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+-return total;
++return val1;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/6187/pattern-ver1-serial/device-manager.core.src.main.java.org.dc.bco.manager.device.core.AbstractDeviceFactory.java-newInstance.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+-return total;
++return val2;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/6187/pattern-ver1-serial/device-manager.core.src.main.java.org.dc.bco.manager.device.core.AbstractDeviceFactory.java-newInstance.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
++case 401 :
++
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/1693/pattern-ver1-serial/src.main.java.uk.ac.ic.wlgitbridge.snapshot.getdoc.GetDocResult.java-fromJSON.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+-return val1;
++return 1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/7202/pattern-ver1-serial/client.SurvivalGuide.src.ch.ethz.inf.vs.android.g54.a4.ui.TouchImageView.java-getPointerCount.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+-return total;
++return 1;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/7202/pattern-ver1-serial/client.SurvivalGuide.src.ch.ethz.inf.vs.android.g54.a4.ui.TouchImageView.java-getPointerCount.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
++case 4 :
++
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/2088/pattern-ver1-serial/core.src.com.finalstand.game.Screens.PlayScreen.java-findCreepStartingPos.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return 100;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V33/5846/pattern-ver1-serial/src.com.yy2039.answermachine.MessagesView.java-getKeybackIsCancel.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+val1+total+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/4130/pattern-ver1-serial/view.ProgramLoop.java-createNewUser.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:27:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+val1+val1+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/4130/pattern-ver1-serial/view.ProgramLoop.java-createNewUser.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Iterator;
++
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
++case 5 :
++
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V13/1378/pattern-ver1-serial/src.haven.OptWnd.java-changed.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return -1;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V9/2385/pattern-ver1-serial/dionysos.src.gr.teilar.dionysos.Dionysos.java-checkHtml.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
++default :
++
++break;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V32/4504/pattern-ver1-serial/microsoftband.src.main.java.org.md2k.microsoftband.PrefsFragmentMicrosoftBandSettings.java-onClick.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++total++;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V14/297/pattern-ver1-serial/app.src.main.java.org.team2635.scoutnetclient.fragments.StrategyInfoFragment.java-getData.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
++val1++;
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V14/297/pattern-ver1-serial/app.src.main.java.org.team2635.scoutnetclient.fragments.StrategyInfoFragment.java-getData.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
++val2++;
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V14/297/pattern-ver1-serial/app.src.main.java.org.team2635.scoutnetclient.fragments.StrategyInfoFragment.java-getData.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
++val1++;
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V29/6147/pattern-ver1-serial/src.system.ResultPathCompare.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
++val2++;
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V29/6147/pattern-ver1-serial/src.system.ResultPathCompare.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++total--;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/5173/pattern-ver1-serial/ejb_modules.EJB-timetable.src.main.java.be.vubrooster.ejb.managers.EHBActivityManager.java-loadActivitiesForClassRooms.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++val1--;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/5173/pattern-ver1-serial/ejb_modules.EJB-timetable.src.main.java.be.vubrooster.ejb.managers.EHBActivityManager.java-loadActivitiesForClassRooms.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:28:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++val2--;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/5173/pattern-ver1-serial/ejb_modules.EJB-timetable.src.main.java.be.vubrooster.ejb.managers.EHBActivityManager.java-loadActivitiesForClassRooms.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
++val1--;
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/965/pattern-ver1-serial/src.Game.java-loop.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
++val2--;
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/965/pattern-ver1-serial/src.Game.java-loop.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+-return -val1;
++return 0;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/5321/pattern-ver1-serial/app.src.main.java.edu.gatech.johndoe.carecoordinator.community.UI.CommunityAdapter.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:16 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+-return -val1;
++return val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V40/3906/pattern-ver1-serial/tetrad-lib.src.main.java.edu.cmu.tetrad.algcomparison.algorithm.oracle.pag.Ccd.java-getComparisonGraph.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+-return -val1;
++return val2;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/6187/pattern-ver1-serial/device-manager.core.src.main.java.org.dc.bco.manager.device.core.AbstractDeviceFactory.java-newInstance.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+-return -val1;
++return 1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/7202/pattern-ver1-serial/client.SurvivalGuide.src.ch.ethz.inf.vs.android.g54.a4.ui.TouchImageView.java-getPointerCount.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
++case 27 :
++
++return 5;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V13/1889/pattern-ver1-serial/app.src.main.java.johan.laststraw.AiPatterns.java-getAiPatternNr.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return (long)(0L);
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+-return -val1;
++return (long)(-val1);
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+-return val1;
++return (long)(val1);
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+-return total;
++return (long)(total);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:29:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return 1+0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V36/6216/pattern-ver1-serial/src.main.java.controller.graph.GradeShape.java-getScoreFromLocation.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
++val2=val2;
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V31/432/pattern-ver1-serial/src.arcane_arcade_menus.MainMenuMenuCreator.java-MainMenuElement.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
++val1=val1;
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V31/432/pattern-ver1-serial/src.arcane_arcade_menus.MainMenuMenuCreator.java-MainMenuElement.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return 0L&0xff;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/5603/pattern-ver1-serial/uk.ac.herts.SmartLab.XBee.Response.XBeeRx64Response.java-GetReceiveStatus.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+-return -val1;
++return -val1&0xff;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/5603/pattern-ver1-serial/uk.ac.herts.SmartLab.XBee.Response.XBeeRx64Response.java-GetReceiveStatus.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+-return val1;
++return val1&0xff;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/5603/pattern-ver1-serial/uk.ac.herts.SmartLab.XBee.Response.XBeeRx64Response.java-GetReceiveStatus.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+-return total;
++return total&0xff;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/5603/pattern-ver1-serial/uk.ac.herts.SmartLab.XBee.Response.XBeeRx64Response.java-GetReceiveStatus.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++total=1000;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V4/3726/pattern-ver1-serial/WeatherService.src.weatherservice.StatisticsCalculator.java-MinWindSpeed.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.io.Serializable;
++
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+-return -val1;
++return -val1*1000l;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V32/5781/pattern-ver1-serial/app.src.main.java.com.badou.mworking.entity.category.CategoryDetail.java-getStartline_c.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.io.Serializable;
++
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+-return val1;
++return val1*1000l;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V32/5781/pattern-ver1-serial/app.src.main.java.com.badou.mworking.entity.category.CategoryDetail.java-getStartline_c.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.io.Serializable;
++
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+-return total;
++return total*1000l;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V32/5781/pattern-ver1-serial/app.src.main.java.com.badou.mworking.entity.category.CategoryDetail.java-getStartline_c.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:30:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++int a=0;
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++int a=0;
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException(total+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V42/222/pattern-ver1-serial/src.com.yuval.aiconnotation.FileSystem.java-saveObject.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException(val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V42/222/pattern-ver1-serial/src.com.yuval.aiconnotation.FileSystem.java-saveObject.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException(val2+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V42/222/pattern-ver1-serial/src.com.yuval.aiconnotation.FileSystem.java-saveObject.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++String OUTSTRING="";
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++String OUTSTRING="";
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
++int indexSelection=0;
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/(val2-2)!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V25/5738/pattern-ver1-serial/huffmantrees.HuffmanTree.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(val1!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V14/5499/pattern-ver1-serial/src.dao.PublicationDAO.java-listComents.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V14/5499/pattern-ver1-serial/src.dao.PublicationDAO.java-listComents.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:31:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V14/5499/pattern-ver1-serial/src.dao.PublicationDAO.java-listComents.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++int a=1;
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++int a=1;
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++boolean b=true;
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++boolean b=true;
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return 0L+val2;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/5747/pattern-ver1-serial/src.main.java.MySimpleClass.java-add.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+-return 0L;
++return 0L+val1;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/5747/pattern-ver1-serial/src.main.java.MySimpleClass.java-add.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++if("index".equals(val1)){
++return 0;
++}
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++if("index".equals(val2)){
++return 0;
++}
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if("index".equals(val1)){
++return 0;
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:32:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if("index".equals(val2)){
++return 0;
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if("index".equals(total)){
++return 0;
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if(val1<0){
++return 0l;
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/1167/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.router.Publishers.java-receivedData.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++if(val2<0){
++return 0l;
++}
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/1167/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.router.Publishers.java-receivedData.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
++}
++if(val2<0){
++return 0l;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/1167/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.router.Publishers.java-receivedData.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if(val2<0){
++return 0l;
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/1167/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.router.Publishers.java-receivedData.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++if(val1<0){
++return 0l;
++}
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/1167/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.router.Publishers.java-receivedData.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++assert (total!=val1*val2);
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/3232/pattern-ver1-serial/src.main.java.com.about.java.controllers.MainController.java-mainpage.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2!=val1||"查看红包".equals(total/val2)){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/4605/pattern-ver1-serial/app.src.main.java.xyz.monkeytong.hongbao.utils.HongbaoSignature.java-generateSignature.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2!=val1||total/val2==3){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V30/1380/pattern-ver1-serial/Cluedo.src.control.Player.java-validMove.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total<0L||(total/val2!=val1)){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V8/110/pattern-ver1-serial/src.com.firebirdberlin.nightdream.ui.NightDreamUI.java-updateWeatherData.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2<0||total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V7/1602/pattern-ver1-serial/src.engine.network.server.ServerClient.java-knowMap.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:33:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(true){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/6216/pattern-ver1-serial/app.src.main.java.example.com.mpdlcamera.Upload.CustomAdapter.java-getView.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2!=val1||total/val2==Long.MIN_VALUE){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V5/7087/pattern-ver1-serial/BDEBase.src.main.java.gr.demokritos.iit.base.util.Utils.java-extractYearMonthDayLiteral.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2!=val1||total/val2==0){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V37/1056/pattern-ver1-serial/lts-admin.src.main.java.com.github.ltsopensource.admin.web.api.SuspendJobQueueApi.java-suspendJobRecovery.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2!=val1||total/val2>9){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V6/2964/pattern-ver1-serial/main.plugins.org.talend.dataquality.sampling.src.main.java.org.talend.dataquality.datamasking.FunctionApplier.java-generateDuplicate.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2!=val1&&total/val2<4000000){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V28/46/pattern-ver1-serial/raw.master.registryKit.registryKit.registryKit.src.main.java.com.registryKit.survey.surveyManager.java-saveSurveyDocument.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(Double.isNaN(total/val2)){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V32/1622/pattern-ver1-serial/src.mckay.utilities.staticlibraries.StringMethods.java-getDoubleInScientificNotation.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(total/val2!=val1&&total/val2!=9999){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5798/pattern-ver1-serial/SONPlugin.src.org.workcraft.plugins.son.granularity.HourMins.java-getHour.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++if(val1>0&&total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/553/pattern-ver1-serial/src.main.java.edu.berkeley.cs.nlp.ocular.main.TrainFont.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++assert (val2>=0):"Receive a negative tratment";
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Book.java-setChapters.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++assert (val2>=0):"Receive a negative tratment";
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Book.java-setChapters.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:34:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++assert (val1>=0):"Receive a negative tratment";
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Book.java-setChapters.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++assert (val1>=0):"Receive a negative tratment";
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Book.java-setChapters.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++assert (total>=0):"Receive a negative tratment";
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Book.java-setChapters.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.util.Date;
++
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++assert (val2!=0):"Receive a size tratment";
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Course.java-newArray.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.util.Date;
++
+ public static long safeMultiply(long val1,int val2){
++assert (val2!=0):"Receive a size tratment";
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Course.java-newArray.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.util.Date;
++
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++assert (val1!=0):"Receive a size tratment";
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Course.java-newArray.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.util.Date;
++
+ public static long safeMultiply(long val1,int val2){
++assert (val1!=0):"Receive a size tratment";
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Course.java-newArray.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.util.Date;
++
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++assert (total!=0):"Receive a size tratment";
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Course.java-newArray.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if(val1>7){
++throw new RuntimeException("Sorry, it is impossible to determine what number it is in canonical form if base is larger than 7. \n Use rational fraction or sequence representation.");
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/4557/pattern-ver1-serial/p-adic.src.main.java.vvk.numbers.PAdic.java-PAdic.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
++}
++if(val2>7){
++throw new RuntimeException("Sorry, it is impossible to determine what number it is in canonical form if base is larger than 7. \n Use rational fraction or sequence representation.");
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/4557/pattern-ver1-serial/p-adic.src.main.java.vvk.numbers.PAdic.java-PAdic.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++if(val2>7){
++throw new RuntimeException("Sorry, it is impossible to determine what number it is in canonical form if base is larger than 7. \n Use rational fraction or sequence representation.");
++}
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/4557/pattern-ver1-serial/p-adic.src.main.java.vvk.numbers.PAdic.java-PAdic.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:35:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if(val2>7){
++throw new RuntimeException("Sorry, it is impossible to determine what number it is in canonical form if base is larger than 7. \n Use rational fraction or sequence representation.");
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/4557/pattern-ver1-serial/p-adic.src.main.java.vvk.numbers.PAdic.java-PAdic.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if(total<=0){
++total=1;
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/1761/pattern-ver1-serial/JazminServer.src.jazmin.core.monitor.DispatcherMonitorAgent.java-sample.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++}
++if(total<=0){
++total=1;
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/1761/pattern-ver1-serial/JazminServer.src.jazmin.core.monitor.DispatcherMonitorAgent.java-sample.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2+" -u "+total);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V38/5800/pattern-ver1-serial/tools.gsissh.src.main.java.org.apache.airavata.gsi.ssh.api.job.SlurmJobConfiguration.java-getJobIdMonitorCommand.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 7, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2+" -u "+val1);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V38/5800/pattern-ver1-serial/tools.gsissh.src.main.java.org.apache.airavata.gsi.ssh.api.job.SlurmJobConfiguration.java-getJobIdMonitorCommand.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 7, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2+" -u "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V38/5800/pattern-ver1-serial/tools.gsissh.src.main.java.org.apache.airavata.gsi.ssh.api.job.SlurmJobConfiguration.java-getJobIdMonitorCommand.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 7, INS : 0, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+-if(total/val2!=val1){
++boolean haveBreadCrumbs=false;
++if(total/val2!=val1&&haveBreadCrumbs){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/2313/pattern-ver1-serial/src.main.java.org.ednovo.gooru.client.mvp.folder.toc.FolderTocView.java-setBreadCrumbs.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 5, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++if(val2<0){
++return 0;
++}
++if(val2>=val1){
++return val1-1;
++}
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/4307/pattern-ver1-serial/src.structures.MatrixUtilities.java-getColumnGroup.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
++if(val1<0){
++return 0;
++}
++if(val1>=val2){
++return val2-1;
++}
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/4307/pattern-ver1-serial/src.structures.MatrixUtilities.java-getColumnGroup.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if(val2<0){
++return 0;
++}
++if(val2>=val1){
++return val1-1;
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/4307/pattern-ver1-serial/src.structures.MatrixUtilities.java-getColumnGroup.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if(val1<0){
++return 0;
++}
++if(val1>=val2){
++return val2-1;
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/4307/pattern-ver1-serial/src.structures.MatrixUtilities.java-getColumnGroup.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if(val2<0){
++return 0;
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if(val2>=total){
++return total-1;
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/4307/pattern-ver1-serial/src.structures.MatrixUtilities.java-getColumnGroup.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:36:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if(total<0){
++return 0;
++}
++if(total>=val2){
++return val2-1;
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/4307/pattern-ver1-serial/src.structures.MatrixUtilities.java-getColumnGroup.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if(total<0){
++return 0;
++}
++if(total>=val1){
++return val1-1;
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/4307/pattern-ver1-serial/src.structures.MatrixUtilities.java-getColumnGroup.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if(val1<0){
++return 0;
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if(val1>=total){
++return total-1;
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/4307/pattern-ver1-serial/src.structures.MatrixUtilities.java-getColumnGroup.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if(val2==3){
++System.out.println("debug");
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++}
++if(val2==3){
++System.out.println("debug");
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V9/4383/pattern-ver1-serial/Dameo.src.dameo.gametree.NegaMax.java-alphaBeta.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++if(val1==3){
++System.out.println("debug");
++}
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++}
++if(val1==3){
++System.out.println("debug");
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V9/4383/pattern-ver1-serial/Dameo.src.dameo.gametree.NegaMax.java-alphaBeta.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
++if(total==3){
++System.out.println("debug");
++}
++if(total==3){
++System.out.println("debug");
++}
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V9/4383/pattern-ver1-serial/Dameo.src.dameo.gametree.NegaMax.java-alphaBeta.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++ final String dropStatement="Multiplication overflows a long: "+val1+" * "+val2;
++throw new ArithmeticException(dropStatement);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6019/pattern-ver1-serial/src.main.java.nz.co.gregs.dbvolution.internal.h2.MultiPoint2DFunctions.java-add.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 7, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++ final String dropStatement="Multiplication overflows a long: "+val1+" * "+val2;
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException(dropStatement);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6019/pattern-ver1-serial/src.main.java.nz.co.gregs.dbvolution.internal.h2.MultiPoint2DFunctions.java-add.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 7, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++String loc="Multiplication overflows a long: "+val1+" * "+val2;
++throw new ArithmeticException(loc);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V8/5610/pattern-ver1-serial/app.src.main.java.com.toddburgessmedia.stackoverflowretrofit.MeetupActivity.java-onNext.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 7, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++String loc="Multiplication overflows a long: "+val1+" * "+val2;
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+-throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
++throw new ArithmeticException(loc);
+ }
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V8/5610/pattern-ver1-serial/app.src.main.java.com.toddburgessmedia.stackoverflowretrofit.MeetupActivity.java-onNext.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 7, INS : 3, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/time/time_15_buggy/src/main/java/org/joda/time/field/FieldUtils.java[126,149]
+------------Candidate---------------
+ public static long safeMultiply(long val1,int val2){
++long startTime=System.currentTimeMillis();
+ switch (val2){
+ case -1 :
+ 
+ return -val1;
+ case 0 :
+ 
+ return 0L;
+ case 1 :
+ 
+ return val1;
+ }
+ long total=val1*val2;
+ if(total/val2!=val1){
+ throw new ArithmeticException("Multiplication overflows a long: "+val1+" * "+val2);
+ }
++long endTime=System.currentTimeMillis();
++long totalTime=endTime-startTime;
+ return total;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/5668/pattern-ver1-serial/Euler.src.Euler20.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 13, UPD : 0, INS : 13, DEL : 0
+Failing Tests:[org.joda.time.field.TestFieldUtils::testSafeMultiplyLongInt]
+---------START : 2019.09.05 AD at 00:17:17 CDT
+---------TIME : 2019.09.05 AD at 00:37:56 CDT
+--------------- END -----------------
+Finish : time-15 > patch : 0 | Start : Thu Sep 05 00:17:17 CDT 2019 | End : 2019.09.05 AD at 00:37:56 CDT

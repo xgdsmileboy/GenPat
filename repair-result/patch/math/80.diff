@@ -1,0 +1,870 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
++flipIfWarranted(n,2);
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V22/5555/pattern-ver1-serial/src.main.java.TeamRoots.Goetia.client.gui.GuiFocus.java-mouseReleased.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:54:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
++flipIfWarranted(n,2);
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V22/5555/pattern-ver1-serial/src.main.java.TeamRoots.Goetia.client.gui.GuiFocus.java-mouseReleased.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:54:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
++flipIfWarranted(n,2);
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V22/5555/pattern-ver1-serial/src.main.java.TeamRoots.Goetia.client.gui.GuiFocus.java-mouseReleased.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:55:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
++flipIfWarranted(n,2);
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V22/5555/pattern-ver1-serial/src.main.java.TeamRoots.Goetia.client.gui.GuiFocus.java-mouseReleased.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:55:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
++flipIfWarranted(n,2);
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V2/4414/pattern-ver1-serial/crawler.src.crawler.Crawler.java-onStatus.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:55:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
++flipIfWarranted(n,2);
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/6741/pattern-ver1-serial/core.src.main.java.org.jahia.modules.external.ExternalSessionImpl.java-move.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:56:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
++flipIfWarranted(n,2);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V3/5726/pattern-ver1-serial/library.src.main.java.com.cocosw.bottomsheet.ClosableSlidingLayout.java-onViewReleased.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:56:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
++flipIfWarranted(n,2);
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V3/5726/pattern-ver1-serial/library.src.main.java.com.cocosw.bottomsheet.ClosableSlidingLayout.java-onViewReleased.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:56:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
++flipIfWarranted(n,2);
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+-flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/1266/pattern-ver1-serial/catroid.src.org.catrobat.catroid.livewallpaper.LiveWallpaper.java-onCreate.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.07 AD at 23:57:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_80_buggy/src/main/java/org/apache/commons/math/linear/EigenDecompositionImpl.java[812,929]
+------------Solution---------------
+ private void processGeneralBlock(int n) throws InvalidMatrixException{
++pingPong=1-pingPong;
+ double sumOffDiag=0;
+ for(int i=0;i<n-1;++i){
+  final int fourI=4*i;
+  final double ei=work[fourI+2];
+ sumOffDiag+=ei;
+ }
+ if(sumOffDiag==0){
+ return ;
+ }
+ flipIfWarranted(n,2);
+ initialSplits(n);
+ tType=0;
+ dMin1=0;
+ dMin2=0;
+ dN=0;
+ dN1=0;
+ dN2=0;
+ tau=0;
+ int i0=0;
+ int n0=n;
+ while(n0>0){
+ sigma=(n0==n)?0:-work[4*n0-2];
+ sigmaLow=0;
+ double offDiagMin=(i0==n0)?0:work[4*n0-6];
+ double offDiagMax=0;
+ double diagMax=work[4*n0-4];
+ double diagMin=diagMax;
+ i0=0;
+ for(int i=4*(n0-2);i>=0;i-=4){
+ if(work[i+2]<=0){
+ i0=1+i/4;
+ break;
+ }
+ if(diagMin>=4*offDiagMax){
+ diagMin=Math.min(diagMin,work[i+4]);
+ offDiagMax=Math.max(offDiagMax,work[i+2]);
+ }
+ diagMax=Math.max(diagMax,work[i]+work[i+2]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ }
+ work[4*n0-2]=offDiagMin;
+ dMin=-Math.max(0,diagMin-2*Math.sqrt(diagMin*offDiagMax));
+ pingPong=0;
+ int maxIter=30*(n0-i0);
+ for(int k=0;i0<n0;++k){
+ if(k>=maxIter){
+ throw new InvalidMatrixException(new MaxIterationsExceededException(maxIter));
+ }
+ n0=goodStep(i0,n0);
+ pingPong=1-pingPong;
+ if((pingPong==0)&&(n0-i0>3)&&(work[4*n0-1]<=TOLERANCE_2*diagMax)&&(work[4*n0-2]<=TOLERANCE_2*sigma)){
+ int split=i0-1;
+ diagMax=work[4*i0];
+ offDiagMin=work[4*i0+2];
+ double previousEMin=work[4*i0+3];
+ for(int i=4*i0;i<4*n0-16;i+=4){
+ if((work[i+3]<=TOLERANCE_2*work[i])||(work[i+2]<=TOLERANCE_2*sigma)){
+ work[i+2]=-sigma;
+ split=i/4;
+ diagMax=0;
+ offDiagMin=work[i+6];
+ previousEMin=work[i+7];
+ }else {
+ diagMax=Math.max(diagMax,work[i+4]);
+ offDiagMin=Math.min(offDiagMin,work[i+2]);
+ previousEMin=Math.min(previousEMin,work[i+3]);
+ }
+ }
+ work[4*n0-2]=offDiagMin;
+ work[4*n0-1]=previousEMin;
+ i0=split+1;
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V4/389/pattern-ver1-serial/src.profilGestion.java-gestion.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 1, DEL : 5
+Failing Tests:[org.apache.commons.math.linear.EigenDecompositionImplTest::testMathpbx02]
+---------START : 2019.09.07 AD at 20:35:34 CDT
+---------TIME : 2019.09.08 AD at 00:24:51 CDT
+--------------- END -----------------

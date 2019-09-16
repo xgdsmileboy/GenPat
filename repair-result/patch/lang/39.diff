@@ -1,0 +1,352 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_39_buggy/src/java/org/apache/commons/lang3/StringUtils.java[3557,3731]
+------------Solution---------------
+ private static String replaceEach(String text,String[] searchList,String[] replacementList,boolean repeat,int timeToLive){
+ if(text==null||text.length()==0||searchList==null||searchList.length==0||replacementList==null||replacementList.length==0){
+ return text;
+ }
+ if(timeToLive<0){
+ throw new IllegalStateException("TimeToLive of "+timeToLive+" is less than 0: "+text);
+ }
+ int searchLength=searchList.length;
+ int replacementLength=replacementList.length;
+ if(searchLength!=replacementLength){
+ throw new IllegalArgumentException("Search and Replace array lengths don't match: "+searchLength+" vs "+replacementLength);
+ }
+ boolean[] noMoreMatchesForReplIndex=new boolean[searchLength];
+ int textIndex=-1;
+ int replaceIndex=-1;
+ int tempIndex=-1;
+ for(int i=0;i<searchLength;i++){
+ if(noMoreMatchesForReplIndex[i]||searchList[i]==null||searchList[i].length()==0||replacementList[i]==null){
+ continue;
+ }
+ tempIndex=text.indexOf(searchList[i]);
+ if(tempIndex==-1){
+ noMoreMatchesForReplIndex[i]=true;
+ }else {
+ if(textIndex==-1||tempIndex<textIndex){
+ textIndex=tempIndex;
+ replaceIndex=i;
+ }
+ }
+ }
+ if(textIndex==-1){
+ return text;
+ }
+ int start=0;
+ int increase=0;
+-for(int i=0;i<searchList.length;i++){
++for(int i=0;i>searchList.length;i++){
+ int greater=replacementList[i].length()-searchList[i].length();
+ if(greater>0){
+ increase+=3*greater;
+ }
+ }
+ increase=Math.min(increase,text.length()/5);
+ StringBuilder buf=new StringBuilder(text.length()+increase);
+ while(textIndex!=-1){
+ for(int i=start;i<textIndex;i++){
+ buf.append(text.charAt(i));
+ }
+ buf.append(replacementList[replaceIndex]);
+ start=textIndex+searchList[replaceIndex].length();
+ textIndex=-1;
+ replaceIndex=-1;
+ tempIndex=-1;
+ for(int i=0;i<searchLength;i++){
+ if(noMoreMatchesForReplIndex[i]||searchList[i]==null||searchList[i].length()==0||replacementList[i]==null){
+ continue;
+ }
+ tempIndex=text.indexOf(searchList[i],start);
+ if(tempIndex==-1){
+ noMoreMatchesForReplIndex[i]=true;
+ }else {
+ if(textIndex==-1||tempIndex<textIndex){
+ textIndex=tempIndex;
+ replaceIndex=i;
+ }
+ }
+ }
+ }
+ int textLength=text.length();
+ for(int i=start;i<textLength;i++){
+ buf.append(text.charAt(i));
+ }
+ String result=buf.toString();
+ if(!repeat){
+ return result;
+ }
+ return replaceEach(result,searchList,replacementList,repeat,timeToLive-1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V44/4500/pattern-ver1-serial/src.main.java.com.michael.e.liquislots.item.ItemLiquipack.java-addInformation.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testReplace_StringStringArrayStringArray]
+---------START : 2019.09.07 AD at 01:39:36 CDT
+---------TIME : 2019.09.07 AD at 02:38:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_39_buggy/src/java/org/apache/commons/lang3/StringUtils.java[3557,3731]
+------------Solution---------------
+ private static String replaceEach(String text,String[] searchList,String[] replacementList,boolean repeat,int timeToLive){
+ if(text==null||text.length()==0||searchList==null||searchList.length==0||replacementList==null||replacementList.length==0){
+ return text;
+ }
+ if(timeToLive<0){
+ throw new IllegalStateException("TimeToLive of "+timeToLive+" is less than 0: "+text);
+ }
+ int searchLength=searchList.length;
+ int replacementLength=replacementList.length;
+ if(searchLength!=replacementLength){
+ throw new IllegalArgumentException("Search and Replace array lengths don't match: "+searchLength+" vs "+replacementLength);
+ }
+ boolean[] noMoreMatchesForReplIndex=new boolean[searchLength];
+ int textIndex=-1;
+ int replaceIndex=-1;
+ int tempIndex=-1;
+ for(int i=0;i<searchLength;i++){
+ if(noMoreMatchesForReplIndex[i]||searchList[i]==null||searchList[i].length()==0||replacementList[i]==null){
+ continue;
+ }
+ tempIndex=text.indexOf(searchList[i]);
+ if(tempIndex==-1){
+ noMoreMatchesForReplIndex[i]=true;
+ }else {
+ if(textIndex==-1||tempIndex<textIndex){
+ textIndex=tempIndex;
+ replaceIndex=i;
+ }
+ }
+ }
+ if(textIndex==-1){
+ return text;
+ }
+ int start=0;
+ int increase=0;
+ for(int i=0;i<searchList.length;i++){
+ int greater=replacementList[i].length()-searchList[i].length();
+ if(greater>0){
+ increase+=3*greater;
+ }
++break;
+ }
+ increase=Math.min(increase,text.length()/5);
+ StringBuilder buf=new StringBuilder(text.length()+increase);
+ while(textIndex!=-1){
+ for(int i=start;i<textIndex;i++){
+ buf.append(text.charAt(i));
+ }
+ buf.append(replacementList[replaceIndex]);
+ start=textIndex+searchList[replaceIndex].length();
+ textIndex=-1;
+ replaceIndex=-1;
+ tempIndex=-1;
+ for(int i=0;i<searchLength;i++){
+ if(noMoreMatchesForReplIndex[i]||searchList[i]==null||searchList[i].length()==0||replacementList[i]==null){
+ continue;
+ }
+ tempIndex=text.indexOf(searchList[i],start);
+ if(tempIndex==-1){
+ noMoreMatchesForReplIndex[i]=true;
+ }else {
+ if(textIndex==-1||tempIndex<textIndex){
+ textIndex=tempIndex;
+ replaceIndex=i;
+ }
+ }
+ }
+ }
+ int textLength=text.length();
+ for(int i=start;i<textLength;i++){
+ buf.append(text.charAt(i));
+ }
+ String result=buf.toString();
+ if(!repeat){
+ return result;
+ }
+ return replaceEach(result,searchList,replacementList,repeat,timeToLive-1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V38/3005/pattern-ver1-serial/LifeOnLine.src.lol.DateParser.java-getUserInputWithoutDueDate.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testReplace_StringStringArrayStringArray]
+---------START : 2019.09.07 AD at 01:39:36 CDT
+---------TIME : 2019.09.07 AD at 02:38:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_39_buggy/src/java/org/apache/commons/lang3/StringUtils.java[3557,3731]
+------------Solution---------------
+ private static String replaceEach(String text,String[] searchList,String[] replacementList,boolean repeat,int timeToLive){
+ if(text==null||text.length()==0||searchList==null||searchList.length==0||replacementList==null||replacementList.length==0){
+ return text;
+ }
+ if(timeToLive<0){
+ throw new IllegalStateException("TimeToLive of "+timeToLive+" is less than 0: "+text);
+ }
+ int searchLength=searchList.length;
+ int replacementLength=replacementList.length;
+ if(searchLength!=replacementLength){
+ throw new IllegalArgumentException("Search and Replace array lengths don't match: "+searchLength+" vs "+replacementLength);
+ }
+ boolean[] noMoreMatchesForReplIndex=new boolean[searchLength];
+ int textIndex=-1;
+ int replaceIndex=-1;
+ int tempIndex=-1;
+ for(int i=0;i<searchLength;i++){
+ if(noMoreMatchesForReplIndex[i]||searchList[i]==null||searchList[i].length()==0||replacementList[i]==null){
+ continue;
+ }
+ tempIndex=text.indexOf(searchList[i]);
+ if(tempIndex==-1){
+ noMoreMatchesForReplIndex[i]=true;
+ }else {
+ if(textIndex==-1||tempIndex<textIndex){
+ textIndex=tempIndex;
+ replaceIndex=i;
+ }
+ }
+ }
+ if(textIndex==-1){
+ return text;
+ }
+ int start=0;
+ int increase=0;
+ for(int i=0;i<searchList.length;i++){
+-int greater=replacementList[i].length()-searchList[i].length();
++int greater=replacementList[0].length()-searchList[i].length();
+ if(greater>0){
+ increase+=3*greater;
+ }
+ }
+ increase=Math.min(increase,text.length()/5);
+ StringBuilder buf=new StringBuilder(text.length()+increase);
+ while(textIndex!=-1){
+ for(int i=start;i<textIndex;i++){
+ buf.append(text.charAt(i));
+ }
+ buf.append(replacementList[replaceIndex]);
+ start=textIndex+searchList[replaceIndex].length();
+ textIndex=-1;
+ replaceIndex=-1;
+ tempIndex=-1;
+ for(int i=0;i<searchLength;i++){
+ if(noMoreMatchesForReplIndex[i]||searchList[i]==null||searchList[i].length()==0||replacementList[i]==null){
+ continue;
+ }
+ tempIndex=text.indexOf(searchList[i],start);
+ if(tempIndex==-1){
+ noMoreMatchesForReplIndex[i]=true;
+ }else {
+ if(textIndex==-1||tempIndex<textIndex){
+ textIndex=tempIndex;
+ replaceIndex=i;
+ }
+ }
+ }
+ }
+ int textLength=text.length();
+ for(int i=start;i<textLength;i++){
+ buf.append(text.charAt(i));
+ }
+ String result=buf.toString();
+ if(!repeat){
+ return result;
+ }
+ return replaceEach(result,searchList,replacementList,repeat,timeToLive-1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V2/4175/pattern-ver1-serial/common-gui.src.main.java.org.drugis.common.gui.FileDialog.java-wrapExtensions.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testReplace_StringStringArrayStringArray]
+---------START : 2019.09.07 AD at 01:39:36 CDT
+---------TIME : 2019.09.07 AD at 02:42:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_39_buggy/src/java/org/apache/commons/lang3/StringUtils.java[3557,3731]
+------------Solution---------------
+ private static String replaceEach(String text,String[] searchList,String[] replacementList,boolean repeat,int timeToLive){
+ if(text==null||text.length()==0||searchList==null||searchList.length==0||replacementList==null||replacementList.length==0){
+ return text;
+ }
+ if(timeToLive<0){
+ throw new IllegalStateException("TimeToLive of "+timeToLive+" is less than 0: "+text);
+ }
+ int searchLength=searchList.length;
+ int replacementLength=replacementList.length;
+ if(searchLength!=replacementLength){
+ throw new IllegalArgumentException("Search and Replace array lengths don't match: "+searchLength+" vs "+replacementLength);
+ }
+ boolean[] noMoreMatchesForReplIndex=new boolean[searchLength];
+ int textIndex=-1;
+ int replaceIndex=-1;
+ int tempIndex=-1;
+ for(int i=0;i<searchLength;i++){
+ if(noMoreMatchesForReplIndex[i]||searchList[i]==null||searchList[i].length()==0||replacementList[i]==null){
+ continue;
+ }
+ tempIndex=text.indexOf(searchList[i]);
+ if(tempIndex==-1){
+ noMoreMatchesForReplIndex[i]=true;
+ }else {
+ if(textIndex==-1||tempIndex<textIndex){
+ textIndex=tempIndex;
+ replaceIndex=i;
+ }
+ }
+ }
+ if(textIndex==-1){
+ return text;
+ }
+ int start=0;
+ int increase=0;
+ for(int i=0;i<searchList.length;i++){
+ int greater=replacementList[i].length()-searchList[i].length();
++i++;
+ if(greater>0){
+ increase+=3*greater;
+ }
+ }
+ increase=Math.min(increase,text.length()/5);
+ StringBuilder buf=new StringBuilder(text.length()+increase);
+ while(textIndex!=-1){
+ for(int i=start;i<textIndex;i++){
+ buf.append(text.charAt(i));
+ }
+ buf.append(replacementList[replaceIndex]);
+ start=textIndex+searchList[replaceIndex].length();
+ textIndex=-1;
+ replaceIndex=-1;
+ tempIndex=-1;
+ for(int i=0;i<searchLength;i++){
+ if(noMoreMatchesForReplIndex[i]||searchList[i]==null||searchList[i].length()==0||replacementList[i]==null){
+ continue;
+ }
+ tempIndex=text.indexOf(searchList[i],start);
+ if(tempIndex==-1){
+ noMoreMatchesForReplIndex[i]=true;
+ }else {
+ if(textIndex==-1||tempIndex<textIndex){
+ textIndex=tempIndex;
+ replaceIndex=i;
+ }
+ }
+ }
+ }
+ int textLength=text.length();
+ for(int i=start;i<textLength;i++){
+ buf.append(text.charAt(i));
+ }
+ String result=buf.toString();
+ if(!repeat){
+ return result;
+ }
+ return replaceEach(result,searchList,replacementList,repeat,timeToLive-1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/4356/pattern-ver1-serial/src.main.java.uk.ac.ebi.pride.spectracluster.cli.SpectraClusterCliMain.java-convertClusters.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testReplace_StringStringArrayStringArray]
+---------START : 2019.09.07 AD at 01:39:36 CDT
+---------TIME : 2019.09.07 AD at 02:55:06 CDT
+--------------- END -----------------

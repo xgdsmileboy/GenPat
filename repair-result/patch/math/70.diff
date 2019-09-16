@@ -1,0 +1,29 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_70_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BisectionSolver.java[69,73]
+------------Solution---------------
+ public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
+-return solve(min,max);
++return solve(f,min,max);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/5063/pattern-ver1-serial/odemapster-core-querytranslator.src.main.java.es.upm.fi.dia.oeg.obdi.core.querytranslator.AbstractCondSQLGenerator.java-genCondSQLSubject.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BisectionSolverTest::testMath369]
+---------START : 2019.09.07 AD at 07:31:17 CDT
+---------TIME : 2019.09.07 AD at 07:36:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_70_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BisectionSolver.java[69,73]
+------------Solution---------------
+-public double solve(UnivariateRealFunction f,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
++public double solve(UnivariateRealFunction sourceGtfsCache,double min,double max,double initial) throws MaxIterationsExceededException,FunctionEvaluationException{
++f=sourceGtfsCache;
+ return solve(min,max);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V33/5628/pattern-ver1-serial/src.main.java.com.conveyal.gtfs.api.ApiMain.java-initialize.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 1, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BisectionSolverTest::testMath369]
+---------START : 2019.09.07 AD at 07:31:17 CDT
+---------TIME : 2019.09.07 AD at 07:38:31 CDT
+--------------- END -----------------

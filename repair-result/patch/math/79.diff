@@ -1,0 +1,196 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+ int sum=0;
+ for(int i=0;i<p1.length;i++){
+- final int dp=p1[i]-p2[i];
++ final double dp=p1[i]-p2[i];
+ sum+=dp*dp;
+ }
+ return Math.sqrt(sum);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/3073/pattern-ver1-serial/src.mlsp.cs.cmu.edu.tmm.TMMAlphaPosterior.java-alphaSum.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:11:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+ int sum=0;
+ for(int i=0;i<p1.length;i++){
+- final int dp=p1[i]-p2[i];
++ final float dp=p1[i]-p2[i];
+ sum+=dp*dp;
+ }
+ return Math.sqrt(sum);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/6860/pattern-ver1-serial/hazelcast.src.main.java.com.hazelcast.map.impl.eviction.MaxSizeChecker.java-isEvictablePerPartition.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:12:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+-int sum=0;
++double sum=0;
+ for(int i=0;i<p1.length;i++){
+- final int dp=p1[i]-p2[i];
++ final double dp=p1[i]-p2[i];
+ sum+=dp*dp;
+ }
+ return Math.sqrt(sum);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V2/425/pattern-ver1-serial/app.src.main.java.com.pemws14.armyoffriends.GameMechanics.java-getPlayerLevelProgress.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:16:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+-int sum=0;
++float sum=0;
+ for(int i=0;i<p1.length;i++){
+- final int dp=p1[i]-p2[i];
++ final float dp=p1[i]-p2[i];
+ sum+=dp*dp;
+ }
+ return Math.sqrt(sum);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V4/7403/pattern-ver1-serial/src.structures.CountryCompetition.java-searchUsableComp.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:19:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+ int sum=0;
+ for(int i=0;i<p1.length;i++){
+  final int dp=p1[i]-p2[i];
+-sum+=dp*dp;
++sum+=1.0*dp*dp;
+ }
+ return Math.sqrt(sum);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V46/7751/pattern-ver1-serial/src.main.java.info.debatty.java.stringsimilarity.Cosine.java-norm.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:29:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+ int sum=0;
+ for(int i=0;i<p1.length;i++){
+  final int dp=p1[i]-p2[i];
+ sum+=dp*dp;
+ }
+-return Math.sqrt(sum);
++return Math.sqrt(Math.abs(sum));
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V7/1979/pattern-ver1-serial/h2o-algos.src.main.java.hex.tree.gbm.GBM.java-map.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:29:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+ int sum=0;
+ for(int i=0;i<p1.length;i++){
+  final int dp=p1[i]-p2[i];
+ sum+=dp*dp;
++}
++if(sum<0){
++return 0d;
+ }
+ return Math.sqrt(sum);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/1167/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.router.Publishers.java-receivedData.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:31:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+ int sum=0;
+ for(int i=0;i<p1.length;i++){
+  final int dp=p1[i]-p2[i];
+-sum+=dp*dp;
++sum+=(double)dp*(double)dp;
+ }
+ return Math.sqrt(sum);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V10/2453/pattern-ver1-serial/GURPS.src.Character.java-getMovementSpeed.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:33:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+ int sum=0;
+ for(int i=0;i<p1.length;i++){
+  final int dp=p1[i]-p2[i];
+ sum+=dp*dp;
+ }
+-return Math.sqrt(sum);
++return Math.sqrt(Math.max(sum,0));
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V6/6142/pattern-ver1-serial/main.java.rowautomation.renders.RenderBlockCrossing.java-renderWorldBlock.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:33:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_79_buggy/src/main/java/org/apache/commons/math/util/MathUtils.java[1616,1630]
+------------Solution---------------
+ public static double distance(int[] p1,int[] p2){
+ int sum=0;
+ for(int i=0;i<p1.length;i++){
+  final int dp=p1[i]-p2[i];
+ sum+=dp*dp;
++if(sum<0){
++sum=0;
++}
+ }
+ return Math.sqrt(sum);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/4394/pattern-ver1-serial/src.main.java.cloudsync.connector.RemoteGoogleDriveConnector.java-remove.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.math.stat.clustering.KMeansPlusPlusClustererTest::testPerformClusterAnalysisDegenerate]
+---------START : 2019.09.07 AD at 17:14:14 CDT
+---------TIME : 2019.09.07 AD at 20:35:33 CDT
+--------------- END -----------------

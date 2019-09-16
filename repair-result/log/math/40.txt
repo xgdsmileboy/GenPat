@@ -1,0 +1,3188 @@
+Repair : math_40
+Current failed test : org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716 | 2019.09.06 AD at 13:11:11 CDT
+Location : org.apache.commons.math.exception.MathIllegalStateException.getMessage:[80]#1.0
+Compute Candidate : 2019.09.06 AD at 13:12:30 CDT - 2019.09.06 AD at 13:15:33 CDT , PNumber : 11284, CandNumber : 24 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
++import java.util.Locale;
++
+ @Override public String getMessage(){
+-return context.getMessage();
++return context.getMessage(Locale.ENGLISH);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V18/3320/pattern-ver1-serial/src.main.java.com.sk89q.craftbook.circuits.ic.ICMechanicFactory.java-hasSafePermissions.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:15:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
++import java.nio.charset.StandardCharsets;
++
++import java.util.Locale;
++
+ @Override public String getMessage(){
+-return context.getMessage();
++return context.getMessage(Locale.UK);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V15/4612/pattern-ver1-serial/plugins.org.csstudio.saverestore.git.src.org.csstudio.saverestore.git.GitManager.java-findSnapshotsByTag.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:15:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return context.getMessage(null);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V29/104/pattern-ver1-serial/cps.hu.bme.mit.inf.cps.patterns.src-gen.hu.bme.mit.inf.cps.patterns.AllApplicationInstanceIsRunningMatch.java-newEmptyMatch.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return context.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V5/3034/pattern-ver1-serial/app.src.main.java.wmad.iti.relativelist.RelativesListHome.java-onErrorResponse.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return this.context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/1924/pattern-ver1-serial/src.main.java.org.spongepowered.api.util.command.ImmutableCommandMapping.java-getCallable.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++this.getMessage();
+ return context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V35/5018/pattern-ver1-serial/app.src.main.java.it.unimi.unimiplaces.presenters.BookmarksPresenter.java-init.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return new String(context.getMessage());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V50/2421/pattern-ver1-serial/src.uk.co.quartzcraft.kingdoms.features.kingdom.Kingdom.java-getKing.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return (String)context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return (String)(context.getMessage());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++int a=0;
+ return context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++String OUTSTRING="";
+ return context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return "FolderPersister for '"+this;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V10/1833/pattern-ver1-serial/src.main.de.dal33t.powerfolder.disk.Folder.java-toString.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++int a=1;
+ return context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:16:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++boolean b=true;
+ return context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
++import java.util.regex.Matcher;
++
++import java.util.regex.Pattern;
++
+ @Override public String getMessage(){
+-return context.getMessage();
++return context.getMessage()+".*";
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/6165/pattern-ver1-serial/src.main.java.com.oneandone.network.snmpman.configuration.type.WildcardOID.java-toString.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++if(context==null){
++return null;
++}
+ return context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return context.getMessage()!=null?context.getMessage():new String();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/4736/pattern-ver1-serial/server.src.main.java.com.paypal.selion.grid.SeLionStandaloneConfiguration.java-getStandaloneConfiguration.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return context==null?null:context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return context.getMessage()==null?new String():context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5999/pattern-ver1-serial/persistence.src.main.java.com.softserve.osbb.model.Bill.java-getApartment.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++if(context!=null){
+ return context.getMessage();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
+-return context.getMessage();
++return context!=null?context.getMessage():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++if(context==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[77,81]
+------------Candidate---------------
+ @Override public String getMessage(){
++if(context!=null){
+ return context.getMessage();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:17:26 CDT
+--------------- END -----------------
+Location : org.apache.commons.math.exception.MathIllegalStateException.getLocalizedMessage:[86]#1.0
+Compute Candidate : 2019.09.06 AD at 13:18:10 CDT - 2019.09.06 AD at 13:21:11 CDT , PNumber : 11281, CandNumber : 22 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return context.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V31/7441/pattern-ver1-serial/HelloWorld.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return context.getMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V9/3644/pattern-ver1-serial/src.java.com.src.MainClass.java-generateReports.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return this.context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/1924/pattern-ver1-serial/src.main.java.org.spongepowered.api.util.command.ImmutableCommandMapping.java-getCallable.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++this.getLocalizedMessage();
+ return context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V35/5018/pattern-ver1-serial/app.src.main.java.it.unimi.unimiplaces.presenters.BookmarksPresenter.java-init.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return new String(context.getLocalizedMessage());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V50/2421/pattern-ver1-serial/src.uk.co.quartzcraft.kingdoms.features.kingdom.Kingdom.java-getKing.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return (String)context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return (String)(context.getLocalizedMessage());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++int a=0;
+ return context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++String OUTSTRING="";
+ return context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return "FolderPersister for '"+this;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V10/1833/pattern-ver1-serial/src.main.de.dal33t.powerfolder.disk.Folder.java-toString.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++int a=1;
+ return context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++boolean b=true;
+ return context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
++import java.util.regex.Matcher;
++
++import java.util.regex.Pattern;
++
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return context.getLocalizedMessage()+".*";
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/6165/pattern-ver1-serial/src.main.java.com.oneandone.network.snmpman.configuration.type.WildcardOID.java-toString.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++if(context==null){
++return null;
++}
+ return context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:21:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return context.getLocalizedMessage()!=null?context.getLocalizedMessage():new String();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/4736/pattern-ver1-serial/server.src.main.java.com.paypal.selion.grid.SeLionStandaloneConfiguration.java-getStandaloneConfiguration.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:22:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return context==null?null:context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4320/pattern-ver1-serial/src.main.java.org.jenkinsci.plugins.githubissues.GitHubIssueNotifier.java-getRepoForJob.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:22:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return context.getLocalizedMessage()==null?new String():context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5999/pattern-ver1-serial/persistence.src.main.java.com.softserve.osbb.model.Bill.java-getApartment.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:22:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++if(context!=null){
+ return context.getLocalizedMessage();
++}else {
++return null;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/3589/pattern-ver1-serial/HermesBucarBala.app.src.main.java.com.laboratoriodesoftware2015.hermesbucarbala.presenter.DashboardPresenter.java-getListTabsById.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:22:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
+-return context.getLocalizedMessage();
++return context!=null?context.getLocalizedMessage():null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/997/pattern-ver1-serial/src.main.java.bammerbom.ultimatecore.bukkit.r.java-getPermission.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:22:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++if(context==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ return context.getLocalizedMessage();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:22:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[83,87]
+------------Candidate---------------
+ @Override public String getLocalizedMessage(){
++if(context!=null){
+ return context.getLocalizedMessage();
++}
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/4738/pattern-ver1-serial/src.tonegod.gui.controls.lists.ComboBox.java-getListItems.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 2, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:22:15 CDT
+--------------- END -----------------
+Location : org.apache.commons.math.util.Incrementor.Incrementor:[65, 62, 61, 68]#0.7071067811865475
+Compute Candidate : 2019.09.06 AD at 13:23:02 CDT - 2019.09.06 AD at 13:26:21 CDT , PNumber : 11260, CandNumber : 11 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++return ;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:26:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++max++;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V14/297/pattern-ver1-serial/app.src.main.java.org.team2635.scoutnetclient.fragments.StrategyInfoFragment.java-getData.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:26:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++max--;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/5173/pattern-ver1-serial/ejb_modules.EJB-timetable.src.main.java.be.vubrooster.ejb.managers.EHBActivityManager.java-loadActivitiesForClassRooms.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:26:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++while(true){
++
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V61/177/pattern-ver1-serial/flink-addons.flink-streaming.flink-streaming-core.src.main.java.org.apache.flink.streaming.api.streamvertex.StreamVertex.java-invoke.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:28:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++max=max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5893/pattern-ver1-serial/vipr-portal.portal.app.models.datatable.NfsACLDataTable.java-NfsAclInfo.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:28:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++ final String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5976/pattern-ver1-serial/rhymecity.src.main.java.com.fly.firefly.ui.activity.Login.LoginFragment.java-forgotPassword.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:28:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++int indexSelection=0;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:28:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++boolean loggingIn=false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/2030/pattern-ver1-serial/src.client.gui.batchstate.BatchState.java-BatchState.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:28:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++if((Thread.currentThread().interrupted())){
++return ;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:28:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:28:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[55,68]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public Incrementor(int max){
+ this(max,new MaxCountExceededCallback(){
+   /** 
+  * {@inheritDoc} 
+  */
+   public void trigger(  int max){
+     throw new MaxCountExceededException(max);
+   }
+ }
+ );
++JOptionPane.showMessageDialog(null,"Uspješno ste odjavljeni sa sistema!","Info",JOptionPane.INFORMATION_MESSAGE);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/3046/pattern-ver1-serial/Projekat.iTravel.src.main.java.ba.unsa.etf.si.app.iTravel.Forms.Meni.java-OdjaviSe.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:28:51 CDT
+--------------- END -----------------
+Location : org.apache.commons.math.util.Incrementor.incrementCount:[151, 150, 153]#0.7071067811865475
+Compute Candidate : 2019.09.06 AD at 13:29:34 CDT - 2019.09.06 AD at 13:33:26 CDT , PNumber : 11398, CandNumber : 69 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++return ;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++return ;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++return ;
+ }
++return ;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/4557/pattern-ver1-serial/src.de.rincewind.api.gui.elements.ElementCounter.java-setCount.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>=maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V59/3225/pattern-ver1-serial/src.org.peg4d.ParserContext.java-beginPeformStat.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count!=maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V36/71/pattern-ver1-serial/src.edu.stanford.nlp.mt.decoder.feat.base.TranslationModelFeaturizer.java-ruleFeaturize.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count<maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V19/3701/pattern-ver1-serial/lc57.java-insert.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++maxCountCallback.trigger(maximalCount);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V29/3884/pattern-ver1-serial/TcpChat.src.client.gui.ClientGuiThread.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+-maxCountCallback.trigger(maximalCount);
++this.maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V18/4298/pattern-ver1-serial/src.main.java.org.spongepowered.api.service.command.SimpleCommandService.java-getHelp.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++this.incrementCount();
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V35/5018/pattern-ver1-serial/app.src.main.java.it.unimi.unimiplaces.presenters.BookmarksPresenter.java-init.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++this.incrementCount();
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V35/5018/pattern-ver1-serial/app.src.main.java.it.unimi.unimiplaces.presenters.BookmarksPresenter.java-init.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:33:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++this.count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V68/5197/pattern-ver1-serial/src.main.java.com.isocraft.tileentity.eridiumnet.TileEridiumRelay.java-updateEntity.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:34:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++synchronized(maxCountCallback){
+ maxCountCallback.trigger(maximalCount);
++}
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V17/90/pattern-ver1-serial/PolibudaRun.src.HorizontalMove.java-down.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:34:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++while(true){
++
++}
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V61/177/pattern-ver1-serial/flink-addons.flink-streaming.flink-streaming-core.src.main.java.org.apache.flink.streaming.api.streamvertex.StreamVertex.java-invoke.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:34:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++}
++while(true){
++
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V61/177/pattern-ver1-serial/flink-addons.flink-streaming.flink-streaming-core.src.main.java.org.apache.flink.streaming.api.streamvertex.StreamVertex.java-invoke.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++synchronized(this){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++}
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V7/3100/pattern-ver1-serial/src.de.uni_koblenz.jgralab.greql.evaluator.GreqlQueryImpl.java-evaluate.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++if(maxCountCallback!=null){
+ maxCountCallback.trigger(maximalCount);
++}
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V8/6555/pattern-ver1-serial/app.src.main.java.com.example.uaharoni.tourdeplace.view.MapFragment.java-addPlaceMarker.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++if(maxCountCallback==null){
++return ;
++}
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++if(maxCountCallback==null){
++return ;
++}
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++synchronized(this){
+ maxCountCallback.trigger(maximalCount);
++}
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V13/4122/pattern-ver1-serial/hazelcast.src.main.java.com.hazelcast.impl.DefaultRecord.java-invalidateValueCache.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++if(maximalCount>0){
+ maxCountCallback.trigger(maximalCount);
++}
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V48/1583/pattern-ver1-serial/core.src.main.java.tachyon.client.CountingWritableBlockChannel.java-write.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++int a=0;
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++int a=0;
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++String OUTSTRING="";
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++String OUTSTRING="";
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++int maxCountCallback=5;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++int maximalCount=5;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++int maxCountCallback=5;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++int maximalCount=5;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++int count=5;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++ final String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5976/pattern-ver1-serial/rhymecity.src.main.java.com.fly.firefly.ui.activity.Login.LoginFragment.java-forgotPassword.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++ final String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5976/pattern-ver1-serial/rhymecity.src.main.java.com.fly.firefly.ui.activity.Login.LoginFragment.java-forgotPassword.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++int indexSelection=0;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:36:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++int indexSelection=0;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++int a=1;
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++int a=1;
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++boolean maxCountCallback=true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++boolean maximalCount=true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:14 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++boolean maxCountCallback=true;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++boolean maximalCount=true;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++boolean count=true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++boolean b=true;
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++boolean b=true;
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+-maxCountCallback.trigger(maximalCount);
++maxCountCallback.trigger(Math.abs(maximalCount));
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/6264/pattern-ver1-serial/src.main.java.com.metal.fetcher.fetcher.impl.WeiboFetcher.java-getRandomAccount.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++if((Thread.currentThread().interrupted())){
++return ;
++}
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++}
++if((Thread.currentThread().interrupted())){
++return ;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++maxCountCallback.trigger(maximalCount);
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V14/6394/pattern-ver1-serial/src.com.withiter.frame.MainFrame.java-loadDatas.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
+-maxCountCallback.trigger(maximalCount);
+ }
++maxCountCallback.trigger(maximalCount);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V66/2466/pattern-ver1-serial/tajo-core.src.main.java.org.apache.tajo.worker.Task.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++if(++count>maximalCount){
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V2/3128/pattern-ver1-serial/src.cubicmadness.gamestates.GameStateManager.java-popCurrentState.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 1, DEL : 3
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(true){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/6216/pattern-ver1-serial/app.src.main.java.example.com.mpdlcamera.Upload.CustomAdapter.java-getView.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>maximalCount||++count==Long.MIN_VALUE){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V5/7087/pattern-ver1-serial/BDEBase.src.main.java.gr.demokritos.iit.base.util.Utils.java-extractYearMonthDayLiteral.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:37:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(Double.isNaN(++count)){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V32/1622/pattern-ver1-serial/src.mckay.utilities.staticlibraries.StringMethods.java-getDoubleInScientificNotation.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:47:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>maximalCount||"查看红包".equals(++count)){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/4605/pattern-ver1-serial/app.src.main.java.xyz.monkeytong.hongbao.utils.HongbaoSignature.java-generateSignature.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:47:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>maximalCount||++count==3){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V30/1380/pattern-ver1-serial/Cluedo.src.control.Player.java-validMove.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count<0||++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V7/1602/pattern-ver1-serial/src.engine.network.server.ServerClient.java-knowMap.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>maximalCount||++count==0){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V37/1056/pattern-ver1-serial/lts-admin.src.main.java.com.github.ltsopensource.admin.web.api.SuspendJobQueueApi.java-suspendJobRecovery.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>maximalCount||++count>9){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V6/2964/pattern-ver1-serial/main.plugins.org.talend.dataquality.sampling.src.main.java.org.talend.dataquality.datamasking.FunctionApplier.java-generateDuplicate.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>maximalCount&&++count<4000000){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V28/46/pattern-ver1-serial/raw.master.registryKit.registryKit.registryKit.src.main.java.com.registryKit.survey.surveyManager.java-saveSurveyDocument.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>maximalCount&&++count!=9999){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5798/pattern-ver1-serial/SONPlugin.src.org.workcraft.plugins.son.granularity.HourMins.java-getHour.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(maximalCount>0&&++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/553/pattern-ver1-serial/src.main.java.edu.berkeley.cs.nlp.ocular.main.TrainFont.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++JOptionPane.showMessageDialog(null,"Uspješno ste odjavljeni sa sistema!","Info",JOptionPane.INFORMATION_MESSAGE);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/3046/pattern-ver1-serial/Projekat.iTravel.src.main.java.ba.unsa.etf.si.app.iTravel.Forms.Meni.java-OdjaviSe.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public void incrementCount(){
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++JOptionPane.showMessageDialog(null,"Uspješno ste odjavljeni sa sistema!","Info",JOptionPane.INFORMATION_MESSAGE);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/3046/pattern-ver1-serial/Projekat.iTravel.src.main.java.ba.unsa.etf.si.app.iTravel.Forms.Meni.java-OdjaviSe.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+-if(++count>maximalCount){
++if(++count>maximalCount||++count=='"'){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/1758/pattern-ver1-serial/modules.ImportPlugin.src.main.java.org.gephi.io.importer.plugin.file.ImporterDOT.java-edgeAttributes.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++if(maxCountCallback==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++if(maxCountCallback==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ maxCountCallback.trigger(maximalCount);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++if(++count==12){
++return ;
++}else {
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
++}
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4902/pattern-ver1-serial/app.src.main.java.com.cs180project.ucrclasses.BaseCalendarActivity.java-interpretTime.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 7, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
+ if(++count>maximalCount){
++long startTime=System.currentTimeMillis();
+ maxCountCallback.trigger(maximalCount);
++long endTime=System.currentTimeMillis();
++long totalTime=endTime-startTime;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/5668/pattern-ver1-serial/Euler.src.Euler20.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 13, UPD : 0, INS : 13, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/util/Incrementor.java[136,153]
+------------Candidate---------------
+ public void incrementCount(){
++long startTime=System.currentTimeMillis();
+ if(++count>maximalCount){
+ maxCountCallback.trigger(maximalCount);
+ }
++long endTime=System.currentTimeMillis();
++long totalTime=endTime-startTime;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/5668/pattern-ver1-serial/Euler.src.Euler20.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 13, UPD : 0, INS : 13, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:48:51 CDT
+--------------- END -----------------
+Location : org.apache.commons.math.exception.MaxCountExceededException.MaxCountExceededException:[42, 43]#0.7071067811865475
+Compute Candidate : 2019.09.06 AD at 13:49:32 CDT - 2019.09.06 AD at 13:53:14 CDT , PNumber : 11280, CandNumber : 27 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
++import java.nio.file.StandardCopyOption;
++
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,StandardCopyOption.REPLACE_EXISTING);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V11/1692/pattern-ver1-serial/src.main.java.sitecreators.utils.image.ImageDAOImpl.java-saveImage.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,false);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V11/3756/pattern-ver1-serial/controllersvc.src.main.java.com.emc.storageos.networkcontroller.impl.mds.MdsNetworkSystemDevice.java-createActiveZoneset.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++return ;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,true);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V39/4436/pattern-ver1-serial/src.main.java.org.smartreaction.starrealms.model.players.Player.java-optionallyScrapCardsFromHandOrDiscard.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,0);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V39/7029/pattern-ver1-serial/app.src.main.java.hu.bme.simonyi.acstudio.analogchaosinventoryapp.inventory.TreeCreator.java-createTree.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,"");
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V10/4137/pattern-ver1-serial/src.main.java.com.quix.aia.cn.imo.mapper.EopAttendanceMaintenance.java-eopAttendanceListing.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,max);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/1335/pattern-ver1-serial/controllersvc.src.main.java.com.emc.storageos.vplexcontroller.VPlexDeviceController.java-storageViewRemoveInitiators.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V63/2568/pattern-ver1-serial/src.framework.scuba.domain.AllocLoc.java-AllocLoc.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,2);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V45/1189/pattern-ver1-serial/eclipse.plugins.org.switchyard.tools.ui.editor.src.org.switchyard.tools.ui.editor.components.camel.jms.CamelJmsComposite.java-getJmsTabControl.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,10,max);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/5788/pattern-ver1-serial/src.com.intellij.bigdecimal.Subtract.java-Subtract.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,-1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/314/pattern-ver1-serial/android.src.main.java.notification.templates.TextFieldTemplate.java-getGraphicComponent.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,null,null);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V45/4590/pattern-ver1-serial/actor-sdk.sdk-core.core.core-shared.src.main.java.im.actor.core.modules.internal.presence.OwnPresenceActor.java-performOnline.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,false,true);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/3948/pattern-ver1-serial/jboss-admin.src.main.java.org.teiid.adminapi.jboss.AdminFactory.java-getRequestsForSession.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:53:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++while(true){
++
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V61/177/pattern-ver1-serial/flink-addons.flink-streaming.flink-streaming-core.src.main.java.org.apache.flink.streaming.api.streamvertex.StreamVertex.java-invoke.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:55:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+-this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++this(LocalizedFormats.MAX_COUNT_EXCEEDED,max,true,true);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/3948/pattern-ver1-serial/jboss-admin.src.main.java.org.teiid.adminapi.jboss.AdminFactory.java-getTranslators.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:55:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++max=max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5893/pattern-ver1-serial/vipr-portal.portal.app.models.datatable.NfsACLDataTable.java-NfsAclInfo.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:55:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++int LocalizedFormats=5;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:55:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++int MAX_COUNT_EXCEEDED=5;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++ final String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5976/pattern-ver1-serial/rhymecity.src.main.java.com.fly.firefly.ui.activity.Login.LoginFragment.java-forgotPassword.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++int indexSelection=0;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++boolean MAX_COUNT_EXCEEDED=true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++boolean LocalizedFormats=true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++boolean loggingIn=false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/2030/pattern-ver1-serial/src.client.gui.batchstate.BatchState.java-BatchState.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++assert (max!=null);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/4812/pattern-ver1-serial/graal.com.oracle.graal.nodes.src.com.oracle.graal.nodes.calc.IsNullNode.java-IsNullNode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++if((Thread.currentThread().interrupted())){
++return ;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[36,43]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public MaxCountExceededException(Number max){
+ this(LocalizedFormats.MAX_COUNT_EXCEEDED,max);
++JOptionPane.showMessageDialog(null,"Uspješno ste odjavljeni sa sistema!","Info",JOptionPane.INFORMATION_MESSAGE);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/3046/pattern-ver1-serial/Projekat.iTravel.src.main.java.ba.unsa.etf.si.app.iTravel.Forms.Meni.java-OdjaviSe.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 13:56:29 CDT
+--------------- END -----------------
+Location : org.apache.commons.math.exception.MaxCountExceededException.MaxCountExceededException:[53, 54, 55, 56]#0.7071067811865475
+Compute Candidate : 2019.09.06 AD at 13:57:11 CDT - 2019.09.06 AD at 14:01:16 CDT , PNumber : 11267, CandNumber : 0 
+Location : org.apache.commons.math.exception.MaxCountExceededException.getMax:[62]#0.7071067811865475
+Compute Candidate : 2019.09.06 AD at 14:01:56 CDT - 2019.09.06 AD at 14:04:47 CDT , PNumber : 11280, CandNumber : 12 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
+-return max;
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:04:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
+-return max;
++return 0;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/5321/pattern-ver1-serial/app.src.main.java.edu.gatech.johndoe.carecoordinator.community.UI.CommunityAdapter.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:04:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
+-return max;
++return 1;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/7202/pattern-ver1-serial/client.SurvivalGuide.src.ch.ethz.inf.vs.android.g54.a4.ui.TouchImageView.java-getPointerCount.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:04:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
+-return max;
++return this.max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/1924/pattern-ver1-serial/src.main.java.org.spongepowered.api.util.command.ImmutableCommandMapping.java-getCallable.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:04:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
+-return max;
++return this.getMax();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V3/6962/pattern-ver1-serial/CodenameOne.src.com.codename1.ui.Toolbar.java-constructSideNavigationComponent.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:05:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
++this.getMax();
+ return max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V35/5018/pattern-ver1-serial/app.src.main.java.it.unimi.unimiplaces.presenters.BookmarksPresenter.java-init.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:05:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
+-return max;
++return (Number)(max);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:05:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
++int a=0;
+ return max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:05:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
++String OUTSTRING="";
+ return max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:05:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
++Number max=8;
+ return max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V32/2823/pattern-ver1-serial/app.src.main.java.com.scanner.cardreader.BradleyThreshold.java-getHalfOfFrame.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:05:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
++int a=1;
+ return max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:05:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MaxCountExceededException.java[58,63]
+------------Candidate---------------
+ public Number getMax(){
++boolean b=true;
+ return max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:05:20 CDT
+--------------- END -----------------
+Location : org.apache.commons.math.exception.MathIllegalStateException.MathIllegalStateException:[45, 46, 47, 48]#0.7071067811865475
+Compute Candidate : 2019.09.06 AD at 14:06:04 CDT - 2019.09.06 AD at 14:10:25 CDT , PNumber : 11267, CandNumber : 0 
+Location : org.apache.commons.math.exception.MathIllegalStateException.MathIllegalStateException:[69, 70]#0.7071067811865475
+Compute Candidate : 2019.09.06 AD at 14:11:06 CDT - 2019.09.06 AD at 14:14:22 CDT , PNumber : 11280, CandNumber : 27 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
++import java.util.Locale;
++
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,Locale.US);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/2959/pattern-ver1-serial/lib.src.main.java.org.theta4j.Theta.java-getDateTime.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
++import java.util.Locale;
++
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,Locale.ENGLISH);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/6693/pattern-ver1-serial/src.main.java.com.twilio.sdk.resource.InstanceResource.java-parseDate.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,String.CASE_INSENSITIVE_ORDER);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V32/1813/pattern-ver1-serial/src.me.libraryaddict.Hungergames.Managers.KitManager.java-addKit.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,false);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V8/2675/pattern-ver1-serial/core.org.eclipse.cdt.core.parser.org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTConditionalExpression.java-convertToMatch.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++return ;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,0);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V17/3557/pattern-ver1-serial/src.main.java.com.jetbrains.jetpad.vclang.term.expr.sort.Level.java-prettyPrint.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,"UTF-8");
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/1349/pattern-ver1-serial/eu.scasefp7.eclipse.reqeditor.src.eu.scasefp7.eclipse.reqeditor.wizards.ImportRqsWizardPage.java-execute.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
++import java.util.ArrayList;
++
++import com.sun.javafx.scene.control.behavior.KeyBinding;
++
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,new ArrayList<KeyBinding>());
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V33/314/pattern-ver1-serial/src.main.java.jfxtras.labs.internal.scene.control.behavior.SixteenSegmentBehavior.java-SixteenSegmentBehavior.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,2);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V8/2170/pattern-ver1-serial/tool.jtag.src.main.java.nl.lxtreme.ols.tool.jtag.JTAGDataSet.java-reportJTAGTdiData.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,"path");
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/5783/pattern-ver1-serial/src.main.java.org.spongepowered.api.service.persistence.data.MemoryDataView.java-createView.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,3);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V16/6008/pattern-ver1-serial/src.main.java.edu.illinois.cs.cogcomp.xlwikifier.evaluation.TAC2016Eval.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(null,LocalizedFormats.ILLEGAL_STATE,null);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V23/483/pattern-ver1-serial/app.src.main.java.com.ekeitho.shake.map.FriendsMapAreaFragment.java-onConnected.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
++import org.omg.CORBA.OMGVMCID;
++
++import org.omg.CORBA.CompletionStatus;
++
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,OMGVMCID.value|3,CompletionStatus.COMPLETED_NO);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/3523/pattern-ver1-serial/core.src.main.java.org.jacorb.poa.POA.java-makeDestructionComplete.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,null,null);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V20/2082/pattern-ver1-serial/interview_questions.trees_and_graphs.ValidateBST.java-checkBST.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:14:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,true,false);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V58/1403/pattern-ver1-serial/common.taytom258.show.tso.ShowFacit.java-svcDate.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:15:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++while(true){
++
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V61/177/pattern-ver1-serial/flink-addons.flink-streaming.flink-streaming-core.src.main.java.org.apache.flink.streaming.api.streamvertex.StreamVertex.java-invoke.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
++import java.nio.charset.Charset;
++
+ public MathIllegalStateException(){
+-this(LocalizedFormats.ILLEGAL_STATE);
++this(LocalizedFormats.ILLEGAL_STATE,Charset.forName("UTF-8"));
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3733/pattern-ver1-serial/Code.Part1.src.core.Intraprocedural.java-callgraph.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++int LocalizedFormats=5;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++int ILLEGAL_STATE=5;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/7018/pattern-ver1-serial/app.src.main.java.com.priteshjain.popularmovies.util.EndlessRecyclerOnScrollListener.java-onScrolled.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++ final String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V44/5976/pattern-ver1-serial/rhymecity.src.main.java.com.fly.firefly.ui.activity.Login.LoginFragment.java-forgotPassword.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++int indexSelection=0;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++boolean ILLEGAL_STATE=true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++boolean LocalizedFormats=true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/4636/pattern-ver1-serial/core.src.io.github.emergentorganization.cellrpg.input.player.MovementControls.PathDraw.java-process.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++boolean loggingIn=false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/2030/pattern-ver1-serial/src.client.gui.batchstate.BatchState.java-BatchState.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++if((Thread.currentThread().interrupted())){
++return ;
++}
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[65,70]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ public MathIllegalStateException(){
+ this(LocalizedFormats.ILLEGAL_STATE);
++JOptionPane.showMessageDialog(null,"Uspješno ste odjavljeni sa sistema!","Info",JOptionPane.INFORMATION_MESSAGE);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/3046/pattern-ver1-serial/Projekat.iTravel.src.main.java.ba.unsa.etf.si.app.iTravel.Forms.Meni.java-OdjaviSe.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:17:36 CDT
+--------------- END -----------------
+Location : org.apache.commons.math.exception.MathIllegalStateException.getContext:[74]#0.7071067811865475
+Compute Candidate : 2019.09.06 AD at 14:18:22 CDT - 2019.09.06 AD at 14:21:25 CDT , PNumber : 11281, CandNumber : 10 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
+-return context;
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
+-return context;
++return this.context;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/1924/pattern-ver1-serial/src.main.java.org.spongepowered.api.util.command.ImmutableCommandMapping.java-getCallable.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
+-return context;
++return this.getContext();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V3/6962/pattern-ver1-serial/CodenameOne.src.com.codename1.ui.Toolbar.java-constructSideNavigationComponent.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
++this.getContext();
+ return context;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V35/5018/pattern-ver1-serial/app.src.main.java.it.unimi.unimiplaces.presenters.BookmarksPresenter.java-init.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
+-return context;
++return (ExceptionContext)(context);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
++int a=0;
+ return context;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
++String OUTSTRING="";
+ return context;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
++int a=1;
+ return context;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
++boolean b=true;
+ return context;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_40_buggy/src/main/java/org/apache/commons/math/exception/MathIllegalStateException.java[72,75]
+------------Candidate---------------
+ public ExceptionContext getContext(){
++if(context==null){
++return null;
++}
+ return context;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V7/4158/pattern-ver1-serial/src.floobits.windows.ChatForm.java-update.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.BracketingNthOrderBrentSolverTest::testIssue716]
+---------START : 2019.09.06 AD at 13:11:11 CDT
+---------TIME : 2019.09.06 AD at 14:21:58 CDT
+--------------- END -----------------
+Finish : math-40 > patch : 0 | Start : Fri Sep 06 13:11:11 CDT 2019 | End : 2019.09.06 AD at 14:21:58 CDT

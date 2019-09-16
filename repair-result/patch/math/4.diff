@@ -1,0 +1,139 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_4_buggy/src/main/java/org/apache/commons/math3/geometry/euclidean/threed/SubLine.java[96,127]
+------------Solution---------------
+ public Vector3D intersection(SubLine subLine,boolean includeEndPoints){
+ Vector3D v1D=line.intersection(subLine.line);
++if(v1D==null){
++return null;
++}
+ Location loc1=remainingRegion.checkPoint(line.toSubSpace(v1D));
+ Location loc2=subLine.remainingRegion.checkPoint(subLine.line.toSubSpace(v1D));
+ if(includeEndPoints){
+ return ((loc1!=Location.OUTSIDE)&&(loc2!=Location.OUTSIDE))?v1D:null;
+ }else {
+ return ((loc1==Location.INSIDE)&&(loc2==Location.INSIDE))?v1D:null;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math3.geometry.euclidean.threed.SubLineTest::testIntersectionNotIntersecting_purify_1]
+---------START : 2019.09.04 AD at 16:05:38 CDT
+---------TIME : 2019.09.04 AD at 16:43:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_4_buggy/src/main/java/org/apache/commons/math3/geometry/euclidean/threed/Line.java[106,115]
+------------Solution---------------
+ public double getAbscissa(Vector3D point){
++if(point==null){
++return 0d;
++}
+ return point.subtract(zero).dotProduct(direction);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math3.geometry.euclidean.threed.SubLineTest::testIntersectionNotIntersecting_purify_1]
+---------START : 2019.09.04 AD at 16:05:38 CDT
+---------TIME : 2019.09.04 AD at 18:21:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_4_buggy/src/main/java/org/apache/commons/math3/geometry/euclidean/twod/SubLine.java[96,131]
+------------Solution---------------
+ public Vector2D intersection(SubLine subLine,boolean includeEndPoints){
+ Line line1=(Line)getHyperplane();
+ Line line2=(Line)subLine.getHyperplane();
+ Vector2D v2D=line1.intersection(line2);
++if(v2D==null){
++return null;
++}
+ Location loc1=getRemainingRegion().checkPoint(line1.toSubSpace(v2D));
+ Location loc2=subLine.getRemainingRegion().checkPoint(line2.toSubSpace(v2D));
+ if(includeEndPoints){
+ return ((loc1!=Location.OUTSIDE)&&(loc2!=Location.OUTSIDE))?v2D:null;
+ }else {
+ return ((loc1==Location.INSIDE)&&(loc2==Location.INSIDE))?v2D:null;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.math3.geometry.euclidean.twod.SubLineTest::testIntersectionParallel_purify_1]
+---------START : 2019.09.04 AD at 16:05:38 CDT
+---------TIME : 2019.09.04 AD at 19:21:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_4_buggy/src/main/java/org/apache/commons/math3/geometry/euclidean/twod/SubLine.java[96,131]
+------------Solution---------------
+ public Vector2D intersection(SubLine subLine,boolean includeEndPoints){
+ Line line1=(Line)getHyperplane();
+ Line line2=(Line)subLine.getHyperplane();
+ Vector2D v2D=line1.intersection(line2);
++if(v2D==null||line1==null){
++return null;
++}
+ Location loc1=getRemainingRegion().checkPoint(line1.toSubSpace(v2D));
+ Location loc2=subLine.getRemainingRegion().checkPoint(line2.toSubSpace(v2D));
+ if(includeEndPoints){
+ return ((loc1!=Location.OUTSIDE)&&(loc2!=Location.OUTSIDE))?v2D:null;
+ }else {
+ return ((loc1==Location.INSIDE)&&(loc2==Location.INSIDE))?v2D:null;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V22/6302/pattern-ver1-serial/modules.core.src.main.java.io.smsc.repository.customer.customer.CustomerRepositoryImpl.java-removeUser.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.math3.geometry.euclidean.twod.SubLineTest::testIntersectionParallel_purify_1]
+---------START : 2019.09.04 AD at 16:05:38 CDT
+---------TIME : 2019.09.04 AD at 19:30:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_4_buggy/src/main/java/org/apache/commons/math3/geometry/euclidean/twod/SubLine.java[96,131]
+------------Solution---------------
+ public Vector2D intersection(SubLine subLine,boolean includeEndPoints){
+ Line line1=(Line)getHyperplane();
+ Line line2=(Line)subLine.getHyperplane();
+ Vector2D v2D=line1.intersection(line2);
++if(line1==null||v2D==null||subLine==null){
++return null;
++}
+ Location loc1=getRemainingRegion().checkPoint(line1.toSubSpace(v2D));
+ Location loc2=subLine.getRemainingRegion().checkPoint(line2.toSubSpace(v2D));
+ if(includeEndPoints){
+ return ((loc1!=Location.OUTSIDE)&&(loc2!=Location.OUTSIDE))?v2D:null;
+ }else {
+ return ((loc1==Location.INSIDE)&&(loc2==Location.INSIDE))?v2D:null;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V16/1000/pattern-ver1-serial/common.crazypants.enderio.machine.crusher.CrusherRecipeManager.java-addRecipe.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 0, INS : 12, DEL : 0
+Failing Tests:[org.apache.commons.math3.geometry.euclidean.twod.SubLineTest::testIntersectionParallel_purify_1]
+---------START : 2019.09.04 AD at 16:05:38 CDT
+---------TIME : 2019.09.04 AD at 19:33:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_4_buggy/src/main/java/org/apache/commons/math3/geometry/euclidean/twod/SubLine.java[96,131]
+------------Solution---------------
+ public Vector2D intersection(SubLine subLine,boolean includeEndPoints){
+ Line line1=(Line)getHyperplane();
+ Line line2=(Line)subLine.getHyperplane();
+ Vector2D v2D=line1.intersection(line2);
++if(line1==null||subLine==null||v2D==null){
++return null;
++}
+ Location loc1=getRemainingRegion().checkPoint(line1.toSubSpace(v2D));
+ Location loc2=subLine.getRemainingRegion().checkPoint(line2.toSubSpace(v2D));
+ if(includeEndPoints){
+ return ((loc1!=Location.OUTSIDE)&&(loc2!=Location.OUTSIDE))?v2D:null;
+ }else {
+ return ((loc1==Location.INSIDE)&&(loc2==Location.INSIDE))?v2D:null;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V16/1000/pattern-ver1-serial/common.crazypants.enderio.machine.crusher.CrusherRecipeManager.java-addRecipe.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 0, INS : 12, DEL : 0
+Failing Tests:[org.apache.commons.math3.geometry.euclidean.twod.SubLineTest::testIntersectionParallel_purify_1]
+---------START : 2019.09.04 AD at 16:05:38 CDT
+---------TIME : 2019.09.04 AD at 19:35:09 CDT
+--------------- END -----------------

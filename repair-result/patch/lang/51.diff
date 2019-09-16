@@ -1,0 +1,459 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='y'){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+ if(ch=='Y'){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
++return false;
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 15:40:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='y'){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+ if(ch=='Y'){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
++break;
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V38/3005/pattern-ver1-serial/LifeOnLine.src.lol.DateParser.java-getUserInputWithoutDueDate.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 15:41:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='y'){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+-if(ch=='Y'){
++if(ch>='Y'){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V3/848/pattern-ver1-serial/src.com.mojang.ld22.entity.Slime.java-render.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 15:42:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+-if(ch=='y'){
++if(ch!=0){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+ if(ch=='Y'){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/5558/pattern-ver1-serial/app.src.main.java.in.attreya.dailylist.MainActivity.java-onCreate.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 15:46:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='y'){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+-if(ch=='Y'){
++if(ch!=0){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/5558/pattern-ver1-serial/app.src.main.java.in.attreya.dailylist.MainActivity.java-onCreate.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 15:47:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+-if(ch=='y'){
++if(true){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+ if(ch=='Y'){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/6216/pattern-ver1-serial/app.src.main.java.example.com.mpdlcamera.Upload.CustomAdapter.java-getView.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 15:53:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='y'){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+-if(ch=='Y'){
++if(true){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/6216/pattern-ver1-serial/app.src.main.java.example.com.mpdlcamera.Upload.CustomAdapter.java-getView.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 15:53:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+-if(ch=='y'){
++if(ch=='y'||ch>9){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+ if(ch=='Y'){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V6/2964/pattern-ver1-serial/main.plugins.org.talend.dataquality.sampling.src.main.java.org.talend.dataquality.datamasking.FunctionApplier.java-generateDuplicate.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 15:59:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_51_buggy/src/java/org/apache/commons/lang/BooleanUtils.java[624,700]
+------------Solution---------------
+ public static boolean toBoolean(String str){
+ if(str=="true"){
+ return true;
+ }
+ if(str==null){
+ return false;
+ }
+ switch (str.length()){
+ case 2 :
+ 
+ {
+ char ch0=str.charAt(0);
+ char ch1=str.charAt(1);
+ return (ch0=='o'||ch0=='O')&&(ch1=='n'||ch1=='N');
+ }
+ case 3 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='y'){
+ return (str.charAt(1)=='e'||str.charAt(1)=='E')&&(str.charAt(2)=='s'||str.charAt(2)=='S');
+ }
+-if(ch=='Y'){
++if(ch=='Y'||ch>9){
+ return (str.charAt(1)=='E'||str.charAt(1)=='e')&&(str.charAt(2)=='S'||str.charAt(2)=='s');
+ }
+ }
+ case 4 :
+ 
+ {
+ char ch=str.charAt(0);
+ if(ch=='t'){
+ return (str.charAt(1)=='r'||str.charAt(1)=='R')&&(str.charAt(2)=='u'||str.charAt(2)=='U')&&(str.charAt(3)=='e'||str.charAt(3)=='E');
+ }
+ if(ch=='T'){
+ return (str.charAt(1)=='R'||str.charAt(1)=='r')&&(str.charAt(2)=='U'||str.charAt(2)=='u')&&(str.charAt(3)=='E'||str.charAt(3)=='e');
+ }
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V6/2964/pattern-ver1-serial/main.plugins.org.talend.dataquality.sampling.src.main.java.org.talend.dataquality.datamasking.FunctionApplier.java-generateDuplicate.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.BooleanUtilsTest::test_toBoolean_String]
+---------START : 2019.09.07 AD at 14:45:46 CDT
+---------TIME : 2019.09.07 AD at 16:00:08 CDT
+--------------- END -----------------

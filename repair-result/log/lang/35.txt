@@ -1,0 +1,3465 @@
+Repair : lang_35
+Current failed test : org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1 | 2019.09.06 AD at 14:34:43 CDT
+Location : org.apache.commons.lang3.ArrayUtils.add:[3292, 3295, 3290, 3298, 3299, 3300]#1.0
+Compute Candidate : 2019.09.06 AD at 14:35:46 CDT - 2019.09.06 AD at 14:48:32 CDT , PNumber : 11394, CandNumber : 0 
+Location : org.apache.commons.lang3.ArrayUtils.copyArrayGrow1:[3535, 3529]#0.3333333333333333
+Compute Candidate : 2019.09.06 AD at 14:48:45 CDT - 2019.09.06 AD at 15:10:16 CDT , PNumber : 11376, CandNumber : 155 
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(array==null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V40/1240/pattern-ver1-serial/flexo-foundation.src.main.java.org.openflexo.foundation.viewpoint.FlexoConceptInstanceRole.java-applyValidation.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1,0);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V39/7029/pattern-ver1-serial/app.src.main.java.hu.bme.simonyi.acstudio.analogchaosinventoryapp.inventory.TreeCreator.java-createTree.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+-Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++Object newArray=Array.newInstance(newArrayComponentType.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V33/668/pattern-ver1-serial/src.jp.ac.aiit.jointry.controllers.MainController.java-initialize.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(array!=""){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V29/276/pattern-ver1-serial/src.edu.cpp.cs.cs141.final_project.User_Interface.TextUI.TextUserInterface.java-drawAlertText.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V63/2568/pattern-ver1-serial/src.framework.scuba.domain.AllocLoc.java-AllocLoc.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.get(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V31/4761/pattern-ver1-serial/src.main.java.org.la4j.vector.source.UnsafeVectorSource.java-get.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+-return newArray;
++return array;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/6187/pattern-ver1-serial/device-manager.core.src.main.java.org.dc.bco.manager.device.core.AbstractDeviceFactory.java-newInstance.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:50 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+-return newArray;
++return newArrayComponentType;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/6187/pattern-ver1-serial/device-manager.core.src.main.java.org.dc.bco.manager.device.core.AbstractDeviceFactory.java-newInstance.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(newArrayComponentType!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V9/1150/pattern-ver1-serial/src.main.java.de.nedelosk.modularmachines.client.gui.GuiAssembler.java-onUpdate.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1,2);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V45/1189/pattern-ver1-serial/eclipse.plugins.org.switchyard.tools.ui.editor.src.org.switchyard.tools.ui.editor.components.camel.jms.CamelJmsComposite.java-getJmsTabControl.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 0, INS : 1, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:10:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.getInt(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V10/536/pattern-ver1-serial/app.src.main.java.comjason_lewisg.httpsgithub.boozic.Controllers.ProductListController.java-updateProduct.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1,-1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V35/314/pattern-ver1-serial/android.src.main.java.notification.templates.TextFieldTemplate.java-getGraphicComponent.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++arrayLength++;
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V14/297/pattern-ver1-serial/app.src.main.java.org.team2635.scoutnetclient.fragments.StrategyInfoFragment.java-getData.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+-Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++Object newArray=Array.newInstance(newArrayComponentType.getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V43/1694/pattern-ver1-serial/flinklink.src.main.java.eu.amidst.flinklink.core.learning.parametric.ParallelMaximumLikelihood2.java-updateModel.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++arrayLength--;
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/5173/pattern-ver1-serial/ejb_modules.EJB-timetable.src.main.java.be.vubrooster.ejb.managers.EHBActivityManager.java-loadActivitiesForClassRooms.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(array.equals(null)){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V1/343/pattern-ver1-serial/src.gui.batches.ItemBatchView.java-selectProduct.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++array=array;
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V31/432/pattern-ver1-serial/src.arcane_arcade_menus.MainMenuMenuCreator.java-MainMenuElement.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++arrayLength=1000;
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V4/3726/pattern-ver1-serial/WeatherService.src.weatherservice.StatisticsCalculator.java-MinWindSpeed.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++newArray=1000;
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V4/3726/pattern-ver1-serial/WeatherService.src.weatherservice.StatisticsCalculator.java-MinWindSpeed.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(true){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/6216/pattern-ver1-serial/app.src.main.java.example.com.mpdlcamera.Upload.CustomAdapter.java-getView.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++int a=0;
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++int a=0;
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V24/5087/pattern-ver1-serial/app.src.main.java.ru.alexandersurinov.androidtimereportingsystem.repository.ProjectRepository.java-onFailure.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++newArray=false;
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V16/271/pattern-ver1-serial/src.datamining.clustering.protoype.altopt.PolynomFCMNoiseClusteringAlgorithm.java-classifyNoise.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++String OUTSTRING="";
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++String OUTSTRING="";
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V49/487/pattern-ver1-serial/api.src.main.java.v1.rest.LabelsResource.java-getLabel_XML.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++array=new Object();
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V6/4713/pattern-ver1-serial/CapstoneProject.src.capstone.BinaryTree.java-getRecords.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:11:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++newArray=new Object();
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V6/4713/pattern-ver1-serial/CapstoneProject.src.capstone.BinaryTree.java-getRecords.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++int indexSelection=0;
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V28/7667/pattern-ver1-serial/Handyboy.src.com.vallverk.handyboy.view.HandyBoyViewFragment.java-updateJobsContainer.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++int a=1;
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++int a=1;
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V25/7434/pattern-ver1-serial/app.src.main.java.hummingbird.android.mobile_app.views.fragments.LibraryFragmentAdapter.java-onFragmentSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++boolean b=true;
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++boolean b=true;
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V30/6898/pattern-ver1-serial/minijava-compiler-frontend.SamplePrograms.SampleMiniJavaPrograms.QuickSort.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array==null){
++return false;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V33/244/pattern-ver1-serial/app.src.main.java.net.pilpin.nanodegree_popularmovies.FetchMoviesTask.java-getDataFromJsonMovieList.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
++}
++if(array==null){
++return false;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V33/244/pattern-ver1-serial/app.src.main.java.net.pilpin.nanodegree_popularmovies.FetchMoviesTask.java-getDataFromJsonMovieList.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
++}
++if(newArrayComponentType==null){
++return false;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V33/244/pattern-ver1-serial/app.src.main.java.net.pilpin.nanodegree_popularmovies.FetchMoviesTask.java-getDataFromJsonMovieList.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++return false;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V33/244/pattern-ver1-serial/app.src.main.java.net.pilpin.nanodegree_popularmovies.FetchMoviesTask.java-getDataFromJsonMovieList.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++if(array==null){
++return "";
++}
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/5349/pattern-ver1-serial/drools-wb-screens.drools-wb-guided-dtable-editor.drools-wb-guided-dtable-editor-client.src.main.java.org.drools.workbench.screens.guided.dtable.client.widget.table2.columns.dom.textbox.TextBoxLongSingletonDOMElementFactory.java-convert.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(array==null){
++return "";
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/5349/pattern-ver1-serial/drools-wb-screens.drools-wb-guided-dtable-editor.drools-wb-guided-dtable-editor-client.src.main.java.org.drools.workbench.screens.guided.dtable.client.widget.table2.columns.dom.textbox.TextBoxLongSingletonDOMElementFactory.java-convert.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(newArrayComponentType==null){
++return "";
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/5349/pattern-ver1-serial/drools-wb-screens.drools-wb-guided-dtable-editor.drools-wb-guided-dtable-editor-client.src.main.java.org.drools.workbench.screens.guided.dtable.client.widget.table2.columns.dom.textbox.TextBoxLongSingletonDOMElementFactory.java-convert.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++return "";
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/5349/pattern-ver1-serial/drools-wb-screens.drools-wb-guided-dtable-editor.drools-wb-guided-dtable-editor-client.src.main.java.org.drools.workbench.screens.guided.dtable.client.widget.table2.columns.dom.textbox.TextBoxLongSingletonDOMElementFactory.java-convert.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++if(array==null){
++return null;
++}
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(array==null){
++return null;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(newArrayComponentType==null){
++return null;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++return null;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(array==newArrayComponentType){
++return true;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(newArrayComponentType==array){
++return true;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(array==newArray){
++return true;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==array){
++return true;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:12:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array==null){
++return null;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V19/3094/pattern-ver1-serial/scribengin.core.src.main.java.com.neverwinterdp.scribengin.storage.hdfs.sink.HDFSSinkPartitionStreamWriter.java-prepareCommit.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(arrayLength==Array.getLength(array)){
++return newArray;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5920/pattern-ver1-serial/FileReaders.gff.GVFReader.java-get_detail.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==Array.newInstance(array.getClass().getComponentType(),arrayLength+1)){
++return arrayLength;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5920/pattern-ver1-serial/FileReaders.gff.GVFReader.java-get_detail.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
++}
++if(newArrayComponentType==null){
++return null;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V60/886/pattern-ver1-serial/src.com.inovex.zabbixmobile.activities.BaseSeverityFilterActivity.java-onSeveritySelected.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(array==null){
++return null;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V60/886/pattern-ver1-serial/src.com.inovex.zabbixmobile.activities.BaseSeverityFilterActivity.java-onSeveritySelected.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return null;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V48/2471/pattern-ver1-serial/src.com.widerwille.afterglow.AfterglowIconProvider.java-getIcon.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++if("index".equals(array)){
++return 0;
++}
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if("index".equals(array)){
++return 0;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if("index".equals(newArrayComponentType)){
++return 0;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if("index".equals(arrayLength)){
++return 0;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if("index".equals(newArray)){
++return 0;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V20/5660/pattern-ver1-serial/plugins.crawloverview-plugin.src.main.java.com.crawljax.plugins.crawloverview.StateWriter.java-getStateNumber.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if("&null".equals(array)){
++return null;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
++}
++if("&null".equals(array)){
++return null;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
++}
++if("&null".equals(newArrayComponentType)){
++return null;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:39 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if("&null".equals(arrayLength)){
++return null;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if("&null".equals(newArray)){
++return null;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V14/1018/pattern-ver1-serial/skuldsku-prod.src.main.java.no.steria.skuldsku.recorder.java.serializer.ClassSerializer.java-myAsObject.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:44 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return true;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V26/5925/pattern-ver1-serial/vipr-portal.com.iwave.isa.content.src.java.com.emc.sa.asset.providers.BlockProvider.java-acceptId.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++if(newArray==null){
++return false;
++}
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V17/1529/pattern-ver1-serial/src.main.java.net.openhft.chronicle.core.io.IOTools.java-shallowDeleteDirWithFiles.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array.getClass()==null){
++return null;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2437/pattern-ver1-serial/app.src.main.java.org.gdg.frisbee.android.onboarding.FirstStartStep1Fragment.java-addChapters.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V37/5444/pattern-ver1-serial/shellGDX.src.com.shellGDX.model2D.ModelObject2D.java-touchDown.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.equals("")){
++return "";
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V28/6228/pattern-ver1-serial/src.engine.QueryEngine.java-slice.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:13:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return 1;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V38/6245/pattern-ver1-serial/core.java.android.net.NetworkInfo.java-getSubtypeName.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.equals("-1")){
++return null;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V10/4405/pattern-ver1-serial/src.edu.ucsb.cs.Main.java-editGuardianGivenName.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return (Object)Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5127/pattern-ver1-serial/com.buglabs.common.com.buglabs.bug.sysfs.BMIDevice.java-apply.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return 0;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/5321/pattern-ver1-serial/app.src.main.java.edu.gatech.johndoe.carecoordinator.community.UI.CommunityAdapter.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(array.equals(newArrayComponentType)){
++return false;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5852/pattern-ver1-serial/ganttproject.src.net.sourceforge.ganttproject.TaskContainmentHierarchyFacadeImpl.java-areUnrelated.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(newArrayComponentType.equals(array)){
++return false;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5852/pattern-ver1-serial/ganttproject.src.net.sourceforge.ganttproject.TaskContainmentHierarchyFacadeImpl.java-areUnrelated.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:16 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array.equals(arrayLength)){
++return false;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5852/pattern-ver1-serial/ganttproject.src.net.sourceforge.ganttproject.TaskContainmentHierarchyFacadeImpl.java-areUnrelated.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(array.equals(newArray)){
++return false;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5852/pattern-ver1-serial/ganttproject.src.net.sourceforge.ganttproject.TaskContainmentHierarchyFacadeImpl.java-areUnrelated.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:21 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.equals(array)){
++return false;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5852/pattern-ver1-serial/ganttproject.src.net.sourceforge.ganttproject.TaskContainmentHierarchyFacadeImpl.java-areUnrelated.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return newArrayComponentType;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V40/3906/pattern-ver1-serial/tetrad-lib.src.main.java.edu.cmu.tetrad.algcomparison.algorithm.oracle.pag.Ccd.java-getComparisonGraph.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++assert (array!=null);
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++assert (array!=null);
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++assert (newArrayComponentType!=null);
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++assert (newArray!=null);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V42/2471/pattern-ver1-serial/src.main.java.seedu.taskell.model.task.TaskDate.java-convertMonthIntoInteger.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++if(newArrayComponentType.equals(InputStream.class)){
++return array;
++}
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(newArrayComponentType.equals(InputStream.class)){
++return array;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(newArrayComponentType.equals(InputStream.class)){
++return arrayLength;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArrayComponentType.equals(InputStream.class)){
++return newArray;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(array.equals(InputStream.class)){
++return newArrayComponentType;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array.equals(InputStream.class)){
++return arrayLength;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:53 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.equals(InputStream.class)){
++return array;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:14:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.io.Reader;
++
++import java.io.InputStream;
++
++import java.io.InputStreamReader;
++
++import java.io.OutputStreamWriter;
++
++import java.io.IOException;
++
++import java.io.OutputStream;
++
++import java.io.Writer;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(array.equals(InputStream.class)){
++return newArray;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V36/1916/pattern-ver1-serial/ambari-server.src.main.java.org.apache.ambari.server.api.GsonJsonProvider.java-readFrom.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return array;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/6187/pattern-ver1-serial/device-manager.core.src.main.java.org.dc.bco.manager.device.core.AbstractDeviceFactory.java-newInstance.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(array!=null){
+ if(array!=null){
++int arrayLength=Array.getLength(array);
++Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++System.arraycopy(array,0,newArray,0,arrayLength);
++return newArray;
++}
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/384/pattern-ver1-serial/app.src.main.java.com.farfromsober.ffs.activities.LoginActivity.java-onDataParsed.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(newArrayComponentType!=null){
++if(array!=null){
++int arrayLength=Array.getLength(array);
++Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++System.arraycopy(array,0,newArray,0,arrayLength);
++return newArray;
++}
++return Array.newInstance(newArrayComponentType,1);
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/384/pattern-ver1-serial/app.src.main.java.com.farfromsober.ffs.activities.LoginActivity.java-onDataParsed.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(array!=null){
++if(array!=null){
++int arrayLength=Array.getLength(array);
++Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++System.arraycopy(array,0,newArray,0,arrayLength);
++return newArray;
++}
++return Array.newInstance(newArrayComponentType,1);
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V8/384/pattern-ver1-serial/app.src.main.java.com.farfromsober.ffs.activities.LoginActivity.java-onDataParsed.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return (Object)(Array.newInstance(newArrayComponentType,1));
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/1621/pattern-ver1-serial/src.lab4.FileService.FileService.java-readFile.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
++}
++if(newArrayComponentType.getName().isEmpty()){
++return null;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V38/7204/pattern-ver1-serial/src.main.java.sg.edu.nus.cs2103t.omnitask.logic.DataImpl.java-addTask.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++assert (arrayLength!=Array.getLength(array));
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/3232/pattern-ver1-serial/src.main.java.com.about.java.controllers.MainController.java-mainpage.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++assert (newArray!=Array.newInstance(array.getClass().getComponentType(),arrayLength+1));
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/3232/pattern-ver1-serial/src.main.java.com.about.java.controllers.MainController.java-mainpage.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++assert (array!=null);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/4812/pattern-ver1-serial/graal.com.oracle.graal.nodes.src.com.oracle.graal.nodes.calc.IsNullNode.java-IsNullNode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
++assert (array!=null);
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/4812/pattern-ver1-serial/graal.com.oracle.graal.nodes.src.com.oracle.graal.nodes.calc.IsNullNode.java-IsNullNode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:26 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
++assert (newArrayComponentType!=null);
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/4812/pattern-ver1-serial/graal.com.oracle.graal.nodes.src.com.oracle.graal.nodes.calc.IsNullNode.java-IsNullNode.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.util.regex.Matcher;
++
++import java.util.regex.Pattern;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1)+".*";
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/6165/pattern-ver1-serial/src.main.java.com.oneandone.network.snmpman.configuration.type.WildcardOID.java-toString.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.awt.List;
++
++import java.util.*;
++
++import java.awt.geom.Arc2D;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.equals(null)){
++return null;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V40/2100/pattern-ver1-serial/ExpressionCalculator.ExpressionCalculator.java-recursiveReduce.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.awt.List;
++
++import java.util.*;
++
++import java.awt.geom.Arc2D;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++if(newArray.equals(null)){
++return null;
++}
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V40/2100/pattern-ver1-serial/ExpressionCalculator.ExpressionCalculator.java-recursiveReduce.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.equals("655")){
++System.out.println();
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V38/3726/pattern-ver1-serial/src.protosocket.client.WriteThread.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if((Thread.currentThread().interrupted())){
++return null;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
++}
++if((Thread.currentThread().interrupted())){
++return null;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V16/2/pattern-ver1-serial/src.com.grishberg.data.api.MqServer.java-run.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(array!=null||"查看红包".equals(array)){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/4605/pattern-ver1-serial/app.src.main.java.xyz.monkeytong.hongbao.utils.HongbaoSignature.java-generateSignature.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:49 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(array!=null||array==""){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V38/7341/pattern-ver1-serial/log210_webproject_BDD.src.RechercheLivre.java-RechercheLivre.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1)!=null?Array.newInstance(newArrayComponentType,1):new Object();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V23/4736/pattern-ver1-serial/server.src.main.java.com.paypal.selion.grid.SeLionStandaloneConfiguration.java-getStandaloneConfiguration.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:55 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import javax.swing.JOptionPane;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++JOptionPane.showMessageDialog(null,"No se pudo cargar la canci�n","Error",JOptionPane.ERROR_MESSAGE);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V30/7753/pattern-ver1-serial/src.entities.Playlist.java-putInMemory.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:15:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(array!=null||array==null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V35/4704/pattern-ver1-serial/src.main.java.com.alibaba.fastjson.parser.ParserConfig.java-createJavaBeanDeserializer.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1)==null?new Object():Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/5999/pattern-ver1-serial/persistence.src.main.java.com.softserve.osbb.model.Bill.java-getApartment.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++assert (arrayLength>=0):"Receive a negative tratment";
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Book.java-setChapters.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++assert (array!=null):"Appointments day is not allowed to be null!";
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++assert (array!=null):"Appointments day is not allowed to be null!";
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++assert (newArrayComponentType!=null):"Appointments day is not allowed to be null!";
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++assert (newArray!=null):"Appointments day is not allowed to be null!";
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V26/3408/pattern-ver1-serial/tutorfinder.src.main.java.ch.unibe.ese.Tutorfinder.model.Appointment.java-setDay.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.util.Calendar;
++
++import java.util.Date;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++assert (arrayLength!=0):"Receive a size tratment";
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/6481/pattern-ver1-serial/QualCurso.app.src.main.java.models.Course.java-newArray.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 5, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array.getClass()==null){
++throw new IllegalStateException("player is not initialised, game might not be started");
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V47/378/pattern-ver1-serial/src.main.java.game.Game.java-extraLife.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(arrayLength>7){
++throw new RuntimeException("Sorry, it is impossible to determine what number it is in canonical form if base is larger than 7. \n Use rational fraction or sequence representation.");
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/4557/pattern-ver1-serial/p-adic.src.main.java.vvk.numbers.PAdic.java-PAdic.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(arrayLength>7){
++throw new RuntimeException("Sorry, it is impossible to determine what number it is in canonical form if base is larger than 7. \n Use rational fraction or sequence representation.");
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/4557/pattern-ver1-serial/p-adic.src.main.java.vvk.numbers.PAdic.java-PAdic.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++if(array==null){
++throw new IllegalStateException("Cannot instantiate Page whitout String url constructor parameter or @PageURL class annotation");
++}
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V50/4732/pattern-ver1-serial/src.main.java.com.mgiorda.page.AbstractPage.java-AbstractPage.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.util.ArrayList;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++newArray=new ArrayList<>();
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V15/3179/pattern-ver1-serial/src.dev.televex.memecraftcore.lore.loreapi.java-addLoreLineTop.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
++import java.util.ArrayList;
++
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++if(newArray==null){
++newArray=new ArrayList<>();
++}
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V15/3179/pattern-ver1-serial/src.dev.televex.memecraftcore.lore.loreapi.java-addLoreLineTop.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++newArray="";
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V5/755/pattern-ver1-serial/src.org.simiancage.bukkit.messagechangerlite.MessageChangerLite.java-getMessage.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:51 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++if(newArray==null){
++newArray="";
++}
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V5/755/pattern-ver1-serial/src.org.simiancage.bukkit.messagechangerlite.MessageChangerLite.java-getMessage.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:16:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.equals("")){
++newArray="Manchester United FC";
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V11/4958/pattern-ver1-serial/FootballScores.app.src.main.java.barqsoft.footballscores.widget.ScoresWidgetIntentService.java-onHandleIntent.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(arrayLength<=0){
++arrayLength=1;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/1761/pattern-ver1-serial/JazminServer.src.jazmin.core.monitor.DispatcherMonitorAgent.java-sample.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(arrayLength<=0){
++arrayLength=1;
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/1761/pattern-ver1-serial/JazminServer.src.jazmin.core.monitor.DispatcherMonitorAgent.java-sample.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:08 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array!=null){
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V36/2803/pattern-ver1-serial/core.src.main.java.com.orientechnologies.orient.core.index.hashindex.local.OHashTableDirectory.java-deleteWithoutOpen.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 1, DEL : 5
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:12 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(array.getClass().getSimpleName().startsWith("SystemException")){
++return true;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/3872/pattern-ver1-serial/sdk.src.main.java.com.amazon.speech.speechlet.verifier.ApplicationIdSpeechletRequestVerifier.java-verify.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.getClass().getSimpleName().startsWith("SystemException")){
++return true;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V21/3872/pattern-ver1-serial/sdk.src.main.java.com.amazon.speech.speechlet.verifier.ApplicationIdSpeechletRequestVerifier.java-verify.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray.equals("127.0.0.1")){
++newArray="114.113.202.141";
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V12/5284/pattern-ver1-serial/src.netease.pomelo.chat.MainActivity.java-responseData.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 0, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1-1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/7554/pattern-ver1-serial/src.rush.hour.Board.java-getGoalTiles.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 6, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+-Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1-1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+-return Array.newInstance(newArrayComponentType,1);
++return Array.newInstance(newArrayComponentType,1-1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/7554/pattern-ver1-serial/src.rush.hour.Board.java-getGoalTiles.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 6, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+-if(array!=null){
++if(array!=null&&!array.equals("")){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V51/6260/pattern-ver1-serial/Client.src.com.way.chat.activity.ChatActivity.java-onItemClick.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 6, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++Object t=newArray;
++newArray=null;
+ System.arraycopy(array,0,newArray,0,arrayLength);
+-return newArray;
++return t;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/5100/pattern-ver1-serial/CityGenJava.src.gameObjects.player.Player.java-drop.pattern
+MATCHLEVEL : ALL
+ALL : 7, UPD : 1, INS : 6, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++throw new IllegalStateException("User isn't registered! "+array);
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/5393/pattern-ver1-serial/peergos.user.UserContext.java-sendFollowRequest.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++throw new IllegalStateException("User isn't registered! "+arrayLength);
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/5393/pattern-ver1-serial/peergos.user.UserContext.java-sendFollowRequest.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:37 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++System.arraycopy(array,0,newArray,0,arrayLength);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V11/2664/pattern-ver1-serial/src.main.java.micdoodle8.mods.galacticraft.planets.asteroids.entities.EntityGrapple.java-EntityGrapple.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 1, DEL : 7
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(array==null){
++return "";
++}
++if(newArrayComponentType==null){
++return array;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/5645/pattern-ver1-serial/model.src.main.java.uk.ac.ebi.bioinvindex.utils.datasourceload.DataLocationManager.java-buildLocationFromRawParam.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:43 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
++if(newArrayComponentType==null){
++return "";
++}
++if(array==null){
++return newArrayComponentType;
++}
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/5645/pattern-ver1-serial/model.src.main.java.uk.ac.ebi.bioinvindex.utils.datasourceload.DataLocationManager.java-buildLocationFromRawParam.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++if(array==null){
++return "";
++}
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++return array;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/5645/pattern-ver1-serial/model.src.main.java.uk.ac.ebi.bioinvindex.utils.datasourceload.DataLocationManager.java-buildLocationFromRawParam.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++return "";
++}
++if(array==null){
++return newArray;
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/5645/pattern-ver1-serial/model.src.main.java.uk.ac.ebi.bioinvindex.utils.datasourceload.DataLocationManager.java-buildLocationFromRawParam.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:52 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(array==null||newArray==null){
++throw new NullPointerException();
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2177/pattern-ver1-serial/projects.core.src.main.java.org.quick.core.prop.DefaultExpressionContext.java-withFunction.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 0, INS : 9, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null||array==null){
++throw new NullPointerException();
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2177/pattern-ver1-serial/projects.core.src.main.java.org.quick.core.prop.DefaultExpressionContext.java-withFunction.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 0, INS : 9, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:17:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(arrayLength==3){
++System.out.println("debug");
++}
++if(arrayLength==3){
++System.out.println("debug");
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V9/4383/pattern-ver1-serial/Dameo.src.dameo.gametree.NegaMax.java-alphaBeta.pattern
+MATCHLEVEL : ALL
+ALL : 10, UPD : 0, INS : 10, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:18:00 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array==null){
++array="20200101";
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++newArray="20160101";
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V11/5352/pattern-ver1-serial/GitlabMonitor.src.main.java.org.gitmining.monitor.service.StudentService.java-getStudentEventItem.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 0, INS : 12, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:18:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++if(array==null){
++array="20160101";
++}
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++newArray="20200101";
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V11/5352/pattern-ver1-serial/GitlabMonitor.src.main.java.org.gitmining.monitor.service.StudentService.java-getStudentEventItem.pattern
+MATCHLEVEL : ALL
+ALL : 12, UPD : 0, INS : 12, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:18:06 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
++long startTime=System.currentTimeMillis();
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
+ System.arraycopy(array,0,newArray,0,arrayLength);
++long endTime=System.currentTimeMillis();
++long totalTime=endTime-startTime;
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V6/5668/pattern-ver1-serial/Euler.src.Euler20.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 13, UPD : 0, INS : 13, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:18:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
++if(array==null){
++array=new String[0];
++}
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++newArray=new String[0];
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/2884/pattern-ver1-serial/components.user-mgt.org.wso2.carbon.user.mgt.workflow.src.main.java.org.wso2.carbon.user.mgt.workflow.userstore.UpdateRoleUsersWFRequestHandler.java-startUpdateRoleUsersFlow.pattern
+MATCHLEVEL : ALL
+ALL : 14, UPD : 0, INS : 14, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:18:13 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_35_buggy/src/main/java/org/apache/commons/lang3/ArrayUtils.java[3519,3536]
+------------Candidate---------------
+ private static Object copyArrayGrow1(Object array,Class<?> newArrayComponentType){
+ if(array!=null){
+ int arrayLength=Array.getLength(array);
+ Object newArray=Array.newInstance(array.getClass().getComponentType(),arrayLength+1);
++if(newArray==null){
++newArray=new String[0];
++}
++if(array==null){
++array=new String[0];
++}
+ System.arraycopy(array,0,newArray,0,arrayLength);
+ return newArray;
+ }
+ return Array.newInstance(newArrayComponentType,1);
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V15/2884/pattern-ver1-serial/components.user-mgt.org.wso2.carbon.user.mgt.workflow.src.main.java.org.wso2.carbon.user.mgt.workflow.userstore.UpdateRoleUsersWFRequestHandler.java-startUpdateRoleUsersFlow.pattern
+MATCHLEVEL : ALL
+ALL : 14, UPD : 0, INS : 14, DEL : 0
+Failing Tests:[org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_1]
+---------START : 2019.09.06 AD at 14:34:43 CDT
+---------TIME : 2019.09.06 AD at 15:18:15 CDT
+--------------- END -----------------
+Current failed test : org.apache.commons.lang3.ArrayUtilsAddTest::testLANG571_purify_2 | 2019.09.06 AD at 15:18:15 CDT
+Location : org.apache.commons.lang3.ArrayUtils.add:[3568, 3569, 3571, 3574]#1.0
+Compute Candidate : 2019.09.06 AD at 15:18:45 CDT - 2019.09.06 AD at 15:35:51 CDT , PNumber : 11398, CandNumber : 0 
+Finish : lang-35 > patch : 0 | Start : Fri Sep 06 14:34:43 CDT 2019 | End : 2019.09.06 AD at 15:35:51 CDT

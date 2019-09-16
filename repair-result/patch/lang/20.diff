@@ -1,0 +1,378 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3341,3394]
+------------Solution---------------
+ public static String join(Object[] array,String separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ if(separator==null){
+ separator=EMPTY;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+separator.length());
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array.toString().length())+separator.length());
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V33/3555/pattern-ver1-serial/bpm.bonita-core.bonita-process-engine.src.main.java.org.bonitasoft.engine.api.impl.PlatformAPIImpl.java-createTenantFolderInBonitaHome.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_Objectarray_purify_6]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 17:47:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3341,3394]
+------------Solution---------------
+ public static String join(Object[] array,String separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ if(separator==null){
+ separator=EMPTY;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+separator.length());
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:separator.toString().length())+separator.length());
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/1308/pattern-ver1-serial/com.hangum.tadpole.rdb.core.src.com.hangum.tadpole.rdb.core.dialog.db.UserDBGroupDialog.java-UserDBGroupDialog.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_Objectarray_purify_6]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 17:48:57 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3341,3394]
+------------Solution---------------
+ public static String join(Object[] array,String separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ if(separator==null){
+ separator=EMPTY;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+separator.length());
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:separator.length())+separator.length());
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V43/1694/pattern-ver1-serial/flinklink.src.main.java.eu.amidst.flinklink.core.learning.parametric.ParallelMaximumLikelihood2.java-updateModel.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_Objectarray_purify_6]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 17:52:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3341,3394]
+------------Solution---------------
+ public static String join(Object[] array,String separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ if(separator==null){
+ separator=EMPTY;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+separator.length());
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:1)+separator.length());
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4284/pattern-ver1-serial/object-filter.src.main.java.org.infinispan.objectfilter.impl.util.Interval.java-compareTo.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_Objectarray_purify_6]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 17:59:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3341,3394]
+------------Solution---------------
+ public static String join(Object[] array,String separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ if(separator==null){
+ separator=EMPTY;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+separator.length());
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:0)+separator.length());
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V14/1552/pattern-ver1-serial/src.main.java.net.sourceforge.fenixedu.domain.Tutorship.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_Objectarray_purify_6]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 17:59:59 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3341,3394]
+------------Solution---------------
+ public static String join(Object[] array,String separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ if(separator==null){
+ separator=EMPTY;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+separator.length());
++StringBuilder buf=new StringBuilder(startIndex+separator.length());
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V28/2671/pattern-ver1-serial/Project.EncryptaBackend.src.Converter.java-binaryStringToString.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 9, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_Objectarray_purify_6]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 18:05:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3263,3309]
+------------Solution---------------
+ public static String join(Object[] array,char separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+1);
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array.toString().length())+1);
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V33/3555/pattern-ver1-serial/bpm.bonita-core.bonita-process-engine.src.main.java.org.bonitasoft.engine.api.impl.PlatformAPIImpl.java-createTenantFolderInBonitaHome.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_ArrayChar_purify_8]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 19:01:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3263,3309]
+------------Solution---------------
+ public static String join(Object[] array,char separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+1);
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:1)+1);
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V34/4284/pattern-ver1-serial/object-filter.src.main.java.org.infinispan.objectfilter.impl.util.Interval.java-compareTo.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_ArrayChar_purify_8]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 19:07:38 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3263,3309]
+------------Solution---------------
+ public static String join(Object[] array,char separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+1);
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:-1)+1);
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/262/pattern-ver1-serial/src.main.java.com.github.ddth.djs.bo.log.TaskLogBo.java-getDurationPickup.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_ArrayChar_purify_8]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 19:08:03 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3263,3309]
+------------Solution---------------
+ public static String join(Object[] array,char separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+1);
++StringBuilder buf=new StringBuilder((array[startIndex]==null?16:0)+1);
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V14/1552/pattern-ver1-serial/src.main.java.net.sourceforge.fenixedu.domain.Tutorship.java-compare.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 4, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_ArrayChar_purify_8]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 19:08:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3263,3309]
+------------Solution---------------
+ public static String join(Object[] array,char separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+1);
++StringBuilder buf=new StringBuilder((array[startIndex]==null?0:1)+1);
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V27/922/pattern-ver1-serial/PluginCore.src.main.java.com.plugin.core.manager.PluginCallbackImpl.java-onRemove.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_ArrayChar_purify_8]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 19:10:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_20_buggy/src/main/java/org/apache/commons/lang3/StringUtils.java[3263,3309]
+------------Solution---------------
+ public static String join(Object[] array,char separator,int startIndex,int endIndex){
+ if(array==null){
+ return null;
+ }
+ int noOfItems=(endIndex-startIndex);
+ if(noOfItems<=0){
+ return EMPTY;
+ }
+-StringBuilder buf=new StringBuilder((array[startIndex]==null?16:array[startIndex].toString().length())+1);
++StringBuilder buf=new StringBuilder(startIndex+1);
+ for(int i=startIndex;i<endIndex;i++){
+ if(i>startIndex){
+ buf.append(separator);
+ }
+ if(array[i]!=null){
+ buf.append(array[i]);
+ }
+ }
+ return buf.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V28/2671/pattern-ver1-serial/Project.EncryptaBackend.src.Converter.java-binaryStringToString.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 9, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang3.StringUtilsTest::testJoin_ArrayChar_purify_8]
+---------START : 2019.09.05 AD at 17:11:47 CDT
+---------TIME : 2019.09.05 AD at 19:12:23 CDT
+--------------- END -----------------

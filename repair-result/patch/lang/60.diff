@@ -1,0 +1,44 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_60_buggy/src/java/org/apache/commons/lang/text/StrBuilder.java[1665,1679]
+------------Solution---------------
+ public boolean contains(char ch){
+ char[] thisBuf=buffer;
+-for(int i=0;i<thisBuf.length;i++){
++for(int i=0;i<size;i++){
+ if(thisBuf[i]==ch){
+ return true;
+ }
+ }
+ return false;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/7560/pattern-ver1-serial/src.main.org.codehaus.groovy.util.ListHashMap.java-get.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.text.StrBuilderTest::testLang295_purify_1]
+---------START : 2019.09.07 AD at 17:21:30 CDT
+---------TIME : 2019.09.07 AD at 17:35:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_60_buggy/src/java/org/apache/commons/lang/text/StrBuilder.java[1717,1736]
+------------Solution---------------
+ public int indexOf(char ch,int startIndex){
+ startIndex=(startIndex<0?0:startIndex);
+ if(startIndex>=size){
+ return -1;
+ }
+ char[] thisBuf=buffer;
+-for(int i=startIndex;i<thisBuf.length;i++){
++for(int i=startIndex;i<size;i++){
+ if(thisBuf[i]==ch){
+ return i;
+ }
+ }
+ return -1;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/7560/pattern-ver1-serial/src.main.org.codehaus.groovy.util.ListHashMap.java-get.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.lang.text.StrBuilderTest::testLang295_purify_2]
+---------START : 2019.09.07 AD at 17:21:30 CDT
+---------TIME : 2019.09.07 AD at 21:05:32 CDT
+--------------- END -----------------

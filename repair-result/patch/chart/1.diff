@@ -1,0 +1,445 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
++if(dataset==null){
+ return result;
+ }
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V40/1240/pattern-ver1-serial/flexo-foundation.src.main.java.org.openflexo.foundation.viewpoint.FlexoConceptInstanceRole.java-applyValidation.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:08:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
++if(dataset.equals(null)){
+ return result;
+ }
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V1/343/pattern-ver1-serial/src.gui.batches.ItemBatchView.java-selectProduct.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:11:47 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
+-return result;
+-}
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
++if(dataset!=null){
++return result;
++}
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/6937/pattern-ver1-serial/library.src.main.java.com.reginald.swiperefresh.CustomSwipeRefreshLayout.java-onLayout.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 1, DEL : 4
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:18:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
+-return result;
+-}
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
++if(dataset!=null){
++return result;
++}
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/6937/pattern-ver1-serial/library.src.main.java.com.reginald.swiperefresh.CustomSwipeRefreshLayout.java-onLayout.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 0, INS : 1, DEL : 4
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:18:28 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
++boolean haveBreadCrumbs=false;
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
++if(dataset!=null&&haveBreadCrumbs){
+ return result;
+ }
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/2313/pattern-ver1-serial/src.main.java.org.ednovo.gooru.client.mvp.folder.toc.FolderTocView.java-setBreadCrumbs.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 3, INS : 3, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:20:19 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
++boolean haveBreadCrumbs=false;
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
++if(dataset!=null&&haveBreadCrumbs){
+ return result;
+ }
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
++haveBreadCrumbs=true;
+ }
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/2313/pattern-ver1-serial/src.main.java.org.ednovo.gooru.client.mvp.folder.toc.FolderTocView.java-setBreadCrumbs.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 3, INS : 6, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:21:23 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
++boolean haveBreadCrumbs=false;
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
++if(dataset!=null&&haveBreadCrumbs){
+ return result;
+ }
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
++haveBreadCrumbs=true;
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/2313/pattern-ver1-serial/src.main.java.org.ednovo.gooru.client.mvp.folder.toc.FolderTocView.java-setBreadCrumbs.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 3, INS : 6, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:21:46 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
++boolean haveBreadCrumbs=false;
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
++if(dataset!=null&&haveBreadCrumbs){
+ return result;
+ }
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
++haveBreadCrumbs=true;
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/2313/pattern-ver1-serial/src.main.java.org.ednovo.gooru.client.mvp.folder.toc.FolderTocView.java-setBreadCrumbs.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 3, INS : 6, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:22:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
++boolean haveBreadCrumbs=false;
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
++if(dataset!=null&&haveBreadCrumbs){
+ return result;
+ }
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
++haveBreadCrumbs=true;
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/2313/pattern-ver1-serial/src.main.java.org.ednovo.gooru.client.mvp.folder.toc.FolderTocView.java-setBreadCrumbs.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 3, INS : 6, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:22:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_1_buggy/source/org/jfree/chart/renderer/category/AbstractCategoryItemRenderer.java[1782,1822]
+------------Solution---------------
+ public LegendItemCollection getLegendItems(){
+ LegendItemCollection result=new LegendItemCollection();
+ if(this.plot==null){
+ return result;
+ }
++boolean haveBreadCrumbs=false;
+ int index=this.plot.getIndexOf(this);
+ CategoryDataset dataset=this.plot.getDataset(index);
+-if(dataset!=null){
++if(dataset!=null&&haveBreadCrumbs){
+ return result;
+ }
+ int seriesCount=dataset.getRowCount();
+ if(plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)){
+ for(int i=0;i<seriesCount;i++){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
++haveBreadCrumbs=true;
+ }
+ }else {
+ for(int i=seriesCount-1;i>=0;i--){
+ if(isSeriesVisibleInLegend(i)){
+ LegendItem item=getLegendItem(index,i);
+ if(item!=null){
+ result.add(item);
+ }
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/2313/pattern-ver1-serial/src.main.java.org.ednovo.gooru.client.mvp.folder.toc.FolderTocView.java-setBreadCrumbs.pattern
+MATCHLEVEL : ALL
+ALL : 9, UPD : 3, INS : 6, DEL : 0
+Failing Tests:[org.jfree.chart.renderer.category.junit.AbstractCategoryItemRendererTests::test2947660]
+---------START : 2019.09.04 AD at 09:18:11 CDT
+---------TIME : 2019.09.04 AD at 10:22:56 CDT
+--------------- END -----------------

@@ -1,0 +1,433 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_4_buggy/source/org/jfree/chart/plot/XYPlot.java[4418,4519]
+------------Solution---------------
+ public Range getDataRange(ValueAxis axis){
+ Range result=null;
+ List mappedDatasets=new ArrayList();
+ List includedAnnotations=new ArrayList();
+ boolean isDomainAxis=true;
+ int domainIndex=getDomainAxisIndex(axis);
+ if(domainIndex>=0){
+ isDomainAxis=true;
+ mappedDatasets.addAll(getDatasetsMappedToDomainAxis(new Integer(domainIndex)));
+ if(domainIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ int rangeIndex=getRangeAxisIndex(axis);
+ if(rangeIndex>=0){
+ isDomainAxis=false;
+ mappedDatasets.addAll(getDatasetsMappedToRangeAxis(new Integer(rangeIndex)));
+ if(rangeIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ Iterator iterator=mappedDatasets.iterator();
+ while(iterator.hasNext()){
+ XYDataset d=(XYDataset)iterator.next();
+ if(d!=null){
+ XYItemRenderer r=getRendererForDataset(d);
+ if(isDomainAxis){
+ if(r!=null){
+ result=Range.combine(result,r.findDomainBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findDomainBounds(d));
++return null;
+ }
+ }else {
+ if(r!=null){
+ result=Range.combine(result,r.findRangeBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findRangeBounds(d));
++return null;
+ }
+ }
+ Collection c=r.getAnnotations();
+ Iterator i=c.iterator();
+ while(i.hasNext()){
+ XYAnnotation a=(XYAnnotation)i.next();
+ if(a instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(a);
+ }
+ }
+ }
+ }
+ Iterator it=includedAnnotations.iterator();
+ while(it.hasNext()){
+ XYAnnotationBoundsInfo xyabi=(XYAnnotationBoundsInfo)it.next();
+ if(xyabi.getIncludeInDataBounds()){
+ if(isDomainAxis){
+ result=Range.combine(result,xyabi.getXRange());
+ }else {
+ result=Range.combine(result,xyabi.getYRange());
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V2/4018/pattern-ver1-serial/src.client.net.Clientsocket.java-Sender.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 0, INS : 2, DEL : 0
+Failing Tests:[org.jfree.chart.junit.XYStepAreaChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testReplaceDataset, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange2, org.jfree.chart.junit.ScatterPlotTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.TimeSeriesChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.JFreeChartTests::testSerialization4, org.jfree.chart.junit.XYAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.ScatterPlotTests::testReplaceDataset, org.jfree.chart.plot.junit.XYPlotTests::testDrawRangeGridlines, org.jfree.chart.junit.XYAreaChartTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.ValueAxisTests::testAxisMargins, org.jfree.chart.junit.XYAreaChartTests::testReplaceDataset, org.jfree.chart.junit.ScatterPlotTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange2, org.jfree.chart.junit.XYStepAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepAreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testDrawWithNullInfo]
+---------START : 2019.09.04 AD at 10:22:57 CDT
+---------TIME : 2019.09.04 AD at 12:39:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_4_buggy/source/org/jfree/chart/plot/XYPlot.java[4418,4519]
+------------Solution---------------
+ public Range getDataRange(ValueAxis axis){
+ Range result=null;
+ List mappedDatasets=new ArrayList();
+ List includedAnnotations=new ArrayList();
+ boolean isDomainAxis=true;
+ int domainIndex=getDomainAxisIndex(axis);
+ if(domainIndex>=0){
+ isDomainAxis=true;
+ mappedDatasets.addAll(getDatasetsMappedToDomainAxis(new Integer(domainIndex)));
+ if(domainIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ int rangeIndex=getRangeAxisIndex(axis);
+ if(rangeIndex>=0){
+ isDomainAxis=false;
+ mappedDatasets.addAll(getDatasetsMappedToRangeAxis(new Integer(rangeIndex)));
+ if(rangeIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ Iterator iterator=mappedDatasets.iterator();
+ while(iterator.hasNext()){
+ XYDataset d=(XYDataset)iterator.next();
+ if(d!=null){
+ XYItemRenderer r=getRendererForDataset(d);
+ if(isDomainAxis){
+ if(r!=null){
+ result=Range.combine(result,r.findDomainBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findDomainBounds(d));
+ }
+ }else {
+ if(r!=null){
+ result=Range.combine(result,r.findRangeBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findRangeBounds(d));
++}
+ }
++if(r==null){
++continue;
+ }
+ Collection c=r.getAnnotations();
+ Iterator i=c.iterator();
+ while(i.hasNext()){
+ XYAnnotation a=(XYAnnotation)i.next();
+ if(a instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(a);
+ }
+ }
+ }
+ }
+ Iterator it=includedAnnotations.iterator();
+ while(it.hasNext()){
+ XYAnnotationBoundsInfo xyabi=(XYAnnotationBoundsInfo)it.next();
+ if(xyabi.getIncludeInDataBounds()){
+ if(isDomainAxis){
+ result=Range.combine(result,xyabi.getXRange());
+ }else {
+ result=Range.combine(result,xyabi.getYRange());
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V5/2120/pattern-ver1-serial/org.dawb.workbench.ui.src.org.dawb.workbench.ui.editors.PlotDataEditor.java-getSelected.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.jfree.chart.junit.XYStepAreaChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testReplaceDataset, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange2, org.jfree.chart.junit.ScatterPlotTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.TimeSeriesChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.JFreeChartTests::testSerialization4, org.jfree.chart.junit.XYAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.ScatterPlotTests::testReplaceDataset, org.jfree.chart.plot.junit.XYPlotTests::testDrawRangeGridlines, org.jfree.chart.junit.XYAreaChartTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.ValueAxisTests::testAxisMargins, org.jfree.chart.junit.XYAreaChartTests::testReplaceDataset, org.jfree.chart.junit.ScatterPlotTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange2, org.jfree.chart.junit.XYStepAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepAreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testDrawWithNullInfo]
+---------START : 2019.09.04 AD at 10:22:57 CDT
+---------TIME : 2019.09.04 AD at 12:51:35 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_4_buggy/source/org/jfree/chart/plot/XYPlot.java[4418,4519]
+------------Solution---------------
+ public Range getDataRange(ValueAxis axis){
+ Range result=null;
+ List mappedDatasets=new ArrayList();
+ List includedAnnotations=new ArrayList();
+ boolean isDomainAxis=true;
+ int domainIndex=getDomainAxisIndex(axis);
+ if(domainIndex>=0){
+ isDomainAxis=true;
+ mappedDatasets.addAll(getDatasetsMappedToDomainAxis(new Integer(domainIndex)));
+ if(domainIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ int rangeIndex=getRangeAxisIndex(axis);
+ if(rangeIndex>=0){
+ isDomainAxis=false;
+ mappedDatasets.addAll(getDatasetsMappedToRangeAxis(new Integer(rangeIndex)));
+ if(rangeIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ Iterator iterator=mappedDatasets.iterator();
+ while(iterator.hasNext()){
+ XYDataset d=(XYDataset)iterator.next();
+ if(d!=null){
+ XYItemRenderer r=getRendererForDataset(d);
++if(r==null){
++continue;
++}
+ if(isDomainAxis){
+ if(r!=null){
+ result=Range.combine(result,r.findDomainBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findDomainBounds(d));
+ }
+ }else {
+ if(r!=null){
+ result=Range.combine(result,r.findRangeBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findRangeBounds(d));
+ }
+ }
+ Collection c=r.getAnnotations();
+ Iterator i=c.iterator();
+ while(i.hasNext()){
+ XYAnnotation a=(XYAnnotation)i.next();
+ if(a instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(a);
+ }
+ }
+ }
+ }
+ Iterator it=includedAnnotations.iterator();
+ while(it.hasNext()){
+ XYAnnotationBoundsInfo xyabi=(XYAnnotationBoundsInfo)it.next();
+ if(xyabi.getIncludeInDataBounds()){
+ if(isDomainAxis){
+ result=Range.combine(result,xyabi.getXRange());
+ }else {
+ result=Range.combine(result,xyabi.getYRange());
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V25/7058/pattern-ver1-serial/datakit.src.main.java.org.md2k.datakit.manager.FileManager.java-getExternalSDCardDirectory.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.jfree.chart.junit.XYStepAreaChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testReplaceDataset, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange2, org.jfree.chart.junit.ScatterPlotTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.TimeSeriesChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.JFreeChartTests::testSerialization4, org.jfree.chart.junit.XYAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.ScatterPlotTests::testReplaceDataset, org.jfree.chart.plot.junit.XYPlotTests::testDrawRangeGridlines, org.jfree.chart.junit.XYAreaChartTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.ValueAxisTests::testAxisMargins, org.jfree.chart.junit.XYAreaChartTests::testReplaceDataset, org.jfree.chart.junit.ScatterPlotTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange2, org.jfree.chart.junit.XYStepAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepAreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testDrawWithNullInfo]
+---------START : 2019.09.04 AD at 10:22:57 CDT
+---------TIME : 2019.09.04 AD at 13:00:41 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_4_buggy/source/org/jfree/chart/plot/XYPlot.java[4418,4519]
+------------Solution---------------
+ public Range getDataRange(ValueAxis axis){
+ Range result=null;
+ List mappedDatasets=new ArrayList();
+ List includedAnnotations=new ArrayList();
+ boolean isDomainAxis=true;
+ int domainIndex=getDomainAxisIndex(axis);
+ if(domainIndex>=0){
+ isDomainAxis=true;
+ mappedDatasets.addAll(getDatasetsMappedToDomainAxis(new Integer(domainIndex)));
+ if(domainIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ int rangeIndex=getRangeAxisIndex(axis);
+ if(rangeIndex>=0){
+ isDomainAxis=false;
+ mappedDatasets.addAll(getDatasetsMappedToRangeAxis(new Integer(rangeIndex)));
+ if(rangeIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ Iterator iterator=mappedDatasets.iterator();
+ while(iterator.hasNext()){
+ XYDataset d=(XYDataset)iterator.next();
+ if(d!=null){
+ XYItemRenderer r=getRendererForDataset(d);
++if(r==null){
++return null;
++}
+ if(isDomainAxis){
+ if(r!=null){
+ result=Range.combine(result,r.findDomainBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findDomainBounds(d));
+ }
+ }else {
+ if(r!=null){
+ result=Range.combine(result,r.findRangeBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findRangeBounds(d));
+ }
+ }
+ Collection c=r.getAnnotations();
+ Iterator i=c.iterator();
+ while(i.hasNext()){
+ XYAnnotation a=(XYAnnotation)i.next();
+ if(a instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(a);
+ }
+ }
+ }
+ }
+ Iterator it=includedAnnotations.iterator();
+ while(it.hasNext()){
+ XYAnnotationBoundsInfo xyabi=(XYAnnotationBoundsInfo)it.next();
+ if(xyabi.getIncludeInDataBounds()){
+ if(isDomainAxis){
+ result=Range.combine(result,xyabi.getXRange());
+ }else {
+ result=Range.combine(result,xyabi.getYRange());
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/5906/pattern-ver1-serial/src.com.apocalyptech.minecraft.xray.MineCraftEnvironment.java-buildImageFromInput.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.jfree.chart.junit.XYStepAreaChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testReplaceDataset, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange2, org.jfree.chart.junit.ScatterPlotTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.TimeSeriesChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.JFreeChartTests::testSerialization4, org.jfree.chart.junit.XYAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.ScatterPlotTests::testReplaceDataset, org.jfree.chart.plot.junit.XYPlotTests::testDrawRangeGridlines, org.jfree.chart.junit.XYAreaChartTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.ValueAxisTests::testAxisMargins, org.jfree.chart.junit.XYAreaChartTests::testReplaceDataset, org.jfree.chart.junit.ScatterPlotTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange2, org.jfree.chart.junit.XYStepAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepAreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testDrawWithNullInfo]
+---------START : 2019.09.04 AD at 10:22:57 CDT
+---------TIME : 2019.09.04 AD at 13:02:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_4_buggy/source/org/jfree/chart/plot/XYPlot.java[4418,4519]
+------------Solution---------------
+ public Range getDataRange(ValueAxis axis){
+ Range result=null;
+ List mappedDatasets=new ArrayList();
+ List includedAnnotations=new ArrayList();
+ boolean isDomainAxis=true;
+ int domainIndex=getDomainAxisIndex(axis);
+ if(domainIndex>=0){
+ isDomainAxis=true;
+ mappedDatasets.addAll(getDatasetsMappedToDomainAxis(new Integer(domainIndex)));
+ if(domainIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ int rangeIndex=getRangeAxisIndex(axis);
+ if(rangeIndex>=0){
+ isDomainAxis=false;
+ mappedDatasets.addAll(getDatasetsMappedToRangeAxis(new Integer(rangeIndex)));
+ if(rangeIndex==0){
+ Iterator iterator=this.annotations.iterator();
+ while(iterator.hasNext()){
+ XYAnnotation annotation=(XYAnnotation)iterator.next();
+ if(annotation instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(annotation);
+ }
+ }
+ }
+ }
+ Iterator iterator=mappedDatasets.iterator();
+ while(iterator.hasNext()){
+ XYDataset d=(XYDataset)iterator.next();
+ if(d!=null){
+ XYItemRenderer r=getRendererForDataset(d);
+ if(isDomainAxis){
+ if(r!=null){
+ result=Range.combine(result,r.findDomainBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findDomainBounds(d));
+ }
+ }else {
+ if(r!=null){
+ result=Range.combine(result,r.findRangeBounds(d));
+ }else {
+ result=Range.combine(result,DatasetUtilities.findRangeBounds(d));
+ }
+ }
++if(r!=null){
+ Collection c=r.getAnnotations();
+ Iterator i=c.iterator();
+ while(i.hasNext()){
+ XYAnnotation a=(XYAnnotation)i.next();
+ if(a instanceof XYAnnotationBoundsInfo){
+ includedAnnotations.add(a);
++}
+ }
+ }
+ }
+ }
+ Iterator it=includedAnnotations.iterator();
+ while(it.hasNext()){
+ XYAnnotationBoundsInfo xyabi=(XYAnnotationBoundsInfo)it.next();
+ if(xyabi.getIncludeInDataBounds()){
+ if(isDomainAxis){
+ result=Range.combine(result,xyabi.getXRange());
+ }else {
+ result=Range.combine(result,xyabi.getYRange());
+ }
+ }
+ }
+ return result;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V31/5761/pattern-ver1-serial/src.main.java.jp.sf.amateras.mirage.type.enumerate.EnumOneBasedOrdinalValueType.java-isSupport.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 3, INS : 0, DEL : 5
+Failing Tests:[org.jfree.chart.junit.XYStepAreaChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testReplaceDataset, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.NumberAxisTests::testXYAutoRange2, org.jfree.chart.junit.ScatterPlotTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.TimeSeriesChartTests::testReplaceDataset, org.jfree.chart.junit.TimeSeriesChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.JFreeChartTests::testSerialization4, org.jfree.chart.junit.XYAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.ScatterPlotTests::testReplaceDataset, org.jfree.chart.plot.junit.XYPlotTests::testDrawRangeGridlines, org.jfree.chart.junit.XYAreaChartTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.ValueAxisTests::testAxisMargins, org.jfree.chart.junit.XYAreaChartTests::testReplaceDataset, org.jfree.chart.junit.ScatterPlotTests::testDrawWithNullInfo, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange1, org.jfree.chart.axis.junit.LogAxisTests::testXYAutoRange2, org.jfree.chart.junit.XYStepAreaChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepChartTests::testSetSeriesToolTipGenerator, org.jfree.chart.junit.XYStepAreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.XYStepChartTests::testDrawWithNullInfo]
+---------START : 2019.09.04 AD at 10:22:57 CDT
+---------TIME : 2019.09.04 AD at 13:14:31 CDT
+--------------- END -----------------

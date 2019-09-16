@@ -1,0 +1,18 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_77_buggy/src/main/java/org/apache/commons/math/linear/ArrayRealVector.java[716,724]
+------------Solution---------------
+ @Override public double getLInfNorm(){
+ double max=0;
+ for(double a : data){
+-max+=Math.max(max,Math.abs(a));
++max+=1;
+ }
+ return max;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V5/2320/pattern-ver1-serial/mp4.src.main.java.edu.illinois.cs.mapreduce.JobManager.java-updateJobStatus.pattern
+MATCHLEVEL : ALL
+ALL : 6, UPD : 6, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.linear.ArrayRealVectorTest::testBasicFunctions_purify_8]
+---------START : 2019.09.07 AD at 14:41:20 CDT
+---------TIME : 2019.09.07 AD at 14:56:43 CDT
+--------------- END -----------------

@@ -1,0 +1,28 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/mockito/mockito_38_buggy/src/org/mockito/internal/verification/argumentmatching/ArgumentMatchingTool.java[47,49]
+------------Solution---------------
+ private boolean toStringEquals(Matcher m,Object arg){
+-return StringDescription.toString(m).equals(arg.toString());
++return StringDescription.toString(m).equals(arg==null?null:arg.toString());
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V31/4299/pattern-ver1-serial/client.synapseJavaClient.src.main.java.org.sagebionetworks.client.SynapseClientImpl.java-uploadToS3FileHandle.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.mockitousage.bugs.ActualInvocationHasNullArgumentNPEBugTest::shouldAllowPassingNullArgument, org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull]
+---------START : 2019.09.05 AD at 09:22:16 CDT
+---------TIME : 2019.09.05 AD at 09:50:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/mockito/mockito_38_buggy/src/org/mockito/internal/verification/argumentmatching/ArgumentMatchingTool.java[47,49]
+------------Solution---------------
+ private boolean toStringEquals(Matcher m,Object arg){
+-return StringDescription.toString(m).equals(arg.toString());
++return StringDescription.toString(m).equals(arg!=null?arg.toString():null);
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V2/4302/pattern-ver1-serial/src.com.floreantpos.model.KitchenTicket.java-fromTicket.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.mockitousage.bugs.ActualInvocationHasNullArgumentNPEBugTest::shouldAllowPassingNullArgument, org.mockito.internal.verification.argumentmatching.ArgumentMatchingToolTest::shouldWorkFineWhenGivenArgIsNull]
+---------START : 2019.09.05 AD at 09:22:16 CDT
+---------TIME : 2019.09.05 AD at 09:50:55 CDT
+--------------- END -----------------

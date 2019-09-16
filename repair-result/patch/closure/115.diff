@@ -1,0 +1,399 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_115_buggy/src/com/google/javascript/jscomp/FunctionInjector.java[677,758]
+------------Solution---------------
+ private CanInlineResult canInlineReferenceDirectly(Node callNode,Node fnNode){
+ if(!isDirectCallNodeReplacementPossible(fnNode)){
+ return CanInlineResult.NO;
+ }
+ Node block=fnNode.getLastChild();
+ boolean hasSideEffects=false;
+ if(block.hasChildren()){
+ Preconditions.checkState(block.hasOneChild());
+-Node stmt=block.getFirstChild();
++Node stmt=callNode.getFirstChild();
+ if(stmt.isReturn()){
+ hasSideEffects=NodeUtil.mayHaveSideEffects(stmt.getFirstChild(),compiler);
+ }
+ }
+ Node cArg=callNode.getFirstChild().getNext();
+ if(!callNode.getFirstChild().isName()){
+ if(NodeUtil.isFunctionObjectCall(callNode)){
+ if(cArg==null||!cArg.isThis()){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }else {
+ Preconditions.checkState(!NodeUtil.isFunctionObjectApply(callNode));
+ }
+ }
+ Node fnParam=NodeUtil.getFunctionParameters(fnNode).getFirstChild();
+ while(cArg!=null||fnParam!=null){
+ if(fnParam!=null){
+ if(cArg!=null){
+ if(hasSideEffects&&NodeUtil.canBeSideEffected(cArg)){
+ return CanInlineResult.NO;
+ }
+ if(NodeUtil.mayEffectMutableState(cArg,compiler)&&NodeUtil.getNameReferenceCount(block,fnParam.getString())>1){
+ return CanInlineResult.NO;
+ }
+ }
+ fnParam=fnParam.getNext();
+ }
+ if(cArg!=null){
+ if(NodeUtil.mayHaveSideEffects(cArg,compiler)){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }
+ }
+ return CanInlineResult.YES;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V60/79/pattern-ver1-serial/src.main.java.com.brxt.service.impl.ReportManagerImpl.java-getFinanceCheckList.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified8, com.google.javascript.jscomp.InlineFunctionsTest::testBug4944818, com.google.javascript.jscomp.InlineFunctionsTest::testDoubleInlining1, com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified9, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions23, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions6, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions22]
+---------START : 2019.09.07 AD at 10:03:11 CDT
+---------TIME : 2019.09.07 AD at 14:30:01 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_115_buggy/src/com/google/javascript/jscomp/FunctionInjector.java[677,758]
+------------Solution---------------
+ private CanInlineResult canInlineReferenceDirectly(Node callNode,Node fnNode){
+ if(!isDirectCallNodeReplacementPossible(fnNode)){
+ return CanInlineResult.NO;
+ }
+ Node block=fnNode.getLastChild();
+ boolean hasSideEffects=false;
+ if(block.hasChildren()){
+ Preconditions.checkState(block.hasOneChild());
+-Node stmt=block.getFirstChild();
++Node stmt=fnNode.getFirstChild();
+ if(stmt.isReturn()){
+ hasSideEffects=NodeUtil.mayHaveSideEffects(stmt.getFirstChild(),compiler);
+ }
+ }
+ Node cArg=callNode.getFirstChild().getNext();
+ if(!callNode.getFirstChild().isName()){
+ if(NodeUtil.isFunctionObjectCall(callNode)){
+ if(cArg==null||!cArg.isThis()){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }else {
+ Preconditions.checkState(!NodeUtil.isFunctionObjectApply(callNode));
+ }
+ }
+ Node fnParam=NodeUtil.getFunctionParameters(fnNode).getFirstChild();
+ while(cArg!=null||fnParam!=null){
+ if(fnParam!=null){
+ if(cArg!=null){
+ if(hasSideEffects&&NodeUtil.canBeSideEffected(cArg)){
+ return CanInlineResult.NO;
+ }
+ if(NodeUtil.mayEffectMutableState(cArg,compiler)&&NodeUtil.getNameReferenceCount(block,fnParam.getString())>1){
+ return CanInlineResult.NO;
+ }
+ }
+ fnParam=fnParam.getNext();
+ }
+ if(cArg!=null){
+ if(NodeUtil.mayHaveSideEffects(cArg,compiler)){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }
+ }
+ return CanInlineResult.YES;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V60/79/pattern-ver1-serial/src.main.java.com.brxt.service.impl.ReportManagerImpl.java-getFinanceCheckList.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified8, com.google.javascript.jscomp.InlineFunctionsTest::testBug4944818, com.google.javascript.jscomp.InlineFunctionsTest::testDoubleInlining1, com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified9, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions23, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions6, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions22]
+---------START : 2019.09.07 AD at 10:03:11 CDT
+---------TIME : 2019.09.07 AD at 14:33:10 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_115_buggy/src/com/google/javascript/jscomp/FunctionInjector.java[677,758]
+------------Solution---------------
+ private CanInlineResult canInlineReferenceDirectly(Node callNode,Node fnNode){
+ if(!isDirectCallNodeReplacementPossible(fnNode)){
+ return CanInlineResult.NO;
+ }
+ Node block=fnNode.getLastChild();
+ boolean hasSideEffects=false;
+ if(block.hasChildren()){
+ Preconditions.checkState(block.hasOneChild());
+ Node stmt=block.getFirstChild();
+ if(stmt.isReturn()){
+-hasSideEffects=NodeUtil.mayHaveSideEffects(stmt.getFirstChild(),compiler);
++hasSideEffects=NodeUtil.mayHaveSideEffects(callNode.getFirstChild(),compiler);
+ }
+ }
+ Node cArg=callNode.getFirstChild().getNext();
+ if(!callNode.getFirstChild().isName()){
+ if(NodeUtil.isFunctionObjectCall(callNode)){
+ if(cArg==null||!cArg.isThis()){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }else {
+ Preconditions.checkState(!NodeUtil.isFunctionObjectApply(callNode));
+ }
+ }
+ Node fnParam=NodeUtil.getFunctionParameters(fnNode).getFirstChild();
+ while(cArg!=null||fnParam!=null){
+ if(fnParam!=null){
+ if(cArg!=null){
+ if(hasSideEffects&&NodeUtil.canBeSideEffected(cArg)){
+ return CanInlineResult.NO;
+ }
+ if(NodeUtil.mayEffectMutableState(cArg,compiler)&&NodeUtil.getNameReferenceCount(block,fnParam.getString())>1){
+ return CanInlineResult.NO;
+ }
+ }
+ fnParam=fnParam.getNext();
+ }
+ if(cArg!=null){
+ if(NodeUtil.mayHaveSideEffects(cArg,compiler)){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }
+ }
+ return CanInlineResult.YES;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V60/79/pattern-ver1-serial/src.main.java.com.brxt.service.impl.ReportManagerImpl.java-getFinanceCheckList.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified8, com.google.javascript.jscomp.InlineFunctionsTest::testBug4944818, com.google.javascript.jscomp.InlineFunctionsTest::testDoubleInlining1, com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified9, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions23, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions6, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions22]
+---------START : 2019.09.07 AD at 10:03:11 CDT
+---------TIME : 2019.09.07 AD at 14:36:11 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_115_buggy/src/com/google/javascript/jscomp/FunctionInjector.java[677,758]
+------------Solution---------------
+ private CanInlineResult canInlineReferenceDirectly(Node callNode,Node fnNode){
+ if(!isDirectCallNodeReplacementPossible(fnNode)){
+ return CanInlineResult.NO;
+ }
+ Node block=fnNode.getLastChild();
+ boolean hasSideEffects=false;
+ if(block.hasChildren()){
+ Preconditions.checkState(block.hasOneChild());
+ Node stmt=block.getFirstChild();
+ if(stmt.isReturn()){
+-hasSideEffects=NodeUtil.mayHaveSideEffects(stmt.getFirstChild(),compiler);
++hasSideEffects=NodeUtil.mayHaveSideEffects(fnNode.getFirstChild(),compiler);
+ }
+ }
+ Node cArg=callNode.getFirstChild().getNext();
+ if(!callNode.getFirstChild().isName()){
+ if(NodeUtil.isFunctionObjectCall(callNode)){
+ if(cArg==null||!cArg.isThis()){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }else {
+ Preconditions.checkState(!NodeUtil.isFunctionObjectApply(callNode));
+ }
+ }
+ Node fnParam=NodeUtil.getFunctionParameters(fnNode).getFirstChild();
+ while(cArg!=null||fnParam!=null){
+ if(fnParam!=null){
+ if(cArg!=null){
+ if(hasSideEffects&&NodeUtil.canBeSideEffected(cArg)){
+ return CanInlineResult.NO;
+ }
+ if(NodeUtil.mayEffectMutableState(cArg,compiler)&&NodeUtil.getNameReferenceCount(block,fnParam.getString())>1){
+ return CanInlineResult.NO;
+ }
+ }
+ fnParam=fnParam.getNext();
+ }
+ if(cArg!=null){
+ if(NodeUtil.mayHaveSideEffects(cArg,compiler)){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }
+ }
+ return CanInlineResult.YES;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V60/79/pattern-ver1-serial/src.main.java.com.brxt.service.impl.ReportManagerImpl.java-getFinanceCheckList.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified8, com.google.javascript.jscomp.InlineFunctionsTest::testBug4944818, com.google.javascript.jscomp.InlineFunctionsTest::testDoubleInlining1, com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified9, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions23, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions6, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions22]
+---------START : 2019.09.07 AD at 10:03:11 CDT
+---------TIME : 2019.09.07 AD at 14:39:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_115_buggy/src/com/google/javascript/jscomp/FunctionInjector.java[677,758]
+------------Solution---------------
+ private CanInlineResult canInlineReferenceDirectly(Node callNode,Node fnNode){
+ if(!isDirectCallNodeReplacementPossible(fnNode)){
+ return CanInlineResult.NO;
+ }
+ Node block=fnNode.getLastChild();
+ boolean hasSideEffects=false;
+ if(block.hasChildren()){
+ Preconditions.checkState(block.hasOneChild());
+ Node stmt=block.getFirstChild();
+-if(stmt.isReturn()){
++if(callNode.isReturn()){
+ hasSideEffects=NodeUtil.mayHaveSideEffects(stmt.getFirstChild(),compiler);
+ }
+ }
+ Node cArg=callNode.getFirstChild().getNext();
+ if(!callNode.getFirstChild().isName()){
+ if(NodeUtil.isFunctionObjectCall(callNode)){
+ if(cArg==null||!cArg.isThis()){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }else {
+ Preconditions.checkState(!NodeUtil.isFunctionObjectApply(callNode));
+ }
+ }
+ Node fnParam=NodeUtil.getFunctionParameters(fnNode).getFirstChild();
+ while(cArg!=null||fnParam!=null){
+ if(fnParam!=null){
+ if(cArg!=null){
+ if(hasSideEffects&&NodeUtil.canBeSideEffected(cArg)){
+ return CanInlineResult.NO;
+ }
+ if(NodeUtil.mayEffectMutableState(cArg,compiler)&&NodeUtil.getNameReferenceCount(block,fnParam.getString())>1){
+ return CanInlineResult.NO;
+ }
+ }
+ fnParam=fnParam.getNext();
+ }
+ if(cArg!=null){
+ if(NodeUtil.mayHaveSideEffects(cArg,compiler)){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }
+ }
+ return CanInlineResult.YES;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V22/2812/pattern-ver1-serial/src.com.undeadscythes.udsplugin.eventhandlers.PlayerDeath.java-pvp.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified8, com.google.javascript.jscomp.InlineFunctionsTest::testBug4944818, com.google.javascript.jscomp.InlineFunctionsTest::testDoubleInlining1, com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified9, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions23, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions6, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions22]
+---------START : 2019.09.07 AD at 10:03:11 CDT
+---------TIME : 2019.09.07 AD at 14:42:54 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_115_buggy/src/com/google/javascript/jscomp/FunctionInjector.java[677,758]
+------------Solution---------------
+ private CanInlineResult canInlineReferenceDirectly(Node callNode,Node fnNode){
+ if(!isDirectCallNodeReplacementPossible(fnNode)){
+ return CanInlineResult.NO;
+ }
+ Node block=fnNode.getLastChild();
+ boolean hasSideEffects=false;
+ if(block.hasChildren()){
+ Preconditions.checkState(block.hasOneChild());
+ Node stmt=block.getFirstChild();
+-if(stmt.isReturn()){
++if(fnNode.isReturn()){
+ hasSideEffects=NodeUtil.mayHaveSideEffects(stmt.getFirstChild(),compiler);
+ }
+ }
+ Node cArg=callNode.getFirstChild().getNext();
+ if(!callNode.getFirstChild().isName()){
+ if(NodeUtil.isFunctionObjectCall(callNode)){
+ if(cArg==null||!cArg.isThis()){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }else {
+ Preconditions.checkState(!NodeUtil.isFunctionObjectApply(callNode));
+ }
+ }
+ Node fnParam=NodeUtil.getFunctionParameters(fnNode).getFirstChild();
+ while(cArg!=null||fnParam!=null){
+ if(fnParam!=null){
+ if(cArg!=null){
+ if(hasSideEffects&&NodeUtil.canBeSideEffected(cArg)){
+ return CanInlineResult.NO;
+ }
+ if(NodeUtil.mayEffectMutableState(cArg,compiler)&&NodeUtil.getNameReferenceCount(block,fnParam.getString())>1){
+ return CanInlineResult.NO;
+ }
+ }
+ fnParam=fnParam.getNext();
+ }
+ if(cArg!=null){
+ if(NodeUtil.mayHaveSideEffects(cArg,compiler)){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }
+ }
+ return CanInlineResult.YES;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V22/2812/pattern-ver1-serial/src.com.undeadscythes.udsplugin.eventhandlers.PlayerDeath.java-pvp.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified8, com.google.javascript.jscomp.InlineFunctionsTest::testBug4944818, com.google.javascript.jscomp.InlineFunctionsTest::testDoubleInlining1, com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified9, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions23, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions6, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions22]
+---------START : 2019.09.07 AD at 10:03:11 CDT
+---------TIME : 2019.09.07 AD at 14:45:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/closure/closure_115_buggy/src/com/google/javascript/jscomp/FunctionInjector.java[677,758]
+------------Solution---------------
+ private CanInlineResult canInlineReferenceDirectly(Node callNode,Node fnNode){
+ if(!isDirectCallNodeReplacementPossible(fnNode)){
+ return CanInlineResult.NO;
+ }
+ Node block=fnNode.getLastChild();
+ boolean hasSideEffects=false;
+ if(block.hasChildren()){
+ Preconditions.checkState(block.hasOneChild());
+ Node stmt=block.getFirstChild();
+-if(stmt.isReturn()){
++if(!stmt.isReturn()){
+ hasSideEffects=NodeUtil.mayHaveSideEffects(stmt.getFirstChild(),compiler);
+ }
+ }
+ Node cArg=callNode.getFirstChild().getNext();
+ if(!callNode.getFirstChild().isName()){
+ if(NodeUtil.isFunctionObjectCall(callNode)){
+ if(cArg==null||!cArg.isThis()){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }else {
+ Preconditions.checkState(!NodeUtil.isFunctionObjectApply(callNode));
+ }
+ }
+ Node fnParam=NodeUtil.getFunctionParameters(fnNode).getFirstChild();
+ while(cArg!=null||fnParam!=null){
+ if(fnParam!=null){
+ if(cArg!=null){
+ if(hasSideEffects&&NodeUtil.canBeSideEffected(cArg)){
+ return CanInlineResult.NO;
+ }
+ if(NodeUtil.mayEffectMutableState(cArg,compiler)&&NodeUtil.getNameReferenceCount(block,fnParam.getString())>1){
+ return CanInlineResult.NO;
+ }
+ }
+ fnParam=fnParam.getNext();
+ }
+ if(cArg!=null){
+ if(NodeUtil.mayHaveSideEffects(cArg,compiler)){
+ return CanInlineResult.NO;
+ }
+ cArg=cArg.getNext();
+ }
+ }
+ return CanInlineResult.YES;
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V12/6908/pattern-ver1-serial/mainModule.src.backend.building.ProductionBuilding.java-canBuild.pattern
+MATCHLEVEL : ALL
+ALL : 2, UPD : 2, INS : 0, DEL : 0
+Failing Tests:[com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified8, com.google.javascript.jscomp.InlineFunctionsTest::testBug4944818, com.google.javascript.jscomp.InlineFunctionsTest::testDoubleInlining1, com.google.javascript.jscomp.InlineFunctionsTest::testNoInlineIfParametersModified9, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions23, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions6, com.google.javascript.jscomp.InlineFunctionsTest::testInlineFunctions22]
+---------START : 2019.09.07 AD at 10:03:11 CDT
+---------TIME : 2019.09.07 AD at 14:56:38 CDT
+--------------- END -----------------

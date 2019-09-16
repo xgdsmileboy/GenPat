@@ -1,0 +1,47 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/lang/lang_45_buggy/src/java/org/apache/commons/lang/WordUtils.java[585,642]
+------------Solution---------------
+ public static String abbreviate(String str,int lower,int upper,String appendToEnd){
+ if(str==null){
+ return null;
+ }
+ if(str.length()==0){
+ return StringUtils.EMPTY;
+ }
+ if(upper==-1||upper>str.length()){
+ upper=str.length();
+ }
+ if(upper<lower){
+ upper=lower;
+ }
+ StringBuffer result=new StringBuffer();
+ int index=StringUtils.indexOf(str," ",lower);
+ if(index==-1){
++if(str==null){
++return "";
++}
++if(appendToEnd==null){
++return str;
++}
+ result.append(str.substring(0,upper));
+ if(upper!=str.length()){
+ result.append(StringUtils.defaultString(appendToEnd));
+ }
+ }else {
+ if(index>upper){
+ result.append(str.substring(0,upper));
+ result.append(StringUtils.defaultString(appendToEnd));
+ }else {
+ result.append(str.substring(0,index));
+ result.append(StringUtils.defaultString(appendToEnd));
+ }
+ }
+ return result.toString();
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/5645/pattern-ver1-serial/model.src.main.java.uk.ac.ebi.bioinvindex.utils.datasourceload.DataLocationManager.java-buildLocationFromRawParam.pattern
+MATCHLEVEL : ALL
+ALL : 8, UPD : 0, INS : 8, DEL : 0
+Failing Tests:[org.apache.commons.lang.WordUtilsTest::testAbbreviate]
+---------START : 2019.09.07 AD at 07:09:26 CDT
+---------TIME : 2019.09.07 AD at 08:30:49 CDT
+--------------- END -----------------

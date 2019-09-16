@@ -1,0 +1,1190 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+ if(x==x1){
+ x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
++continue;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V31/5856/pattern-ver1-serial/internalLibraries.backup.src.main.java.com.emc.storageos.management.backup.DbBackupHandler.java-dumpBackup.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:31:30 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+-if(x==x1){
++if(x==0){
+ x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V20/4207/pattern-ver1-serial/app.src.main.java.pl.pnoga.weatheralert.app.dao.OptionsDAO.java-saveRefreshInterval.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:37:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+ if(x==x1){
+-x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
++x0=0.5*(x0+x0-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/1162/pattern-ver1-serial/Android.C4.app.src.main.java.projectc4.c4.client.GameGridView.java-dropPowerup.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:48:29 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+ if(x==x1){
+-x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
++x0=0.5*(x0+f0-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V21/1162/pattern-ver1-serial/Android.C4.app.src.main.java.projectc4.c4.client.GameGridView.java-dropPowerup.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:49:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+-if(x==x1){
++if(ftol==x1){
+ x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5778/pattern-ver1-serial/src.main.java.cn.momia.mapi.api.AbstractIndexApi.java-getBanners.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:50:36 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+-if(x==x1){
++if(atol==x1){
+ x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5778/pattern-ver1-serial/src.main.java.cn.momia.mapi.api.AbstractIndexApi.java-getBanners.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:51:34 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+-if(x==x1){
++if(rtol==x1){
+ x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5778/pattern-ver1-serial/src.main.java.cn.momia.mapi.api.AbstractIndexApi.java-getBanners.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:52:31 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+-if(x==x1){
++if(fx==x1){
+ x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5778/pattern-ver1-serial/src.main.java.cn.momia.mapi.api.AbstractIndexApi.java-getBanners.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:53:27 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+-if(x==x1){
++if(x0==x1){
+ x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5778/pattern-ver1-serial/src.main.java.cn.momia.mapi.api.AbstractIndexApi.java-getBanners.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:54:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_50_buggy/src/main/java/org/apache/commons/math/analysis/solvers/BaseSecantSolver.java[127,253]
+------------Solution---------------
+ protected final double doSolve(){
+ double x0=getMin();
+ double x1=getMax();
+ double f0=computeObjectiveValue(x0);
+ double f1=computeObjectiveValue(x1);
+ if(f0==0.0){
+ return x0;
+ }
+ if(f1==0.0){
+ return x1;
+ }
+ verifyBracketing(x0,x1);
+  final double ftol=getFunctionValueAccuracy();
+  final double atol=getAbsoluteAccuracy();
+  final double rtol=getRelativeAccuracy();
+ boolean inverted=false;
+ while(true){
+  final double x=x1-((f1*(x1-x0))/(f1-f0));
+  final double fx=computeObjectiveValue(x);
+ if(fx==0.0){
+ return x;
+ }
+ if(f1*fx<0){
+ x0=x1;
+ f0=f1;
+ inverted=!inverted;
+ }else {
+ switch (method){
+ case ILLINOIS :
+ 
+ f0*=0.5;
+ break;
+ case PEGASUS :
+ 
+ f0*=f1/(f1+fx);
+ break;
+ case REGULA_FALSI :
+ 
+-if(x==x1){
++if(f0==x1){
+ x0=0.5*(x0+x1-FastMath.max(rtol*FastMath.abs(x1),atol));
+ f0=computeObjectiveValue(x0);
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ x1=x;
+ f1=fx;
+ if(FastMath.abs(f1)<=ftol){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ if(inverted){
+ return x1;
+ }
+ break;
+ case RIGHT_SIDE :
+ 
+ if(!inverted){
+ return x1;
+ }
+ break;
+ case BELOW_SIDE :
+ 
+ if(f1<=0){
+ return x1;
+ }
+ break;
+ case ABOVE_SIDE :
+ 
+ if(f1>=0){
+ return x1;
+ }
+ break;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ if(FastMath.abs(x1-x0)<FastMath.max(rtol*FastMath.abs(x1),atol)){
+ switch (allowed){
+ case ANY_SIDE :
+ 
+ return x1;
+ case LEFT_SIDE :
+ 
+ return inverted?x1:x0;
+ case RIGHT_SIDE :
+ 
+ return inverted?x0:x1;
+ case BELOW_SIDE :
+ 
+ return (f1<=0)?x1:x0;
+ case ABOVE_SIDE :
+ 
+ return (f1>=0)?x1:x0;
+ default :
+ 
+ throw new MathInternalError();
+ }
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2015/V1/5778/pattern-ver1-serial/src.main.java.cn.momia.mapi.api.AbstractIndexApi.java-getBanners.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.analysis.solvers.RegulaFalsiSolverTest::testIssue631]
+---------START : 2019.09.06 AD at 10:38:44 CDT
+---------TIME : 2019.09.06 AD at 12:55:24 CDT
+--------------- END -----------------

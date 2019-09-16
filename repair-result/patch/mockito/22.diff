@@ -1,0 +1,144 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/mockito/mockito_22_buggy/src/org/mockito/internal/matchers/Equality.java[12,20]
+------------Solution---------------
+ public static boolean areEqual(Object o1,Object o2){
+ if(o1==null||o2==null){
+ return o1==null&&o2==null;
+ }else {
++if(o2==o1){
++return true;
++}
+ if(isArray(o1)){
+ return isArray(o2)&&areArraysEqual(o1,o2);
+ }else {
+ return o1.equals(o2);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.mockito.internal.matchers.EqualityTest::shouldKnowIfObjectsAreEqual]
+---------START : 2019.09.04 AD at 19:22:34 CDT
+---------TIME : 2019.09.04 AD at 19:47:09 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/mockito/mockito_22_buggy/src/org/mockito/internal/matchers/Equality.java[12,20]
+------------Solution---------------
+ public static boolean areEqual(Object o1,Object o2){
+ if(o1==null||o2==null){
+ return o1==null&&o2==null;
+ }else {
++if(o1==o2){
++return true;
++}
+ if(isArray(o1)){
+ return isArray(o2)&&areArraysEqual(o1,o2);
+ }else {
+ return o1.equals(o2);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.mockito.internal.matchers.EqualityTest::shouldKnowIfObjectsAreEqual]
+---------START : 2019.09.04 AD at 19:22:34 CDT
+---------TIME : 2019.09.04 AD at 19:48:24 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/mockito/mockito_22_buggy/src/org/mockito/internal/matchers/Equality.java[12,20]
+------------Solution---------------
+ public static boolean areEqual(Object o1,Object o2){
+ if(o1==null||o2==null){
+ return o1==null&&o2==null;
+ }else {
+ if(isArray(o1)){
+ return isArray(o2)&&areArraysEqual(o1,o2);
+ }else {
++if(o2==o1){
++return true;
++}
+ return o1.equals(o2);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.mockito.internal.matchers.EqualityTest::shouldKnowIfObjectsAreEqual]
+---------START : 2019.09.04 AD at 19:22:34 CDT
+---------TIME : 2019.09.04 AD at 19:50:05 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/mockito/mockito_22_buggy/src/org/mockito/internal/matchers/Equality.java[12,20]
+------------Solution---------------
+ public static boolean areEqual(Object o1,Object o2){
+ if(o1==null||o2==null){
+ return o1==null&&o2==null;
+ }else {
+ if(isArray(o1)){
+ return isArray(o2)&&areArraysEqual(o1,o2);
+ }else {
++if(o1==o2){
++return true;
++}
+ return o1.equals(o2);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.mockito.internal.matchers.EqualityTest::shouldKnowIfObjectsAreEqual]
+---------START : 2019.09.04 AD at 19:22:34 CDT
+---------TIME : 2019.09.04 AD at 19:51:22 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/mockito/mockito_22_buggy/src/org/mockito/internal/matchers/Equality.java[12,20]
+------------Solution---------------
+ public static boolean areEqual(Object o1,Object o2){
++if(o2==o1){
++return true;
++}
+ if(o1==null||o2==null){
+ return o1==null&&o2==null;
+ }else {
+ if(isArray(o1)){
+ return isArray(o2)&&areArraysEqual(o1,o2);
+ }else {
+ return o1.equals(o2);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.mockito.internal.matchers.EqualityTest::shouldKnowIfObjectsAreEqual]
+---------START : 2019.09.04 AD at 19:22:34 CDT
+---------TIME : 2019.09.04 AD at 19:53:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/mockito/mockito_22_buggy/src/org/mockito/internal/matchers/Equality.java[12,20]
+------------Solution---------------
+ public static boolean areEqual(Object o1,Object o2){
++if(o1==o2){
++return true;
++}
+ if(o1==null||o2==null){
+ return o1==null&&o2==null;
+ }else {
+ if(isArray(o1)){
+ return isArray(o2)&&areArraysEqual(o1,o2);
+ }else {
+ return o1.equals(o2);
+ }
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V19/3923/pattern-ver1-serial/railo-java.railo-core.src.railo.runtime.op.Operator.java-_equalsComplexEL.pattern
+MATCHLEVEL : ALL
+ALL : 4, UPD : 0, INS : 4, DEL : 0
+Failing Tests:[org.mockito.internal.matchers.EqualityTest::shouldKnowIfObjectsAreEqual]
+---------START : 2019.09.04 AD at 19:22:34 CDT
+---------TIME : 2019.09.04 AD at 19:54:22 CDT
+--------------- END -----------------

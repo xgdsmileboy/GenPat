@@ -1,0 +1,858 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:37:45 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
++return ;
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V24/2173/pattern-ver1-serial/hu.bme.mit.viatra.ttc.dse.src.hu.bme.mit.viatra.ttc.dse.DseSolverMain.java-main.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:38:56 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
+ }else {
+ drawBackground(g2,dataArea);
++return ;
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/3053/pattern-ver1-serial/src.UI.ReservationUI.java-reserveTableOption.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:40:07 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
++return ;
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/3053/pattern-ver1-serial/src.UI.ReservationUI.java-reserveTableOption.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:41:18 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
++return ;
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/3053/pattern-ver1-serial/src.UI.ReservationUI.java-reserveTableOption.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:42:33 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
++return ;
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/3053/pattern-ver1-serial/src.UI.ReservationUI.java-reserveTableOption.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:43:40 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
++return ;
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/3053/pattern-ver1-serial/src.UI.ReservationUI.java-reserveTableOption.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:44:48 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
++return ;
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/3053/pattern-ver1-serial/src.UI.ReservationUI.java-reserveTableOption.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:45:58 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
++return ;
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/3053/pattern-ver1-serial/src.UI.ReservationUI.java-reserveTableOption.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:47:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/chart/chart_26_buggy/source/org/jfree/chart/plot/CategoryPlot.java[2514,2651]
+------------Solution---------------
+ public void draw(Graphics2D g2,Rectangle2D area,Point2D anchor,PlotState parentState,PlotRenderingInfo state){
+ boolean b1=(area.getWidth()<=MINIMUM_WIDTH_TO_DRAW);
+ boolean b2=(area.getHeight()<=MINIMUM_HEIGHT_TO_DRAW);
+ if(b1||b2){
+ return ;
+ }
+ if(state==null){
+ state=new PlotRenderingInfo(null);
++return ;
+ }
+ state.setPlotArea(area);
+ RectangleInsets insets=getInsets();
+ insets.trim(area);
+ AxisSpace space=calculateAxisSpace(g2,area);
+ Rectangle2D dataArea=space.shrink(area,null);
+ this.axisOffset.trim(dataArea);
+ state.setDataArea(dataArea);
+ if(getRenderer()!=null){
+ getRenderer().drawBackground(g2,this,dataArea);
+ }else {
+ drawBackground(g2,dataArea);
+ }
+ Map axisStateMap=drawAxes(g2,area,dataArea,state);
+ Shape savedClip=g2.getClip();
+ g2.clip(dataArea);
+ drawDomainGridlines(g2,dataArea);
+ AxisState rangeAxisState=(AxisState)axisStateMap.get(getRangeAxis());
+ if(rangeAxisState==null){
+ if(parentState!=null){
+ rangeAxisState=(AxisState)parentState.getSharedAxisStates().get(getRangeAxis());
+ }
++return ;
+ }
+ if(rangeAxisState!=null){
+ drawRangeGridlines(g2,dataArea,rangeAxisState.getTicks());
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.BACKGROUND);
+ }
+ boolean foundData=false;
+ Composite originalComposite=g2.getComposite();
+ g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,getForegroundAlpha()));
+ DatasetRenderingOrder order=getDatasetRenderingOrder();
+ if(order==DatasetRenderingOrder.FORWARD){
+ for(int i=0;i<this.datasets.size();i++){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }else {
+ for(int i=this.datasets.size()-1;i>=0;i--){
+ foundData=render(g2,dataArea,i,state)||foundData;
+ }
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawDomainMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ for(int i=0;i<this.renderers.size();i++){
+ drawRangeMarkers(g2,dataArea,i,Layer.FOREGROUND);
+ }
+ drawAnnotations(g2,dataArea);
+ g2.setClip(savedClip);
+ g2.setComposite(originalComposite);
+ if(!foundData){
+ drawNoDataMessage(g2,dataArea);
+ }
+ if(isRangeCrosshairVisible()){
+ drawRangeCrosshair(g2,dataArea,getOrientation(),getRangeCrosshairValue(),getRangeAxis(),getRangeCrosshairStroke(),getRangeCrosshairPaint());
+ }
+ if(getRenderer()!=null){
+ getRenderer().drawOutline(g2,this,dataArea);
+ }else {
+ drawOutline(g2,dataArea);
+ }
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V57/3053/pattern-ver1-serial/src.UI.ReservationUI.java-reserveTableOption.pattern
+MATCHLEVEL : ALL
+ALL : 0, UPD : 0, INS : 0, DEL : 0
+Failing Tests:[org.jfree.chart.junit.BarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LevelRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChart3DTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.LayeredBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.StatisticalLineAndShapeRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.IntervalBarRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.WaterfallChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChart3DTests::testDrawWithNullInfo, org.jfree.chart.junit.AreaChartTests::testDrawWithNullInfo, org.jfree.chart.junit.LineChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo2, org.jfree.chart.junit.BarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.GanttChartTests::testDrawWithNullInfo, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization3, org.jfree.chart.plot.junit.CategoryPlotTests::test1654215, org.jfree.chart.plot.junit.CategoryPlotTests::testSerialization4, org.jfree.chart.renderer.category.junit.GroupedStackedBarRendererTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.BoxAndWhiskerRendererTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedBarChartTests::testDrawWithNullInfo, org.jfree.chart.junit.StackedAreaChartTests::testDrawWithNullInfo, org.jfree.chart.renderer.category.junit.MinMaxCategoryRendererTests::testDrawWithNullInfo]
+---------START : 2019.09.05 AD at 20:33:55 CDT
+---------TIME : 2019.09.05 AD at 23:48:09 CDT
+--------------- END -----------------

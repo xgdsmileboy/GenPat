@@ -1,0 +1,170 @@
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+ ret=d/(d-2.0);
+-return ret;
++return 0;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V22/2193/pattern-ver1-serial/Poker.src.fr.poker.model.Carte.java-compareValue.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:53:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+ ret=d/(d-2.0);
+-return ret;
++return p;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V12/6187/pattern-ver1-serial/device-manager.core.src.main.java.org.dc.bco.manager.device.core.AbstractDeviceFactory.java-newInstance.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:54:02 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+ ret=d/(d-2.0);
+-return ret;
++return 1;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V4/7202/pattern-ver1-serial/client.SurvivalGuide.src.ch.ethz.inf.vs.android.g54.a4.ui.TouchImageView.java-getPointerCount.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:54:15 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+ ret=d/(d-2.0);
+-return ret;
++return d;
+ }
+
+PATTERN : /home/jiajun/GithubData/2011/V1/6794/pattern-ver1-serial/java.src.main.java.net.auxesia.Population.java-getPopulation.pattern
+MATCHLEVEL : ALL
+ALL : 1, UPD : 1, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:54:32 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
++d=1000;
+ ret=d/(d-2.0);
+ return ret;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V4/3726/pattern-ver1-serial/WeatherService.src.weatherservice.StatisticsCalculator.java-MinWindSpeed.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:55:25 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+ ret=d/(d-2.0);
++ret=1000;
+ return ret;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V4/3726/pattern-ver1-serial/WeatherService.src.weatherservice.StatisticsCalculator.java-MinWindSpeed.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 0, INS : 3, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:55:42 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+-ret=d/(d-2.0);
++ret=d/d;
+ return ret;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V52/5364/pattern-ver1-serial/src.beast.core.MCMC.java-doLoop.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:56:04 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+-ret=d/(d-2.0);
++ret=d/p;
+ return ret;
+ }
+
+PATTERN : /home/jiajun/GithubData/2012-2014/V52/5364/pattern-ver1-serial/src.beast.core.MCMC.java-doLoop.pattern
+MATCHLEVEL : ALL
+ALL : 3, UPD : 3, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:56:20 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+-ret=d/(d-2.0);
++ret=d;
+ return ret;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/3010/pattern-ver1-serial/rakam-spi.src.main.java.com.facebook.presto.sql.RakamSqlFormatter.java-Formatter.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:57:17 CDT
+--------------- END -----------------
+FILE : /home/jiajun/GenPat/artifacts-bak/projects/math/math_95_buggy/src/java/org/apache/commons/math/distribution/FDistributionImpl.java[135,149]
+------------Solution---------------
+ protected double getInitialDomain(double p){
+ double ret;
+ double d=getDenominatorDegreesOfFreedom();
+-ret=d/(d-2.0);
++ret=p;
+ return ret;
+ }
+
+PATTERN : /home/jiajun/GithubData/2016/V13/3010/pattern-ver1-serial/rakam-spi.src.main.java.com.facebook.presto.sql.RakamSqlFormatter.java-Formatter.pattern
+MATCHLEVEL : ALL
+ALL : 5, UPD : 5, INS : 0, DEL : 0
+Failing Tests:[org.apache.commons.math.distribution.FDistributionTest::testSmallDegreesOfFreedom]
+---------START : 2019.09.07 AD at 23:02:40 CDT
+---------TIME : 2019.09.08 AD at 00:57:32 CDT
+--------------- END -----------------
