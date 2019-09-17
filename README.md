@@ -8,7 +8,7 @@
 
 ## I. Introduction
 
-*GenPath* is an automatic program transformation inferring framework, which infers general (reusable) transformations from singular examples. In this process, it leverages a big code corpus to guide the inference process. The following figure is the workflow of our approach.
+*GenPat* is an automatic program transformation inferring framework, which infers general (reusable) transformations from singular examples. In this process, it leverages a big code corpus to guide the inference process. The following figure is the workflow of our approach.
 
 ![The workflow of this technique.\label{workflow}](./doc/figure/overview.png)
 
@@ -48,7 +48,7 @@ As a result, the final transformation pattern contains a subset of the nodes in 
 
 ## III. How to run
 
-*GenPath* was traditionally developed as an Maven project with IntelliJ, you can simply import this project to your workspace and run it as a common Java program or contribute it. The main class is **mfix.Main**, and for the running option please refer to the [Running Options](#user-content-running-options).
+*GenPat* was traditionally developed as an Maven project with IntelliJ, you can simply import this project to your workspace and run it as a common Java program or contribute it. The main class is **mfix.Main**, and for the running option please refer to the [Running Options](#user-content-running-options).
 
 * As it is a maven project, a simpler method to build it is using the command line with `mvn package`, which will generate a runnable `jar` file in the `artifact` directory. (NOTE: Please ensure you have configured Java&Maven environment first)
 
