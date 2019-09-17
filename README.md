@@ -18,7 +18,7 @@
 2. **Extracting Modifications** : performs hypergraph differencing and extracts modifications related to corresponding nodes in the graph. Specifically, tree-based differencing, e.g., GumTree, can be used to perfrom the differencing as this hypergraph is a super graph with the original AST as backbone.
 2. **Inferring Transformations** : based on the previous process, we know which nodes are modified. This step first selects a set of node according to the expansion starting from the changed nodes, which will constitute the context of the transformation. Next, a big code corpus will be utilized to select the attributes of those context nodes, i.e., frequently appeared attributes across projects will be kept in the transformation pattern, while others discarded.
 
-As a result, the final transformation pattern contains a subset of the nodes in the hypergraph and their selective attributes.
+As a result, the final transformation pattern contains a subset of the nodes in the hypergraph and their selected attributes.
 
 #### Applying Stage
 
