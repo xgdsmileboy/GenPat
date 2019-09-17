@@ -9,11 +9,11 @@
 ##### Running congifuration
 
 ```powershell
-\# run GenPat on sydit dataset
-java -jar GenPat.jar sydit 
+# run GenPat on sydit dataset
+$java -jar GenPat.jar sydit 
 
-\# run GenPat on sampled c3 dataset
-java -jar GenPat.jar c3 
+# run GenPat on sampled c3 dataset
+$java -jar GenPat.jar c3 
 
 ```
 
