@@ -6,17 +6,64 @@
 
 package mfix;
 
-import mfix.tools.Cleaner;
-import mfix.tools.Cluster;
-import mfix.tools.Filter;
-import mfix.tools.PatternPrinter;
-import mfix.tools.Repair;
-import mfix.tools.Search;
-import mfix.tools.TokenStatistic;
+import mfix.tools.*;
 
 public class Main {
 
+    static String pSrc = "package com.company;\n" +
+            "public class Main {\n" +
+            "    public static void test1(int x) {\n" +
+            "        int t;\n" +
+            "        t = x;\n" +
+            "        return t;\n" +
+            "    }\n" +
+            "    public static void test2(int y) {\n" +
+            "        int t;\n" +
+            "        t = y;\n" +
+            "        return t;\n" +
+            "    }\n" +
+            "    public static void main(String[] args) {\n" +
+            "    }\n" +
+            "}\n";
+    static String pTar = "package com.company;\n" +
+            "public class Main {\n" +
+            "    public static void test1(int x) {\n" +
+            "        int t;\n" +
+            "        t = x + 1;\n" +
+            "        return t;\n" +
+            "    }\n" +
+            "    public static void test2(int y) {\n" +
+            "        int t;\n" +
+            "        t = y;\n" +
+            "        return t;\n" +
+            "    }\n" +
+            "    public static void main(String[] args) {\n" +
+            "    }\n" +
+            "}\n";
+    static String pSrcMethod = "public static void test1(int x) {\n" +
+            "        int t;\n" +
+            "        t = x;\n" +
+            "        return t;\n" +
+            "    }";
+    static String pTarMethod = "public static void test1(int x) {\n" +
+            "        int t;\n" +
+            "        t = x + 1;\n" +
+            "        return t;\n" +
+            "    }";
+    static String buggyMethod = "public static void test2(int y) {\n" +
+            "        int t;\n" +
+            "        t = y;\n" +
+            "        return t;\n" +
+            "    }";
+    
     public static void main(String[] args) {
+
+        Transformer t = new Transformer();
+        t.loadPatternSrc(pSrcMethod, pSrc, "C:\\Users\\37583\\IdeaProjects\\untitled2\\src\\com\\company\\a.java");
+        t.loadPatternTar(pTarMethod, pTar, "C:\\Users\\37583\\IdeaProjects\\untitled2\\src\\com\\company\\b.java");
+        t.extractPattern();
+        String ret = t.apply(buggyMethod, "C:\\Users\\37583\\IdeaProjects\\untitled2\\src\\com\\company\\c.java");
+        System.out.println(ret);
 
         if (args.length == 0) {
             System.err.println("Please given the arguments");

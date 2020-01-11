@@ -176,7 +176,7 @@ public class PatternExtractor {
         return patterns;
     }
 
-    private Set<Variable> getVars(Set<Node> nodes) {
+    public static Set<Variable> getVars(Set<Node> nodes) {
         Set<Variable> vars = new HashSet<>();
         Queue<Node> queue = new LinkedList<>(nodes);
         while (!queue.isEmpty()) {
@@ -222,7 +222,7 @@ public class PatternExtractor {
         return imports;
     }
 
-    private Pair<Set<Variable>, Set<String>> parseFields(ASTNode m1, ASTNode m2) {
+    public static Pair<Set<Variable>, Set<String>> parseFields(ASTNode m1, ASTNode m2) {
         // TODO : define classes for fields and imports
         TypeDeclaration srcType = null;
         TypeDeclaration tarType = null;
