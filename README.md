@@ -8,7 +8,7 @@
 
 ## I. Introduction
 
-*GenPath* is an automatic program transformation inferring framework, which infers general (reusable) transformations from singular examples. In this process, it leverages a big code corpus to guide the inference process. The following figure is the workflow of our approach.
+*GenPat* is an automatic program transformation inferring framework, which infers general (reusable) transformations from singular examples. In this process, it leverages a big code corpus to guide the inference process. The following figure is the workflow of our approach.
 
 ![The workflow of this technique.\label{workflow}](./doc/figure/overview.png)
 
@@ -71,15 +71,70 @@ repair: run porgram repair
 cluster: run pattern cluster
 ```
 
-More Details related to each `FUNC`: TBD.
+More Details related to each `FUNC`: 
+
+* **print**: `"<command> -if <arg> [-of <arg>]"`, printing the details of the given pattern to console or file.
+
+  * `-if`: denotes the absolute path of pattern file.
+
+  * `-of`: denotes the absolute path of the output file.
+
+    e.g., java -jar GenPat.jar print -if in_file -of out_file
+
+* **filter**: `"<command> (-ip <arg> | -filter <arg>) [-dir <arg>] [-line <arg>] [-change <arg>] [-of <arg> | -op <arg>]"`, filter and serialize patterns with the given criteria.
+
+  * `-ip | -filter`: the `-ip` denotes the #Directory# of the pairwise buggy-fixed files, while `-filter` denotes the absolute path of the file that contains the absolute paths of patterns to be filtered. One of them should be provided while running. Please note when apply the option of `-if`, the #Directory# should be formatted as follows:
+
+    ```powershell
+    |-directory
+    |-|-buggy-version
+    |-|-| source_code_file.java
+    |-|-fixed-version
+    |-|-| source_code_file.java
+    ```
+
+    One can reformat the structure of files in [`mfix.common.util.MiningUtils.java`](./src/main/java/mfix/common/util/MiningUtils.java)
+
+  * `-dir`: the output directory of the serialized patterns (needed only when `-filter` option is used).
+
+  * `-line`: max number of lines of code that were changed (filtering criterion).
+
+  * `-change`: max number of change actions (filtering criterion).
+
+  * `-of | -op`: the `-of` denotes the absolute path of output file that prints the paths of patterns, while `-op` denotes the absolute path of output directory (default file name is "PatternRecord.txt").
+
+* repair: `"<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) (-pf <arg> | -pattern <arg>) [-d4jhome <arg>]"`, try to repair a buggy file or a bug in defects4j with the given pattern or list of patterns. One argument in each bracket should be given.
+
+  * `-bf`: denotes the absolute path of buggy file.
+  * `-bp`: denotes the absolute base directory of buggy program or file.
+  * `-xml`: **no arguments** for this option, denotes read the buggy subject information from `project.xml`.
+  * `-d4j`: denotes the bug id in defects4j benchmark, e.g., chart_1.
+  * `-pf`: denotes the absolote path of the file which records the paths of all avaliable patterns.
+  * `-pattern`: denotes the absolote path of pattern file
+  * `-d4jhome`: denotes the home directory of defects4j, used for running defects4j command.
+
+* cluster: `"<command> -if <arg> [-dir <arg>] [-op <arg>]"`, cluster same patterns together.
+
+  * `-if`: denotes the absolute path of the file which contains the path information of patterns.
+  * `-dir`: the home directory of pattern files.
+  * `-op`: the output path of results.
+
+We only listed some of the most important features of *GenPat*, please learn more via checking its implementation.
 
 #### Result Analysis
 
-TBD.
+* Typically, the output is the transformated source code after applying some patterns.
+* Particularly, when using *GenPat* for program repair on defects4j, it will produce two sub-folders, i.e., log and patch, where the log folder contains the log information during the repair, including used pattern, code-diffs and so on (view [log](./repair-result/log) for more details), while the patch folder contains the patches that can pass the test cases. (view [patch](./repair-result/patch) for more details).
 
 ## IV. Evaluation Result
 
-TBD.
+Evaluations on two distinct application scenarios:
+
+* Systematic Editing—**significantly outperforms the state-of-the-art Sydit with up to 5.5x correctly transformed cases.**
+
+* Automatic Program Repair —**successfully fixed 19 bugs in the Defects4J benchmark, 4 of which have never been repaired by any existing technique.**
+
+  Please read our paper for more evaluation results.
 
 ## V. Structure of the project
 ```powershell
