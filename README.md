@@ -83,7 +83,7 @@ More Details related to each `FUNC`:
 
 * **filter**: `"<command> (-ip <arg> | -filter <arg>) [-dir <arg>] [-line <arg>] [-change <arg>] [-of <arg> | -op <arg>]"`, filter and serialize patterns with the given criteria.
 
-  * `-ip | -filter`: the `-ip` denotes the #Directory# of the pairwise buggy-fixed files, while `-filter` denotes the absolute path of the file that contains the absolute paths of patterns to be filtered. One of them should be provided while running. Please note when apply the option of `-if`, the #Directory# should be formatted as follows:
+  * `-ip | -filter`: the `-ip` denotes the #Directory# of the pairwise buggy-fixed files, while `-filter` denotes the absolute path of the file that contains the paths of patterns to be filtered. One of them should be provided while running. Please note when applying the option of `-if`, #Directory# should be formatted as follows:
 
     ```powershell
     |-directory
@@ -95,13 +95,13 @@ More Details related to each `FUNC`:
 
     One can reformat the structure of files in [`mfix.common.util.MiningUtils.java`](./src/main/java/mfix/common/util/MiningUtils.java)
 
-  * `-dir`: the output directory of the serialized patterns (needed only when `-filter` option is used).
+  * `-dir`: the output directory of the serialized patterns (needed only when option `-filter` is used).
 
   * `-line`: max number of lines of code that were changed (filtering criterion).
 
   * `-change`: max number of change actions (filtering criterion).
 
-  * `-of | -op`: the `-of` denotes the absolute path of output file that prints the paths of patterns, while `-op` denotes the absolute path of output directory (default file name is "PatternRecord.txt").
+  * `-of | -op`: the `-of` denotes the absolute path of output file for recording the paths of patterns, while `-op` denotes the absolute path of output directory (default file name is "PatternRecord.txt").
 
 * repair: `"<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) (-pf <arg> | -pattern <arg>) [-d4jhome <arg>]"`, try to repair a buggy file or a bug in defects4j with the given pattern or list of patterns. One argument in each bracket should be given.
 
@@ -119,11 +119,11 @@ More Details related to each `FUNC`:
   * `-dir`: the home directory of pattern files.
   * `-op`: the output path of results.
 
-We only listed some of the most important features of *GenPat*, please learn more via checking its implementation.
+We only list some of the most important features of *GenPat*, please learn more via checking its implementation.
 
 #### Result Analysis
 
-* Typically, the output is the transformated source code after applying some patterns.
+* Typically, the output is the transformed source code after applying some pattern.
 * Particularly, when using *GenPat* for program repair on defects4j, it will produce two sub-folders, i.e., log and patch, where the log folder contains the log information during the repair, including used pattern, code-diffs and so on (view [log](./repair-result/log) for more details), while the patch folder contains the patches that can pass the test cases. (view [patch](./repair-result/patch) for more details).
 
 ## IV. Evaluation Result
