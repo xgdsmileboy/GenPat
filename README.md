@@ -75,7 +75,7 @@ More Details related to each `FUNC`:
 
 * **print**: `"<command> -if <arg> [-of <arg>]"`, printing the details of the given pattern to console or file.
 
-  * `-if`: denotes the absolute path of pattern file (e.g., [pattern_file1.pattern](./example/patterns)).
+  * `-if`: denotes the absolute path of pattern file (e.g., [pattern_file1.pattern](./example/patterns), serialized file).
 
   * `-of`: denotes the absolute path of the output file.
 
@@ -83,17 +83,21 @@ More Details related to each `FUNC`:
 
 * **filter**: `"<command> (-ip <arg> | -filter <arg>) [-dir <arg>] [-line <arg>] [-change <arg>] [-of <arg> | -op <arg>]"`, filter and serialize patterns with the given criteria.
 
-  * `-ip | -filter`: the `-ip` denotes the #Directory# of the pairwise buggy-fixed files (e.g., [xxx/example/src](./example/src)), while `-filter` denotes the absolute path of the file that contains the paths of patterns to be filtered (e.g., [PatternRecord.txt](./example/records/)). One of them should be provided while running. Please note when applying the option of `-if`, #Directory# should be formatted as follows:
+  * Option group, one of the following options should be given
 
-    ```powershell
+    * `-ip`: denotes the #Directory# of the pairwise buggy-fixed files (e.g., [xxx/example/src](./example/src)). #Directory# should be formatted as follows:
+
+      ```powershell
     |-directory
-    |...|-buggy-version
-    |...|-| source_code_file.java
-    |...|-fixed-version
-    |...|-| source_code_file.java
-    ```
+      |...|-buggy-version
+      |...|-| source_code_file.java
+      |...|-fixed-version
+      |...|-| source_code_file.java
+      ```
+    
+      One can reformat the structure of files in [`mfix.common.util.MiningUtils.java`](./src/main/java/mfix/common/util/MiningUtils.java)
 
-    One can reformat the structure of files in [`mfix.common.util.MiningUtils.java`](./src/main/java/mfix/common/util/MiningUtils.java)
+    * `-filter`: denotes the absolute path of the file that contains the paths of patterns to be filtered (e.g., [PatternRecord.txt](./example/records/)).
 
   * `-dir`: the output directory of the serialized patterns (needed only when option `-filter` is used, e.g., if the option for `-filter` is file [PatternRecord.txt](./example/records/), `-dir` can be `/home/jack/code`, `/home/jack` and so on, which is the prefix of the path.
 
@@ -105,12 +109,14 @@ More Details related to each `FUNC`:
 
 * repair: `"<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) (-pf <arg> | -pattern <arg>) [-d4jhome <arg>]"`, try to repair a buggy file or a bug in defects4j with the given pattern or list of patterns. One argument in each bracket should be given.
 
+  * Option group, one of the following options should be given:
   * `-bf`: denotes the absolute path of buggy file.
-  * `-bp`: denotes the absolute base directory of buggy program or file (GenPat will traverse the complete directory for repair).
-  * `-xml`: **no arguments** for this option, denotes reading the buggy subject information from [project.xml](./resources/conf/).
-  * `-d4j`: denotes the bug id in defects4j benchmark, e.g., chart_1.
-  * `-pf`: denotes the absolote path of the file which records the paths of all avaliable patterns (e.g., [PatternRecord.txt](./example/records/)).
-  * `-pattern`: denotes the absolote path of pattern file (e.g., [pattern_file1.pattern](./example/patterns)).
+    * `-bp`: denotes the absolute base directory of buggy program or file (GenPat will traverse the files in the directory for repair).
+    * `-xml`: **no arguments** for this option, denotes reading the buggy subject information from [project.xml](./resources/conf/).
+    * `-d4j`: denotes the bug id in defects4j benchmark, e.g., chart_1.
+  * Option group, one of the following options should be given:
+    * `-pf`: denotes the absolote path of the file which records the paths of all avaliable patterns (e.g., [PatternRecord.txt](./example/records/)).
+    * `-pattern`: denotes the absolote path of pattern file (e.g., [pattern_file1.pattern](./example/patterns)).
   * `-d4jhome`: denotes the home directory of defects4j, used for running defects4j command (e.g., `/home/jack/code/defects4j`).
 
 * cluster: `"<command> -if <arg> [-dir <arg>] [-op <arg>]"`, cluster same patterns together.
