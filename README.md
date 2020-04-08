@@ -85,7 +85,7 @@ More Details related to each `FUNC`:
 
   * Option group, one of the following options should be given
 
-    * `-ip`: denotes the #Directory# of the pairwise buggy-fixed files (e.g., [xxx/example/src](./example/src)). #Directory# should be formatted as follows:
+    1. `-ip`: denotes the #Directory# of the pairwise buggy-fixed files (e.g., [xxx/example/src](./example/src)). #Directory# should be formatted as follows:
 
       ```powershell
       |-directory
@@ -97,7 +97,7 @@ More Details related to each `FUNC`:
     
       One can reformat the structure of files in [`mfix.common.util.MiningUtils.java`](./src/main/java/mfix/common/util/MiningUtils.java)
 
-    * `-filter`: denotes the absolute path of the file that contains the paths of patterns to be filtered (e.g., [xxx/example/records/PatternRecord.txt](./example/records/)).
+    2. `-filter`: denotes the absolute path of the file that contains the paths of patterns to be filtered (e.g., [xxx/example/records/PatternRecord.txt](./example/records/)).
 
   * `-dir`: the output directory of the serialized patterns (needed only when option `-filter` is used, e.g., if the option for `-filter` is file [PatternRecord.txt](./example/records/), `-dir` can be `/home/jack/code`, `/home/jack` and so on, which is the prefix of the path.
 
@@ -107,19 +107,19 @@ More Details related to each `FUNC`:
 
   * `-of | -op`: the `-of` denotes the absolute path of output file for recording the paths of patterns, while `-op` denotes the absolute path of output directory (default file name is "PatternRecord.txt").
 
-* repair: `"<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) (-pf <arg> | -pattern <arg>) [-d4jhome <arg>]"`, try to repair a buggy file or a bug in defects4j with the given pattern or list of patterns. One argument in each bracket should be given.
+* **repair**: `"<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) (-pf <arg> | -pattern <arg>) [-d4jhome <arg>]"`, try to repair a buggy file or a bug in defects4j with the given pattern or list of patterns. One argument in each bracket should be given.
 
   * Option group, one of the following options should be given:
-    * `-bf`: denotes the absolute path of buggy file.
-    * `-bp`: denotes the absolute base directory of buggy program or file (GenPat will traverse the files in the directory for repair).
-    * `-xml`: **no arguments** for this option, denotes reading the buggy subject information from [project.xml](./resources/conf/).
-    * `-d4j`: denotes the bug id in defects4j benchmark, e.g., chart_1.
+    1. `-bf`: denotes the absolute path of buggy file.
+    2. `-bp`: denotes the absolute base directory of buggy program or file (GenPat will traverse the files in the directory for repair).
+    3. `-xml`: **no arguments** for this option, denotes reading the buggy subject information from [project.xml](./resources/conf/).
+    4. `-d4j`: denotes the bug id in defects4j benchmark, e.g., chart_1.
   * Option group, one of the following options should be given:
-    * `-pf`: denotes the absolote path of the file which records the paths of all avaliable patterns (e.g., [xxx/example/records/PatternRecord.txt](./example/records/)).
-    * `-pattern`: denotes the absolote path of pattern file (e.g., [xxx/example/patterns/pattern_file1.pattern](./example/patterns)).
+    1. `-pf`: denotes the absolote path of the file which records the paths of all avaliable patterns (e.g., [xxx/example/records/PatternRecord.txt](./example/records/)).
+    2. `-pattern`: denotes the absolote path of pattern file (e.g., [xxx/example/patterns/pattern_file1.pattern](./example/patterns)).
   * `-d4jhome`: denotes the home directory of defects4j, used for running defects4j command (e.g., `/home/jack/code/defects4j`).
 
-* cluster: `"<command> -if <arg> [-dir <arg>] [-op <arg>]"`, cluster same patterns together.
+* **cluster**: `"<command> -if <arg> [-dir <arg>] [-op <arg>]"`, cluster same patterns together.
 
   * `-if`: denotes the absolute path of the file which contains the path information of patterns (e.g., [xxx/example/records/PatternRecord.txt](./example/records/)).
   * `-dir`: the home directory of pattern files, it can be `/home/jack/code`, `/home/jack` and so on, which is the prefix of the path in [PatternRecord.txt](./example/records/)).
