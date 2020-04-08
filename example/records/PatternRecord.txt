@@ -1,0 +1,2 @@
+/home/jack/code/GenPat/example/patterns/pattern_file1.pattern
+/home/jack/code/GenPat/example/patterns/pattern_file2.pattern
