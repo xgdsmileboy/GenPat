@@ -110,7 +110,7 @@ More Details related to each `FUNC`:
 * repair: `"<command> (-bf <arg> | -bp <arg> | -xml | -d4j <arg>) (-pf <arg> | -pattern <arg>) [-d4jhome <arg>]"`, try to repair a buggy file or a bug in defects4j with the given pattern or list of patterns. One argument in each bracket should be given.
 
   * Option group, one of the following options should be given:
-  * `-bf`: denotes the absolute path of buggy file.
+    * `-bf`: denotes the absolute path of buggy file.
     * `-bp`: denotes the absolute base directory of buggy program or file (GenPat will traverse the files in the directory for repair).
     * `-xml`: **no arguments** for this option, denotes reading the buggy subject information from [project.xml](./resources/conf/).
     * `-d4j`: denotes the bug id in defects4j benchmark, e.g., chart_1.
