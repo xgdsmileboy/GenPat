@@ -87,15 +87,15 @@ More Details related to each `FUNC`:
 
     1. `-ip`: denotes the #Directory# of the pairwise buggy-fixed files (e.g., [xxx/example/src](./example/src)). #Directory# should be formatted as follows:
 
-      ```powershell
-      |-directory
-        |...|-buggy-version
-        |...|-| source_code_file.java
-        |...|-fixed-version
-        |...|-| source_code_file.java
-      ```
-    
-      One can reformat the structure of files in [`mfix.common.util.MiningUtils.java`](./src/main/java/mfix/common/util/MiningUtils.java)
+        ```powershell
+        |-directory
+          |...|-buggy-version
+          |...|-| source_code_file.java
+          |...|-fixed-version
+          |...|-| source_code_file.java
+        ```
+
+        One can reformat the structure of files in [`mfix.common.util.MiningUtils.java`](./src/main/java/mfix/common/util/MiningUtils.java)
 
     2. `-filter`: denotes the absolute path of the file that contains the paths of patterns to be filtered (e.g., [xxx/example/records/PatternRecord.txt](./example/records/)).
 
