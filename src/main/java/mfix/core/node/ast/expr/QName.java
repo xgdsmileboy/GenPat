@@ -184,9 +184,11 @@ public class QName extends Label {
 					return null;
 				}
 				stringBuffer.append(".");
-				tmp = _sname.transfer(vars, exprMap, retType, exceptions, metric);
-				if(tmp == null) return null;
-				stringBuffer.append(tmp);
+				// Field access need not check, 2020-6-8 @jiajun
+				stringBuffer.append(_sname.getName());
+// 				tmp = _sname.transfer(vars, exprMap, retType, exceptions, metric);
+// 				if(tmp == null) return null;
+// 				stringBuffer.append(tmp);
 			} else {
 				stringBuffer.append(tmp);
 			}
