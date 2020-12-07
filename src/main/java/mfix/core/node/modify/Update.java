@@ -53,7 +53,10 @@ public class Update extends Modification {
             metric.inc();
             return new StringBuffer(_tarStr);
         }
-        int oldSize = NodeUtils.parseTreeSize(_srcNode.getBuggyBindingNode());
+        int oldSize = 1;
+        if (_srcNode != null) {
+            oldSize = NodeUtils.parseTreeSize(_srcNode.getBuggyBindingNode());
+        }
         if (_tarNode == null) {
             metric.add(oldSize);
             return new StringBuffer();
